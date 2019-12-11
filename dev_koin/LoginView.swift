@@ -15,8 +15,6 @@ struct LoginView: View {
     @State var login_email: String = ""
     @State var login_password: String = ""
     
-    
-    
     @State var authenticationDidFail: Bool = false
     @State var authenticationDidSucceed: Bool = false
     
@@ -140,7 +138,7 @@ struct LoginView: View {
 
 
 func submit() {
-    // to be implement
+    
 }
 
 struct LoginView_Previews: PreviewProvider {

@@ -9,10 +9,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var signInSuccess = false
+    
+    var body: some View {
+        return Group {
+            if signInSuccess {
+                MainView()
+            } else {
+                LoginView()
+            }
+        }
+    }
+}
+
+struct MainView: View {
     @State private var selection = 0
     @State var isDrawerOpen: Bool = false
     
-       var body: some View {
+    var body: some View {
+        
            
         return ZStack {
             if !self.isDrawerOpen {
@@ -66,6 +81,7 @@ struct ContentView: View {
             .tag(2)
         }
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
