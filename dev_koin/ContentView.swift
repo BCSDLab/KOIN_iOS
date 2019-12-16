@@ -10,14 +10,17 @@ import SwiftUI
 
 struct ContentView: View {
     @State var signInSuccess = false
+    @EnvironmentObject var userData: UserDownloader
+    
+    
     
     var body: some View {
-        return Group {
-            if signInSuccess {
-                MainView()
-            } else {
-                LoginView()
-            }
+        Group {
+            if (userData.userData != nil) {
+            MainView()
+          } else {
+            UserLoginView()
+          }
         }
     }
 }

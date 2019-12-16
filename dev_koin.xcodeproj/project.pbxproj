@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		35B91606A76D75D3C8814F35 /* Pods_dev_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B37B4374F8874044D9E53C3 /* Pods_dev_koin.framework */; };
-		A05EF45E239FA9D3005847AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05EF45D239FA9D3005847AD /* User.swift */; };
-		A0731612239FCEA5001B3976 /* EndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731611239FCEA5001B3976 /* EndPoints.swift */; };
+		8B4B3C05815DE2AEFFF94BA0 /* Pods_dev_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A8151F313C8E5EF0877EB6C /* Pods_dev_koin.framework */; };
+		A05EF45E239FA9D3005847AD /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05EF45D239FA9D3005847AD /* UserData.swift */; };
 		A0731614239FD056001B3976 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731613239FD056001B3976 /* LoginView.swift */; };
 		A0C637C2239D25770041DE96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637C1239D25770041DE96 /* AppDelegate.swift */; };
 		A0C637C4239D25770041DE96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637C3239D25770041DE96 /* SceneDelegate.swift */; };
@@ -20,14 +19,13 @@
 		A0C637D6239D26E30041DE96 /* DrawerContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637D5239D26E30041DE96 /* DrawerContent.swift */; };
 		A0C637D8239D26F20041DE96 /* NavigationDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637D7239D26F20041DE96 /* NavigationDrawer.swift */; };
 		A0C637DA239D2D100041DE96 /* HomeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637D9239D2D100041DE96 /* HomeMenu.swift */; };
+		A0C81F7523A6597000AB33AA /* UserDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C81F7423A6597000AB33AA /* UserDownloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		233B2ED153A1B7B590856B20 /* Pods-dev_koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev_koin.debug.xcconfig"; path = "Target Support Files/Pods-dev_koin/Pods-dev_koin.debug.xcconfig"; sourceTree = "<group>"; };
-		5B37B4374F8874044D9E53C3 /* Pods_dev_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dev_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		893F8AC0E6FCE598F9A55AF7 /* Pods-dev_koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev_koin.release.xcconfig"; path = "Target Support Files/Pods-dev_koin/Pods-dev_koin.release.xcconfig"; sourceTree = "<group>"; };
-		A05EF45D239FA9D3005847AD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A0731611239FCEA5001B3976 /* EndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoints.swift; sourceTree = "<group>"; };
+		223D52228FEB496CB90F1BFE /* Pods-dev_koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev_koin.debug.xcconfig"; path = "Target Support Files/Pods-dev_koin/Pods-dev_koin.debug.xcconfig"; sourceTree = "<group>"; };
+		6A8151F313C8E5EF0877EB6C /* Pods_dev_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dev_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A05EF45D239FA9D3005847AD /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		A0731613239FD056001B3976 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A0C637BE239D25770041DE96 /* dev_koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dev_koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0C637C1239D25770041DE96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +38,8 @@
 		A0C637D5239D26E30041DE96 /* DrawerContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerContent.swift; sourceTree = "<group>"; };
 		A0C637D7239D26F20041DE96 /* NavigationDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDrawer.swift; sourceTree = "<group>"; };
 		A0C637D9239D2D100041DE96 /* HomeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenu.swift; sourceTree = "<group>"; };
+		A0C81F7423A6597000AB33AA /* UserDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDownloader.swift; sourceTree = "<group>"; };
+		F911620FAC58BABBA85558FD /* Pods-dev_koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev_koin.release.xcconfig"; path = "Target Support Files/Pods-dev_koin/Pods-dev_koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,42 +47,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35B91606A76D75D3C8814F35 /* Pods_dev_koin.framework in Frameworks */,
+				8B4B3C05815DE2AEFFF94BA0 /* Pods_dev_koin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5820C3AC4D8C5E66454A4F2B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				5B37B4374F8874044D9E53C3 /* Pods_dev_koin.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A05EF45A239FA8F4005847AD /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				A0731611239FCEA5001B3976 /* EndPoints.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		A05EF45B239FA8FB005847AD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				A05EF45D239FA9D3005847AD /* User.swift */,
+				A05EF45D239FA9D3005847AD /* UserData.swift */,
+				A0C81F7423A6597000AB33AA /* UserDownloader.swift */,
 			);
 			path = Entities;
-			sourceTree = "<group>";
-		};
-		A05EF45F239FAC1A005847AD /* User */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = User;
 			sourceTree = "<group>";
 		};
 		A0C637B5239D25770041DE96 = {
@@ -91,7 +69,7 @@
 				A0C637C0239D25770041DE96 /* dev_koin */,
 				A0C637BF239D25770041DE96 /* Products */,
 				A81BB2738787A6169454BF6B /* Pods */,
-				5820C3AC4D8C5E66454A4F2B /* Frameworks */,
+				DCAC4E789DED41414D2C0B7F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,9 +84,7 @@
 		A0C637C0239D25770041DE96 /* dev_koin */ = {
 			isa = PBXGroup;
 			children = (
-				A05EF45F239FAC1A005847AD /* User */,
 				A05EF45B239FA8FB005847AD /* Entities */,
-				A05EF45A239FA8F4005847AD /* Common */,
 				A0C637C1239D25770041DE96 /* AppDelegate.swift */,
 				A0C637C3239D25770041DE96 /* SceneDelegate.swift */,
 				A0C637C5239D25770041DE96 /* ContentView.swift */,
@@ -135,10 +111,18 @@
 		A81BB2738787A6169454BF6B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				233B2ED153A1B7B590856B20 /* Pods-dev_koin.debug.xcconfig */,
-				893F8AC0E6FCE598F9A55AF7 /* Pods-dev_koin.release.xcconfig */,
+				223D52228FEB496CB90F1BFE /* Pods-dev_koin.debug.xcconfig */,
+				F911620FAC58BABBA85558FD /* Pods-dev_koin.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		DCAC4E789DED41414D2C0B7F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6A8151F313C8E5EF0877EB6C /* Pods_dev_koin.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,11 +132,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0C637D2239D25790041DE96 /* Build configuration list for PBXNativeTarget "dev_koin" */;
 			buildPhases = (
-				3FF58FA57B7F73D30103F178 /* [CP] Check Pods Manifest.lock */,
+				118C734905C6D2C4D8997D2A /* [CP] Check Pods Manifest.lock */,
 				A0C637BA239D25770041DE96 /* Sources */,
 				A0C637BB239D25770041DE96 /* Frameworks */,
 				A0C637BC239D25770041DE96 /* Resources */,
-				ECC66048990CC4E641B4B65E /* [CP] Embed Pods Frameworks */,
+				1B34DEA8057DADC9BA6864BA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -210,7 +194,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3FF58FA57B7F73D30103F178 /* [CP] Check Pods Manifest.lock */ = {
+		118C734905C6D2C4D8997D2A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,7 +216,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ECC66048990CC4E641B4B65E /* [CP] Embed Pods Frameworks */ = {
+		1B34DEA8057DADC9BA6864BA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -263,8 +247,8 @@
 				A0C637DA239D2D100041DE96 /* HomeMenu.swift in Sources */,
 				A0C637D6239D26E30041DE96 /* DrawerContent.swift in Sources */,
 				A0C637C6239D25770041DE96 /* ContentView.swift in Sources */,
-				A0731612239FCEA5001B3976 /* EndPoints.swift in Sources */,
-				A05EF45E239FA9D3005847AD /* User.swift in Sources */,
+				A0C81F7523A6597000AB33AA /* UserDownloader.swift in Sources */,
+				A05EF45E239FA9D3005847AD /* UserData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,7 +382,7 @@
 		};
 		A0C637D3239D25790041DE96 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 233B2ED153A1B7B590856B20 /* Pods-dev_koin.debug.xcconfig */;
+			baseConfigurationReference = 223D52228FEB496CB90F1BFE /* Pods-dev_koin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -419,7 +403,7 @@
 		};
 		A0C637D4239D25790041DE96 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 893F8AC0E6FCE598F9A55AF7 /* Pods-dev_koin.release.xcconfig */;
+			baseConfigurationReference = F911620FAC58BABBA85558FD /* Pods-dev_koin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
