@@ -15,74 +15,137 @@ struct ContentView: View {
     
     
     var body: some View {
+
         Group {
-            if (userData.userData != nil) {
+            if (userData.isUser()) {
             MainView()
           } else {
             UserLoginView()
           }
         }
+
+    }
+}
+
+struct MenuView: View {
+    var body: some View {
+        
+        EmptyView()
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        return NavigationView {
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    NavigationLink(destination: MealView()) {
+                            Text("test")
+                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding().background(Color.white)
+                    Spacer()
+                    NavigationLink(destination: MealView()) {
+                        Text("meal")
+                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                    Spacer()
+                    NavigationLink(destination: MealView()) {
+                        Text("meal")
+                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                    Spacer()
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
+                
+                HStack {
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding().background(Color.white)
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                Spacer()
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
+                
+                HStack {
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                Spacer()
+                NavigationLink(destination: MealView()) {
+                    Text("meal")
+                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
+                Spacer()
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
+            }
+
+        }.background(Color.orange)
+    }
+}
+
+struct MyInfoView: View {
+    @EnvironmentObject var userData: UserDownloader
+    
+    var body: some View {
+        
+        List {
+            Section(header: Text("기본정보")) {
+                Text("test")
+            }
+        }.listStyle(GroupedListStyle())
     }
 }
 
 struct MainView: View {
     @State private var selection = 0
-    @State var isDrawerOpen: Bool = false
+    @EnvironmentObject var userData: UserDownloader
+    
     
     var body: some View {
         
-           
         return ZStack {
-            if !self.isDrawerOpen {
-                NavigationView {
-                    EmptyView()
-                    .navigationBarTitle(Text("코인"))
-                        .navigationBarItems(leading: Button(action: {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                self.isDrawerOpen.toggle()
-                            }
-                        })
-                        {
-                            Image(systemName: "sidebar.left")
-                        })
+            
+            TabView(selection: $selection){
+                HomeView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "house")
+                            Text("홈")
+                        }
+                    }
+                    .tag(0)
+                Text("카테고리")
+                    .font(.title)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "list.dash")
+                            Text("카테고리")
+                        }
+                    }
+                    .tag(1)
+                MyInfoView()
+                .font(.title)
+                .tabItem {
+                    VStack {
+                        Image(systemName: "person")
+                        Text("내정보")
+                    }
                 }
-            }
-            NavigationDrawer(isOpen: self.isDrawerOpen)
-        }.onTapGesture {
-                if self.isDrawerOpen {
-                    self.isDrawerOpen.toggle()
-                }
+                .tag(2)
+            }.accentColor(.blue)
+            
         }
         
-        TabView(selection: $selection){
-            Text("홈")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Image("first")
-                        Text("홈")
-                    }
-                }
-                .tag(0)
-            Text("카테고리")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Image("second")
-                        Text("카테고리")
-                    }
-                }
-                .tag(1)
-            Text("내정보")
-            .font(.title)
-            .tabItem {
-                VStack {
-                    Image("second")
-                    Text("내정보")
-                }
-            }
-            .tag(2)
-        }
+        
     }
     
 }

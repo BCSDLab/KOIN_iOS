@@ -19,10 +19,6 @@ struct UserLoginView: View {
     @State var login_password: String = ""
     @EnvironmentObject var userData: UserDownloader
     
-    func signIn() {
-        userData.login_session(email: login_email, password: login_password)
-    }
-    
     var body: some View {
     return ZStack {
         VStack {
@@ -56,7 +52,9 @@ struct UserLoginView: View {
                 }
 
                 
-                Button(action: signIn) {
+                Button(action: {
+                    self.userData.setUser(email: self.login_email, password: self.login_password)
+                }) {
                     HStack {
                         Spacer()
                         Text("로그인")

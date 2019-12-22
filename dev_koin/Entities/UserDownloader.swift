@@ -15,38 +15,57 @@ import Foundation
 import UIKit
 
 class UserDownloader: ObservableObject {
-    @Published var userData: UserData?
+    @Published var userData: UserRequest? = nil
     
-    init() {
-        userData = nil
+    public init() {
+        self.userData = nil
     }
     
-    func request(email: String, hash_password: String){
-        var login_success: Bool = false
-        
-        do {
-        AF.request("http://api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hash_password], encoder: JSONParameterEncoder.default).response { response in
-            switch response.result {
-            case .success(let value):
-                guard let data = value else { return }
-                self.userData = try! JSONDecoder().decode(UserData.self, from: data)
-                login_success = true
-            case .failure( _):
-                login_success = false
+    func setUser(email: String, password: String) {
+        login_session(email: email, password: password) { user in
+            self.userData = user
+        }
+    }
+    
+    func isUser() -> Bool {
+        if self.userData == nil {
+            return false
+        }
+        return true
+    }
+    
+    func getUserInfo() -> [String] {
+        if let user = self.userData {
+            if let userinfo = user.user {
+                return [userinfo.portalAccount, userinfo.name, userinfo.nickname, userinfo.anonymousNickname, userinfo.phoneNumber, userinfo.gender == 0 ? "남자":"여자", userinfo.studentNumber, userinfo.major]
             }
         }
-        }
-        
+        return ["error"]
     }
     
-    func login_session(email: String, password: String){
-        
+    func login_session(email: String, password: String, completion: @escaping (UserRequest?) -> Void) {
         let inputData = Data(password.utf8)
         let hashed = SHA256.hash(data: inputData)
-        let hashString = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
-            
-        request(email: email, hash_password: hashString)
-        
+        let hashPassword = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
+        do {
+            Alamofire
+            .request("http://api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.prettyPrinted)
+            .validate { request, response, data in
+                return .success
+            }
+            .response { response in
+                guard let data = response.data else { return }
+                do {
+                    let decoder = JSONDecoder()
+                    let userRequest = try decoder.decode(UserRequest.self, from: data)
+                    completion(userRequest)
+                } catch let error {
+                    print(error)
+                    completion(nil)
+                }
+            }
+        }
     }
+    
 }
 
