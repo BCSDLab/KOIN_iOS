@@ -6,8 +6,16 @@
 //  Copyright © 2019 정태훈. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import Alamofire
+import ObjectMapper
+import AlamofireObjectMapper
+import CryptoKit
+import CryptoTokenKit
+import Foundation
+import UIKit
+
+
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,14 +28,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
-        var userData = UserDownloader()
+        //let contentView = ContentView()
+        //let userData = UserDownloader()
+        let settings = UserSettings()
+        let startView = StartView()
         
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView.environmentObject(userData))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings))
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -60,7 +70,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    
 
 
 }
 
+struct StartView: View {
+    @EnvironmentObject var settings: UserSettings
+    
+    
+    var body: some View {
+        let set = UserSettings()
+        if UserDefaults.standard.bool(forKey: "Loggedin") {
+            set.loggedIn = true
+            return AnyView(ContentView())
+        } else {
+            set.loggedIn = false
+            return AnyView(UserLoginView())
+        }
+    }
+}

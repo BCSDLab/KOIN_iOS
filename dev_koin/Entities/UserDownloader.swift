@@ -15,32 +15,52 @@ import Foundation
 import UIKit
 
 class UserDownloader: ObservableObject {
-    @Published var userData: UserRequest? = nil
+    @Published var userData: UserRequest?
     
     public init() {
-        self.userData = nil
+            loadUser()
+    }
+    
+    func loadUser() {
+        if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+                self.userData = loaded
+            }
+        } else {
+            self.userData = nil
+        }
+        getUserInfo()
     }
     
     func setUser(email: String, password: String) {
         login_session(email: email, password: password) { user in
             self.userData = user
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(user) {
+                UserDefaults.standard.set(encoded, forKey: "user")
+            }
         }
+        getUserInfo()
     }
     
     func isUser() -> Bool {
+        loadUser()
         if self.userData == nil {
             return false
         }
         return true
     }
     
-    func getUserInfo() -> [String] {
+    func getUserInfo(){
         if let user = self.userData {
             if let userinfo = user.user {
-                return [userinfo.portalAccount, userinfo.name, userinfo.nickname, userinfo.anonymousNickname, userinfo.phoneNumber, userinfo.gender == 0 ? "남자":"여자", userinfo.studentNumber, userinfo.major]
+                let a = [userinfo.portalAccount, userinfo.name, userinfo.nickname, userinfo.anonymousNickname, userinfo.phoneNumber, userinfo.gender == 0 ? "남자":"여자", userinfo.studentNumber, userinfo.major]
+                UserDefaults.standard.set(a, forKey: "userInfo")
+                //return a
             }
         }
-        return ["error"]
+        //return ["error"]
     }
     
     func login_session(email: String, password: String, completion: @escaping (UserRequest?) -> Void) {
@@ -58,6 +78,7 @@ class UserDownloader: ObservableObject {
                 do {
                     let decoder = JSONDecoder()
                     let userRequest = try decoder.decode(UserRequest.self, from: data)
+                    
                     completion(userRequest)
                 } catch let error {
                     print(error)

@@ -9,20 +9,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var signInSuccess = false
-    @EnvironmentObject var userData: UserDownloader
     
     
     
     var body: some View {
 
-        Group {
-            if (userData.isUser()) {
-            MainView()
-          } else {
-            UserLoginView()
-          }
-        }
+        MainView()
 
     }
 }
@@ -36,70 +28,64 @@ struct MenuView: View {
 
 struct HomeView: View {
     var body: some View {
-        return NavigationView {
-            
-            VStack {
-                HStack {
-                    Spacer()
-                    NavigationLink(destination: MealView()) {
-                            Text("test")
-                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding().background(Color.white)
-                    Spacer()
-                    NavigationLink(destination: MealView()) {
-                        Text("meal")
-                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                    Spacer()
-                    NavigationLink(destination: MealView()) {
-                        Text("meal")
-                    }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                    Spacer()
-                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
-                
-                HStack {
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding().background(Color.white)
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                Spacer()
-                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
-                
-                HStack {
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                Spacer()
-                NavigationLink(destination: MealView()) {
-                    Text("meal")
-                }.frame(minWidth: 0, maxWidth: 100, minHeight: 0, maxHeight: 100, alignment: .center).padding()
-                Spacer()
-                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 100, alignment: .topLeading).padding([.leading,.trailing], 10)
-            }
-
-        }.background(Color.orange)
+        return EmptyView()
     }
 }
 
+func loadUserInfo() -> [[[String]]] {
+    
+    if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+        let decoder = JSONDecoder()
+        if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+            if let userInfo = loaded.user {
+                let userInfoData = [[["아이디",userInfo.portalAccount], ["이름",userInfo.name], ["닉네임",userInfo.nickname], ["익명닉네임",userInfo.anonymousNickname], ["휴대전화",userInfo.phoneNumber], ["성별",userInfo.gender == 0 ? "남자":"여자"]], [["학번",userInfo.studentNumber], ["전공",userInfo.major]]]
+                return userInfoData
+            }
+        }
+    }
+    return []
+}
+
+
+
 struct MyInfoView: View {
-    @EnvironmentObject var userData: UserDownloader
+    var listData: [[[String]]] = loadUserInfo()
+
+    
     
     var body: some View {
         
         List {
             Section(header: Text("기본정보")) {
-                Text("test")
+                ForEach(listData[0], id:\.self) { general in
+                    HStack {
+                    Text(general[0])
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text(general[1])
+                        .font(.subheadline)
+                        .fontWeight(.light)
+
+                    }
+                    
+                }
+                
+                
+            }
+            Section(header: Text("학교정보")) {
+                ForEach(listData[1], id:\.self) { school in
+                    HStack {
+                    Text(school[0])
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text(school[1])
+                        .font(.subheadline)
+                        .fontWeight(.light)
+
+                    }
+                    
+                }
+                
             }
         }.listStyle(GroupedListStyle())
     }
@@ -107,7 +93,6 @@ struct MyInfoView: View {
 
 struct MainView: View {
     @State private var selection = 0
-    @EnvironmentObject var userData: UserDownloader
     
     
     var body: some View {
@@ -115,7 +100,7 @@ struct MainView: View {
         return ZStack {
             
             TabView(selection: $selection){
-                HomeView()
+                Text("홈")
                     .tabItem {
                         VStack {
                             Image(systemName: "house")
@@ -132,9 +117,11 @@ struct MainView: View {
                         }
                     }
                     .tag(1)
+                NavigationView {
                 MyInfoView()
-                .font(.title)
-                .tabItem {
+                }
+                    .font(.title)
+                    .tabItem {
                     VStack {
                         Image(systemName: "person")
                         Text("내정보")

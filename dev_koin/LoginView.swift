@@ -14,10 +14,13 @@ import CryptoKit
 import CryptoTokenKit
 import Foundation
 
+
+
 struct UserLoginView: View {
     @State var login_email: String = ""
     @State var login_password: String = ""
-    @EnvironmentObject var userData: UserDownloader
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var settings: UserSettings
     
     var body: some View {
     return ZStack {
@@ -35,11 +38,11 @@ struct UserLoginView: View {
                 HStack {
                     TextField("KOREATECH 이메일", text: $login_email)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-                        .font(/*@START_MENU_TOKEN@*/.subheadline/*@END_MENU_TOKEN@*/)
+                        .font(.subheadline)
                     Text("@ koreatech.ac.kr")
                         .fontWeight(.regular)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 10))
-                        .font(/*@START_MENU_TOKEN@*/.footnote/*@END_MENU_TOKEN@*/)
+                        .font(.subheadline)
                 }
                     Divider()
                 
@@ -53,7 +56,11 @@ struct UserLoginView: View {
 
                 
                 Button(action: {
-                    self.userData.setUser(email: self.login_email, password: self.login_password)
+                    if isLoginSuccess(email: self.login_email, password: self.login_password) {
+                        UserDefaults.standard.set(true, forKey: "Loggedin")
+                        UserDefaults.standard.synchronize()
+                        self.settings.loggedIn = true
+                    }
                 }) {
                     HStack {
                         Spacer()
@@ -122,6 +129,49 @@ struct UserLoginView: View {
 
 func submit() {
     
+}
+
+func isLoginSuccess(email: String, password: String) -> Bool {
+    login_session(email: email, password: password) { user in
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(user) {
+            UserDefaults.standard.set(encoded, forKey: "user")
+        }
+    }
+    
+    if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+        let decoder = JSONDecoder()
+        if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+            return true
+        }
+    }
+    return false
+    
+}
+
+func login_session(email: String, password: String, completion: @escaping (UserRequest?) -> Void) {
+    let inputData = Data(password.utf8)
+    let hashed = SHA256.hash(data: inputData)
+    let hashPassword = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
+    do {
+        Alamofire
+        .request("http://api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.prettyPrinted)
+        .validate { request, response, data in
+            return .success
+        }
+        .response { response in
+            guard let data = response.data else { return }
+            do {
+                let decoder = JSONDecoder()
+                let userRequest = try decoder.decode(UserRequest.self, from: data)
+                
+                completion(userRequest)
+            } catch let error {
+                print(error)
+                completion(nil)
+            }
+        }
+    }
 }
 
 

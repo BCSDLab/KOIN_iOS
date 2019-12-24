@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import SwiftUI
 
 struct UserRequest: Codable {
     let token: String?
