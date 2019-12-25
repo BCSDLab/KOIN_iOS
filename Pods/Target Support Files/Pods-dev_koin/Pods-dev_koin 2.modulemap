@@ -1,0 +1,6 @@
+framework module Pods_dev_koin {
+  umbrella header "Pods-dev_koin-umbrella.h"
+
+  export *
+  module * { export * }
+}
