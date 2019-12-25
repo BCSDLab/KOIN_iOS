@@ -294,6 +294,7 @@ struct MyInfoView: View {
                     Text(general[0])
                         .font(.headline)
                         .fontWeight(.semibold)
+                    Spacer()
                     Text(general[1])
                         .font(.subheadline)
                         .fontWeight(.light)
@@ -310,6 +311,7 @@ struct MyInfoView: View {
                     Text(school[0])
                         .font(.headline)
                         .fontWeight(.semibold)
+                    Spacer()
                     Text(school[1])
                         .font(.subheadline)
                         .fontWeight(.light)
@@ -324,59 +326,130 @@ struct MyInfoView: View {
 }
 
 struct MainView: View {
-    @State private var selection = 0
+    @ObservedObject var viewRouter = ViewRouter()
+    
+    @State var showSideMenu = false
     
     
     var body: some View {
-        
-        return ZStack {
-            
-            TabView(selection: $selection){
-                HomeView()
-                    .background(Color.white)
-                .tabItem {
-                        VStack {
-                            Image("bottom_home")
-                                .renderingMode(.template)
-                                .font(.subheadline)
-                                .accentColor(.blue)
-                            Text("홈")
-                        }
-                    }.accentColor(.blue)
-                    .tag(0)
-                Text("카테고리")
-                    .font(.title)
-                    .tabItem {
-                        VStack {
-                            Image("bottom_category")
-                                .renderingMode(.template)
-                                .font(.subheadline)
-                                .accentColor(.blue)
-                            Text("카테고리")
-                        }
-                    }.accentColor(.blue)
-                    .tag(1)
-                NavigationView {
-                MyInfoView()
-                }
-                    .tabItem {
-                    VStack {
-                        Image("bottom_myinfo")
-                            .renderingMode(.template)
-                            .font(.subheadline)
-                            .accentColor(.blue)
-                        Text("내정보")
+        return GeometryReader { geometry in
+            VStack {
+                if self.viewRouter.currentView == "home" {
+                    HomeView()
+                } else if self.viewRouter.currentView == "info" {
+                    NavigationView{
+                        MyInfoView()
                     }
-                }.accentColor(.blue)
-                .tag(2)
-            }
-            
+                }
+                ZStack {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Spacer()
+                            Image("bottom_home")
+                                .resizable()
+                                .renderingMode(.template)
+                                .frame(width:45, height: 30)
+                                .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
+                            Text("홈")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            Spacer()
+                                }.onTapGesture {
+                                    self.viewRouter.currentView = "home"
+                                }
+                        .foregroundColor(self.viewRouter.currentView == "home" ? .blue : Color.black.opacity(0.7))
+                        .accentColor(self.viewRouter.currentView == "hone" ? .blue : Color.black.opacity(0.7))
+                        .padding()
+                        Spacer()
+                        VStack {
+                        Image("bottom_category")
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width:45, height: 30)
+                        Text("카테고리")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            }
+                        .padding()
+                            .foregroundColor(Color.black.opacity(0.7))
+                            .accentColor(Color.black.opacity(0.7))
+                        .onTapGesture {
+                                
+                            }
+                        Spacer()
+                        VStack {
+                        Image("bottom_myinfo")
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width:45, height: 30)
+                            
+                        Text("내정보")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            }.onTapGesture {
+                                self.viewRouter.currentView = "info"
+                            }
+                            .foregroundColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
+                        .accentColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
+                        .padding()
+                        Spacer()
+                    }
+                        .frame(width: geometry.size.width, height: geometry.size.height/11)
+                    .background(Color.white.shadow(radius: 2))
+                }
+            }.edgesIgnoringSafeArea(.bottom)
         }
-        
-        
+            
+           
     }
     
 }
+    
+    /*
+               TabView(selection: $selection){
+                   HomeView()
+                       .background(Color.white)
+                   .tabItem {
+                           VStack {
+                               Image("bottom_home")
+                                   .renderingMode(.template)
+                                   .font(.subheadline)
+                                   .accentColor(.blue)
+                               Text("홈")
+                           }
+                       }.accentColor(.blue)
+                       .tag(0)
+                   Text("카테고리")
+                       .font(.title)
+                       .tabItem {
+                           VStack {
+                               Image("bottom_category")
+                                   .renderingMode(.template)
+                                   .font(.subheadline)
+                                   .accentColor(.blue)
+                               Text("카테고리")
+                           }
+                       }.accentColor(.blue)
+                       .tag(1)
+                   NavigationView {
+                   MyInfoView()
+                   }
+                       .tabItem {
+                       VStack {
+                           Image("bottom_myinfo")
+                               .renderingMode(.template)
+                               .font(.subheadline)
+                               .accentColor(.blue)
+                           Text("내정보")
+                       }
+                   }.accentColor(.blue)
+                   .tag(2)
+               }
+               
+           }
+           
+           */
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
