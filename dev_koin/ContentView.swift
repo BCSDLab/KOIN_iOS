@@ -176,20 +176,18 @@ struct MyInfoView: View {
                 
                 HStack {
                     Spacer()
-                    Button(action: {}) {
-                        Text("회원탈퇴")
+                    Text("회원탈퇴").onTapGesture {
+                        
                     }
                     Spacer()
                     Divider()
                     Spacer()
-                    Button(action: {
-                        UserDefaults.standard.removeObject(forKey: "Loggedin")
-                        UserDefaults.standard.removeObject(forKey: "user")
-                        UserDefaults.standard.synchronize()
-                        self.settings.loggedIn = false
-                        UserLoginView()
-                    }) {
-                        Text("로그아웃")
+                    Text("로그아웃").onTapGesture {
+                    UserDefaults.standard.removeObject(forKey: "Loggedin")
+                    UserDefaults.standard.removeObject(forKey: "user")
+                    UserDefaults.standard.synchronize()
+                    self.settings.loggedIn = false
+                    UserLoginView()
                     }
                     Spacer()
                 }
@@ -466,7 +464,8 @@ struct MainView: View {
                     } else if self.viewRouter.currentView == "info" {
                         NavigationView{
                             MyInfoView()
-                        }.navigationBarTitle("내 설정", displayMode: .inline)
+                            .navigationBarTitle("내 정보")
+                        }.navigationBarTitle("내 정보")
                         
                     }
                     ZStack {
