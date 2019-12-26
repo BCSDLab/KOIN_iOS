@@ -141,38 +141,68 @@ struct SideMenu: View {
 
 
 struct MyInfoView: View {
+    @EnvironmentObject var settings: UserSettings
     var listData: [[[String]]] = loadUserInfo()
     
     var body: some View {
-        List {
-            Section(header: Text("기본정보")) {
-                ForEach(listData[0], id:\.self) { general in
-                    HStack {
-                        Text(general[0])
+        VStack {
+            List {
+                Section(header: Text("기본정보")) {
+                    ForEach(listData[0], id:\.self) { general in
+                        HStack {
+                            Text(general[0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Text(general[1])
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                        }
+                    }
+                }
+                Section(header: Text("학교정보")) {
+                    ForEach(listData[1], id:\.self) { school in
+                        HStack {
+                        Text(school[0])
                             .font(.headline)
                             .fontWeight(.semibold)
                         Spacer()
-                        Text(general[1])
+                        Text(school[1])
                             .font(.subheadline)
                             .fontWeight(.light)
+                        }
                     }
                 }
-            }
-            Section(header: Text("학교정보")) {
-                ForEach(listData[1], id:\.self) { school in
-                    HStack {
-                    Text(school[0])
-                        .font(.headline)
-                        .fontWeight(.semibold)
+                
+                HStack {
                     Spacer()
-                    Text(school[1])
-                        .font(.subheadline)
-                        .fontWeight(.light)
+                    Button(action: {}) {
+                        Text("회원탈퇴")
                     }
+                    Spacer()
+                    Divider()
+                    Spacer()
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "Loggedin")
+                        UserDefaults.standard.removeObject(forKey: "user")
+                        UserDefaults.standard.synchronize()
+                        self.settings.loggedIn = false
+                        UserLoginView()
+                    }) {
+                        Text("로그아웃")
+                    }
+                    Spacer()
                 }
+                
             }
+            .listStyle(GroupedListStyle())
+            
+            
+            
         }
-        .listStyle(GroupedListStyle())
+        
+        
+        
     }
 }
 
@@ -233,8 +263,8 @@ struct HomeView: View {
             .padding(.leading, 25)
             VStack() {
                 Spacer()
-                VStack(alignment: .center) {
-                    HStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 0) {
+                    HStack(alignment: .center, spacing: 0) {
                         Button(action: {}) {
                             VStack{
                                 Spacer()
@@ -252,21 +282,22 @@ struct HomeView: View {
                                 .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
                                 .background(Color.white)
                         }
+                            .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
                         Button(action: {}) {
                             VStack{
-                            Spacer()
-                            Image("bus")
-                                .renderingMode(.original)
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                            Spacer()
-                            Text("버스/교통")
-                                .fontWeight(.semibold)
-                                .foregroundColor(.black)
-                                .opacity(0.6)
-                                .padding(.bottom, 20)
-                            }
+                                Spacer()
+                                Image("bus")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                Spacer()
+                                Text("버스/교통")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.black)
+                                    .opacity(0.6)
+                                    .padding(.bottom, 20)
+                                }
                                 .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
                                 .background(Color.white)
                             }
@@ -290,7 +321,7 @@ struct HomeView: View {
                             }
                             .border(Color.gray.opacity(0.2), width: 0.5)
                         }
-                    HStack(alignment: .center) {
+                    HStack(alignment: .center, spacing: 0) {
                         Button(action: {}) {
                             VStack{
                             Spacer()
@@ -308,6 +339,7 @@ struct HomeView: View {
                                 .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
                                 .background(Color.white)
                         }
+                        .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
                         Button(action: {}) {
@@ -347,7 +379,7 @@ struct HomeView: View {
                         }
                         .border(Color.gray.opacity(0.2), width: 0.5)
                     }
-                    HStack(alignment: .center) {
+                    HStack(alignment: .center, spacing: 0) {
                         Button(action: {}) {
                             VStack{
                             Spacer()
@@ -434,7 +466,8 @@ struct MainView: View {
                     } else if self.viewRouter.currentView == "info" {
                         NavigationView{
                             MyInfoView()
-                        }
+                        }.navigationBarTitle("내 설정", displayMode: .inline)
+                        
                     }
                     ZStack {
                         HStack {
