@@ -20,10 +20,10 @@ struct MenuContent: View {
                     Text("홍길동")
                         .font(.system(size: 20))
                         .fontWeight(.semibold)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("light_navy"))
                     Text("님,안녕하세요!")
                         .font(.system(size: 15))
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("light_navy"))
                     Spacer()
                     Image("img_menu_logo")
                 }
@@ -33,6 +33,10 @@ struct MenuContent: View {
                         Image(systemName: "person")
                         Text("내정보")
                             .font(.subheadline)
+                        .onTapGesture {
+                            MyInfoView()
+                        }
+                        
                         }
                     
                     Section(header:

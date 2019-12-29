@@ -11,6 +11,7 @@
 		A025874F23B112D40023B00C /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A025874E23B112D40023B00C /* UserSettings.swift */; };
 		A04BE22723B356E400E26D38 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BE22623B356E400E26D38 /* ViewRouter.swift */; };
 		A0731614239FD056001B3976 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731613239FD056001B3976 /* LoginView.swift */; };
+		A092376623B5EBB900C60C2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A092376823B5EBB900C60C2F /* InfoPlist.strings */; };
 		A0AFD7F523AF940D002BC8EF /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFD7F423AF940D002BC8EF /* UserRequest.swift */; };
 		A0AFD7F723AF9425002BC8EF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFD7F623AF9425002BC8EF /* User.swift */; };
 		A0C637C2239D25770041DE96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C637C1239D25770041DE96 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 		A0C637C8239D25790041DE96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0C637C7239D25790041DE96 /* Assets.xcassets */; };
 		A0C637CB239D25790041DE96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0C637CA239D25790041DE96 /* Preview Assets.xcassets */; };
 		A0C637CE239D25790041DE96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0C637CC239D25790041DE96 /* LaunchScreen.storyboard */; };
+		A0CC198023B87A5D003CC858 /* AddUserProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CC197F23B87A5D003CC858 /* AddUserProperty.swift */; };
 		A0F0498623B5034700E91771 /* AddUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0498523B5034700E91771 /* AddUserView.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,9 +30,12 @@
 		A025874E23B112D40023B00C /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		A04BE22623B356E400E26D38 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		A0731613239FD056001B3976 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A092376323B5EB3C00C60C2F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A092376723B5EBB900C60C2F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A092376923B5EBE800C60C2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A0AFD7F423AF940D002BC8EF /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		A0AFD7F623AF9425002BC8EF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A0C637BE239D25770041DE96 /* 코인.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "코인.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0C637BE239D25770041DE96 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0C637C1239D25770041DE96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0C637C3239D25770041DE96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A0C637C5239D25770041DE96 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -38,6 +43,7 @@
 		A0C637CA239D25790041DE96 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A0C637CD239D25790041DE96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0C637CF239D25790041DE96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0CC197F23B87A5D003CC858 /* AddUserProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserProperty.swift; sourceTree = "<group>"; };
 		A0F0498523B5034700E91771 /* AddUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserView.swift; sourceTree = "<group>"; };
 		B963ACC104C7000DD7F72081 /* Pods_dev_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dev_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFAA7311E821EC4E9774D60A /* Pods-dev_koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev_koin.debug.xcconfig"; path = "Target Support Files/Pods-dev_koin/Pods-dev_koin.debug.xcconfig"; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 				A0AFD7F623AF9425002BC8EF /* User.swift */,
 				A025874E23B112D40023B00C /* UserSettings.swift */,
 				A04BE22623B356E400E26D38 /* ViewRouter.swift */,
+				A0CC197F23B87A5D003CC858 /* AddUserProperty.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -88,7 +95,7 @@
 		A0C637BF239D25770041DE96 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A0C637BE239D25770041DE96 /* 코인.app */,
+				A0C637BE239D25770041DE96 /* koin.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,14 +105,15 @@
 			children = (
 				A05EF45B239FA8FB005847AD /* Entities */,
 				A0C637C1239D25770041DE96 /* AppDelegate.swift */,
-				A0F0498523B5034700E91771 /* AddUserView.swift */,
 				A0C637C3239D25770041DE96 /* SceneDelegate.swift */,
-				A0C637C5239D25770041DE96 /* ContentView.swift */,
 				A0C637C7239D25790041DE96 /* Assets.xcassets */,
 				A0C637CC239D25790041DE96 /* LaunchScreen.storyboard */,
 				A0C637CF239D25790041DE96 /* Info.plist */,
 				A0C637C9239D25790041DE96 /* Preview Content */,
+				A0C637C5239D25770041DE96 /* ContentView.swift */,
 				A0731613239FD056001B3976 /* LoginView.swift */,
+				A0F0498523B5034700E91771 /* AddUserView.swift */,
+				A092376823B5EBB900C60C2F /* InfoPlist.strings */,
 			);
 			path = dev_koin;
 			sourceTree = "<group>";
@@ -146,7 +154,7 @@
 			);
 			name = dev_koin;
 			productName = dev_koin;
-			productReference = A0C637BE239D25770041DE96 /* 코인.app */;
+			productReference = A0C637BE239D25770041DE96 /* koin.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -171,6 +179,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = A0C637B5239D25770041DE96;
 			productRefGroup = A0C637BF239D25770041DE96 /* Products */;
@@ -188,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0C637CE239D25790041DE96 /* LaunchScreen.storyboard in Resources */,
+				A092376623B5EBB900C60C2F /* InfoPlist.strings in Resources */,
 				A0C637CB239D25790041DE96 /* Preview Assets.xcassets in Resources */,
 				A0C637C8239D25790041DE96 /* Assets.xcassets in Resources */,
 			);
@@ -249,6 +259,7 @@
 				A0731614239FD056001B3976 /* LoginView.swift in Sources */,
 				A0C637C6239D25770041DE96 /* ContentView.swift in Sources */,
 				A0AFD7F523AF940D002BC8EF /* UserRequest.swift in Sources */,
+				A0CC198023B87A5D003CC858 /* AddUserProperty.swift in Sources */,
 				A0AFD7F723AF9425002BC8EF /* User.swift in Sources */,
 				A0F0498623B5034700E91771 /* AddUserView.swift in Sources */,
 			);
@@ -257,10 +268,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		A092376823B5EBB900C60C2F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A092376723B5EBB900C60C2F /* ko */,
+				A092376923B5EBE800C60C2F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		A0C637CC239D25790041DE96 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A0C637CD239D25790041DE96 /* Base */,
+				A092376323B5EB3C00C60C2F /* ko */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -272,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -332,6 +354,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -398,7 +421,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bada.dev-koin";
-				PRODUCT_NAME = "코인";
+				PRODUCT_NAME = koin;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -420,7 +443,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bada.dev-koin";
-				PRODUCT_NAME = "코인";
+				PRODUCT_NAME = koin;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -23,7 +23,7 @@ struct UserLoginView: View {
     @EnvironmentObject var settings: UserSettings
     
     var body: some View {
-    return ZStack {
+    return NavigationView {
         VStack {
             Spacer()
             Image("logo_koin_color")
@@ -72,14 +72,16 @@ struct UserLoginView: View {
                     .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
                 
                 
-                Button(action: submit) {
+                
                 HStack {
                     Spacer()
-                    Text("회원가입")
-                        .foregroundColor(Color.white)
+                    NavigationLink(destination: AddUserView().environmentObject(AddUserProperty())) {
+                        Text("회원가입")
+                            .foregroundColor(Color.white)
+                    }
                     Spacer()
-                }
-                 }.padding().background(Color("light_navy"))
+                }.padding().background(Color("light_navy"))
+                 
                 
                 HStack(alignment: .center) {
                     Button(action: submit) {
