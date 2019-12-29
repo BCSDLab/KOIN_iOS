@@ -2,3 +2,6 @@ session.playground/
 /Podfile.lock
 dev_koin.xcodeproj/
 dev_koin.xcworkspace/
+.idea/
+Pods/Pods.xcodeproj/
+Pods/Target Support Files/
