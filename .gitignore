@@ -1,0 +1,5 @@
+./session.playground
+./Podfile.lock
+dev_koin/
+./dev_koin.xcodeproj
+./dev_koin.xcworkspace
