@@ -10,7 +10,7 @@ import Foundation
 
 struct DiningRequest: Codable, Hashable{
     let id: Int
-    let data: String?
+    let date: String?
     let type: String?
     let place: String?
     let priceCard: Int?
@@ -19,7 +19,7 @@ struct DiningRequest: Codable, Hashable{
     let menu: [String]?
     private enum CodingKeys: String, CodingKey {
             case id = "id"
-            case data = "data"
+            case date = "date"
             case type = "type"
             case place = "place"
             case priceCard = "price_card"

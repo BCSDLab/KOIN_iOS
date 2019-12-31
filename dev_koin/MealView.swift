@@ -39,7 +39,7 @@ struct MealView: View {
                         Spacer()
                         Text("<")
                         Spacer()
-                        Text("2019년 12월 31일")
+                        Text("2020년 01월 01일")
                         Spacer()
                         Text(">")
                         Spacer()
@@ -68,13 +68,11 @@ struct MealView: View {
                 }
                 
             if self.diningViewRouter.currentView == "breakfast" {
-                BreakfastView()
+                MenuView(menu_type: 0)
             } else if self.diningViewRouter.currentView == "lunch" {
-                Text("lunch")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                MenuView(menu_type: 1)
             } else if self.diningViewRouter.currentView == "dinner" {
-                Text("dinner")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                MenuView(menu_type: 2)
             }
             }.padding(.top, 20)
                 
@@ -82,9 +80,13 @@ struct MealView: View {
     }
 }
 
-struct BreakfastView: View {
-    var meals: [[String]] = load_meal()
-    
+struct MenuView: View {
+    var menu_type: Int
+    var meals: [[String]]
+    init(menu_type: Int) {
+        self.menu_type = menu_type
+        self.meals = load_meal(menu_type: menu_type, date: Date())
+    }
     var body: some View {
         List {
             VStack {
@@ -151,28 +153,49 @@ struct CardView: View{
     
 }
 
-func load_meal(date: Date = Date()) -> [[String]] {
+func load_meal(menu_type: Int = 0, date: Date = Date()) -> [[String]] {
+    // 0: breakfast, 1: lunch, 2: dinner
     meal_session(date: date)
-    var t: [[String]] = []
+    var breakfast: [[String]] = []
+    var lunch: [[String]] = []
+    var dinner: [[String]] = []
     
     if let data = UserDefaults.standard.object(forKey:"meal") as? Data {
         let decoder = JSONDecoder()
         if let loaded = try? decoder.decode([DiningRequest].self, from: data) {
             for i in loaded {
                 var a: Array<String> = Array()
-                if let data = i.data {a.append(data)} else{a.append("")}
-                if let type = i.type {a.append(type)} else{a.append("")}
-                if let place = i.place {a.append(place)} else{a.append("")}
-                if let priceCard = i.priceCard {a.append(String(priceCard))} else{a.append("")}
-                if let priceCash = i.priceCash {a.append(String(priceCash))} else{a.append("")}
-                if let kcal = i.kcal {a.append(String(kcal))} else{a.append("")}
-                if let menu = i.menu {
-                    let stringMenu = menu.joined(separator: "\n")
+                var menu_type: String = ""
+                if let diningDate = i.date {a.append(diningDate)} else{a.append("")}
+                if let diningType = i.type {
+                    menu_type = diningType
+                    a.append(diningType)
+                } else{a.append("")}
+                if let diningPlace = i.place {a.append(diningPlace)} else{a.append("")}
+                if let diningPriceCard = i.priceCard {a.append(String(diningPriceCard))} else{a.append("")}
+                if let diningPriceCash = i.priceCash {a.append(String(diningPriceCash))} else{a.append("")}
+                if let diningKcal = i.kcal {a.append(String(diningKcal))} else{a.append("")}
+                if let diningMenu = i.menu {
+                    let stringMenu = diningMenu.joined(separator: "\n")
                     a.append(stringMenu)
                 } else{a.append("")}
-                t.append(a)
+                if menu_type == "BREAKFAST" {
+                    breakfast.append(a)
+                } else if menu_type == "LUNCH" {
+                    lunch.append(a)
+                } else if menu_type == "DINNER" {
+                    dinner.append(a)
+                }
+                
             }
-            return t
+            if menu_type == 0 {
+                return breakfast
+            } else if menu_type == 1 {
+                return lunch
+            } else if menu_type == 2 {
+                return dinner
+            }
+            
         }
     }
     return [[""]]
