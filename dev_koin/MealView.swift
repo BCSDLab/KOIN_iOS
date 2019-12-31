@@ -11,44 +11,83 @@ import Alamofire
 import ObjectMapper
 import AlamofireObjectMapper
 
+func convertPrice(price:String) -> String {
+    let formatter = NumberFormatter()
+    formatter.locale = Locale.current
+    formatter.numberStyle = .currency
+    formatter.currencySymbol = ""
+    formatter.numberStyle = .decimal
+    if let intPrice = Int(price) {
+        if let formattedPrice = formatter.string(from: intPrice as NSNumber) {
+            return formattedPrice
+        }
+    }
+    return price
+}
+
 
 //[data, type, place, priceCard, priceCash, kcal, menu]
 struct MealView: View {
+    @State private var selectedTab: Int = 0
+    @ObservedObject var diningViewRouter = DiningViewRouter()
+    
+    var body: some View {
+            NavigationView{
+                
+            VStack {
+                HStack {
+                Spacer()
+                Text("아침").onTapGesture {
+                        self.diningViewRouter.currentView = "breakfast"
+                    }
+                    .foregroundColor(self.diningViewRouter.currentView == "breakfast" ? .blue : Color.black.opacity(0.7))
+                    .accentColor(self.diningViewRouter.currentView == "breakfast" ? .blue : Color.black.opacity(0.7))
+                Spacer()
+                Text("점심").onTapGesture {
+                    self.diningViewRouter.currentView = "lunch"
+                }
+                .foregroundColor(self.diningViewRouter.currentView == "lunch" ? .blue : Color.black.opacity(0.7))
+                .accentColor(self.diningViewRouter.currentView == "lunch" ? .blue : Color.black.opacity(0.7))
+                Spacer()
+                    Text("저녁").onTapGesture {
+                        self.diningViewRouter.currentView = "dinner"
+                    }
+                    .foregroundColor(self.diningViewRouter.currentView == "dinner" ? .blue : Color.black.opacity(0.7))
+                    .accentColor(self.diningViewRouter.currentView == "dinner" ? .blue : Color.black.opacity(0.7))
+                    Spacer()
+                }
+                
+                
+            if self.diningViewRouter.currentView == "breakfast" {
+                BreakfastView()
+            } else if self.diningViewRouter.currentView == "lunch" {
+                Text("lunch")
+            } else if self.diningViewRouter.currentView == "dinner" {
+                Text("dinner")
+            }
+            }
+            }
+        
+    }
+}
+
+struct BreakfastView: View {
     var meals: [[String]] = load_meal()
     
     var body: some View {
-        NavigationView{
-    /*
-            HStack{
-                Button(action: {}) {
-                    Text("아침")
-                }
-                Spacer()
-                Button(action: {}) {
-                    Text("점심")
-                }
-                Spacer()
-                Button(action: {}) {
-                    Text("저녁")
-                }
-            }.frame(minWidth: 120, idealWidth: 150,maxWidth: 180)
-            */
-            List {
-                VStack {
-                    ForEach(meals, id: \.self) {meal in
-                        CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
-                    }
+        List {
+            VStack {
+                ForEach(meals, id: \.self) {meal in
+                    CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
                 }
             }
-            
-            
-            
-            
-            
-            
-        }.navigationBarTitle("식단")
+        }
     }
 }
+
+
+
+
 
 struct CardView: View{
     var place: String
@@ -56,6 +95,8 @@ struct CardView: View{
     var priceCash: String
     var kcal: String
     var menu: String
+    
+    
     
     var body: some View{
                 VStack(alignment: .leading){
@@ -65,7 +106,7 @@ struct CardView: View{
                             .fontWeight(.medium)
                         .foregroundColor(.primary)
                         Spacer()
-                        Text("캐시비 \(priceCard)원 / 현금 \(priceCash)원")
+                        Text("캐시비 \(convertPrice(price: priceCard))원 / 현금 \(convertPrice(price: priceCash))원")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     }
