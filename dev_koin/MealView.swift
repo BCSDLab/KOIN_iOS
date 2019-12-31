@@ -32,9 +32,18 @@ struct MealView: View {
     @ObservedObject var diningViewRouter = DiningViewRouter()
     
     var body: some View {
-            NavigationView{
                 
             VStack {
+                VStack {
+                    HStack{
+                        Spacer()
+                        Text("<")
+                        Spacer()
+                        Text("2019년 12월 31일")
+                        Spacer()
+                        Text(">")
+                        Spacer()
+                    }.padding(.bottom, 40)
                 HStack {
                 Spacer()
                 Text("아침").onTapGesture {
@@ -56,17 +65,19 @@ struct MealView: View {
                     .accentColor(self.diningViewRouter.currentView == "dinner" ? .blue : Color.black.opacity(0.7))
                     Spacer()
                 }
-                
+                }
                 
             if self.diningViewRouter.currentView == "breakfast" {
                 BreakfastView()
             } else if self.diningViewRouter.currentView == "lunch" {
                 Text("lunch")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if self.diningViewRouter.currentView == "dinner" {
                 Text("dinner")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            }
-            }
+            }.padding(.top, 20)
+                
         
     }
 }
@@ -121,10 +132,6 @@ struct CardView: View{
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(nil)
-                    
-                
-                              
-        
           
         }
                 
