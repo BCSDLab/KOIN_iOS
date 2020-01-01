@@ -11,18 +11,11 @@ import Alamofire
 import ObjectMapper
 import AlamofireObjectMapper
 
-func convertPrice(price:String) -> String {
-    let formatter = NumberFormatter()
-    formatter.locale = Locale.current
-    formatter.numberStyle = .currency
-    formatter.currencySymbol = ""
-    formatter.numberStyle = .decimal
-    if let intPrice = Int(price) {
-        if let formattedPrice = formatter.string(from: intPrice as NSNumber) {
-            return formattedPrice
-        }
-    }
-    return price
+func dateToString(date: Date)->String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+    let dateString = dateFormatter.string(from: date)
+    return dateString
 }
 
 
@@ -30,6 +23,8 @@ func convertPrice(price:String) -> String {
 struct MealView: View {
     @State private var selectedTab: Int = 0
     @ObservedObject var diningViewRouter = DiningViewRouter()
+    @State var date: Date = Date()
+    @State var dateString: String = dateToString(date: Date())
     
     var body: some View {
                 
@@ -37,11 +32,17 @@ struct MealView: View {
                 VStack {
                     HStack{
                         Spacer()
-                        Text("<")
+                        Text("<").onTapGesture {
+                            self.date = Date(timeInterval: -86400, since: self.date)
+                            self.dateString = dateToString(date: self.date)
+                        }
                         Spacer()
-                        Text("2020년 01월 01일")
+                        Text(dateString)
                         Spacer()
-                        Text(">")
+                        Text(">").onTapGesture {
+                            self.date = Date(timeInterval: 86400, since: self.date)
+                            self.dateString = dateToString(date: self.date)
+                        }
                         Spacer()
                     }.padding(.bottom, 40)
                 HStack {
@@ -87,6 +88,7 @@ struct MenuView: View {
         self.menu_type = menu_type
         self.meals = load_meal(menu_type: menu_type, date: Date())
     }
+    
     var body: some View {
         List {
             VStack {
@@ -143,14 +145,28 @@ struct CardView: View{
                 .padding()
         .cornerRadius(10)
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(.sRGB,red: 150/255, green: 150/255, blue: 150/255, opacity: 0.5), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 1)
+                .stroke(Color(.sRGB,red: 150/255, green: 150/255, blue: 150/255, opacity: 0.5), lineWidth: 0.7)
         )
         .padding([.top, .horizontal])
         
     }
  
     
+}
+
+func convertPrice(price:String) -> String {
+    let formatter = NumberFormatter()
+    formatter.locale = Locale.current
+    formatter.numberStyle = .currency
+    formatter.currencySymbol = ""
+    formatter.numberStyle = .decimal
+    if let intPrice = Int(price) {
+        if let formattedPrice = formatter.string(from: intPrice as NSNumber) {
+            return formattedPrice
+        }
+    }
+    return price
 }
 
 func load_meal(menu_type: Int = 0, date: Date = Date()) -> [[String]] {
