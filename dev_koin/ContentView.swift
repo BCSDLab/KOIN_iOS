@@ -456,6 +456,15 @@ struct MainView: View {
     @ObservedObject var viewRouter = ViewRouter()
     @State var menuOpen: Bool = false
     
+    init() {
+        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        //Use this if NavigationBarTitle is with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        //Use this if NavigationBarTitle is with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    
     func openMenu() {
         self.menuOpen.toggle()
     }

@@ -19,6 +19,7 @@ struct MealView: View {
     
     init() {
       UITableView.appearance().separatorColor = .clear
+            //Use this if NavigationBarTitle is with Large Font
     }
     
     var body: some View {
