@@ -260,9 +260,11 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity, maxHeight:70, alignment: .leading)
             }
             .zIndex(-1)
-            .frame(maxWidth: .infinity, maxHeight: 200, alignment: .leading)
-            .padding(.top,50)
+            .frame(maxWidth: .infinity, maxHeight: 150, alignment: .leading)
+            .padding(.top,80)
             .padding(.leading, 25)
+            .edgesIgnoringSafeArea(.top)
+                
             VStack() {
                 Spacer()
                 VStack(alignment: .center, spacing: 0) {
@@ -344,7 +346,7 @@ struct HomeView: View {
                         .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
-                        Button(action: {}) {
+                        NavigationLink(destination: MealView().navigationBarTitle(Text("식단"), displayMode: .inline)) {
                             VStack{
                             Spacer()
                             Image("restaurant")
@@ -443,7 +445,8 @@ struct HomeView: View {
                 }
                 .clipped()
                 .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
-                .padding(.bottom, 40)
+                .padding(.bottom, 70)
+                .edgesIgnoringSafeArea(.top)
             }
         }
     }
@@ -464,7 +467,9 @@ struct MainView: View {
                 }.zIndex(99)
                 VStack {
                     if self.viewRouter.currentView == "home" {
+                        NavigationView{
                         HomeView()
+                        }.navigationBarHidden(true)
                     } else if self.viewRouter.currentView == "info" {
                         NavigationView{
                             MyInfoView()
@@ -520,9 +525,7 @@ struct MainView: View {
                                         .font(.system(size: 12))
                                         .fontWeight(.medium)
                                     }
-                                    .onTapGesture {
-                                        self.viewRouter.currentView = "info"
-                                    }
+                                    //.onTapGesture {self.viewRouter.currentView = "info"}
                                     .foregroundColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
                                     .accentColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
                                     .padding()
