@@ -23,8 +23,10 @@ func dateToString(date: Date)->String {
 struct MealView: View {
     @State private var selectedTab: Int = 0
     @ObservedObject var diningViewRouter = DiningViewRouter()
+    @ObservedObject var observed = DiningFetcher(date: Date())
     @State var date: Date = Date()
     @State var dateString: String = dateToString(date: Date())
+    
     
     var body: some View {
                 
@@ -35,6 +37,7 @@ struct MealView: View {
                         Text("<").onTapGesture {
                             self.date = Date(timeInterval: -86400, since: self.date)
                             self.dateString = dateToString(date: self.date)
+                            self.observed.meal_session(date: self.date)
                         }
                         Spacer()
                         Text(dateString)
@@ -42,6 +45,7 @@ struct MealView: View {
                         Text(">").onTapGesture {
                             self.date = Date(timeInterval: 86400, since: self.date)
                             self.dateString = dateToString(date: self.date)
+                            self.observed.meal_session(date: self.date)
                         }
                         Spacer()
                     }.padding(.bottom, 40)
@@ -69,11 +73,11 @@ struct MealView: View {
                 }
                 
             if self.diningViewRouter.currentView == "breakfast" {
-                MenuView(menu_type: 0)
+                MenuView(menu_type: 0, observed: self.observed)
             } else if self.diningViewRouter.currentView == "lunch" {
-                MenuView(menu_type: 1)
+                MenuView(menu_type: 1, observed: self.observed)
             } else if self.diningViewRouter.currentView == "dinner" {
-                MenuView(menu_type: 2)
+                MenuView(menu_type: 2, observed: self.observed)
             }
             }.padding(.top, 20)
                 
@@ -81,21 +85,19 @@ struct MealView: View {
     }
 }
 
+// 0: BREAKFAST, 1: LUNCH, 2: DINNER
 struct MenuView: View {
     var menu_type: Int
-    var meals: [[String]]
-    init(menu_type: Int) {
-        self.menu_type = menu_type
-        self.meals = load_meal(menu_type: menu_type, date: Date())
-    }
-    
+    let menu_switch: Array<String> = ["BREAKFAST", "LUNCH", "DINNER"]
+    @ObservedObject var observed: DiningFetcher
+    //CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
     var body: some View {
-        List {
-            VStack {
-                ForEach(meals, id: \.self) {meal in
-                    CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
-                }
+        List(observed.meals) { meal in
+            if(meal.type == self.menu_switch[self.menu_type]) {
+                CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
             }
+            
+            
         }
     }
 }
@@ -106,10 +108,10 @@ struct MenuView: View {
 
 struct CardView: View{
     var place: String
-    var priceCard: String
-    var priceCash: String
-    var kcal: String
-    var menu: String
+    var priceCard: Int?
+    var priceCash: Int?
+    var kcal: Int?
+    var menu: [String]
     
     
     
@@ -127,12 +129,12 @@ struct CardView: View{
                     }
                     Divider()
                         .foregroundColor(Color("squash"))
-                    Text("\(kcal)Kcal")
+                    Text("\(convertPrice(price: kcal))Kcal")
                     .font(.caption)
                     .foregroundColor(.secondary)
                         .padding(.bottom, 10)
                     
-                    Text(menu)
+                    Text(menu.joined(separator: "\n"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(nil)
@@ -155,83 +157,22 @@ struct CardView: View{
     
 }
 
-func convertPrice(price:String) -> String {
+func convertPrice(price:Int?) -> String {
+    //let stringPrice: String
     let formatter = NumberFormatter()
     formatter.locale = Locale.current
     formatter.numberStyle = .currency
     formatter.currencySymbol = ""
     formatter.numberStyle = .decimal
-    if let intPrice = Int(price) {
+    
+    
+    if let intPrice = price {
         if let formattedPrice = formatter.string(from: intPrice as NSNumber) {
             return formattedPrice
         }
     }
-    return price
-}
-
-func load_meal(menu_type: Int = 0, date: Date = Date()) -> [[String]] {
-    // 0: breakfast, 1: lunch, 2: dinner
-    meal_session(date: date)
-    var breakfast: [[String]] = []
-    var lunch: [[String]] = []
-    var dinner: [[String]] = []
     
-    if let data = UserDefaults.standard.object(forKey:"meal") as? Data {
-        let decoder = JSONDecoder()
-        if let loaded = try? decoder.decode([DiningRequest].self, from: data) {
-            for i in loaded {
-                var a: Array<String> = Array()
-                var menu_type: String = ""
-                if let diningDate = i.date {a.append(diningDate)} else{a.append("")}
-                if let diningType = i.type {
-                    menu_type = diningType
-                    a.append(diningType)
-                } else{a.append("")}
-                if let diningPlace = i.place {a.append(diningPlace)} else{a.append("")}
-                if let diningPriceCard = i.priceCard {a.append(String(diningPriceCard))} else{a.append("")}
-                if let diningPriceCash = i.priceCash {a.append(String(diningPriceCash))} else{a.append("")}
-                if let diningKcal = i.kcal {a.append(String(diningKcal))} else{a.append("")}
-                if let diningMenu = i.menu {
-                    let stringMenu = diningMenu.joined(separator: "\n")
-                    a.append(stringMenu)
-                } else{a.append("")}
-                if menu_type == "BREAKFAST" {
-                    breakfast.append(a)
-                } else if menu_type == "LUNCH" {
-                    lunch.append(a)
-                } else if menu_type == "DINNER" {
-                    dinner.append(a)
-                }
-                
-            }
-            if menu_type == 0 {
-                return breakfast
-            } else if menu_type == 1 {
-                return lunch
-            } else if menu_type == 2 {
-                return dinner
-            }
-            
-        }
-    }
-    return [[""]]
-}
-
-func meal_session(date: Date = Date()) {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyMMdd"
-    let dateString:String = dateFormatter.string(from: date)
-    
-        Alamofire
-            .request("http://api.koreatech.in/dinings?date=\(dateString)", method: .get, encoding: JSONEncoding.default)
-            .response{ response in
-                guard let data = response.data else { return }
-                do {
-                    UserDefaults.standard.set(data, forKey: "meal")
-                } catch let error {
-                    print(error)
-                }
-            }
+    return "0"
 }
 
 struct MealView_Previews: PreviewProvider {

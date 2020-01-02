@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct DiningRequest: Codable, Hashable{
+struct DiningRequest: Codable, Hashable, Identifiable{
     let id: Int
-    let date: String?
-    let type: String?
-    let place: String?
+    let date: String
+    let type: String
+    let place: String
     let priceCard: Int?
     let priceCash: Int?
     let kcal: Int?
-    let menu: [String]?
+    let menu: [String]
     private enum CodingKeys: String, CodingKey {
             case id = "id"
             case date = "date"
