@@ -80,12 +80,9 @@ struct StartView: View {
     @EnvironmentObject var settings: UserSettings
     
     var body: some View {
-        let set = UserSettings()
-        if UserDefaults.standard.bool(forKey: "Loggedin") {
-            set.loggedIn = true
+        if settings.isLogin {
             return AnyView(ContentView())
         } else {
-            set.loggedIn = false
             return AnyView(UserLoginView())
         }
     }

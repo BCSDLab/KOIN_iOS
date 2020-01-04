@@ -11,5 +11,5 @@ import SwiftUI
 import Combine
 
 class ViewRouter: ObservableObject {
-    @Published var currentView = "home"
+    @Published var currentView = 0
 }
