@@ -250,6 +250,7 @@ struct HomeView: View {
     }
     
     var body: some View {
+        NavigationView{
         GeometryReader { geometry in
             ZStack {
                 
@@ -288,7 +289,6 @@ struct HomeView: View {
                 
                 .frame(width: geometry.size.height, height: 400, alignment: .top)
                     .padding(.leading, 30)
-                .padding(.top, 80)
                 
                 
                 Spacer()
@@ -377,7 +377,7 @@ struct HomeView: View {
                         .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
-                        NavigationLink(destination: MealView().navigationBarTitle(Text("식단"), displayMode: .inline)) {
+                        NavigationLink(destination: MealView()) {
                             VStack{
                             Spacer()
                             Image("restaurant")
@@ -476,9 +476,10 @@ struct HomeView: View {
                 }
                 .clipped()
                 .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
-                .padding(.bottom, 70)
+                .padding(.bottom, 50)
             }
             
+        }
         }.onAppear {
             print("HomeView appeared!")
         }.onDisappear {
@@ -512,11 +513,9 @@ struct MainView: View {
                 VStack {
                     VStack {
                         if self.viewRouter.currentView == 0 {
-                            NavigationView{
+                            
                                 HomeView()
-                                .navigationBarTitle("")
-                                .navigationBarHidden(true)
-                            }
+                            
                             
                         } else {
                             

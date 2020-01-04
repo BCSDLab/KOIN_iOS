@@ -19,11 +19,9 @@ struct MealView: View {
     
     init() {
       UITableView.appearance().separatorColor = .clear
-            //Use this if NavigationBarTitle is with Large Font
     }
     
     var body: some View {
-                
             VStack {
                 VStack {
                     HStack{
@@ -74,6 +72,12 @@ struct MealView: View {
                 MenuView(menu_type: 2, observed: self.observed)
             }
             }.padding(.top, 20)
+        .navigationBarTitle(Text("식단"), displayMode: .inline)
+        .onAppear {
+            print("MealView appeared!")
+        }.onDisappear {
+            print("MealView disappeared!")
+        }
                 
         
     }
