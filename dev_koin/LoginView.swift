@@ -19,7 +19,7 @@ import Foundation
 struct UserLoginView: View {
     @State var login_email: String = ""
     @State var login_password: String = ""
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    //@Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var settings: UserSettings
     
     var body: some View {
@@ -56,11 +56,9 @@ struct UserLoginView: View {
 
                 
                 Button(action: {
-                    if isLoginSuccess(email: self.login_email, password: self.login_password) {
-                        UserDefaults.standard.set(true, forKey: "Loggedin")
-                        UserDefaults.standard.synchronize()
-                        self.settings.loggedIn = true
-                    }
+                    self.settings.login_session(email: self.login_email, password: self.login_password)
+                    self.settings.login_succeed()
+                    print("clicked")
                 }) {
                     HStack {
                         Spacer()
@@ -122,6 +120,10 @@ struct UserLoginView: View {
                 .offset(y: 15)
                 .padding(.bottom, CGFloat(30))
         }
+    }.onAppear {
+        print("UserLoginView appeared!")
+    }.onDisappear {
+        print("UserLoginView disappeared!")
     }
         
 
@@ -133,48 +135,7 @@ func submit() {
     
 }
 
-func isLoginSuccess(email: String, password: String) -> Bool {
-    login_session(email: email, password: password) { user in
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(user) {
-            UserDefaults.standard.set(encoded, forKey: "user")
-        }
-    }
-    
-    if let data = UserDefaults.standard.object(forKey:"user") as? Data {
-        let decoder = JSONDecoder()
-        if let loaded = try? decoder.decode(UserRequest.self, from: data) {
-            return true
-        }
-    }
-    return false
-    
-}
 
-func login_session(email: String, password: String, completion: @escaping (UserRequest?) -> Void) {
-    let inputData = Data(password.utf8)
-    let hashed = SHA256.hash(data: inputData)
-    let hashPassword = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
-    do {
-        Alamofire
-        .request("http://api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.prettyPrinted)
-        .validate { request, response, data in
-            return .success
-        }
-        .response { response in
-            guard let data = response.data else { return }
-            do {
-                let decoder = JSONDecoder()
-                let userRequest = try decoder.decode(UserRequest.self, from: data)
-                
-                completion(userRequest)
-            } catch let error {
-                print(error)
-                completion(nil)
-            }
-        }
-    }
-}
 
 
 

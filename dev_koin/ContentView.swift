@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct MenuContent: View {
+    @EnvironmentObject var settings: UserSettings
 
     init() {
       UITableView.appearance().separatorColor = .clear
@@ -33,10 +34,12 @@ struct MenuContent: View {
                         Image(systemName: "person")
                         Text("내정보")
                             .font(.subheadline)
-                        .onTapGesture {
-                            MyInfoView()
-                        }
                         
+                        
+                        }.onTapGesture {
+                            UserDefaults.standard.removeObject(forKey: "user")
+                            //UserDefaults.standard.synchronize()
+                            self.settings.logout_session()
                         }
                     
                     Section(header:
@@ -108,6 +111,10 @@ struct MenuContent: View {
                         }
                     }
                 }
+            }.onAppear {
+                print("MenuContent appeared!")
+            }.onDisappear {
+                print("MenuContent disappeared!")
             }
     }
 }
@@ -125,7 +132,6 @@ struct SideMenu: View {
             }
                 .background(Color.gray.opacity(0.3))
                 .opacity(self.isOpen ? 1.0 : 0.0)
-                .edgesIgnoringSafeArea(.all)
                 .animation(Animation.easeIn.delay(0.25))
                 .onTapGesture {
                     self.menuClose()
@@ -136,21 +142,40 @@ struct SideMenu: View {
                     .background(Color.white)
                     .offset(x: self.isOpen ? 0 : -self.width)
                     .animation(.default)
-                    .edgesIgnoringSafeArea(.top)
                 Spacer()
             }
+        }.onAppear {
+            print("SideMenu appeared!")
+        }.onDisappear {
+            print("SideMenu disappeared!")
         }
     }
 }
 
 
 struct MyInfoView: View {
-    @EnvironmentObject var settings: UserSettings
-    var listData: [[[String]]] = loadUserInfo()
+    var listData: [[[String]]] = []
+    //@EnvironmentObject var settings: UserSettings
+    
+    init() {
+        loadUserInfo()
+    }
+    
+    mutating func loadUserInfo(){
+        if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+                if let userInfo = loaded.user {
+                    listData =  [[["아이디",userInfo.portalAccount], ["이름",userInfo.name], ["닉네임",userInfo.nickname], ["익명닉네임",userInfo.anonymousNickname], ["휴대전화",userInfo.phoneNumber], ["성별",userInfo.gender == 0 ? "남자":"여자"]], [["학번",userInfo.studentNumber], ["전공",userInfo.major]]]
+                    
+                }
+            }
+        }
+    }
     
     var body: some View {
-        VStack {
             List {
+                
                 Section(header: Text("기본정보")) {
                     ForEach(listData[0], id:\.self) { general in
                         HStack {
@@ -164,6 +189,8 @@ struct MyInfoView: View {
                         }
                     }
                 }
+ 
+         
                 Section(header: Text("학교정보")) {
                     ForEach(listData[1], id:\.self) { school in
                         HStack {
@@ -177,7 +204,7 @@ struct MyInfoView: View {
                         }
                     }
                 }
-                
+     
                 HStack {
                     Spacer()
                     Text("회원탈퇴").onTapGesture {
@@ -187,85 +214,89 @@ struct MyInfoView: View {
                     Divider()
                     Spacer()
                     Text("로그아웃").onTapGesture {
-                    UserDefaults.standard.removeObject(forKey: "Loggedin")
-                    UserDefaults.standard.removeObject(forKey: "user")
-                    UserDefaults.standard.synchronize()
-                    self.settings.loggedIn = false
-                    UserLoginView()
+                        //UserDefaults.standard.set(false, forKey: "Loggedin")
+                        //UserDefaults.standard.removeObject(forKey: "user")
+                        //UserDefaults.standard.synchronize()
+                        //StartView()
                     }
                     Spacer()
                 }
                 
             }
             .listStyle(GroupedListStyle())
-            
-            
-            
+        .onAppear {
+            print("MyInfoView appeared!")
+        }.onDisappear {
+            print("MyInfoView disappeared!")
         }
+            
+            
+            
         
         
         
     }
 }
 
+
 struct HomeView: View {
-    let rows: CGFloat = 3
-    let columns: CGFloat = 3
     
-    var horizontalEdges: CGFloat {
-        return columns - 1
-    }
-
-    var verticalEdges: CGFloat {
-        return rows - 1
-    }
-
     func getItemWidth(containerWidth: CGFloat) -> CGFloat {
-        return (containerWidth - 50) / columns
+        return (containerWidth - 50) / 3
     }
 
     func getItemHeight(containerHeight: CGFloat) -> CGFloat {
-        return (containerHeight) / rows
+        return (containerHeight) / 3
     }
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .top) {
-                Rectangle()
-                    .fill(Color("squash"))
-                    .frame(width: geometry.size.width, height: 350)
-                    .zIndex(-10)
-                    .edgesIgnoringSafeArea(.top)
-                Image("img_bg")
-                    .renderingMode(.original)
+            ZStack {
+                
+                VStack {
+                    Image("img_bg")
                     .resizable()
-                    .frame(width: geometry.size.width, height: 350)
-                    .zIndex(-5)
-                    .edgesIgnoringSafeArea(.top)
-            VStack(alignment: .leading) {
+                    .frame(width: geometry.size.width, height: 400)
+                    .background(Color("squash"))
+                    Spacer()
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
+                .edgesIgnoringSafeArea(.top)
+                
+                VStack(alignment: .leading) {
+                
+                VStack(alignment: .leading) {
                 Image("logo_footer")
                     .renderingMode(.original)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60)
+                    .frame(width: 65, height: 37)
+                    
                 Text("\'코인\' ios앱 출시")
                     .fontWeight(.light)
                     .foregroundColor(Color.white.opacity(0.5))
                     .font(.system(size: 15))
-                    .padding(.top, 20)
+                
                 Text("코리아텍 학생들이\n함께 만들어가는 커뮤니티")
                     .font(.system(size: 25))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, maxHeight:70, alignment: .leading)
-            }
-            .zIndex(-1)
-            .frame(maxWidth: .infinity, maxHeight: 150, alignment: .leading)
-            .padding(.top,80)
-            .padding(.leading, 25)
-            .edgesIgnoringSafeArea(.top)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    
+                    
+                }
                 
-            VStack() {
+                .frame(width: geometry.size.height, height: 400, alignment: .top)
+                    .padding(.leading, 30)
+                .padding(.top, 80)
+                
+                
+                Spacer()
+            }.frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+                
+          
+            
+                VStack() {
                 Spacer()
                 VStack(alignment: .center, spacing: 0) {
                     HStack(alignment: .center, spacing: 0) {
@@ -446,8 +477,12 @@ struct HomeView: View {
                 .clipped()
                 .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
                 .padding(.bottom, 70)
-                .edgesIgnoringSafeArea(.top)
             }
+            
+        }.onAppear {
+            print("HomeView appeared!")
+        }.onDisappear {
+            print("HomeView disappeared!")
         }
     }
 }
@@ -466,17 +501,23 @@ struct MainView: View {
                     SideMenu(width: geometry.size.width/3*2, isOpen: self.menuOpen, menuClose: self.openMenu)
                 }.zIndex(99)
                 VStack {
-                    if self.viewRouter.currentView == "home" {
-                        NavigationView{
-                        HomeView()
-                        }.navigationBarHidden(true)
-                    } else if self.viewRouter.currentView == "info" {
-                        NavigationView{
-                            MyInfoView()
-                            .navigationBarTitle("내 정보")
-                        }.navigationBarTitle("내 정보")
-                        
-                    }
+                    VStack {
+                        if self.viewRouter.currentView == 0 {
+                            NavigationView{
+                                HomeView()
+                                .navigationBarTitle("")
+                                .navigationBarHidden(true)
+                            }
+                            
+                        } else {
+                            
+                            NavigationView{
+                                MyInfoView()
+                                .navigationBarTitle("내 정보")
+                            }
+                            
+                        }
+                    }.frame(width: geometry.size.width, height: geometry.size.height-56)
                     ZStack {
                         HStack {
                             Spacer()
@@ -485,17 +526,17 @@ struct MainView: View {
                                 Image("bottom_home")
                                     .resizable()
                                     .renderingMode(.template)
-                                    .frame(width:45, height: 30)
+                                    .frame(width:38, height: 24)
                                     .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                                 Text("홈")
                                     .font(.system(size: 12))
                                     .fontWeight(.medium)
                                 Spacer()
                                 }.onTapGesture {
-                                    self.viewRouter.currentView = "home"
+                                    self.viewRouter.currentView = 0
                                 }
-                                .foregroundColor(self.viewRouter.currentView == "home" ? .blue : Color.black.opacity(0.7))
-                                .accentColor(self.viewRouter.currentView == "hone" ? .blue : Color.black.opacity(0.7))
+                                .foregroundColor(self.viewRouter.currentView == 0 ? .blue : Color.black.opacity(0.7))
+                                .accentColor(self.viewRouter.currentView == 0 ? .blue : Color.black.opacity(0.7))
                                 .padding()
                             Spacer()
                             Spacer()
@@ -503,7 +544,7 @@ struct MainView: View {
                                 Image("bottom_category")
                                     .resizable()
                                     .renderingMode(.template)
-                                    .frame(width:45, height: 30)
+                                    .frame(width:38, height: 24)
                                 Text("카테고리")
                                     .font(.system(size: 12))
                                     .fontWeight(.medium)
@@ -520,21 +561,30 @@ struct MainView: View {
                                     Image("bottom_myinfo")
                                         .resizable()
                                         .renderingMode(.template)
-                                        .frame(width:45, height: 30)
+                                        .frame(width:38, height: 24)
                                     Text("내정보")
                                         .font(.system(size: 12))
                                         .fontWeight(.medium)
                                     }
-                                    //.onTapGesture {self.viewRouter.currentView = "info"}
-                                    .foregroundColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
-                                    .accentColor(self.viewRouter.currentView == "info" ? .blue : Color.black.opacity(0.7))
+                                    .onTapGesture {
+                                        print(self.viewRouter.currentView)
+                                        self.viewRouter.currentView = 1
+                                        print(self.viewRouter.currentView)
+                                        
+                                    }
+                                    .foregroundColor(self.viewRouter.currentView == 1 ? .blue : Color.black.opacity(0.7))
+                                    .accentColor(self.viewRouter.currentView == 1 ? .blue : Color.black.opacity(0.7))
                                     .padding()
                                 Spacer()
                             }
-                            .frame(width: geometry.size.width, height: geometry.size.height/11)
+                            .frame(width: geometry.size.width, height: 56)
                             .background(Color.white.shadow(radius: 2))
                         }
                     }
+                }.onAppear {
+                    print("MainView appeared!")
+                }.onDisappear {
+                    print("MainView disappeared!")
                 }
     }
 }
@@ -543,19 +593,6 @@ struct ContentView: View {
     var body: some View {
         MainView()
     }
-}
-
-func loadUserInfo() -> [[[String]]] {
-    if let data = UserDefaults.standard.object(forKey:"user") as? Data {
-        let decoder = JSONDecoder()
-        if let loaded = try? decoder.decode(UserRequest.self, from: data) {
-            if let userInfo = loaded.user {
-                let userInfoData = [[["아이디",userInfo.portalAccount], ["이름",userInfo.name], ["닉네임",userInfo.nickname], ["익명닉네임",userInfo.anonymousNickname], ["휴대전화",userInfo.phoneNumber], ["성별",userInfo.gender == 0 ? "남자":"여자"]], [["학번",userInfo.studentNumber], ["전공",userInfo.major]]]
-                return userInfoData
-            }
-        }
-    }
-    return []
 }
     
 
