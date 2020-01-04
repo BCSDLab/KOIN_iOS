@@ -11,22 +11,16 @@ import Alamofire
 import ObjectMapper
 import AlamofireObjectMapper
 
-func dateToString(date: Date)->String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-    let dateString = dateFormatter.string(from: date)
-    return dateString
-}
-
-
-//[data, type, place, priceCard, priceCash, kcal, menu]
 struct MealView: View {
-    @State private var selectedTab: Int = 0
     @ObservedObject var diningViewRouter = DiningViewRouter()
     @ObservedObject var observed = DiningFetcher(date: Date())
     @State var date: Date = Date()
     @State var dateString: String = dateToString(date: Date())
     
+    init() {
+      UITableView.appearance().separatorColor = .clear
+            //Use this if NavigationBarTitle is with Large Font
+    }
     
     var body: some View {
                 
@@ -90,13 +84,15 @@ struct MenuView: View {
     var menu_type: Int
     let menu_switch: Array<String> = ["BREAKFAST", "LUNCH", "DINNER"]
     @ObservedObject var observed: DiningFetcher
-    //CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
+    
     var body: some View {
-        List(observed.meals) { meal in
-            if(meal.type == self.menu_switch[self.menu_type]) {
-                CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
-            }
+        List {
             
+            ForEach(observed.meals) { meal in
+                if(meal.type == self.menu_switch[self.menu_type]) {
+                    CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
+                }
+            }
             
         }
     }
@@ -155,6 +151,13 @@ struct CardView: View{
     }
  
     
+}
+
+func dateToString(date: Date)->String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+    let dateString = dateFormatter.string(from: date)
+    return dateString
 }
 
 func convertPrice(price:Int?) -> String {
