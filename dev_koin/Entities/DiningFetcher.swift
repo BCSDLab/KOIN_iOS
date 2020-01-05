@@ -16,6 +16,7 @@ public class DiningFetcher: ObservableObject {
     
     init(date: Date) {
         meal_session(date: date)
+        print("dining fetcher init")
     }
     
     func meal_session(date: Date){
