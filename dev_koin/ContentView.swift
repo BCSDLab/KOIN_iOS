@@ -32,7 +32,7 @@ struct MenuContent: View {
                 }
                 .padding(.leading, CGFloat(20))
                 .padding(.trailing, CGFloat(20))
-                .padding(.top, CGFloat(20))
+                .padding(.top, CGFloat(50))
                 List {
                     
                     HStack {
@@ -132,6 +132,7 @@ struct SideMenu: View {
                 .background(Color.gray.opacity(0.3))
                 .opacity(self.tabData.isCustomItemSelected ? 1.0 : 0.0)
                 .animation(Animation.easeIn.delay(0.25))
+                .edgesIgnoringSafeArea(.top)
                 .onTapGesture {
                     self.tabData.dismiss_menu()
                     print(self.tabData.isCustomItemSelected)
@@ -141,7 +142,7 @@ struct SideMenu: View {
                     .frame(width: self.width)
                     .background(Color.white)
                     .offset(x: self.tabData.isCustomItemSelected ? 0 : -self.width)
-                    .animation(.default)
+                    .animation(.default).edgesIgnoringSafeArea(.top)
                 Spacer()
             }
         }.onAppear {
@@ -576,6 +577,7 @@ struct ContentTabView: View {
 
             }
             .font(.headline)
+                .edgesIgnoringSafeArea(.top)
         }.onAppear {
             print("ContentTabView appeared!")
         }.onDisappear {
