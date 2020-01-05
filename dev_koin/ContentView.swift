@@ -10,13 +10,15 @@ import SwiftUI
 
 struct MenuContent: View {
     @EnvironmentObject var settings: UserSettings
+    //@EnvironmentObject var viewRouter: ViewRouter
 
     init() {
       UITableView.appearance().separatorColor = .clear
     }
 
     var body: some View {
-        return VStack {
+        return
+            VStack {
                 HStack {
                     Text("홍길동")
                         .font(.system(size: 20))
@@ -28,18 +30,15 @@ struct MenuContent: View {
                     Spacer()
                     Image("img_menu_logo")
                 }
-                .padding([.leading, .trailing, .top], 20)
+                .padding(.leading, CGFloat(20))
+                .padding(.trailing, CGFloat(20))
+                .padding(.top, CGFloat(20))
                 List {
+                    
                     HStack {
                         Image(systemName: "person")
                         Text("내정보")
                             .font(.subheadline)
-                        
-                        
-                        }.onTapGesture {
-                            UserDefaults.standard.removeObject(forKey: "user")
-                            //UserDefaults.standard.synchronize()
-                            self.settings.logout_session()
                         }
                     
                     Section(header:
@@ -111,7 +110,8 @@ struct MenuContent: View {
                         }
                     }
                 }
-            }.onAppear {
+            
+        }.onAppear {
                 print("MenuContent appeared!")
             }.onDisappear {
                 print("MenuContent disappeared!")
@@ -122,8 +122,7 @@ struct MenuContent: View {
 
 struct SideMenu: View {
     let width: CGFloat
-    let isOpen: Bool
-    let menuClose: () -> Void
+    @EnvironmentObject var tabData: ViewRouter
     
     var body: some View {
         ZStack {
@@ -131,16 +130,17 @@ struct SideMenu: View {
                 EmptyView()
             }
                 .background(Color.gray.opacity(0.3))
-                .opacity(self.isOpen ? 1.0 : 0.0)
+                .opacity(self.tabData.isCustomItemSelected ? 1.0 : 0.0)
                 .animation(Animation.easeIn.delay(0.25))
                 .onTapGesture {
-                    self.menuClose()
+                    self.tabData.dismiss_menu()
+                    print(self.tabData.isCustomItemSelected)
                 }
             HStack {
                 MenuContent()
                     .frame(width: self.width)
                     .background(Color.white)
-                    .offset(x: self.isOpen ? 0 : -self.width)
+                    .offset(x: self.tabData.isCustomItemSelected ? 0 : -self.width)
                     .animation(.default)
                 Spacer()
             }
@@ -155,8 +155,8 @@ struct SideMenu: View {
 
 struct MyInfoView: View {
     var listData: [[[String]]] = []
-    //@EnvironmentObject var settings: UserSettings
-    
+    @EnvironmentObject var settings: UserSettings
+  
     init() {
         loadUserInfo()
     }
@@ -174,6 +174,8 @@ struct MyInfoView: View {
     }
     
     var body: some View {
+        return
+            
             List {
                 
                 Section(header: Text("기본정보")) {
@@ -214,16 +216,15 @@ struct MyInfoView: View {
                     Divider()
                     Spacer()
                     Text("로그아웃").onTapGesture {
-                        //UserDefaults.standard.set(false, forKey: "Loggedin")
-                        //UserDefaults.standard.removeObject(forKey: "user")
-                        //UserDefaults.standard.synchronize()
-                        //StartView()
+                        UserDefaults.standard.removeObject(forKey: "user")
+                        self.settings.logout_session()
                     }
                     Spacer()
                 }
                 
             }
             .listStyle(GroupedListStyle())
+        
         .onAppear {
             print("MyInfoView appeared!")
         }.onDisappear {
@@ -241,6 +242,16 @@ struct MyInfoView: View {
 
 struct HomeView: View {
     
+    init() {
+        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        UINavigationBar.appearance().tintColor = UIColor.white
+        //Use this if NavigationBarTitle is with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        //Use this if NavigationBarTitle is with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    
     func getItemWidth(containerWidth: CGFloat) -> CGFloat {
         return (containerWidth - 50) / 3
     }
@@ -250,6 +261,7 @@ struct HomeView: View {
     }
     
     var body: some View {
+        NavigationView{
         GeometryReader { geometry in
             ZStack {
                 
@@ -288,7 +300,6 @@ struct HomeView: View {
                 
                 .frame(width: geometry.size.height, height: 400, alignment: .top)
                     .padding(.leading, 30)
-                .padding(.top, 80)
                 
                 
                 Spacer()
@@ -377,7 +388,8 @@ struct HomeView: View {
                         .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
-                        NavigationLink(destination: MealView().navigationBarTitle(Text("식단"), displayMode: .inline)) {
+                        NavigationLink(destination: MealView()) {
+                        //Button(action: {}) {
                             VStack{
                             Spacer()
                             Image("restaurant")
@@ -394,6 +406,7 @@ struct HomeView: View {
                                 .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
                                 .background(Color.white)
                         }
+                            
                         .border(Color.gray.opacity(0.2), width: 0.5)
                         Button(action: {}) {
                             VStack{
@@ -476,10 +489,12 @@ struct HomeView: View {
                 }
                 .clipped()
                 .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
-                .padding(.bottom, 70)
+                .padding(.bottom, 50)
             }
             
-        }.onAppear {
+        }
+        }
+        .onAppear {
             print("HomeView appeared!")
         }.onDisappear {
             print("HomeView disappeared!")
@@ -487,111 +502,92 @@ struct HomeView: View {
     }
 }
 
-struct MainView: View {
-    @ObservedObject var viewRouter = ViewRouter()
-    @State var menuOpen: Bool = false
+struct ContentTabView: View {
+    @EnvironmentObject var tabData: ViewRouter
     
-    func openMenu() {
-        self.menuOpen.toggle()
+    init() {
+        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        //Use this if NavigationBarTitle is with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        //Use this if NavigationBarTitle is with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     
-    var body: some View {
-        return GeometryReader { geometry in
-                ZStack {
-                    SideMenu(width: geometry.size.width/3*2, isOpen: self.menuOpen, menuClose: self.openMenu)
-                }.zIndex(99)
+
+        var body: some View {
+            GeometryReader { geometry in
+            ZStack {
+                SideMenu(width: geometry.size.width/3*2)
+                
+            }.zIndex(99)
+                TabView (selection: self.$tabData.itemSelected){
+
+            // First Secection
+            NavigationView{
+                HomeView()
+                .navigationBarTitle("")
+                .navigationBarHidden(true)
+            }
+            .tabItem {
                 VStack {
-                    VStack {
-                        if self.viewRouter.currentView == 0 {
-                            NavigationView{
-                                HomeView()
-                                .navigationBarTitle("")
-                                .navigationBarHidden(true)
-                            }
-                            
-                        } else {
-                            
-                            NavigationView{
-                                MyInfoView()
-                                .navigationBarTitle("내 정보")
-                            }
-                            
-                        }
-                    }.frame(width: geometry.size.width, height: geometry.size.height-56)
-                    ZStack {
-                        HStack {
-                            Spacer()
-                            VStack {
-                                Spacer()
-                                Image("bottom_home")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .frame(width:38, height: 24)
-                                    .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
-                                Text("홈")
-                                    .font(.system(size: 12))
-                                    .fontWeight(.medium)
-                                Spacer()
-                                }.onTapGesture {
-                                    self.viewRouter.currentView = 0
-                                }
-                                .foregroundColor(self.viewRouter.currentView == 0 ? .blue : Color.black.opacity(0.7))
-                                .accentColor(self.viewRouter.currentView == 0 ? .blue : Color.black.opacity(0.7))
-                                .padding()
-                            Spacer()
-                            Spacer()
-                            VStack {
-                                Image("bottom_category")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .frame(width:38, height: 24)
-                                Text("카테고리")
-                                    .font(.system(size: 12))
-                                    .fontWeight(.medium)
-                                }
-                                .padding()
-                                .foregroundColor(Color.black.opacity(0.7))
-                                .accentColor(Color.black.opacity(0.7))
-                                .onTapGesture {
-                                    self.openMenu()
-                                }
-                            Spacer()
-                            Spacer()
-                                VStack {
-                                    Image("bottom_myinfo")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .frame(width:38, height: 24)
-                                    Text("내정보")
-                                        .font(.system(size: 12))
-                                        .fontWeight(.medium)
-                                    }
-                                    .onTapGesture {
-                                        print(self.viewRouter.currentView)
-                                        self.viewRouter.currentView = 1
-                                        print(self.viewRouter.currentView)
-                                        
-                                    }
-                                    .foregroundColor(self.viewRouter.currentView == 1 ? .blue : Color.black.opacity(0.7))
-                                    .accentColor(self.viewRouter.currentView == 1 ? .blue : Color.black.opacity(0.7))
-                                    .padding()
-                                Spacer()
-                            }
-                            .frame(width: geometry.size.width, height: 56)
-                            .background(Color.white.shadow(radius: 2))
-                        }
-                    }
-                }.onAppear {
-                    print("MainView appeared!")
-                }.onDisappear {
-                    print("MainView disappeared!")
+                Image("bottom_home")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width:38, height: 24)
+                Text("홈")
+                    .font(.system(size: 12))
+                    .fontWeight(.medium)
+                Spacer()
                 }
+            }.tag(1)
+
+            // Add Element
+            Text("Custom Action")
+            .tabItem {
+                VStack {
+                Image("bottom_category")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width:38, height: 24)
+                Text("카테고리")
+                    .font(.system(size: 12))
+                    .fontWeight(.medium)
+                }
+            }
+            .tag(2)
+
+            // Events
+            NavigationView{
+                MyInfoView()
+                .navigationBarTitle("내 정보")
+            }
+            .tabItem {
+                VStack {
+                Image("bottom_myinfo")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width:38, height: 24)
+                Text("내정보")
+                    .font(.system(size: 12))
+                    .fontWeight(.medium)
+                }
+            }.tag(3)
+
+            }
+            .font(.headline)
+        }.onAppear {
+            print("ContentTabView appeared!")
+        }.onDisappear {
+            print("ContentTabView disappeared!")
+        }
     }
-}
+    }
 
 struct ContentView: View {
+    
     var body: some View {
-        MainView()
+        ContentTabView()
     }
 }
     

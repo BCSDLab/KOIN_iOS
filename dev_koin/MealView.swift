@@ -11,63 +11,76 @@ import Alamofire
 import ObjectMapper
 import AlamofireObjectMapper
 
-func dateToString(date: Date)->String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-    let dateString = dateFormatter.string(from: date)
-    return dateString
-}
-
-
-//[data, type, place, priceCard, priceCash, kcal, menu]
 struct MealView: View {
-    @State private var selectedTab: Int = 0
     @ObservedObject var diningViewRouter = DiningViewRouter()
     @ObservedObject var observed = DiningFetcher(date: Date())
     @State var date: Date = Date()
     @State var dateString: String = dateToString(date: Date())
     
+    init() {
+      UITableView.appearance().separatorColor = .clear
+    
+        
+    }
     
     var body: some View {
-                
-            VStack {
+        let drag = DragGesture()
+            .onEnded {
+                if $0.translation.width > 100 {
+                    self.date = Date(timeInterval: -86400, since: self.date)
+                    self.dateString = dateToString(date: self.date)
+                    self.observed.meal_session(date: self.date)
+                } else if $0.translation.width < -100 {
+                    self.date = Date(timeInterval: 86400, since: self.date)
+                    self.dateString = dateToString(date: self.date)
+                    self.observed.meal_session(date: self.date)
+                }
+        }
+        
+            return VStack {
                 VStack {
                     HStack{
                         Spacer()
-                        Text("<").onTapGesture {
+                        Image(systemName: "chevron.left").onTapGesture {
                             self.date = Date(timeInterval: -86400, since: self.date)
                             self.dateString = dateToString(date: self.date)
                             self.observed.meal_session(date: self.date)
                         }
                         Spacer()
                         Text(dateString)
+                            .fontWeight(.medium)
                         Spacer()
-                        Text(">").onTapGesture {
+                        Image(systemName: "chevron.right").onTapGesture {
                             self.date = Date(timeInterval: 86400, since: self.date)
                             self.dateString = dateToString(date: self.date)
                             self.observed.meal_session(date: self.date)
                         }
                         Spacer()
-                    }.padding(.bottom, 40)
-                HStack {
+                    }.padding(.bottom, 20)
+                    HStack(alignment: .center, spacing: 30) {
                 Spacer()
-                Text("아침").onTapGesture {
+                Text("아침")
+                    .underline(self.diningViewRouter.currentView == "breakfast" ? true : false, color: Color("squash")).onTapGesture {
                         self.diningViewRouter.currentView = "breakfast"
                     }
-                    .foregroundColor(self.diningViewRouter.currentView == "breakfast" ? .blue : Color.black.opacity(0.7))
-                    .accentColor(self.diningViewRouter.currentView == "breakfast" ? .blue : Color.black.opacity(0.7))
-                Spacer()
-                Text("점심").onTapGesture {
+                .foregroundColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
+                    .accentColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
+                
+                Text("점심")
+                    .underline(self.diningViewRouter.currentView == "lunch" ? true : false, color: Color("squash"))
+                    .onTapGesture {
                     self.diningViewRouter.currentView = "lunch"
                 }
-                .foregroundColor(self.diningViewRouter.currentView == "lunch" ? .blue : Color.black.opacity(0.7))
-                .accentColor(self.diningViewRouter.currentView == "lunch" ? .blue : Color.black.opacity(0.7))
-                Spacer()
-                    Text("저녁").onTapGesture {
+                .foregroundColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
+                .accentColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
+                
+                    Text("저녁")
+                        .underline(self.diningViewRouter.currentView == "dinner" ? true : false, color: Color("squash"))
+                        .onTapGesture {
                         self.diningViewRouter.currentView = "dinner"
                     }
-                    .foregroundColor(self.diningViewRouter.currentView == "dinner" ? .blue : Color.black.opacity(0.7))
-                    .accentColor(self.diningViewRouter.currentView == "dinner" ? .blue : Color.black.opacity(0.7))
+                    .foregroundColor(self.diningViewRouter.currentView == "dinner" ? Color("squash") : Color.black.opacity(0.7))
+                    .accentColor(self.diningViewRouter.currentView == "dinner" ? Color("squash") : Color.black.opacity(0.7))
                     Spacer()
                 }
                 }
@@ -80,6 +93,41 @@ struct MealView: View {
                 MenuView(menu_type: 2, observed: self.observed)
             }
             }.padding(.top, 20)
+        .navigationBarTitle(Text("식단"), displayMode: .inline)
+                .gesture(drag)
+        .onAppear {
+            
+            let hour = Calendar.current.component(.hour, from: self.date)
+            let minute = Calendar.current.component(.minute, from: self.date)
+            
+                if(hour >= 0 && hour < 9) {
+                    self.diningViewRouter.currentView = "breakfast"
+                } else if (hour >= 9 && hour < 14) {
+                    if (hour == 13 && minute > 30) {
+                        self.diningViewRouter.currentView = "dinner"
+                    } else {
+                        self.diningViewRouter.currentView = "lunch"
+                    }
+                } else if (hour >= 14 && hour < 19) {
+                    if (hour == 18 && minute > 30) {
+                        self.date = Date(timeInterval: 86400, since: self.date)
+                        self.dateString = dateToString(date: self.date)
+                        self.observed.meal_session(date: self.date)
+                        self.diningViewRouter.currentView = "breakfast"
+                    } else {
+                        self.diningViewRouter.currentView = "dinner"
+                    }
+                } else if (hour >= 19 && hour < 24) {
+                    self.date = Date(timeInterval: 86400, since: Date())
+                    self.dateString = dateToString(date: self.date)
+                    self.observed.meal_session(date: self.date)
+                    self.diningViewRouter.currentView = "breakfast"
+                }
+                print(self.diningViewRouter.currentView)
+            print("MealView appeared!")
+        }.onDisappear {
+            print("MealView disappeared!")
+        }
                 
         
     }
@@ -90,13 +138,16 @@ struct MenuView: View {
     var menu_type: Int
     let menu_switch: Array<String> = ["BREAKFAST", "LUNCH", "DINNER"]
     @ObservedObject var observed: DiningFetcher
-    //CardView(place: meal[2], priceCard: meal[3], priceCash: meal[4], kcal: meal[5], menu: meal[6])
+    
     var body: some View {
-        List(observed.meals) { meal in
-            if(meal.type == self.menu_switch[self.menu_type]) {
-                CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
-            }
+        List {
             
+            ForEach(observed.meals) { meal in
+                if(meal.type == self.menu_switch[self.menu_type]) {
+                    CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
+                    
+                }
+            }
             
         }
     }
@@ -127,8 +178,16 @@ struct CardView: View{
                         .font(.caption)
                         .foregroundColor(.secondary)
                     }
-                    Divider()
-                        .foregroundColor(Color("squash"))
+                    if (place == "능수관") {
+                        Rectangle()
+                        .fill(Color("squash"))
+                        .frame(height: 1)
+                    } else {
+                        Rectangle()
+                        .fill(Color("light_navy"))
+                        .frame(height: 1)
+                    }
+                    
                     Text("\(convertPrice(price: kcal))Kcal")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -136,7 +195,8 @@ struct CardView: View{
                     
                     Text(menu.joined(separator: "\n"))
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
+                        .fontWeight(.light)
                     .lineLimit(nil)
           
         }
@@ -145,16 +205,28 @@ struct CardView: View{
                     
                     .frame(maxWidth: .infinity)
                 .padding()
+                
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 1)
-                .stroke(Color(.sRGB,red: 150/255, green: 150/255, blue: 150/255, opacity: 0.5), lineWidth: 0.7)
+                .stroke(Color("cloudy_blue"), lineWidth: 0.7)
         )
+        .background(Color.white)
         .padding([.top, .horizontal])
+        .clipped()
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 1)
+        
         
     }
  
     
+}
+
+func dateToString(date: Date)->String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+    let dateString = dateFormatter.string(from: date)
+    return dateString
 }
 
 func convertPrice(price:Int?) -> String {
