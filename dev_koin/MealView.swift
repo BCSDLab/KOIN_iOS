@@ -19,7 +19,6 @@ struct MealView: View {
     
     init() {
       UITableView.appearance().separatorColor = .clear
-        
     
         
     }
@@ -97,21 +96,21 @@ struct MealView: View {
         .navigationBarTitle(Text("식단"), displayMode: .inline)
                 .gesture(drag)
         .onAppear {
+            
             let hour = Calendar.current.component(.hour, from: self.date)
             let minute = Calendar.current.component(.minute, from: self.date)
             
                 if(hour >= 0 && hour < 9) {
                     self.diningViewRouter.currentView = "breakfast"
                 } else if (hour >= 9 && hour < 14) {
-                    if (minute > 30) {
+                    if (hour == 13 && minute > 30) {
                         self.diningViewRouter.currentView = "dinner"
                     } else {
                         self.diningViewRouter.currentView = "lunch"
                     }
                 } else if (hour >= 14 && hour < 19) {
-                    if (minute > 30) {
+                    if (hour == 18 && minute > 30) {
                         self.date = Date(timeInterval: 86400, since: self.date)
-                        
                         self.dateString = dateToString(date: self.date)
                         self.observed.meal_session(date: self.date)
                         self.diningViewRouter.currentView = "breakfast"
@@ -124,7 +123,6 @@ struct MealView: View {
                     self.observed.meal_session(date: self.date)
                     self.diningViewRouter.currentView = "breakfast"
                 }
-                print(self.date)
                 print(self.diningViewRouter.currentView)
             print("MealView appeared!")
         }.onDisappear {

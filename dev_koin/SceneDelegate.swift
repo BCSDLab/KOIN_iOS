@@ -32,12 +32,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //let userData = UserDownloader()
         let settings = UserSettings()
         let startView = StartView()
+        let viewRouter = ViewRouter(initialIndex: 1, customItemIndex: 2)
         
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -78,6 +79,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 struct StartView: View {
     @EnvironmentObject var settings: UserSettings
+    @EnvironmentObject var viewRouter: ViewRouter
+    
     
     var body: some View {
         if settings.isLogin {
