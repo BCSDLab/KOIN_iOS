@@ -13,7 +13,7 @@ import SwiftUI
 struct UserRequest: Codable {
     let token: String?
     let ttl: Int?
-    let user: User?
+    var user: User?
     private enum CodingKeys: String, CodingKey {
         case token = "token"
         case ttl = "ttl"

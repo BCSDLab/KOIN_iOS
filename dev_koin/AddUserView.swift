@@ -13,8 +13,37 @@ struct AddUserView: View {
     @State var login_email: String = ""
     @State var login_password: String = ""
     @State var login_valid_password: String = ""
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State private var showingSuccessAlert = false
+    //@State private var showingErrorAlert = false
+    //@State private var showingPropertyAlert = false
+    //@State private var showingDiffAlert = false
     
     @EnvironmentObject var property: AddUserProperty
+    @EnvironmentObject var settings: UserSettings
+    
+    func check_register(email: String, password: String, valid_password: String) {
+        if settings.check_valid_password(password: password, valid_password: valid_password) {
+            if self.property.personality_checked && self.property.koin_checked {
+                self.settings.register_session(email: email, password: password) { result in
+                    if result {
+                        self.showingSuccessAlert = true
+                        print("success")
+                    } else {
+                        //self.showingErrorAlert = true
+                        print("error")
+                    }
+                }
+            } else {
+                //self.showingPropertyAlert = true
+                print("property")
+            }
+        } else {
+            //self.showingDiffAlert = true
+            print("diff")
+        }
+        
+    }
     
     
     var body: some View {
@@ -92,7 +121,7 @@ struct AddUserView: View {
             }.padding()
             .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: {
-                
+                self.check_register(email: self.login_email, password: self.login_password, valid_password: self.login_valid_password)
             }) {
                 HStack {
                     Spacer()
@@ -121,6 +150,23 @@ struct AddUserView: View {
             
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], CGFloat(50))
+        .alert(isPresented: $showingSuccessAlert) {
+            //if self.showingSuccessAlert {
+                Alert(title: Text("이메일 확인"), message: Text("회원 가입을 완료하시려면 메일을 확인해보세요."), dismissButton: .destructive(Text("돌아가기")) {
+                    self.showingSuccessAlert = false
+                    self.presentationMode.wrappedValue.dismiss()
+                    })//}
+            /*
+            if self.showingErrorAlert {
+                Alert(title: Text("에러"), message: Text("회원가입에 오류가 생겼습니다. 다시 시도해보세요."), dismissButton: .destructive(Text("확인")){self.showingErrorAlert = false})
+            }
+            if self.showingPropertyAlert {
+                Alert(title: Text("약관 동의 확인"), message: Text("동의되지 않은 약관이 있습니다."), dismissButton: .destructive(Text("확인")){self.showingPropertyAlert = false})
+            }
+            if self.showingDiffAlert {
+                Alert(title: Text("비밀번호 불일치"), message: Text("비밀번호가 일치하지 않습니다."), dismissButton: .destructive(Text("확인")){self.showingDiffAlert = false})
+            }*/
+        }
         
         
         

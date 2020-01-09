@@ -32,7 +32,7 @@ struct MenuContent: View {
                 }
                 .padding(.leading, CGFloat(20))
                 .padding(.trailing, CGFloat(20))
-                .padding(.top, CGFloat(20))
+                .padding(.top, CGFloat(50))
                 List {
                     
                     HStack {
@@ -132,6 +132,7 @@ struct SideMenu: View {
                 .background(Color.gray.opacity(0.3))
                 .opacity(self.tabData.isCustomItemSelected ? 1.0 : 0.0)
                 .animation(Animation.easeIn.delay(0.25))
+                .edgesIgnoringSafeArea(.top)
                 .onTapGesture {
                     self.tabData.dismiss_menu()
                     print(self.tabData.isCustomItemSelected)
@@ -141,7 +142,7 @@ struct SideMenu: View {
                     .frame(width: self.width)
                     .background(Color.white)
                     .offset(x: self.tabData.isCustomItemSelected ? 0 : -self.width)
-                    .animation(.default)
+                    .animation(.default).edgesIgnoringSafeArea(.top)
                 Spacer()
             }
         }.onAppear {
@@ -153,70 +154,243 @@ struct SideMenu: View {
 }
 
 
-struct MyInfoView: View {
-    var listData: [[[String]]] = []
+struct EditModalView: View {
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var settings: UserSettings
-  
-    init() {
-        loadUserInfo()
-    }
+    @State var updated_password: String = ""
+    @State var updated_name: String = ""
+    @State var updated_nickname: String = ""
+    @State var updated_gender: Int = -1
+    @State var updated_studentNumber: String = ""
+    @State var updated_phoneNumber: String = ""
+    var disableName: Bool = false
+    var disableGender: Bool = false
+    var disablePhoneNumber: Bool = false
+    var disableStudentNumber: Bool = false
     
-    mutating func loadUserInfo(){
+    init() {
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
-                if let userInfo = loaded.user {
-                    listData =  [[["아이디",userInfo.portalAccount], ["이름",userInfo.name], ["닉네임",userInfo.nickname], ["익명닉네임",userInfo.anonymousNickname], ["휴대전화",userInfo.phoneNumber], ["성별",userInfo.gender == 0 ? "남자":"여자"]], [["학번",userInfo.studentNumber], ["전공",userInfo.major]]]
+                print(loaded.user)
+        if let userInfo = loaded.user {
+                    
+                    if let infoName = userInfo.name { print(infoName)
+                        if !infoName.isEmpty {
+                            print("not empty")
+                            _updated_name = State(initialValue: infoName)
+                        self.disableName = true
+                        }}
+            print(self.disableName)
+                    if let infoNickname = userInfo.nickname { print(infoNickname)
+                        if !infoNickname.isEmpty {
+                            print("not empty")
+                    //self.updated_nickname = infoNickname
+                            _updated_nickname = State(initialValue: infoNickname)
+                        //중복 여부 체크
+                    }}
+            print(updated_nickname)
+                    if let infoPhoneNumber = userInfo.phoneNumber { print(infoPhoneNumber)
+                        if !infoPhoneNumber.isEmpty {
+                            print("not empty")
+                    //self.updated_phoneNumber = infoPhoneNumber
+                            _updated_phoneNumber = State(initialValue: infoPhoneNumber)
+                    self.disablePhoneNumber = true
+                    }}
+            print(self.disablePhoneNumber)
+                    if let infoGender = userInfo.gender { print(infoGender)
+                        if infoGender != -1 {
+                            print("not empty")
+                    _updated_gender = State(initialValue: infoGender)
+                    self.disableGender = true
+                    }}
+            print(self.disableGender)
+                    if let infoStudentNumber = userInfo.studentNumber {print(infoStudentNumber)
+                        if !infoStudentNumber.isEmpty {
+                            print("not empty")
+                    _updated_studentNumber = State(initialValue: infoStudentNumber)
+                    self.disableStudentNumber = true
+                    } }
+            print(self.disableStudentNumber)
+                    
                     
                 }
             }
         }
     }
     
-    var body: some View {
-        return
-            
-            List {
-                
-                Section(header: Text("기본정보")) {
-                    ForEach(listData[0], id:\.self) { general in
-                        HStack {
-                            Text(general[0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Text(general[1])
-                                .font(.subheadline)
-                                .fontWeight(.light)
-                        }
-                    }
+    func putUserData() {
+        var changedNickname: Bool = false
+        var token: String = ""
+        print("start userData")
+        if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+            print("userdefaults")
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+                if let token_data = loaded.token {
+                    token = token_data
                 }
- 
-         
-                Section(header: Text("학교정보")) {
-                    ForEach(listData[1], id:\.self) { school in
-                        HStack {
-                        Text(school[0])
+        if let userInfo = loaded.user {
+            print(userInfo.nickname)
+            print(updated_nickname)
+            if userInfo.nickname != updated_nickname {
+                print("changed Nickname")
+                changedNickname = true
+            }
+            
+                }
+            }
+        }
+        
+        
+        
+        self.settings.update_session(token: token, updated_password: updated_password, updated_name: updated_name, updated_nickname: updated_nickname, updated_gender: updated_gender, updated_isGraduated: false, updated_studentNumber: updated_studentNumber, updated_phoneNumber: updated_phoneNumber, changed_name: !self.disableName, changed_gender: !self.disableGender, changed_phoneNumber: !self.disablePhoneNumber, changed_studentNumber: !self.disableStudentNumber, changed_nickname: changedNickname) { result in
+            if result {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        }
+    }
+    
+    
+    //self.presentationMode.wrappedValue.dismiss()
+    var body: some View {
+        let someNumberProxy = Binding<String>(
+            get: { String(format: "%d", Int(self.updated_gender)) },
+            set: {
+                if let value = NumberFormatter().number(from: $0) {
+                    self.updated_gender = value.intValue
+                }
+            }
+        )
+        
+    return VStack{
+        SecureField("비밀번호", text: $updated_password)
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                .font(.subheadline)
+        TextField("이름", text: $updated_name)
+        .disabled(disableName)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        .font(.subheadline)
+        TextField("닉네임", text: $updated_nickname)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        .font(.subheadline)
+        
+        TextField("성별", text: someNumberProxy)
+            .disabled(disableGender)
+        .keyboardType(.decimalPad)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        .font(.subheadline)
+        
+        TextField("학번", text: $updated_studentNumber)
+            .disabled(disableStudentNumber)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        .font(.subheadline)
+        TextField("핸드폰 번호", text: $updated_phoneNumber)
+            .disabled(disablePhoneNumber)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+        .font(.subheadline)
+        
+        
+        Button(action: putUserData){
+            Text("보내기")
+        }
+    }.onAppear {
+        print("EditUserView appeared!")
+    }.onDisappear {
+        print("EditUserView disappeared!")
+    }
+}
+}
+
+
+struct MyInfoView: View {
+    var listData: [[[String]]] = []
+    @EnvironmentObject var settings: UserSettings
+    @State private var show_modal: Bool = false
+    //정보 수정은 임시로 modal로 설정
+
+    init() {
+        loadUserInfo()
+    }
+
+    mutating func loadUserInfo() {
+        if let data = UserDefaults.standard.object(forKey:"user") as? Data {
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+                if let userInfo = loaded.user {
+                    var name: String = "이름 없음"
+                    var nickname: String = "닉네임 없음"
+                    var phoneNumber: String = "휴대폰 번호 없음"
+                    var gender: String = "성별 없음"
+                    var studentNumber: String = "학번 없음"
+                    var major: String = "전공 없음"
+
+                    if let infoName = userInfo.name { name = infoName }
+                    if let infoNickname = userInfo.nickname {nickname = infoNickname}
+                    if let infoPhoneNumber = userInfo.phoneNumber {phoneNumber = infoPhoneNumber}
+                    if let infoGender = userInfo.gender {
+                        gender = infoGender == 0 ? "남자":"여자"
+                    }
+                    if let infoStudentNumber = userInfo.studentNumber {studentNumber = infoStudentNumber}
+                    if let infoMajor = userInfo.major {major = infoMajor}
+
+                    listData = [[["아이디", userInfo.portalAccount], ["이름", name], ["닉네임", nickname], ["익명닉네임", userInfo.anonymousNickname], ["휴대전화", phoneNumber], ["성별", gender]], [["학번",studentNumber], ["전공",major]]]
+
+                }
+            }
+        }
+    }
+
+    
+    var body: some View {
+        List{
+        Section(header: Text("기본정보")) {
+            ForEach(listData[0], id:\.self) { general in
+                HStack {
+                    Text(general[0])
                             .font(.headline)
                             .fontWeight(.semibold)
-                        Spacer()
-                        Text(school[1])
+                    Spacer()
+                    Text(general[1])
                             .font(.subheadline)
                             .fontWeight(.light)
-                        }
-                    }
+                }
+            }
+        }
+
+
+        Section(header: Text("학교정보")) {
+            ForEach(listData[1], id:\.self) { school in
+                HStack {
+                    Text(school[0])
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    Spacer()
+                    Text(school[1])
+                            .font(.subheadline)
+                            .fontWeight(.light)
+                }
+            }
+        }
+                
+                Button(action: {
+                        print("put modal on")
+                        self.show_modal = true
+                    }) {
+                        Text("정보 수정")
+                }.sheet(isPresented: self.$show_modal) {
+                    EditModalView().environmentObject(self.settings)
                 }
      
                 HStack {
                     Spacer()
                     Text("회원탈퇴").onTapGesture {
-                        
+                        self.settings.delete_session(token: self.settings.get_token())
                     }
                     Spacer()
                     Divider()
                     Spacer()
                     Text("로그아웃").onTapGesture {
-                        UserDefaults.standard.removeObject(forKey: "user")
                         self.settings.logout_session()
                     }
                     Spacer()
@@ -230,11 +404,6 @@ struct MyInfoView: View {
         }.onDisappear {
             print("MyInfoView disappeared!")
         }
-            
-            
-            
-        
-        
         
     }
 }
@@ -576,6 +745,7 @@ struct ContentTabView: View {
 
             }
             .font(.headline)
+                .edgesIgnoringSafeArea(.top)
         }.onAppear {
             print("ContentTabView appeared!")
         }.onDisappear {

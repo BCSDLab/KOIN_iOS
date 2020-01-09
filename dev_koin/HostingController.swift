@@ -1,0 +1,17 @@
+//
+//  HostingController.swift
+//  dev_koin
+//
+//  Created by 정태훈 on 2020/01/06.
+//  Copyright © 2020 정태훈. All rights reserved.
+//
+
+import Foundation
+import SwiftUI
+import Combine
+
+class HostingController<Content> : UIHostingController<Content> where Content : View {
+    @objc override dynamic open var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+}

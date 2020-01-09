@@ -9,21 +9,21 @@
 import Foundation
 
 struct User: Codable {
-    let accountNonExpired: Bool
-    let accountNonLocked: Bool
-    let anonymousNickname: String
-    let credentialsNonExpired: Bool
-    let enabled: Bool
-    let gender: Int
-    let identity: Int
-    let isGraduated: Bool
-    let major: String
-    let name: String
-    let nickname: String
-    let phoneNumber: String
-    let portalAccount: String
-    let studentNumber: String
-    let username: String
+    var accountNonExpired: Bool
+    var accountNonLocked: Bool
+    var anonymousNickname: String
+    var credentialsNonExpired: Bool
+    var enabled: Bool
+    var gender: Int?
+    var identity: Int?
+    var isGraduated: Bool?
+    var major: String?
+    var name: String?
+    var nickname: String?
+    var phoneNumber: String?
+    var portalAccount: String
+    var studentNumber: String?
+    var username: String?
     private enum CodingKeys: String, CodingKey {
         case accountNonExpired = "accountNonExpired"
         case accountNonLocked = "accountNonLocked"
