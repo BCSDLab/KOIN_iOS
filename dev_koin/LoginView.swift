@@ -13,6 +13,7 @@ import AlamofireObjectMapper
 import CryptoKit
 import CryptoTokenKit
 import Foundation
+import PKHUD
 
 
 
@@ -56,9 +57,11 @@ struct UserLoginView: View {
 
                 
                 Button(action: {
-                    self.settings.login_session(email: self.login_email, password: self.login_password)
-                    self.settings.login_succeed()
-                    print("clicked")
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.settings.login_session(email: self.login_email, password: self.login_password)
+                        HUD.flash(.success, delay: 0.5)
+                    }
                 }) {
                     HStack {
                         Spacer()

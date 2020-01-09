@@ -6,6 +6,11 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>stage.api.koreatech.in</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>api.koreatech.in</key>
 			<dict>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
