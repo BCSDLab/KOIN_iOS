@@ -304,16 +304,11 @@ struct EditModalView: View {
 
 
 struct MyInfoView: View {
-    var listData: [[[String]]] = []
     @EnvironmentObject var settings: UserSettings
     @State private var show_modal: Bool = false
-    //정보 수정은 임시로 modal로 설정
 
-    init() {
-        loadUserInfo()
-    }
-
-    mutating func loadUserInfo() {
+    func loadUserInfo() -> [[[String]]] {
+        var listData: [[[String]]] = []
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
@@ -336,14 +331,17 @@ struct MyInfoView: View {
 
                     listData = [[["아이디", userInfo.portalAccount], ["이름", name], ["닉네임", nickname], ["익명닉네임", userInfo.anonymousNickname], ["휴대전화", phoneNumber], ["성별", gender]], [["학번",studentNumber], ["전공",major]]]
 
+
                 }
             }
         }
+        return listData
     }
-
     
     var body: some View {
-        List{
+        var listData = loadUserInfo()
+
+        return List{
         Section(header: Text("기본정보")) {
             ForEach(listData[0], id:\.self) { general in
                 HStack {
