@@ -238,6 +238,36 @@ class UserSettings: ObservableObject {
             self.isLogin = false
         }
     }
+
+    func check_nickname(nickname: String, result: @escaping (Bool) -> Void) {
+        let url = "http://stage.api.koreatech.in/user/check/nickname/\(nickname)"
+        if let url_encode = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+
+            Alamofire
+                    .request(url_encode, method: .get, encoding: JSONEncoding.default)
+                    .responseJSON { response in
+                        if let status = response.response?.statusCode {
+                            switch(status){
+                            case 200:
+                                result(true)
+
+                            default:
+                                print("error with response status: \(status)")
+                                result(false)
+                            }
+                        }
+                        if let result = response.result.value {
+                            let JSON = result as! NSDictionary
+                            print(JSON["error"])
+                            print(JSON["success"])
+                        }
+
+                    }
+
+        }
+
+
+    }
     
     func logout_session() {
         UserDefaults.standard.set(nil, forKey: "user")

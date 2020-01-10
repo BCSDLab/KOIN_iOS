@@ -218,6 +218,16 @@ struct EditModalView: View {
             }
         }
     }
+
+    func check_nickname() {
+        self.settings.check_nickname(nickname: updated_nickname) { result in
+            if result {
+                print("겹치지 않아요")
+            } else {
+                print("겹쳐요")
+            }
+        }
+    }
     
     func putUserData() {
         var changedNickname: Bool = false
@@ -270,9 +280,14 @@ struct EditModalView: View {
         .disabled(disableName)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         .font(.subheadline)
-        TextField("닉네임", text: $updated_nickname)
-        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-        .font(.subheadline)
+        HStack {
+            TextField("닉네임", text: $updated_nickname)
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                    .font(.subheadline)
+            Button(action: check_nickname) {
+                Text("닉네임 중복")
+            }
+        }
         
         TextField("성별", text: someNumberProxy)
             .disabled(disableGender)
@@ -369,8 +384,8 @@ struct MyInfoView: View {
                 }
             }
         }
-     
                 HStack {
+
                     Spacer()
                     Text("회원탈퇴").onTapGesture {
                         self.settings.delete_session(token: self.settings.get_token())
@@ -720,13 +735,8 @@ struct ContentTabView: View {
             NavigationView{
                 MyInfoView()
                 .navigationBarTitle("내 정보")
-                .navigationBarItems(trailing: Button(action: {
-                    print("put modal on")
-                    self.show_modal = true
-                }) {
-                    Text("정보 수정")
-                }.sheet(isPresented: self.$show_modal) {
-                    EditModalView().environmentObject(self.settings)
+                .navigationBarItems(trailing: NavigationLink(destination: EditModalView().environmentObject(self.settings)) {
+                    Text("수정")
                 })
             }
             .tabItem {
