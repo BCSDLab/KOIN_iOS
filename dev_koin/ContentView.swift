@@ -251,8 +251,7 @@ struct EditModalView: View {
         }
     }
     
-    
-    //self.presentationMode.wrappedValue.dismiss()
+
     var body: some View {
         let someNumberProxy = Binding<String>(
             get: { String(format: "%d", Int(self.updated_gender)) },
@@ -358,7 +357,7 @@ struct MyInfoView: View {
 
 
         Section(header: Text("학교정보")) {
-            ForEach(listData[1], id:\.self) { school in
+            ForEach(listData[1], id: \.self) { school in
                 HStack {
                     Text(school[0])
                             .font(.headline)
@@ -370,15 +369,6 @@ struct MyInfoView: View {
                 }
             }
         }
-                
-                Button(action: {
-                        print("put modal on")
-                        self.show_modal = true
-                    }) {
-                        Text("정보 수정")
-                }.sheet(isPresented: self.$show_modal) {
-                    EditModalView().environmentObject(self.settings)
-                }
      
                 HStack {
                     Spacer()
@@ -671,6 +661,8 @@ struct HomeView: View {
 
 struct ContentTabView: View {
     @EnvironmentObject var tabData: ViewRouter
+    @EnvironmentObject var settings: UserSettings
+    @State private var show_modal: Bool = false
     
     init() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
@@ -728,6 +720,14 @@ struct ContentTabView: View {
             NavigationView{
                 MyInfoView()
                 .navigationBarTitle("내 정보")
+                .navigationBarItems(trailing: Button(action: {
+                    print("put modal on")
+                    self.show_modal = true
+                }) {
+                    Text("정보 수정")
+                }.sheet(isPresented: self.$show_modal) {
+                    EditModalView().environmentObject(self.settings)
+                })
             }
             .tabItem {
                 VStack {

@@ -23,37 +23,6 @@ class UserSettings: ObservableObject {
     init() {
         self.login_succeed()
     }
-
-    func loadUserInfo() -> [[[String]]] {
-        var listData: [[[String]]] = []
-        if let data = UserDefaults.standard.object(forKey:"user") as? Data {
-            let decoder = JSONDecoder()
-            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
-                if let userInfo = loaded.user {
-                    var name: String = "이름 없음"
-                    var nickname: String = "닉네임 없음"
-                    var phoneNumber: String = "휴대폰 번호 없음"
-                    var gender: String = "성별 없음"
-                    var studentNumber: String = "학번 없음"
-                    var major: String = "전공 없음"
-
-                    if let infoName = userInfo.name { name = infoName }
-                    if let infoNickname = userInfo.nickname {nickname = infoNickname}
-                    if let infoPhoneNumber = userInfo.phoneNumber {phoneNumber = infoPhoneNumber}
-                    if let infoGender = userInfo.gender {
-                        gender = infoGender == 0 ? "남자":"여자"
-                    }
-                    if let infoStudentNumber = userInfo.studentNumber {studentNumber = infoStudentNumber}
-                    if let infoMajor = userInfo.major {major = infoMajor}
-
-                    listData = [[["아이디", userInfo.portalAccount], ["이름", name], ["닉네임", nickname], ["익명닉네임", userInfo.anonymousNickname], ["휴대전화", phoneNumber], ["성별", gender]], [["학번",studentNumber], ["전공",major]]]
-
-
-                }
-            }
-        }
-        return listData
-    }
     
     func remove_user() {
         self.user = nil
