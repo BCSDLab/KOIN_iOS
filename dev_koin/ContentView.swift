@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MenuContent: View {
     @EnvironmentObject var settings: UserSettings
-    @EnvironmentObject var viewRouter: ViewRouter
+    //@EnvironmentObject var viewRouter: ViewRouter
 
     init() {
       UITableView.appearance().separatorColor = .clear
@@ -167,7 +167,6 @@ struct EditModalView: View {
     var disableGender: Bool = false
     var disablePhoneNumber: Bool = false
     var disableStudentNumber: Bool = false
-    @State var duplicateNickname: Bool = true
     
     init() {
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
@@ -186,6 +185,7 @@ struct EditModalView: View {
                     if let infoNickname = userInfo.nickname { print(infoNickname)
                         if !infoNickname.isEmpty {
                             print("not empty")
+                    //self.updated_nickname = infoNickname
                             _updated_nickname = State(initialValue: infoNickname)
                         //중복 여부 체크
                     }}
@@ -193,6 +193,7 @@ struct EditModalView: View {
                     if let infoPhoneNumber = userInfo.phoneNumber { print(infoPhoneNumber)
                         if !infoPhoneNumber.isEmpty {
                             print("not empty")
+                    //self.updated_phoneNumber = infoPhoneNumber
                             _updated_phoneNumber = State(initialValue: infoPhoneNumber)
                     self.disablePhoneNumber = true
                     }}
@@ -218,13 +219,11 @@ struct EditModalView: View {
         }
     }
 
-    func check_nickname(){
+    func check_nickname() {
         self.settings.check_nickname(nickname: updated_nickname) { result in
             if result {
-                self.duplicateNickname = false
                 print("겹치지 않아요")
             } else {
-                self.duplicateNickname = true
                 print("겹쳐요")
             }
         }
@@ -252,18 +251,14 @@ struct EditModalView: View {
                 }
             }
         }
-
-
-        if !duplicateNickname {
-            self.settings.update_session(token: token, updated_password: updated_password, updated_name: updated_name, updated_nickname: updated_nickname, updated_gender: updated_gender, updated_isGraduated: false, updated_studentNumber: updated_studentNumber, updated_phoneNumber: updated_phoneNumber, changed_name: !self.disableName, changed_gender: !self.disableGender, changed_phoneNumber: !self.disablePhoneNumber, changed_studentNumber: !self.disableStudentNumber, changed_nickname: changedNickname) { result in
-                if result {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
+        
+        
+        
+        self.settings.update_session(token: token, updated_password: updated_password, updated_name: updated_name, updated_nickname: updated_nickname, updated_gender: updated_gender, updated_isGraduated: false, updated_studentNumber: updated_studentNumber, updated_phoneNumber: updated_phoneNumber, changed_name: !self.disableName, changed_gender: !self.disableGender, changed_phoneNumber: !self.disablePhoneNumber, changed_studentNumber: !self.disableStudentNumber, changed_nickname: changedNickname) { result in
+            if result {
+                self.presentationMode.wrappedValue.dismiss()
             }
-        } else {
-            print("실행되지 않아요")
         }
-
     }
     
 
@@ -361,38 +356,34 @@ struct MyInfoView: View {
         var listData = loadUserInfo()
 
         return List{
-            if !listData.isEmpty {
-                Section(header: Text("기본정보")) {
-
-                    ForEach(listData[0], id: \.self) { general in
-                        HStack {
-                            Text(general[0])
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                            Spacer()
-                            Text(general[1])
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
-                        }
-                    }
-
-                }
-
-
-                Section(header: Text("학교정보")) {
-                    ForEach(listData[1], id: \.self) { school in
-                        HStack {
-                            Text(school[0])
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                            Spacer()
-                            Text(school[1])
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
-                        }
-                    }
+        Section(header: Text("기본정보")) {
+            ForEach(listData[0], id:\.self) { general in
+                HStack {
+                    Text(general[0])
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    Spacer()
+                    Text(general[1])
+                            .font(.subheadline)
+                            .fontWeight(.light)
                 }
             }
+        }
+
+
+        Section(header: Text("학교정보")) {
+            ForEach(listData[1], id: \.self) { school in
+                HStack {
+                    Text(school[0])
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    Spacer()
+                    Text(school[1])
+                            .font(.subheadline)
+                            .fontWeight(.light)
+                }
+            }
+        }
                 HStack {
 
                     Spacer()
@@ -426,7 +417,10 @@ struct HomeView: View {
     init() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
         UINavigationBar.appearance().tintColor = UIColor.white
+        //Use this if NavigationBarTitle is with Large Font
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        //Use this if NavigationBarTitle is with displayMode = .inline
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     
@@ -471,6 +465,9 @@ struct HomeView: View {
                     .fontWeight(.medium)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    
+                    
                 }
                 
                 .frame(width: geometry.size.height, height: 400, alignment: .top)
