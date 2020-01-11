@@ -18,30 +18,28 @@ struct MenuContent: View {
     }
 
     var body: some View {
-        return
-            VStack {
+        VStack {
+            HStack {
+                Text("홍길동")
+                .font(.system(size: 20))
+                .fontWeight(.semibold)
+                .foregroundColor(Color("light_navy"))
+                Text("님,안녕하세요!")
+                .font(.system(size: 15))
+                .foregroundColor(Color("light_navy"))
+                Spacer()
+                Image("img_menu_logo")
+            }
+            .padding(.leading, CGFloat(20))
+            .padding(.trailing, CGFloat(20))
+            .padding(.top, CGFloat(50))
+            List {
                 HStack {
-                    Text("홍길동")
-                        .font(.system(size: 20))
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color("light_navy"))
-                    Text("님,안녕하세요!")
-                        .font(.system(size: 15))
-                        .foregroundColor(Color("light_navy"))
-                    Spacer()
-                    Image("img_menu_logo")
-                }
-                .padding(.leading, CGFloat(20))
-                .padding(.trailing, CGFloat(20))
-                .padding(.top, CGFloat(50))
-                List {
-                    
-                    HStack {
                         Image(systemName: "person")
                         Text("내정보")
                             .font(.subheadline)
                         }
-                    
+
                     Section(header:
                     Text("학교정보")
                         .font(.subheadline)
@@ -89,8 +87,8 @@ struct MenuContent: View {
                                     .foregroundColor(.gray)
                                     .opacity(0.5)
                             }
-                    
-                        
+
+
                             HStack {
                                 Text("버전 정보")
                                     .font(.subheadline)
@@ -111,7 +109,7 @@ struct MenuContent: View {
                         }
                     }
                 }
-            
+
         }.onAppear {
                 print("MenuContent appeared!")
             }.onDisappear {
@@ -124,7 +122,7 @@ struct MenuContent: View {
 struct SideMenu: View {
     let width: CGFloat
     @EnvironmentObject var tabData: ViewRouter
-    
+
     var body: some View {
         ZStack {
             GeometryReader { _ in
@@ -154,47 +152,6 @@ struct SideMenu: View {
     }
 }
 
-struct Toast<Presenting>: View where Presenting: View {
-
-    /// The binding that decides the appropriate drawing in the body.
-    //@Binding var isShowing: Bool
-    /// The view that will be "presenting" this toast
-    let presenting: () -> Presenting
-    /// The text to show
-    let text: Text
-
-    var body: some View {
-
-        GeometryReader { geometry in
-
-            ZStack(alignment: .center) {
-
-                self.presenting()
-                        .blur(radius: 1)
-
-                VStack {
-                    self.text
-                }
-                        .frame(width: geometry.size.width / 2,
-                                height: geometry.size.height / 5)
-                        .background(Color.secondary.colorInvert())
-                        .foregroundColor(Color.primary)
-                        .cornerRadius(20)
-                        .transition(.slide)
-                        .opacity(1)
-
-            }
-
-        }.onAppear {
-            print("Toast appeared!")
-        }.onDisappear {
-            print("Toast disappeared!")
-        }
-
-    }
-
-}
-
 
 struct EditModalView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -205,21 +162,21 @@ struct EditModalView: View {
     @State var updated_gender: Int = -1
     @State var updated_studentNumber: String = ""
     @State var updated_phoneNumber: String = ""
-    
+
     @State var text = ""
-    
+
     var disableName: Bool = false
     var disableGender: Bool = false
     var disablePhoneNumber: Bool = false
     var disableStudentNumber: Bool = false
-    
+
     init() {
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
                 print(loaded.user)
         if let userInfo = loaded.user {
-                    
+
                     if let infoName = userInfo.name { print(infoName)
                         if !infoName.isEmpty {
                             print("not empty")
@@ -230,15 +187,12 @@ struct EditModalView: View {
                     if let infoNickname = userInfo.nickname { print(infoNickname)
                         if !infoNickname.isEmpty {
                             print("not empty")
-                    //self.updated_nickname = infoNickname
                             _updated_nickname = State(initialValue: infoNickname)
-                        //중복 여부 체크
                     }}
             print(updated_nickname)
                     if let infoPhoneNumber = userInfo.phoneNumber { print(infoPhoneNumber)
                         if !infoPhoneNumber.isEmpty {
                             print("not empty")
-                    //self.updated_phoneNumber = infoPhoneNumber
                             _updated_phoneNumber = State(initialValue: infoPhoneNumber)
                     self.disablePhoneNumber = true
                     }}
@@ -257,16 +211,16 @@ struct EditModalView: View {
                     self.disableStudentNumber = true
                     } }
             print(self.disableStudentNumber)
-                    
-                    
+
+
                 }
             }
         }
-        
+
     }
 
 
-    
+
     func putUserData() {
         var changedNickname: Bool = false
         var token: String = ""
@@ -285,29 +239,25 @@ struct EditModalView: View {
                 print("changed Nickname")
                 changedNickname = true
             }
-            
+
                 }
             }
         }
-        
-        
-        
+
         self.settings.update_session(token: token, updated_password: updated_password, updated_name: updated_name, updated_nickname: updated_nickname, updated_gender: updated_gender, updated_isGraduated: false, updated_studentNumber: updated_studentNumber, updated_phoneNumber: updated_phoneNumber, changed_name: !self.disableName, changed_gender: !self.disableGender, changed_phoneNumber: !self.disablePhoneNumber, changed_studentNumber: !self.disableStudentNumber, changed_nickname: changedNickname) { result in
             if result {
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
     }
-    
+
     func check_nickname() {
         let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
         let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
         yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
         y: uiview.frame.size.height / 2)
         yourLabel.textAlignment = .center
-        //yourLabel.backgroundColor = UIColor.black
-        
-        
+
         self.settings.check_nickname(nickname: updated_nickname) { result in
             if result {
                 self.text = "겹치지 않아요."
@@ -327,9 +277,6 @@ struct EditModalView: View {
         }
     }
 
-    
-    
-
     var body: some View {
         let someNumberProxy = Binding<String>(
             get: { String(format: "%d", Int(self.updated_gender)) },
@@ -339,9 +286,7 @@ struct EditModalView: View {
                 }
             }
         )
-        
-        
-        
+
     return VStack{
         SecureField("비밀번호", text: $updated_password)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
@@ -358,13 +303,13 @@ struct EditModalView: View {
                 Text("닉네임 중복")
             }
         }
-        
+
         TextField("성별", text: someNumberProxy)
             .disabled(disableGender)
         .keyboardType(.decimalPad)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         .font(.subheadline)
-        
+
         TextField("학번", text: $updated_studentNumber)
             .disabled(disableStudentNumber)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
@@ -373,8 +318,8 @@ struct EditModalView: View {
             .disabled(disablePhoneNumber)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         .font(.subheadline)
-        
-        
+
+
         Button(action: putUserData){
             Text("보내기")
         }
@@ -421,7 +366,7 @@ struct MyInfoView: View {
         }
         return listData
     }
-    
+
     var body: some View {
         var listData = loadUserInfo()
 
@@ -440,7 +385,7 @@ struct MyInfoView: View {
                 }
             }
         }
-                
+
                 Section(header: Text("학교정보")) {
                     ForEach(listData[1], id: \.self) { school in
                         HStack {
@@ -454,11 +399,11 @@ struct MyInfoView: View {
                         }
                     }
                 }
-                
+
             }
 
 
-        
+
                 HStack {
 
                     Spacer()
@@ -473,39 +418,35 @@ struct MyInfoView: View {
                     }
                     Spacer()
                 }
-                
+
             }
             .listStyle(GroupedListStyle())
                 .alert(isPresented: $showingDeleteAlert) {
-                    //if self.showingSuccessAlert {
                     Alert(title: Text("탈퇴하시겠습니까?"), message: Text("모든 정보가 사라집니다."), primaryButton: .destructive(Text("탈퇴하기")) {
                         self.showingDeleteAlert = false
                         self.settings.delete_session(token: self.settings.get_token())
                     }, secondaryButton: .default(Text("취소")) {self.showingDeleteAlert = false})
                 }
-        
+
         .onAppear {
             print("MyInfoView appeared!")
         }.onDisappear {
             print("MyInfoView disappeared!")
         }
-        
+
     }
 }
 
 
 struct HomeView: View {
-    
+
     init() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
         UINavigationBar.appearance().tintColor = UIColor.white
-        //Use this if NavigationBarTitle is with Large Font
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        //Use this if NavigationBarTitle is with displayMode = .inline
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
-    
+
     func getItemWidth(containerWidth: CGFloat) -> CGFloat {
         return (containerWidth - 50) / 3
     }
@@ -513,12 +454,11 @@ struct HomeView: View {
     func getItemHeight(containerHeight: CGFloat) -> CGFloat {
         return (containerHeight) / 3
     }
-    
+
     var body: some View {
         NavigationView{
         GeometryReader { geometry in
             ZStack {
-                
                 VStack {
                     Image("img_bg")
                     .resizable()
@@ -528,39 +468,28 @@ struct HomeView: View {
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
                 .edgesIgnoringSafeArea(.top)
-                
+
                 VStack(alignment: .leading) {
-                
                 VStack(alignment: .leading) {
                 Image("logo_footer")
                     .renderingMode(.original)
                     .resizable()
                     .frame(width: 65, height: 37)
-                    
                 Text("\'코인\' ios앱 출시")
                     .fontWeight(.light)
                     .foregroundColor(Color.white.opacity(0.5))
                     .font(.system(size: 15))
-                
                 Text("코리아텍 학생들이\n함께 만들어가는 커뮤니티")
                     .font(.system(size: 25))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
-                    
                 }
-                
                 .frame(width: geometry.size.height, height: 400, alignment: .top)
-                    .padding(.leading, 30)
-                
-                
+                .padding(.leading, 30)
                 Spacer()
-            }.frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
-                
-          
-            
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                 VStack() {
                 Spacer()
                 VStack(alignment: .center, spacing: 0) {
@@ -643,7 +572,6 @@ struct HomeView: View {
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
                         NavigationLink(destination: MealView()) {
-                        //Button(action: {}) {
                             VStack{
                             Spacer()
                             Image("restaurant")
@@ -660,7 +588,7 @@ struct HomeView: View {
                                 .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
                                 .background(Color.white)
                         }
-                            
+
                         .border(Color.gray.opacity(0.2), width: 0.5)
                         Button(action: {}) {
                             VStack{
@@ -745,7 +673,7 @@ struct HomeView: View {
                 .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
                 .padding(.bottom, 50)
             }
-            
+
         }
         }
         .onAppear {
@@ -760,31 +688,28 @@ struct ContentTabView: View {
     @EnvironmentObject var tabData: ViewRouter
     @EnvironmentObject var settings: UserSettings
     @State private var show_modal: Bool = false
-    
+
     init() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
-        //Use this if NavigationBarTitle is with Large Font
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        //Use this if NavigationBarTitle is with displayMode = .inline
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
-    
+
 
         var body: some View {
             GeometryReader { geometry in
             ZStack {
                 SideMenu(width: geometry.size.width/3*2)
-                
+
             }.zIndex(99)
                 TabView (selection: self.$tabData.itemSelected){
 
-            // First Secection
-            NavigationView{
-                HomeView()
-                .navigationBarTitle("")
-                .navigationBarHidden(true)
-            }
+                        NavigationView{
+                            HomeView()
+                                    .navigationBarTitle("")
+                                    .navigationBarHidden(true)
+                        }
+
             .tabItem {
                 VStack {
                 Image("bottom_home")
@@ -798,7 +723,6 @@ struct ContentTabView: View {
                 }
             }.tag(1)
 
-            // Add Element
             Text("Custom Action")
             .tabItem {
                 VStack {
@@ -813,7 +737,6 @@ struct ContentTabView: View {
             }
             .tag(2)
 
-            // Events
             NavigationView{
                 MyInfoView()
                 .navigationBarTitle("내 정보")
@@ -845,12 +768,12 @@ struct ContentTabView: View {
     }
 
 struct ContentView: View {
-    
+
     var body: some View {
         ContentTabView()
     }
 }
-    
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
