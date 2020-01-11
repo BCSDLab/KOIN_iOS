@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import PKHUD
 
 struct MenuContent: View {
     @EnvironmentObject var settings: UserSettings
@@ -153,6 +154,47 @@ struct SideMenu: View {
     }
 }
 
+struct Toast<Presenting>: View where Presenting: View {
+
+    /// The binding that decides the appropriate drawing in the body.
+    //@Binding var isShowing: Bool
+    /// The view that will be "presenting" this toast
+    let presenting: () -> Presenting
+    /// The text to show
+    let text: Text
+
+    var body: some View {
+
+        GeometryReader { geometry in
+
+            ZStack(alignment: .center) {
+
+                self.presenting()
+                        .blur(radius: 1)
+
+                VStack {
+                    self.text
+                }
+                        .frame(width: geometry.size.width / 2,
+                                height: geometry.size.height / 5)
+                        .background(Color.secondary.colorInvert())
+                        .foregroundColor(Color.primary)
+                        .cornerRadius(20)
+                        .transition(.slide)
+                        .opacity(1)
+
+            }
+
+        }.onAppear {
+            print("Toast appeared!")
+        }.onDisappear {
+            print("Toast disappeared!")
+        }
+
+    }
+
+}
+
 
 struct EditModalView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -163,6 +205,9 @@ struct EditModalView: View {
     @State var updated_gender: Int = -1
     @State var updated_studentNumber: String = ""
     @State var updated_phoneNumber: String = ""
+    
+    @State var text = ""
+    
     var disableName: Bool = false
     var disableGender: Bool = false
     var disablePhoneNumber: Bool = false
@@ -217,17 +262,10 @@ struct EditModalView: View {
                 }
             }
         }
+        
     }
 
-    func check_nickname() {
-        self.settings.check_nickname(nickname: updated_nickname) { result in
-            if result {
-                print("겹치지 않아요")
-            } else {
-                print("겹쳐요")
-            }
-        }
-    }
+
     
     func putUserData() {
         var changedNickname: Bool = false
@@ -261,6 +299,36 @@ struct EditModalView: View {
         }
     }
     
+    func check_nickname() {
+        let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+        let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+        yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
+        y: uiview.frame.size.height / 2)
+        yourLabel.textAlignment = .center
+        //yourLabel.backgroundColor = UIColor.black
+        
+        
+        self.settings.check_nickname(nickname: updated_nickname) { result in
+            if result {
+                self.text = "겹치지 않아요."
+                yourLabel.text = self.text
+                uiview.addSubview(yourLabel)
+                PKHUD.sharedHUD.contentView = uiview
+                PKHUD.sharedHUD.show()
+                PKHUD.sharedHUD.hide(afterDelay: 1.0)
+            } else {
+                self.text = "겹쳐요."
+                yourLabel.text = self.text
+                uiview.addSubview(yourLabel)
+                PKHUD.sharedHUD.contentView = uiview
+                PKHUD.sharedHUD.show()
+                PKHUD.sharedHUD.hide(afterDelay: 1.0)
+            }
+        }
+    }
+
+    
+    
 
     var body: some View {
         let someNumberProxy = Binding<String>(
@@ -271,6 +339,8 @@ struct EditModalView: View {
                 }
             }
         )
+        
+        
         
     return VStack{
         SecureField("비밀번호", text: $updated_password)
@@ -319,7 +389,7 @@ struct EditModalView: View {
 
 struct MyInfoView: View {
     @EnvironmentObject var settings: UserSettings
-    @State private var show_modal: Bool = false
+    @State var showingDeleteAlert: Bool = false
 
     func loadUserInfo() -> [[[String]]] {
         var listData: [[[String]]] = []
@@ -356,6 +426,7 @@ struct MyInfoView: View {
         var listData = loadUserInfo()
 
         return List{
+            if !listData.isEmpty {
         Section(header: Text("기본정보")) {
             ForEach(listData[0], id:\.self) { general in
                 HStack {
@@ -369,26 +440,30 @@ struct MyInfoView: View {
                 }
             }
         }
-
-
-        Section(header: Text("학교정보")) {
-            ForEach(listData[1], id: \.self) { school in
-                HStack {
-                    Text(school[0])
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                    Spacer()
-                    Text(school[1])
-                            .font(.subheadline)
-                            .fontWeight(.light)
+                
+                Section(header: Text("학교정보")) {
+                    ForEach(listData[1], id: \.self) { school in
+                        HStack {
+                            Text(school[0])
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                            Spacer()
+                            Text(school[1])
+                                    .font(.subheadline)
+                                    .fontWeight(.light)
+                        }
+                    }
                 }
+                
             }
-        }
+
+
+        
                 HStack {
 
                     Spacer()
                     Text("회원탈퇴").onTapGesture {
-                        self.settings.delete_session(token: self.settings.get_token())
+                        self.showingDeleteAlert = true
                     }
                     Spacer()
                     Divider()
@@ -401,6 +476,13 @@ struct MyInfoView: View {
                 
             }
             .listStyle(GroupedListStyle())
+                .alert(isPresented: $showingDeleteAlert) {
+                    //if self.showingSuccessAlert {
+                    Alert(title: Text("탈퇴하시겠습니까?"), message: Text("모든 정보가 사라집니다."), primaryButton: .destructive(Text("탈퇴하기")) {
+                        self.showingDeleteAlert = false
+                        self.settings.delete_session(token: self.settings.get_token())
+                    }, secondaryButton: .default(Text("취소")) {self.showingDeleteAlert = false})
+                }
         
         .onAppear {
             print("MyInfoView appeared!")
