@@ -12,6 +12,7 @@ import Combine
 
 class ViewRouter: ObservableObject {
     let customActionteminidex: Int
+    var currentView: String = "home"
 
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
 

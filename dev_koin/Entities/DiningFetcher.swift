@@ -16,15 +16,14 @@ public class DiningFetcher: ObservableObject {
     
     init(date: Date) {
         meal_session(date: date)
-        print("dining fetcher init")
     }
     
     func meal_session(date: Date){
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_kr")
         dateFormatter.dateFormat = "yyMMdd"
+
         let dateString:String = dateFormatter.string(from: date)
-        print(dateString)
 
         Alamofire
         .request("http://api.koreatech.in/dinings?date=\(dateString)", method: .get, encoding: JSONEncoding.default)
@@ -32,7 +31,6 @@ public class DiningFetcher: ObservableObject {
             guard let data = response.data else { return }
             do {
                 let decoder = JSONDecoder()
-                print(data)
                 if let loaded = try? decoder.decode([DiningRequest].self, from: data) {
                     self.meals = loaded
                     self.meals.reverse()
