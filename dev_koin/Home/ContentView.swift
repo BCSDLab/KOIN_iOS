@@ -112,10 +112,6 @@ struct ContentView: View {
             }
                     .font(.headline)
                     .edgesIgnoringSafeArea(.top)
-        }.onAppear {
-            print("ContentTabView appeared!")
-        }.onDisappear {
-            print("ContentTabView disappeared!")
         }
     }
 }

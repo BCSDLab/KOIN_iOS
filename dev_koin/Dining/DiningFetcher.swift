@@ -34,9 +34,9 @@ public class DiningFetcher: ObservableObject {
                 if let loaded = try? decoder.decode([DiningRequest].self, from: data) {
                     self.meals = loaded
                     self.meals.reverse()
-                } else { print("error")}
+                } else { }
             } catch let error {
-                print(error)
+
             }
         }
     }

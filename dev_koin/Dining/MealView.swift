@@ -123,10 +123,6 @@ struct MealView: View {
                     self.observed.meal_session(date: self.date)
                     self.diningViewRouter.currentView = "breakfast"
                 }
-                print(self.diningViewRouter.currentView)
-            print("MealView appeared!")
-        }.onDisappear {
-            print("MealView disappeared!")
         }
                 
         

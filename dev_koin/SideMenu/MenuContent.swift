@@ -117,10 +117,6 @@ struct MenuContent: View {
                 }
             }
 
-        }.onAppear {
-            print("MenuContent appeared!")
-        }.onDisappear {
-            print("MenuContent disappeared!")
         }
     }
 }

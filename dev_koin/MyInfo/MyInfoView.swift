@@ -106,11 +106,6 @@ struct MyInfoView: View {
                     }, secondaryButton: .default(Text("취소")) {self.showingDeleteAlert = false})
                 }
 
-                .onAppear {
-                    print("MyInfoView appeared!")
-                }.onDisappear {
-                    print("MyInfoView disappeared!")
-                }
 
     }
 }

@@ -169,7 +169,6 @@ struct AddUserView: View {
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], CGFloat(50))
         .alert(isPresented: $showingSuccessAlert) {
-            //if self.showingSuccessAlert {
                 Alert(title: Text("이메일 확인"), message: Text("회원 가입을 완료하시려면 메일을 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
                     self.showingSuccessAlert = false
                     self.presentationMode.wrappedValue.dismiss()

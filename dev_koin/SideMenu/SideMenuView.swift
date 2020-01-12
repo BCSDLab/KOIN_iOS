@@ -22,7 +22,6 @@ struct SideMenu: View {
                     .edgesIgnoringSafeArea(.top)
                     .onTapGesture {
                         self.tabData.dismiss_menu()
-                        print(self.tabData.isCustomItemSelected)
                     }
             HStack {
                 MenuContent()
@@ -32,10 +31,6 @@ struct SideMenu: View {
                         .animation(.default).edgesIgnoringSafeArea(.top)
                 Spacer()
             }
-        }.onAppear {
-            print("SideMenu appeared!")
-        }.onDisappear {
-            print("SideMenu disappeared!")
         }
     }
 }

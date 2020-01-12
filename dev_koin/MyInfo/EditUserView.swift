@@ -28,43 +28,32 @@ struct EditUserView: View {
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
-                print(loaded.user)
                 if let userInfo = loaded.user {
 
-                    if let infoName = userInfo.name { print(infoName)
+                    if let infoName = userInfo.name {
                         if !infoName.isEmpty {
-                            print("not empty")
                             _updated_name = State(initialValue: infoName)
                             self.disableName = true
                         }}
-                    print(self.disableName)
-                    if let infoNickname = userInfo.nickname { print(infoNickname)
+                    if let infoNickname = userInfo.nickname {
                         if !infoNickname.isEmpty {
-                            print("not empty")
                             _updated_nickname = State(initialValue: infoNickname)
                         }}
-                    print(updated_nickname)
-                    if let infoPhoneNumber = userInfo.phoneNumber { print(infoPhoneNumber)
+                    if let infoPhoneNumber = userInfo.phoneNumber {
                         if !infoPhoneNumber.isEmpty {
-                            print("not empty")
                             _updated_phoneNumber = State(initialValue: infoPhoneNumber)
                             self.disablePhoneNumber = true
                         }}
-                    print(self.disablePhoneNumber)
-                    if let infoGender = userInfo.gender { print(infoGender)
+                    if let infoGender = userInfo.gender {
                         if infoGender != -1 {
-                            print("not empty")
                             _updated_gender = State(initialValue: infoGender)
                             self.disableGender = true
                         }}
-                    print(self.disableGender)
-                    if let infoStudentNumber = userInfo.studentNumber {print(infoStudentNumber)
+                    if let infoStudentNumber = userInfo.studentNumber {
                         if !infoStudentNumber.isEmpty {
-                            print("not empty")
                             _updated_studentNumber = State(initialValue: infoStudentNumber)
                             self.disableStudentNumber = true
                         } }
-                    print(self.disableStudentNumber)
 
 
                 }
@@ -77,19 +66,14 @@ struct EditUserView: View {
     func putUserData() {
         var changedNickname: Bool = false
         var token: String = ""
-        print("start userData")
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
-            print("userdefaults")
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
                 if let token_data = loaded.token {
                     token = token_data
                 }
                 if let userInfo = loaded.user {
-                    print(userInfo.nickname)
-                    print(updated_nickname)
                     if userInfo.nickname != updated_nickname {
-                        print("changed Nickname")
                         changedNickname = true
                     }
 
@@ -176,10 +160,6 @@ struct EditUserView: View {
             Button(action: putUserData){
                 Text("보내기")
             }
-        }.onAppear {
-            print("EditUserView appeared!")
-        }.onDisappear {
-            print("EditUserView disappeared!")
         }
     }
 }

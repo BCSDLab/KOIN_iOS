@@ -140,7 +140,6 @@ struct HomeView: View {
                                         .border(Color.gray.opacity(0.2), width: 0.5)
 
                                 Button(action: {self.viewRouter.currentView = "dining"
-                                    print(self.viewRouter.currentView)
                                     self.viewRouter.dismiss_menu()}) {
                                     VStack{
                                         Spacer()
@@ -246,10 +245,6 @@ struct HomeView: View {
 
             }
         }
-                .onAppear {
-                    print("HomeView appeared!")
-                }.onDisappear {
-            print("HomeView disappeared!")
-        }
+
     }
 }
