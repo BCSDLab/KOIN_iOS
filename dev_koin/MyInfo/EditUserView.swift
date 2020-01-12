@@ -16,6 +16,9 @@ struct EditUserView: View {
     @State var updated_gender: Int = -1
     @State var updated_studentNumber: String = ""
     @State var updated_phoneNumber: String = ""
+    var username: String = ""
+    var anonymous_nickname: String = ""
+    
 
     @State var text = ""
 
@@ -29,6 +32,8 @@ struct EditUserView: View {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(UserRequest.self, from: data) {
                 if let userInfo = loaded.user {
+                    username = userInfo.portalAccount
+                    anonymous_nickname = userInfo.anonymousNickname
 
                     if let infoName = userInfo.name {
                         if !infoName.isEmpty {
@@ -113,7 +118,7 @@ struct EditUserView: View {
             }
         }
     }
-
+    
     var body: some View {
         let someNumberProxy = Binding<String>(
                 get: { String(format: "%d", Int(self.updated_gender)) },
@@ -123,43 +128,80 @@ struct EditUserView: View {
                     }
                 }
         )
-
-        return VStack{
-            SecureField("비밀번호", text: $updated_password)
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-                    .font(.subheadline)
-            TextField("이름", text: $updated_name)
+        
+        return List{
+            Section(header: Text("기본정보")) {
+                HStack {
+                    Text("아이디")
+                    Text("\(username)@koreatech.ac.kr")
+                }
+                HStack {
+                    Text("이름")
+                    TextField("이름", text: $updated_name)
                     .disabled(disableName)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                     .font(.subheadline)
-            HStack {
-                TextField("닉네임", text: $updated_nickname)
+                }
+                HStack {
+                    Text("닉네임")
+                    TextField("닉네임", text: $updated_nickname)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                            .font(.subheadline)
+                    Button(action: check_nickname) {
+                        Text("닉네임 중복")
+                    }
+                }
+                HStack {
+                    Text("익명닉네임")
+                    Text("\(anonymous_nickname)")
+                }
+                HStack {
+                    Text("휴대전화")
+                    TextField("핸드폰 번호", text: $updated_phoneNumber)
+                        .disabled(disablePhoneNumber)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                         .font(.subheadline)
-                Button(action: check_nickname) {
-                    Text("닉네임 중복")
+                }
+                HStack {
+                    Text("성별")
+                    Picker(selection: $updated_gender, label: Text("성별")) {
+                        Text("남자").tag(0)
+                        Text("여자").tag(1)
+                    }.pickerStyle(SegmentedPickerStyle())
+                    .disabled(disableGender)
                 }
             }
 
-            TextField("성별", text: someNumberProxy)
-                    .disabled(disableGender)
-                    .keyboardType(.decimalPad)
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-                    .font(.subheadline)
-
-            TextField("학번", text: $updated_studentNumber)
+            Section(header: Text("학교정보")) {
+                HStack {
+                    Text("학번")
+                    TextField("학번", text: $updated_studentNumber)
                     .disabled(disableStudentNumber)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                     .font(.subheadline)
-            TextField("핸드폰 번호", text: $updated_phoneNumber)
-                    .disabled(disablePhoneNumber)
+                }
+            }
+            
+            Section(header: Text("비밀번호 변경")) {
+                HStack {
+                    Text("변경할 비밀번호")
+                    SecureField("비밀번호", text: $updated_password)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                     .font(.subheadline)
-
-
+                }
+            }
+            
             Button(action: putUserData){
                 Text("보내기")
             }
+
         }
+        
+    }
+}
+
+struct EditUserView_Previews: PreviewProvider {
+    static var previews: some View {
+        EditUserView()
     }
 }

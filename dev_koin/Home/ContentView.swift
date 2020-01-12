@@ -93,7 +93,7 @@ struct ContentView: View {
                                     Image(systemName: "chevron.left")
                                     Text("홈")
                                 }
-                            }, trailing: NavigationLink(destination: EditUserView().environmentObject(self.settings)) {
+                            }, trailing: NavigationLink(destination: EditUserView().environmentObject(self.settings).navigationBarTitle("내정보 수정", displayMode: .inline)) {
                                 Text("수정")
                             })
                 }
