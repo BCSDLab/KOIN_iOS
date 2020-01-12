@@ -11,7 +11,7 @@ import PKHUD
 
 struct MenuContent: View {
     @EnvironmentObject var settings: UserSettings
-    //@EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var viewRouter: ViewRouter
 
     init() {
       UITableView.appearance().separatorColor = .clear
@@ -38,7 +38,11 @@ struct MenuContent: View {
                         Image(systemName: "person")
                         Text("내정보")
                             .font(.subheadline)
-                        }
+                        }.onTapGesture {
+                    self.viewRouter.currentView = "myinfo"
+                    print(self.viewRouter.currentView)
+                    self.viewRouter.dismiss_menu()
+                }
 
                     Section(header:
                     Text("학교정보")
@@ -51,7 +55,13 @@ struct MenuContent: View {
                             Text("버스 / 교통")
                                 .font(.subheadline)
                             Text("식단")
+                                    .onTapGesture {
+                                        self.viewRouter.currentView = "dining"
+                                        print(self.viewRouter.currentView)
+                                        self.viewRouter.dismiss_menu()
+                                    }
                                 .font(.subheadline)
+
                             Text("동아리")
                                 .font(.subheadline)
                     }
@@ -218,7 +228,6 @@ struct EditModalView: View {
         }
 
     }
-
 
 
     func putUserData() {
@@ -439,7 +448,7 @@ struct MyInfoView: View {
 
 
 struct HomeView: View {
-
+    @EnvironmentObject var viewRouter: ViewRouter
     init() {
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
         UINavigationBar.appearance().tintColor = UIColor.white
@@ -571,7 +580,9 @@ struct HomeView: View {
                         .clipped()
                         .border(Color.gray.opacity(0.2), width: 0.5)
 
-                        NavigationLink(destination: MealView()) {
+                        Button(action: {self.viewRouter.currentView = "dining"
+                            print(self.viewRouter.currentView)
+                            self.viewRouter.dismiss_menu()}) {
                             VStack{
                             Spacer()
                             Image("restaurant")
@@ -705,9 +716,20 @@ struct ContentTabView: View {
                 TabView (selection: self.$tabData.itemSelected){
 
                         NavigationView{
-                            HomeView()
-                                    .navigationBarTitle("")
-                                    .navigationBarHidden(true)
+                            if self.tabData.currentView == "home" {
+                                HomeView()
+                                        .navigationBarTitle("")
+                                        .navigationBarHidden(true)
+                            } else if self.tabData.currentView == "dining" {
+                                MealView()
+                                .navigationBarTitle("식단", displayMode: .inline)
+                                .navigationBarItems(leading: Button(action: self.tabData.go_home) {Text("뒤로")})
+                            } else if self.tabData.currentView == "myinfo" {
+                                MyInfoView()
+                                        .navigationBarTitle("식단", displayMode: .inline)
+                                        .navigationBarItems(leading: Button(action: self.tabData.go_home) {Text("뒤로")})
+                            }
+
                         }
 
             .tabItem {
@@ -717,7 +739,7 @@ struct ContentTabView: View {
                     .renderingMode(.template)
                     .frame(width:38, height: 24)
                 Text("홈")
-                    .font(.system(size: 12))
+                        .font(.system(size: 12))
                     .fontWeight(.medium)
                 Spacer()
                 }
@@ -731,7 +753,7 @@ struct ContentTabView: View {
                     .renderingMode(.template)
                     .frame(width:38, height: 24)
                 Text("카테고리")
-                    .font(.system(size: 12))
+                        .font(.system(size: 12))
                     .fontWeight(.medium)
                 }
             }
@@ -751,7 +773,7 @@ struct ContentTabView: View {
                     .renderingMode(.template)
                     .frame(width:38, height: 24)
                 Text("내정보")
-                    .font(.system(size: 12))
+                        .font(.system(size: 12))
                     .fontWeight(.medium)
                 }
             }.tag(3)

@@ -12,6 +12,7 @@ import Combine
 
 class ViewRouter: ObservableObject {
     let customActionteminidex: Int
+    let homeActionteminidex: Int
     var currentView: String = "home"
 
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
@@ -21,6 +22,9 @@ class ViewRouter: ObservableObject {
             if itemSelected == customActionteminidex {
                 itemSelected = oldValue
                 isCustomItemSelected = true
+            } else if itemSelected == homeActionteminidex {
+                isHomeItemSelected = true
+                currentView = "home"
             }
             objectWillChange.send(self)
         }
@@ -31,11 +35,20 @@ class ViewRouter: ObservableObject {
         objectWillChange.send(self)
     }
 
+    func go_home() {
+        currentView = "home"
+        isHomeItemSelected = true
+        objectWillChange.send(self)
+    }
+
+    var isHomeItemSelected: Bool = false
+
     /// This is true when the user has selected the Item with the custom action
     var isCustomItemSelected: Bool = false
 
     init(initialIndex: Int = 1, customItemIndex: Int) {
         self.customActionteminidex = customItemIndex
         self.itemSelected = initialIndex
+        self.homeActionteminidex = 1
     }
 }
