@@ -715,21 +715,33 @@ struct ContentTabView: View {
             }.zIndex(99)
                 TabView (selection: self.$tabData.itemSelected){
 
-                        NavigationView{
+                        NavigationView {
                             if self.tabData.currentView == "home" {
                                 HomeView()
                                         .navigationBarTitle("")
                                         .navigationBarHidden(true)
                             } else if self.tabData.currentView == "dining" {
                                 MealView()
-                                .navigationBarTitle("식단", displayMode: .inline)
-                                .navigationBarItems(leading: Button(action: self.tabData.go_home) {Text("뒤로")})
+                                        .navigationBarTitle("식단", displayMode: .inline)
+                                        .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                            HStack {
+                                                Image(systemName: "chevron.left")
+                                                Text("홈")
+                                            }
+                                        })
                             } else if self.tabData.currentView == "myinfo" {
                                 MyInfoView()
-                                        .navigationBarTitle("식단", displayMode: .inline)
-                                        .navigationBarItems(leading: Button(action: self.tabData.go_home) {Text("뒤로")})
-                            }
+                                        .navigationBarTitle("내정보", displayMode: .inline)
+                                        .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                            HStack {
+                                                Image(systemName: "chevron.left")
+                                                Text("홈")
+                                            }
+                                        }, trailing: NavigationLink(destination: EditModalView().environmentObject(self.settings)) {
+                                    Text("수정")
+                                })
 
+                            }
                         }
 
             .tabItem {
@@ -761,10 +773,15 @@ struct ContentTabView: View {
 
             NavigationView{
                 MyInfoView()
-                .navigationBarTitle("내 정보")
-                .navigationBarItems(trailing: NavigationLink(destination: EditModalView().environmentObject(self.settings)) {
-                    Text("수정")
-                })
+                        .navigationBarTitle("내정보", displayMode: .inline)
+                        .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("홈")
+                            }
+                        }, trailing: NavigationLink(destination: EditModalView().environmentObject(self.settings)) {
+                            Text("수정")
+                        })
             }
             .tabItem {
                 VStack {

@@ -36,9 +36,7 @@ class ViewRouter: ObservableObject {
     }
 
     func go_home() {
-        currentView = "home"
-        isHomeItemSelected = true
-        objectWillChange.send(self)
+        itemSelected = 1
     }
 
     var isHomeItemSelected: Bool = false
