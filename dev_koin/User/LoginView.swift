@@ -20,7 +20,6 @@ import PKHUD
 struct UserLoginView: View {
     @State var login_email: String = ""
     @State var login_password: String = ""
-    //@Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var settings: UserSettings
     
     var body: some View {
@@ -123,10 +122,6 @@ struct UserLoginView: View {
                 .offset(y: 15)
                 .padding(.bottom, CGFloat(30))
         }
-    }.onAppear {
-        print("UserLoginView appeared!")
-    }.onDisappear {
-        print("UserLoginView disappeared!")
     }
         
 

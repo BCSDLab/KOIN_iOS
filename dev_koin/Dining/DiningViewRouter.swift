@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+//Dining에서 선택된 탭을 담당
 class DiningViewRouter: ObservableObject {
-    @Published var currentView = "breakfast"
+    @Published var currentView = "breakfast"  //breakfast, lunch, dinner에 따라 표시되는 탭이 달라짐
 }
