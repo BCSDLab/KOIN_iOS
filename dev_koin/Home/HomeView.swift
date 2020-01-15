@@ -7,18 +7,24 @@ import Foundation
 import SwiftUI
 
 struct HomeView: View {
+    // 탭과 관련된 데이터를 가지고 있는 오브젝트
     @EnvironmentObject var viewRouter: ViewRouter
     init() {
+        // 네비게이션 바 색 설정
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        // 네비게이션 강조 색 설정
         UINavigationBar.appearance().tintColor = UIColor.white
+        // 네비게이션 글자 색 설정
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
 
+    // 전체 버튼들의 가로 길이 설정
     func getItemWidth(containerWidth: CGFloat) -> CGFloat {
         return (containerWidth - 50) / 3
     }
 
+    // 전체 버튼들의 세로 길이 설정
     func getItemHeight(containerHeight: CGFloat) -> CGFloat {
         return (containerHeight) / 3
     }
@@ -138,7 +144,7 @@ struct HomeView: View {
                                 }
                                         .clipped()
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-
+                                // 식단 버튼 클릭 시, dining 화면으로 바꾼 후에 sidemenu를 닫는다.
                                 Button(action: {self.viewRouter.currentView = "dining"
                                     self.viewRouter.dismiss_menu()}) {
                                     VStack{

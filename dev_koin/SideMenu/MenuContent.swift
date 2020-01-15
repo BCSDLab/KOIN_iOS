@@ -7,10 +7,13 @@ import Foundation
 import SwiftUI
 
 struct MenuContent: View {
+    // 유저 정보가 들어있는 오브젝트
     @EnvironmentObject var settings: UserSettings
+    // 탭 정보가 들어있는 오브젝트
     @EnvironmentObject var viewRouter: ViewRouter
 
     init() {
+        // 리스트의 구분선을 투명하게 변경
         UITableView.appearance().separatorColor = .clear
     }
 
@@ -35,9 +38,10 @@ struct MenuContent: View {
                     Image(systemName: "person")
                     Text("내정보")
                             .font(.subheadline)
-                }.onTapGesture {
+                }.onTapGesture { // 내정보 누를 시
+                    // 현재 view를 myinfo로 변경
                     self.viewRouter.currentView = "myinfo"
-                    print(self.viewRouter.currentView)
+                    // 메뉴 닫음
                     self.viewRouter.dismiss_menu()
                 }
 
@@ -52,9 +56,10 @@ struct MenuContent: View {
                     Text("버스 / 교통")
                             .font(.subheadline)
                     Text("식단")
-                            .onTapGesture {
+                            .onTapGesture { // 식단 누를 시
+                                // 현재 view를 dining으로 변경
                                 self.viewRouter.currentView = "dining"
-                                print(self.viewRouter.currentView)
+                                // 메뉴 닫음
                                 self.viewRouter.dismiss_menu()
                             }
                             .font(.subheadline)
