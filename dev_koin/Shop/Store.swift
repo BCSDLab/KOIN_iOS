@@ -17,7 +17,7 @@ struct Store: Codable, Hashable, Identifiable {
     let openTime: String?
     let closeTime: String?
     let isEvent: Bool
-    //let eventArticles: [StoreEvent]?
+    let eventArticles: [StoreEvent]?
     let payBank: Bool
     let hit: Int
     let internalName: String
@@ -40,7 +40,7 @@ struct Store: Codable, Hashable, Identifiable {
         case openTime = "open_time"
         case closeTime = "close_time"
         case isEvent = "is_event"
-        //case eventArticles = "event_articles"
+        case eventArticles = "event_articles"
         case payBank = "pay_bank"
         case hit = "hit"
         case internalName = "internal_name"

@@ -5,10 +5,14 @@
 
 import Foundation
 import Alamofire
+import SwiftUI
+import Combine
 
 class StoreController: ObservableObject {
     @Published var stores: Shops? = nil
     @Published var detail_store: Store? = nil
+    
+    let objectWillChange = PassthroughSubject<StoreController, Never>()
 
     init() {
         self.store_session()
@@ -27,6 +31,7 @@ class StoreController: ObservableObject {
                 self.stores = loaded
             }
         }
+        objectWillChange.send(self)
     }
     
     
@@ -45,12 +50,14 @@ class StoreController: ObservableObject {
                 let decoder = JSONDecoder()
                 let storeRequest = try decoder.decode(Store.self, from: data)
                 self.detail_store = storeRequest
+                self.objectWillChange.send(self)
 
             } catch let error {
                 print(error)
             }
 
         }
+        
     }
 
     func get_stores() -> [Store] {
@@ -58,6 +65,24 @@ class StoreController: ObservableObject {
             return shops.shops
         }
         return []
+    }
+    
+    func get_stores(category: String){
+        var filtered_stores: [Store] = []
+        
+        if let data = UserDefaults.standard.object(forKey: "stores") as? Data {
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(Shops.self, from: data) {
+                    for store in loaded.shops {
+                        if store.category == category {
+                            filtered_stores.append(store)
+                        }
+                    }
+            }
+        }
+        
+        self.stores = Shops(shops: filtered_stores)
+        self.objectWillChange.send(self)
     }
 
     func store_session() {

@@ -11,7 +11,7 @@ struct StoreEvent: Codable, Hashable, Identifiable {
     let shopId: Int
     let title: String
     let eventTitle: String
-    let content: String
+    var content: String
     let userId: Int
     let nickname: String
     let thumbnail: String?

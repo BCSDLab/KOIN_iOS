@@ -8,9 +8,13 @@ import Combine
 
 struct Shops: Codable, Hashable {
 
-    let shops: [Store]
+    var shops: [Store]
 
     private enum CodingKeys: String, CodingKey {
         case shops = "shops"
+    }
+    
+    init(shops: [Store]) {
+        self.shops = shops
     }
 }
