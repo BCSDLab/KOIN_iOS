@@ -7,18 +7,19 @@ import Foundation
 import Alamofire
 import SwiftUI
 import Combine
+import PKHUD
 
 class StoreController: ObservableObject {
-    @Published var stores: Shops? = nil
-    @Published var detail_store: Store? = nil
-    
+    @Published var stores: Shops?
+    @Published var detail_store: Store?
+
     let objectWillChange = PassthroughSubject<StoreController, Never>()
 
     init() {
-        self.store_session()
-        self.load_stores()
+        stores = Shops()
+        detail_store = Store()
     }
-    
+
     init(store_id: Int) {
         self.store_session()
         self.load_store(store_id: store_id)

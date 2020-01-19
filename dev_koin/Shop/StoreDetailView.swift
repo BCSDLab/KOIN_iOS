@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import PKHUD
 
 extension String{
     func getArrayAfterRegex(regex: String) -> [String] {
@@ -26,18 +27,15 @@ extension String{
     }
 }
 
-
 struct StoreDetailView: View {
-    @ObservedObject var controller: StoreController
+    @ObservedObject var controller: StoreController = StoreController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var store_id: Int
     
     init(store_id: Int) {
         self.store_id = store_id
-        controller = StoreController(store_id: store_id)
+        self.controller.load_store(store_id: store_id)
     }
-    
-    
     
     var body: some View {
         var storeName: String = "가게이름"
@@ -47,6 +45,7 @@ struct StoreDetailView: View {
         var store_deliveryPrice: Int = 0
         var store_delivery: Bool = false
         var store_payCard: Bool = false
+        var store_payBank: Bool = false
         var store_menus: [Menus] = []
         var store_images: [String] = []
         var store_event: [StoreEvent] = []
@@ -73,6 +72,7 @@ struct StoreDetailView: View {
             store_deliveryPrice = info.deliveryPrice
             store_delivery = info.delivery
             store_payCard = info.payCard
+            store_payBank = info.payBank
             if let menus = info.menus {
                 for menu in menus {
                     store_menus.append(menu)
@@ -101,24 +101,55 @@ struct StoreDetailView: View {
             Text(storeName).font(.title)
             HStack {
                 Text("전화번호")
-            Text(store_phone)
+                Text(store_phone)
+                        .foregroundColor(Color.black.opacity(0.3))
 
             }
             HStack {
                 Text("운영시간")
-            Text("\(store_openTime) ~ \(store_closeTime)")
+                Text("\(store_openTime) ~ \(store_closeTime)")
+                        .foregroundColor(Color.black.opacity(0.3))
             }
             HStack {
                 Text("기타 정보")
                 
                 VStack {
-                    Text("배달료 \(store_deliveryPrice)원")
+                    if (store_deliveryPrice != 0) {
+                        Text("배달료 \(store_deliveryPrice)원")
+                                .foregroundColor(Color.black.opacity(0.3))
+                    }
+
                 }
 
             }
             HStack {
-                Text(store_delivery ? "배달 가능" : "배달 불가능")
-                Text(store_payCard ? "카드 가능" : "카드 불가능")
+                if store_delivery {
+                    Text("#배달 가능")
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .foregroundColor(.white)
+                            .padding(.all, 5)
+                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+                }
+                if store_payCard {
+                    Text("#카드 가능")
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .foregroundColor(.white)
+                            .padding(.all, 5)
+                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+                }
+                if store_payBank {
+                    Text("#계좌이체 가능")
+
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .foregroundColor(.white)
+                            .padding(.all, 5)
+                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+
+                }
+
             }
                 
             HStack {
@@ -139,10 +170,16 @@ struct StoreDetailView: View {
 
                 }) {
                     Text("전화하기")
+                            .foregroundColor(Color.white)
+                            .padding(.all, 10)
+                            .background(Color("light_navy"))
                 }
-                Button(action: {self.presentationMode.wrappedValue.dismiss()}) {
+                Button(action: { self.presentationMode.wrappedValue.dismiss() }) {
                     Text("상점목록")
-                }
+                            .foregroundColor(Color.white)
+                            .padding(.all, 10)
+                            .background(Color("warm_grey_two"))
+                }.padding(.trailing, 10)
             }
             
             ScrollView(.horizontal){
@@ -196,26 +233,17 @@ struct StoreDetailView: View {
                     }
                 }
 
-                VStack{
-            ForEach(store_menus, id: \.self) { menus in
-                HStack{
-                Text(menus.name)
-                    Spacer()
-                    VStack {
-                    ForEach(menus.priceType, id: \.self) { price in
-                        HStack {
-                            Text(price.size)
-                        Text(price.price)
-                        }
-                        
-                        }
+                VStack {
+                    Text("메뉴")
+                            .font(.title)
+                            .padding(.bottom)
+                    ForEach(store_menus, id: \.self) { menus in
+                        StoreMenuCellView(menus: menus)
                     }
                 }
-            }
-                }
-            
+                        .navigationBarTitle(storeName)
 
-        }
+            }
         }.onAppear() {
             print("StoreDetailView Appeared")
         }.onDisappear() {
@@ -224,9 +252,46 @@ struct StoreDetailView: View {
     }
 }
 
+struct StoreMenuCellView: View {
+
+    let menus: Menus
+
+    init(menus: Menus) {
+        self.menus = menus
+    }
+
+    var body: some View {
+        return HStack {
+            Text(menus.name)
+            Spacer()
+            VStack {
+                ForEach(menus.priceType, id: \.self) { price in
+                    HStack {
+                        if (price.size != "기본") {
+                            Text(price.size)
+                        }
+                        Text(price.price)
+                                .foregroundColor(Color("light_navy"))
+                    }
+
+                }
+            }
+        }.frame(maxWidth: .infinity)
+                .padding()
+                .overlay(
+                        Rectangle()
+                                .stroke(Color("menu_border"), lineWidth: 1)
+                )
+                .background(Color("white_two"))
+                .padding([.horizontal])
+                .padding([.vertical], 10)
+                .clipped()
+    }
+}
+
 struct StoreDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        StoreDetailView(store_id: 96)
+        StoreDetailView(store_id: 40)
         //40, 96
     }
 }

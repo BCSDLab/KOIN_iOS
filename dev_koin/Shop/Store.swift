@@ -9,28 +9,29 @@
 import Foundation
 
 struct Store: Codable, Hashable, Identifiable {
-    let delivery: Bool
-    let address: String?
-    let payCard: Bool
-    let description: String?
-    let imageUrls: [String]?
-    let openTime: String?
-    let closeTime: String?
-    let isEvent: Bool
-    let eventArticles: [StoreEvent]?
-    let payBank: Bool
-    let hit: Int
-    let internalName: String
-    let isDeleted: Bool
-    let phone: String?
-    let chosung: String
-    let name: String
-    let id: Int
-    let menus: [Menus]?
-    let category: String
-    let permalink: String?
-    let remarks: String?
-    let deliveryPrice: Int
+    var delivery: Bool
+    var address: String?
+    var payCard: Bool
+    var description: String?
+    var imageUrls: [String]?
+    var openTime: String?
+    var closeTime: String?
+    var isEvent: Bool
+    var eventArticles: [StoreEvent]?
+    var payBank: Bool
+    var hit: Int
+    var internalName: String
+    var isDeleted: Bool
+    var phone: String?
+    var chosung: String
+    var name: String
+    var id: Int
+    var menus: [Menus]?
+    var category: String
+    var permalink: String?
+    var remarks: String?
+    var deliveryPrice: Int
+
     private enum CodingKeys: String, CodingKey {
         case delivery = "delivery"
         case address = "address"
@@ -54,5 +55,30 @@ struct Store: Codable, Hashable, Identifiable {
         case permalink = "permalink"
         case remarks = "remarks"
         case deliveryPrice = "delivery_price"
+    }
+
+    init() {
+        delivery = false
+        address = nil
+        payCard = false
+        description = nil
+        imageUrls = nil
+        openTime = nil
+        closeTime = nil
+        isEvent = false
+        eventArticles = nil
+        payBank = false
+        hit = 0
+        internalName = ""
+        isDeleted = false
+        phone = nil
+        chosung = ""
+        name = ""
+        id = -1
+        menus = nil
+        category = "S000"
+        permalink = nil
+        remarks = nil
+        deliveryPrice = 0
     }
 }

@@ -13,8 +13,13 @@ struct Shops: Codable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case shops = "shops"
     }
-    
+
     init(shops: [Store]) {
         self.shops = shops
     }
+
+    init() {
+        self.shops = [Store()]
+    }
+
 }
