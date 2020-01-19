@@ -14,8 +14,10 @@ struct StoreView: View {
     @ObservedObject var stores: StoreController = StoreController()
 
     init() {
-        stores.store_session()
-        stores.load_stores()
+
+            self.stores.store_session()
+            self.stores.load_stores()
+
     }
 
 

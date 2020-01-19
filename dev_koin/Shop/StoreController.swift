@@ -12,8 +12,21 @@ import PKHUD
 class StoreController: ObservableObject {
     @Published var stores: Shops?
     @Published var detail_store: Store?
+    var isImageClicked: Bool = false
+    var expandImage: String = ""
 
     let objectWillChange = PassthroughSubject<StoreController, Never>()
+
+    func open_image(image: String) {
+        expandImage = image
+        isImageClicked = true
+        objectWillChange.send(self)
+    }
+
+    func dismiss_image() {
+        isImageClicked = false
+        objectWillChange.send(self)
+    }
 
     init() {
         stores = Shops()

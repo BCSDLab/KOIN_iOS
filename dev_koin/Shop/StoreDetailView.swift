@@ -27,6 +27,53 @@ extension String{
     }
 }
 
+struct ExpandImageView: View {
+    @EnvironmentObject var ImageData: StoreController
+
+    var body: some View {
+        ZStack {
+            GeometryReader { _ in
+                EmptyView()
+            }
+                    .background(Color.gray.opacity(0.3))
+                    .opacity(self.ImageData.isImageClicked ? 1.0 : 0.0)
+                    .edgesIgnoringSafeArea(.top)
+                    .onTapGesture {
+                        self.ImageData.dismiss_image()
+                    }
+            GeometryReader { geometry in
+                if self.ImageData.isImageClicked {
+                    HStack {
+                    Spacer()
+                        HStack {
+                                WebImage(url: URL(string: self.ImageData.expandImage))
+                                        .onSuccess { image, cacheType in
+                                            // Success
+                                        }
+                                        .resizable() // Resizable like SwiftUI.Image
+                                        .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                        // Supports ViewBuilder as well
+                                        .placeholder {
+                                            Rectangle().foregroundColor(.gray)
+                                        }
+                                        .animated() // Supports Animated Image
+                                        .indicator(.activity) // Activity Indicator
+                                        .animation(.easeInOut(duration: 0.5)) // Animation Duration
+                                        .transition(.fade) // Fade Transition
+                                        .scaledToFit()
+                                        .frame(width: geometry.size.width - 50, alignment: .center)
+
+                        }
+                    Spacer()
+                    }
+                }
+            
+
+            }
+        }
+    }
+}
+
 struct StoreDetailView: View {
     @ObservedObject var controller: StoreController = StoreController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -53,13 +100,13 @@ struct StoreDetailView: View {
         var store_eventThumbnailType: String = ""
         if let info = self.controller.detail_store {
             storeName = info.name
-            
+
             if let images = info.imageUrls {
                 for image in images {
                     store_images.append(image)
                 }
             }
-            
+
             if let phone = info.phone {
                 store_phone = phone
             }
@@ -90,166 +137,173 @@ struct StoreDetailView: View {
                     }
                     store_event.append(changed_event)
                 }
-                
+
             }
-            
+
         }
-        
-        
-        return ScrollView(.vertical){
-            VStack(alignment: .leading) {
-            Text(storeName).font(.title)
-            HStack {
-                Text("전화번호")
-                Text(store_phone)
-                        .foregroundColor(Color.black.opacity(0.3))
 
-            }
-            HStack {
-                Text("운영시간")
-                Text("\(store_openTime) ~ \(store_closeTime)")
-                        .foregroundColor(Color.black.opacity(0.3))
-            }
-            HStack {
-                Text("기타 정보")
-                
-                VStack {
-                    if (store_deliveryPrice != 0) {
-                        Text("배달료 \(store_deliveryPrice)원")
+
+        return ZStack{
+            ExpandImageView().environmentObject(self.controller).zIndex(99)
+            ScrollView(.vertical) {
+                VStack(alignment: .leading) {
+                    Text(storeName)
+                            .font(.title)
+                    HStack {
+                        Text("전화번호")
+                        Text(store_phone)
                                 .foregroundColor(Color.black.opacity(0.3))
-                    }
 
-                }
-
-            }
-            HStack {
-                if store_delivery {
-                    Text("#배달 가능")
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundColor(.white)
-                            .padding(.all, 5)
-                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
-                }
-                if store_payCard {
-                    Text("#카드 가능")
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundColor(.white)
-                            .padding(.all, 5)
-                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
-                }
-                if store_payBank {
-                    Text("#계좌이체 가능")
-
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundColor(.white)
-                            .padding(.all, 5)
-                            .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
-
-                }
-
-            }
-                
-            HStack {
-                Spacer()
-                Button(action: {
-
-                    // validation of phone number not included
-                    let dash = CharacterSet(charactersIn: "-")
-
-                    let cleanString =
-                    store_phone.trimmingCharacters(in: dash)
-
-                    let tel = "tel://"
-                    let formattedString = tel + cleanString
-                    let url: NSURL = URL(string: formattedString)! as NSURL
-
-                    UIApplication.shared.open(url as URL)
-
-                }) {
-                    Text("전화하기")
-                            .foregroundColor(Color.white)
-                            .padding(.all, 10)
-                            .background(Color("light_navy"))
-                }
-                Button(action: { self.presentationMode.wrappedValue.dismiss() }) {
-                    Text("상점목록")
-                            .foregroundColor(Color.white)
-                            .padding(.all, 10)
-                            .background(Color("warm_grey_two"))
-                }.padding(.trailing, 10)
-            }
-            
-            ScrollView(.horizontal){
-            HStack{
-            ForEach(store_images, id: \.self) { image in
-                WebImage(url: URL(string: image))
-                .onSuccess { image, cacheType in
-                    // Success
-                }
-                .resizable() // Resizable like SwiftUI.Image
-                .placeholder(Image(systemName: "photo")) // Placeholder Image
-                // Supports ViewBuilder as well
-                .placeholder {
-                    Rectangle().foregroundColor(.gray)
-                }
-                .animated() // Supports Animated Image
-                .indicator(.activity) // Activity Indicator
-                .animation(.easeInOut(duration: 0.5)) // Animation Duration
-                .transition(.fade) // Fade Transition
-                .scaledToFit()
-                .frame(width: 300, height: 300, alignment: .center)
-            }
-            }
-            }
-                ForEach(store_event, id: \.self) { event in
-                VStack {
-                        Text(event.eventTitle)
-                    Text(event.content)
-                    ForEach(store_eventThumbnail, id: \.self) { thumbnail in
-                        WebImage(url: URL(string: thumbnail.replacingOccurrences(of: "\"", with: "")))
-                        .onSuccess { image, cacheType in
-                            // Success
-                        }
-                        .resizable() // Resizable like SwiftUI.Image
-                        .placeholder(Image(systemName: "photo")) // Placeholder Image
-                        // Supports ViewBuilder as well
-                        .placeholder {
-                            Rectangle().foregroundColor(.gray)
-                        }
-                        .animated() // Supports Animated Image
-                        .indicator(.activity) // Activity Indicator
-                        .animation(.easeInOut(duration: 0.5)) // Animation Duration
-                        .transition(.fade) // Fade Transition
-                        .scaledToFit()
-                        .frame(width: 300, height: 300, alignment: .center)
                     }
                     HStack {
+                        Text("운영시간")
+                        Text("\(store_openTime) ~ \(store_closeTime)")
+                                .foregroundColor(Color.black.opacity(0.3))
+                    }
+                    HStack {
+                        Text("기타 정보")
+
+                        VStack {
+                            if (store_deliveryPrice != 0) {
+                                Text("배달료 \(store_deliveryPrice)원")
+                                        .foregroundColor(Color.black.opacity(0.3))
+                            }
+
+                        }
+
+                    }
+                    HStack {
+                        if store_delivery {
+                            Text("#배달 가능")
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .foregroundColor(.white)
+                                    .padding(.all, 5)
+                                    .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+                        }
+                        if store_payCard {
+                            Text("#카드 가능")
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .foregroundColor(.white)
+                                    .padding(.all, 5)
+                                    .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+                        }
+                        if store_payBank {
+                            Text("#계좌이체 가능")
+
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .foregroundColor(.white)
+                                    .padding(.all, 5)
+                                    .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color("squash")))
+
+                        }
+
+                    }
+
+                    HStack {
                         Spacer()
-                        Text("\(event.startDate) ~ \(event.endDate)")
-                    }
-                    }
-                }
+                        Button(action: {
 
-                VStack {
-                    Text("메뉴")
-                            .font(.title)
-                            .padding(.bottom)
-                    ForEach(store_menus, id: \.self) { menus in
-                        StoreMenuCellView(menus: menus)
-                    }
-                }
-                        .navigationBarTitle(storeName)
+                            // validation of phone number not included
+                            let dash = CharacterSet(charactersIn: "-")
 
+                            let cleanString =
+                                    store_phone.trimmingCharacters(in: dash)
+
+                            let tel = "tel://"
+                            let formattedString = tel + cleanString
+                            let url: NSURL = URL(string: formattedString)! as NSURL
+
+                            UIApplication.shared.open(url as URL)
+
+                        }) {
+                            Text("전화하기")
+                                    .foregroundColor(Color.white)
+                                    .padding(.all, 10)
+                                    .background(Color("light_navy"))
+                        }
+                        Button(action: { self.presentationMode.wrappedValue.dismiss() }) {
+                            Text("상점목록")
+                                    .foregroundColor(Color.white)
+                                    .padding(.all, 10)
+                                    .background(Color("warm_grey_two"))
+                        }.padding(.trailing, 10)
+                    }
+
+                    //ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(store_images, id: \.self) { image in
+                                WebImage(url: URL(string: image))
+                                        .onSuccess { image, cacheType in
+                                        }
+                                        .resizable()
+                                        .placeholder {
+                                            Rectangle().foregroundColor(.gray)
+                                        }
+                                        .indicator(.activity)
+                                        .onTapGesture {
+                                            self.controller.open_image(image: image)
+                                        }
+                                        .animation(.easeInOut(duration: 0.5))
+                                        .transition(.fade)
+                                        .scaledToFit()
+                                        .frame(width: 300, height: 300, alignment: .center)
+                                
+                                        
+                            }
+                        }
+                    //}
+                    ForEach(store_event, id: \.self) { event in
+                        VStack {
+                            Text(event.eventTitle)
+                            Text(event.content)
+                            ForEach(store_eventThumbnail, id: \.self) { thumbnail in
+                                WebImage(url: URL(string: thumbnail.replacingOccurrences(of: "\"", with: "")))
+                                        .onSuccess { image, cacheType in
+                                            // Success
+                                        }
+                                        .resizable() // Resizable like SwiftUI.Image
+                                        .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                        // Supports ViewBuilder as well
+                                        .placeholder {
+                                            Rectangle().foregroundColor(.gray)
+                                        }
+                                        .animated() // Supports Animated Image
+                                        .indicator(.activity) // Activity Indicator
+                                        .animation(.easeInOut(duration: 0.5)) // Animation Duration
+                                        .transition(.fade) // Fade Transition
+                                        .scaledToFit()
+                                        .frame(width: 300, height: 300, alignment: .center)
+
+                            }
+                            HStack {
+                                Spacer()
+                                Text("\(event.startDate) ~ \(event.endDate)")
+                            }
+                        }
+                    }
+
+                    VStack {
+                        Text("메뉴")
+                                .font(.title)
+                                .padding(.bottom)
+                        ForEach(store_menus, id: \.self) { menus in
+                            StoreMenuCellView(menus: menus)
+                        }
+                    }
+                            .navigationBarTitle(storeName)
+
+                }
             }
-        }.onAppear() {
-            print("StoreDetailView Appeared")
-        }.onDisappear() {
-            print("StoreDetailView Disappeared")
+            }.onAppear() {
+                print("StoreDetailView Appeared")
+            }.onDisappear() {
+                print("StoreDetailView Disappeared")
+            }
         }
-    }
+
 }
 
 struct StoreMenuCellView: View {
