@@ -88,9 +88,16 @@ class StoreController: ObservableObject {
             let decoder = JSONDecoder()
             if let loaded = try? decoder.decode(Shops.self, from: data) {
                     for store in loaded.shops {
-                        if store.category == category {
-                            filtered_stores.append(store)
+                        if category == "S001" {
+                            if store.category == category || store.category == "S000" {
+                                filtered_stores.append(store)
+                            }
+                        } else {
+                            if store.category == category {
+                                filtered_stores.append(store)
+                            }
                         }
+
                     }
             }
         }

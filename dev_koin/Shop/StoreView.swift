@@ -11,47 +11,93 @@ import PKHUD
 
 
 struct StoreView: View {
-    @ObservedObject var stores: StoreController = StoreController()
+    @ObservedObject var stores: StoreController
 
     init() {
-
-            self.stores.store_session()
-            self.stores.load_stores()
-
+        self.stores = StoreController()
     }
 
-
+//종류
+    //기타(S000), 콜벤(S001), 정식(S002), 족발(S003), 중국집(S004), 치킨(S005), 피자(S006), 탕수육(S007), 일반(S008), 미용실(S009)
     var body: some View {
         return ScrollView(.vertical) {
-            HStack {
-                Button(action: {self.stores.get_stores(category: "S001")}) {
-                    Text("1")
+            HStack(alignment: .center, spacing: 15) {
+                Button(action: { self.stores.get_stores(category: "S005") }) {
+                    VStack {
+                        Image("store_category_chicken")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("치킨")
+                    }
                 }
-                Button(action: {self.stores.get_stores(category: "S002")}) {
-                    Text("2")
+                Button(action: { self.stores.get_stores(category: "S006") }) {
+                    VStack {
+                        Image("store_category_pizza")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("피자")
+                    }
                 }
-                Button(action: {self.stores.get_stores(category: "S003")}) {
-                    Text("3")
+                Button(action: { self.stores.get_stores(category: "S007") }) {
+                    VStack {
+                        Image("store_category_sweet_pork")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("탕수육")
+                    }
                 }
-                Button(action: {self.stores.get_stores(category: "S004")}) {
-                    Text("4")
+
+                Button(action: { self.stores.get_stores(category: "S002") }) {
+                    VStack {
+                        Image("store_category_sweet_dosirak")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("도시락")
+                    }
                 }
-                Button(action: {self.stores.get_stores(category: "S005")}) {
-                    Text("5")
+                Button(action: { self.stores.get_stores(category: "S003") }) {
+                    VStack {
+                        Image("store_category_sweet_pork_feet")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("족발")
+                    }
                 }
+
+
             }
-            HStack {
-                Button(action: {self.stores.get_stores(category: "S006")}) {
-                    Text("6")
-                }
-                Button(action: {self.stores.get_stores(category: "S007")}) {
-                    Text("7")
+            HStack(alignment: .center, spacing: 15) {
+
+                Button(action: { self.stores.get_stores(category: "S004") }) {
+                    VStack {
+                        Image("store_category_chinese")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("중국집")
+                    }
                 }
                 Button(action: { self.stores.get_stores(category: "S008") }) {
-                    Text("8")
+                    VStack {
+                        Image("store_category_normal")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("일반음식점")
+                    }
                 }
                 Button(action: { self.stores.get_stores(category: "S009") }) {
-                    Text("9")
+                    VStack {
+                        Image("store_category_hair")
+                                .renderingMode(.original)
+                        //.frame(width: 35, height: 35)
+                        Text("미용실")
+                    }
+                }
+                Button(action: { self.stores.get_stores(category: "S001") }) {
+                    VStack {
+                        Circle().foregroundColor(Color("black"))
+                                .frame(width: 50, height: 50).padding(.all, 0)
+                        Text("기타")
+                    }
                 }
             }
 
@@ -62,6 +108,12 @@ struct StoreView: View {
 
             }
         }.onAppear() {
+            HUD.show(.progress)
+            DispatchQueue.main.async {
+                self.stores.store_session()
+                self.stores.load_stores()
+                HUD.hide()
+            }
             print("StoreView Appeared")
         }.onDisappear() {
             print("StoreView Disappeared")

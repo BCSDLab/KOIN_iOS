@@ -57,7 +57,7 @@ struct UserLoginView: View {
                 
                 Button(action: {
                     HUD.show(.progress)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.async {
                         self.settings.login_session(email: self.login_email, password: self.login_password)
                         HUD.flash(.success, delay: 0.5)
                     }

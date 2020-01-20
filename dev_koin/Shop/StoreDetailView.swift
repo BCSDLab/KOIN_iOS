@@ -37,34 +37,39 @@ struct ExpandImageView: View {
             }
                     .background(Color.gray.opacity(0.3))
                     .opacity(self.ImageData.isImageClicked ? 1.0 : 0.0)
-                    .edgesIgnoringSafeArea(.top)
                     .onTapGesture {
                         self.ImageData.dismiss_image()
                     }
             GeometryReader { geometry in
                 if self.ImageData.isImageClicked {
-                    HStack {
-                    Spacer()
-                        HStack {
-                                WebImage(url: URL(string: self.ImageData.expandImage))
-                                        .onSuccess { image, cacheType in
-                                            // Success
-                                        }
-                                        .resizable() // Resizable like SwiftUI.Image
-                                        .placeholder(Image(systemName: "photo")) // Placeholder Image
-                                        // Supports ViewBuilder as well
-                                        .placeholder {
-                                            Rectangle().foregroundColor(.gray)
-                                        }
-                                        .animated() // Supports Animated Image
-                                        .indicator(.activity) // Activity Indicator
-                                        .animation(.easeInOut(duration: 0.5)) // Animation Duration
-                                        .transition(.fade) // Fade Transition
-                                        .scaledToFit()
-                                        .frame(width: geometry.size.width - 50, alignment: .center)
+                    VStack(alignment: .center) {
+                        Spacer()
+                        HStack(alignment: .center) {
+                            Spacer()
+                            WebImage(url: URL(string: self.ImageData.expandImage))
+                                    .onSuccess { image, cacheType in
+                                        // Success
+                                    }
+                                    .resizable() // Resizable like SwiftUI.Image
+                                    .placeholder(Image(systemName: "photo")) // Placeholder Image
+                                    // Supports ViewBuilder as well
+                                    .placeholder {
+                                        Rectangle().foregroundColor(.gray)
+                                    }
+                                    .animated() // Supports Animated Image
+                                    .indicator(.activity) // Activity Indicator
+                                    .animation(.easeInOut(duration: 0.5)) // Animation Duration
+                                    .transition(.fade) // Fade Transition
+                                    .scaledToFit()
+                                    .frame(width: geometry.size.width - 50, alignment: .center)
+                                    .onTapGesture {
+                                        self.ImageData.dismiss_image()
+                                    }
 
+
+                            Spacer()
                         }
-                    Spacer()
+                        Spacer()
                     }
                 }
             
@@ -81,7 +86,7 @@ struct StoreDetailView: View {
     
     init(store_id: Int) {
         self.store_id = store_id
-        self.controller.load_store(store_id: store_id)
+        self.controller.load_store(store_id: self.store_id)
     }
     
     var body: some View {
@@ -232,7 +237,7 @@ struct StoreDetailView: View {
                         }.padding(.trailing, 10)
                     }
 
-                    //ScrollView(.horizontal) {
+                    ScrollView(.horizontal) {
                         HStack {
                             ForEach(store_images, id: \.self) { image in
                                 WebImage(url: URL(string: image))
@@ -249,12 +254,12 @@ struct StoreDetailView: View {
                                         .animation(.easeInOut(duration: 0.5))
                                         .transition(.fade)
                                         .scaledToFit()
-                                        .frame(width: 300, height: 300, alignment: .center)
+                                        .frame(height: 300, alignment: .center)
                                 
                                         
                             }
                         }
-                    //}
+                    }
                     ForEach(store_event, id: \.self) { event in
                         VStack {
                             Text(event.eventTitle)
@@ -275,7 +280,7 @@ struct StoreDetailView: View {
                                         .animation(.easeInOut(duration: 0.5)) // Animation Duration
                                         .transition(.fade) // Fade Transition
                                         .scaledToFit()
-                                        .frame(width: 300, height: 300, alignment: .center)
+                                        .frame(height: 300)
 
                             }
                             HStack {
