@@ -254,7 +254,7 @@ struct StoreDetailView: View {
                                         .animation(.easeInOut(duration: 0.5))
                                         .transition(.fade)
                                         .scaledToFit()
-                                        .frame(height: 300, alignment: .center)
+                                        .frame(height: 160, alignment: .center)
                                 
                                         
                             }
@@ -280,7 +280,7 @@ struct StoreDetailView: View {
                                         .animation(.easeInOut(duration: 0.5)) // Animation Duration
                                         .transition(.fade) // Fade Transition
                                         .scaledToFit()
-                                        .frame(height: 300)
+                                        .frame(height: 160)
 
                             }
                             HStack {
