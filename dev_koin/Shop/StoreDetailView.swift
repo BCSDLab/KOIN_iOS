@@ -153,30 +153,37 @@ struct StoreDetailView: View {
             ScrollView(.vertical) {
                 VStack(alignment: .leading) {
                     Text(storeName)
-                            .font(.title)
+                        .font(.system(size: 28))
+                            .fontWeight(.bold)
+                        .padding(.vertical)
                     HStack {
                         Text("전화번호")
+                            .fontWeight(.light)
                         Text(store_phone)
-                                .foregroundColor(Color.black.opacity(0.3))
-
-                    }
+                                .foregroundColor(Color("warm_grey_two"))
+                        .fontWeight(.light)
+                    }.padding(.vertical, 3)
                     HStack {
                         Text("운영시간")
+                        .fontWeight(.light)
                         Text("\(store_openTime) ~ \(store_closeTime)")
-                                .foregroundColor(Color.black.opacity(0.3))
-                    }
+                                .foregroundColor(Color("warm_grey_two"))
+                        .fontWeight(.light)
+                    }.padding(.vertical, 3)
                     HStack {
-                        Text("기타 정보")
+                        Text("기타정보")
+                        .fontWeight(.light)
 
                         VStack {
                             if (store_deliveryPrice != 0) {
                                 Text("배달료 \(store_deliveryPrice)원")
-                                        .foregroundColor(Color.black.opacity(0.3))
+                                    .fontWeight(.light)
+                                        .foregroundColor(Color("warm_grey_two"))
                             }
 
                         }
 
-                    }
+                    }.padding(.vertical, 3)
                     HStack {
                         if store_delivery {
                             Text("#배달 가능")
@@ -205,7 +212,7 @@ struct StoreDetailView: View {
 
                         }
 
-                    }
+                    }.padding(.vertical, 10)
 
                     HStack {
                         Spacer()
@@ -234,8 +241,8 @@ struct StoreDetailView: View {
                                     .foregroundColor(Color.white)
                                     .padding(.all, 10)
                                     .background(Color("warm_grey_two"))
-                        }.padding(.trailing, 10)
-                    }
+                        }
+                    }.padding(.vertical, 10)
 
                     ScrollView(.horizontal) {
                         HStack {
@@ -300,7 +307,7 @@ struct StoreDetailView: View {
                     }
                             .navigationBarTitle(storeName)
 
-                }
+                }.padding()
             }
             }.onAppear() {
                 print("StoreDetailView Appeared")
@@ -342,7 +349,6 @@ struct StoreMenuCellView: View {
                                 .stroke(Color("menu_border"), lineWidth: 1)
                 )
                 .background(Color("white_two"))
-                .padding([.horizontal])
                 .padding([.vertical], 10)
                 .clipped()
     }
@@ -350,7 +356,7 @@ struct StoreMenuCellView: View {
 
 struct StoreDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        StoreDetailView(store_id: 40)
+        StoreDetailView(store_id: 3)
         //40, 96
     }
 }
