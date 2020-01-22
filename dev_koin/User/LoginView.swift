@@ -60,8 +60,7 @@ struct UserLoginView: View {
                 Button(action: {
                     // 로딩 HUD를 띄우고
                     HUD.show(.progress)
-                    // 1초동안
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.async {
                         // 로그인 과정을 진행하고
                         self.settings.login_session(email: self.login_email, password: self.login_password)
                         // 0.5초동안 성공 HUD를 띄운다

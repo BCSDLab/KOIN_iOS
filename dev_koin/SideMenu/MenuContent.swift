@@ -53,12 +53,17 @@ struct MenuContent: View {
                         .opacity(0.8)) {
                     Text("주변 상점")
                             .font(.subheadline)
+                            .onTapGesture {
+                                self.viewRouter.currentView = "store"
+                                self.viewRouter.dismiss_menu()
+                            }
                     Text("버스 / 교통")
                             .font(.subheadline)
                     Text("식단")
                             .onTapGesture { // 식단 누를 시
                                 // 현재 view를 dining으로 변경
                                 self.viewRouter.currentView = "dining"
+
                                 // 메뉴 닫음
                                 self.viewRouter.dismiss_menu()
                             }

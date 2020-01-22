@@ -16,6 +16,11 @@ PODS:
   - Japx/Core (2.2.0)
   - ObjectMapper (3.5.1)
   - PKHUD (5.3.0)
+  - SDWebImage (5.4.2):
+    - SDWebImage/Core (= 5.4.2)
+  - SDWebImage/Core (5.4.2)
+  - SDWebImageSwiftUI (0.10.0):
+    - SDWebImage (~> 5.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -24,6 +29,7 @@ DEPENDENCIES:
   - Japx/CodableAlamofire
   - ObjectMapper
   - PKHUD
+  - SDWebImageSwiftUI
 
 SPEC REPOS:
   trunk:
@@ -32,6 +38,8 @@ SPEC REPOS:
     - Japx
     - ObjectMapper
     - PKHUD
+    - SDWebImage
+    - SDWebImageSwiftUI
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -39,7 +47,9 @@ SPEC CHECKSUMS:
   Japx: 9e0b8e00c8a2b79b967f0ae4bd8eb5a293cc9c30
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
+  SDWebImage: 4ca2dc4eefae4224bea8f504251cda485a363745
+  SDWebImageSwiftUI: 56541a8970e6dfad07c48bd03bc411611c644d15
 
-PODFILE CHECKSUM: 619ba8e3bc9449ba23fce21ce587ea5b9aa132db
+PODFILE CHECKSUM: dc6b49808aa2b553ec861fc66c47a631ba5cc2ce
 
 COCOAPODS: 1.8.4

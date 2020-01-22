@@ -1,0 +1,23 @@
+{
+  "images": [
+    {
+      "idiom": "universal",
+      "filename": "admin_2_gjb_q_2015_05_18_18_34_37.png",
+      "scale": "1x"
+    },
+    {
+      "idiom": "universal",
+      "filename": "admin_2_gjb_q_2015_05_18_18_34_37-1.png",
+      "scale": "2x"
+    },
+    {
+      "idiom": "universal",
+      "filename": "admin_2_gjb_q_2015_05_18_18_34_37-2.png",
+      "scale": "3x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

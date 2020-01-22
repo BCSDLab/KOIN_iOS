@@ -63,6 +63,15 @@ struct ContentView: View {
                                     Text("수정")
                                 })
 
+                    } else if self.tabData.currentView == "store" {
+                        StoreView()
+                                .navigationBarTitle("주변식당", displayMode: .inline)
+                                .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                    HStack {
+                                        Image(systemName: "chevron.left")
+                                        Text("홈")
+                                    }
+                                }, trailing: EmptyView())
                     }
                 }
 

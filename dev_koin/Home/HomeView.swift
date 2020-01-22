@@ -125,8 +125,11 @@ struct HomeView: View {
                                         .border(Color.gray.opacity(0.2), width: 0.5)
                             }
                             HStack(alignment: .center, spacing: 0) {
-                                Button(action: {}) {
-                                    VStack{
+                                Button(action: {
+                                    self.viewRouter.currentView = "store"
+                                    self.viewRouter.dismiss_menu()
+                                }) {
+                                    VStack {
                                         Spacer()
                                         Image("store")
                                                 .renderingMode(.original)

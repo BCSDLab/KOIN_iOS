@@ -12,6 +12,7 @@ target 'dev_koin' do
   pod 'PKHUD'
   pod 'Japx'
   pod 'Japx/CodableAlamofire'
+  pod 'SDWebImageSwiftUI'
 
 end
 
