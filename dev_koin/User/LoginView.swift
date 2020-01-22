@@ -16,10 +16,12 @@ import Foundation
 import PKHUD
 
 
-
 struct UserLoginView: View {
+    // 이메일 변수
     @State var login_email: String = ""
+    // 비밀번호 변수
     @State var login_password: String = ""
+    // 유저 정보 변수
     @EnvironmentObject var settings: UserSettings
     
     var body: some View {
@@ -54,11 +56,14 @@ struct UserLoginView: View {
                     Divider()
                 }
 
-                
+                // 로그인 버튼을 누르면
                 Button(action: {
+                    // 로딩 HUD를 띄우고
                     HUD.show(.progress)
                     DispatchQueue.main.async {
+                        // 로그인 과정을 진행하고
                         self.settings.login_session(email: self.login_email, password: self.login_password)
+                        // 0.5초동안 성공 HUD를 띄운다
                         HUD.flash(.success, delay: 0.5)
                     }
                 }) {

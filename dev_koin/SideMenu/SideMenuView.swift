@@ -13,6 +13,7 @@ struct SideMenu: View {
 
     var body: some View {
         ZStack {
+            // 사이드메뉴 뒤의 어두운 부분
             GeometryReader { _ in
                 EmptyView()
             }
@@ -20,10 +21,12 @@ struct SideMenu: View {
                     .opacity(self.tabData.isCustomItemSelected ? 1.0 : 0.0)
                     .animation(Animation.easeIn.delay(0.25))
                     .edgesIgnoringSafeArea(.top)
-                    .onTapGesture {
+                    .onTapGesture { // 빈 부분 클릭 시
+                        // 사이드 메뉴 닫힘
                         self.tabData.dismiss_menu()
                     }
             HStack {
+                // 메뉴 컨텐츠(실질적 sidemenu)
                 MenuContent()
                         .frame(width: self.width)
                         .background(Color.white)

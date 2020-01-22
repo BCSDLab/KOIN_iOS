@@ -11,6 +11,8 @@ import UIKit
 import SwiftUI
 
 class AddUserProperty: ObservableObject {
+    // 개인정보 이용약관 동의 여부
     @Published var personality_checked = false
+    // 코인 이용약관 동의 여부
     @Published var koin_checked = false
 }
