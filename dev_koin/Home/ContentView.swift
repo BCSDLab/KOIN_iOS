@@ -72,6 +72,15 @@ struct ContentView: View {
                                         Text("홈")
                                     }
                                 }, trailing: EmptyView())
+                    } else if self.tabData.currentView == "board_free" {
+                        CommunityView()
+                                .navigationBarTitle("자유게시판", displayMode: .inline)
+                                .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                    HStack {
+                                        Image(systemName: "chevron.left")
+                                        Text("홈")
+                                    }
+                                }, trailing: EmptyView())
                     }
                 }
 

@@ -188,7 +188,8 @@ struct HomeView: View {
                                         .border(Color.gray.opacity(0.2), width: 0.5)
                             }
                             HStack(alignment: .center, spacing: 0) {
-                                Button(action: {}) {
+                                Button(action: {self.viewRouter.currentView = "board_free"
+                                    self.viewRouter.dismiss_menu()}) {
                                     VStack{
                                         Spacer()
                                         Image("board_free")
