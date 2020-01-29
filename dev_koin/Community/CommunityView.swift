@@ -9,26 +9,28 @@
 import SwiftUI
 import PKHUD
 
+
 struct CommunityView: View {
     @ObservedObject var communityData: CommunityController
     
     init() {
         communityData = CommunityController()
-        
     }
     
     var body: some View {
         List {
             ForEach(self.communityData.get_articles(), id:\.self) { l in
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("\(l.title)")
-                        Text(" (\(l.commentCount))")
-                    }
-                    HStack {
-                        Text("조회\(l.hit).\(l.nickname)")
-                        Spacer()
-                        Text(l.createdAt)
+                NavigationLink(destination: CommunityDetailView(community_id: l.id)) {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("\(l.title)")
+                            Text(" (\(l.commentCount))")
+                        }
+                        HStack {
+                            Text("조회\(l.hit).\(l.nickname)")
+                            Spacer()
+                            Text(l.createdAt)
+                        }
                     }
                 }
             }
@@ -38,7 +40,7 @@ struct CommunityView: View {
                 self.communityData.community_session()
                 HUD.hide()
             }
-            print("StoreView Appeared")
+            print("CommunityView Appeared")
         }
     }
 }

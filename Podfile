@@ -7,12 +7,12 @@ target 'dev_koin' do
 
   # Pods for dev_koin
   pod 'Alamofire', '~> 4.7'
-  pod 'ObjectMapper'
-  pod 'AlamofireObjectMapper', '~> 5.2'
   pod 'PKHUD'
-  pod 'Japx'
-  pod 'Japx/CodableAlamofire'
   pod 'SDWebImageSwiftUI'
+  pod "RichEditorView"
+  pod 'SwiftRichString', '< 3.7'
+    # pod 'VEditorKit'
+
 
 end
 

@@ -8,16 +8,46 @@
 
 import Foundation
 
+struct Board: Codable, Hashable {
+    let id: Int
+    let tag: String
+    let name: String
+    let isAnonymous: Bool
+    let articleCount: Int
+    let isDeleted: Bool
+    let isNotice: Bool
+    let parentId: Int?
+    let seq: Int
+    let children: String?
+    let createdAt: String
+    let updatedAt: String
+    private enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case tag = "tag"
+        case name = "name"
+        case isAnonymous = "is_anonymous"
+        case articleCount = "article_count"
+        case isDeleted = "is_deleted"
+        case isNotice = "is_notice"
+        case parentId = "parent_id"
+        case seq = "seq"
+        case children = "children"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+}
+
 struct Article: Codable, Hashable {
     let boardId: Int
+    let board: Board?
     let commentCount: Int
     let content: String
     let contentSummary: String
     let createdAt: String
     let hit: Int
     let id: Int
-    let ip: String
-    let isDeleted: Bool
+    let ip: String?
+    let isDeleted: Bool?
     let isNotice: Bool
     let isSolved: Bool
     let meta: String?
@@ -26,8 +56,9 @@ struct Article: Codable, Hashable {
     let summary: String?
     let title: String
     let updatedAt: String
-    let userId: Int
+    let userId: Int?
     private enum CodingKeys: String, CodingKey {
+        case board = "board"
         case boardId = "board_id"
         case commentCount = "comment_count"
         case content = "content"
@@ -49,6 +80,7 @@ struct Article: Codable, Hashable {
     }
     init() {
         self.boardId = -1
+        self.board = nil
         self.commentCount = 0
         self.content = ""
         self.contentSummary = ""

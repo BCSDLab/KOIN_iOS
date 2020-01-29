@@ -14,11 +14,13 @@ import PKHUD
 
 class CommunityController: ObservableObject {
     @Published var articles: Articles?
+    @Published var detail_article: Article
     
     let objectWillChange = PassthroughSubject<CommunityController, Never>()
     
     init() {
         self.articles = Articles()
+        self.detail_article = Article()
         //self.community_session()
     }
     
@@ -27,6 +29,31 @@ class CommunityController: ObservableObject {
             return articles.articles
         }
         return []
+    }
+
+    func load_community(article_id: Int){
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .validate { request, response, data in
+                    return .success
+                }
+                .response { response in
+                    guard let data = response.data else {
+                        return
+                    }
+                    do {
+                        let decoder = JSONDecoder()
+                        let articleRequest = try decoder.decode(Article.self, from: data)
+                        self.detail_article = articleRequest
+                        //print(self.detail_article)
+                        self.objectWillChange.send(self)
+
+                    } catch let error {
+                        print(error)
+                    }
+
+                }
+
     }
     
     

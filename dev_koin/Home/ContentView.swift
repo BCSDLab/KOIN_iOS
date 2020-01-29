@@ -80,7 +80,9 @@ struct ContentView: View {
                                         Image(systemName: "chevron.left")
                                         Text("홈")
                                     }
-                                }, trailing: EmptyView())
+                                }, trailing: NavigationLink(destination: AddCommunityView()) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
+                                    Text("수정")
+                                })
                     }
                 }
 
