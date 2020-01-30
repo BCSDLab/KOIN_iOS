@@ -30,6 +30,32 @@ class CommunityController: ObservableObject {
         }
         return []
     }
+    
+    func reload_articles() {
+        print(self.get_articles().count)
+        Alamofire
+        .request("http://stage.api.koreatech.in/articles?boardId=1&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+        .validate { request, response, data in
+            return .success
+        }
+        .response { response in
+            guard let data = response.data else {
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let communityArticles = try decoder.decode(Articles.self, from: data)
+                for article in communityArticles.articles {
+                    self.articles?.articles.append(article)
+                }
+                self.objectWillChange.send(self)
+
+            } catch let error {
+                print(error)
+            }
+
+        }
+    }
 
     func load_community(article_id: Int){
         Alamofire
@@ -59,7 +85,7 @@ class CommunityController: ObservableObject {
     
     func community_session() {
             Alamofire
-            .request("http://stage.api.koreatech.in/articles?boardId=1", method: .get, encoding: JSONEncoding.prettyPrinted)
+            .request("http://stage.api.koreatech.in/articles?boardId=1&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
             .validate { request, response, data in
                 return .success
             }

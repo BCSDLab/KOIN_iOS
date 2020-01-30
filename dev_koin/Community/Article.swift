@@ -37,9 +37,35 @@ struct Board: Codable, Hashable {
     }
 }
 
+struct Comment: Codable, Hashable {
+    let id: Int
+    let articleId: Int
+    let content: String
+    let userId: Int
+    let nickname: String
+    let isDeleted: Bool
+    let grantEdit: Bool
+    let grantDelete: Bool
+    let createdAt: String
+    let updateAt: String
+    private enum CodingKeys: String, CodingKey {
+            case id = "id"
+            case articleId = "article_id"
+            case content = "content"
+            case userId = "user_id"
+            case nickname = "nickname"
+            case isDeleted = "is_deleted"
+            case grantEdit = "grantEdit"
+            case grantDelete = "grantDelete"
+            case createdAt = "created_at"
+            case updateAt = "updated_at"
+    }
+}
+
 struct Article: Codable, Hashable {
     let boardId: Int
     let board: Board?
+    let comments: [Comment]?
     let commentCount: Int
     let content: String
     let contentSummary: String
@@ -60,6 +86,7 @@ struct Article: Codable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case board = "board"
         case boardId = "board_id"
+        case comments = "comments"
         case commentCount = "comment_count"
         case content = "content"
         case contentSummary = "contentSummary"
@@ -82,9 +109,10 @@ struct Article: Codable, Hashable {
         self.boardId = -1
         self.board = nil
         self.commentCount = 0
+        self.comments = nil
         self.content = ""
         self.contentSummary = ""
-        self.createdAt = ""
+        self.createdAt = "2020-01-01 00:00:00"
         self.hit = 0
         self.id = -1
         self.ip = ""

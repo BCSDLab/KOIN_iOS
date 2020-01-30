@@ -11,7 +11,7 @@ struct TextWithAttributedString: UIViewRepresentable {
 
     //var content:String
 
-    var attributedString:NSAttributedString
+    var attributedString: NSAttributedString
 
     func makeUIView(context: Context) -> ViewWithLabel {
         let view = ViewWithLabel(frame:CGRect.zero)
@@ -20,6 +20,5 @@ struct TextWithAttributedString: UIViewRepresentable {
 
     func updateUIView(_ uiView: ViewWithLabel, context: Context) {
             uiView.setString(attributedString)
-        
     }
 }
