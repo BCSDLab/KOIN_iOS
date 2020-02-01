@@ -81,16 +81,116 @@ class CommunityController: ObservableObject {
                 }
 
     }
-    
-    
+
+    func put_article(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", board_id: Int, title: String, content: String) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles", method: .post, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+
+    }
+
+    func delete_article(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+    }
+
+    func update_article(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, board_id: Int, title: String, content: String) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .put, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+    }
+
+    func put_comment(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, content: String) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles/\(article_id)/comments", method: .post, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+
+    }
+
+    func delete_comment(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, comment_id: Int) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in//articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+    }
+
+    func update_comment(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, comment_id: Int, content: String) {
+        let headers = [
+            "Authorization": "Bearer " + token
+        ]
+        print("start alamofire")
+
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .validate { request, response, data in
+                    return .success
+                }
+                .responseJSON { response in
+                    print(response)
+                }
+    }
+
+
     func community_session() {
-            Alamofire
-            .request("http://stage.api.koreatech.in/articles?boardId=1&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
-            .validate { request, response, data in
-                return .success
-            }
-            .response { response in
-                guard let data = response.data else { return }
+        Alamofire
+                .request("http://stage.api.koreatech.in/articles?boardId=1&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .validate { request, response, data in
+                    return .success
+                }
+                .response { response in
+                    guard let data = response.data else {
+                        return
+                    }
                 
                 do {
                     let decoder = JSONDecoder()
