@@ -6,12 +6,13 @@
 import Foundation
 import UIKit
 import SwiftUI
+import AttributedTextView
 
 struct TextWithAttributedString: UIViewRepresentable {
 
     //var content:String
 
-    var attributedString: NSAttributedString
+    var attributedString: Attributer
 
     func makeUIView(context: Context) -> ViewWithLabel {
         let view = ViewWithLabel(frame:CGRect.zero)
@@ -19,6 +20,7 @@ struct TextWithAttributedString: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: ViewWithLabel, context: Context) {
-            uiView.setString(attributedString)
+        //debugPrint(content)
+        uiView.setString(attributedString)
     }
 }

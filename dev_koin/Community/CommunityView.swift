@@ -22,6 +22,7 @@ func dateToString(string_date: String) -> String {
 
 
 struct CommunityView: View {
+    @EnvironmentObject var tabData: ViewRouter
     @ObservedObject var communityData = CommunityController()
     
     init() {
@@ -56,7 +57,14 @@ struct CommunityView: View {
             }
         }.onAppear() {
             print("CommunityView Appeared")
-        }
+        }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
+            HStack {
+                Image(systemName: "chevron.left")
+                Text("홈")
+            }
+            }, trailing: NavigationLink(destination: AddCommunityView().environmentObject(communityData)) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
+            Text("추가")
+        })
 
     }
 }

@@ -7,14 +7,15 @@ import Foundation
 import UIKit
 import SwiftUI
 import SwiftRichString
+import AttributedTextView
 
 class ViewWithLabel : UIView {
-    private var label = UILabel()
+    private var label = AttributedTextView()
 
     override init(frame: CGRect) {
         super.init(frame:frame)
         self.addSubview(label)
-        label.numberOfLines = 0
+        //label.numberOfLines = 0
         label.sizeToFit()
         label.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
@@ -23,7 +24,7 @@ class ViewWithLabel : UIView {
         super.init(coder: aDecoder)
     }
 
-    func setString(_ attributedString: NSAttributedString) {
-        self.label.attributedText = attributedString
+    func setString(_ attributedString: Attributer) {
+        self.label.attributer = attributedString
     }
 }

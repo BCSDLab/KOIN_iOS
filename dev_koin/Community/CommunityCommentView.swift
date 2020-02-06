@@ -11,8 +11,12 @@ import SwiftUI
 struct CommunityCommentView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var controller: CommunityController
+    @EnvironmentObject var user: UserSettings
     var community_id: Int
     @State var comment_content: String = ""
+    @State var is_edited: Bool = false
+    @State var edited_comment_id: Int = -1
+    @State var edited_article_id: Int = -1
 
 
     init(community_id: Int) {
@@ -66,20 +70,69 @@ struct CommunityCommentView: View {
                     HStack {
                         Text(c.nickname)
                         Text(c.createdAt)
+                        if(c.userId == self.user.get_userId()) {
+                            Button(action:{self.controller.delete_comment(token: self.user.get_token(),article_id: c.articleId, comment_id: c.id) { result in
+                                if result {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    print("성공 못함")
+                                }
+                                }}) {
+                                Text("삭제")
+                            }
+                        }
                     }
                     Text(c.content)
+                    if(c.userId == self.user.get_userId()) {
+                        Button(action:{
+                            self.comment_content = c.content
+                            self.edited_comment_id = c.id
+                            self.edited_article_id = c.articleId
+                            self.is_edited = true
+                            
+                        }) {
+                            Text("수정")
+                        }
+                    }
                 }
             }
             Divider()
+            //수정모드일 때는 취소와 수정 버튼, 작성모드일 때는 등록 버튼만
             VStack {
+                Text(self.user.get_nickname())
                 TextField("댓글을 작성해주세요.", text: $comment_content)
                 HStack {
-                    Button(action: {}) {
-                        Text("취소")
+                    
+                    if is_edited {
+                        Button(action: {
+                            self.edited_article_id = -1
+                            self.edited_comment_id = -1
+                            self.comment_content = ""
+                            self.is_edited = false
+                        }) {
+                            Text("취소")
+                        }
+                        Button(action: {self.controller.update_comment(token: self.user.get_token(), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { result in
+                                if result {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    print("성공 못함")
+                                }
+                            }}) {
+                            Text("수정")
+                        }
+                    } else {
+                        Button(action: {self.controller.put_comment(token: self.user.get_token(),article_id: self.community_id, content: self.comment_content) { result in
+                                if result {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    print("성공 못함")
+                                }
+                            }}) {
+                            Text("등록")
+                        }
                     }
-                    Button(action: {}) {
-                        Text("등록")
-                    }
+                    
                 }
             }
 

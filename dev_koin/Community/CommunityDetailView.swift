@@ -6,7 +6,9 @@
 import SwiftUI
 import UIKit
 import SwiftRichString
+import AttributedTextView
 
+/*
 open class MyXMLDynamicAttributesResolver: XMLDynamicAttributesResolver {
     public func styleForUnknownXMLTag(_ tag: String, to attributedString: inout AttributedString, attributes: [String : String]?) {
         let finalStyleToApply = Style()
@@ -55,14 +57,16 @@ open class MyXMLDynamicAttributesResolver: XMLDynamicAttributesResolver {
         attributedString.add(style: finalStyleToApply)
     }
 }
-
+*/
 
 struct CommunityDetailView: View {
-    @ObservedObject var controller: CommunityController = CommunityController()
+    @ObservedObject var controller = CommunityController()
+    @EnvironmentObject var user: UserSettings
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var community_id: Int
     let baseFontSize: CGFloat = 16
     @State var isCommentOn: Bool = false
+    var htmlView: HTMLView = HTMLView()
 
 
     init(community_id: Int) {
@@ -89,6 +93,7 @@ struct CommunityDetailView: View {
         var articleCommentCount: Int = 0
         var articleCreatedAt: String = ""
         var articleContent: String = ""
+        //var articleAttrContent: NSAttributedString = NSAttributedString()
 
 
         let article = self.controller.detail_article
@@ -99,19 +104,22 @@ struct CommunityDetailView: View {
         articleCommentCount = article.commentCount
         articleCreatedAt = dateToString(string_date: article.createdAt)
         articleContent = article.content
-        print(articleContent)
+        self.htmlView.loadHTML(article.content)
+        //print(articleContent)
+        //let ttt = articleContent.htmlToAttributedString
+        //print(ttt!)
         
         
-        articleContent = articleContent.replacingOccurrences(of: "<p>", with: "", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "</p>", with: "\n", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "<div>", with: "", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "</div>", with: "\n", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "<p>", with: "", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "</p>", with: "\n", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "<div>", with: "", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "</div>", with: "\n", options: .regularExpression, range: nil)
         articleContent = articleContent.replacingOccurrences(of: "<br>", with: "\n", options: .regularExpression, range: nil)
         articleContent = articleContent.replacingOccurrences(of: "<!--[^>]+>", with: "", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "(</h[^>]+>)", with: "$0\n", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "(</li>)", with: "$0\n", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "src", with: "url", options: .regularExpression, range: nil)
-        articleContent = articleContent.replacingOccurrences(of: "(<img[^>]+)", with: "$0 /", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "(</h[^>]+>)", with: "$0\n", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "(</li>)", with: "$0\n", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "src", with: "url", options: .regularExpression, range: nil)
+        //articleContent = articleContent.replacingOccurrences(of: "(<img[^>]+)", with: "$0 /", options: .regularExpression, range: nil)
         
 
         //print(articleContent)
@@ -130,6 +138,10 @@ struct CommunityDetailView: View {
         }
         let h4Style = Style {
             $0.font = UIFont.boldSystemFont(ofSize: self.baseFontSize)
+            $0.lineBreakMode = .byWordWrapping
+        }
+        let pStyle = Style {
+            $0.font = UIFont.systemFont(ofSize: self.baseFontSize)
             $0.lineBreakMode = .byWordWrapping
         }
         let h5Style = Style {
@@ -168,9 +180,11 @@ struct CommunityDetailView: View {
 
         var styleGroup = StyleGroup(base: Style {
             $0.font = UIFont.systemFont(ofSize: self.baseFontSize)
-            //$0.lineSpacing = 2
+            $0.lineSpacing = 2
             //$0.kerning = Kerning.adobe(-15)
-        }, [
+        },
+            /*
+            [
             "ur": uppercasedRed,
             "h1": h1Style,
             "h2": h2Style,
@@ -192,11 +206,22 @@ struct CommunityDetailView: View {
             "sup": Style {
                 $0.font = UIFont.systemFont(ofSize: self.baseFontSize / 1.2)
                 $0.baselineOffset = Float(self.baseFontSize) / 3.5
-            }])
-        styleGroup.xmlAttributesResolver = MyXMLDynamicAttributesResolver()
+            }]*/
+            [
+                "p": pStyle
+            ]
+        )
+        var defaultstyleGroup = StyleGroup(base: Style {
+            $0.font = UIFont.systemFont(ofSize: self.baseFontSize)
+            $0.lineSpacing = 2
+            //$0.kerning = Kerning.adobe(-15)
+        }, ["p": pStyle])
+        //defaultstyleGroup.xmlAttributesResolver = MyXMLDynamicAttributesResolver()
 
 
-        var attributedContent = articleContent.set(style: styleGroup)
+        var attributedContent = articleContent.set(style: defaultstyleGroup)
+        //debugPrint(attributedContent)
+        //debugPrint(article.content.html)
 
         return VStack {
                     VStack(alignment: .leading) {
@@ -223,13 +248,19 @@ struct CommunityDetailView: View {
                                         .padding(.all, 10)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
-                            Button(action: {}) {
+                            NavigationLink(destination: AddCommunityView(title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
                                         .padding(.all, 10)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
-                            Button(action: {}) {
+                            Button(action: {self.controller.delete_article(token: self.user.get_token(), article_id: self.community_id) { result in
+                            if result {
+                                self.presentationMode.wrappedValue.dismiss()
+                            } else {
+                                print("성공 못함")
+                            }
+                            }}) {
                                 Text("삭제")
                                         .foregroundColor(Color.red)
                                         .padding(.all, 10)
@@ -239,7 +270,9 @@ struct CommunityDetailView: View {
 
                     }
                     Divider()
-                    TextWithAttributedString(attributedString: attributedContent)
+                    
+                    htmlView
+                    
 
 
                 }.padding()

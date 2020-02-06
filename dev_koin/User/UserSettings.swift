@@ -8,8 +8,6 @@
 
 import SwiftUI
 import Alamofire
-import ObjectMapper
-import AlamofireObjectMapper
 import CryptoKit
 import CryptoTokenKit
 import Foundation
@@ -48,6 +46,29 @@ class UserSettings: ObservableObject {
         }
     }
     
+    func get_userId() -> Int {
+        if let user = self.user {
+            print(user)
+            if let userdata = user.user {
+                print(userdata)
+                print(userdata.id)
+                return userdata.id
+            }
+        }
+        return -1
+    }
+    func get_nickname() -> String {
+        if let user = self.user {
+            print(user)
+            if let userdata = user.user {
+                if let nickname = userdata.nickname {
+                    return nickname
+                }
+            }
+        }
+        return ""
+    }
+    
     // 토큰을 주는 함수
     func get_token() -> String {
         // 유저가 nil이 아니면
@@ -75,16 +96,13 @@ class UserSettings: ObservableObject {
     // 주는 값 없이 유저 정보를 업데이트하는 함수(대부분 유저 정보를 받는 쪽으로 활용)
     func update_data(token: String) {
         // Bearer Auth를 이용하기 위한 Header 추가
-        let headers = [
+        let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
         
         // put 메서드로, header추가하여 request를 보내주면
-        Alamofire
+        AF
         .request("http://stage.api.koreatech.in/user/me", method: .put, encoding: JSONEncoding.prettyPrinted, headers: headers)
-        .validate { request, response, data in // 성공했는지 확인하고
-            return .success
-        }
         .response { response in // 응답이 오면
             // 해당 응답에서 data를 꺼내
             guard let data = response.data else { return }
@@ -171,16 +189,13 @@ class UserSettings: ObservableObject {
         // 이제 변경된 정보는 모두 파라미터에 저장된 상태
         
         // Bearer Auth를 이용하기 위한 Header 추가
-        let headers = [
+        let headers: HTTPHeaders = [
                         "Authorization": "Bearer " + token
                     ]
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    Alamofire
+                    AF
                     .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .validate { request, response, data in
-                        return .success // 성공했는지 확인하고
-                    }
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -216,11 +231,8 @@ class UserSettings: ObservableObject {
         // 비밀번호를 hash 처리하고
         let hashPassword = hashed(pw: password)
         // post 메소드로, 이메일, 해시 비밀번호를 파라미터에 넣어 보내면
-            Alamofire
+            AF
             .request("http://stage.api.koreatech.in/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
-            .validate { request, response, data in
-                return .success // 성공하면
-            }
             .responseJSON { response in // JSON 형태로 응답을 받아
                 if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -231,10 +243,6 @@ class UserSettings: ObservableObject {
                                     result(false) // 회원가입이 안 되었다고 알림
                                 }
                             }
-                // 이 부분은 현재 안 쓰고 있는 기능(로그 확인용)
-                        if let result = response.result.value {
-                            let JSON = result as! NSDictionary
-                        }
                 
             }
     }
@@ -262,16 +270,13 @@ class UserSettings: ObservableObject {
     // 회원 탈퇴 기능
     func delete_session(token: String) {
         // Bearer Auth를 이용하기 위한 헤더
-        let headers = [
+        let headers: HTTPHeaders = [
             "Authorization": "Bearer "+token
         ]
         
         //delete 메서드로 헤더와 같이 넣어서 보내주면
-        Alamofire
+        AF
         .request("http://stage.api.koreatech.in/user/me", method: .delete, encoding: URLEncoding.httpBody,headers: headers)
-        .validate { request, response, data in
-            return .success // 성공했는지 확인하고
-        }
         .response { response in // 응답을 받으면
             // UserDefaults의 user값을 삭제하고
             UserDefaults.standard.set(nil, forKey: "user")
@@ -289,7 +294,7 @@ class UserSettings: ObservableObject {
         if let url_encode = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
 
             // 해당 주소를 get 메서드로 보내면
-            Alamofire
+            AF
                     .request(url_encode, method: .get, encoding: JSONEncoding.default)
                     .responseJSON { response in // JSON 형태로 응답받으면
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
@@ -300,10 +305,6 @@ class UserSettings: ObservableObject {
                             default: // 겹치거나 오류가 나면
                                 result(false) // 겹친다고 알림
                             }
-                        }
-                        // 로그 분석용(사용하지 않음)
-                        if let result = response.result.value {
-                            let JSON = result as! NSDictionary
                         }
 
                     }
@@ -328,11 +329,8 @@ class UserSettings: ObservableObject {
         // 비밀번호를 해시 처리하여
         let hashPassword = hashed(pw: password)
         // post 메서드로, 아이디와 비밀번호를 파라미터에 같이 넣어 보내주면
-            Alamofire
+            AF
             .request("http://stage.api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.prettyPrinted)
-            .validate { request, response, data in
-                return .success // 성공했는지 확인하고
-            }
             .response { response in // 응답을 받으면
                 // 응답 내부의 데이터를 가져와
                 guard let data = response.data else { return }
@@ -342,6 +340,7 @@ class UserSettings: ObservableObject {
                     // 데이터를 UserRequest의 형태로 가공하여
                     let userRequest = try decoder.decode(UserRequest.self, from: data)
                     // 해당 class의 user값에 가공된 데이터를 넣어준다.
+                    print(userRequest)
                     self.user = userRequest
                     
                     // 인코더를 가져와서
