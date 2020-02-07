@@ -9,6 +9,7 @@
 import Foundation
 
 struct User: Codable {
+    var id: Int
     var accountNonExpired: Bool
     var accountNonLocked: Bool
     var anonymousNickname: String
@@ -25,6 +26,7 @@ struct User: Codable {
     var studentNumber: String?
     var username: String?
     private enum CodingKeys: String, CodingKey {
+        case id = "id"
         case accountNonExpired = "accountNonExpired"
         case accountNonLocked = "accountNonLocked"
         case anonymousNickname = "anonymous_nickname"

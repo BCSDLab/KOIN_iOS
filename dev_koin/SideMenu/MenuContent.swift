@@ -81,6 +81,13 @@ struct MenuContent: View {
                     Text("익명게시판")
                             .font(.subheadline)
                     Text("자유게시판")
+                        .onTapGesture { // 식단 누를 시
+                            // 현재 view를 dining으로 변경
+                            self.viewRouter.currentView = "board_free"
+
+                            // 메뉴 닫음
+                            self.viewRouter.dismiss_menu()
+                        }
                             .font(.subheadline)
                     Text("채용게시판")
                             .font(.subheadline)

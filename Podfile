@@ -5,14 +5,19 @@ target 'dev_koin' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # use_modular_headers!
+
   # Pods for dev_koin
-  pod 'Alamofire', '~> 4.7'
-  pod 'ObjectMapper'
-  pod 'AlamofireObjectMapper', '~> 5.2'
+  pod 'Alamofire', '~> 5.0.0-rc.3'
   pod 'PKHUD'
-  pod 'Japx'
-  pod 'Japx/CodableAlamofire'
   pod 'SDWebImageSwiftUI'
+  pod "RichEditorView"
+  #pod 'SwiftRichString'
+  #pod 'AttributedTextView', '~> 1.4.0'
+  pod "WordPress-Aztec-iOS", "1.15" # or the version number you want
+  pod "WordPress-Editor-iOS", "1.15"
+  # pod 'VEditorKit'
+
 
 end
 
