@@ -8,8 +8,6 @@
 
 import SwiftUI
 import Alamofire
-import ObjectMapper
-import AlamofireObjectMapper
 
 struct MealView: View {
     //정 선택된 탭을 가져오는 오브젝트

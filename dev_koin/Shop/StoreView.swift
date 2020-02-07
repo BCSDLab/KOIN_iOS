@@ -69,11 +69,8 @@ struct StoreView: View {
                         Text("족발").accentColor(self.category == "S003" ? Color("squash") : .black)
                     }
                 }
-
-
             }
             HStack(alignment: .center, spacing: 15) {
-
                 Button(action: { self.category = "S004"
                 self.stores.get_stores(category: "S004") }) {
                     VStack {

@@ -8,8 +8,6 @@
 
 import SwiftUI
 import Alamofire
-import ObjectMapper
-import AlamofireObjectMapper
 import CryptoKit
 import CryptoTokenKit
 import Foundation

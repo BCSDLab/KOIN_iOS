@@ -32,7 +32,7 @@ public class DiningFetcher: ObservableObject {
         let dateString: String = dateFormatter.string(from: date)
 
         // 데이터 라이브러리를 사용하여
-        Alamofire
+        AF
                 // 해당 날짜의 dining 데이터를 요청하고
         .request("http://api.koreatech.in/dinings?date=\(dateString)", method: .get, encoding: JSONEncoding.default)
                 // response를 받으면

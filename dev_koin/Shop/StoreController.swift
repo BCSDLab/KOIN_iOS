@@ -50,11 +50,8 @@ class StoreController: ObservableObject {
     
     
     func load_store(store_id: Int){
-        Alamofire
+        AF
         .request("http://stage.api.koreatech.in/shops/\(store_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
-        .validate { request, response, data in
-            return .success
-        }
         .response { response in
             guard let data = response.data else {
                 return
@@ -106,11 +103,8 @@ class StoreController: ObservableObject {
     }
 
     func store_session() {
-        Alamofire
+        AF
                 .request("http://stage.api.koreatech.in/shops", method: .get, encoding: JSONEncoding.prettyPrinted)
-                .validate { request, response, data in
-                    return .success
-                }
                 .response { response in
                     guard let data = response.data else {
                         return
