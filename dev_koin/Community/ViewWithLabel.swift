@@ -6,8 +6,8 @@
 import Foundation
 import UIKit
 import SwiftUI
-import SwiftRichString
-import AttributedTextView
+//import SwiftRichString
+//import AttributedTextView
 
 class ViewWithLabel : UIView {
     private var label = AttributedTextView()

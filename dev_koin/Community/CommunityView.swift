@@ -23,6 +23,7 @@ func dateToString(string_date: String) -> String {
 
 struct CommunityView: View {
     @EnvironmentObject var tabData: ViewRouter
+    @EnvironmentObject var user: UserSettings
     @ObservedObject var communityData = CommunityController()
     
     init() {
@@ -33,7 +34,7 @@ struct CommunityView: View {
     var body: some View {
         return List {
             ForEach(self.communityData.get_articles(), id:\.self) { l in
-                NavigationLink(destination: CommunityDetailView(community_id: l.id)) {
+                NavigationLink(destination: CommunityDetailView(community_id: l.id, user_id: l.userId!)) {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(l.title)")

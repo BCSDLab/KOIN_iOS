@@ -28,7 +28,7 @@ struct AddCommunityView: View {
         .navigationBarTitle("새 글 작성")
             .navigationBarItems(trailing: Button(action: {
                 if self.is_edit {
-                    print(self.aztecView.get_html())
+                    //print(self.aztecView.get_html())
                     self.communityData.update_article(token: self.user.get_token(),article_id: self.article_id, board_id: 1, title: self.title, content: self.aztecView.get_html()) { result in
                     if result {
                         self.presentationMode.wrappedValue.dismiss()
@@ -37,7 +37,7 @@ struct AddCommunityView: View {
                     }
                     }
                 } else {
-                    print(self.aztecView.get_html())
+                    //print(self.aztecView.get_html())
                     self.communityData.put_article(token: self.user.get_token(), board_id: 1, title: self.title, content: self.aztecView.get_html()) { result in
                     if result {
                         self.presentationMode.wrappedValue.dismiss()

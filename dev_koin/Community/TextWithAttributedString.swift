@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 import SwiftUI
-import AttributedTextView
+//import AttributedTextView
 
 struct TextWithAttributedString: UIViewRepresentable {
 
