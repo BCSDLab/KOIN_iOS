@@ -12,11 +12,9 @@ target 'dev_koin' do
   pod 'PKHUD'
   pod 'SDWebImageSwiftUI'
   pod "RichEditorView"
-  #pod 'SwiftRichString'
-  #pod 'AttributedTextView', '~> 1.4.0'
-  pod "WordPress-Aztec-iOS", "1.15" # or the version number you want
+  pod "WordPress-Aztec-iOS", "1.15"
   pod "WordPress-Editor-iOS", "1.15"
-  # pod 'VEditorKit'
+  pod 'RSSelectionMenu'
 
 
 end

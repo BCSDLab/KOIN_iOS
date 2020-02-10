@@ -76,6 +76,15 @@ struct ContentView: View {
                         CommunityView()
                                 .navigationBarTitle("자유게시판", displayMode: .inline)
                             .environmentObject(self.tabData)
+                    } else if self.tabData.currentView == "bus" {
+                        BusView()
+                                .navigationBarTitle("버스", displayMode: .inline)
+                                .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                    HStack {
+                                        Image(systemName: "chevron.left")
+                                        Text("홈")
+                                    }
+                                }, trailing: EmptyView())
                     }
                 }
 

@@ -87,7 +87,10 @@ struct HomeView: View {
                                 }
                                         .clipped()
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {}) {
+                                Button(action: {
+                                    self.viewRouter.currentView = "bus"
+                                    self.viewRouter.dismiss_menu()
+                                }) {
                                     VStack{
                                         Spacer()
                                         Image("bus")
