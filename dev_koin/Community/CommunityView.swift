@@ -24,9 +24,12 @@ func dateToString(string_date: String) -> String {
 struct CommunityView: View {
     @EnvironmentObject var tabData: ViewRouter
     @EnvironmentObject var user: UserSettings
-    @ObservedObject var communityData = CommunityController()
+    @ObservedObject var communityData:CommunityController
+    var board_id: Int
     
-    init() {
+    init(board_id: Int) {
+        self.communityData = CommunityController(board_id: board_id)
+        self.board_id = board_id
         self.communityData.community_session()
     }
     
@@ -34,7 +37,7 @@ struct CommunityView: View {
     var body: some View {
         return List {
             ForEach(self.communityData.get_articles(), id:\.self) { l in
-                NavigationLink(destination: CommunityDetailView(community_id: l.id, user_id: l.userId!)) {
+                NavigationLink(destination: CommunityDetailView(community_id: l.id, board_id: self.board_id, user_id: l.userId!)) {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(l.title)")
@@ -63,7 +66,7 @@ struct CommunityView: View {
                 Image(systemName: "chevron.left")
                 Text("홈")
             }
-            }, trailing: NavigationLink(destination: AddCommunityView().environmentObject(communityData)) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
+            }, trailing: NavigationLink(destination: AddCommunityView(board_id: self.board_id).environmentObject(communityData)) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
             Text("추가")
         })
 
@@ -72,6 +75,6 @@ struct CommunityView: View {
 
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityView()
+        CommunityView(board_id: 1)
     }
 }

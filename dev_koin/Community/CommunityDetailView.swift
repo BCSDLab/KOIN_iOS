@@ -60,17 +60,20 @@ open class MyXMLDynamicAttributesResolver: XMLDynamicAttributesResolver {
 */
 
 struct CommunityDetailView: View {
-    @ObservedObject var controller = CommunityController()
+    @ObservedObject var controller:CommunityController
     @EnvironmentObject var user: UserSettings
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var community_id: Int
+    var board_id: Int
     let baseFontSize: CGFloat = 16
     @State var isCommentOn: Bool = false
     var htmlView: HTMLView = HTMLView()
     var getUserId: Int
 
 
-    init(community_id: Int, user_id: Int) {
+    init(community_id: Int,board_id: Int, user_id: Int) {
+        self.board_id = board_id
+        self.controller = CommunityController(board_id: board_id)
         self.community_id = community_id
         self.getUserId = user_id
         self.controller.load_community(article_id: self.community_id)
@@ -140,7 +143,7 @@ struct CommunityDetailView: View {
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             if(self.user.get_userId() == self.getUserId) {
-                            NavigationLink(destination: AddCommunityView(title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
+                                NavigationLink(destination: AddCommunityView(board_id: self.board_id, title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
                                         .padding(.all, 10)
@@ -178,6 +181,6 @@ struct CommunityDetailView: View {
 
 struct CommunityDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityDetailView(community_id: 13851, user_id: 316)
+        CommunityDetailView(community_id: 13851, board_id: 1, user_id: 316)
     }
 }

@@ -15,12 +15,14 @@ import PKHUD
 class CommunityController: ObservableObject {
     @Published var articles: Articles?
     @Published var detail_article: Article
+    var board_id: Int
     
     let objectWillChange = PassthroughSubject<CommunityController, Never>()
     
-    init() {
+    init(board_id: Int) {
         self.articles = Articles()
         self.detail_article = Article()
+        self.board_id = board_id
         //self.community_session()
     }
     
@@ -34,7 +36,7 @@ class CommunityController: ObservableObject {
     func reload_articles() {
         print(self.get_articles().count)
         AF
-            .request("http://stage.api.koreatech.in/articles?boardId=1&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+            .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return
@@ -221,7 +223,7 @@ class CommunityController: ObservableObject {
 
     func community_session() {
         AF
-                .request("http://stage.api.koreatech.in/articles?boardId=1&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
