@@ -80,6 +80,10 @@ struct ContentView: View {
                         CommunityView(board_id: 2)
                                 .navigationBarTitle("취업게시판", displayMode: .inline)
                             .environmentObject(self.tabData)
+                    } else if self.tabData.currentView == "board_secret" {
+                        CommunityView(board_id: -2)
+                                .navigationBarTitle("익명게시판", displayMode: .inline)
+                            .environmentObject(self.tabData)
                     }
                 }
 
