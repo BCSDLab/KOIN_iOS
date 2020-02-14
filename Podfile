@@ -16,6 +16,7 @@ target 'dev_koin' do
   #pod 'AttributedTextView', '~> 1.4.0'
   pod "WordPress-Aztec-iOS", "1.15" # or the version number you want
   pod "WordPress-Editor-iOS", "1.15"
+  pod 'Gridicons', :podspec => 'https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec'
   # pod 'VEditorKit'
 
 

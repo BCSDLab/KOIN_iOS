@@ -97,7 +97,7 @@ struct UserLoginView: View {
                     }
                     Divider()
                         .frame(width: 0, height: 20)
-                    
+                    /*
                     Button(action: submit) {
                         HStack {
                             Image("face").accentColor(.gray)
@@ -105,7 +105,7 @@ struct UserLoginView: View {
                                 .font(.subheadline)
                                 .foregroundColor(Color.gray)
                         }
-                    }
+                    }*/
                 }
                 .padding()
                 
