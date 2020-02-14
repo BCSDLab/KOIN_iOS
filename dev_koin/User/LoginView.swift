@@ -87,7 +87,8 @@ struct UserLoginView: View {
                  
                 
                 HStack(alignment: .center) {
-                    Button(action: submit) {
+                    
+                    NavigationLink(destination: FindPasswordView()) {
                         HStack {
                             Image("password").accentColor(.gray)
                             Text("비밀번호 찾기")

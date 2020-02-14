@@ -40,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             // 상단바 색 변경을 위해 기존 UIHostingController에서 커스터마이징한 HostingController로 변경
             // 첫 시작 화면을 startView로 하고, 유저정보와 탭 정보를 같이 보내준다.
-            window.rootViewController = HostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
             self.window = window
             window.makeKeyAndVisible()
         }
