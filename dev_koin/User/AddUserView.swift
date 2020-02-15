@@ -9,6 +9,27 @@
 import SwiftUI
 import PKHUD
 
+struct TermsView: View {
+    var terms: Bool = true
+    
+    @State var content: String = ""
+    
+    var body : some View {
+        return ScrollView(.vertical) {
+            Text(content)
+                .padding()
+        }.onAppear() {
+            var path: String?
+            if self.terms {
+                path = Bundle.main.path(forResource: "Terms_personal_information", ofType: "txt")
+            } else {
+                path = Bundle.main.path(forResource: "Terms_koin_sign_up", ofType: "txt")
+            }
+            self.content = try! String(contentsOfFile: path!, encoding: String.Encoding.utf8)
+        }
+    }
+}
+
 
 struct AddUserView: View {
     // 이메일 정보를 담는 변수
@@ -21,6 +42,10 @@ struct AddUserView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     // 회원가입 성공 시 Alert를 띄우는 목적의 변수
     @State private var showingSuccessAlert = false
+    
+    @State private var showingKoin = false
+    @State private var showingPersonal = false
+    
     // 실패시, 에러 HUD를 띄울 때의 String 변수
     @State var errorText = ""
     // 약관 동의 여부를 확인하는 객체
@@ -124,13 +149,14 @@ struct AddUserView: View {
             
             HStack {
                 Button(action: {
-                    self.showingPersonality = true
+                    self.showingPersonal.toggle()
                 }) {
                     Text("개인정보 이용약관")
                     .font(.system(size: 12))
                     .underline()
-                }.sheet(isPresented: $showingPersonality) {
-                    Text("aaa")
+                }
+                .sheet(isPresented: $showingPersonal) {
+                    TermsView(terms: true)
                 }
                 Spacer()
                 Button(action: {
@@ -147,15 +173,18 @@ struct AddUserView: View {
             }.padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
             HStack {
+                
                 Button(action: {
-                    self.showingKoin = true
+                    self.showingKoin.toggle()
                 }) {
-                Text("코인 이용약관")
-                .font(.system(size: 12))
-                .underline()
+                    Text("코인 이용약관")
+                    .font(.system(size: 12))
+                    .underline()
                 }.sheet(isPresented: $showingKoin) {
-                    Text("bbb")
+                    TermsView(terms: false)
                 }
+                
+                
                 
                 Spacer()
                 Button(action: {
@@ -202,6 +231,7 @@ struct AddUserView: View {
             
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], CGFloat(50))
+            
             //showingSuccessAlert이 true일 때 Alert을 표시한다.
         .alert(isPresented: $showingSuccessAlert) {
             // 이메일을 확인해보라는 Alert을 띄운 다음

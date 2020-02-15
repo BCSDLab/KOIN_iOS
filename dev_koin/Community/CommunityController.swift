@@ -50,6 +50,7 @@ class CommunityController: ObservableObject {
         //print(self.get_temp_articles().count)
         AF
             .request("http://stage.api.koreatech.in/temp/articles?&page=\(self.get_temp_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+            
         .response { response in
             guard let data = response.data else {
                 return
@@ -70,7 +71,7 @@ class CommunityController: ObservableObject {
     }
     
     func reload_articles() {
-        //print(self.get_articles().count)
+        print(self.board_id)
         AF
             .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
@@ -382,6 +383,54 @@ class CommunityController: ObservableObject {
                             }
                 }
     }
+    
+    /*
+     //가능
+     success({
+         grantEdit = 1;
+     })
+     //불가능
+     success({
+         grantEdit = 0;
+     })
+     
+     */
+    
+    func grant_article_check(password: String, article_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void) {
+        print("start alamofire")
+
+        AF
+            .request("http://stage.api.koreatech.in/temp/articles/grant/check", method: .post, parameters: ["article_id": article_id, "password": password], encoding: JSONEncoding.prettyPrinted)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value as [String: Any]):
+                        result(.success(value))
+                    case .failure(let error):
+                        result(.failure(error))
+                    default:
+                        fatalError("received non-dictionary JSON response")
+                    }
+                }
+    }
+    
+    func grant_comment_check(password: String, comment_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void){
+        print("start alamofire")
+
+        AF
+            .request("http://stage.api.koreatech.in/temp/comments/grant/check", method: .post, parameters: ["comment_id": comment_id, "password": password], encoding: JSONEncoding.prettyPrinted)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value as [String: Any]):
+                        result(.success(value))
+                    case .failure(let error):
+                        result(.failure(error))
+                    default:
+                        fatalError("received non-dictionary JSON response")
+                    }
+                    
+                    
+                }
+    }
 
     func update_comment(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, comment_id: Int, content: String, result: @escaping (Bool) -> Void) {
         let headers: HTTPHeaders = [
@@ -408,7 +457,7 @@ class CommunityController: ObservableObject {
 
     func temp_community_session() {
         AF
-                .request("http://stage.api.koreatech.in/temp/articles?boardId=\(self.board_id)&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("http://stage.api.koreatech.in/temp/articles?page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
@@ -431,7 +480,7 @@ class CommunityController: ObservableObject {
 
     func community_session() {
         AF
-                .request("http://stage.api.koreatech.in/articles?page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
@@ -439,9 +488,9 @@ class CommunityController: ObservableObject {
                 
                 do {
                     let decoder = JSONDecoder()
-                    let communityArticles = try decoder.decode(TempArticles.self, from: data)
+                    let communityArticles = try decoder.decode(Articles.self, from: data)
                     
-                    self.temp_articles = communityArticles
+                    self.articles = communityArticles
                     self.objectWillChange.send(self)
                     
                     
