@@ -32,6 +32,7 @@ struct CommunityCommentView: View {
     @State var edited_article_id: Int = -1
     @State var temp_password: String = ""
     @State var temp_nickname: String = ""
+    @State var grant_check_password: String = ""
 
 
     init(community_id: Int) {
@@ -127,7 +128,7 @@ struct CommunityCommentView: View {
                                 .fontWeight(.light)
                                 Spacer()
                                 
-                                Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.temp_password), article_id: c.articleId, comment_id: c.id) { result in
+                                Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.grant_check_password), article_id: c.articleId, comment_id: c.id) { result in
                                         if result {
                                             self.presentationMode.wrappedValue.dismiss()
                                         } else {
@@ -146,13 +147,27 @@ struct CommunityCommentView: View {
                                 .fontWeight(.light)
                             }.fixedSize(horizontal: false, vertical: true)
                                 .padding(.bottom, 10)
-                            SecureField("비밀번호", text: self.$temp_password)
+                            SecureField("비밀번호", text: self.$grant_check_password)
                                 Button(action:{
-                                    self.comment_content = c.content
-                                    self.edited_comment_id = c.id
-                                    self.edited_article_id = c.articleId
-                                    self.is_edited = true
-                                    self.temp_nickname = c.nickname
+                                    
+                                    self.controller.grant_comment_check(password: self.hashed(pw: self.grant_check_password), comment_id: c.id) { result in
+                                        do {
+                                            let value = try result.get()
+                                            let grant = value["grantEdit"] as! Int
+                                            if grant == 1 {
+                                                self.comment_content = c.content
+                                                self.edited_comment_id = c.id
+                                                self.edited_article_id = c.articleId
+                                                self.is_edited = true
+                                                self.temp_nickname = c.nickname
+                                            } else {
+                                            }
+                                        } catch {
+                                        }
+                                        
+                                    }
+                                    
+                                    
                                 }) {
                                     HStack {
                                     Text("수정")

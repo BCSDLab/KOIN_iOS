@@ -18,6 +18,7 @@ struct CommunityDetailView: View {
     @State var isCommentOn: Bool = false
     var htmlView: HTMLView = HTMLView()
     var getUserId: Int = -1
+    @State var grantValue : Bool = false
     @State var temp_password: String = ""
 
 
@@ -62,7 +63,23 @@ struct CommunityDetailView: View {
         let dateString = dateFormatter.string(from: date!)
         return dateString
     }
-
+ /*
+    func checkGrant(){
+        self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
+            do {
+                let value = try result.get()
+                let grant = value["grantEdit"] as! Int
+                if grant == 1 {
+                    self.grantValue = true
+                } else {
+                    self.grantValue = false
+                }
+            } catch {
+                self.grantValue = false
+            }
+        }
+    }
+*/
 
     var body: some View {
         var article: Article = Article()
@@ -73,8 +90,6 @@ struct CommunityDetailView: View {
         var articleCommentCount: Int = 0
         var articleCreatedAt: String = ""
         var articleContent: String = ""
-        
-        
         
         //var articleAttrContent: NSAttributedString = NSAttributedString()
 
@@ -137,7 +152,7 @@ struct CommunityDetailView: View {
                             }
                             
                             if(self.user.get_userId() == self.getUserId) {
-                                NavigationLink(destination: AddCommunityView(board_id: self.board_id, title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
+                                NavigationLink(destination: AEditorView(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
                                         .padding(.all, 10)
@@ -161,19 +176,39 @@ struct CommunityDetailView: View {
                             //익명일 경우, 비밀번호 맞을 경우에만 접근 가능하게 하기
                             if(self.board_id == -2) {
                                 SecureField("비밀번호", text: $temp_password)
-                                NavigationLink(destination: AddCommunityView(board_id: self.board_id, title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
-                                Text("수정")
-                                    .foregroundColor(Color.black)
+                                NavigationLink(destination: TempAEditorView(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline), isActive: $grantValue) {
+                                    Button(action : {
+                                        self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
+                                                do {
+                                                    let value = try result.get()
+                                                    let grant = value["grantEdit"] as! Int
+                                                    if grant == 1 {
+                                                        self.grantValue = true
+                                                    } else {
+                                                        self.grantValue = false
+                                                    }
+                                                } catch {
+                                                    self.grantValue = false
+                                                }
+                                                
+                                            }
+                                    }) {
+                                        Text("수정")
+                                        .foregroundColor(Color.black)
                                         .padding(.all, 10)
-                                .border(Color.gray.opacity(0.8), width: 1)
+                                        .border(Color.gray.opacity(0.8), width: 1)
+                                    }
                             }
-                                Button(action: {self.controller.delete_temp_article(password: self.hashed(pw:self.temp_password), article_id: self.community_id) { result in
+                                Button(action: {
+                                    self.controller.delete_temp_article(password: self.hashed(pw:self.temp_password), article_id: self.community_id) { result in
                             if result {
                                 self.presentationMode.wrappedValue.dismiss()
                             } else {
                                 print("성공 못함")
                             }
-                            }}) {
+                            }}
+                                
+                                ) {
                                 Text("삭제")
                                         .foregroundColor(Color.red)
                                         .padding(.all, 10)
