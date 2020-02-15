@@ -210,7 +210,8 @@ struct HomeView: View {
                                             .background(Color.white)
                                 }
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {}) {
+                                Button(action: {self.viewRouter.currentView = "board_recruit"
+                                self.viewRouter.dismiss_menu()}) {
                                     VStack{
                                         Spacer()
                                         Image("board_recruit")
@@ -228,7 +229,8 @@ struct HomeView: View {
                                             .background(Color.white)
                                 }
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {}) {
+                                Button(action: {self.viewRouter.currentView = "board_secret"
+                                self.viewRouter.dismiss_menu()}) {
                                     VStack{
                                         Spacer()
                                         Image("board_secret")

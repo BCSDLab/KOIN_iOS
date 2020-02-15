@@ -48,7 +48,7 @@ class UserSettings: ObservableObject {
     
     func get_userId() -> Int {
         if let user = self.user {
-            print(user)
+            //print(user)
             if let userdata = user.user {
                 print(userdata)
                 print(userdata.id)
@@ -59,7 +59,7 @@ class UserSettings: ObservableObject {
     }
     func get_nickname() -> String {
         if let user = self.user {
-            print(user)
+            //print(user)
             if let userdata = user.user {
                 if let nickname = userdata.nickname {
                     return nickname
@@ -80,6 +80,59 @@ class UserSettings: ObservableObject {
             }
         }
         return ""
+    }
+    
+    func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    
+    func check_expired() -> Bool {
+        let d = get_token().split(separator: ".")
+        if d.isEmpty {
+            return false
+        }
+        if let decodedData = Data(base64Encoded: String(d[1])) {
+            if let decodedString = String(data: decodedData, encoding: .utf8) {
+                let decodedDict = convertToDictionary(text: decodedString)
+                if let expTime = decodedDict!["exp"] {
+                    let tm = Date(timeIntervalSince1970: expTime as! TimeInterval)
+                    if Date() > tm {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+                return false
+            }
+            return false
+            
+        }
+        return false
+    }
+    
+    func expired_token() -> Bool {
+        if(check_expired()) {
+            logout_session()
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func get_userId_by_token() -> Int {
+        let d = get_token().split(separator: ".")
+        let decodedData = Data(base64Encoded: String(d[1]))!
+        let decodedString = String(data: decodedData, encoding: .utf8)!
+        let decodedDict = convertToDictionary(text: decodedString)
+        let userId = Int(decodedDict!["sub"]! as! String)!
+        return userId
     }
     
     // 비밀번호를 해시로 변환해주는 함수
@@ -311,7 +364,24 @@ class UserSettings: ObservableObject {
 
         }
 
+    }
+    
+    
+    func find_password(email: String, result: @escaping (Bool) -> Void) {
+        AF
+        .request("http://stage.api.koreatech.in/user/find/password", method: .post, parameters:  ["portal_account": email], encoding: JSONEncoding.prettyPrinted)
+        .responseJSON { response in // JSON 형태로 응답받으면
+            if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                switch(status){
+                case 201: // 겹치지 않으면(200)
+                    result(true) // 겹치지 않는다고 알림
+                default: // 겹치거나 오류가 나면
+                    result(false) // 겹친다고 알림
+                }
+            }
 
+        }
+        
     }
     
     // 로그아웃 기능을 담당하는 함수
@@ -325,7 +395,7 @@ class UserSettings: ObservableObject {
     }
     
     // 로그인 기능을 담당하는 함수
-    func login_session(email: String, password: String) {
+    func login_session(email: String, password: String, result: @escaping (Bool) -> Void) {
         // 비밀번호를 해시 처리하여
         let hashPassword = hashed(pw: password)
         // post 메서드로, 아이디와 비밀번호를 파라미터에 같이 넣어 보내주면
@@ -340,18 +410,29 @@ class UserSettings: ObservableObject {
                     // 데이터를 UserRequest의 형태로 가공하여
                     let userRequest = try decoder.decode(UserRequest.self, from: data)
                     // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    print(userRequest)
-                    self.user = userRequest
-                    
-                    // 인코더를 가져와서
-                    let encoder = JSONEncoder()
-                    // class의 user값이 인코딩이 가능하면
-                    if let encoded = try? encoder.encode(self.user) {
-                        // 인코딩된 user값은 UserDefaults에 저장한다.
-                        UserDefaults.standard.set(encoded, forKey: "user")
-                        // 로그인이 되었다고 알려준다.
-                        self.isLogin = true
+                    //print(userRequest)
+                    if let checkToken = userRequest.token {
+                        self.user = userRequest
+                        
+                        // 인코더를 가져와서
+                        let encoder = JSONEncoder()
+                        // class의 user값이 인코딩이 가능하면
+                        if let encoded = try? encoder.encode(self.user) {
+                            // 인코딩된 user값은 UserDefaults에 저장한다.
+                            UserDefaults.standard.set(encoded, forKey: "user")
+                            // 로그인이 되었다고 알려준다.
+                            self.isLogin = true
+                            result(true)
+                        } else {
+                            self.isLogin = false
+                            result(false)
+                        }
+                    } else {
+                        self.isLogin = false
+                        result(false)
                     }
+                    
+                    
                     
                     
                 } catch let error {

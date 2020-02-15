@@ -5,76 +5,52 @@
 
 import SwiftUI
 import UIKit
-//import SwiftRichString
-//import AttributedTextView
-
-/*
-open class MyXMLDynamicAttributesResolver: XMLDynamicAttributesResolver {
-    public func styleForUnknownXMLTag(_ tag: String, to attributedString: inout AttributedString, attributes: [String : String]?) {
-        let finalStyleToApply = Style()
-        switch tag {
-        case "a": // href support
-            finalStyleToApply.linkURL = URL(string: attributes?["href"])
-
-        case "img":
-            // Remote Image URL support
-            if let url = attributes?["url"] {
-                if let image = AttributedString(imageURL: url, bounds: attributes?["rect"]) {
-                    attributedString.append(image)
-                }
-            }
-
-            // Local Image support
-            if let imageName = attributes?["named"] {
-                if let image = AttributedString(imageNamed: imageName, bounds: attributes?["rect"]) {
-                    attributedString.append(image)
-                }
-            }
-
-        default:
-            break
-        }
-        attributedString.add(style: finalStyleToApply)
-    }
-    
-    
-    public func applyDynamicAttributes(to attributedString: inout AttributedString, xmlStyle: XMLDynamicStyle) {
-        let finalStyleToApply = Style()
-        xmlStyle.enumerateAttributes { key, value  in
-            switch key {
-                case "style": // color support
-                    var colorValue = value.replacingOccurrences(of: "color: rgb[^)](\\w+), (\\w+), (\\w+)+\\);", with: "$1, $2, $3", options: .regularExpression, range: nil)
-                    
-                    let color = colorValue.components(separatedBy: ", ")
-                    
-                    let hexColor = String(format:"%02X", Int(color[0]) ?? 0) + String(format:"%02X", Int(color[1]) ?? 0) + String(format:"%02X", Int(color[2]) ?? 0)
-                    finalStyleToApply.color = Color(hexString: hexColor)
-                default:
-                    break
-            }
-        }
-        
-        attributedString.add(style: finalStyleToApply)
-    }
-}
-*/
+import CryptoKit
+import CryptoTokenKit
 
 struct CommunityDetailView: View {
-    @ObservedObject var controller = CommunityController()
+    @ObservedObject var controller:CommunityController
     @EnvironmentObject var user: UserSettings
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var community_id: Int
+    var board_id: Int
     let baseFontSize: CGFloat = 16
     @State var isCommentOn: Bool = false
     var htmlView: HTMLView = HTMLView()
-    var getUserId: Int
+    var getUserId: Int = -1
+    @State var grantValue : Bool = false
+    @State var temp_password: String = ""
 
 
-    init(community_id: Int, user_id: Int) {
+    init(community_id: Int, board_id: Int, user_id: Int) {
+        self.board_id = board_id
+        self.controller = CommunityController(board_id: board_id)
         self.community_id = community_id
         self.getUserId = user_id
-        self.controller.load_community(article_id: self.community_id)
+        if board_id == -2 {
+            self.controller.load_temp_community(article_id: self.community_id)
+        } else {
+            self.controller.load_community(article_id: self.community_id)
+        }
         print(community_id)
+    }
+    
+    init(community_id: Int) {
+        self.board_id = -2
+        self.controller = CommunityController(board_id: -2)
+        self.community_id = community_id
+        self.controller.load_temp_community(article_id: community_id)
+        print(community_id)
+    }
+    
+    func hashed(pw: String) -> String{
+        // 비밀번호를 먼전 Data로 변환하여
+        let inputData = Data(pw.utf8)
+        // SHA256을 이용해 해시 처리한 다음
+        let hashed = SHA256.hash(data: inputData)
+        // 해시 당 16진수 2자리로 설정하여 합친다.
+        let hashPassword = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
+        return hashPassword
     }
     
     func dateToString(string_date: String) -> String {
@@ -87,30 +63,65 @@ struct CommunityDetailView: View {
         let dateString = dateFormatter.string(from: date!)
         return dateString
     }
-
+ /*
+    func checkGrant(){
+        self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
+            do {
+                let value = try result.get()
+                let grant = value["grantEdit"] as! Int
+                if grant == 1 {
+                    self.grantValue = true
+                } else {
+                    self.grantValue = false
+                }
+            } catch {
+                self.grantValue = false
+            }
+        }
+    }
+*/
 
     var body: some View {
+        var article: Article = Article()
+        var tempArticle: TempArticle = TempArticle()
         var articleTitle: String = "title"
         var articleHit: Int = 0
         var articleNickname: String = ""
         var articleCommentCount: Int = 0
         var articleCreatedAt: String = ""
         var articleContent: String = ""
-        var articleUserId: Int = -1
         
         //var articleAttrContent: NSAttributedString = NSAttributedString()
 
-
-        let article = self.controller.detail_article
+        if self.board_id == -2 {
+            tempArticle = self.controller.detail_temp_article
+            print(tempArticle)
+            articleTitle = tempArticle.title
+            articleHit = tempArticle.hit
+            articleNickname = tempArticle.nickname
+            if let commentCount = tempArticle.commentCount {
+                articleCommentCount = commentCount
+            }
+            articleCreatedAt = dateToString(string_date: tempArticle.createdAt)
+            if let content = tempArticle.content {
+                articleContent = content
+            }
+            self.htmlView.loadHTML(articleContent)
+        } else {
+            article = self.controller.detail_article
+            
+            articleTitle = article.title
+            articleHit = article.hit
+            articleNickname = article.nickname
+            articleCommentCount = article.commentCount
+            articleCreatedAt = dateToString(string_date: article.createdAt)
+            articleContent = article.content
+            self.htmlView.loadHTML(articleContent)
+        }
+        
+        
         //getUserId = self.user.get_userId()
-        articleTitle = article.title
-        articleHit = article.hit
-        articleNickname = article.nickname
-        articleCommentCount = article.commentCount
-        articleCreatedAt = dateToString(string_date: article.createdAt)
-        articleContent = article.content
-        self.htmlView.loadHTML(article.content)
-        print(self.user.get_userId() == self.getUserId)
+        
 
         //print(article.userId == self.user.get_userId())
 
@@ -139,8 +150,9 @@ struct CommunityDetailView: View {
                                         .padding(.all, 10)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
+                            
                             if(self.user.get_userId() == self.getUserId) {
-                            NavigationLink(destination: AddCommunityView(title: articleTitle, content: article.content, article_id: community_id, is_edit: true).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
+                                NavigationLink(destination: AEditorView(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
                                         .padding(.all, 10)
@@ -153,6 +165,50 @@ struct CommunityDetailView: View {
                                 print("성공 못함")
                             }
                             }}) {
+                                Text("삭제")
+                                        .foregroundColor(Color.red)
+                                        .padding(.all, 10)
+                                .border(Color.gray.opacity(0.8), width: 1)
+                            }
+                            
+                            }
+                            
+                            //익명일 경우, 비밀번호 맞을 경우에만 접근 가능하게 하기
+                            if(self.board_id == -2) {
+                                SecureField("비밀번호", text: $temp_password)
+                                NavigationLink(destination: TempAEditorView(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline), isActive: $grantValue) {
+                                    Button(action : {
+                                        self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
+                                                do {
+                                                    let value = try result.get()
+                                                    let grant = value["grantEdit"] as! Int
+                                                    if grant == 1 {
+                                                        self.grantValue = true
+                                                    } else {
+                                                        self.grantValue = false
+                                                    }
+                                                } catch {
+                                                    self.grantValue = false
+                                                }
+                                                
+                                            }
+                                    }) {
+                                        Text("수정")
+                                        .foregroundColor(Color.black)
+                                        .padding(.all, 10)
+                                        .border(Color.gray.opacity(0.8), width: 1)
+                                    }
+                            }
+                                Button(action: {
+                                    self.controller.delete_temp_article(password: self.hashed(pw:self.temp_password), article_id: self.community_id) { result in
+                            if result {
+                                self.presentationMode.wrappedValue.dismiss()
+                            } else {
+                                print("성공 못함")
+                            }
+                            }}
+                                
+                                ) {
                                 Text("삭제")
                                         .foregroundColor(Color.red)
                                         .padding(.all, 10)
@@ -178,6 +234,6 @@ struct CommunityDetailView: View {
 
 struct CommunityDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityDetailView(community_id: 13851, user_id: 316)
+        CommunityDetailView(community_id: 13851, board_id: 1, user_id: 316)
     }
 }

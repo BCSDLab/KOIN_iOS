@@ -40,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             // 상단바 색 변경을 위해 기존 UIHostingController에서 커스터마이징한 HostingController로 변경
             // 첫 시작 화면을 startView로 하고, 유저정보와 탭 정보를 같이 보내준다.
-            window.rootViewController = HostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -88,7 +88,12 @@ struct StartView: View {
         // 만약 로그인이 되어있는 상태이면
         if settings.isLogin {
             // 메인 화면으로 보여주고
-            return AnyView(ContentView())
+            if (!settings.expired_token()) {
+                return AnyView(ContentView())
+            } else {
+                return AnyView(UserLoginView())
+            }
+            
         } else { // 아니면
             // 로그인 페이지를 보여준다.
             return AnyView(UserLoginView())

@@ -73,8 +73,16 @@ struct ContentView: View {
                                     }
                                 }, trailing: EmptyView())
                     } else if self.tabData.currentView == "board_free" {
-                        CommunityView()
+                        CommunityView(board_id: 1)
                                 .navigationBarTitle("자유게시판", displayMode: .inline)
+                            .environmentObject(self.tabData)
+                    } else if self.tabData.currentView == "board_recruit" {
+                        CommunityView(board_id: 2)
+                                .navigationBarTitle("취업게시판", displayMode: .inline)
+                            .environmentObject(self.tabData)
+                    } else if self.tabData.currentView == "board_secret" {
+                        CommunityView(board_id: -2)
+                                .navigationBarTitle("익명게시판", displayMode: .inline)
                             .environmentObject(self.tabData)
                     } else if self.tabData.currentView == "bus" {
                         BusView()

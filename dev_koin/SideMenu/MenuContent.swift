@@ -86,17 +86,30 @@ struct MenuContent: View {
                         .foregroundColor(.gray)
                         .opacity(0.8)) {
                     Text("익명게시판")
+                        .onTapGesture { // 식단 누를 시
+                                                    // 현재 view를 dining으로 변경
+                        self.viewRouter.currentView = "board_secret"
+                        //board_recruit
+                                                    // 메뉴 닫음
+                        self.viewRouter.dismiss_menu()
+                                                }
                             .font(.subheadline)
                     Text("자유게시판")
                         .onTapGesture { // 식단 누를 시
                             // 현재 view를 dining으로 변경
                             self.viewRouter.currentView = "board_free"
-
+//board_recruit
                             // 메뉴 닫음
                             self.viewRouter.dismiss_menu()
                         }
                             .font(.subheadline)
                     Text("채용게시판")
+                        .onTapGesture { // 식단 누를 시
+                                                    // 현재 view를 dining으로 변경
+                                                    self.viewRouter.currentView = "board_recruit"
+                                                    // 메뉴 닫음
+                                                    self.viewRouter.dismiss_menu()
+                                                }
                             .font(.subheadline)
                     Text("콜벤쉐어링")
                             .font(.subheadline)

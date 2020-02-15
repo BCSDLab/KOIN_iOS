@@ -58,11 +58,18 @@ struct UserLoginView: View {
                 Button(action: {
                     // 로딩 HUD를 띄우고
                     HUD.show(.progress)
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1){
                         // 로그인 과정을 진행하고
-                        self.settings.login_session(email: self.login_email, password: self.login_password)
+                        self.settings.login_session(email: self.login_email, password: self.login_password) { result in
+                            if result {
+                                HUD.flash(.success, delay: 0.5)
+                            } else {
+                                HUD.flash(.error, delay: 0.5)
+                            }
+                        }
+                            // 성공일 때 success, 실패일 때 fail 뜨면서 로그인 막기
                         // 0.5초동안 성공 HUD를 띄운다
-                        HUD.flash(.success, delay: 0.5)
+                        
                     }
                 }) {
                     HStack {
@@ -87,7 +94,8 @@ struct UserLoginView: View {
                  
                 
                 HStack(alignment: .center) {
-                    Button(action: submit) {
+                    
+                    NavigationLink(destination: FindPasswordView()) {
                         HStack {
                             Image("password").accentColor(.gray)
                             Text("비밀번호 찾기")
@@ -95,6 +103,7 @@ struct UserLoginView: View {
                                 .foregroundColor(Color.gray)
                         }
                     }
+                    /*
                     Divider()
                         .frame(width: 0, height: 20)
                     
@@ -105,7 +114,7 @@ struct UserLoginView: View {
                                 .font(.subheadline)
                                 .foregroundColor(Color.gray)
                         }
-                    }
+                    }*/
                 }
                 .padding()
                 
