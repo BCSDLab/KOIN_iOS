@@ -311,7 +311,24 @@ class UserSettings: ObservableObject {
 
         }
 
+    }
+    
+    
+    func find_password(email: String, result: @escaping (Bool) -> Void) {
+        AF
+        .request("http://stage.api.koreatech.in/user/find/password", method: .post, parameters:  ["portal_account": email], encoding: JSONEncoding.prettyPrinted)
+        .responseJSON { response in // JSON 형태로 응답받으면
+            if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                switch(status){
+                case 201: // 겹치지 않으면(200)
+                    result(true) // 겹치지 않는다고 알림
+                default: // 겹치거나 오류가 나면
+                    result(false) // 겹친다고 알림
+                }
+            }
 
+        }
+        
     }
     
     // 로그아웃 기능을 담당하는 함수
