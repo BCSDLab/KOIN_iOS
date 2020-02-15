@@ -82,6 +82,59 @@ class UserSettings: ObservableObject {
         return ""
     }
     
+    func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    
+    func check_expired() -> Bool {
+        let d = get_token().split(separator: ".")
+        if d.isEmpty {
+            return false
+        }
+        if let decodedData = Data(base64Encoded: String(d[1])) {
+            if let decodedString = String(data: decodedData, encoding: .utf8) {
+                let decodedDict = convertToDictionary(text: decodedString)
+                if let expTime = decodedDict!["exp"] {
+                    let tm = Date(timeIntervalSince1970: expTime as! TimeInterval)
+                    if Date() > tm {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+                return false
+            }
+            return false
+            
+        }
+        return false
+    }
+    
+    func expired_token() -> Bool {
+        if(check_expired()) {
+            logout_session()
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func get_userId_by_token() -> Int {
+        let d = get_token().split(separator: ".")
+        let decodedData = Data(base64Encoded: String(d[1]))!
+        let decodedString = String(data: decodedData, encoding: .utf8)!
+        let decodedDict = convertToDictionary(text: decodedString)
+        let userId = Int(decodedDict!["sub"]! as! String)!
+        return userId
+    }
+    
     // 비밀번호를 해시로 변환해주는 함수
     func hashed(pw: String) -> String{
         // 비밀번호를 먼전 Data로 변환하여

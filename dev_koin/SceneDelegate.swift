@@ -88,7 +88,12 @@ struct StartView: View {
         // 만약 로그인이 되어있는 상태이면
         if settings.isLogin {
             // 메인 화면으로 보여주고
-            return AnyView(ContentView())
+            if (!settings.expired_token()) {
+                return AnyView(ContentView())
+            } else {
+                return AnyView(UserLoginView())
+            }
+            
         } else { // 아니면
             // 로그인 페이지를 보여준다.
             return AnyView(UserLoginView())
