@@ -8,10 +8,6 @@
 
 import SwiftUI
 
-
-
-
-
 let VacationCheonanCommuterToDujeongStation:[[String]] = [
     ["두정역","07:43"],
     ["노동부(천안지방사무소)","07:45"],
@@ -50,17 +46,18 @@ let SeasonCheongjuCommuterToGym:[[String]] = [
     ["옥산(가산3리BS)","정차"],
     ["대학","08:40"]
 ]
-let VacationSeoulCommuterArrivalSchool:[[String]] = [
+let VacationSeoulCommuterToSeoul:[[String]] = [
     ["대학","18:10"],
     ["죽전간이정류장","하차"],
     ["교대","하차"]
 ]
-let VacationSeoulCommuterArrivalSeoul:[[String]] = [
+let VacationSeoulCommuterToSchool:[[String]] = [
     ["교대","07:20"],
     ["동천역 환승정류장","07:37"],
     ["죽전간이정류장","07:40"],
     ["대학","08:40"]
 ]
+
 let SeasonCheonanCommuterToTerminal:[[String]] = [
     ["터미널","08:00"],
     ["성황동 신협","08:03"],
@@ -86,7 +83,7 @@ let VacationCheonanCommuterToTerminal:[[String]] = [
     ["구성동 부광약국(구 GS주유소)","08:10"],
     ["대학","08:50"]
 ]
-let VacationCheonanCycle:[[String]] = [
+let VacationCheonanShuttle:[[String]] = [
     ["대학","14:00"],
     ["터미널","14:25"],
     ["천안역","14:30"],
@@ -159,7 +156,127 @@ let CheonanCommuterToDujeongStation:[[String]] = [
     ["중앙APT","정차"],
     ["대학","08:50"]
 ]
-//천안주간, 천안주말, 청주, 서울, 대전
+
+let CheonanWeekdayShuttle:[[String]] = [
+["대학(본교)","09:10","11:00","14:00","15:00","16:00","16:30","17:00","","19:30","21:00","","22:40"],
+["천안역(태극당 건너 정류장)","09:30","","","15:20","","","","","","","",""],
+["터미널(신세계)","09:40","","","15:30","","","","","","","",""],
+["두정캠퍼스","09:55","","","15:45","","","","","","","21:50",""],
+["터미널(신세계)","10:10","11:25","14:25","16:05","16:25","16:55","17:25","18:45","19:55","하차","22:00","하차"],
+["천안역","10:15","11:30","14:30","16:10","16:30","17:00","17:30","18:50","20:00","종점","22:05","종점"],
+["대학(본교)","11:00","12:00","15:00","16:40","17:00","17:30","18:00","19:20","20:40","","22:25",""]
+]
+
+let CheonanWeekendShuttle:[[String]] = [
+["대학(본교)","14:00","","17:00","",""],
+["천안역(태극당 건너 정류장)","","","","",""],
+["터미널(신세계)","","","","",""],
+["두정캠퍼스","","","","",""],
+["터미널(신세계)","14:25","18:45","17:30","21:15","21:30"],
+["천안역","14:30","18:50","17:35","21:20","21:35"],
+["대학(본교)","15:00","19:30","18:10","21:50","22:00"]
+]
+
+let CheongjuCommuterToGym:[[String]] = [
+    ["체육관(NEPA)","07:40"],
+    ["사창사거리","07:42"],
+    ["갤러리호텔(봉명우체국 건너편 BS)","07:46"],
+    ["솔밭공원","07:50"],
+    ["청주역A(서촌동BS)","07:56"],
+    ["대학","08:50"]
+]
+
+let CheongjuCommuterToYongam:[[String]] = [
+    ["용암동 현대아파트","07:30"],
+    ["용암동GS대청주유소","07:31"],
+    ["석교동육거리","07:33"],
+    ["상당공원B(지하상가)","07:36"],
+    ["청주시청(방아다리)","07:37"],
+    ["문화 산업단지(구 제조창)","07:40"],
+    ["성모병원(율량 맥도널드)","07:45"],
+    ["과학단지(오창프라자)","08:00"],
+    ["대학","08:50"]
+]
+
+let CheongjuCommuterToSannam:[[String]] = [
+    ["산남동 수곡교회","07:20"],
+    ["충북 원예농협(GS 마트)","07:22"],
+    ["충북대병원(버스정류장)","07:26"],
+    ["KBS 맞은편","07:27"],
+    ["개신동푸르지오(버스정류장)","07:31"],
+    ["군산회타운(경산초 맞은편)","07:32"],
+    ["롯데마트앞","07:37"],
+    ["흥덕고교 버스정류장","07:42"],
+    ["청주역(서촌동버스정류장)","07:46"],
+    ["옥산(가락3리버스정류장)","07:49"],
+    ["대학","08:50"]
+]
+
+let CheongjuCommuterToBunpyeong:[[String]] = [
+    ["대학","등교만"],
+    ["분평동 전자랜드","07:30"],
+    ["남성초등학교","07:31"],
+    ["청주교대(KFC 앞)","07:32"],
+    ["청주농협 남부지점(일신장)","07:34"],
+    ["서원대학교","07:38"],
+    ["사직동 새마을금고(거구장)","07:41"],
+    ["사직평화APT(버스정류장)","07:42"],
+    ["청원경찰서","07:43"],
+    ["루체피에스타(구 대한예식장)","07:45"],
+    ["청주농고후문","07:47"],
+    ["성모병원(율량 맥도널드)","07:50"],
+    ["과학단지(오창프라자)","08:00"],
+    ["대학","08:50"]
+]
+
+let CheongjuShuttle:[[String]] = [
+    ["대학(본교)","","14:00","16:00","20:00","22:00"],
+    ["옥산(가락3리)","","하차","","하차",""],
+    ["청주역","","하차","","하차",""],
+    ["G-WELL CITY","","하차","","하차",""],
+    ["솔밭공원","","하차","","하차",""],
+    ["봉명우체국","","하차","","하차",""],
+    ["오창과학단지","","","하차","","하차"],
+    ["성모병원","","","하차","","하차"],
+    ["신봉사거리(LPG충전소)","","","하차","","하차"],
+    ["봉명사거리","","","하차","","하차"],
+    ["사창사거리","","하차","하차","하차","하차"],
+    ["체육관","","하차","하차","하차","종점"],
+    ["상당공원","","하차","하차","하차",""],
+    ["육거리","","하차","하차","하차",""],
+    ["삼양가스","","하차","하차","하차",""],
+    ["용암동(현대APT)","11:50","종점","종점","종점",""],
+    ["GS 대청주유소(용암동)","11:51","","","",""],
+    ["석교동육거리","11:54","","","",""],
+    ["상당공원(지하상가)","11:56","","","",""],
+    ["체육관(NEPA)","11:58","","","",""],
+    ["사창사거리","12:00","","","",""],
+    ["갤러리호텔","12:02","","","",""],
+    ["솔밭공원앞","12:05","","","",""],
+    ["청주역(서촌동버스정류장)","12:10","","","",""],
+    ["옥산(가락3리버스정류장)","12:12","","","",""],
+    ["대학(본교)","12:50","","","",""]
+]
+
+let SeoulCommuterToSeoul:[[String]] = [
+    ["대학","18:10","16:30(학기중 월, 금요일 운행)"],
+    ["죽전간이정류장","하차","하차"],
+    ["교대","하차","하차"]
+]
+
+let SeoulCommuterToSchool:[[String]] = [
+    ["교대","07:20"],
+    ["동천역 환승정류장","07:37"],
+    ["죽전간이정류장","07:40"],
+    ["대학","08:40"]
+]
+
+let DaejeonCommuter:[[String]] = [
+    ["대학→대전(하교 / 주말 전날)","18:20"],
+    ["대전→대학(등교 / 주초 휴무일 전날) (승차장소확인)","18:00(시청), 18:10 (시청), 18:20 (역), 18:25(복합터미널 건너편 오렌지팩토리)"]
+]
+
+
 
 struct CommuterListCell: View {
     let place: String
@@ -176,6 +293,19 @@ struct CommuterListCell: View {
         }
     }
 }
+
+// ["SeasonCheonanCommuterToTerminal","SeasonCheonanCommuterToCheonanStation","VacationCheonanCommuterToTerminal"]
+// VacationCheonanCommuterToDujeongStation
+// ["VacationCheongjuCommuterToYongam","SeasonCheongjuCommuterToGym","VacationCheongjuCommuterToYongam"]
+// ["VacationSeoulCommuterToSchool","VacationSeoulCommuterToSeoul"]
+// VacationCheonanShuttle
+// ["CheonanCommuterToKTX", "CheonanCommuterToTerminal","CheonanCommuterToCheonanStation","CheonanCommuterToShinbang","CheonanCommuterToDujeongStation"]
+// CheonanWeekdayShuttle
+// CheonanWeekendShuttle
+// ["CheongjuCommuterToGym","CheongjuCommuterToYongam","CheongjuCommuterToSannam","CheongjuCommuterToBunpyeong"]
+// CheongjuShuttle
+// ["SeoulCommuterToSeoul","SeoulCommuterToSchool"]
+// DaejeonCommuter
 
 struct CommuterListView: View {
     var CommuterList: [[String]]
