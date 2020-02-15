@@ -20,8 +20,6 @@ struct FindPasswordView: View {
     // 유저 정보가 담겨있는 객체
     @EnvironmentObject var settings: UserSettings
     
-    
-    
     var body: some View {
         // 에러 HUD를 위한 임의의 뷰 객체
         let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
@@ -31,7 +29,8 @@ struct FindPasswordView: View {
         y: uiview.frame.size.height / 2)
         yourLabel.textAlignment = .center
         
-        return VStack(alignment: .leading){
+
+        return VStack(alignment: .leading) {
             Text("비밀번호 찾기")
                 .font(.title)
                 .fontWeight(.bold)
