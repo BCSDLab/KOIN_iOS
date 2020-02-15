@@ -53,9 +53,6 @@ struct AddUserView: View {
     // 유저 정보가 담겨있는 객체
     @EnvironmentObject var settings: UserSettings
     
-    @State private var showingPersonality = false
-    @State private var showingKoin = false
-    
     // 회원가입 기능을 제공하는 함수
     func check_register(email: String, password: String, valid_password: String) {
         // 에러 HUD를 위한 임의의 뷰 객체
@@ -152,6 +149,7 @@ struct AddUserView: View {
                     self.showingPersonal.toggle()
                 }) {
                     Text("개인정보 이용약관")
+                        .foregroundColor(Color("gray2"))
                     .font(.system(size: 12))
                     .underline()
                 }
@@ -178,6 +176,7 @@ struct AddUserView: View {
                     self.showingKoin.toggle()
                 }) {
                     Text("코인 이용약관")
+                    .foregroundColor(Color("gray2"))
                     .font(.system(size: 12))
                     .underline()
                 }.sheet(isPresented: $showingKoin) {
