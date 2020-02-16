@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftUI
+import PKHUD
 
 struct HomeView: View {
     // 탭과 관련된 데이터를 가지고 있는 오브젝트
@@ -27,6 +28,22 @@ struct HomeView: View {
     // 전체 버튼들의 세로 길이 설정
     func getItemHeight(containerHeight: CGFloat) -> CGFloat {
         return (containerHeight) / 3
+    }
+    
+    func prepare_project() {
+        // 에러 HUD를 위한 임의의 뷰 객체
+        let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+        // 에러 HUD 내에서의 에러 문자 뷰 객체
+        let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+        yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
+        y: uiview.frame.size.height / 2)
+        yourLabel.textAlignment = .center
+        
+        yourLabel.text = "서비스 준비중입니다."
+        uiview.addSubview(yourLabel)
+        PKHUD.sharedHUD.contentView = uiview
+        PKHUD.sharedHUD.show()
+        PKHUD.sharedHUD.hide(afterDelay: 1.0)
     }
 
     var body: some View {
@@ -68,7 +85,7 @@ struct HomeView: View {
                         Spacer()
                         VStack(alignment: .center, spacing: 0) {
                             HStack(alignment: .center, spacing: 0) {
-                                Button(action: {}) {
+                                Button(action: {self.prepare_project()}) {
                                     VStack{
                                         Spacer()
                                         Image("circles")
@@ -105,7 +122,7 @@ struct HomeView: View {
                                             .background(Color.white)
                                 }
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {}) {
+                                Button(action: {self.prepare_project()}) {
                                     VStack{
                                         Spacer()
                                         Image("timetable")
@@ -168,7 +185,7 @@ struct HomeView: View {
                                 }
 
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {}) {
+                                Button(action: {self.prepare_project()}) {
                                     VStack{
                                         Spacer()
                                         Image("market")

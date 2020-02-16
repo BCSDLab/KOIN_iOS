@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftUI
+import PKHUD
 
 struct MenuContent: View {
     // 유저 정보가 들어있는 오브젝트
@@ -15,6 +16,22 @@ struct MenuContent: View {
     init() {
         // 리스트의 구분선을 투명하게 변경
         UITableView.appearance().separatorColor = .clear
+    }
+    
+    func prepare_project() {
+        // 에러 HUD를 위한 임의의 뷰 객체
+        let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+        // 에러 HUD 내에서의 에러 문자 뷰 객체
+        let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+        yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
+        y: uiview.frame.size.height / 2)
+        yourLabel.textAlignment = .center
+        
+        yourLabel.text = "서비스 준비중입니다."
+        uiview.addSubview(yourLabel)
+        PKHUD.sharedHUD.contentView = uiview
+        PKHUD.sharedHUD.show()
+        PKHUD.sharedHUD.hide(afterDelay: 1.0)
     }
 
     var body: some View {
@@ -58,6 +75,13 @@ struct MenuContent: View {
                                 self.viewRouter.dismiss_menu()
                             }
                     Text("버스 / 교통")
+                        .onTapGesture { // 식단 누를 시
+                            // 현재 view를 dining으로 변경
+                            self.prepare_project()
+
+                            // 메뉴 닫음
+                            self.viewRouter.dismiss_menu()
+                        }
                             .font(.subheadline)
                     Text("식단")
                             .onTapGesture { // 식단 누를 시
@@ -70,6 +94,13 @@ struct MenuContent: View {
                             .font(.subheadline)
 
                     Text("동아리")
+                        .onTapGesture { // 식단 누를 시
+                            // 현재 view를 dining으로 변경
+                            self.prepare_project()
+
+                            // 메뉴 닫음
+                            self.viewRouter.dismiss_menu()
+                        }
                             .font(.subheadline)
                 }
                 Section(header:
@@ -105,8 +136,22 @@ struct MenuContent: View {
                                                 }
                             .font(.subheadline)
                     Text("콜벤쉐어링")
+                        .onTapGesture { // 식단 누를 시
+                            // 현재 view를 dining으로 변경
+                            self.prepare_project()
+
+                            // 메뉴 닫음
+                            self.viewRouter.dismiss_menu()
+                        }
                             .font(.subheadline)
                     Text("중고장터")
+                        .onTapGesture { // 식단 누를 시
+                            // 현재 view를 dining으로 변경
+                            self.prepare_project()
+
+                            // 메뉴 닫음
+                            self.viewRouter.dismiss_menu()
+                        }
                             .font(.subheadline)
                 }
                 Section(header:
