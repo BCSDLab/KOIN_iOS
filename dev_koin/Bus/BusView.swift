@@ -87,6 +87,7 @@ struct BusInfoView: View {
     @State private var isArrivalActionSheet = false
     @State var selectedDepart = 0
     @State var selectedArrival = 2
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var departActionSheet: ActionSheet {
         ActionSheet(title: Text("출발"), buttons: [
@@ -149,6 +150,9 @@ struct BusInfoView: View {
                 HStack {
                     if(shuttleTime != [-1, -1, -1]) {
                         Text("\(shuttleTime[0])시간 \(shuttleTime[1])분 \(shuttleTime[2])초 남음")
+                        .onReceive(timer) { _ in
+                            shuttleTime[2] = shuttleTime[2] - 1
+                        }
                         Spacer()
                         Text("\(self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
                     } else {
@@ -169,6 +173,9 @@ struct BusInfoView: View {
                 HStack {
                     if(nextShuttleTime != [-1, -1, -1]) {
                         Text("\(nextShuttleTime[0])시간 \(nextShuttleTime[1])분 \(nextShuttleTime[2])초 남음")
+                        .onReceive(timer) { _ in
+                            nextShuttleTime[2] = nextShuttleTime[2] - 1
+                        }
                         Spacer()
                         Text("\(nextShuttle)분 출발")
                     } else {
@@ -191,6 +198,9 @@ struct BusInfoView: View {
                 HStack {
                     if(expressTime != [-1, -1, -1]) {
                         Text("\(expressTime[0])시간 \(expressTime[1])분 \(expressTime[2])초 남음")
+                        .onReceive(timer) { _ in
+                            expressTime[2] = expressTime[2] - 1
+                        }
                         Spacer()
                         Text("\(self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
                     } else {
@@ -211,6 +221,10 @@ struct BusInfoView: View {
                 HStack {
                     if(nextExpressTime != [-1, -1, -1]) {
                         Text("\(nextExpressTime[0])시간 \(nextExpressTime[1])분 \(nextExpressTime[2])초 남음")
+                        .onReceive(timer) { _ in
+                            nextExpressTime[2] = nextExpressTime[2] - 1
+                            
+                        }
                         Spacer()
                         Text("\(nextExpress)분 출발")
                     } else {
@@ -315,7 +329,7 @@ struct BusView: View {
             BusPagerView(pageCount: 3, currentIndex: self.$currentPage) {
                 BusInfoView()
                 BusSearchView()
-                Color.black
+                CommuterListView()
             }
         }
     }

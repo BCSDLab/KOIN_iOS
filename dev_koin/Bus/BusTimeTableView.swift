@@ -308,27 +308,142 @@ struct CommuterListCell: View {
 // DaejeonCommuter
 
 struct CommuterListView: View {
-    var CommuterList: [[String]]
+    //var CommuterList: [[String]]
+    var PrimaryCommuterList = ["천안 등교/하교","천안 셔틀","청주 등교/하교","청주 셔틀","서울 등교/하교","대전 등교/하교"]
+    var VacationCommuterList = ["(계절/방학)천안 등교/하교","(계절/방학)천안 셔틀","(계절/방학)청주 등교/하교","(계절/방학)청주 셔틀","(방학)서울 등교/하교"]
+    var CheonanCommuterList = ["천안역","터미널","두정역","고속철","신방동"]
+    var CheonanVacationList = ["계절학기 터미널","계절학기 천안역","방학 터미널","계절/방학 두정역"]
+    var CheongjuCommuterList = ["체육관","용암동","산남동","분평동"]
+    @State private var isPrimaryActionSheet = false
+    @State private var isSecondActionSheet = false
+    @State var primary: Int = 0
+    @State var secondary: Int = 0
     
-    init(list: [[String]] ) {
-        self.CommuterList = list
+    var PrimaryActionSheet: ActionSheet {
+        ActionSheet(title: Text("선택"), buttons: [
+                .default(Text(PrimaryCommuterList[0]), action: {self.primary = 0}),
+                .default(Text(PrimaryCommuterList[1]), action: {self.primary = 1}),
+                .default(Text(PrimaryCommuterList[2]), action: {self.primary = 2}),
+                .default(Text(PrimaryCommuterList[3]), action: {self.primary = 3}),
+                .default(Text(PrimaryCommuterList[4]), action: {self.primary = 4}),
+                .default(Text(PrimaryCommuterList[5]), action: {self.primary = 5}),
+                    .destructive(Text("취소"), action: {self.isPrimaryActionSheet.toggle()})
+        ])
     }
+    
+    func SecondaryActionSheet() -> ActionSheet{
+        if (primary == 0) {
+            return ActionSheet(title: Text("선택"), buttons: [
+                .default(Text("천안역"), action: {self.secondary = 0}),
+                .default(Text("터미널"), action: {self.secondary = 1}),
+                .default(Text("두정역"), action: {self.secondary = 2}),
+                .default(Text("고속철"), action: {self.secondary = 3}),
+                .default(Text("신방동"), action: {self.secondary = 4}),
+                .destructive(Text("취소"), action: {self.isSecondActionSheet.toggle()})
+            ])
+        } else if(primary == 2) {
+            return ActionSheet(title: Text("선택"), buttons: [
+                .default(Text("체육관"), action: {self.secondary = 0}),
+                .default(Text("용암동"), action: {self.secondary = 1}),
+                .default(Text("산남동"), action: {self.secondary = 2}),
+                .default(Text("분평동"), action: {self.secondary = 3}),
+                .destructive(Text("취소"), action: {self.isSecondActionSheet.toggle()})
+            ])
+        }
+        return ActionSheet(title: Text("nothing"))
+    }
+    
     var body: some View {
         VStack {
             HStack {
+                Text(PrimaryCommuterList[primary])
+                    .actionSheet(isPresented: $isPrimaryActionSheet) {
+                        self.PrimaryActionSheet
+                }
+                    .onTapGesture {
+                        self.isPrimaryActionSheet.toggle()
+                }
+                if (primary == 0) {
+                    Text(CheonanCommuterList[secondary])
+                        .actionSheet(isPresented: $isSecondActionSheet) {
+                            SecondaryActionSheet()
+                    }
+                        .onTapGesture {
+                            self.isSecondActionSheet.toggle()
+                    }
+                }
+                if (primary == 2) {
+                    Text(CheongjuCommuterList[secondary])
+                        .actionSheet(isPresented: $isSecondActionSheet) {
+                            SecondaryActionSheet()
+                    }
+                        .onTapGesture {
+                            self.isSecondActionSheet.toggle()
+                    }
+                }
+                
+                
+            }
+            
+            HStack {
+                
                 Text("승차장소")
                     .foregroundColor(Color("light_navy"))
                 Spacer()
                 Text("시간")
                 .foregroundColor(Color("light_navy"))
+                
             }.padding(.horizontal, 20)
             Rectangle()
                 .fill(Color("light_navy"))
                 .frame(height: 1)
             .padding(.horizontal, 10)
-            List(CommuterList, id: \.self) { l in
-                CommuterListCell(place: l[0], time: l[1])
-            }.padding(.horizontal, 10)
+            
+            
+            if primary == 0 {
+                if secondary == 0 {
+                    List(CheonanCommuterToCheonanStation, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 1 {
+                    List(CheonanCommuterToTerminal, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 2 {
+                    List(CheonanCommuterToDujeongStation, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 3 {
+                    List(CheonanCommuterToKTX, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 4 {
+                    List(CheonanCommuterToShinbang, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                }
+            } else if primary == 2 {
+                if secondary == 0 {
+                    List(CheongjuCommuterToGym, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 1 {
+                    List(CheongjuCommuterToYongam, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 2 {
+                    List(CheongjuCommuterToSannam, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                } else if secondary == 3 {
+                    List(CheongjuCommuterToBunpyeong, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
+                }
+            } else {
+                Text("aaa")
+            }
+ 
         }
     }
 }
@@ -341,6 +456,6 @@ struct BusTimeTableView: View {
 
 struct BusTimeTableView_Previews: PreviewProvider {
     static var previews: some View {
-        CommuterListView(list: VacationCheonanCommuterToDujeongStation)
+        CommuterListView()
     }
 }
