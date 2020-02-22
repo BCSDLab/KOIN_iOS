@@ -156,11 +156,12 @@ class CommunityController: ObservableObject {
 
     }
 
-    func put_article(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", board_id: Int, title: String, content: String, result: @escaping (Bool) -> Void) {
+    func put_article(token: String, board_id: Int, title: String, content: String, result: @escaping (Bool) -> Void) {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
+        print("put article")
+        print([token, board_id, title, content])
 
         AF
                 .request("http://stage.api.koreatech.in/articles", method: .post, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
