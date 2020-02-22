@@ -37,7 +37,7 @@ struct MenuContent: View {
     var body: some View {
         VStack {
             HStack {
-                Text("홍길동")
+                Text(self.settings.get_nickname())
                         .font(.system(size: 20))
                         .fontWeight(.semibold)
                         .foregroundColor(Color("light_navy"))

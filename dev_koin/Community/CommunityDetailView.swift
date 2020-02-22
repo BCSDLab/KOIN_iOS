@@ -91,6 +91,7 @@ struct CommunityDetailView: View {
         var articleCreatedAt: String = ""
         var articleContent: String = ""
         
+        
         //var articleAttrContent: NSAttributedString = NSAttributedString()
 
         if self.board_id == -2 {
@@ -120,10 +121,9 @@ struct CommunityDetailView: View {
         }
         
         
-        //getUserId = self.user.get_userId()
+        let rich_editor = RichEditor(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id, token: self.user.get_token())
         
-
-        //print(article.userId == self.user.get_userId())
+        let temp_rich_editor = TempRichEditor(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id)
 
         return VStack {
                     VStack(alignment: .leading) {
@@ -152,7 +152,8 @@ struct CommunityDetailView: View {
                             }
                             
                             if(self.user.get_userId() == self.getUserId) {
-                                NavigationLink(destination: AEditorView(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline)) {
+                                NavigationLink(destination: rich_editor
+                                ) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
                                         .padding(.all, 10)
@@ -176,7 +177,7 @@ struct CommunityDetailView: View {
                             //익명일 경우, 비밀번호 맞을 경우에만 접근 가능하게 하기
                             if(self.board_id == -2) {
                                 SecureField("비밀번호", text: $temp_password)
-                                NavigationLink(destination: TempAEditorView(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id).environmentObject(self.controller).navigationBarTitle("수정", displayMode: .inline), isActive: $grantValue) {
+                                NavigationLink(destination: temp_rich_editor, isActive: $grantValue) {
                                     Button(action : {
                                         self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
                                                 do {

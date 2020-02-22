@@ -72,7 +72,6 @@ final class HTMLViewControler: UIViewController {
         </style>
 <body>
 """
-        print(headerString+styleString + htmlContent + "</body>")
             webview.loadHTMLString(headerString+styleString + htmlContent + "</body>", baseURL: nil)
     }
 
