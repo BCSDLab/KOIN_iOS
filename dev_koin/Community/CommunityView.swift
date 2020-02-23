@@ -32,7 +32,8 @@ struct TempCommunityList: View {
     }
     
     var body: some View {
-                List {
+        var temp_rich_editor = TempRichEditor(is_edit: false)
+                return List {
                 ForEach(self.communityData.get_temp_articles(), id:\.self) { l in
                     // communitydetailview 방식 변경
                     NavigationLink(destination: CommunityDetailView(community_id: l.id)) {
@@ -64,7 +65,10 @@ struct TempCommunityList: View {
                     Image(systemName: "chevron.left")
                     Text("홈")
                 }
-                }, trailing: NavigationLink(destination: AddCommunityView(board_id: -2).environmentObject(self.communityData)) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
+                }, trailing: NavigationLink(destination:
+                    temp_rich_editor
+                    )
+                    { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
                 Text("추가")
             })
         }
@@ -83,7 +87,7 @@ struct CommunityList: View {
     }
     
     var body: some View {
-        List {
+        return List {
             ForEach(self.communityData.get_articles(), id:\.self) { l in
                 NavigationLink(destination: CommunityDetailView(community_id: l.id, board_id: self.board_id, user_id: l.userId!)) {
                     VStack(alignment: .leading) {
@@ -114,7 +118,9 @@ struct CommunityList: View {
                 Image(systemName: "chevron.left")
                 Text("홈")
             }
-            }, trailing: NavigationLink(destination: AddCommunityView(board_id: self.board_id).environmentObject(self.communityData)) { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
+            }, trailing: NavigationLink(destination: RichEditor(is_edit: false, board_id: self.board_id, token: self.user.get_token()))
+            //NavigationLink(destination: AddCommunityView(board_id: self.board_id).environmentObject(self.communityData)
+             { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
             Text("추가")
         })
     }

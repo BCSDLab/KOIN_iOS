@@ -77,7 +77,7 @@ import UIKit
 
     /// The internal height of the text being displayed.
     /// Is continually being updated as the text is edited.
-    open private(set) var editorHeight: Int = 0 {
+    open var editorHeight: Int = 0 {
         didSet {
             delegate?.richEditor?(self, heightDidChange: editorHeight)
         }
@@ -177,8 +177,8 @@ import UIKit
         }
         set {
             contentHTML = newValue
+            runJS("RE.setHtml('\(newValue.escaped)');")
             if isEditorLoaded {
-                runJS("RE.setHtml('\(newValue.escaped)');")
                 updateHeight()
             }
         }

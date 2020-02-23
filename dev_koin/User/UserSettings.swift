@@ -50,8 +50,6 @@ class UserSettings: ObservableObject {
         if let user = self.user {
             //print(user)
             if let userdata = user.user {
-                print(userdata)
-                print(userdata.id)
                 return userdata.id
             }
         }
