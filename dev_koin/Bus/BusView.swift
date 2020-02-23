@@ -37,13 +37,13 @@ struct BusSearchView: View {
     }
     
     var body: some View {
-            var shuttleTime: [Int] = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-            var expressTime: [Int] = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
+            var shuttleTime: TimeInterval = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
+            var expressTime: TimeInterval = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
             var nearShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
             var nearExpressTime : String =
                 self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-            var nextShuttleTime: [Int] = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-            var nextExpressTime: [Int] = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
+            var nextShuttleTime: TimeInterval = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
+            var nextExpressTime: TimeInterval = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
             var nextShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
             var nextExpress : String =
                 self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
@@ -108,13 +108,13 @@ struct BusInfoView: View {
     }
     
     var body: some View {
-        var shuttleTime: [Int] = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        var expressTime: [Int] = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
+        var shuttleTime: TimeInterval = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
+        var expressTime: TimeInterval = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
         var nearShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
         var nearExpressTime : String =
             self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        var nextShuttleTime: [Int] = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-        var nextExpressTime: [Int] = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
+        var nextShuttleTime: TimeInterval = self.controller.getRemainShuttleTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
+        var nextExpressTime: TimeInterval = self.controller.getRemainExpressTimeToInt(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
         var nextShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
         var nextExpress : String =
             self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
@@ -148,10 +148,10 @@ struct BusInfoView: View {
                     Text(showStation[selectedArrival])
                 }
                 HStack {
-                    if(shuttleTime != [-1, -1, -1]) {
-                        Text("\(shuttleTime[0])시간 \(shuttleTime[1])분 \(shuttleTime[2])초 남음")
+                    if(shuttleTime != 0) {
+                        Text("\(shuttleTime)")
                         .onReceive(timer) { _ in
-                            shuttleTime[2] = shuttleTime[2] - 1
+                            shuttleTime = shuttleTime - 60
                         }
                         Spacer()
                         Text("\(self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
@@ -171,10 +171,10 @@ struct BusInfoView: View {
                     Text("학교셔틀")
                 }
                 HStack {
-                    if(nextShuttleTime != [-1, -1, -1]) {
-                        Text("\(nextShuttleTime[0])시간 \(nextShuttleTime[1])분 \(nextShuttleTime[2])초 남음")
+                    if(nextShuttleTime != 0) {
+                        Text("\(nextShuttleTime)")
                         .onReceive(timer) { _ in
-                            nextShuttleTime[2] = nextShuttleTime[2] - 1
+                            nextShuttleTime = nextShuttleTime - 60
                         }
                         Spacer()
                         Text("\(nextShuttle)분 출발")
@@ -196,10 +196,10 @@ struct BusInfoView: View {
                     Text(showStation[selectedArrival])
                 }
                 HStack {
-                    if(expressTime != [-1, -1, -1]) {
-                        Text("\(expressTime[0])시간 \(expressTime[1])분 \(expressTime[2])초 남음")
+                    if(expressTime != 0) {
+                        Text("\(expressTime)")
                         .onReceive(timer) { _ in
-                            expressTime[2] = expressTime[2] - 1
+                            expressTime = expressTime - 60
                         }
                         Spacer()
                         Text("\(self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
@@ -219,11 +219,10 @@ struct BusInfoView: View {
                     Text("대성고속")
                 }
                 HStack {
-                    if(nextExpressTime != [-1, -1, -1]) {
-                        Text("\(nextExpressTime[0])시간 \(nextExpressTime[1])분 \(nextExpressTime[2])초 남음")
+                    if(nextExpressTime != 0) {
+                        Text("\(nextExpressTime)")
                         .onReceive(timer) { _ in
-                            nextExpressTime[2] = nextExpressTime[2] - 1
-                            
+                            nextExpressTime = nextExpressTime - 60
                         }
                         Spacer()
                         Text("\(nextExpress)분 출발")

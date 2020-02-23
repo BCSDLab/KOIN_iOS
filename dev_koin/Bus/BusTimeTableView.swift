@@ -294,6 +294,50 @@ struct CommuterListCell: View {
     }
 }
 
+struct ShuttleListCell: View {
+    let content: [String]
+
+    var body: some View {
+                HStack {
+                    Text(self.content[0])
+                    .frame(width: 100, alignment: .center)
+                    .padding(5)
+                    ForEach(1 ..< content.count, id: \.self) { i in
+                        Text(self.content[i] == "" ? "X" : self.content[i])
+                                .frame(width: 50, alignment: .center)
+                            .padding(5)
+                        
+                    }
+        }
+    }
+
+    init(content: [String]) {
+        self.content = content
+    }
+}
+
+struct SeoulListCell: View {
+    let content: [String]
+
+    var body: some View {
+                HStack {
+                    Text(self.content[0])
+                    .frame(width: 100, alignment: .center)
+                    .padding(5)
+                    ForEach(1 ..< content.count, id: \.self) { i in
+                        Text(self.content[i] == "" ? "X" : self.content[i])
+                                .frame(width: 100, alignment: .center)
+                            .padding(5)
+                        
+                    }
+        }
+    }
+
+    init(content: [String]) {
+        self.content = content
+    }
+}
+
 // ["SeasonCheonanCommuterToTerminal","SeasonCheonanCommuterToCheonanStation","VacationCheonanCommuterToTerminal"]
 // VacationCheonanCommuterToDujeongStation
 // ["VacationCheongjuCommuterToYongam","SeasonCheongjuCommuterToGym","VacationCheongjuCommuterToYongam"]
@@ -385,22 +429,22 @@ struct CommuterListView: View {
                 
             }
             
-            HStack {
-                
-                Text("승차장소")
-                    .foregroundColor(Color("light_navy"))
-                Spacer()
-                Text("시간")
-                .foregroundColor(Color("light_navy"))
-                
-            }.padding(.horizontal, 20)
-            Rectangle()
-                .fill(Color("light_navy"))
-                .frame(height: 1)
-            .padding(.horizontal, 10)
-            
             
             if primary == 0 {
+                HStack {
+                    
+                    Text("승차장소")
+                        .foregroundColor(Color("light_navy"))
+                    Spacer()
+                    Text("시간")
+                    .foregroundColor(Color("light_navy"))
+                    
+                }.padding(.horizontal, 20)
+                Rectangle()
+                    .fill(Color("light_navy"))
+                    .frame(height: 1)
+                .padding(.horizontal, 10)
+                
                 if secondary == 0 {
                     List(CheonanCommuterToCheonanStation, id: \.self) { l in
                         CommuterListCell(place: l[0], time: l[1])
@@ -422,7 +466,42 @@ struct CommuterListView: View {
                         CommuterListCell(place: l[0], time: l[1])
                     }.padding(.horizontal, 10)
                 }
+            } else if primary == 1 {
+                ScrollView(.horizontal) {
+                    HStack {
+                        Text("구간")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                        ForEach(0 ..< 12, id: \.self) { i in
+                            Text("\(i+1)회")
+                                .frame(width: 50, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                        }
+                    }.padding(.horizontal, 10)
+                    Rectangle()
+                        .fill(Color("light_navy"))
+                        .frame(height: 1)
+                        .padding(.horizontal, 10)
+                    List(CheonanWeekdayShuttle, id: \.self) { l in
+                        ShuttleListCell(content: l)
+                    }
+                }
             } else if primary == 2 {
+                HStack {
+                    
+                    Text("승차장소")
+                        .foregroundColor(Color("light_navy"))
+                    Spacer()
+                    Text("시간")
+                    .foregroundColor(Color("light_navy"))
+                    
+                }.padding(.horizontal, 20)
+                Rectangle()
+                    .fill(Color("light_navy"))
+                    .frame(height: 1)
+                .padding(.horizontal, 10)
                 if secondary == 0 {
                     List(CheongjuCommuterToGym, id: \.self) { l in
                         CommuterListCell(place: l[0], time: l[1])
@@ -440,6 +519,90 @@ struct CommuterListView: View {
                         CommuterListCell(place: l[0], time: l[1])
                     }.padding(.horizontal, 10)
                 }
+            } else if primary == 3 {
+                ScrollView(.horizontal) {
+                    HStack {
+                        Text("구간")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                        ForEach(0 ..< 5, id: \.self) { i in
+                            Text("\(i+1)회")
+                                .frame(width: 50, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                        }
+                    }.padding(.horizontal, 10)
+                    Rectangle()
+                        .fill(Color("light_navy"))
+                        .frame(height: 1)
+                        .padding(.horizontal, 10)
+                    List(CheongjuShuttle, id: \.self) { l in
+                        ShuttleListCell(content: l)
+                    }
+                }
+            } else if primary == 4 {
+                ScrollView(.horizontal) {
+                    HStack {
+                        Text("등교시")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                            Text("운행시간")
+                                .frame(width: 100, alignment: .center)
+                                .foregroundColor(Color("light_navy"))
+                                .padding(5)
+                            Text("추가운행(월,금)")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                    }.padding(.horizontal, 10)
+                    Rectangle()
+                        .fill(Color("light_navy"))
+                        .frame(height: 1)
+                        .padding(.horizontal, 10)
+                    List(SeoulCommuterToSchool, id: \.self) { l in
+                        SeoulListCell(content: l)
+                    }
+                    HStack {
+                        Text("하교시")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                            Text("운행시간")
+                                .frame(width: 100, alignment: .center)
+                                .foregroundColor(Color("light_navy"))
+                                .padding(5)
+                            Text("추가운행(월,금)")
+                            .frame(width: 100, alignment: .center)
+                            .foregroundColor(Color("light_navy"))
+                            .padding(5)
+                    }.padding(.horizontal, 10)
+                    Rectangle()
+                        .fill(Color("light_navy"))
+                        .frame(height: 1)
+                        .padding(.horizontal, 10)
+                    List(SeoulCommuterToSeoul, id: \.self) { l in
+                        SeoulListCell(content: l)
+                    }
+                }
+            } else if primary == 5 {
+                HStack {
+                    
+                    Text("승차장소")
+                        .foregroundColor(Color("light_navy"))
+                    Spacer()
+                    Text("시간")
+                    .foregroundColor(Color("light_navy"))
+                    
+                }.padding(.horizontal, 20)
+                Rectangle()
+                    .fill(Color("light_navy"))
+                    .frame(height: 1)
+                .padding(.horizontal, 10)
+                    List(DaejeonCommuter, id: \.self) { l in
+                        CommuterListCell(place: l[0], time: l[1])
+                    }.padding(.horizontal, 10)
             } else {
                 Text("aaa")
             }

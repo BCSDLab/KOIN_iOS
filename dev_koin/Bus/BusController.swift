@@ -401,13 +401,13 @@ class BusController {
         ]
     }
     
-    func getRemainTimeToInt(timetable: [String], startIndex: Int) -> [Int] {
+    func getRemainTimeToInt(timetable: [String], startIndex: Int) -> TimeInterval {
         let date = DateFormatter()
         date.locale = Locale(identifier: "ko_kr")
         date.timeZone = TimeZone(abbreviation: "KST")
         
         if timetable.count == 0 {
-            return [-1,-1,-1]
+            return 0.0
         }
         
         for i in startIndex..<timetable.count {
@@ -415,13 +415,16 @@ class BusController {
             let timetableDate = Calendar.current.date(bySettingHour: Int(time[0])!, minute: Int(time[1])!, second: 0, of: Date())!
             let interval = timetableDate.timeIntervalSince(Date())
             if interval > 0 {
+                /*
                 let components = Calendar.current.dateComponents([.hour,.minute,.second], from: Date(), to: timetableDate)
                 if case let (h?, m?, s?) = (components.hour, components.minute, components.second) {
                     return [h,m,s]
                 }
+                */
+                return interval
             }
         }
-        return [-1,-1,-1]
+        return 0.0
     }
     
     func getBusTimeIndex(timetable: [String], startIndex: Int) -> Int {
@@ -478,46 +481,46 @@ class BusController {
         return [-1, -1, -1]
     }
     
-    func getRemainShuttleTimeToInt(depart: String, arrival: String, isNow: Bool) -> [Int] {
+    func getRemainShuttleTimeToInt(depart: String, arrival: String, isNow: Bool) -> TimeInterval {
         let shuttleTimeTable = getCurrentDayShuttleDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
         if (shuttleTimeTable.isEmpty) {
             //print("empty")
-            return [-1,-1,-1]
+            return 0
         }
         resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, startIndex: 0)
         if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
             //print("out of index")
-            return [-1,-1,-1]
+            return 0
         }
         if (isNow) {
             return getRemainTimeToInt(timetable: shuttleTimeTable, startIndex: 0)
         } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
             //print("out of index 1")
-            return [-1,-1,-1]
+            return 0
         } else {
             //print("?")
             return getRemainTimeToInt(timetable: shuttleTimeTable, startIndex: resultNowIndex + 1)
         }
     }
     
-    func getRemainExpressTimeToInt(depart: String, arrival: String, isNow: Bool) -> [Int] {
+    func getRemainExpressTimeToInt(depart: String, arrival: String, isNow: Bool) -> TimeInterval {
         let expressTimeTable = getCurrentDayExpressDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
         if (expressTimeTable.isEmpty) {
-            return [-1,-1,-1]
+            return 0
         }
         resultNowIndex = getBusTimeIndex(timetable: expressTimeTable, startIndex: 0)
 
         if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
-            return [-1,-1,-1]
+            return 0
         }
         if (isNow) {
             return getRemainTimeToInt(timetable: expressTimeTable, startIndex: 0)
         } else if (resultNowIndex + 1 >= expressTimeTable.count) {
-            return [-1,-1,-1]
+            return 0
         } else {
             return getRemainTimeToInt(timetable: expressTimeTable, startIndex: resultNowIndex + 1)
         }
