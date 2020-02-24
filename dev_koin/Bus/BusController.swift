@@ -51,7 +51,7 @@ class BusController {
     ]
     let shuttleFromKoreatech:[[String]]  = [
             [ // 월요일
-                    /*
+                    
                         "09:10",
                         "11:00",
                         "14:00",
@@ -62,12 +62,12 @@ class BusController {
                         "19:30",
                         "21:00",
                         "22:40"
-                     */
+                     
                     // 2019-동계방학
-                    "14:00"
+                    //"14:00"
             ],
             [ // 화요일
-                    /*
+                    
                         "09:10",
                         "11:00",
                         "14:00",
@@ -78,12 +78,12 @@ class BusController {
                         "19:30",
                         "21:00",
                         "22:40"
-                     */
+                     
                     // 2019-동계방학
-                    "14:00"
+                    //"14:00"
             ],
             [ // 수요일
-                    /*
+                    
                         "09:10",
                         "11:00",
                         "14:00",
@@ -94,12 +94,12 @@ class BusController {
                         "19:30",
                         "21:00",
                         "22:40"
-                     */
+                     
                     // 2019-동계방학
-                    "14:00"
+                    //"14:00"
             ],
             [ // 목요일
-                    /*
+                    
                         "09:10",
                         "11:00",
                         "14:00",
@@ -110,12 +110,12 @@ class BusController {
                         "19:30",
                         "21:00",
                         "22:40"
-                     */
+                     
                     // 2019-동계방학
-                    "14:00"
+                    //"14:00"
             ],
             [ // 금요일
-                    /*
+                    
                         "09:10",
                         "11:00",
                         "14:00",
@@ -127,25 +127,25 @@ class BusController {
                         "19:30",
                         "21:00",
                         "22:40"
-                     */
+                     
                     // 2019-동계방학
-                    "14:00"
+                    //"14:00"
             ],
             [ // 토요일
-                    /*
+                    
                         "14:00"
-                     */
+                     
             ],
             [ // 일요일
-                    /*
+                    
                         "17:00"
-                     */
+                     
             ]
     ]
     
     let shuttleFromTerminal:[[String]] = [
             [ // 월요일
-                    /*
+                    
                         "08:00",
                         "10:10",
                         "11:25",
@@ -157,13 +157,13 @@ class BusController {
                         "18:45",
                         "19:55",
                         "22:00"
-                     */
+                     
                     // 2019-동계방학
-                    "08:00",
-                    "14:25"
+                    //"08:00",
+                    //"14:25"
             ],
             [ // 화요일
-                    /*
+                    
                         "08:00",
                         "10:10",
                         "11:25",
@@ -175,13 +175,13 @@ class BusController {
                         "18:45",
                         "19:55",
                         "22:00"
-                     */
+                     
                     // 2019-동계방학
-                    "08:00",
-                    "14:25"
+                    //"08:00",
+                    //"14:25"
             ],
             [ // 수요일
-                    /*
+                    
                         "08:00",
                         "10:10",
                         "11:25",
@@ -193,13 +193,13 @@ class BusController {
                         "18:45",
                         "19:55",
                         "22:00"
-                     */
+                     
                     // 2019-동계방학
-                    "08:00",
-                    "14:25"
+                    //"08:00",
+                    //"14:25"
             ],
             [ // 목요일
-                    /*
+                    
                         "08:00",
                         "10:10",
                         "11:25",
@@ -211,13 +211,13 @@ class BusController {
                         "18:45",
                         "19:55",
                         "22:00"
-                     */
+                     
                     // 2019-동계방학
-                    "08:00",
-                    "14:25"
+                    //"08:00",
+                    //"14:25"
             ],
             [ // 금요일
-                    /*
+                    
                         "08:00",
                         "10:10",
                         "11:25",
@@ -229,29 +229,29 @@ class BusController {
                         "18:45",
                         "19:55",
                         "22:00"
-                     */
+                     
                     // 2019-동계방학
-                    "08:00",
-                    "14:25"
+                    //"08:00",
+                    //"14:25"
             ],
             [ // 토요일
-                    /*
+                    
                         "14:25",
                         "18:45"
-                     */
+                     
             ],
             [ // 일요일
-                    /*
+                    
                         "17:30",
                         "21:15",
                         "21:30"
-                     */
+                     
             ]
     ]
     
     let shuttleFromStationToKoreatech:[[String]] = [
             [ // 월요일
-                    /*
+                    
                         "08:05",
                         "10:15",
                         "11:30",
@@ -263,13 +263,13 @@ class BusController {
                         "18:50",
                         "20:00",
                         "22:05"
-                     */
+                     
                     // 2019-동계방학
-                    "08:05",
-                    "14:30"
+                    //"08:05",
+                    //"14:30"
             ],
             [ // 화요일
-                    /*
+                    
                         "08:05",
                         "10:15",
                         "11:30",
@@ -281,13 +281,13 @@ class BusController {
                         "18:50",
                         "20:00",
                         "22:05"
-                     */
+                     
                     // 2019-동계방학
-                    "08:05",
-                    "14:30"
+                    //"08:05",
+                    //"14:30"
             ],
             [ // 수요일
-                    /*
+                    
                         "08:05",
                         "10:15",
                         "11:30",
@@ -299,13 +299,13 @@ class BusController {
                         "18:50",
                         "20:00",
                         "22:05"
-                     */
+                     
                     // 2019-동계방학
-                    "08:05",
-                    "14:30"
+                    //"08:05",
+                    //"14:30"
             ],
             [ // 목요일
-                    /*
+                    
                         "08:05",
                         "10:15",
                         "11:30",
@@ -317,13 +317,13 @@ class BusController {
                         "18:50",
                         "20:00",
                         "22:05"
-                     */
+                     
                     // 2019-동계방학
-                    "08:05",
-                    "14:30"
+                    //"08:05",
+                    //"14:30"
             ],
             [ // 금요일
-                    /*
+                    
                         "08:05",
                         "10:15",
                         "11:30",
@@ -335,56 +335,56 @@ class BusController {
                         "18:50",
                         "20:00",
                         "22:05"
-                     */
+                     
                     // 2019-동계방학
-                    "08:05",
-                    "14:30"
+                    //"08:05",
+                    //"14:30"
             ],
             [ // 토요일
-                    /*
+                    
                         "14:30",
                         "18:50"
-                     */
+                     
             ],
             [ // 일요일
-                    /*
+                    
                         "17:35",
                         "21:20",
                         "21:35"
-                     */
+                     
             ]
     ]
     
     let shuttleFromStationToTerminal:[[String]] = [
             [ // 월요일
-                    /*
+                    
                         "09:30",
                         "15:20"
-                     */
+                     
             ],
             [ // 화요일
-                    /*
+                    
                         "09:30",
                         "15:20"
-                     */
+                     
             ],
             [ // 수요일
-                    /*
+                    
                         "09:30",
                         "15:20"
-                     */
+                     
             ],
             [ // 목요일
-                    /*
+                    
                         "09:30",
                         "15:20"
-                     */
+                     
             ],
             [ // 금요일
-                    /*
+                    
                         "09:30",
                         "15:20"
-                     */
+                     
             ],
             [ // 토요일
             ],
@@ -401,13 +401,13 @@ class BusController {
         ]
     }
     
-    func getRemainTimeToInt(timetable: [String], startIndex: Int) -> TimeInterval {
+    func getRemainTimeToDate(timetable: [String], startIndex: Int) -> Date {
         let date = DateFormatter()
         date.locale = Locale(identifier: "ko_kr")
         date.timeZone = TimeZone(abbreviation: "KST")
         
         if timetable.count == 0 {
-            return 0.0
+            return Date()
         }
         
         for i in startIndex..<timetable.count {
@@ -421,10 +421,10 @@ class BusController {
                     return [h,m,s]
                 }
                 */
-                return interval
+                return timetableDate
             }
         }
-        return 0.0
+        return Date()
     }
     
     func getBusTimeIndex(timetable: [String], startIndex: Int) -> Int {
@@ -451,24 +451,20 @@ class BusController {
     
     func getBusTimeIndex(timetable: [String], hour: Int, min: Int) -> Int {
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale(identifier: "ko_kr")
-        dateformatter.timeZone = TimeZone(abbreviation: "KST")
+        dateformatter.locale = Locale.current
+        dateformatter.timeZone = TimeZone.current
         dateformatter.dateFormat = "HH:mm"
         
         let stringTime = String(format: "%02d", hour) + ":" + String(format: "%02d", min)
         let endDate = dateformatter.date(from: stringTime)!
-        
-        let date = DateFormatter()
-        date.locale = Locale(identifier: "ko_kr")
-        date.timeZone = TimeZone(abbreviation: "KST")
+
         
         if timetable.count == 0 {
             return -1
         }
-        
         for i in 0..<timetable.count {
-            let timetableDate = date.date(from: timetable[i])!
-            let interval = timetableDate.timeIntervalSince(endDate)
+            let timetableDate = dateformatter.date(from: timetable[i])
+            let interval = timetableDate!.timeIntervalSince(endDate)
             if interval > 0 {
                 return i
             }
@@ -476,53 +472,116 @@ class BusController {
         return -1
     }
     
-    func getRemainCityBusTimeToInt(depart: String, arrival: String) -> [Int] {
+    func getRemainCityBusTimeToDate(depart: String, arrival: String) -> Date{
+        var remainTime: Int = 0
        AF.request("http://stage.api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
-        return [-1, -1, -1]
+        .response { response in
+            guard let data = response.data else {
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let cityBusRequest = try decoder.decode(CityBus.self, from: data)
+                if let remain = cityBusRequest.remainTime {
+                    remainTime = remain
+                } else {
+                    remainTime = 0
+                }
+                
+            } catch let error {
+                remainTime = 0
+            }
+
+        }
+        return Date(timeIntervalSinceNow: TimeInterval(remainTime))
     }
     
-    func getRemainShuttleTimeToInt(depart: String, arrival: String, isNow: Bool) -> TimeInterval {
+    func getRemainCityBusTimeToString(depart: String, arrival: String) -> String {
+        let remainDate = getRemainCityBusTimeToDate(depart: depart, arrival: arrival)
+        
+        let dateformatter = DateFormatter()
+        dateformatter.locale = Locale.current
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.dateFormat = "hh:mm"
+        
+        return dateformatter.string(from: remainDate)
+    }
+    func getNextCityBusTimeToString(depart: String, arrival: String) -> String {
+        let nextDate = getNextCityBusTimeToDate(depart: depart, arrival: arrival)
+        
+        let dateformatter = DateFormatter()
+        dateformatter.locale = Locale.current
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.dateFormat = "hh:mm"
+        
+        return dateformatter.string(from: nextDate)
+    }
+    
+    func getNextCityBusTimeToDate(depart: String, arrival: String) -> Date{
+        var nextRemainTime: Int = 0
+       AF.request("http://stage.api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
+        .response { response in
+            guard let data = response.data else {
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let cityBusRequest = try decoder.decode(CityBus.self, from: data)
+                if let remain = cityBusRequest.nextRemainTime {
+                    nextRemainTime = remain
+                } else {
+                    nextRemainTime = 0
+                }
+            } catch let error {
+                nextRemainTime = 0
+            }
+
+        }
+        return Date(timeIntervalSinceNow: TimeInterval(nextRemainTime))
+    }
+    
+    func getRemainShuttleTimeToDate(depart: String, arrival: String, isNow: Bool) -> Date {
         let shuttleTimeTable = getCurrentDayShuttleDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
         if (shuttleTimeTable.isEmpty) {
             //print("empty")
-            return 0
+            return Date()
         }
         resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, startIndex: 0)
         if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
             //print("out of index")
-            return 0
+            return Date()
         }
         if (isNow) {
-            return getRemainTimeToInt(timetable: shuttleTimeTable, startIndex: 0)
+            return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: 0)
         } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
             //print("out of index 1")
-            return 0
+            return Date()
         } else {
             //print("?")
-            return getRemainTimeToInt(timetable: shuttleTimeTable, startIndex: resultNowIndex + 1)
+            return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: resultNowIndex + 1)
         }
     }
     
-    func getRemainExpressTimeToInt(depart: String, arrival: String, isNow: Bool) -> TimeInterval {
+    func getRemainExpressTimeToDate(depart: String, arrival: String, isNow: Bool) -> Date {
         let expressTimeTable = getCurrentDayExpressDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
         if (expressTimeTable.isEmpty) {
-            return 0
+            return Date()
         }
         resultNowIndex = getBusTimeIndex(timetable: expressTimeTable, startIndex: 0)
 
         if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
-            return 0
+            return Date()
         }
         if (isNow) {
-            return getRemainTimeToInt(timetable: expressTimeTable, startIndex: 0)
+            return getRemainTimeToDate(timetable: expressTimeTable, startIndex: 0)
         } else if (resultNowIndex + 1 >= expressTimeTable.count) {
-            return 0
+            return Date()
         } else {
-            return getRemainTimeToInt(timetable: expressTimeTable, startIndex: resultNowIndex + 1)
+            return getRemainTimeToDate(timetable: expressTimeTable, startIndex: resultNowIndex + 1)
         }
     }
     
@@ -553,8 +612,8 @@ class BusController {
     
     func getNearShuttleTimeToString(depart: String, arrival: String, year:Int,month:Int, day:Int, hour: Int, min: Int) -> String {
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale(identifier: "ko_kr")
-        dateformatter.timeZone = TimeZone(abbreviation: "KST")
+        dateformatter.locale = Locale.current
+        dateformatter.timeZone = TimeZone.current
         dateformatter.dateFormat = "yyyyMMdd"
         
         let stringDate = String(format: "%04d", year) + String(format: "%02d", month) + String(format: "%02d", day)
