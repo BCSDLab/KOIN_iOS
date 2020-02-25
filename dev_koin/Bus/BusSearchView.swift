@@ -226,9 +226,7 @@ class SearchTimeTable: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let name = String(describing: type(of: self))
-        print(name)
-        let nib = UINib(nibName: name, bundle: Bundle.main)
+        let nib = UINib(nibName: "searchTimeTable", bundle: Bundle.main)
         guard let view = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
             return }
         view.frame = self.bounds

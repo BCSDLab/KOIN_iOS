@@ -12,11 +12,12 @@ target 'dev_koin' do
   pod 'PKHUD'
   pod 'SDWebImageSwiftUI'
   pod "RichEditorView"
-  pod "WordPress-Aztec-iOS", "1.15"
-  pod "WordPress-Editor-iOS", "1.15"
-  pod 'Gridicons', :podspec => 'https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec'
+  # pod "WordPress-Aztec-iOS", "1.15"
+  # pod "WordPress-Editor-iOS", "1.15"
+  # pod 'Gridicons', :podspec => 'https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec'
   # pod 'VEditorKit'
-  pod 'RSSelectionMenu'
+  pod 'IGColorPicker'
+  # pod 'RSSelectionMenu'
 
 
 end

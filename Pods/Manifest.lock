@@ -1,54 +1,42 @@
 PODS:
   - Alamofire (5.0.0-rc.3)
-  - Gridicons (0.19)
+  - IGColorPicker (0.4.3):
+    - M13Checkbox
+  - M13Checkbox (3.4.0)
   - PKHUD (5.3.0)
   - RichEditorView (5.0.0)
-  - RSSelectionMenu (6.1.0)
   - SDWebImage (5.4.2):
     - SDWebImage/Core (= 5.4.2)
   - SDWebImage/Core (5.4.2)
   - SDWebImageSwiftUI (0.10.0):
     - SDWebImage (~> 5.3)
-  - WordPress-Aztec-iOS (1.15.0)
-  - WordPress-Editor-iOS (1.15.0):
-    - WordPress-Aztec-iOS (= 1.15.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.0.0-rc.3)
-  - Gridicons (from `https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec`)
+  - IGColorPicker
   - PKHUD
   - RichEditorView
-  - RSSelectionMenu
   - SDWebImageSwiftUI
-  - WordPress-Aztec-iOS (= 1.15)
-  - WordPress-Editor-iOS (= 1.15)
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - IGColorPicker
+    - M13Checkbox
     - PKHUD
     - RichEditorView
-    - RSSelectionMenu
     - SDWebImage
     - SDWebImageSwiftUI
-    - WordPress-Aztec-iOS
-    - WordPress-Editor-iOS
-
-EXTERNAL SOURCES:
-  Gridicons:
-    :podspec: https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec
 
 SPEC CHECKSUMS:
   Alamofire: ca8c0de6906873be89d6deec5c8de279e00bf872
-  Gridicons: dc92efbe5fd60111d2e8ea051d84a60cca552abc
+  IGColorPicker: f6034f8629aa90cce308a76ecc0fdf2afed0bf34
+  M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
-  RSSelectionMenu: dac4fa365e4bbd95c0eccd0b6ff51a623a22a1c6
   SDWebImage: 4ca2dc4eefae4224bea8f504251cda485a363745
   SDWebImageSwiftUI: 56541a8970e6dfad07c48bd03bc411611c644d15
-  WordPress-Aztec-iOS: 004a458e7c4a7b0e6ed1f40695f4ce3b35ba040f
-  WordPress-Editor-iOS: 56846c373c8f9e6276d5c3827c71aec6156b2abc
 
-PODFILE CHECKSUM: d08df72db21018f2d47e9a89e0a30456c53f63e8
+PODFILE CHECKSUM: f19d5bff9273859e3202010806a9b4c7112505f1
 
 COCOAPODS: 1.8.4

@@ -407,7 +407,6 @@ struct BusView: View {
     var body: some View {
         VStack {
             HStack {
-            Spacer()
                 VStack{
                     Text("운행정보")
                             //현재 선택되어있는 탭이 "breakfast"이면, squash색의 밑줄 긋기
@@ -420,8 +419,7 @@ struct BusView: View {
                     Rectangle()
                         .fill(self.currentPage == 0 ? Color("squash") : Color.black.opacity(0.7))
                     .frame(height: 1)
-                }
-                Spacer()
+                }.padding(.horizontal, 0)
 
                     VStack{
                         Text("운행 정보 검색")
@@ -435,8 +433,7 @@ struct BusView: View {
                             Rectangle()
                                 .fill(self.currentPage == 1 ? Color("squash") : Color.black.opacity(0.7))
                             .frame(height: 1)
-                    }
-                    Spacer()
+                    }.padding(.horizontal, 0)
                     VStack{
                         Text("시간표")
                                 //현재 선택되어있는 탭이 "breakfast"이면, squash색의 밑줄 긋기
@@ -449,9 +446,8 @@ struct BusView: View {
                         Rectangle()
                             .fill(self.currentPage == 2 ? Color("squash") : Color.black.opacity(0.7))
                         .frame(height: 1)
-                    }
-                Spacer()
-            }
+                }.padding(.horizontal, 0)
+            }.padding(.horizontal, 0)
             BusPagerView(pageCount: 3, currentIndex: self.$currentPage) {
                 BusInfoView()
                 BusSearchView()
