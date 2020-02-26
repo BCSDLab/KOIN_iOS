@@ -16,8 +16,8 @@ target 'dev_koin' do
   # pod "WordPress-Editor-iOS", "1.15"
   # pod 'Gridicons', :podspec => 'https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec'
   # pod 'VEditorKit'
-  # pod 'RSSelectionMenu'
   pod 'IGColorPicker'
+  # pod 'RSSelectionMenu'
 
 
 end
