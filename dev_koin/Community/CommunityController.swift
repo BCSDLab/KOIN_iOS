@@ -257,10 +257,9 @@ class CommunityController: ObservableObject {
                 .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .put, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(response)
+                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
-                                    
                                     result(true) // 회원가입이 잘 되었다고 알리고
                                     self.load_community(article_id: article_id)
                                     self.objectWillChange.send(self)

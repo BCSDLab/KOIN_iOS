@@ -84,7 +84,7 @@ struct ContentView: View {
                         CommunityView(board_id: -2)
                                 .navigationBarTitle("익명게시판", displayMode: .inline)
                             .environmentObject(self.tabData)
-                    } else if self.tabData.currentView == "bus" {
+                    }  /*else if self.tabData.currentView == "bus" {
                         BusView()
                                 .navigationBarTitle("버스", displayMode: .inline)
                                 .navigationBarItems(leading: Button(action: self.tabData.go_home) {
@@ -93,7 +93,7 @@ struct ContentView: View {
                                         Text("홈")
                                     }
                                 }, trailing: EmptyView())
-                    }
+                    }*/
                 }
 
                         .tabItem {  // 첫번째 탭에 해당되는 아이템 레이아웃
