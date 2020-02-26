@@ -21,19 +21,24 @@ struct StoreView: View {
     var body: some View {
         return ScrollView(.vertical) {
 
-            Text("CATEGORY")
-                .font(.system(size: 20))
-                .fontWeight(.bold)
+            Text("카테고리")
+                .font(.system(size: 15))
+                .fontWeight(.medium)
+            .foregroundColor(Color("black"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 
-            HStack(alignment: .center, spacing: 15) {
+            HStack(alignment: .center, spacing: 20) {
                 Button(action: { self.category = "S005"
                 self.stores.get_stores(category: "S005") }) {
                     VStack {
                         Image("store_category_chicken")
                                 .renderingMode(.original)
-                        Text("치킨").accentColor(self.category == "S005" ? Color("squash") : .black)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("치킨").accentColor(self.category == "S005" ? Color("squash") : Color("black"))
+                            .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S006"
@@ -41,7 +46,11 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_pizza")
                                 .renderingMode(.original)
-                        Text("피자").accentColor(self.category == "S006" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("피자").accentColor(self.category == "S006" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S007"
@@ -49,7 +58,11 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_sweet_pork")
                                 .renderingMode(.original)
-                        Text("탕수육").accentColor(self.category == "S007" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                            .padding(.bottom, 5)
+                        Text("탕수육").accentColor(self.category == "S007" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
 
@@ -58,7 +71,11 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_sweet_dosirak")
                                 .renderingMode(.original)
-                        Text("도시락").accentColor(self.category == "S002" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("도시락").accentColor(self.category == "S002" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S003"
@@ -66,17 +83,25 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_sweet_pork_feet")
                                 .renderingMode(.original)
-                        Text("족발").accentColor(self.category == "S003" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("족발").accentColor(self.category == "S003" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
             }
-            HStack(alignment: .center, spacing: 15) {
+            HStack(alignment: .center, spacing: 20) {
                 Button(action: { self.category = "S004"
                 self.stores.get_stores(category: "S004") }) {
                     VStack {
                         Image("store_category_chinese")
                                 .renderingMode(.original)
-                        Text("중국집").accentColor(self.category == "S004" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("중국집").accentColor(self.category == "S004" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S008"
@@ -84,7 +109,11 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_normal")
                                 .renderingMode(.original)
-                        Text("일반음식점").accentColor(self.category == "S008" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("일반음식점").accentColor(self.category == "S008" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S009"
@@ -92,7 +121,11 @@ struct StoreView: View {
                     VStack {
                         Image("store_category_hair")
                                 .renderingMode(.original)
-                        Text("미용실").accentColor(self.category == "S009" ? Color("squash") : .black)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(.bottom, 5)
+                        Text("미용실").accentColor(self.category == "S009" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                 }
                 Button(action: { self.category = "S001"
@@ -100,48 +133,48 @@ struct StoreView: View {
                     VStack {
                         ZStack {
                             Circle()
-                            .foregroundColor(Color("black").opacity(0.5))
-                                .frame(width: 70, height: 70)
+                            .foregroundColor(Color("grey_circle"))
+                                .frame(width: 50, height: 50)
                                 .padding(.all, 0)
                             Text("···")
                                 .foregroundColor(.white)
                                 .font(.largeTitle)
-                        }
+                        }.padding(.bottom, 5)
                         
                         
                         
-                        Text("기타").accentColor(self.category == "S001" ? Color("squash") : .black)
+                        Text("기타").accentColor(self.category == "S001" ? Color("squash") : Color("black"))
+                        .font(.system(size: 13))
                     }
                         
                 }
-            }
+            }.padding(.bottom, 10)
             HStack {
                 Text("상점 목록")
                     .fontWeight(.medium)
                     .padding(.leading)
                     .foregroundColor(Color("warm_grey"))
-                .font(.system(size: 15))
-                    
+                .font(.system(size: 13))
                 Spacer()
                 Image("event")
                 .renderingMode(.original)
-                .frame(height: 7)
-                .fixedSize(horizontal: false, vertical: true)
+                .resizable()
+                    .frame(width: 12,height: 17)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 Text(": 이벤트 진행중")
                     .fontWeight(.medium)
                     .padding(.trailing)
                 .foregroundColor(Color("warm_grey"))
-                .font(.system(size: 12))
+                .font(.system(size: 10))
             }.frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
-                .background(Color("store_list_title")).fixedSize(horizontal: false, vertical: true)
+                .background(Color("store_list_title"))
                 
             
             VStack {
             ForEach(self.stores.get_stores(), id: \.self) { i in
 
-                StoreCellView(store_name: i.name, store_id: i.id, is_event: i.isEvent, is_delevery: i.delivery, is_card: i.payCard, is_bank: i.payBank)
+                    StoreCellView(store_name: i.name, store_id: i.id, is_event: i.isEvent, is_delevery: i.delivery, is_card: i.payCard, is_bank: i.payBank)
 
 
             }
@@ -178,49 +211,88 @@ struct StoreCellView: View {
     }
 
     var body: some View {
-        NavigationLink(destination: StoreDetailView(store_id: storeId)) {
-            HStack {
-                HStack {
-                    Text(storeName)
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black.opacity(0.7))
-                    if (isEvent) {
-                        Image("event")
-                                .renderingMode(.original)
-                                .frame(height: 7)
-                                //.resizable()
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    }
-                }.padding([.vertical, .leading], 10)
-                Spacer()
-                HStack {
-                Text("배달")
-                        .foregroundColor(isDelivery ? Color("squash") : Color.black.opacity(0.3))
-                    .font(.subheadline)
+        return Group {
+            if (isEvent) {
+                NavigationLink(destination: StoreDetailView(store_id: storeId)) {
+                    HStack {
+                                Text(storeName)
+                                    .font(.system(size: 15))
+                                        .fontWeight(.medium)
+                                        .foregroundColor(Color("black"))
+                                    Image("event")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .frame(width: 12,height: 17)
+                        
+                        Spacer()
+                        HStack {
+                        Text("배달")
+                                .foregroundColor(isDelivery ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
 
-                Text("카드결제")
-                        .foregroundColor(isCard ? Color("squash") : Color.black.opacity(0.3))
-                    .font(.subheadline)
+                        Text("카드결제")
+                                .foregroundColor(isCard ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
 
-                Text("계좌이체")
-                        .foregroundColor(isBank ? Color("squash") : Color.black.opacity(0.3))
-                    .font(.subheadline)
-                }.padding([.vertical, .trailing], 10)
-            }.fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .cornerRadius(10)
-                    .overlay(
-                            RoundedRectangle(cornerRadius: 1)
-                                    .stroke(Color("cloudy_blue"), lineWidth: 0.7)
-                    )
-                    .background(Color.white)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                    .clipped()
-                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 1)
+                        Text("계좌이체")
+                                .foregroundColor(isBank ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
+                        }
+                    }.padding(.vertical, 4)
+                            .frame(maxWidth: .infinity)
+                        .padding(.all, 16.5)
+                            .overlay(
+                                    Rectangle()
+                                            .stroke(Color("cloudy_blue"), lineWidth: 1)
+                            )
+                            .background(Color.white)
+                        //.padding(.vertical, 6)
+                        //.padding(.horizontal, 10)
+                            .clipped()
+                    //.shadow(color: Color.black.opacity(0.25), radius: 1, x: 0, y: 0)
+                }.padding(.horizontal, 16.5)
+            } else {
+                NavigationLink(destination: StoreDetailView(store_id: storeId)) {
+                    HStack {
+                                Text(storeName)
+                                    .font(.system(size: 15))
+                                        .fontWeight(.medium)
+                                        .foregroundColor(Color("black"))
+                        Image("")
+                        .renderingMode(.original)
+                        .resizable()
+                        .frame(width: 12,height: 17)
+                    
+                        Spacer()
+                        HStack {
+                        Text("배달")
+                                .foregroundColor(isDelivery ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
+
+                        Text("카드결제")
+                                .foregroundColor(isCard ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
+
+                        Text("계좌이체")
+                                .foregroundColor(isBank ? Color("squash") : Color("cloudy_blue"))
+                            .font(.system(size: 12))
+                        }//.padding([.vertical, .trailing], 10)
+                    }.padding(.vertical, 4)
+                            .frame(maxWidth: .infinity)
+                        .padding(.all, 16.5)
+                            .overlay(
+                                    Rectangle()
+                                            .stroke(Color("cloudy_blue"), lineWidth: 1)
+                            )
+                            .background(Color.white)
+                        //.padding(.vertical, 6)
+                        //.padding(.horizontal, 10)
+                            .clipped()
+                    //.shadow(color: Color.black.opacity(0.25), radius: 1, x: 0, y: 0)
+                }.padding(.horizontal, 16.5)
+            }
         }
+        
     }
 }
 
