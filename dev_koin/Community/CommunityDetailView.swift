@@ -120,10 +120,6 @@ struct CommunityDetailView: View {
             self.htmlView.loadHTML(articleContent)
         }
         
-        
-        let rich_editor = RichEditor(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id, token: self.user.get_token())
-        
-        let temp_rich_editor = TempRichEditor(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id)
 
         return VStack {
                     VStack(alignment: .leading) {
@@ -152,7 +148,7 @@ struct CommunityDetailView: View {
                             }
                             
                             if(self.user.get_userId() == self.getUserId) {
-                                NavigationLink(destination: rich_editor
+                                NavigationLink(destination: RichEditor(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id, token: self.user.get_token())
                                 ) {
                                 Text("수정")
                                     .foregroundColor(Color.black)
@@ -177,7 +173,7 @@ struct CommunityDetailView: View {
                             //익명일 경우, 비밀번호 맞을 경우에만 접근 가능하게 하기
                             if(self.board_id == -2) {
                                 SecureField("비밀번호", text: $temp_password)
-                                NavigationLink(destination: temp_rich_editor, isActive: $grantValue) {
+                                NavigationLink(destination: TempRichEditor(is_edit: true, title: articleTitle, content: articleContent, nickname: articleNickname, article_id: community_id), isActive: $grantValue) {
                                     Button(action : {
                                         self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
                                                 do {
