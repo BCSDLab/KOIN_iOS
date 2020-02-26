@@ -77,7 +77,7 @@ struct MenuContent: View {
                     Text("버스 / 교통")
                         .onTapGesture { // 식단 누를 시
                             // 현재 view를 dining으로 변경
-                            self.prepare_project()
+                            self.viewRouter.currentView = "bus"
 
                             // 메뉴 닫음
                             self.viewRouter.dismiss_menu()

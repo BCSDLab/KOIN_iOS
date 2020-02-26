@@ -105,10 +105,8 @@ struct BusSearchView: View {
                     Text("fff")
                         .onTapGesture {
                             let alertHC = UIHostingController(rootView: MyAlert())
-
                             alertHC.preferredContentSize = CGSize(width: 300, height: 200)
                             alertHC.modalPresentationStyle = UIModalPresentationStyle.formSheet
-
                             UIApplication.shared.windows[0].rootViewController?.present(alertHC, animated: true)
                     }
                 }

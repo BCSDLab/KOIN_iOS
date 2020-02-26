@@ -350,7 +350,6 @@ struct SeoulListCell: View {
 // CheongjuShuttle
 // ["SeoulCommuterToSeoul","SeoulCommuterToSchool"]
 // DaejeonCommuter
-
 struct CommuterListView: View {
     //var CommuterList: [[String]]
     var PrimaryCommuterList = ["천안 등교/하교","천안 셔틀","청주 등교/하교","청주 셔틀","서울 등교/하교","대전 등교/하교"]

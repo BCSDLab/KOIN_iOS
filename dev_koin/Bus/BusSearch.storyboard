@@ -161,7 +161,7 @@
     </scenes>
     <resources>
         <namedColor name="blue2">
-            <color red="0.82352941176470584" green="0.85490196078431369" blue="0.88627450980392153" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.82352941176470584" green="0.85490196078431369" blue="0.88627450980392153" alpha="0.20000000298023224" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray2">
             <color red="0.63137254901960782" green="0.63137254901960782" blue="0.63137254901960782" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

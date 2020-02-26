@@ -48,7 +48,7 @@ struct MealView: View {
             return VStack {
                 VStack {
                     HStack {
-                        Spacer()
+                        
                         Image(systemName: "chevron.left").onTapGesture { // 왼쪽 화살표를 클릭시
                             // 날짜를 어제로 바꾸기
                             self.date = Date(timeInterval: -86400, since: self.date)
@@ -56,10 +56,10 @@ struct MealView: View {
                             self.dateString = dateToString(date: self.date)
                             // 어제의 식단 데이터를 불러오기
                             self.observed.meal_session(date: self.date)
-                        }
+                        }.padding(.leading, 52)
                         Spacer()
                         Text(dateString)
-                                .fontWeight(.medium)
+                            .font(.system(size: 15, weight: .medium))
                         Spacer()
                         Image(systemName: "chevron.right").onTapGesture { //오른쪽 화살표를 클릭 시
                             //날짜를 내일로 바꾸기
@@ -68,14 +68,13 @@ struct MealView: View {
                             self.dateString = dateToString(date: self.date)
                             // 내일의 식단 데이터를 불러오기
                             self.observed.meal_session(date: self.date)
-                        }
-                        Spacer()
-                    }.padding(.bottom, 20)
-                    HStack(alignment: .center, spacing: 30) {
+                        }.padding(.trailing, 52)
+                        
+                    }.padding(.bottom, 30)
+                    HStack(alignment: .center, spacing: 40) {
                 Spacer()
                         Text("아침")
-                                //현재 선택되어있는 탭이 "breakfast"이면, squash색의 밑줄 긋기
-                                .underline(self.diningViewRouter.currentView == "breakfast" ? true : false, color: Color("squash"))
+                            .font(.system(size: 15, weight: .regular))
                                 .onTapGesture { //이 탭을 누르면
                                     //선택된 탭을 "breakfast"로 변경
                                     self.diningViewRouter.currentView = "breakfast"
@@ -84,8 +83,7 @@ struct MealView: View {
                     .accentColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
 
                         Text("점심")
-                                //현재 선택되어있는 탭이 "lunch"이면, squash색의 밑줄 긋기
-                                .underline(self.diningViewRouter.currentView == "lunch" ? true : false, color: Color("squash"))
+                            .font(.system(size: 15, weight: .regular))
                                 .onTapGesture { //이 탭을 누르면
                                     //선택된 탭을 "lunch"로 변경
                                     self.diningViewRouter.currentView = "lunch"
@@ -94,8 +92,7 @@ struct MealView: View {
                 .accentColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
 
                         Text("저녁")
-                                //현재 선택되어있는 탭이 "dinner"이면, squash색의 밑줄 긋기
-                                .underline(self.diningViewRouter.currentView == "dinner" ? true : false, color: Color("squash"))
+                            .font(.system(size: 15, weight: .regular))
                                 .onTapGesture {//이 탭을 누르면
                                     //선택된 탭을 "dinner"로 변경
                                     self.diningViewRouter.currentView = "dinner"
@@ -113,7 +110,7 @@ struct MealView: View {
             } else if self.diningViewRouter.currentView == "dinner" {
                 MenuView(menu_type: 2, observed: self.observed)
             }
-            }.padding(.top, 20)
+            }.padding(.top, 32)
         .navigationBarTitle(Text("식단"), displayMode: .inline)
                 .gesture(drag)
         .onAppear {
@@ -194,14 +191,13 @@ struct CardView: View{
                 VStack(alignment: .leading){
                     HStack {
                         Text(place)
-                        .font(.headline)
-                            .fontWeight(.medium)
-                        .foregroundColor(.primary)
+                        .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(.black)
                         Spacer()
                         Text("캐시비 \(convertPrice(price: priceCard))원 / 현금 \(convertPrice(price: priceCash))원")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    }
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color("warm_grey"))
+                    }.padding(.top, 8)
                     if (place == "능수관") {
                         Rectangle()
                         .fill(Color("squash"))
@@ -213,14 +209,14 @@ struct CardView: View{
                     }
                     
                     Text("\(convertPrice(price: kcal))Kcal")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                        .padding(.bottom, 10)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(Color("warm_grey"))
+                        .padding(.bottom, 16)
                     
                     Text(menu.joined(separator: "\n"))
-                    .font(.caption)
-                        .foregroundColor(.primary)
-                        .fontWeight(.light)
+                    .font(.system(size: 12, weight: .regular))
+                        .lineSpacing(6)
+                        .foregroundColor(Color("black"))
                     .lineLimit(nil)
           
         }
@@ -231,12 +227,12 @@ struct CardView: View{
         .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 1)
-                .stroke(Color("cloudy_blue"), lineWidth: 0.7)
+                .stroke(Color("cloudy_blue"), lineWidth: 1)
         )
         .background(Color.white)
-        .padding([.top, .horizontal])
+        .padding([.top, .horizontal], 16)
         .clipped()
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 1)
+        .shadow(color: Color.black.opacity(0.25), radius: 6, x: 0, y: 0)
         
         
     }
@@ -249,7 +245,7 @@ func dateToString(date: Date)->String {
     // Date 포맷을 설정해주는 오브젝트
     let dateFormatter = DateFormatter()
     // Date 포맷 설정
-    dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+    dateFormatter.dateFormat = "yyyy-MM-dd"
     //Date 포맷에 따라 String으로 변환해주기
     let dateString = dateFormatter.string(from: date)
     return dateString
