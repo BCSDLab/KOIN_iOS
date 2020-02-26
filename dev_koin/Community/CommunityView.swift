@@ -89,7 +89,7 @@ struct CommunityList: View {
     var body: some View {
         return List {
             ForEach(self.communityData.get_articles(), id:\.self) { l in
-                NavigationLink(destination: CommunityDetailView(community_id: l.id, board_id: self.board_id, user_id: l.userId!)) {
+                NavigationLink(destination: CommunityDetailView(community_id: l.id, board_id: self.board_id, user_id: l.userId!).navigationBarTitle(Text(l.title))) {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(l.title)")
