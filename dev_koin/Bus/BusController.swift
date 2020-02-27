@@ -415,12 +415,6 @@ class BusController {
             let timetableDate = Calendar.current.date(bySettingHour: Int(time[0])!, minute: Int(time[1])!, second: 0, of: Date())!
             let interval = timetableDate.timeIntervalSince(Date())
             if interval > 0 {
-                /*
-                let components = Calendar.current.dateComponents([.hour,.minute,.second], from: Date(), to: timetableDate)
-                if case let (h?, m?, s?) = (components.hour, components.minute, components.second) {
-                    return [h,m,s]
-                }
-                */
                 return timetableDate
             }
         }
@@ -451,8 +445,8 @@ class BusController {
     
     func getBusTimeIndex(timetable: [String], hour: Int, min: Int) -> Int {
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale.current
-        dateformatter.timeZone = TimeZone.current
+        dateformatter.locale = Locale(identifier: "ko_kr")
+        dateformatter.timeZone = TimeZone(abbreviation: "KST")
         dateformatter.dateFormat = "HH:mm"
         
         let stringTime = String(format: "%02d", hour) + ":" + String(format: "%02d", min)
@@ -500,8 +494,8 @@ class BusController {
         let remainDate = getRemainCityBusTimeToDate(depart: depart, arrival: arrival)
         
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale.current
-        dateformatter.timeZone = TimeZone.current
+        dateformatter.locale = Locale(identifier: "ko_kr")
+        dateformatter.timeZone = TimeZone(abbreviation: "KST")
         dateformatter.dateFormat = "hh:mm"
         
         return dateformatter.string(from: remainDate)
@@ -510,8 +504,8 @@ class BusController {
         let nextDate = getNextCityBusTimeToDate(depart: depart, arrival: arrival)
         
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale.current
-        dateformatter.timeZone = TimeZone.current
+        dateformatter.locale = Locale(identifier: "ko_kr")
+        dateformatter.timeZone = TimeZone(abbreviation: "KST")
         dateformatter.dateFormat = "hh:mm"
         
         return dateformatter.string(from: nextDate)
@@ -612,8 +606,8 @@ class BusController {
     
     func getNearShuttleTimeToString(depart: String, arrival: String, year:Int,month:Int, day:Int, hour: Int, min: Int) -> String {
         let dateformatter = DateFormatter()
-        dateformatter.locale = Locale.current
-        dateformatter.timeZone = TimeZone.current
+        dateformatter.locale = Locale(identifier: "ko_kr")
+        dateformatter.timeZone = TimeZone(abbreviation: "KST")
         dateformatter.dateFormat = "yyyyMMdd"
         
         let stringDate = String(format: "%04d", year) + String(format: "%02d", month) + String(format: "%02d", day)
@@ -674,17 +668,17 @@ class BusController {
     
     func getCurrentDayShuttleDayStringArray(depart: String, arrival: String) -> [String] {
         var shuttleTimeTable: [String]
-        let weekday = (Calendar.current.component(.weekday, from: Date()) + 6) % 7
+        let weekday = (Calendar.current.component(.weekday, from: Date()) + 5) % 7
         //print(weekday)
         if depart == "station" {
             shuttleTimeTable = (arrival == "koreatech") ? shuttleFromStationToKoreatech[weekday] : shuttleFromStationToTerminal[weekday]
         } else {
             let timeTable = shuttleTimeTables[depart]!
-            //print(timeTable)
-            //print(timeTable[weekday])
+            print(timeTable)
+            print(timeTable[weekday])
             shuttleTimeTable = timeTable[weekday]
         }
-        //print(shuttleTimeTable)
+        print(shuttleTimeTable)
         return shuttleTimeTable
     }
     

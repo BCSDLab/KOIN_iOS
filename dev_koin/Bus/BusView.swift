@@ -168,6 +168,7 @@ struct BusInfoView: View {
     var body: some View {
         var shuttleTime: Date = self.controller.getRemainShuttleTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
         var expressTime: Date = self.controller.getRemainExpressTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
+        
         var nearShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
         var nearExpressTime : String =
             self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
@@ -185,183 +186,363 @@ struct BusInfoView: View {
             self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
         
         
-        return VStack {
-            HStack {
-                Text(showStation[selectedDepart])
-                    .actionSheet(isPresented: $isDepartActionSheet) {
-                        self.departActionSheet
-                }
-                    .onTapGesture {
-                        self.isDepartActionSheet.toggle()
-                }
-                Text("에서")
-                Text(showStation[selectedArrival])
-                .onTapGesture {
-                        self.isArrivalActionSheet.toggle()
-                }.actionSheet(isPresented: $isArrivalActionSheet) {
-                        self.arrivalActionSheet
-                }
-                Text("갑니다")
-                }
+        return
+            VStack {
+                HStack {
+                    HStack {
+                        Text(showStation[selectedDepart])
+                        .font(.system(size: 20))
+                        .foregroundColor(Color("black"))
+                        .fixedSize(horizontal: true, vertical: false)
+                        Image(systemName: "chevron.down")
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 9.9, height: 6.1, alignment: .center)
+                        .foregroundColor(Color("bus_arrow_color"))
+                        .padding(.all, 0)
+                    }
+                        .actionSheet(isPresented: $isDepartActionSheet) {
+                            self.departActionSheet
+                    }
+                        .onTapGesture {
+                            self.isDepartActionSheet.toggle()
+                    }
+                    
+                    Text("에서 ")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color("black"))
+                        .fontWeight(.light)
+                    HStack {
+                        Text(showStation[selectedArrival])
+                            .font(.system(size: 20))
+                            .foregroundColor(Color("black"))
+                            .fixedSize(horizontal: true, vertical: false)
+                        Image(systemName: "chevron.down")
+                            .renderingMode(.template)
+                            .resizable()
+                            .frame(width: 9.9, height: 6.1, alignment: .center)
+                            .foregroundColor(Color("bus_arrow_color"))
+                            .padding(.all, 0)
+                    }.onTapGesture {
+                            self.isArrivalActionSheet.toggle()
+                    }.actionSheet(isPresented: $isArrivalActionSheet) {
+                            self.arrivalActionSheet
+                    }
+                    
+                    Text("갑니다")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color("black"))
+                        .fontWeight(.light)
+                    .padding(.all, 0)
+                }.padding(.vertical, 16)
+                    ScrollView(.vertical) {
+                VStack {
+                    HStack {
+                        Text("출발")
+                            .font(.system(size: 11))
+                            .foregroundColor(.white)
+                            .frame(width: 42, height: 20, alignment: .center)
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                        Text(showStation[selectedDepart])
+                        .font(.system(size: 15))
+                        .foregroundColor(.white)
+                        .fontWeight(.light)
+                        Spacer()
+                        Text("학교셔틀")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                    }.padding([.top, .horizontal], 16)
+                    HStack {
+                        Text("도착")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white)
+                        .frame(width: 42, height: 20, alignment: .center)
+                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                        Text(showStation[selectedArrival])
+                            .font(.system(size: 15))
+                            .foregroundColor(.white)
+                            .fontWeight(.light)
+                        Spacer()
+                    }.padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                    HStack {
+                        if(shuttleTime.timeIntervalSince(Date()) > 0) {
+                            Text(countDownString(from: shuttleTime, until: nowDate))
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                            Spacer()
+                            Text("(\(self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발)")
+                            .font(.system(size: 13))
+                            .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                        } else {
+                            Text("운행 정보 없음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            Spacer()
+                        }
+                        
+                    }.padding([.horizontal, .top], 16)
+                        .padding(.bottom, 8)
+                }.background(Color("squash"))
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 4)
                 
-            VStack {
-                HStack {
-                    Text(showStation[selectedDepart])
-                    Spacer()
-                    Text("학교셔틀")
-                }
-                HStack {
-                    Text(showStation[selectedArrival])
-                }
-                HStack {
-                    if(shuttleTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: shuttleTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
+                VStack {
+                    HStack {
+                        Text("다음 버스")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white)
                         Spacer()
-                        Text("\(self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                    
-                }
-            }.background(Color("squash"))
-                .padding()
-            
-            VStack {
-                HStack {
-                    Text("다음 버스")
-                    Spacer()
-                    Text("학교셔틀")
-                }
-                HStack {
-                    if(nextShuttleTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: nextShuttleTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
+                        Text("학교셔틀")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                    }.padding([.top, .horizontal], 16)
+                    .padding(.bottom, 8)
+                    HStack {
+                        if(nextShuttleTime.timeIntervalSince(Date()) > 0) {
+                            Text(countDownString(from: nextShuttleTime, until: nowDate))
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                            Spacer()
+                            Text("(\(nextShuttle)분 출발)")
+                            .font(.system(size: 13))
+                            .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                        } else {
+                            Text("운행 정보 없음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            Spacer()
+                        }
+                        
+                    }.padding([.horizontal, .top], 16)
+                        .padding(.bottom, 8)
+                }.background(Color("squash"))
+                .padding(.horizontal, 16)
+                .padding(.bottom, 4)
+                
+                
+                VStack {
+                               HStack {
+                                   Text("출발")
+                                       .font(.system(size: 11))
+                                       .foregroundColor(.white)
+                                       .frame(width: 42, height: 20, alignment: .center)
+                                       .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                                   Text(showStation[selectedDepart])
+                                   .font(.system(size: 15))
+                                   .foregroundColor(.white)
+                                   .fontWeight(.light)
+                                   Spacer()
+                                   Text("대성고속")
+                                   .font(.system(size: 14))
+                                   .foregroundColor(.white)
+                               }.padding([.top, .horizontal], 16)
+                               HStack {
+                                   Text("도착")
+                                   .font(.system(size: 11))
+                                   .foregroundColor(.white)
+                                   .frame(width: 42, height: 20, alignment: .center)
+                                   .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                                   Text(showStation[selectedArrival])
+                                       .font(.system(size: 15))
+                                       .foregroundColor(.white)
+                                       .fontWeight(.light)
+                                   Spacer()
+                               }.padding(.horizontal, 16)
+                                   .padding(.vertical, 8)
+                               HStack {
+                                   if(expressTime.timeIntervalSince(Date()) > 0) {
+                                       Text(countDownString(from: expressTime, until: nowDate))
+                                           .font(.system(size: 18))
+                                           .fontWeight(.bold)
+                                           .foregroundColor(.white)
+                                       .onAppear(perform: {
+                                           let _ = self.timer
+                                       })
+                                       Spacer()
+                                       Text("(\(self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발)")
+                                       .font(.system(size: 13))
+                                       .foregroundColor(.white)
+                                    .onAppear(perform: {
+                                        let _ = self.timer
+                                    })
+                                   } else {
+                                       Text("운행 정보 없음")
+                                       .font(.system(size: 18))
+                                       .fontWeight(.bold)
+                                       .foregroundColor(.white)
+                                       Spacer()
+                                   }
+                                   
+                               }.padding([.horizontal, .top], 16)
+                                   .padding(.bottom, 8)
+                           }.background(Color("shark"))
+                               .padding(.horizontal, 16)
+                               .padding(.vertical, 4)
+                
+                VStack {
+                    HStack {
+                        Text("다음 버스")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white)
                         Spacer()
-                        Text("\(nextShuttle)분 출발")
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                }
-            }.background(Color("squash"))
-            .padding()
-            
-            VStack {
-                HStack {
-                    Text(showStation[selectedDepart])
-                    Spacer()
-                    Text("대성고속")
-                }
-                HStack {
-                    Text(showStation[selectedArrival])
-                }
-                HStack {
-                    if(expressTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: expressTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
+                        Text("대성고속")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                    }.padding([.top, .horizontal], 16)
+                    .padding(.bottom, 8)
+                    HStack {
+                        if(nextExpressTime.timeIntervalSince(Date()) > 0) {
+                            Text(countDownString(from: nextExpressTime, until: nowDate))
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                            Spacer()
+                            Text("(\(nextExpress)분 출발)")
+                            .font(.system(size: 13))
+                            .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                        } else {
+                            Text("운행 정보 없음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            Spacer()
+                        }
+                        
+                    }.padding([.horizontal, .top], 16)
+                        .padding(.bottom, 8)
+                }.background(Color("shark"))
+                .padding(.horizontal, 16)
+                .padding(.bottom, 4)
+                
+                
+                VStack {
+                               HStack {
+                                   Text("출발")
+                                       .font(.system(size: 11))
+                                       .foregroundColor(.white)
+                                       .frame(width: 42, height: 20, alignment: .center)
+                                       .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                                   Text(showStation[selectedDepart])
+                                   .font(.system(size: 15))
+                                   .foregroundColor(.white)
+                                   .fontWeight(.light)
+                                   Spacer()
+                                   Text("시내버스")
+                                   .font(.system(size: 14))
+                                   .foregroundColor(.white)
+                               }.padding([.top, .horizontal], 16)
+                               HStack {
+                                   Text("도착")
+                                   .font(.system(size: 11))
+                                   .foregroundColor(.white)
+                                   .frame(width: 42, height: 20, alignment: .center)
+                                   .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 1))
+                                   Text(showStation[selectedArrival])
+                                       .font(.system(size: 15))
+                                       .foregroundColor(.white)
+                                       .fontWeight(.light)
+                                   Spacer()
+                               }.padding(.horizontal, 16)
+                                   .padding(.vertical, 8)
+                               HStack {
+                                   if(nearCityBusTime.timeIntervalSince(Date()) > 0) {
+                                       Text(countDownString(from: nearCityBusTime, until: nowDate))
+                                           .font(.system(size: 18))
+                                           .fontWeight(.bold)
+                                           .foregroundColor(.white)
+                                       .onAppear(perform: {
+                                           let _ = self.timer
+                                       })
+                                       Spacer()
+                                       Text("(\(nearCityBus)분 출발)")
+                                       .font(.system(size: 13))
+                                       .foregroundColor(.white)
+                                    .onAppear(perform: {
+                                        let _ = self.timer
+                                    })
+                                   } else {
+                                       Text("운행 정보 없음")
+                                       .font(.system(size: 18))
+                                       .fontWeight(.bold)
+                                       .foregroundColor(.white)
+                                       Spacer()
+                                   }
+                                   
+                               }.padding([.horizontal, .top], 16)
+                                   .padding(.bottom, 8)
+                           }.background(Color("mint"))
+                               .padding(.horizontal, 16)
+                               .padding(.vertical, 4)
+                
+                VStack {
+                    HStack {
+                        Text("다음 버스")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white)
                         Spacer()
-                        Text("\(self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발")
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                    
+                        Text("시내버스")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                    }.padding([.top, .horizontal], 16)
+                    .padding(.bottom, 8)
+                    HStack {
+                        if(nextCityBusTime.timeIntervalSince(Date()) > 0) {
+                            Text(countDownString(from: nextCityBusTime, until: nowDate))
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                            Spacer()
+                            Text("(\(nextCityBus)분 출발)")
+                            .font(.system(size: 13))
+                            .foregroundColor(.white)
+                            .onAppear(perform: {
+                                let _ = self.timer
+                            })
+                        } else {
+                            Text("운행 정보 없음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            Spacer()
+                        }
+                        
+                    }.padding([.horizontal, .top], 16)
+                        .padding(.bottom, 8)
+                }.background(Color("mint"))
+                .padding(.horizontal, 16)
+                .padding(.bottom, 4)
+                
+                
                 }
-            }.background(Color("shark"))
-                .padding()
-            
-            VStack {
-                HStack {
-                    Text("다음 버스")
-                    Spacer()
-                    Text("대성고속")
-                }
-                HStack {
-                    if(nextExpressTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: nextExpressTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                        Spacer()
-                        Text("\(nextExpress)분 출발")
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                }
-            }.background(Color("shark"))
-            .padding()
-            
-            VStack {
-                HStack {
-                    Text(showStation[selectedDepart])
-                    Spacer()
-                    Text("시내버스")
-                }
-                HStack {
-                    Text(showStation[selectedArrival])
-                }
-                HStack {
-                    if(nearCityBusTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: nearCityBusTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                        Spacer()
-                        Text("\(nearCityBus)분 출발")
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                    
-                }
-            }.background(Color("mint"))
-                .padding()
-            
-            VStack {
-                HStack {
-                    Text("다음 버스")
-                    Spacer()
-                    Text("시내버스")
-                }
-                HStack {
-                    if(nextCityBusTime.timeIntervalSince(Date()) > 0) {
-                        Text(countDownString(from: nextCityBusTime, until: nowDate))
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                        Spacer()
-                        Text("\(nextCityBus)분 출발")
-                        .onAppear(perform: {
-                            let _ = self.timer
-                        })
-                    } else {
-                        Text("운행 정보 없음")
-                    }
-                    
-                }
-            }.background(Color("mint"))
-            .padding()
-            
-            
-            
-            
+            }
         }
-    }
+    
 }
 
 struct BusPagerView<Content: View>: View {
