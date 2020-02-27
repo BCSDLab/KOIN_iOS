@@ -13,6 +13,7 @@ class StoreController: ObservableObject {
     @Published var detail_store: Store?
     var isImageClicked: Bool = false
     var expandImage: String = ""
+    var expandImageArray : [String] = []
 
     let objectWillChange = PassthroughSubject<StoreController, Never>()
 

@@ -8,16 +8,11 @@ target 'dev_koin' do
   # use_modular_headers!
 
   # Pods for dev_koin
-  pod 'Alamofire', '~> 5.0.0-rc.3'
+  pod 'Alamofire', '~> 5.0.0'
   pod 'PKHUD'
   pod 'SDWebImageSwiftUI'
   pod "RichEditorView"
-  # pod "WordPress-Aztec-iOS", "1.15"
-  # pod "WordPress-Editor-iOS", "1.15"
-  # pod 'Gridicons', :podspec => 'https://raw.github.com/Automattic/Gridicons-iOS/develop/Gridicons.podspec'
-  # pod 'VEditorKit'
   pod 'IGColorPicker'
-  # pod 'RSSelectionMenu'
 
 
 end
