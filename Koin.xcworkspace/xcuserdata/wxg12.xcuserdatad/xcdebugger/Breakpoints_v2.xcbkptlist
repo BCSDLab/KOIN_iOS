@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "6D1435B5-C77F-4865-A3CF-EAFBEE8B536C"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "622BBF76-64D7-4265-BB95-A6370ABCD8C9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/AttributedTextView/Sources/NSAttributedString+Html.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "init(html:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8F968E58-29D0-4C03-8A96-B875145AB345"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "dev_koin/Community/EditorViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "ViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "8F968E58-29D0-4C03-8A96-B875145AB345 - 665d6880935116d5"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "koin.ViewController.picker.getter : __C.UIImagePickerController"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/dev_koin/dev_koin/Community/EditorViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "59">
+               </Location>
+               <Location
+                  uuid = "8F968E58-29D0-4C03-8A96-B875145AB345 - 9f8d954ddc95f0b4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "koin.ViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; koin.ViewController"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/dev_koin/dev_koin/Community/EditorViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "549">
+               </Location>
+               <Location
+                  uuid = "8F968E58-29D0-4C03-8A96-B875145AB345 - f7163673e2712cb7"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "koin.ViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;koin.ViewController&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/dev_koin/dev_koin/Community/EditorViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "480">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
