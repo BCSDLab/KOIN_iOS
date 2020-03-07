@@ -107,9 +107,11 @@ struct ContentView: View {
 
                         .tabItem {  // 첫번째 탭에 해당되는 아이템 레이아웃
                             
-                                Image("bottom_home")
+                                Image(systemName: "house")
+                                    .resizable()
                                         .renderingMode(.template)
                                     .font(.system(size: 15))
+                                    .lineSpacing(8)
  
                                 Text("홈")
                                         .font(.system(size: 12))
@@ -118,14 +120,16 @@ struct ContentView: View {
                 Text("Custom Action") // 임의의 뷰(아무 기능 없으며, 해당 탭 클릭시 ViewRouter에서 SideMenu를 여는 기능 작동)
                         .tabItem { // 두번째 탭에 해당되는 아이템 레이아웃
                             VStack {
-                                Image("bottom_category")
+                                Image(systemName: "tray")
                                         .resizable()
                                         .renderingMode(.template)
                                         .font(.system(size: 15))
+                                    .lineSpacing(8)
+                                
                                 Text("카테고리")
                                         .font(.system(size: 12))
                                         .fontWeight(.medium)
-                            }
+                            }.padding(.all,10)
                         }
                         .tag(2)
 
@@ -137,16 +141,15 @@ struct ContentView: View {
                                     Image(systemName: "chevron.left")
                                     Text("홈")
                                 }
-                            }, trailing: NavigationLink(destination: EditUserView().environmentObject(self.settings).navigationBarTitle("내정보 수정", displayMode: .inline)) {  //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
-                                Text("수정")
                             })
                 }
                         .tabItem { // 세번째 탭에 해당되는 아이템 레이아웃
                             VStack {
-                                Image("bottom_myinfo")
+                                Image(systemName: "person")
                                         .resizable()
                                         .renderingMode(.template)
                                         .font(.system(size: 15))
+                                    .lineSpacing(8)
                                 Text("내정보")
                                         .font(.system(size: 12))
                                         .fontWeight(.medium)

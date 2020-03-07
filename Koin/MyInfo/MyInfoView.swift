@@ -7,14 +7,68 @@ import Foundation
 import SwiftUI
 import PKHUD
 
-
-
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        return Binding(
+            get: { self.wrappedValue },
+            set: { selection in
+                self.wrappedValue = selection
+                handler(selection)
+        })
+    }
+}
 
 struct MyInfoView: View {
     // 유저 정보가 들어있는 오브젝트
     @EnvironmentObject var settings: UserSettings
     // 회원 탈퇴 전 Alert표시를 위한 값(true일시 Alert 표시)
     @State var showingDeleteAlert: Bool = false
+    
+    @State var updated_gender: Int = -1
+    @State var change_name: String = ""
+    @State var change_nickname: String = ""
+    @State var change_phoneNumber: String = ""
+    @State var change_studentNumber: String = ""
+    
+    @State var showNicknameModal: Bool = false
+    @State var showPhoneModal: Bool = false
+    @State var showNameModal: Bool = false
+    @State var showStudentNumberModal: Bool = false
+    
+    
+    var listData: [[[String]]] = []
+    
+    init() {
+        listData = loadUserInfo()
+        // 네비게이션 바 색 설정
+        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        // 네비게이션 바 글자색 설정(흰색)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+
+    
+    // 닉네임이 겹치는지 확인해주는 함수
+    func check_nickname() {
+        // HUD로 보여주기 위한 뷰 오브젝트
+        let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+        // HUD 내부의 글자 뷰 오브젝트
+        let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
+        yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
+                y: uiview.frame.size.height / 2)
+        yourLabel.textAlignment = .center
+    }
+    
+    func genderChange(_ tag: Int) {
+        self.settings.update_gender(token: self.settings.get_token(), updated_gender: tag) { result in
+            if result {
+                print("success")
+            } else {
+                print("error")
+            }
+        }
+    }
+    
 
     // 유저 정보를 불러와서 리스트에 맞는 데이터로 반환
     func loadUserInfo() -> [[[String]]] {
@@ -44,7 +98,7 @@ struct MyInfoView: View {
                     if let infoPhoneNumber = userInfo.phoneNumber {phoneNumber = infoPhoneNumber}
                     // 성별이 -1이 아니면, 0일 경우에는 "남자"로, 아닐때는(1) "여자"로 저장
                     if let infoGender = userInfo.gender {
-                        gender = infoGender == 0 ? "남자":"여자"
+                        gender = infoGender == 0 ? "0":"1"
                     }
                     // 학번이 nil이 아니면, 해당 값을 studentNumber에 저장
                     if let infoStudentNumber = userInfo.studentNumber {studentNumber = infoStudentNumber}
@@ -63,42 +117,262 @@ struct MyInfoView: View {
 
     var body: some View {
         // 유저 정보 데이터 불러오기
-        var listData = loadUserInfo()
-
+        
+        
         return List{
             // 데이터가 비어있지 않을때만 표시
             if !listData.isEmpty {
                 Section(header: Text("기본정보")) {
-                    ForEach(listData[0], id:\.self) { general in
-                        HStack {
-                            Text(general[0])
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                            Spacer()
-                            Text(general[1])
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
+                    HStack {
+                        Text(listData[0][0][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        Text(listData[0][0][1])
+                        .font(.subheadline)
+                        .fontWeight(.light)
+                    }
+                    HStack {
+                        Text(listData[0][1][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        if(listData[0][1][1] == "이름 없음") {
+                            
+                            Text("이름 없음")
+                            .font(.headline)
+                            .fontWeight(.light)
+                            
+                            Button(action:{self.showNameModal.toggle()}) {
+                                Text("추가").foregroundColor(Color("light_navy"))
+                            }
+                        } else {
+                            Text(listData[0][1][1])
+                            .font(.headline)
+                            .fontWeight(.light)
+                        }
+                        
+                    }.sheet(isPresented: $showNameModal) {
+                        return NavigationView {
+                            VStack(alignment: .leading) {
+                                //Text("이름").foregroundColor(Color("warm_grey_two"))
+                                TextField("이름", text: self.$change_name).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Spacer()
+                                }.padding().navigationBarItems(
+                                leading:
+                                Button(action: {
+                                    self.showNameModal = false
+                                }) {
+                                    Text("닫기").foregroundColor(Color("light_navy"))
+                            }, trailing:
+                                Button(action: {
+                                    
+                                    self.settings.update_name(token: self.settings.get_token(), updated_name: self.change_name) { result in
+                                        if result {
+                                            self.showNameModal = false
+                                        } else {
+                                            print("error")
+                                        }
+                                    }
+                                    
+                                }) {
+                                    Text("수정").foregroundColor(Color("light_navy"))
+                            })
+                            
+
                         }
                     }
+                    HStack {
+                        Text(listData[0][2][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        if(listData[0][2][1] == "닉네임 없음") {
+                            Text("닉네임 없음")
+                            Button(action:{self.showNicknameModal.toggle()}) {
+                                Text("추가").foregroundColor(Color("light_navy"))
+                            }
+                        } else {
+                            Text(listData[0][2][1])
+                            .font(.headline)
+                            .fontWeight(.light)
+                            Button(action: {self.showNicknameModal.toggle()}) {
+                                Text("수정").foregroundColor(Color("light_navy"))
+                            }
+                        }
+                        
+                    }.sheet(isPresented: $showNicknameModal) {
+                        return NavigationView {
+                            VStack(alignment: .leading) {
+                                //Text("닉네임").foregroundColor(Color("warm_grey_two"))
+                                TextField("닉네임", text: self.$change_nickname).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Spacer()
+                                }
+                            .padding()
+                            .navigationBarItems(
+                                leading:
+                                Button(action: {
+                                    self.showNicknameModal = false
+                                }) {
+                                    Text("닫기").foregroundColor(Color("light_navy"))
+                            }, trailing:
+                                Button(action: {
+                                    self.settings.update_nickname(token: self.settings.get_token(), updated_nickname: self.change_nickname) { result in
+                                        if result {
+                                            self.showNicknameModal = false
+                                        } else {
+                                            print("error")
+                                        }
+                                    }
+                                }) {
+                                    Text("수정").foregroundColor(Color("light_navy"))
+                                })
+                            
+                            
+                            
+
+                        }
+                    }
+                    HStack {
+                        Text(listData[0][3][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        Text(listData[0][3][1])
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                    }
+                    HStack {
+                        Text(listData[0][4][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        if(listData[0][4][1] == "휴대폰 번호 없음") {
+                            Text("휴대폰 번호 없음")
+                            Button(action:{self.showPhoneModal = true}) {
+                                Text("추가").foregroundColor(Color("light_navy"))
+                            }
+                        } else {
+                            Text(listData[0][4][1])
+                            .font(.headline)
+                            .fontWeight(.light)
+                            Button(action: {
+                                self.showPhoneModal = true
+                            }) {
+                                Text("수정").foregroundColor(Color("light_navy"))
+                            }
+                        }
+                        
+                    }.sheet(isPresented: $showPhoneModal) {
+                        NavigationView {
+                            VStack(alignment: .leading) {
+                                //Text("폰번호").foregroundColor(Color("warm_grey_two"))
+                                TextField("폰번호", text: self.$change_phoneNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Spacer()
+                                }.padding().navigationBarItems(
+                                leading:
+                                Button(action: {
+                                    self.showPhoneModal = false
+                                }) {
+                                    Text("닫기").foregroundColor(Color("light_navy"))
+                            }, trailing:
+                                Button(action: {
+                                    self.settings.update_phoneNumber(token: self.settings.get_token(), updated_phoneNumber: self.change_phoneNumber) { result in
+                                        if result {
+                                            self.showPhoneModal = false
+                                        } else {
+                                            print("error")
+                                        }
+                                    }
+                                }) {
+                                    Text("수정").foregroundColor(Color("light_navy"))
+                            })
+                            
+
+                        }
+                    }
+                    HStack {
+                        Text(listData[0][5][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Picker(selection: $updated_gender.onChange(genderChange), label: Text("성별")) {
+                            Text("남자").tag(0)
+                            Text("여자").tag(1)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                        
+                            
+                    }
+                
                 }
 
                 Section(header: Text("학교정보")) {
-                    ForEach(listData[1], id: \.self) { school in
+                    //ForEach(listData[1], id: \.self) { school in
                         HStack {
-                            Text(school[0])
+                            Text(listData[1][0][0])
                                     .font(.headline)
                                     .fontWeight(.semibold)
                             Spacer()
-                            Text(school[1])
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
+                            if(listData[1][0][1] == "학번 없음") {
+                                Text("학번 없음")
+                                Button(action:{self.showStudentNumberModal.toggle()}) {
+                                    Text("추가").foregroundColor(Color("light_navy"))
+                                }
+                            } else {
+                                Text(listData[1][0][1])
+                                .font(.headline)
+                                .fontWeight(.light)
+                            }
+                        }.sheet(isPresented: $showStudentNumberModal) {
+                            NavigationView() {
+                                VStack(alignment: .leading) {
+                                    //Text("학번").foregroundColor(Color("warm_grey_two"))
+                                    TextField("학번", text: self.$change_studentNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                    Spacer()
+                                    }.padding().navigationBarItems(
+                                    leading:
+                                    Button(action: {
+                                        self.showStudentNumberModal = false
+                                    }) {
+                                        Text("닫기").foregroundColor(Color("light_navy"))
+                                }, trailing:
+                                    Button(action: {
+                                        self.settings.update_studentNumber(token: self.settings.get_token(), updated_studentNumber: self.change_studentNumber){ result in
+                                            if result {
+                                                self.showStudentNumberModal = false
+                                            } else {
+                                                print("error")
+                                            }
+                                        }
+                                    }) {
+                                        Text("수정").foregroundColor(Color("light_navy"))
+                                })
+                                
+                                
+
+                            }
                         }
+                    HStack {
+                        Text(listData[1][1][0])
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        Spacer()
+                        Text(listData[1][1][1])
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                    }
+                    //}
+                    HStack {
+                        Spacer()
+                        Text("* 전과 등의 이유로 학번과 학부 정보가 불일치하는 경우\nbcsdlab@gmail.com으로 문의바랍니다.")
+                            .font(.system(size: 11))
+                        .foregroundColor(Color("warm_grey_two"))
+                            .multilineTextAlignment(.center)
+                        Spacer()
                     }
                 }
 
             }
-
-
 
             HStack {
 
@@ -129,7 +403,14 @@ struct MyInfoView: View {
                         // Alert를 닫는다.(아무 일도 일어나지 않는다.)
                         self.showingDeleteAlert = false}
                     )
+        }.onAppear() {
+            if !self.listData[0][5][1].isEmpty {
+                if let gender = Int(self.listData[0][5][1]) {
+                    self.updated_gender = gender
                 }
+                
+            }
+        }
 
 
     }

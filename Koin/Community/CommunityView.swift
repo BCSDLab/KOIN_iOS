@@ -28,7 +28,6 @@ struct TempCommunityList: View {
     init() {
         self.communityData = CommunityController(board_id: -2)
         self.communityData.temp_community_session()
-        print(self.communityData.temp_articles)
     }
     
     var body: some View {
@@ -40,14 +39,20 @@ struct TempCommunityList: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("\(l.title)")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color("black"))
+                                .lineLimit(1)
                                 Text("(\(l.commentCount ?? 0))")
-                                .foregroundColor(Color("light_navy"))
-                            }
+                                .font(.system(size: 16))
+                                    .foregroundColor(Color("light_navy"))
+                                }.padding(.vertical, 16)
                             HStack {
-                                Text("조회\(l.hit)·\(l.nickname)")
+                                Text("조회\(l.hit) · \(l.nickname)")
+                                    .font(.system(size: 12))
                                     .foregroundColor(Color("warm_grey"))
                                 Spacer()
                                 Text(dateToString(string_date: l.createdAt))
+                                    .font(.system(size: 12))
                                     .foregroundColor(Color("warm_grey"))
                             }
                         }
@@ -93,18 +98,25 @@ struct CommunityList: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(l.title)")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color("black"))
+                                .lineLimit(1)
                             Text("(\(l.commentCount))")
+                                .font(.system(size: 16))
                             .foregroundColor(Color("light_navy"))
-                        }
+                        }.padding(.vertical, 10)
                         HStack {
-                            Text("조회\(l.hit)·\(l.nickname)")
+                            Text("조회\(l.hit) · \(l.nickname)")
+                                .font(.system(size: 12))
                                 .foregroundColor(Color("warm_grey"))
                             Spacer()
                             Text(dateToString(string_date: l.createdAt))
+                                .font(.system(size: 12))
                                 .foregroundColor(Color("warm_grey"))
                         }
                     }
-                }.onAppear {
+                }
+                    .onAppear {
                     if l == self.communityData.get_articles().last && self.communityData.get_articles().count != 1 {
                         self.communityData.reload_articles()
                 }
