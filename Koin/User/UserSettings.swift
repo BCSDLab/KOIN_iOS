@@ -520,6 +520,7 @@ class UserSettings: ObservableObject {
             AF
             .request("http://stage.api.koreatech.in/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
             .responseJSON { response in // JSON 형태로 응답을 받아
+                
                 if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)

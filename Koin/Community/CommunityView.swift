@@ -35,7 +35,7 @@ struct TempCommunityList: View {
                 return List {
                 ForEach(self.communityData.get_temp_articles(), id:\.self) { l in
                     // communitydetailview 방식 변경
-                    NavigationLink(destination: CommunityDetailView(community_id: l.id)) {
+                    NavigationLink(destination: CommunityDetailView(community_id: l.id).navigationBarTitle(Text(l.title))) {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("\(l.title)")

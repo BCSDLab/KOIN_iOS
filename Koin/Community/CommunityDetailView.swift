@@ -102,8 +102,7 @@ struct CommunityDetailView: View {
             articleContent = article.content
             self.htmlView.loadHTML(articleContent)
         }
-        
-
+    
         return VStack {
                     VStack(alignment: .leading) {
                         HStack {

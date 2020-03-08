@@ -17,7 +17,7 @@ import IGColorPicker
 
 struct TempRichEditor: UIViewControllerRepresentable {
     var controller: TempViewController = UIStoryboard(name: "Editor", bundle: nil).instantiateViewController(identifier: "TempViewController") as! TempViewController
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var is_edit: Bool = false
     var title: String = ""
     var content: String = ""
@@ -26,6 +26,7 @@ struct TempRichEditor: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> TempViewController {
         controller.is_edit = is_edit
+        controller.presentationMode = presentationMode
         if is_edit {
             controller.article_title = title
             controller.content = content
@@ -57,6 +58,7 @@ struct RichEditor: UIViewControllerRepresentable {
         controller.is_edit = is_edit
         controller.board_id = board_id
         controller.token = token
+        controller.presentationMode = presentationMode
         if is_edit {
             controller.title = title
             controller.article_title = title
@@ -83,7 +85,7 @@ class ViewController: UIViewController {
     @IBOutlet var editorView: RichEditorView!
     @IBOutlet var titleField: UITextField!
     var colorPickerView: ColorPickerView!
-    
+    var presentationMode: Binding<PresentationMode>? = nil
     let picker = UIImagePickerController()
     var is_edit: Bool = false
     var board_id: Int = -1
@@ -101,7 +103,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(self.presentationMode)
         picker.delegate = self
         communityData = CommunityController(board_id: self.board_id)
         titleField.delegate = self
@@ -225,22 +227,20 @@ class ViewController: UIViewController {
     
     @objc func checkAction() {
         if is_edit {
-            communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
+            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
                     print("success")
-                    print(self.navigationController?.title)
-                    print(self.parent?.navigationController?.title)
-                    self.navigationController?.popViewController(animated: true)
+                    self.presentationMode?.wrappedValue.dismiss()
                 } else {
                     print("???")
                 }
                 
             }
         } else {
-            communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
+            self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
                 print(result)
                 if result {
-                    self.navigationController?.popViewController(animated: true)
+                    self.parent?.navigationController?.popViewController(animated: true)
                 } else {
                     print("???")
                 }
@@ -355,7 +355,7 @@ extension ViewController: RichEditorToolbarDelegate {
 class TempViewController: UIViewController {
     var communityData: CommunityController = CommunityController(board_id: -2)
     var colorPickerView: ColorPickerView!
-    
+    var presentationMode: Binding<PresentationMode>? = nil
     @IBOutlet var tempEditorView: RichEditorView!
     @IBOutlet var tempTitleField: UITextField!
     @IBOutlet var tempNicknameField: UITextField!
@@ -376,6 +376,10 @@ class TempViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(self.navigationController?.viewControllers)
+        print(self.navigationController?.navigationItem)
+        print(self.presentationMode)
+        
         tempTitleField.text = article_title
         
         picker.delegate = self
@@ -512,7 +516,7 @@ class TempViewController: UIViewController {
                 
                 if result {
                     print("success")
-                    self.navigationController?.popViewController(animated: true)
+                    self.presentationMode?.wrappedValue.dismiss()
                 } else {
                     print("성공 못함")
                 }
@@ -522,7 +526,15 @@ class TempViewController: UIViewController {
             communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
                     print("success")
-                    self.navigationController?.popViewController(animated: true)
+                    print(self.navigationController?.viewControllers)
+                    for i in self.navigationController!.viewControllers {
+                        print(i)
+                        print(i.title)
+                        print(i.children)
+                    }
+                    print(self.navigationController?.navigationItem)
+                    print(self.navigationController?.navigationItem)
+                    self.parent?.navigationController?.popViewController(animated: true)
                 } else {
                     print("성공 못함")
                 }

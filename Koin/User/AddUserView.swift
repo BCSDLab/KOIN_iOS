@@ -136,8 +136,8 @@ struct AddUserView: View {
                 SecureField("비밀번호", text: $login_password)
                     .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                     .font(/*@START_MENU_TOKEN@*/.subheadline/*@END_MENU_TOKEN@*/)
-            
-                Divider()
+            
+                Divider()
                 
                 SecureField("비밀번호 확인", text: $login_valid_password)
                 .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
@@ -155,7 +155,7 @@ struct AddUserView: View {
                     self.showingPersonal.toggle()
                 }) {
                     Text("개인정보 이용약관")
-                        .foregroundColor(Color("gray2"))
+                        .foregroundColor(Color("grey2"))
                     .font(.system(size: 12))
                     .underline()
                 }
@@ -182,7 +182,7 @@ struct AddUserView: View {
                     self.showingKoin.toggle()
                 }) {
                     Text("코인 이용약관")
-                    .foregroundColor(Color("gray2"))
+                    .foregroundColor(Color("grey2"))
                     .font(.system(size: 12))
                     .underline()
                 }.sheet(isPresented: $showingKoin) {

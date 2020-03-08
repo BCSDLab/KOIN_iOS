@@ -45,7 +45,13 @@ struct MyInfoView: View {
         // 네비게이션 바 글자색 설정(흰색)
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "light_navy")
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "light_navy")], for: .normal)
+        UISegmentedControl.appearance().backgroundColor = UIColor.white
     }
+    
 
     
     // 닉네임이 겹치는지 확인해주는 함수
@@ -125,37 +131,36 @@ struct MyInfoView: View {
                 Section(header: Text("기본정보")) {
                     HStack {
                         Text(listData[0][0][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                        Spacer()
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                        .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
                         Text(listData[0][0][1])
-                        .font(.subheadline)
-                        .fontWeight(.light)
+                            .foregroundColor(Color("black"))
+                            .font(.system(size: 15))
+                            .fontWeight(.light)
                     }
                     HStack {
                         Text(listData[0][1][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                        .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
+                        Text(listData[0][1][1])
+                        .foregroundColor(Color("black"))
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
                         Spacer()
                         if(listData[0][1][1] == "이름 없음") {
-                            
-                            Text("이름 없음")
-                            .font(.headline)
-                            .fontWeight(.light)
-                            
                             Button(action:{self.showNameModal.toggle()}) {
                                 Text("추가").foregroundColor(Color("light_navy"))
                             }
-                        } else {
-                            Text(listData[0][1][1])
-                            .font(.headline)
-                            .fontWeight(.light)
                         }
                         
                     }.sheet(isPresented: $showNameModal) {
                         return NavigationView {
                             VStack(alignment: .leading) {
-                                //Text("이름").foregroundColor(Color("warm_grey_two"))
+                                Text("이름").foregroundColor(Color("warm_grey_two"))
                                 TextField("이름", text: self.$change_name).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
                                 Spacer()
                                 }.padding().navigationBarItems(
@@ -184,18 +189,21 @@ struct MyInfoView: View {
                     }
                     HStack {
                         Text(listData[0][2][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                        .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
+                        Text(listData[0][2][1])
+                        .foregroundColor(Color("black"))
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
                         Spacer()
                         if(listData[0][2][1] == "닉네임 없음") {
-                            Text("닉네임 없음")
                             Button(action:{self.showNicknameModal.toggle()}) {
                                 Text("추가").foregroundColor(Color("light_navy"))
                             }
                         } else {
-                            Text(listData[0][2][1])
-                            .font(.headline)
-                            .fontWeight(.light)
+                            
                             Button(action: {self.showNicknameModal.toggle()}) {
                                 Text("수정").foregroundColor(Color("light_navy"))
                             }
@@ -235,27 +243,31 @@ struct MyInfoView: View {
                     }
                     HStack {
                         Text(listData[0][3][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                        Spacer()
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                                .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
                         Text(listData[0][3][1])
-                                .font(.subheadline)
+                                .foregroundColor(Color("black"))
+                                .font(.system(size: 15))
                                 .fontWeight(.light)
                     }
                     HStack {
                         Text(listData[0][4][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                                .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
+                        Text(listData[0][4][1])
+                        .foregroundColor(Color("black"))
+                        .font(.system(size: 15))
+                        .fontWeight(.light)
                         Spacer()
                         if(listData[0][4][1] == "휴대폰 번호 없음") {
-                            Text("휴대폰 번호 없음")
                             Button(action:{self.showPhoneModal = true}) {
                                 Text("추가").foregroundColor(Color("light_navy"))
                             }
                         } else {
-                            Text(listData[0][4][1])
-                            .font(.headline)
-                            .fontWeight(.light)
                             Button(action: {
                                 self.showPhoneModal = true
                             }) {
@@ -293,13 +305,16 @@ struct MyInfoView: View {
                     }
                     HStack {
                         Text(listData[0][5][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                            .font(.system(size: 15))
+                        .foregroundColor(Color("warm_grey_two"))
+                        .frame(width: 75, alignment: .leading)
+                            .padding(.trailing)
                         Picker(selection: $updated_gender.onChange(genderChange), label: Text("성별")) {
                             Text("남자").tag(0)
                             Text("여자").tag(1)
                             }
                             .pickerStyle(SegmentedPickerStyle())
+                    
                         
                             
                     }
@@ -308,20 +323,23 @@ struct MyInfoView: View {
 
                 Section(header: Text("학교정보")) {
                     //ForEach(listData[1], id: \.self) { school in
-                        HStack {
+                        HStack() {
                             Text(listData[1][0][0])
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(Color("warm_grey_two"))
+                                .frame(width: 75, alignment: .leading)
+                            .padding(.trailing)
+                            Text(listData[1][0][1])
+                            .foregroundColor(Color("black"))
+                            .font(.system(size: 15))
+                            .fontWeight(.light)
                             Spacer()
                             if(listData[1][0][1] == "학번 없음") {
-                                Text("학번 없음")
                                 Button(action:{self.showStudentNumberModal.toggle()}) {
                                     Text("추가").foregroundColor(Color("light_navy"))
                                 }
                             } else {
-                                Text(listData[1][0][1])
-                                .font(.headline)
-                                .fontWeight(.light)
+                                
                             }
                         }.sheet(isPresented: $showStudentNumberModal) {
                             NavigationView() {
@@ -354,11 +372,13 @@ struct MyInfoView: View {
                         }
                     HStack {
                         Text(listData[1][1][0])
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                        Spacer()
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("warm_grey_two"))
+                        .frame(width: 75, alignment: .leading)
+                        .padding(.trailing)
                         Text(listData[1][1][1])
-                                .font(.subheadline)
+                                .foregroundColor(Color("black"))
+                                .font(.system(size: 15))
                                 .fontWeight(.light)
                     }
                     //}
@@ -370,10 +390,12 @@ struct MyInfoView: View {
                             .multilineTextAlignment(.center)
                         Spacer()
                     }
+                    
                 }
+                
+                
 
             }
-
             HStack {
 
                 Spacer()
@@ -390,6 +412,8 @@ struct MyInfoView: View {
                 }
                 Spacer()
             }
+
+            
 
         }
                 .listStyle(GroupedListStyle())
