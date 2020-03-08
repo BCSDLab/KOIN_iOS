@@ -48,7 +48,6 @@ class UserSettings: ObservableObject {
     
     func get_userId() -> Int {
         if let user = self.user {
-            //print(user)
             if let userdata = user.user {
                 return userdata.id
             }
@@ -57,7 +56,6 @@ class UserSettings: ObservableObject {
     }
     func get_nickname() -> String {
         if let user = self.user {
-            //print(user)
             if let userdata = user.user {
                 if let nickname = userdata.nickname {
                     return nickname
@@ -644,7 +642,6 @@ class UserSettings: ObservableObject {
                     // 데이터를 UserRequest의 형태로 가공하여
                     let userRequest = try decoder.decode(UserRequest.self, from: data)
                     // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    //print(userRequest)
                     if let checkToken = userRequest.token {
                         self.user = userRequest
                         

@@ -64,7 +64,6 @@ struct TempCommunityList: View {
                     
                 }
             }.onAppear() {
-                print("CommunityView Appeared")
             }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
                 HStack {
                     Image(systemName: "chevron.left")
@@ -88,7 +87,6 @@ struct CommunityList: View {
         self.board_id = board_id
         self.communityData = CommunityController(board_id: board_id)
         self.communityData.community_session()
-        print(self.communityData.articles)
     }
     
     var body: some View {
@@ -124,7 +122,6 @@ struct CommunityList: View {
                 
             }
         }.onAppear() {
-            print("CommunityView Appeared")
         }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
             HStack {
                 Image(systemName: "chevron.left")
@@ -146,7 +143,6 @@ struct CommunityView: View {
     var board_id: Int
     //board_id == -2 temp로 작업되게
     init(board_id: Int) {
-        print(board_id)
         self.board_id = board_id
     }
     
@@ -155,7 +151,6 @@ struct CommunityView: View {
             if (self.board_id == -2) {
                 return AnyView(TempCommunityList())
             }else {
-                print("open communityList")
                 return AnyView(CommunityList(board_id: self.board_id))
         }
         

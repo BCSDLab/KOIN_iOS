@@ -57,6 +57,7 @@ struct AddUserView: View {
         // 네비게이션 바 글자색 설정(흰색)
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.black]
+            
     }
     
     // 회원가입 기능을 제공하는 함수

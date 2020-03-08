@@ -103,7 +103,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self.presentationMode)
         picker.delegate = self
         communityData = CommunityController(board_id: self.board_id)
         titleField.delegate = self
@@ -128,7 +127,6 @@ class ViewController: UIViewController {
         
         var options = toolbar.options
         
-        print(options)
         
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
@@ -229,20 +227,18 @@ class ViewController: UIViewController {
         if is_edit {
             self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
-                    print("success")
                     self.presentationMode?.wrappedValue.dismiss()
                 } else {
-                    print("???")
+                    print("성공 못함")
                 }
                 
             }
         } else {
             self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
-                print(result)
                 if result {
                     self.parent?.navigationController?.popViewController(animated: true)
                 } else {
-                    print("???")
+                    print("성공 못함")
                 }
             }
         }
@@ -376,9 +372,6 @@ class TempViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self.navigationController?.viewControllers)
-        print(self.navigationController?.navigationItem)
-        print(self.presentationMode)
         
         tempTitleField.text = article_title
         
@@ -515,7 +508,6 @@ class TempViewController: UIViewController {
             communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 
                 if result {
-                    print("success")
                     self.presentationMode?.wrappedValue.dismiss()
                 } else {
                     print("성공 못함")
@@ -525,15 +517,6 @@ class TempViewController: UIViewController {
         } else {
             communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
-                    print("success")
-                    print(self.navigationController?.viewControllers)
-                    for i in self.navigationController!.viewControllers {
-                        print(i)
-                        print(i.title)
-                        print(i.children)
-                    }
-                    print(self.navigationController?.navigationItem)
-                    print(self.navigationController?.navigationItem)
                     self.parent?.navigationController?.popViewController(animated: true)
                 } else {
                     print("성공 못함")
@@ -622,7 +605,6 @@ extension TempViewController: UIImagePickerControllerDelegate, UINavigationContr
                     switch response.result {
                     case .success(let value as [String: Any]):
                         let image_url = value["url"]
-                        print(image_url)
                         self.toolbar.editor?.insertImage(image_url as! String, alt: "koin")
                     case .failure(let error):
                         print(error)

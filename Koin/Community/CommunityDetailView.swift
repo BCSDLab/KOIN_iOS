@@ -32,7 +32,6 @@ struct CommunityDetailView: View {
         } else {
             self.controller.load_community(article_id: self.community_id)
         }
-        print(community_id)
     }
     
     init(community_id: Int) {
@@ -40,7 +39,6 @@ struct CommunityDetailView: View {
         self.controller = CommunityController(board_id: -2)
         self.community_id = community_id
         self.controller.load_temp_community(article_id: community_id)
-        print(community_id)
     }
     
     func hashed(pw: String) -> String{
@@ -79,7 +77,6 @@ struct CommunityDetailView: View {
 
         if self.board_id == -2 {
             tempArticle = self.controller.detail_temp_article
-            print(tempArticle)
             articleTitle = tempArticle.title
             articleHit = tempArticle.hit
             articleNickname = tempArticle.nickname

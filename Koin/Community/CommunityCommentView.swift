@@ -96,7 +96,6 @@ struct CommunityCommentView: View {
         }
 
         
-        //print(articleContent)
         
         return Group {
             if self.controller.board_id == -2 {

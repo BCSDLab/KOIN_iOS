@@ -398,6 +398,31 @@ struct SeoulListCell: View {
     }
 }
 
+struct ExpressListCell: View {
+    let place: String
+    let time: String
+
+    var body: some View {
+                HStack {
+                    Text(self.place)
+                        .foregroundColor(Color("black"))
+                    .font(.system(size: 13))
+                    .frame(width: 150, alignment: .center)
+                    .padding(5)
+                    Text(self.time)
+                        .foregroundColor(Color("black"))
+                    .font(.system(size: 13))
+                    .frame(width: 150, alignment: .center)
+                    .padding(5)
+        }
+    }
+
+    init(place: String, time: String) {
+        self.place = place
+        self.time = time
+    }
+}
+
 // ["SeasonCheonanCommuterToTerminal","SeasonCheonanCommuterToCheonanStation","VacationCheonanCommuterToTerminal"]
 // VacationCheonanCommuterToDujeongStation
 // ["VacationCheongjuCommuterToYongam","SeasonCheongjuCommuterToGym","VacationCheongjuCommuterToYongam"]
@@ -834,16 +859,20 @@ struct CommuterListView: View {
                         Rectangle()
                         .fill(Color("light_navy"))
                         .frame(height: 2)
-                           HStack {
-                               Text("출발시간")
-                                   .font(.system(size: 15))
-                                   .foregroundColor(Color("light_navy"))
-                               Spacer()
-                               Text("도착시간")
-                               .font(.system(size: 15))
-                               .foregroundColor(Color("light_navy"))
-                               
-                           }.padding(.horizontal, 10)
+
+                        HStack {
+                                    Text("출발시간")
+                                        .foregroundColor(Color("light_navy"))
+                                    .font(.system(size: 15))
+                                    .frame(width: 150, alignment: .center)
+                                    .padding(5)
+                                    Text("도착시간")
+                                        .foregroundColor(Color("light_navy"))
+                                        .font(.system(size: 15))
+                                        .frame(width: 150, alignment: .center)
+                                        .padding(5)
+                        }
+                        
                            Rectangle()
                                .fill(Color("light_navy"))
                                .frame(height: 1)
@@ -852,11 +881,11 @@ struct CommuterListView: View {
                     
                     if primary == 0 {
                         ForEach(ExpressBusFromKoreatechToTerminal, id: \.self) { l in
-                            CommuterListCell(place: l[0], time: l[1])
+                            ExpressListCell(place: l[0], time: l[1])
                         }
                     } else {
                         ForEach(ExpressBusFromTerminalToKoreatech, id: \.self) { l in
-                            CommuterListCell(place: l[0], time: l[1])
+                            ExpressListCell(place: l[0], time: l[1])
                         }
                     }
                     }.padding(.horizontal, 10)
@@ -888,7 +917,6 @@ struct CommuterListView: View {
                 }.padding(.horizontal, 10)
             }
             
-                       
                        
             
                    

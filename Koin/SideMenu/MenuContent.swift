@@ -173,7 +173,11 @@ struct MenuContent: View {
                                 .renderingMode(.template)
                                 .foregroundColor(.gray)
                                 .opacity(0.5)
-                    }
+                    }.onTapGesture {
+                        let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+
+                        UIApplication.shared.open(url as URL)
+                            }
 
                     HStack {
                         Text("만든이")

@@ -127,9 +127,7 @@ class BusSearchController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
         dateFormatter.locale = Locale.current
-        print(dateText.text!)
         let date = dateFormatter.date(from: dateText.text!)
-        print(date)
         
         let timeFormatter = DateFormatter()
         timeFormatter.timeZone = TimeZone.autoupdatingCurrent
@@ -178,10 +176,6 @@ class BusSearchController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //searchView.layer.zPosition = 999
-        //self.view.bringSubviewToFront(searchView)
-        
-        print("start")
          let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone.autoupdatingCurrent
         dateFormatter.locale = Locale.current

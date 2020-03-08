@@ -22,6 +22,8 @@ struct UserLoginView: View {
     // 유저 정보 변수
     @EnvironmentObject var settings: UserSettings
     
+
+    
     var body: some View {
     return NavigationView {
         VStack {

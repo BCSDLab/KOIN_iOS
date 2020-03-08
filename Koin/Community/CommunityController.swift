@@ -23,7 +23,6 @@ class CommunityController: ObservableObject {
     let objectWillChange = PassthroughSubject<CommunityController, Never>()
     
     init(board_id: Int) {
-        print(board_id)
         self.articles = Articles()
         self.detail_article = Article()
         self.board_id = board_id
@@ -47,7 +46,6 @@ class CommunityController: ObservableObject {
     }
     //만약 페이지 초과할 때 조치 방법 생각
     func reload_temp_articles() {
-        //print(self.get_temp_articles().count)
         AF
             .request("http://stage.api.koreatech.in/temp/articles?&page=\(self.get_temp_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
             
@@ -71,7 +69,6 @@ class CommunityController: ObservableObject {
     }
     
     func reload_articles() {
-        print(self.board_id)
         AF
             .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
@@ -103,9 +100,7 @@ class CommunityController: ObservableObject {
                     do {
                         let decoder = JSONDecoder()
                         let articleRequest = try decoder.decode(TempArticle.self, from: data)
-                        print(articleRequest)
                         self.detail_temp_article = articleRequest
-                        print(self.detail_temp_article)
                         self.objectWillChange.send(self)
 
                     } catch let error {
@@ -127,7 +122,6 @@ class CommunityController: ObservableObject {
                         let decoder = JSONDecoder()
                         let articleRequest = try decoder.decode(Article.self, from: data)
                         self.detail_article = articleRequest
-                        //print(self.detail_article)
                         self.objectWillChange.send(self)
 
                     } catch let error {
@@ -143,7 +137,6 @@ class CommunityController: ObservableObject {
             .request("http://stage.api.koreatech.in/temp/articles", method: .post, parameters: ["password": password, "title": title, "content": content, "nickname": nickname], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                        print(status)
                                     switch(status){
                                     case 201: // 잘 받아졌을 때(201)
                                         result(true) // 회원가입이 잘 되었다고 알리고
@@ -160,14 +153,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("put article")
-        print([token, board_id, title, content])
 
         AF
                 .request("http://stage.api.koreatech.in/articles", method: .post, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                        print(status)
                                     switch(status){
                                     case 201: // 잘 받아졌을 때(201)
                                         result(true) // 회원가입이 잘 되었다고 알리고
@@ -184,13 +174,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "password": password
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/temp/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -206,13 +194,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -225,13 +211,11 @@ class CommunityController: ObservableObject {
     }
     
     func update_temp_article(password: String, article_id: Int, title: String, content: String, result: @escaping (Bool) -> Void) {
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/temp/articles/\(article_id)", method: .put, parameters: ["password": password, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(response)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     
@@ -250,14 +234,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
-        print(content)
 
         AF
                 .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .put, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -272,14 +253,12 @@ class CommunityController: ObservableObject {
     }
     
     func put_temp_comment(password: String, article_id: Int, nickname:String, content: String, result: @escaping (Bool) -> Void) {
-        print("start alamofire")
 
         AF
             .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments", method: .post, parameters: ["content": content, "nickname": nickname,
                                                                                                                        "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -297,13 +276,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/articles/\(article_id)/comments", method: .post, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -321,13 +298,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "password": password
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -345,13 +320,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in//articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -365,13 +338,12 @@ class CommunityController: ObservableObject {
                 }
     }
     
-    func update_temp_comment(password: String, article_id: Int, comment_id: Int, content: String, result: @escaping (Bool) -> Void) {        print("start alamofire")
+    func update_temp_comment(password: String, article_id: Int, comment_id: Int, content: String, result: @escaping (Bool) -> Void) {
 
         AF
             .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content, "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     result(true) // 회원가입이 잘 되었다고 알리고
@@ -384,20 +356,8 @@ class CommunityController: ObservableObject {
                 }
     }
     
-    /*
-     //가능
-     success({
-         grantEdit = 1;
-     })
-     //불가능
-     success({
-         grantEdit = 0;
-     })
-     
-     */
     
     func grant_article_check(password: String, article_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void) {
-        print("start alamofire")
 
         AF
             .request("http://stage.api.koreatech.in/temp/articles/grant/check", method: .post, parameters: ["article_id": article_id, "password": password], encoding: JSONEncoding.prettyPrinted)
@@ -414,7 +374,6 @@ class CommunityController: ObservableObject {
     }
     
     func grant_comment_check(password: String, comment_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void){
-        print("start alamofire")
 
         AF
             .request("http://stage.api.koreatech.in/temp/comments/grant/check", method: .post, parameters: ["comment_id": comment_id, "password": password], encoding: JSONEncoding.prettyPrinted)
@@ -436,13 +395,11 @@ class CommunityController: ObservableObject {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
-        print("start alamofire")
 
         AF
                 .request("http://stage.api.koreatech.in/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
-                    print(status)
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
                                     result(true) // 회원가입이 잘 되었다고 알리고

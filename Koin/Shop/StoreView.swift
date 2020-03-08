@@ -186,9 +186,7 @@ struct StoreView: View {
                 self.stores.load_stores()
                 HUD.hide()
             }
-            print("StoreView Appeared")
         }.onDisappear() {
-            print("StoreView Disappeared")
         }
     }
 }
