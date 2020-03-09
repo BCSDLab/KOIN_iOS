@@ -96,7 +96,6 @@ struct CommunityCommentView: View {
         }
 
         
-        //print(articleContent)
         
         return Group {
             if self.controller.board_id == -2 {
@@ -104,27 +103,36 @@ struct CommunityCommentView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(articleTitle)")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color.black.opacity(0.87))
                         Text("(\(articleCommentCount))")
+                            .font(.system(size: 16))
                         .foregroundColor(Color("light_navy"))
-                        }
+                        }.padding(.bottom, 8)
                         HStack {
-                            Text("조회\(articleHit)·\(articleNickname)")
+                            Text("조회\(articleHit) · \(articleNickname)")
+                                .font(.system(size: 13))
                                 .foregroundColor(Color("warm_grey"))
+                                .lineLimit(1)
                             Spacer()
                             Text(articleCreatedAt)
+                                .font(.system(size: 12))
+                                .fontWeight(.light)
                                 .foregroundColor(Color("warm_grey"))
                         }
 
-                    }
+                    }.padding(.bottom, 8)
                     Divider()
                     ForEach(articleTempComments, id: \.self) { c in
                         VStack(alignment: .leading) {
                             HStack {
                                 Text(c.nickname)
+                                    .font(.system(size: 14))
                                     .foregroundColor(Color("black"))
-                                    .fontWeight(.medium)
+                                .lineLimit(1)
                                 Text(commentDateToString(string_date: c.createdAt))
-                                .foregroundColor(Color("gray2"))
+                                .font(.system(size: 12))
+                                .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
                                 Spacer()
                                 
@@ -137,17 +145,22 @@ struct CommunityCommentView: View {
                                         }}) {
                                         Image("close")
                                             .renderingMode(.original)
-                                            .fixedSize(horizontal: false, vertical: true)
+                                            .resizable()
+                                            .frame(width: 12, height: 12)
                                     }
                                 
                             }
                             HStack {
                             Text(c.content)
+                                .font(.system(size: 14))
                                 .foregroundColor(Color("black"))
                                 .fontWeight(.light)
-                            }.fixedSize(horizontal: false, vertical: true)
-                                .padding(.bottom, 10)
+                            }
                             SecureField("비밀번호", text: self.$grant_check_password)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                            .lineLimit(1)
+                            .frame(height: 36.7)
                                 Button(action:{
                                     
                                     self.controller.grant_comment_check(password: self.hashed(pw: self.grant_check_password), comment_id: c.id) { result in
@@ -171,10 +184,11 @@ struct CommunityCommentView: View {
                                 }) {
                                     HStack {
                                     Text("수정")
+                                        .font(.system(size: 12))
                                         .fontWeight(.light)
                                         .foregroundColor(.black)
-                                    }.padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
+                                        .frame(width: 50, height: 30, alignment: .center)
+                                    }
                                     .border(Color.gray.opacity(0.8), width: 1)
                                 }
                             
@@ -183,22 +197,41 @@ struct CommunityCommentView: View {
                     Divider()
                     //수정모드일 때는 취소와 수정 버튼, 작성모드일 때는 등록 버튼만
                     VStack(alignment: .leading) {
+                        
                         VStack(alignment: .leading) {
                             if !is_edited {
                                 TextField("닉네임", text: $temp_nickname)
+                                .font(.system(size: 14))
+                                .foregroundColor(Color("black"))
+                                .lineLimit(1)
+                                .frame(height: 36.7)
+                                .border(Color.gray.opacity(0.8), width: 1)
                             } else {
                                 Text(self.temp_nickname)
+                                .font(.system(size: 14))
+                                .foregroundColor(Color("black"))
+                                .padding(.top, 6)
                             }
                            SecureField("비밀번호", text: $temp_password)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                            .lineLimit(1)
+                            .frame(height: 36.7)
+                            .border(Color.gray.opacity(0.8), width: 1)
+                            
                             TextField("댓글을 작성해주세요.", text: $comment_content)
-                                .font(.system(size: 16, weight: .light, design: .default))
-                        }.padding(.all, 10)
-                        .border(Color.gray.opacity(0.8), width: 1)
+                                .font(.system(size: 14))
+                                .foregroundColor(Color("black"))
+                                    .lineLimit(.max)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(height: 112)
+                            .border(Color.gray.opacity(0.8), width: 1)
+                        }.padding(.vertical, 10)
+                        
                         
                         
                     }
-                    HStack {
-                        
+                    HStack(spacing: 17) {
                         if is_edited {
                             
                             Button(action: {
@@ -207,11 +240,10 @@ struct CommunityCommentView: View {
                                 self.comment_content = ""
                                 self.is_edited = false
                             }) {
-                                VStack{
                                 Text("취소")
-                                }
-                                .padding(.all, 10)
-                                .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                .border(Color.gray.opacity(0.8), width: 1)
                                     
                             }
                             
@@ -222,10 +254,10 @@ struct CommunityCommentView: View {
                                         print("성공 못함")
                                     }
                                 }}) {
-                                    VStack{
                                 Text("수정")
-                                    }.padding(.all, 10)
-                                    .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 12))
+                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                        .border(Color.gray.opacity(0.8), width: 1)
                                         
                             }
                             
@@ -238,15 +270,17 @@ struct CommunityCommentView: View {
                                         print("성공 못함")
                                     }
                                 }}) {
-                                    VStack{
+
                                 Text("등록")
-                                    }.padding(.all, 10)
-                                    .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                    .border(Color.gray.opacity(0.8), width: 1)
                                         
                         }
                         }
                         
-                    }.fixedSize(horizontal: false, vertical: true)
+                    }.frame(height: 27)
+                    .padding(.top, 9)
 
                 }.padding()
             } else {
@@ -254,27 +288,36 @@ struct CommunityCommentView: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(articleTitle)")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color.black.opacity(0.87))
+                            
                         Text("(\(articleCommentCount))")
-                        .foregroundColor(Color("light_navy"))
-                        }
+                            .font(.system(size: 16))
+                            .foregroundColor(Color("light_navy"))
+                        }.padding(.bottom, 16)
                         HStack {
-                            Text("조회\(articleHit)·\(articleNickname)")
+                            Text("조회\(articleHit) · \(articleNickname)")
+                                .font(.system(size: 13))
                                 .foregroundColor(Color("warm_grey"))
+                            .lineLimit(1)
                             Spacer()
                             Text(articleCreatedAt)
+                                .font(.system(size: 12))
+                                .fontWeight(.light)
                                 .foregroundColor(Color("warm_grey"))
                         }
 
-                    }
+                    }.padding(.bottom, 10)
                     Divider()
                     ForEach(articleComments, id: \.self) { c in
                         VStack(alignment: .leading) {
                             HStack {
                                 Text(c.nickname)
+                                    .font(.system(size: 14))
                                     .foregroundColor(Color("black"))
-                                    .fontWeight(.medium)
                                 Text(commentDateToString(string_date: c.createdAt))
-                                .foregroundColor(Color("gray2"))
+                                    .font(.system(size: 12))
+                                .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
                                 Spacer()
                                 if(c.userId == self.user.get_userId()) {
@@ -287,12 +330,15 @@ struct CommunityCommentView: View {
                                         }}) {
                                         Image("close")
                                             .renderingMode(.original)
-                                            .fixedSize(horizontal: false, vertical: true)
+                                            .resizable()
+                                            .frame(width: 12, height: 12)
+                                            
                                     }
                                 }
                             }
                             HStack {
                             Text(c.content)
+                                .font(.system(size: 14))
                                 .foregroundColor(Color("black"))
                                 .fontWeight(.light)
                             }.fixedSize(horizontal: false, vertical: true)
@@ -308,10 +354,11 @@ struct CommunityCommentView: View {
                                 }) {
                                     HStack {
                                     Text("수정")
+                                        .font(.system(size: 12))
                                         .fontWeight(.light)
                                         .foregroundColor(.black)
-                                    }.padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
+                                        .frame(width: 50, height: 30, alignment: .center)
+                                    }
                                     .border(Color.gray.opacity(0.8), width: 1)
                                 }
                             }
@@ -320,17 +367,24 @@ struct CommunityCommentView: View {
                     Divider()
                     //수정모드일 때는 취소와 수정 버튼, 작성모드일 때는 등록 버튼만
                     VStack(alignment: .leading) {
+                        Text(self.user.get_nickname())
+                            .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                            .padding(.top, 6)
+                        
                         VStack(alignment: .leading) {
-                        Text(self.user.get_nickname()).foregroundColor(Color("black"))
-                        .fontWeight(.medium)
                             TextField("댓글을 작성해주세요.", text: $comment_content)
-                                .font(.system(size: 16, weight: .light, design: .default))
+                                .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                                .lineLimit(.max)
+                                .multilineTextAlignment(.leading)
+                                .frame(height: 112)
                         }.padding(.all, 10)
                         .border(Color.gray.opacity(0.8), width: 1)
                         
                         
                     }
-                    HStack {
+                    HStack(spacing: 17) {
                         
                         if is_edited {
                             
@@ -340,11 +394,10 @@ struct CommunityCommentView: View {
                                 self.comment_content = ""
                                 self.is_edited = false
                             }) {
-                                VStack{
                                 Text("취소")
-                                }
-                                .padding(.all, 10)
-                                .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                .border(Color.gray.opacity(0.8), width: 1)
                                     
                             }
                             
@@ -355,10 +408,10 @@ struct CommunityCommentView: View {
                                         print("성공 못함")
                                     }
                                 }}) {
-                                    VStack{
                                 Text("수정")
-                                    }.padding(.all, 10)
-                                    .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                    .border(Color.gray.opacity(0.8), width: 1)
                                         
                             }
                             
@@ -371,15 +424,16 @@ struct CommunityCommentView: View {
                                         print("성공 못함")
                                     }
                                 }}) {
-                                    VStack{
                                 Text("등록")
-                                    }.padding(.all, 10)
-                                    .border(Color.gray.opacity(0.8), width: 1).fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                    .border(Color.gray.opacity(0.8), width: 1)
                                         
                         }
                         }
                         
-                    }.fixedSize(horizontal: false, vertical: true)
+                    }.frame(height: 27)
+                        .padding(.top, 9)
 
                 }.padding()
             }

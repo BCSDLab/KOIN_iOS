@@ -28,7 +28,6 @@ struct TempCommunityList: View {
     init() {
         self.communityData = CommunityController(board_id: -2)
         self.communityData.temp_community_session()
-        print(self.communityData.temp_articles)
     }
     
     var body: some View {
@@ -36,18 +35,25 @@ struct TempCommunityList: View {
                 return List {
                 ForEach(self.communityData.get_temp_articles(), id:\.self) { l in
                     // communitydetailview 방식 변경
-                    NavigationLink(destination: CommunityDetailView(community_id: l.id)) {
+                    NavigationLink(destination: CommunityDetailView(community_id: l.id).navigationBarTitle(Text(l.title))) {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("\(l.title)")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color("black"))
+                                .lineLimit(1)
                                 Text("(\(l.commentCount ?? 0))")
-                                .foregroundColor(Color("light_navy"))
-                            }
+                                .font(.system(size: 16))
+                                    .foregroundColor(Color("light_navy"))
+                                }.padding(.vertical, 16)
                             HStack {
-                                Text("조회\(l.hit)·\(l.nickname)")
+                                Text("조회\(l.hit) · \(l.nickname)")
+                                    .font(.system(size: 12))
                                     .foregroundColor(Color("warm_grey"))
+                                    .lineLimit(1)
                                 Spacer()
                                 Text(dateToString(string_date: l.createdAt))
+                                    .font(.system(size: 12))
                                     .foregroundColor(Color("warm_grey"))
                             }
                         }
@@ -59,7 +65,6 @@ struct TempCommunityList: View {
                     
                 }
             }.onAppear() {
-                print("CommunityView Appeared")
             }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
                 HStack {
                     Image(systemName: "chevron.left")
@@ -83,7 +88,6 @@ struct CommunityList: View {
         self.board_id = board_id
         self.communityData = CommunityController(board_id: board_id)
         self.communityData.community_session()
-        print(self.communityData.articles)
     }
     
     var body: some View {
@@ -93,18 +97,26 @@ struct CommunityList: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Text("\(l.title)")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color("black"))
+                                .lineLimit(1)
                             Text("(\(l.commentCount))")
+                                .font(.system(size: 16))
                             .foregroundColor(Color("light_navy"))
-                        }
+                        }.padding(.vertical, 10)
                         HStack {
-                            Text("조회\(l.hit)·\(l.nickname)")
+                            Text("조회\(l.hit) · \(l.nickname)")
+                                .font(.system(size: 12))
                                 .foregroundColor(Color("warm_grey"))
+                                .lineLimit(1)
                             Spacer()
                             Text(dateToString(string_date: l.createdAt))
+                                .font(.system(size: 12))
                                 .foregroundColor(Color("warm_grey"))
                         }
                     }
-                }.onAppear {
+                }
+                    .onAppear {
                     if l == self.communityData.get_articles().last && self.communityData.get_articles().count != 1 {
                         self.communityData.reload_articles()
                 }
@@ -112,7 +124,6 @@ struct CommunityList: View {
                 
             }
         }.onAppear() {
-            print("CommunityView Appeared")
         }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
             HStack {
                 Image(systemName: "chevron.left")
@@ -134,7 +145,6 @@ struct CommunityView: View {
     var board_id: Int
     //board_id == -2 temp로 작업되게
     init(board_id: Int) {
-        print(board_id)
         self.board_id = board_id
     }
     
@@ -143,7 +153,6 @@ struct CommunityView: View {
             if (self.board_id == -2) {
                 return AnyView(TempCommunityList())
             }else {
-                print("open communityList")
                 return AnyView(CommunityList(board_id: self.board_id))
         }
         

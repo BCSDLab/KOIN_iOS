@@ -224,7 +224,6 @@ let b = [store_phone, "\(store_openTime) ~ \(store_closeTime)", store_address, "
                             let url: NSURL = URL(string: formattedString)! as NSURL
 
                             UIApplication.shared.open(url as URL)
-
                         }) {
                             Text("전화하기")
                                 .font(.system(size: 15))
@@ -310,9 +309,7 @@ let b = [store_phone, "\(store_openTime) ~ \(store_closeTime)", store_address, "
                 }//.padding()
             }
             }.onAppear() {
-                print("StoreDetailView Appeared")
             }.onDisappear() {
-                print("StoreDetailView Disappeared")
             }
         }
 

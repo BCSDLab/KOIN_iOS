@@ -32,7 +32,6 @@ struct CommunityDetailView: View {
         } else {
             self.controller.load_community(article_id: self.community_id)
         }
-        print(community_id)
     }
     
     init(community_id: Int) {
@@ -40,7 +39,6 @@ struct CommunityDetailView: View {
         self.controller = CommunityController(board_id: -2)
         self.community_id = community_id
         self.controller.load_temp_community(article_id: community_id)
-        print(community_id)
     }
     
     func hashed(pw: String) -> String{
@@ -63,23 +61,6 @@ struct CommunityDetailView: View {
         let dateString = dateFormatter.string(from: date!)
         return dateString
     }
- /*
-    func checkGrant(){
-        self.controller.grant_article_check(password: self.hashed(pw: self.temp_password), article_id: self.community_id) { result in
-            do {
-                let value = try result.get()
-                let grant = value["grantEdit"] as! Int
-                if grant == 1 {
-                    self.grantValue = true
-                } else {
-                    self.grantValue = false
-                }
-            } catch {
-                self.grantValue = false
-            }
-        }
-    }
-*/
 
     var body: some View {
         var article: Article = Article()
@@ -96,7 +77,6 @@ struct CommunityDetailView: View {
 
         if self.board_id == -2 {
             tempArticle = self.controller.detail_temp_article
-            print(tempArticle)
             articleTitle = tempArticle.title
             articleHit = tempArticle.hit
             articleNickname = tempArticle.nickname
@@ -119,31 +99,39 @@ struct CommunityDetailView: View {
             articleContent = article.content
             self.htmlView.loadHTML(articleContent)
         }
-        
-
+    
         return VStack {
                     VStack(alignment: .leading) {
                         HStack {
                         Text("\(articleTitle)")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color.black.opacity(0.87))
                         Text("(\(articleCommentCount))")
+                            .font(.system(size: 16))
                         .foregroundColor(Color("light_navy"))
-                        }
+                        }.padding(.bottom, 8)
                         HStack {
-                            Text("조회\(articleHit)·\(articleNickname)")
+                            Text("조회\(articleHit) · \(articleNickname)")
+                                .font(.system(size: 13))
                                 .foregroundColor(Color("warm_grey"))
+                            .lineLimit(1)
                             Spacer()
                             Text(articleCreatedAt)
+                                .font(.system(size: 12))
+                                .fontWeight(.light)
                                 .foregroundColor(Color("warm_grey"))
                         }
                         HStack {
                             NavigationLink(destination: CommunityCommentView(community_id: self.community_id).environmentObject(self.controller).navigationBarTitle("댓글", displayMode: .inline)) {
                                 HStack {
                                 Text("댓글")
+                                    .font(.system(size: 13))
                                     .foregroundColor(Color.black)
                                     Text("\(articleCommentCount)")
+                                        .font(.system(size: 13))
                                     .foregroundColor(Color("light_navy"))
                                 }
-                                        .padding(.all, 10)
+                                    .frame(width: 71, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             
@@ -151,8 +139,9 @@ struct CommunityDetailView: View {
                                 NavigationLink(destination: RichEditor(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id, token: self.user.get_token())
                                 ) {
                                 Text("수정")
+                                    .font(.system(size: 13))
                                     .foregroundColor(Color.black)
-                                        .padding(.all, 10)
+                                    .frame(width: 71, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             Button(action: {self.controller.delete_article(token: self.user.get_token(), article_id: self.community_id) { result in
@@ -163,8 +152,9 @@ struct CommunityDetailView: View {
                             }
                             }}) {
                                 Text("삭제")
+                                    .font(.system(size: 13))
                                         .foregroundColor(Color.red)
-                                        .padding(.all, 10)
+                                        .frame(width: 71, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             
@@ -191,8 +181,9 @@ struct CommunityDetailView: View {
                                             }
                                     }) {
                                         Text("수정")
+                                            .font(.system(size: 13))
                                         .foregroundColor(Color.black)
-                                        .padding(.all, 10)
+                                        .frame(width: 71, height: 29, alignment: .center)
                                         .border(Color.gray.opacity(0.8), width: 1)
                                     }
                             }
@@ -207,13 +198,15 @@ struct CommunityDetailView: View {
                                 
                                 ) {
                                 Text("삭제")
+                                    .font(.system(size: 13))
                                         .foregroundColor(Color.red)
-                                        .padding(.all, 10)
+                                        .frame(width: 71, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             
                             }
-                        }
+                        }.padding(.top, 16.5)
+                            .padding(.bottom, 8)
 
                     }
                     Divider()

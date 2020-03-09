@@ -431,10 +431,7 @@ class BusController {
             let time = timetable[i].split(separator: ":")
             if let timetableDate = Calendar.current.date(bySettingHour: Int(time[0])!, minute: Int(time[1])!, second: 0, of: Date()) {
                 let interval = timetableDate.timeIntervalSince(Date())
-                //print(interval)
                 if interval > 0 {
-                    //print("catch")
-                    //print(i)
                     return i
                 }
             }
@@ -539,21 +536,17 @@ class BusController {
         var resultNowIndex: Int
         
         if (shuttleTimeTable.isEmpty) {
-            //print("empty")
             return Date()
         }
         resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, startIndex: 0)
         if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
-            //print("out of index")
             return Date()
         }
         if (isNow) {
             return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: 0)
         } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
-            //print("out of index 1")
             return Date()
         } else {
-            //print("?")
             return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: resultNowIndex + 1)
         }
     }
@@ -584,20 +577,16 @@ class BusController {
         var resultNowIndex: Int
         
         if shuttleTimeTable.isEmpty {
-            //print("empty")
             return ""
         }
         resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, startIndex: 0)
-        //print(resultNowIndex)
         if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
-            //print("out1")
             return ""
         }
         
         if (isNow) {
             return shuttleTimeTable[resultNowIndex]
         } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
-            //print("out2")
             return ""
         } else {
             return shuttleTimeTable[resultNowIndex+1]
@@ -669,16 +658,12 @@ class BusController {
     func getCurrentDayShuttleDayStringArray(depart: String, arrival: String) -> [String] {
         var shuttleTimeTable: [String]
         let weekday = (Calendar.current.component(.weekday, from: Date()) + 5) % 7
-        //print(weekday)
         if depart == "station" {
             shuttleTimeTable = (arrival == "koreatech") ? shuttleFromStationToKoreatech[weekday] : shuttleFromStationToTerminal[weekday]
         } else {
             let timeTable = shuttleTimeTables[depart]!
-            //print(timeTable)
-            //print(timeTable[weekday])
             shuttleTimeTable = timeTable[weekday]
         }
-        //print(shuttleTimeTable)
         return shuttleTimeTable
     }
     

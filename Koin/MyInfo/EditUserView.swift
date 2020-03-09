@@ -78,6 +78,8 @@ struct EditUserView: View {
         }
 
     }
+    
+    
 
     // 업데이트할 정보를 넘겨주는 함수
     func putUserData() {

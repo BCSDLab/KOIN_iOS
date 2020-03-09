@@ -17,7 +17,7 @@ import IGColorPicker
 
 struct TempRichEditor: UIViewControllerRepresentable {
     var controller: TempViewController = UIStoryboard(name: "Editor", bundle: nil).instantiateViewController(identifier: "TempViewController") as! TempViewController
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var is_edit: Bool = false
     var title: String = ""
     var content: String = ""
@@ -26,6 +26,7 @@ struct TempRichEditor: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> TempViewController {
         controller.is_edit = is_edit
+        controller.presentationMode = presentationMode
         if is_edit {
             controller.article_title = title
             controller.content = content
@@ -57,6 +58,7 @@ struct RichEditor: UIViewControllerRepresentable {
         controller.is_edit = is_edit
         controller.board_id = board_id
         controller.token = token
+        controller.presentationMode = presentationMode
         if is_edit {
             controller.title = title
             controller.article_title = title
@@ -83,7 +85,7 @@ class ViewController: UIViewController {
     @IBOutlet var editorView: RichEditorView!
     @IBOutlet var titleField: UITextField!
     var colorPickerView: ColorPickerView!
-    
+    var presentationMode: Binding<PresentationMode>? = nil
     let picker = UIImagePickerController()
     var is_edit: Bool = false
     var board_id: Int = -1
@@ -101,7 +103,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         picker.delegate = self
         communityData = CommunityController(board_id: self.board_id)
         titleField.delegate = self
@@ -110,12 +111,14 @@ class ViewController: UIViewController {
         editorView.inputAccessoryView = toolbar
         editorView.placeholder = "내용을 입력해주세요."
         editorView.html = content
+        editorView.setEditorFontColor(UIColor(named: "black")!)
 
         toolbar.delegate = self
         toolbar.editor = editorView
         
-        colorPickerView = ColorPickerView(frame: CGRect(x: 40, y: 40, width: 280, height: 150))
+        colorPickerView = ColorPickerView(frame: CGRect(x: 40, y: 40, width: 300, height: 150))
         colorPickerView.delegate = self
+        colorPickerView.colors = [UIColor.red, UIColor.blue, UIColor.yellow, UIColor.purple, UIColor.green]
 
         
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
@@ -124,7 +127,6 @@ class ViewController: UIViewController {
         
         var options = toolbar.options
         
-        print(options)
         
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
@@ -223,24 +225,20 @@ class ViewController: UIViewController {
     
     @objc func checkAction() {
         if is_edit {
-            communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
+            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
-                    print("success")
-                    print(self.navigationController?.title)
-                    print(self.parent?.navigationController?.title)
-                    self.navigationController?.popViewController(animated: true)
+                    self.presentationMode?.wrappedValue.dismiss()
                 } else {
-                    print("???")
+                    print("성공 못함")
                 }
                 
             }
         } else {
-            communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
-                print(result)
+            self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
-                    self.navigationController?.popViewController(animated: true)
+                    self.parent?.navigationController?.popViewController(animated: true)
                 } else {
-                    print("???")
+                    print("성공 못함")
                 }
             }
         }
@@ -352,7 +350,8 @@ extension ViewController: RichEditorToolbarDelegate {
 
 class TempViewController: UIViewController {
     var communityData: CommunityController = CommunityController(board_id: -2)
-    
+    var colorPickerView: ColorPickerView!
+    var presentationMode: Binding<PresentationMode>? = nil
     @IBOutlet var tempEditorView: RichEditorView!
     @IBOutlet var tempTitleField: UITextField!
     @IBOutlet var tempNicknameField: UITextField!
@@ -373,6 +372,7 @@ class TempViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tempTitleField.text = article_title
         
         picker.delegate = self
@@ -382,6 +382,11 @@ class TempViewController: UIViewController {
 
         toolbar.delegate = self
         toolbar.editor = tempEditorView
+        
+        
+        colorPickerView = ColorPickerView(frame: CGRect(x: 40, y: 40, width: 300, height: 60))
+        colorPickerView.delegate = self
+        colorPickerView.colors = [UIColor.red, UIColor.blue, UIColor.yellow, UIColor.purple, UIColor.green]
         
 
         // We will create a custom action that clears all the input text when it is pressed
@@ -435,10 +440,46 @@ class TempViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         
+        let text_color_action = RichEditorOptionItem(image: UIImage(named: "text_color"), title: "textColor") { toolbar in
+            
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n", preferredStyle: .actionSheet)
+            alert.view.addSubview(self.colorPickerView)
+
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "추가", style: .default) { (action) in
+                
+                let color = self.colorPickerView.colors[self.colorPickerView.indexOfSelectedColor!]
+                toolbar.editor?.setTextColor(color)
+            }
+            
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+        let back_color_action = RichEditorOptionItem(image: UIImage(named: "bg_color"), title: "backColor") { toolbar in
+            
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+            alert.view.addSubview(self.colorPickerView)
+
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "추가", style: .default) { (action) in
+                
+                let color = self.colorPickerView.colors[self.colorPickerView.indexOfSelectedColor!]
+                toolbar.editor?.setTextBackgroundColor(color)
+            }
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
         options[options.count-2] = image
         options[options.count-1] = link_action
+        options[9] = text_color_action
+        options[10] = back_color_action
         toolbar.options = options
          
+        
     }
     
     func hashed(pw: String) -> String{
@@ -467,8 +508,7 @@ class TempViewController: UIViewController {
             communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 
                 if result {
-                    print("success")
-                    self.navigationController?.popViewController(animated: true)
+                    self.presentationMode?.wrappedValue.dismiss()
                 } else {
                     print("성공 못함")
                 }
@@ -477,8 +517,7 @@ class TempViewController: UIViewController {
         } else {
             communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
                 if result {
-                    print("success")
-                    self.navigationController?.popViewController(animated: true)
+                    self.parent?.navigationController?.popViewController(animated: true)
                 } else {
                     print("성공 못함")
                 }
@@ -492,40 +531,6 @@ extension TempViewController: RichEditorDelegate {
 
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
         
-    }
-    
-}
-
-extension TempViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-                    let imageData = image.jpegData(compressionQuality: 0.50)
-            let url = "http://stage.api.koreatech.in/temp/items/image/thumbnail/upload"
-
-            AF.upload(multipartFormData: { multiPart in
-                multiPart.append( imageData! , withName: "image", fileName: "uploaded_ios.png", mimeType: "image/png")
-            }, to: url)
-                .uploadProgress(queue: .main, closure: { progress in
-                    //Current upload progress of file
-                    print("Upload Progress: \(progress.fractionCompleted)")
-                })
-                .responseJSON { response in
-                    switch response.result {
-                    case .success(let value as [String: Any]):
-                        let image_url = value["url"]
-                        print(image_url)
-                        self.toolbar.editor?.insertImage(image_url as! String, alt: "koin")
-                    case .failure(let error):
-                        print(error)
-                    default:
-                        fatalError("received non-dictionary JSON response")
-                    }
-            }
-            
-        }
-        dismiss(animated: true, completion: nil)
     }
     
 }
@@ -557,13 +562,61 @@ extension TempViewController: RichEditorToolbarDelegate {
     }
 
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
-        toolbar.editor?.insertImage("https://gravatar.com/avatar/696cf5da599733261059de06c4d1fe22", alt: "Gravatar")
+        toolbar.editor?.insertImage("https://stage-static.koreatech.in/upload/2020/02/20/a929792f-5fbd-4195-bd09-cbdd649dd221-1582206890825.jpg", alt: "Gravatar")
     }
 
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
         if toolbar.editor?.hasRangeSelection == true {
-            toolbar.editor?.insertLink("http://github.com/cjwirth/RichEditorView", title: "Github Link")
+            toolbar.editor?.insertLink("http://naver.com",title: "aaaa")
         }
     }
 }
+    
+    extension TempViewController: ColorPickerViewDelegate {
+
+      func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
+        // A color has been selected
+      }
+
+      // This is an optional method
+      func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
+        // A color has been deselected
+      }
+
+    }
+
+extension TempViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+                    let imageData = image.jpegData(compressionQuality: 0.50)
+            let url = "http://stage.api.koreatech.in/temp/items/image/thumbnail/upload"
+
+            AF.upload(multipartFormData: { multiPart in
+                multiPart.append( imageData! , withName: "image", fileName: "uploaded_ios.png", mimeType: "image/png")
+            }, to: url)
+                .uploadProgress(queue: .main, closure: { progress in
+                    //Current upload progress of file
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value as [String: Any]):
+                        let image_url = value["url"]
+                        self.toolbar.editor?.insertImage(image_url as! String, alt: "koin")
+                    case .failure(let error):
+                        print(error)
+                    default:
+                        fatalError("received non-dictionary JSON response")
+                    }
+            }
+            
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+

@@ -20,6 +20,12 @@ struct FindPasswordView: View {
     // 유저 정보가 담겨있는 객체
     @EnvironmentObject var settings: UserSettings
     
+    init() {
+        // 네비게이션 바 글자색 설정(흰색)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.black]
+    }
+    
     var body: some View {
         // 에러 HUD를 위한 임의의 뷰 객체
         let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))

@@ -48,7 +48,6 @@ class UserSettings: ObservableObject {
     
     func get_userId() -> Int {
         if let user = self.user {
-            //print(user)
             if let userdata = user.user {
                 return userdata.id
             }
@@ -57,7 +56,6 @@ class UserSettings: ObservableObject {
     }
     func get_nickname() -> String {
         if let user = self.user {
-            //print(user)
             if let userdata = user.user {
                 if let nickname = userdata.nickname {
                     return nickname
@@ -212,6 +210,241 @@ class UserSettings: ObservableObject {
         }
     }
     
+    func update_name(token: String, updated_name: String = "", result: @escaping (Bool) -> Void) {
+        
+        // 빈 파라미터를 생성
+        var parameters: [String: Any] = [:]
+        // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
+        if !updated_name.isEmpty {parameters["name"] = updated_name}
+        
+        
+        // Bearer Auth를 이용하기 위한 Header 추가
+        let headers: HTTPHeaders = [
+                        "Authorization": "Bearer " + token
+                    ]
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    AF
+                    .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .response { response in // 응답이 오면
+                        // 해당 응답에서 data를 꺼내
+                        guard let data = response.data else { return }
+                        do {
+                            // 디코더를 설정하고
+                            let decoder = JSONDecoder()
+                            // 데이터를 User에 맞게 가공한다.
+                            let user = try decoder.decode(User.self, from: data)
+                            
+                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                            self.user?.user = user
+
+                            // 인코더를 설정하여
+                            let encoder = JSONEncoder()
+                            // 현재 user(UserRequest)를 인코딩할 수 있으면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 데이터가 변경되었다고 알려준다.
+                                self.isChanged = true
+                                result(true)
+                            }
+                            
+                            
+                        } catch let error {
+                            result(false)
+                        }
+                    }
+    }
+    
+    func update_nickname(token: String, updated_nickname: String = "", result: @escaping (Bool) -> Void) {
+        
+        // 빈 파라미터를 생성
+        var parameters: [String: Any] = [:]
+        // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
+        if !updated_nickname.isEmpty {parameters["nickname"] = updated_nickname}
+        
+        
+        // Bearer Auth를 이용하기 위한 Header 추가
+        let headers: HTTPHeaders = [
+                        "Authorization": "Bearer " + token
+                    ]
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    AF
+                    .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .response { response in // 응답이 오면
+                        // 해당 응답에서 data를 꺼내
+                        guard let data = response.data else { return }
+                        do {
+                            // 디코더를 설정하고
+                            let decoder = JSONDecoder()
+                            // 데이터를 User에 맞게 가공한다.
+                            let user = try decoder.decode(User.self, from: data)
+                            
+                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                            self.user?.user = user
+
+                            // 인코더를 설정하여
+                            let encoder = JSONEncoder()
+                            // 현재 user(UserRequest)를 인코딩할 수 있으면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 데이터가 변경되었다고 알려준다.
+                                self.isChanged = true
+                                result(true)
+                            }
+                            
+                            
+                        } catch let error {
+                            result(false)
+                        }
+                    }
+    }
+    
+    func update_phoneNumber(token: String, updated_phoneNumber: String = "", result: @escaping (Bool) -> Void) {
+        
+        // 빈 파라미터를 생성
+        var parameters: [String: Any] = [:]
+        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
+        if !updated_phoneNumber.isEmpty {parameters["phone_number"] = updated_phoneNumber}
+        
+        // Bearer Auth를 이용하기 위한 Header 추가
+        let headers: HTTPHeaders = [
+                        "Authorization": "Bearer " + token
+                    ]
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    AF
+                    .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .response { response in // 응답이 오면
+                        // 해당 응답에서 data를 꺼내
+                        guard let data = response.data else { return }
+                        do {
+                            // 디코더를 설정하고
+                            let decoder = JSONDecoder()
+                            // 데이터를 User에 맞게 가공한다.
+                            let user = try decoder.decode(User.self, from: data)
+                            
+                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                            self.user?.user = user
+
+                            // 인코더를 설정하여
+                            let encoder = JSONEncoder()
+                            // 현재 user(UserRequest)를 인코딩할 수 있으면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 데이터가 변경되었다고 알려준다.
+                                self.isChanged = true
+                                result(true)
+                            }
+                            
+                            
+                        } catch let error {
+                            result(false)
+                        }
+                    }
+    }
+    
+    func update_gender(token: String, updated_gender: Int = -1, result: @escaping (Bool) -> Void) {
+        
+        // 빈 파라미터를 생성
+        var parameters: [String: Any] = [:]
+        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
+        if updated_gender != -1 {parameters["gender"] = updated_gender}
+        
+        // Bearer Auth를 이용하기 위한 Header 추가
+        let headers: HTTPHeaders = [
+                        "Authorization": "Bearer " + token
+                    ]
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    AF
+                    .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .response { response in // 응답이 오면
+                        // 해당 응답에서 data를 꺼내
+                        guard let data = response.data else { return }
+                        do {
+                            // 디코더를 설정하고
+                            let decoder = JSONDecoder()
+                            // 데이터를 User에 맞게 가공한다.
+                            let user = try decoder.decode(User.self, from: data)
+                            
+                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                            self.user?.user = user
+
+                            // 인코더를 설정하여
+                            let encoder = JSONEncoder()
+                            // 현재 user(UserRequest)를 인코딩할 수 있으면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 데이터가 변경되었다고 알려준다.
+                                self.isChanged = true
+                                result(true)
+                            }
+                            
+                            
+                        } catch let error {
+                            result(false)
+                        }
+                    }
+    }
+    
+    /*
+     parameters["student_number"] = updated_studentNumber
+     // school_number_to_major를 이용하여 학번에 전공을 추출하여 해당 값을 파라미터에 추가
+     parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
+     */
+    
+    func update_studentNumber(token: String, updated_studentNumber: String = "", result: @escaping (Bool) -> Void) {
+        
+        // 빈 파라미터를 생성
+        var parameters: [String: Any] = [:]
+        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
+        parameters["student_number"] = updated_studentNumber
+        // school_number_to_major를 이용하여 학번에 전공을 추출하여 해당 값을 파라미터에 추가
+        parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
+        
+        // Bearer Auth를 이용하기 위한 Header 추가
+        let headers: HTTPHeaders = [
+                        "Authorization": "Bearer " + token
+                    ]
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    AF
+                    .request("http://stage.api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .response { response in // 응답이 오면
+                        // 해당 응답에서 data를 꺼내
+                        guard let data = response.data else { return }
+                        do {
+                            // 디코더를 설정하고
+                            let decoder = JSONDecoder()
+                            // 데이터를 User에 맞게 가공한다.
+                            let user = try decoder.decode(User.self, from: data)
+                            
+                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                            self.user?.user = user
+
+                            // 인코더를 설정하여
+                            let encoder = JSONEncoder()
+                            // 현재 user(UserRequest)를 인코딩할 수 있으면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 데이터가 변경되었다고 알려준다.
+                                self.isChanged = true
+                                result(true)
+                            }
+                            
+                            
+                        } catch let error {
+                            result(false)
+                        }
+                    }
+    }
+    
     // 유저 정보를 업데이트하는 함수
     func update_session(token: String, updated_password: String = "", updated_name: String = "", updated_nickname: String = "", updated_gender: Int = -1, updated_isGraduated: Bool = false, updated_studentNumber: String = "", updated_phoneNumber: String = "", changed_name: Bool = false, changed_gender: Bool = false, changed_phoneNumber: Bool = false, changed_studentNumber: Bool = false, changed_nickname: Bool = false, result: @escaping (Bool) -> Void) {
         
@@ -285,6 +518,7 @@ class UserSettings: ObservableObject {
             AF
             .request("http://stage.api.koreatech.in/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
             .responseJSON { response in // JSON 형태로 응답을 받아
+                
                 if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
@@ -408,7 +642,6 @@ class UserSettings: ObservableObject {
                     // 데이터를 UserRequest의 형태로 가공하여
                     let userRequest = try decoder.decode(UserRequest.self, from: data)
                     // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    //print(userRequest)
                     if let checkToken = userRequest.token {
                         self.user = userRequest
                         
