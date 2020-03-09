@@ -9,11 +9,24 @@
 import SwiftUI
 import PKHUD
 
+extension UIDevice {
+    var hasNotch: Bool {
+        print(UIApplication.shared.keyWindow?.safeAreaInsets.bottom)
+        let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        return bottom > 0
+    }
+}
+
 extension UITabBar {
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
         super.sizeThatFits(size)
         var sizeThatFits = super.sizeThatFits(size)
-        sizeThatFits.height = 71
+        if UIDevice.current.hasNotch {
+            sizeThatFits.height = 90
+        } else {
+            sizeThatFits.height = 56
+        }
+        
         return sizeThatFits
     }
 }
@@ -106,30 +119,35 @@ struct ContentView: View {
                 }
 
                         .tabItem {  // 첫번째 탭에 해당되는 아이템 레이아웃
-                            
-                                Image(systemName: "house")
-                                    .resizable()
-                                        .renderingMode(.template)
-                                    .font(.system(size: 15))
-                                    .lineSpacing(8)
- 
-                                Text("홈")
-                                        .font(.system(size: 12))
-                        }.tag(1)
+                            VStack {
+                                VStack {
+                                    Image("home")
+                                        .resizable()
+                                            .renderingMode(.template)
+                                        .font(.system(size: 20))
+                                    Text("홈")
+                                            .font(.system(size: 15))
+                                .fontWeight(.medium)
+                                }.frame(height: 60, alignment: .top)
+                                
+                            Spacer()
+                            }
+                }.tag(1)
 
                 Text("Custom Action") // 임의의 뷰(아무 기능 없으며, 해당 탭 클릭시 ViewRouter에서 SideMenu를 여는 기능 작동)
                         .tabItem { // 두번째 탭에 해당되는 아이템 레이아웃
                             VStack {
-                                Image(systemName: "tray")
+                                VStack {
+                                Image("menu")
                                         .resizable()
                                         .renderingMode(.template)
-                                        .font(.system(size: 15))
-                                    .lineSpacing(8)
-                                
+                                        .font(.system(size: 20))
                                 Text("카테고리")
-                                        .font(.system(size: 12))
+                                        .font(.system(size: 15))
                                         .fontWeight(.medium)
-                            }.padding(.all,10)
+                                }.frame(height: 60, alignment: .top)
+                                Spacer()
+                            }
                         }
                         .tag(2)
 
@@ -144,16 +162,20 @@ struct ContentView: View {
                             })
                 }
                         .tabItem { // 세번째 탭에 해당되는 아이템 레이아웃
-                            VStack {
-                                Image(systemName: "person")
+                            VStack(spacing: 0) {
+                                VStack{
+                                Image("info")
                                         .resizable()
                                         .renderingMode(.template)
-                                        .font(.system(size: 15))
-                                    .lineSpacing(8)
+                                        .font(.system(size: 20))
                                 Text("내정보")
-                                        .font(.system(size: 12))
+                                        .font(.system(size: 15))
                                         .fontWeight(.medium)
+                                }.frame(height: 60, alignment: .top)
+                                Spacer()
                             }
+                            
+                            
                         }.tag(3)
 
             }

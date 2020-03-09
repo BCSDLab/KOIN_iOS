@@ -114,6 +114,7 @@ struct CommunityDetailView: View {
                             Text("조회\(articleHit) · \(articleNickname)")
                                 .font(.system(size: 13))
                                 .foregroundColor(Color("warm_grey"))
+                            .lineLimit(1)
                             Spacer()
                             Text(articleCreatedAt)
                                 .font(.system(size: 12))
