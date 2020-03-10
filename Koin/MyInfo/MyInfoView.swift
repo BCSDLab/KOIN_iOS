@@ -210,6 +210,7 @@ struct MyInfoView: View {
                         }
                         
                     }.sheet(isPresented: $showNicknameModal) {
+                        // 닉네임 10글자 제한
                         return NavigationView {
                             VStack(alignment: .leading) {
                                 //Text("닉네임").foregroundColor(Color("warm_grey_two"))

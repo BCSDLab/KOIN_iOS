@@ -116,9 +116,10 @@ class ViewController: UIViewController {
         toolbar.delegate = self
         toolbar.editor = editorView
         
-        colorPickerView = ColorPickerView(frame: CGRect(x: 40, y: 40, width: 300, height: 150))
+        colorPickerView = ColorPickerView()
         colorPickerView.delegate = self
-        colorPickerView.colors = [UIColor.red, UIColor.blue, UIColor.yellow, UIColor.purple, UIColor.green]
+        colorPickerView.layoutDelegate = self
+        colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
 
         
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
@@ -130,7 +131,7 @@ class ViewController: UIViewController {
         
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
-            let alert =  UIAlertController(title: "원하는 타이틀", message: "원하는 메세지", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
 
             let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in
                 self.picker.sourceType = .photoLibrary
@@ -152,15 +153,15 @@ class ViewController: UIViewController {
         
         let link_action = RichEditorOptionItem(image: UIImage(named: "insert_link"), title: "link") { toolbar in
             
-            let alert =  UIAlertController(title: "원하는 타이틀", message: "원하는 메세지", preferredStyle: .alert)
+            let alert =  UIAlertController(title: "링크 추가", message: "", preferredStyle: .alert)
             
             alert.addTextField() {
-                $0.placeholder = "링크를 입력하세요."
+                $0.placeholder = "주소를 입력하세요."
             }
 
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-            let ok = UIAlertAction(title: "추가", style: .default) { (action) in
+            let ok = UIAlertAction(title: "입력", style: .default) { (action) in
                 if toolbar.editor?.hasRangeSelection == true {
                 toolbar.editor?.insertLink((alert.textFields?[0].text)!, title: "ios link")
                 }
@@ -172,8 +173,18 @@ class ViewController: UIViewController {
         
         let text_color_action = RichEditorOptionItem(image: UIImage(named: "text_color"), title: "textColor") { toolbar in
             
-            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n", preferredStyle: .actionSheet)
             alert.view.addSubview(self.colorPickerView)
+            self.colorPickerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.colorPickerView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+                .isActive = true
+            self.colorPickerView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 60)
+                .isActive = true
+            self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
+                .isActive = true
+            self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
+            .isActive = true
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
@@ -189,8 +200,19 @@ class ViewController: UIViewController {
         
         let back_color_action = RichEditorOptionItem(image: UIImage(named: "bg_color"), title: "backColor") { toolbar in
             
-            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n", preferredStyle: .actionSheet)
+            
             alert.view.addSubview(self.colorPickerView)
+            self.colorPickerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.colorPickerView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+                .isActive = true
+            self.colorPickerView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 60)
+                .isActive = true
+            self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
+                .isActive = true
+            self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
+            .isActive = true
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
@@ -258,6 +280,30 @@ extension ViewController: ColorPickerViewDelegate {
   // This is an optional method
   func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
     // A color has been deselected
+  }
+
+}
+
+extension ViewController: ColorPickerViewDelegateFlowLayout {
+
+  // ------------------------------------------------------------------
+  // All these methods are optionals, your are not to implement them 🖖🏻
+  // ------------------------------------------------------------------
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    // The size for each cell
+    // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
+    return CGSize(width: 48, height: 48)
+  }
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    // Space between cells
+    return 22
+  }
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    // Space between rows
+    return 0
   }
 
 }
@@ -384,10 +430,10 @@ class TempViewController: UIViewController {
         toolbar.editor = tempEditorView
         
         
-        colorPickerView = ColorPickerView(frame: CGRect(x: 40, y: 40, width: 300, height: 60))
+        colorPickerView = ColorPickerView()
         colorPickerView.delegate = self
-        colorPickerView.colors = [UIColor.red, UIColor.blue, UIColor.yellow, UIColor.purple, UIColor.green]
-        
+        colorPickerView.layoutDelegate = self
+        colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
 
         // We will create a custom action that clears all the input text when it is pressed
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
@@ -400,7 +446,7 @@ class TempViewController: UIViewController {
         
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
-            let alert =  UIAlertController(title: "원하는 타이틀", message: "원하는 메세지", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
 
             let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in
                 self.picker.sourceType = .photoLibrary
@@ -422,15 +468,15 @@ class TempViewController: UIViewController {
         
         let link_action = RichEditorOptionItem(image: UIImage(named: "insert_link"), title: "link") { toolbar in
             
-            let alert =  UIAlertController(title: "원하는 타이틀", message: "원하는 메세지", preferredStyle: .alert)
+            let alert =  UIAlertController(title: "링크 추가", message: "", preferredStyle: .alert)
             
             alert.addTextField() {
-                $0.placeholder = "링크를 입력하세요."
+                $0.placeholder = "주소를 입력하세요."
             }
 
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-            let ok = UIAlertAction(title: "추가", style: .default) { (action) in
+            let ok = UIAlertAction(title: "입력", style: .default) { (action) in
                 if toolbar.editor?.hasRangeSelection == true {
                 toolbar.editor?.insertLink((alert.textFields?[0].text)!, title: "ios link")
                 }
@@ -442,8 +488,18 @@ class TempViewController: UIViewController {
         
         let text_color_action = RichEditorOptionItem(image: UIImage(named: "text_color"), title: "textColor") { toolbar in
             
-            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n", preferredStyle: .actionSheet)
             alert.view.addSubview(self.colorPickerView)
+            self.colorPickerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.colorPickerView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+                .isActive = true
+            self.colorPickerView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 60)
+                .isActive = true
+            self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
+                .isActive = true
+            self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
+            .isActive = true
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
@@ -459,8 +515,18 @@ class TempViewController: UIViewController {
         
         let back_color_action = RichEditorOptionItem(image: UIImage(named: "bg_color"), title: "backColor") { toolbar in
             
-            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+            let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n", preferredStyle: .actionSheet)
             alert.view.addSubview(self.colorPickerView)
+            self.colorPickerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.colorPickerView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+                .isActive = true
+            self.colorPickerView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 60)
+                .isActive = true
+            self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
+                .isActive = true
+            self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
+            .isActive = true
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
@@ -585,6 +651,30 @@ extension TempViewController: RichEditorToolbarDelegate {
       }
 
     }
+
+extension TempViewController: ColorPickerViewDelegateFlowLayout {
+
+  // ------------------------------------------------------------------
+  // All these methods are optionals, your are not to implement them 🖖🏻
+  // ------------------------------------------------------------------
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    // The size for each cell
+    // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
+    return CGSize(width: 48, height: 48)
+  }
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    // Space between cells
+    return 22
+  }
+
+  func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    // Space between rows
+    return 0
+  }
+
+}
 
 extension TempViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     

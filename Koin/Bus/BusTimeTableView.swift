@@ -423,18 +423,6 @@ struct ExpressListCell: View {
     }
 }
 
-// ["SeasonCheonanCommuterToTerminal","SeasonCheonanCommuterToCheonanStation","VacationCheonanCommuterToTerminal"]
-// VacationCheonanCommuterToDujeongStation
-// ["VacationCheongjuCommuterToYongam","SeasonCheongjuCommuterToGym","VacationCheongjuCommuterToYongam"]
-// ["VacationSeoulCommuterToSchool","VacationSeoulCommuterToSeoul"]
-// VacationCheonanShuttle
-// ["CheonanCommuterToKTX", "CheonanCommuterToTerminal","CheonanCommuterToCheonanStation","CheonanCommuterToShinbang","CheonanCommuterToDujeongStation"]
-// CheonanWeekdayShuttle
-// CheonanWeekendShuttle
-// ["CheongjuCommuterToGym","CheongjuCommuterToYongam","CheongjuCommuterToSannam","CheongjuCommuterToBunpyeong"]
-// CheongjuShuttle
-// ["SeoulCommuterToSeoul","SeoulCommuterToSchool"]
-// DaejeonCommuter
 struct CommuterListView: View {
     //var CommuterList: [[String]]
     var PrimaryCommuterList = ["천안 등교/하교","천안 셔틀","청주 등교/하교","청주 셔틀","서울 등교/하교","대전 등교/하교"]
@@ -450,6 +438,7 @@ struct CommuterListView: View {
     @State private var isSecondActionSheet = false
     @State private var isExpressActionSheet = false
     @State var primary: Int = 0
+    @State var expressIndex: Int = 0
     @State var secondary: Int = 0
     
     var PrimaryActionSheet: ActionSheet {
@@ -466,8 +455,8 @@ struct CommuterListView: View {
     
     var ExpressActionSheet: ActionSheet {
         ActionSheet(title: Text("선택"), buttons: [
-                .default(Text(ExpressList[0]), action: {self.primary = 0}),
-                .default(Text(ExpressList[1]), action: {self.primary = 1}),
+                .default(Text(ExpressList[0]), action: {self.expressIndex = 0}),
+                .default(Text(ExpressList[1]), action: {self.expressIndex = 1}),
                     .destructive(Text("취소"), action: {self.isExpressActionSheet.toggle()})
         ])
     }
@@ -825,11 +814,10 @@ struct CommuterListView: View {
                     }
                 }.padding(.horizontal, 10)
             } else if isExpressButtonClicked {
-                
                 VStack {
                     HStack {
                      HStack {
-                         Text(ExpressList[primary])
+                         Text(ExpressList[expressIndex])
                              .padding(.vertical, 10)
                              .padding(.horizontal, 8)
                              .font(.system(size: 13))
@@ -879,7 +867,7 @@ struct CommuterListView: View {
                                
                     
                     
-                    if primary == 0 {
+                    if expressIndex == 0 {
                         ForEach(ExpressBusFromKoreatechToTerminal, id: \.self) { l in
                             ExpressListCell(place: l[0], time: l[1])
                         }

@@ -52,7 +52,8 @@ class BusSearchController: UIViewController {
     
     @IBOutlet weak var dateButton: UIButton!
     
-    let picker: UIDatePicker = UIDatePicker(frame: CGRect(x: 40, y: 40, width: 280, height: 150))
+    //let picker: UIDatePicker = UIDatePicker(frame: CGRect(x: 40, y: 40, width: 280, height: 150))
+    let picker: UIDatePicker = UIDatePicker()
     
     @objc func departAction(_ sender:UITapGestureRecognizer){
        let depart =  UIAlertController(title: "출발지", message: "출발지를 선택해주세요.", preferredStyle: .actionSheet)
@@ -219,6 +220,16 @@ class BusSearchController: UIViewController {
         picker.date = currentDate
         
         alert.view.addSubview(picker)
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        
+        picker.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+            .isActive = true
+        picker.centerYAnchor.constraint(equalTo: alert.view.centerYAnchor)
+            .isActive = true
+        picker.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 20)
+            .isActive = true
+        picker.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 4)
+        .isActive = true
 
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
             let dateFormatter = DateFormatter()
