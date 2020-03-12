@@ -18,6 +18,12 @@ extension Binding {
     }
 }
 
+extension String {
+    public func toPhoneNumber() -> String {
+        return self.replacingOccurrences(of: "(\\d{3})(\\d{4})(\\d{3})", with: "$1-$2-$3", options: .regularExpression, range: nil)
+    }
+}
+
 struct MyInfoView: View {
     // 유저 정보가 들어있는 오브젝트
     @EnvironmentObject var settings: UserSettings
@@ -53,7 +59,6 @@ struct MyInfoView: View {
     }
     
 
-    
     // 닉네임이 겹치는지 확인해주는 함수
     func check_nickname() {
         // HUD로 보여주기 위한 뷰 오브젝트
@@ -124,7 +129,6 @@ struct MyInfoView: View {
     var body: some View {
         // 유저 정보 데이터 불러오기
         
-        
         return List{
             // 데이터가 비어있지 않을때만 표시
             if !listData.isEmpty {
@@ -161,7 +165,7 @@ struct MyInfoView: View {
                         return NavigationView {
                             VStack(alignment: .leading) {
                                 Text("이름").foregroundColor(Color("warm_grey_two"))
-                                TextField("이름", text: self.$change_name).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                TextField("이름", text: self.$settings.nameValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
                                 Spacer()
                                 }.padding().navigationBarItems(
                                 leading:
@@ -172,7 +176,7 @@ struct MyInfoView: View {
                             }, trailing:
                                 Button(action: {
                                     
-                                    self.settings.update_name(token: self.settings.get_token(), updated_name: self.change_name) { result in
+                                    self.settings.update_name(token: self.settings.get_token(), updated_name: self.settings.nameValue) { result in
                                         if result {
                                             self.showNameModal = false
                                         } else {
@@ -214,7 +218,7 @@ struct MyInfoView: View {
                         return NavigationView {
                             VStack(alignment: .leading) {
                                 //Text("닉네임").foregroundColor(Color("warm_grey_two"))
-                                TextField("닉네임", text: self.$change_nickname).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                TextField("닉네임", text: self.$settings.nicknameValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
                                 Spacer()
                                 }
                             .padding()
@@ -226,7 +230,7 @@ struct MyInfoView: View {
                                     Text("닫기").foregroundColor(Color("light_navy"))
                             }, trailing:
                                 Button(action: {
-                                    self.settings.update_nickname(token: self.settings.get_token(), updated_nickname: self.change_nickname) { result in
+                                    self.settings.update_nickname(token: self.settings.get_token(), updated_nickname: self.settings.nicknameValue) { result in
                                         if result {
                                             self.showNicknameModal = false
                                         } else {
@@ -280,7 +284,7 @@ struct MyInfoView: View {
                         NavigationView {
                             VStack(alignment: .leading) {
                                 //Text("폰번호").foregroundColor(Color("warm_grey_two"))
-                                TextField("폰번호", text: self.$change_phoneNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                TextField("폰번호", text: self.$settings.phoneValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical).keyboardType(.numberPad)
                                 Spacer()
                                 }.padding().navigationBarItems(
                                 leading:
@@ -290,7 +294,7 @@ struct MyInfoView: View {
                                     Text("닫기").foregroundColor(Color("light_navy"))
                             }, trailing:
                                 Button(action: {
-                                    self.settings.update_phoneNumber(token: self.settings.get_token(), updated_phoneNumber: self.change_phoneNumber) { result in
+                                    self.settings.update_phoneNumber(token: self.settings.get_token(), updated_phoneNumber: self.settings.phoneValue.toPhoneNumber()) { result in
                                         if result {
                                             self.showPhoneModal = false
                                         } else {
@@ -346,7 +350,7 @@ struct MyInfoView: View {
                             NavigationView() {
                                 VStack(alignment: .leading) {
                                     //Text("학번").foregroundColor(Color("warm_grey_two"))
-                                    TextField("학번", text: self.$change_studentNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                    TextField("학번", text: self.$settings.studentNumberValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical).keyboardType(.numberPad)
                                     Spacer()
                                     }.padding().navigationBarItems(
                                     leading:
@@ -356,7 +360,7 @@ struct MyInfoView: View {
                                         Text("닫기").foregroundColor(Color("light_navy"))
                                 }, trailing:
                                     Button(action: {
-                                        self.settings.update_studentNumber(token: self.settings.get_token(), updated_studentNumber: self.change_studentNumber){ result in
+                                        self.settings.update_studentNumber(token: self.settings.get_token(), updated_studentNumber: self.settings.studentNumberValue){ result in
                                             if result {
                                                 self.showStudentNumberModal = false
                                             } else {

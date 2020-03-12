@@ -11,6 +11,9 @@ import Alamofire
 import CryptoKit
 import CryptoTokenKit
 import Foundation
+import Combine
+
+
 
 class UserSettings: ObservableObject {
     // 유저 정보
@@ -21,6 +24,41 @@ class UserSettings: ObservableObject {
     @Published var isLogin: Bool = false
     // 값이 바뀌었는지 여부
     @Published var isChanged: Bool = false
+    
+    let didChange = PassthroughSubject<UserSettings,Never>()
+
+    
+    @Published var nameValue = "" {
+        didSet {
+            if nameValue.count > 5 && oldValue.count <= 5 {
+                nameValue = oldValue
+            }
+        }
+    }
+    
+    @Published var nicknameValue = "" {
+        didSet {
+            if nicknameValue.count > 10 && oldValue.count <= 10 {
+                nicknameValue = oldValue
+            }
+        }
+    }
+    
+    @Published var phoneValue = "" {
+        didSet {
+            if phoneValue.count > 11 && oldValue.count <= 11 {
+                phoneValue = oldValue
+            }
+        }
+    }
+    
+    @Published var studentNumberValue = "" {
+        didSet {
+            if studentNumberValue.count > 10 && oldValue.count <= 10 {
+                studentNumberValue = oldValue
+            }
+        }
+    }
     
     init() {
         // 로그인이 되었는지 확인
