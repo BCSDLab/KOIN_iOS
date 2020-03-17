@@ -8,6 +8,13 @@ import UIKit
 import CryptoKit
 import CryptoTokenKit
 
+
+/*
+ let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+
+ UIApplication.shared.open(url as URL)
+ */
+
 struct CommunityDetailView: View {
     @ObservedObject var controller:CommunityController
     @EnvironmentObject var user: UserSettings
@@ -135,7 +142,6 @@ struct CommunityDetailView: View {
                                     .frame(width: 71, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
-                            
                             if(self.user.get_userId() == self.getUserId) {
                                 NavigationLink(destination: RichEditor(is_edit: true, board_id: self.board_id, title: articleTitle, content: articleContent, article_id: community_id, token: self.user.get_token())
                                 ) {
@@ -184,7 +190,7 @@ struct CommunityDetailView: View {
                                         Text("수정")
                                             .font(.system(size: 13))
                                         .foregroundColor(Color.black)
-                                        .frame(width: 71, height: 29, alignment: .center)
+                                        .frame(width: 35, height: 29, alignment: .center)
                                         .border(Color.gray.opacity(0.8), width: 1)
                                     }
                             }
@@ -201,10 +207,23 @@ struct CommunityDetailView: View {
                                 Text("삭제")
                                     .font(.system(size: 13))
                                         .foregroundColor(Color.red)
-                                        .frame(width: 71, height: 29, alignment: .center)
+                                        .frame(width: 35, height: 29, alignment: .center)
                                 .border(Color.gray.opacity(0.8), width: 1)
                             }
                             
+                            }
+                            Button(action: {
+                                let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+
+                                UIApplication.shared.open(url as URL)
+                            }) {
+                                HStack {
+                                Text("신고")
+                                    .font(.system(size: 13))
+                                    .foregroundColor(Color.red)
+                                }
+                                    .frame(width: 35, height: 29, alignment: .center)
+                                .border(Color.gray.opacity(0.8), width: 1)
                             }
                         }.padding(.top, 16.5)
                             .padding(.bottom, 8)

@@ -24,7 +24,7 @@
                                 <rect key="frame" x="10" y="15" width="355" height="20"/>
                                 <color key="textColor" name="black"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" keyboardType="alphabet"/>
+                                <textInputTraits key="textInputTraits"/>
                             </textField>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VzZ-x1-RVR">
                                 <rect key="frame" x="0.0" y="120" width="375" height="2"/>
@@ -117,7 +117,7 @@
                                 <rect key="frame" x="10" y="145" width="355" height="30"/>
                                 <color key="textColor" name="black"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" keyboardType="alphabet"/>
+                                <textInputTraits key="textInputTraits"/>
                             </textField>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7S3-uP-qoz">
                                 <rect key="frame" x="0.0" y="190" width="375" height="2"/>

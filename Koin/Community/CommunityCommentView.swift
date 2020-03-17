@@ -161,6 +161,7 @@ struct CommunityCommentView: View {
                             .foregroundColor(Color("black"))
                             .lineLimit(1)
                             .frame(height: 36.7)
+                            HStack {
                                 Button(action:{
                                     
                                     self.controller.grant_comment_check(password: self.hashed(pw: self.grant_check_password), comment_id: c.id) { result in
@@ -182,7 +183,7 @@ struct CommunityCommentView: View {
                                     
                                     
                                 }) {
-                                    HStack {
+                                HStack {
                                     Text("수정")
                                         .font(.system(size: 12))
                                         .fontWeight(.light)
@@ -191,6 +192,22 @@ struct CommunityCommentView: View {
                                     }
                                     .border(Color.gray.opacity(0.8), width: 1)
                                 }
+                                
+                                Button(action: {
+                                    let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+                                    UIApplication.shared.open(url as URL)
+                                }){
+                                        HStack {
+                                        Text("신고")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.light)
+                                            .foregroundColor(.red)
+                                            .frame(width: 50, height: 30, alignment: .center)
+                                        }
+                                        .border(Color.gray.opacity(0.8), width: 1)
+                                    }
+                                
+                            }
                             
                         }.padding(.vertical, 10)
                     }
@@ -344,6 +361,7 @@ struct CommunityCommentView: View {
                             }.fixedSize(horizontal: false, vertical: true)
                                 .padding(.bottom, 10)
                             
+                            HStack {
                             if(c.userId == self.user.get_userId()) {
                                 Button(action:{
                                     self.comment_content = c.content
@@ -362,6 +380,20 @@ struct CommunityCommentView: View {
                                     .border(Color.gray.opacity(0.8), width: 1)
                                 }
                             }
+                                Button(action: {
+                                    let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+                                    UIApplication.shared.open(url as URL)
+                                }){
+                                        HStack {
+                                        Text("신고")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.light)
+                                            .foregroundColor(.red)
+                                            .frame(width: 50, height: 30, alignment: .center)
+                                        }
+                                        .border(Color.gray.opacity(0.8), width: 1)
+                                    }
+                        }
                         }.padding(.vertical, 10)
                     }
                     Divider()
