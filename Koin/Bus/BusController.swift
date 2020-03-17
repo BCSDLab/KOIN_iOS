@@ -12,6 +12,7 @@ import Combine
 import Alamofire
 
 class BusController {
+    /*
     let expressFromKoreatechToTerminal:[String] = [
             "08:00",
             "09:35",
@@ -27,9 +28,18 @@ class BusController {
             "20:00",
             "21:05",
             "21:55"
+    ]*/
+    let expressFromKoreatechToTerminal:[String] = [
+            "08:35",
+            "10:35",
+            "12:35",
+            "14:35",
+            "16:35",
+            "18:35",
+            "20:35"
     ]
     let objectWillChange = PassthroughSubject<BusController, Never>()
-    
+    /*
     let expressFromTerminalToKoreatech:[String]  = [
             "07:00",
             "07:30",
@@ -48,7 +58,17 @@ class BusController {
             "19:30",
             "20:30",
             "21:00"
+    ]*/
+    let expressFromTerminalToKoreatech:[String]  = [
+            "08:00",
+            "10:00",
+            "12:00",
+            "14:00",
+            "16:00",
+            "18:00",
+            "20:30"
     ]
+    
     let shuttleFromKoreatech:[[String]]  = [
             [ // 월요일
                     

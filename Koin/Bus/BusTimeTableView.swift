@@ -13,7 +13,7 @@ let CityBusTimeTable:[[String]] = [
     ["시간표(병천)","6:10(첫)-22:45(막)(10분간격)"],
     ["소요시간","약 40분"]
 ]
-
+/*
 let ExpressBusFromKoreatechToTerminal:[[String]] = [
     ["08:00","08:20"],
     ["09:35","09:55"],
@@ -48,6 +48,26 @@ let ExpressBusFromTerminalToKoreatech:[[String]] = [
     ["19:30","19:50"],
     ["20:30","20:50"],
     ["21:00","21:20"]
+]
+*/
+let ExpressBusFromKoreatechToTerminal:[[String]] = [
+    ["08:35","08:55"],
+    ["10:35","10:55"],
+    ["12:35","12:55"],
+    ["14:35","14:55"],
+    ["16:35","16:55"],
+    ["18:35","18:55"],
+    ["20:35","20:55"]
+]
+
+let ExpressBusFromTerminalToKoreatech:[[String]] = [
+    ["08:00","08:20"],
+    ["10:00","10:20"],
+    ["12:00","12:20"],
+    ["14:00","14:20"],
+    ["16:00","16:20"],
+    ["18:00","18:20"],
+    ["20:30","20:50"]
 ]
 
 let VacationCheonanCommuterToDujeongStation:[[String]] = [
