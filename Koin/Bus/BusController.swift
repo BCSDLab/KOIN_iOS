@@ -485,7 +485,7 @@ class BusController {
     
     func getRemainCityBusTimeToDate(depart: String, arrival: String) -> Date{
         var remainTime: Int = 0
-       AF.request("http://stage.api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
+       AF.request("http://api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return
@@ -530,7 +530,7 @@ class BusController {
     
     func getNextCityBusTimeToDate(depart: String, arrival: String) -> Date{
         var nextRemainTime: Int = 0
-       AF.request("http://stage.api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
+       AF.request("https://api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return

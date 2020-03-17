@@ -47,7 +47,7 @@ class CommunityController: ObservableObject {
     //만약 페이지 초과할 때 조치 방법 생각
     func reload_temp_articles() {
         AF
-            .request("http://stage.api.koreatech.in/temp/articles?&page=\(self.get_temp_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/temp/articles?&page=\(self.get_temp_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
             
         .response { response in
             guard let data = response.data else {
@@ -70,7 +70,7 @@ class CommunityController: ObservableObject {
     
     func reload_articles() {
         AF
-            .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/articles?boardId=\(self.board_id)&page=\(self.get_articles().count/30 + 1)&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return
@@ -92,7 +92,7 @@ class CommunityController: ObservableObject {
 
     func load_temp_community(article_id: Int){
         AF
-                .request("http://stage.api.koreatech.in/temp/articles/\(article_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("https://api.koreatech.in/temp/articles/\(article_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
@@ -113,7 +113,7 @@ class CommunityController: ObservableObject {
     
     func load_community(article_id: Int){
         AF
-                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("https://api.koreatech.in/articles/\(article_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
@@ -134,7 +134,7 @@ class CommunityController: ObservableObject {
     
     func put_temp_article(password: String, title: String, nickname:String, content: String, result: @escaping (Bool) -> Void) {
         AF
-            .request("http://stage.api.koreatech.in/temp/articles", method: .post, parameters: ["password": password, "title": title, "content": content, "nickname": nickname], encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/temp/articles", method: .post, parameters: ["password": password, "title": title, "content": content, "nickname": nickname], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                     switch(status){
@@ -155,7 +155,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/articles", method: .post, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .request("https://api.koreatech.in/articles", method: .post, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                     switch(status){
@@ -176,7 +176,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/temp/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .request("https://api.koreatech.in/temp/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -196,7 +196,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .request("https://api.koreatech.in/articles/\(article_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -213,7 +213,7 @@ class CommunityController: ObservableObject {
     func update_temp_article(password: String, article_id: Int, title: String, content: String, result: @escaping (Bool) -> Void) {
 
         AF
-                .request("http://stage.api.koreatech.in/temp/articles/\(article_id)", method: .put, parameters: ["password": password, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted)
+                .request("https://api.koreatech.in/temp/articles/\(article_id)", method: .put, parameters: ["password": password, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -236,7 +236,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/articles/\(article_id)", method: .put, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .request("https://api.koreatech.in/articles/\(article_id)", method: .put, parameters: ["board_id": board_id, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -255,7 +255,7 @@ class CommunityController: ObservableObject {
     func put_temp_comment(password: String, article_id: Int, nickname:String, content: String, result: @escaping (Bool) -> Void) {
 
         AF
-            .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments", method: .post, parameters: ["content": content, "nickname": nickname,
+            .request("https://api.koreatech.in/temp/articles/\(article_id)/comments", method: .post, parameters: ["content": content, "nickname": nickname,
                                                                                                                        "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
@@ -273,13 +273,15 @@ class CommunityController: ObservableObject {
     }
 
     func put_comment(token: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTYiLCJleHAiOjE1ODA2NTYxMjF9.4l7puQDosaH2R0p0ISeILQwKLjNamqvYqH3sunPSF3Y", article_id: Int, content: String, result: @escaping (Bool) -> Void) {
+        print(content)
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/articles/\(article_id)/comments", method: .post, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .request("https://api.koreatech.in/articles/\(article_id)/comments", method: .post, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
+                    print(response.data)
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
                                 case 201: // 잘 받아졌을 때(201)
@@ -300,7 +302,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .request("https://api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -322,7 +324,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in//articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
+                .request("https://api.koreatech.in//articles/\(article_id)/comments/\(comment_id)", method: .delete, encoding: URLEncoding.httpBody, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -341,7 +343,7 @@ class CommunityController: ObservableObject {
     func update_temp_comment(password: String, article_id: Int, comment_id: Int, content: String, result: @escaping (Bool) -> Void) {
 
         AF
-            .request("http://stage.api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content, "password": password], encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/temp/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content, "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -360,7 +362,7 @@ class CommunityController: ObservableObject {
     func grant_article_check(password: String, article_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void) {
 
         AF
-            .request("http://stage.api.koreatech.in/temp/articles/grant/check", method: .post, parameters: ["article_id": article_id, "password": password], encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/temp/articles/grant/check", method: .post, parameters: ["article_id": article_id, "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     switch response.result {
                     case .success(let value as [String: Any]):
@@ -376,7 +378,7 @@ class CommunityController: ObservableObject {
     func grant_comment_check(password: String, comment_id: Int, result: @escaping (AFResult<[String: Any]>) -> Void){
 
         AF
-            .request("http://stage.api.koreatech.in/temp/comments/grant/check", method: .post, parameters: ["comment_id": comment_id, "password": password], encoding: JSONEncoding.prettyPrinted)
+            .request("https://api.koreatech.in/temp/comments/grant/check", method: .post, parameters: ["comment_id": comment_id, "password": password], encoding: JSONEncoding.prettyPrinted)
                 .responseJSON { response in
                     switch response.result {
                     case .success(let value as [String: Any]):
@@ -397,7 +399,7 @@ class CommunityController: ObservableObject {
         ]
 
         AF
-                .request("http://stage.api.koreatech.in/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
+                .request("https://api.koreatech.in/articles/\(article_id)/comments/\(comment_id)", method: .put, parameters: ["content": content], encoding: JSONEncoding.prettyPrinted, headers: headers)
                 .responseJSON { response in
                     if let status = response.response?.statusCode { // 상태 코드를 받아서
                                 switch(status){
@@ -414,7 +416,7 @@ class CommunityController: ObservableObject {
 
     func temp_community_session() {
         AF
-                .request("http://stage.api.koreatech.in/temp/articles?page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("https://api.koreatech.in/temp/articles?page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
@@ -437,7 +439,7 @@ class CommunityController: ObservableObject {
 
     func community_session() {
         AF
-                .request("http://stage.api.koreatech.in/articles?boardId=\(self.board_id)&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("https://api.koreatech.in/articles?boardId=\(self.board_id)&page=1&limit=30", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return
