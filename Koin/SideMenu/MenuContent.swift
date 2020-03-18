@@ -69,14 +69,14 @@ struct MenuContent: View {
                         .foregroundColor(Color("warm_grey_two"))) {
                     Text("주변 상점")
                             .font(.system(size: 15))
-                            .foregroundColor(Color("black"))
+                            .foregroundColor(self.viewRouter.currentView == "store" ? Color("squash"): Color("black"))
                             .onTapGesture {
                                 self.viewRouter.currentView = "store"
                                 self.viewRouter.dismiss_menu()
                             }
                     Text("버스 / 교통")
                         .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
+                        .foregroundColor(self.viewRouter.currentView == "bus" ? Color("squash"): Color("black"))
                         .onTapGesture { // 식단 누를 시
                             // 현재 view를 dining으로 변경
                             self.viewRouter.currentView = "bus"
@@ -86,7 +86,7 @@ struct MenuContent: View {
                         }
                     Text("식단")
                         .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
+                        .foregroundColor(self.viewRouter.currentView == "dining" ? Color("squash"): Color("black"))
                             .onTapGesture { // 식단 누를 시
                                 // 현재 view를 dining으로 변경
                                 self.viewRouter.currentView = "dining"
@@ -112,7 +112,7 @@ struct MenuContent: View {
                         .foregroundColor(Color("warm_grey_two"))) {
                     Text("익명게시판")
                         .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
+                        .foregroundColor(self.viewRouter.currentView == "board_secret" ? Color("squash"): Color("black"))
                         .onTapGesture { // 식단 누를 시
                                                     // 현재 view를 dining으로 변경
                         self.viewRouter.currentView = "board_secret"
@@ -122,7 +122,7 @@ struct MenuContent: View {
                                                 }
                     Text("자유게시판")
                         .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
+                        .foregroundColor(self.viewRouter.currentView == "board_free" ? Color("squash"): Color("black"))
                         .onTapGesture { // 식단 누를 시
                             // 현재 view를 dining으로 변경
                             self.viewRouter.currentView = "board_free"
@@ -132,7 +132,7 @@ struct MenuContent: View {
                         }
                     Text("취업게시판")
                         .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
+                        .foregroundColor(self.viewRouter.currentView == "board_recruit" ? Color("squash"): Color("black"))
                         .onTapGesture { // 식단 누를 시
                                                     // 현재 view를 dining으로 변경
                                                     self.viewRouter.currentView = "board_recruit"
