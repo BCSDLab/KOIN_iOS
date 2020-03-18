@@ -16,6 +16,8 @@ import Combine
 
 
 class UserSettings: ObservableObject {
+    var isTest = true
+    var api = ""
     // 유저 정보
     @Published var user: UserRequest? = nil
     // 업데이트할 유저 정보
@@ -61,6 +63,7 @@ class UserSettings: ObservableObject {
     }
     
     init() {
+        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
         // 로그인이 되었는지 확인
         self.login_succeed()
     }
@@ -189,7 +192,7 @@ class UserSettings: ObservableObject {
         
         // put 메서드로, header추가하여 request를 보내주면
         AF
-        .request("https://api.koreatech.in/user/me", method: .put, encoding: JSONEncoding.prettyPrinted, headers: headers)
+        .request("\(api)/user/me", method: .put, encoding: JSONEncoding.prettyPrinted, headers: headers)
         .response { response in // 응답이 오면
             // 해당 응답에서 data를 꺼내
             guard let data = response.data else { return }
@@ -263,7 +266,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -309,7 +312,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -354,7 +357,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -399,7 +402,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -452,7 +455,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -517,7 +520,7 @@ class UserSettings: ObservableObject {
                     
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     AF
-                    .request("https://api.koreatech.in/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
                         // 해당 응답에서 data를 꺼내
                         guard let data = response.data else { return }
@@ -554,7 +557,7 @@ class UserSettings: ObservableObject {
         let hashPassword = hashed(pw: password)
         // post 메소드로, 이메일, 해시 비밀번호를 파라미터에 넣어 보내면
             AF
-            .request("https://api.koreatech.in/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
+            .request("\(api)/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
             .responseJSON { response in // JSON 형태로 응답을 받아
                 
                 if let status = response.response?.statusCode { // 상태 코드를 받아서
@@ -599,7 +602,7 @@ class UserSettings: ObservableObject {
         
         //delete 메서드로 헤더와 같이 넣어서 보내주면
         AF
-        .request("https://api.koreatech.in/user/me", method: .delete, encoding: URLEncoding.httpBody,headers: headers)
+        .request("\(api)/user/me", method: .delete, encoding: URLEncoding.httpBody,headers: headers)
         .response { response in // 응답을 받으면
             // UserDefaults의 user값을 삭제하고
             UserDefaults.standard.set(nil, forKey: "user")
@@ -613,7 +616,7 @@ class UserSettings: ObservableObject {
     // 닉네임이 존재하는지 확인하는 함수
     func check_nickname(nickname: String, result: @escaping (Bool) -> Void) {
         // 한글을 그대로 넣을 수 없어 임의로 주소 string으로 url로 인코딩해서 변환
-        let url = "https://api.koreatech.in/user/check/nickname/\(nickname)"
+        let url = "\(api)/user/check/nickname/\(nickname)"
         if let url_encode = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
 
             // 해당 주소를 get 메서드로 보내면
@@ -639,7 +642,7 @@ class UserSettings: ObservableObject {
     
     func find_password(email: String, result: @escaping (Bool) -> Void) {
         AF
-        .request("https://api.koreatech.in/user/find/password", method: .post, parameters:  ["portal_account": email], encoding: JSONEncoding.prettyPrinted)
+        .request("\(api)/user/find/password", method: .post, parameters:  ["portal_account": email], encoding: JSONEncoding.prettyPrinted)
         .responseJSON { response in // JSON 형태로 응답받으면
             if let status = response.response?.statusCode { // 상태 코드를 가져와서
                 switch(status){
@@ -671,7 +674,7 @@ class UserSettings: ObservableObject {
         // post 메서드로, 아이디와 비밀번호를 파라미터에 같이 넣어 보내주면
         print(email, hashPassword)
             AF
-                .request("https://api.koreatech.in/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.default)
+                .request("\(api)/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.default)
             .response { response in // 응답을 받으면
                 // 응답 내부의 데이터를 가져와
                 print(response.response?.statusCode)

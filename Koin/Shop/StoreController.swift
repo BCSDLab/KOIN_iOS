@@ -9,6 +9,9 @@ import Combine
 import PKHUD
 
 class StoreController: ObservableObject {
+    var isTest = true
+    var api = ""
+    
     @Published var stores: Shops?
     @Published var detail_store: Store?
     var isImageClicked: Bool = false
@@ -29,11 +32,13 @@ class StoreController: ObservableObject {
     }
 
     init() {
+        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
         stores = Shops()
         detail_store = Store()
     }
 
     init(store_id: Int) {
+        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
         self.store_session()
         self.load_store(store_id: store_id)
     }
@@ -52,7 +57,7 @@ class StoreController: ObservableObject {
     
     func load_store(store_id: Int){
         AF
-        .request("https://api.koreatech.in/shops/\(store_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
+        .request("\(api)/shops/\(store_id)", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return
@@ -105,7 +110,7 @@ class StoreController: ObservableObject {
 
     func store_session() {
         AF
-                .request("https://api.koreatech.in/shops", method: .get, encoding: JSONEncoding.prettyPrinted)
+                .request("\(api)/shops", method: .get, encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     guard let data = response.data else {
                         return

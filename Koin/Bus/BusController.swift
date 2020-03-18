@@ -12,6 +12,10 @@ import Combine
 import Alamofire
 
 class BusController {
+    var isTest = true
+    
+    var api = ""
+    
     /*
     let expressFromKoreatechToTerminal:[String] = [
             "08:00",
@@ -419,6 +423,7 @@ class BusController {
             "koreatech": shuttleFromKoreatech,
             "terminal": shuttleFromTerminal
         ]
+        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
     }
     
     func getRemainTimeToDate(timetable: [String], startIndex: Int) -> Date {
@@ -530,7 +535,7 @@ class BusController {
     
     func getNextCityBusTimeToDate(depart: String, arrival: String) -> Date{
         var nextRemainTime: Int = 0
-       AF.request("https://api.koreatech.in/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
+       AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
         .response { response in
             guard let data = response.data else {
                 return
