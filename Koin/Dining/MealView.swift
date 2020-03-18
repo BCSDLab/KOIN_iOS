@@ -35,6 +35,7 @@ struct MealView: View {
                         self.dateString = dateToString(date: self.date)
                         // 어제의 식단 데이터를 불러오기
                         self.observed.meal_session(date: self.date)
+                        print(self.observed.meals)
                     } else if $0.translation.width < -100 { // 왼쪽으로 100만큼 이동했다면
                         // 날짜를 내일로 바꾸기
                         self.date = Date(timeInterval: 86400, since: self.date)
@@ -42,6 +43,7 @@ struct MealView: View {
                         self.dateString = dateToString(date: self.date)
                         // 내일의 식단 데이터를 불러오기
                         self.observed.meal_session(date: self.date)
+                        print(self.observed.meals)
                     }
         }
         
@@ -103,13 +105,15 @@ struct MealView: View {
                 }
                 }
                 
-            if self.diningViewRouter.currentView == "breakfast" {
-                MenuView(menu_type: 0, observed: self.observed)
-            } else if self.diningViewRouter.currentView == "lunch" {
-                MenuView(menu_type: 1, observed: self.observed)
-            } else if self.diningViewRouter.currentView == "dinner" {
-                MenuView(menu_type: 2, observed: self.observed)
-            }
+                if self.diningViewRouter.currentView == "breakfast" {
+                    MenuView(menu_type: 0, observed: self.observed)
+                } else if self.diningViewRouter.currentView == "lunch" {
+                    MenuView(menu_type: 1, observed: self.observed)
+                } else if self.diningViewRouter.currentView == "dinner" {
+                    MenuView(menu_type: 2, observed: self.observed)
+                }
+                
+                
             }.padding(.top, 32)
         .navigationBarTitle(Text("식단"), displayMode: .inline)
                 .gesture(drag)
@@ -158,10 +162,9 @@ struct MenuView: View {
 
     var body: some View {
         List {
-            ForEach(observed.meals) { meal in
+            ForEach(self.observed.meals) { meal in
                 if (meal.type == self.menu_switch[self.menu_type]) { // 해당 메뉴일 경우 표시하기
                     CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
-
                 }
             }
             

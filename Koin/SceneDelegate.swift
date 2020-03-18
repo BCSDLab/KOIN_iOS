@@ -16,7 +16,7 @@ import UIKit
 
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    var isTest = true
     var window: UIWindow?
 
 
