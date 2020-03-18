@@ -168,7 +168,7 @@
                                             <constraint firstAttribute="width" constant="64" id="YYq-Dc-a6Z"/>
                                             <constraint firstAttribute="height" constant="32" id="fj4-Ua-6FQ"/>
                                         </constraints>
-                                        <state key="normal" title="Button">
+                                        <state key="normal" title="조회">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
