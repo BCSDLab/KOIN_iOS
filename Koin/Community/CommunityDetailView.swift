@@ -9,12 +9,6 @@ import CryptoKit
 import CryptoTokenKit
 
 
-/*
- let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
-
- UIApplication.shared.open(url as URL)
- */
-
 struct CommunityDetailView: View {
     @ObservedObject var controller:CommunityController
     @EnvironmentObject var user: UserSettings
@@ -27,6 +21,15 @@ struct CommunityDetailView: View {
     var getUserId: Int = -1
     @State var grantValue : Bool = false
     @State var temp_password: String = ""
+    
+    @State var article: Article = Article()
+    @State var tempArticle: TempArticle = TempArticle()
+    @State var articleTitle: String = "title"
+    @State var articleHit: Int = 0
+    @State var articleNickname: String = ""
+    @State var articleCommentCount: Int = 0
+    @State var articleCreatedAt: String = ""
+    @State var articleContent: String = ""
 
 
     init(community_id: Int, board_id: Int, user_id: Int) {
@@ -70,44 +73,10 @@ struct CommunityDetailView: View {
     }
 
     var body: some View {
-        var article: Article = Article()
-        var tempArticle: TempArticle = TempArticle()
-        var articleTitle: String = "title"
-        var articleHit: Int = 0
-        var articleNickname: String = ""
-        var articleCommentCount: Int = 0
-        var articleCreatedAt: String = ""
-        var articleContent: String = ""
         
         
-        //var articleAttrContent: NSAttributedString = NSAttributedString()
-
-        if self.board_id == -2 {
-            tempArticle = self.controller.detail_temp_article
-            articleTitle = tempArticle.title
-            articleHit = tempArticle.hit
-            articleNickname = tempArticle.nickname
-            if let commentCount = tempArticle.commentCount {
-                articleCommentCount = commentCount
-            }
-            articleCreatedAt = dateToString(string_date: tempArticle.createdAt)
-            if let content = tempArticle.content {
-                articleContent = content
-            }
-            self.htmlView.loadHTML(articleContent)
-        } else {
-            article = self.controller.detail_article
-            
-            articleTitle = article.title
-            articleHit = article.hit
-            articleNickname = article.nickname
-            articleCommentCount = article.commentCount
-            articleCreatedAt = dateToString(string_date: article.createdAt)
-            articleContent = article.content
-            self.htmlView.loadHTML(articleContent)
-        }
-    
         return VStack {
+            
                     VStack(alignment: .leading) {
                         HStack {
                         Text("\(articleTitle)")
@@ -236,6 +205,35 @@ struct CommunityDetailView: View {
 
 
                 }.padding()
+            .onAppear{
+                print("CommunityDetail appear")
+                if self.board_id == -2 {
+                    self.tempArticle = self.controller.detail_temp_article
+                    self.articleTitle = self.tempArticle.title
+                    self.articleHit = self.tempArticle.hit
+                    self.articleNickname = self.tempArticle.nickname
+                    if let commentCount = self.tempArticle.commentCount {
+                        self.articleCommentCount = commentCount
+                    }
+                    self.articleCreatedAt = self.dateToString(string_date: self.tempArticle.createdAt)
+                    if let content = self.tempArticle.content {
+                        self.articleContent = content
+                    }
+                    self.htmlView.loadHTML(self.articleContent)
+                } else {
+                    self.article = self.controller.detail_article
+                    self.articleTitle = self.article.title
+                    self.articleHit = self.article.hit
+                    self.articleNickname = self.article.nickname
+                    self.articleCommentCount = self.article.commentCount
+                    self.articleCreatedAt = self.dateToString(string_date: self.article.createdAt)
+                    self.articleContent = self.article.content
+                    //print(self.articleContent)
+                    self.htmlView.loadHTML(self.articleContent)
+                }
+        }.onDisappear{
+            print("CommunityDetail disappear")
+        }
             
         
 

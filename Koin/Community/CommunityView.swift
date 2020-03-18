@@ -9,21 +9,21 @@
 import SwiftUI
 import PKHUD
 
-func dateToString(string_date: String) -> String {
-    let dateFormat = DateFormatter()
-    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    let date = dateFormat.date(from: string_date)
-    
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy.MM.dd"
-    let dateString = dateFormatter.string(from: date!)
-    return dateString
-}
-
 struct TempCommunityList: View {
     @EnvironmentObject var tabData: ViewRouter
     @EnvironmentObject var user: UserSettings
     @ObservedObject var communityData:CommunityController
+    
+    func dateToString(string_date: String) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormat.date(from: string_date)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        let dateString = dateFormatter.string(from: date!)
+        return dateString
+    }
     
     init() {
         self.communityData = CommunityController(board_id: -2)
@@ -52,13 +52,13 @@ struct TempCommunityList: View {
                                     .foregroundColor(Color("warm_grey"))
                                     .lineLimit(1)
                                 Spacer()
-                                Text(dateToString(string_date: l.createdAt))
+                                Text(self.dateToString(string_date: l.createdAt))
                                     .font(.system(size: 12))
                                     .foregroundColor(Color("warm_grey"))
                             }
                         }
                     }.onAppear {
-                        if l == self.communityData.get_temp_articles().last && self.communityData.get_temp_articles().count != 1 {
+                        if l == self.communityData.get_temp_articles().last && self.communityData.get_temp_articles().count % 10 == 0 {
                             self.communityData.reload_temp_articles()
                     }
                     }
@@ -84,6 +84,18 @@ struct CommunityList: View {
     @EnvironmentObject var user: UserSettings
     @ObservedObject var communityData:CommunityController
     var board_id: Int
+    
+    func dateToString(string_date: String) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormat.date(from: string_date)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        let dateString = dateFormatter.string(from: date!)
+        return dateString
+    }
+    
     init(board_id: Int) {
         self.board_id = board_id
         self.communityData = CommunityController(board_id: board_id)
@@ -110,14 +122,15 @@ struct CommunityList: View {
                                 .foregroundColor(Color("warm_grey"))
                                 .lineLimit(nil)
                             Spacer()
-                            Text(dateToString(string_date: l.createdAt))
+                            Text(self.dateToString(string_date: l.createdAt))
                                 .font(.system(size: 12))
                                 .foregroundColor(Color("warm_grey"))
                         }
                     }
                 }
                     .onAppear {
-                    if l == self.communityData.get_articles().last && self.communityData.get_articles().count != 1 {
+                        
+                    if l == self.communityData.get_articles().last && self.communityData.get_articles().count % 10 == 0 {
                         self.communityData.reload_articles()
                 }
                 }

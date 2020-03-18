@@ -18,7 +18,7 @@ struct HTMLView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: HTMLViewControler, context: Context) {
-        
+        print(context)
     }
     
     func loadHTML(_ htmlContent: String) {

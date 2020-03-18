@@ -10,16 +10,7 @@ import SwiftUI
 import CryptoKit
 import CryptoTokenKit
 
-func commentDateToString(string_date: String) -> String {
-    let dateFormat = DateFormatter()
-    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    let date = dateFormat.date(from: string_date)
-    
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
-    let dateString = dateFormatter.string(from: date!)
-    return dateString
-}
+
 
 struct CommunityCommentView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -33,6 +24,28 @@ struct CommunityCommentView: View {
     @State var temp_password: String = ""
     @State var temp_nickname: String = ""
     @State var grant_check_password: String = ""
+    
+    func commentDateToString(string_date: String) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormat.date(from: string_date)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
+        let dateString = dateFormatter.string(from: date!)
+        return dateString
+    }
+    
+    func dateToString(string_date: String) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormat.date(from: string_date)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        let dateString = dateFormatter.string(from: date!)
+        return dateString
+    }
 
 
     init(community_id: Int) {
@@ -130,7 +143,7 @@ struct CommunityCommentView: View {
                                     .font(.system(size: 14))
                                     .foregroundColor(Color("black"))
                                 .lineLimit(1)
-                                Text(commentDateToString(string_date: c.createdAt))
+                                Text(self.commentDateToString(string_date: c.createdAt))
                                 .font(.system(size: 12))
                                 .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
@@ -332,7 +345,7 @@ struct CommunityCommentView: View {
                                 Text(c.nickname)
                                     .font(.system(size: 14))
                                     .foregroundColor(Color("black"))
-                                Text(commentDateToString(string_date: c.createdAt))
+                                Text(self.commentDateToString(string_date: c.createdAt))
                                     .font(.system(size: 12))
                                 .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
