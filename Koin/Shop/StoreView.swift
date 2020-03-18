@@ -20,7 +20,6 @@ struct StoreView: View {
     //기타(S000), 콜벤(S001), 정식(S002), 족발(S003), 중국집(S004), 치킨(S005), 피자(S006), 탕수육(S007), 일반(S008), 미용실(S009)
     var body: some View {
         return ScrollView(.vertical) {
-
             Text("카테고리")
                 .font(.system(size: 15))
                 .fontWeight(.medium)
@@ -29,8 +28,17 @@ struct StoreView: View {
                 .padding()
                 
             HStack(alignment: .center, spacing: 20) {
-                Button(action: { self.category = "S005"
-                self.stores.get_stores(category: "S005") }) {
+                Button(action: {
+                    if(self.category != "S005") {
+                    self.category = "S005"
+                    self.stores.get_stores(category: "S005")
+                } else {
+                        self.category = ""
+                    self.stores.load_stores()
+                    }
+                    
+                }
+                ) {
                     VStack {
                         Image("store_category_chicken")
                                 .renderingMode(.original)
@@ -41,8 +49,13 @@ struct StoreView: View {
                             .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S006"
-                self.stores.get_stores(category: "S006") }) {
+                Button(action: { if(self.category != "S006") {
+                    self.category = "S006"
+                    self.stores.get_stores(category: "S006")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_pizza")
                                 .renderingMode(.original)
@@ -53,8 +66,13 @@ struct StoreView: View {
                         .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S007"
-                self.stores.get_stores(category: "S007") }) {
+                Button(action: { if(self.category != "S007") {
+                    self.category = "S007"
+                    self.stores.get_stores(category: "S007")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_sweet_pork")
                                 .renderingMode(.original)
@@ -66,8 +84,13 @@ struct StoreView: View {
                     }
                 }
 
-                Button(action: { self.category = "S002"
-                self.stores.get_stores(category: "S002") }) {
+                Button(action: { if(self.category != "S002") {
+                    self.category = "S002"
+                    self.stores.get_stores(category: "S002")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_sweet_dosirak")
                                 .renderingMode(.original)
@@ -78,8 +101,13 @@ struct StoreView: View {
                         .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S003"
-                self.stores.get_stores(category: "S003") }) {
+                Button(action: { if(self.category != "S003") {
+                    self.category = "S003"
+                    self.stores.get_stores(category: "S003")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_sweet_pork_feet")
                                 .renderingMode(.original)
@@ -92,8 +120,13 @@ struct StoreView: View {
                 }
             }
             HStack(alignment: .center, spacing: 20) {
-                Button(action: { self.category = "S004"
-                self.stores.get_stores(category: "S004") }) {
+                Button(action: { if(self.category != "S004") {
+                    self.category = "S004"
+                    self.stores.get_stores(category: "S004")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_chinese")
                                 .renderingMode(.original)
@@ -104,8 +137,13 @@ struct StoreView: View {
                         .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S008"
-                self.stores.get_stores(category: "S008") }) {
+                Button(action: { if(self.category != "S008") {
+                    self.category = "S008"
+                    self.stores.get_stores(category: "S008")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_normal")
                                 .renderingMode(.original)
@@ -116,8 +154,13 @@ struct StoreView: View {
                         .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S009"
-                self.stores.get_stores(category: "S009") }) {
+                Button(action: { if(self.category != "S009") {
+                    self.category = "S009"
+                    self.stores.get_stores(category: "S009")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         Image("store_category_hair")
                                 .renderingMode(.original)
@@ -128,8 +171,13 @@ struct StoreView: View {
                         .font(.system(size: 13))
                     }
                 }
-                Button(action: { self.category = "S001"
-                    self.stores.get_stores(category: "S001") }) {
+                Button(action: { if(self.category != "S001") {
+                    self.category = "S001"
+                    self.stores.get_stores(category: "S001")
+                } else {
+                    self.category = ""
+                    self.stores.load_stores()
+                    } }) {
                     VStack {
                         ZStack {
                             Circle()
