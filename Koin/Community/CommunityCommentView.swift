@@ -21,8 +21,8 @@ struct CommunityCommentView: View {
     @State var is_edited: Bool = false
     @State var edited_comment_id: Int = -1
     @State var edited_article_id: Int = -1
-    @State var temp_password: String = ""
     @State var temp_nickname: String = ""
+    @State var temp_password: String = ""
     @State var grant_check_password: String = ""
     
     func commentDateToString(string_date: String) -> String {
@@ -148,7 +148,7 @@ struct CommunityCommentView: View {
                                 .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
                                 Spacer()
-                                
+                                /*
                                 Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.grant_check_password), article_id: c.articleId, comment_id: c.id) { result in
                                         if result {
                                             self.presentationMode.wrappedValue.dismiss()
@@ -160,7 +160,7 @@ struct CommunityCommentView: View {
                                             .renderingMode(.original)
                                             .resizable()
                                             .frame(width: 12, height: 12)
-                                    }
+                                    }*/
                                 
                             }
                             HStack {
@@ -168,31 +168,15 @@ struct CommunityCommentView: View {
                                 .font(.system(size: 14))
                                 .foregroundColor(Color("black"))
                                 .fontWeight(.light)
-                            }
-                            SecureField("비밀번호", text: self.$grant_check_password)
-                            .font(.system(size: 14))
-                            .foregroundColor(Color("black"))
-                            .lineLimit(1)
-                            .frame(height: 36.7)
+                            }.padding(.bottom, 8.5)
                             HStack {
                                 Button(action:{
                                     
-                                    self.controller.grant_comment_check(password: self.hashed(pw: self.grant_check_password), comment_id: c.id) { result in
-                                        do {
-                                            let value = try result.get()
-                                            let grant = value["grantEdit"] as! Int
-                                            if grant == 1 {
-                                                self.comment_content = c.content
-                                                self.edited_comment_id = c.id
-                                                self.edited_article_id = c.articleId
-                                                self.is_edited = true
-                                                self.temp_nickname = c.nickname
-                                            } else {
-                                            }
-                                        } catch {
-                                        }
-                                        
-                                    }
+                                    self.comment_content = c.content
+                                    self.edited_comment_id = c.id
+                                    self.edited_article_id = c.articleId
+                                    self.is_edited = true
+                                    self.temp_nickname = c.nickname
                                     
                                     
                                 }) {
@@ -227,34 +211,31 @@ struct CommunityCommentView: View {
                     Divider()
                     //수정모드일 때는 취소와 수정 버튼, 작성모드일 때는 등록 버튼만
                     VStack(alignment: .leading) {
-                        
                         VStack(alignment: .leading) {
-                            if !is_edited {
-                                TextField("닉네임", text: $temp_nickname)
-                                .font(.system(size: 14))
-                                .foregroundColor(Color("black"))
-                                .lineLimit(1)
-                                .frame(height: 36.7)
-                                .border(Color.gray.opacity(0.8), width: 1)
-                            } else {
-                                Text(self.temp_nickname)
-                                .font(.system(size: 14))
-                                .foregroundColor(Color("black"))
-                                .padding(.top, 6)
-                            }
+                            TextField("닉네임", text: $temp_nickname)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                            .lineLimit(1)
+                            //.frame(height: 36.7)
+                            .padding(.horizontal, 15.5)
+                                .padding(.vertical, 7.8)
+                            .border(Color.gray.opacity(0.8), width: 1)
                            SecureField("비밀번호", text: $temp_password)
                             .font(.system(size: 14))
                             .foregroundColor(Color("black"))
                             .lineLimit(1)
-                            .frame(height: 36.7)
+                            //.frame(height: 36.7)
+                            .padding(.horizontal, 15.5)
+                            .padding(.vertical, 7.8)
                             .border(Color.gray.opacity(0.8), width: 1)
-                            
                             TextField("댓글을 작성해주세요.", text: $comment_content)
                                 .font(.system(size: 14))
                                 .foregroundColor(Color("black"))
                                     .lineLimit(.max)
                                     .multilineTextAlignment(.leading)
-                                    .frame(height: 112)
+                                .frame(height: 112, alignment: .top)
+                                .padding(.horizontal, 15.5)
+                                .padding(.vertical, 7.8)
                             .border(Color.gray.opacity(0.8), width: 1)
                         }.padding(.vertical, 10)
                         
@@ -268,13 +249,31 @@ struct CommunityCommentView: View {
                                 self.edited_article_id = -1
                                 self.edited_comment_id = -1
                                 self.comment_content = ""
+                                self.temp_nickname = ""
+                                self.temp_password = ""
                                 self.is_edited = false
                             }) {
                                 Text("취소")
+                                    .foregroundColor(.black)
                                 .font(.system(size: 12))
                                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
                                 .border(Color.gray.opacity(0.8), width: 1)
                                     
+                            }
+                            
+                            Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id) { result in
+                            if result {
+                                self.presentationMode.wrappedValue.dismiss()
+                            } else {
+                                print("성공 못함")
+                            }
+                            }}) {
+                                Text("삭제")
+                                    .foregroundColor(.red)
+                                    .font(.system(size: 12))
+                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                        .border(Color.gray.opacity(0.8), width: 1)
+                                        
                             }
                             
                             Button(action: {self.controller.update_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { result in
@@ -350,6 +349,7 @@ struct CommunityCommentView: View {
                                 .foregroundColor(Color("grey2"))
                                 .fontWeight(.light)
                                 Spacer()
+/*
                                 if(c.userId == self.user.get_userId()) {
                                     Button(action:{self.controller.delete_comment(token: self.user.get_token(),article_id: c.articleId, comment_id: c.id) { result in
                                         if result {
@@ -365,7 +365,8 @@ struct CommunityCommentView: View {
                                             
                                     }
                                 }
-                            }
+                                */
+                            }.frame(alignment: .leading)
                             HStack {
                             Text(c.content)
                                 .font(.system(size: 14))
@@ -417,15 +418,15 @@ struct CommunityCommentView: View {
                             .foregroundColor(Color("black"))
                             .padding(.top, 6)
                         
-                        VStack(alignment: .leading) {
                             TextField("댓글을 작성해주세요.", text: $comment_content)
                                 .font(.system(size: 14))
                             .foregroundColor(Color("black"))
                                 .lineLimit(.max)
                                 .multilineTextAlignment(.leading)
-                                .frame(height: 112)
-                        }.padding(.all, 10)
-                        .border(Color.gray.opacity(0.8), width: 1)
+                                .frame(height: 112, alignment: .top)
+                                .padding(.all, 15.5)
+                                .border(Color.gray.opacity(0.8), width: 1)
+                        
                         
                         
                     }
@@ -440,7 +441,25 @@ struct CommunityCommentView: View {
                                 self.is_edited = false
                             }) {
                                 Text("취소")
+                                    .foregroundColor(.black)
                                     .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                .border(Color.gray.opacity(0.8), width: 1)
+                                    
+                            }
+                            
+                            Button(action: {
+                                self.controller.delete_comment(token: self.user.get_token(),article_id: self.edited_article_id, comment_id: self.edited_comment_id) { result in
+                                if result {
+                                    self.presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    print("성공 못함")
+                                }
+                                }
+                            }) {
+                                Text("삭제")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.red)
                                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
                                 .border(Color.gray.opacity(0.8), width: 1)
                                     

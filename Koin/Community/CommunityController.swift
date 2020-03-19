@@ -13,7 +13,7 @@ import Combine
 import PKHUD
 
 class CommunityController: ObservableObject {
-    var isTest = false
+    var isTest = true
     
     var api = ""
     
@@ -147,7 +147,7 @@ class CommunityController: ObservableObject {
                                     switch(status){
                                     case 201: // 잘 받아졌을 때(201)
                                         result(true) // 회원가입이 잘 되었다고 알리고
-                                        
+                                        self.objectWillChange.send(self)
                                     default: // 잘 안 받아졌을 때
                                         result(false) // 회원가입이 안 되었다고 알림
                                     }
@@ -168,7 +168,7 @@ class CommunityController: ObservableObject {
                                     switch(status){
                                     case 201: // 잘 받아졌을 때(201)
                                         result(true) // 회원가입이 잘 되었다고 알리고
-                                        
+                                        self.objectWillChange.send(self)
                                     default: // 잘 안 받아졌을 때
                                         result(false) // 회원가입이 안 되었다고 알림
                                     }
@@ -189,7 +189,7 @@ class CommunityController: ObservableObject {
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
-                                    
+                                    self.objectWillChange.send(self)
                                 default: // 잘 안 받아졌을 때
                                     result(false) // 회원가입이 안 되었다고 알림
                                 }
@@ -209,7 +209,7 @@ class CommunityController: ObservableObject {
                                 switch(status){
                                 case 200: // 잘 받아졌을 때(200)
                                     result(true) // 회원가입이 잘 되었다고 알리고
-                                    
+                                    self.objectWillChange.send(self)
                                 default: // 잘 안 받아졌을 때
                                     result(false) // 회원가입이 안 되었다고 알림
                                 }
