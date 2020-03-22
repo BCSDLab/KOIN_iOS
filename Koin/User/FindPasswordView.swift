@@ -17,8 +17,10 @@ struct FindPasswordView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     // 회원가입 성공 시 Alert를 띄우는 목적의 변수
     @State private var showingSuccessAlert = false
+    @State private var showingAlert = false
     // 유저 정보가 담겨있는 객체
     @EnvironmentObject var settings: UserSettings
+    @State var errorText = ""
     
     init() {
         // 네비게이션 바 글자색 설정(흰색)
@@ -56,17 +58,13 @@ struct FindPasswordView: View {
             Spacer()
             
             Button(action: {
-                self.settings.find_password(email: self.login_email) { result in
+                self.settings.find_password(email: self.login_email) { (result, error) in
                     if result {
                         self.showingSuccessAlert = true
+                        self.showingAlert = true
                     } else {
-                        let errorText = "유저 정보를 찾을 수 없습니다."
-                        // 에러 HUD를 보여준다.
-                        yourLabel.text = errorText
-                        uiview.addSubview(yourLabel)
-                        PKHUD.sharedHUD.contentView = uiview
-                        PKHUD.sharedHUD.show()
-                        PKHUD.sharedHUD.hide(afterDelay: 1.0)
+                        self.errorText = (error?.localizedDescription)!
+                        self.showingAlert = true
                     }
                 }
             }) {
@@ -83,6 +81,22 @@ struct FindPasswordView: View {
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], CGFloat(50))
             //showingSuccessAlert이 true일 때 Alert을 표시한다.
+        .alert(isPresented: $showingAlert) {
+            // 이메일을 확인해보라는 Alert을 띄운 다음
+            self.showingSuccessAlert ?
+                Alert(title: Text("이메일 확인"), message: Text("이메일로 비밀번호 찾기 안내 메일을 보냈습니다. 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
+                    // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                    self.showingSuccessAlert = false
+                   // 로그인 페이지로 돌아간다.
+                self.presentationMode.wrappedValue.dismiss()
+                    }) :
+                Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
+                // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                self.showingAlert = false
+                })
+        }
+            
+            /*
         .alert(isPresented: $showingSuccessAlert) {
             // 이메일을 확인해보라는 Alert을 띄운 다음
                 Alert(title: Text("이메일 확인"), message: Text("이메일로 비밀번호 찾기 안내 메일을 보냈습니다. 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
@@ -92,6 +106,8 @@ struct FindPasswordView: View {
                 self.presentationMode.wrappedValue.dismiss()
                     })
         }
+        */
+        
     }
 }
 

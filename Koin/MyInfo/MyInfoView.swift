@@ -29,6 +29,7 @@ struct MyInfoView: View {
     @EnvironmentObject var settings: UserSettings
     // 회원 탈퇴 전 Alert표시를 위한 값(true일시 Alert 표시)
     @State var showingDeleteAlert: Bool = false
+    //@State var showingAlert: Bool = false
     
     @State var updated_gender: Int = -1
     @State var change_name: String = ""
@@ -41,6 +42,12 @@ struct MyInfoView: View {
     @State var showNameModal: Bool = false
     @State var showStudentNumberModal: Bool = false
     
+    @State var errorText = ""
+    
+    /*
+     public final static String FILTERPASSWORD = "^(?=.[a-zA-Z])(?=.[`₩~!@#$%<>^&*()\-=+?<>:;"',.{}|[]/\\]])(?=.*[0-9]).{6,18}$";
+     public final static String FILTER_EMAIL = "^[a-z_0-9]{1,12}$";
+     */
     
     var listData: [[[String]]] = []
     
@@ -71,11 +78,11 @@ struct MyInfoView: View {
     }
     
     func genderChange(_ tag: Int) {
-        self.settings.update_gender(token: self.settings.get_token(), updated_gender: tag) { result in
+        self.settings.update_gender(token: self.settings.get_token(), updated_gender: tag) { (result, error)  in
             if result {
                 print("success")
             } else {
-                print("error")
+                print(error.debugDescription)
             }
         }
     }
@@ -165,7 +172,9 @@ struct MyInfoView: View {
                         return NavigationView {
                             VStack(alignment: .leading) {
                                 Text("이름").foregroundColor(Color("warm_grey_two"))
-                                TextField("이름", text: self.$settings.nameValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                TextField("이름", text: self.$change_name).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Text(self.errorText)
+                                .foregroundColor(.red)
                                 Spacer()
                                 }.padding().navigationBarItems(
                                 leading:
@@ -176,11 +185,12 @@ struct MyInfoView: View {
                             }, trailing:
                                 Button(action: {
                                     
-                                    self.settings.update_name(token: self.settings.get_token(), updated_name: self.settings.nameValue) { result in
+                                    self.settings.update_name(token: self.settings.get_token(), updated_name: self.change_name) { (result, error) in
                                         if result {
+                                            self.errorText = ""
                                             self.showNameModal = false
                                         } else {
-                                            print("error")
+                                            self.errorText = (error?.localizedDescription)!
                                         }
                                     }
                                     
@@ -218,7 +228,9 @@ struct MyInfoView: View {
                         return NavigationView {
                             VStack(alignment: .leading) {
                                 //Text("닉네임").foregroundColor(Color("warm_grey_two"))
-                                TextField("닉네임", text: self.$settings.nicknameValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                TextField("닉네임", text: self.$change_nickname).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Text(self.errorText)
+                                .foregroundColor(.red)
                                 Spacer()
                                 }
                             .padding()
@@ -230,11 +242,12 @@ struct MyInfoView: View {
                                     Text("닫기").foregroundColor(Color("light_navy"))
                             }, trailing:
                                 Button(action: {
-                                    self.settings.update_nickname(token: self.settings.get_token(), updated_nickname: self.settings.nicknameValue) { result in
+                                    self.settings.update_nickname(token: self.settings.get_token(), updated_nickname: self.change_nickname) { (result, error) in
                                         if result {
+                                            self.errorText = ""
                                             self.showNicknameModal = false
                                         } else {
-                                            print("error")
+                                            self.errorText = (error?.localizedDescription)!
                                         }
                                     }
                                 }) {
@@ -284,7 +297,13 @@ struct MyInfoView: View {
                         NavigationView {
                             VStack(alignment: .leading) {
                                 //Text("폰번호").foregroundColor(Color("warm_grey_two"))
-                                TextField("폰번호", text: self.$settings.phoneValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical).keyboardType(.numberPad)
+                                TextField("폰번호", text: self.$change_phoneNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical)
+                                Text("- 기호를 포함한 형태(010-0000-0000)로 입력해주세요.")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color("light_navy"))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text(self.errorText)
+                                    .foregroundColor(.red)
                                 Spacer()
                                 }.padding().navigationBarItems(
                                 leading:
@@ -294,11 +313,12 @@ struct MyInfoView: View {
                                     Text("닫기").foregroundColor(Color("light_navy"))
                             }, trailing:
                                 Button(action: {
-                                    self.settings.update_phoneNumber(token: self.settings.get_token(), updated_phoneNumber: self.settings.phoneValue.toPhoneNumber()) { result in
+                                    self.settings.update_phoneNumber(token: self.settings.get_token(), updated_phoneNumber: self.change_phoneNumber) { (result, error) in
                                         if result {
+                                            self.errorText = ""
                                             self.showPhoneModal = false
                                         } else {
-                                            print("error")
+                                            self.errorText = (error?.localizedDescription)!
                                         }
                                     }
                                 }) {
@@ -350,7 +370,9 @@ struct MyInfoView: View {
                             NavigationView() {
                                 VStack(alignment: .leading) {
                                     //Text("학번").foregroundColor(Color("warm_grey_two"))
-                                    TextField("학번", text: self.$settings.studentNumberValue).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical).keyboardType(.numberPad)
+                                    TextField("학번", text: self.$change_studentNumber).textFieldStyle(DefaultTextFieldStyle()).padding(.vertical).keyboardType(.numberPad)
+                                    Text(self.errorText)
+                                    .foregroundColor(.red)
                                     Spacer()
                                     }.padding().navigationBarItems(
                                     leading:
@@ -360,11 +382,12 @@ struct MyInfoView: View {
                                         Text("닫기").foregroundColor(Color("light_navy"))
                                 }, trailing:
                                     Button(action: {
-                                        self.settings.update_studentNumber(token: self.settings.get_token(), updated_studentNumber: self.settings.studentNumberValue){ result in
+                                        self.settings.update_studentNumber(token: self.settings.get_token(), updated_studentNumber: self.change_studentNumber){ (result, error) in
                                             if result {
+                                                self.errorText = ""
                                                 self.showStudentNumberModal = false
                                             } else {
-                                                print("error")
+                                                self.errorText = (error?.localizedDescription)!
                                             }
                                         }
                                     }) {
@@ -417,9 +440,6 @@ struct MyInfoView: View {
                 }
                 Spacer()
             }
-
-            
-
         }
                 .listStyle(GroupedListStyle())
                 .alert(isPresented: $showingDeleteAlert) {
@@ -427,11 +447,14 @@ struct MyInfoView: View {
                         // Alert를 닫고
                         self.showingDeleteAlert = false
                         // setting 내의 회원 탈퇴 기능에 토큰을 보내 기능을 수행한다.
-                        self.settings.delete_session(token: self.settings.get_token())
+                        self.settings.delete_session(token: self.settings.get_token()) { (_, _) in
+                            
+                        }
                     }, secondaryButton: .default(Text("취소")) {
                         // Alert를 닫는다.(아무 일도 일어나지 않는다.)
-                        self.showingDeleteAlert = false}
-                    )
+                        self.showingDeleteAlert = false
+                        }
+                        )
         }.onAppear() {
             if !self.listData[0][5][1].isEmpty {
                 if let gender = Int(self.listData[0][5][1]) {

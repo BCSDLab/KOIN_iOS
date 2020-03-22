@@ -25,6 +25,9 @@ struct CommunityCommentView: View {
     @State var temp_password: String = ""
     @State var grant_check_password: String = ""
     
+    @State var errorText: String = ""
+    @State var showError: Bool = false
+    
     func commentDateToString(string_date: String) -> String {
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -107,8 +110,6 @@ struct CommunityCommentView: View {
                 }
             }
         }
-
-        
         
         return Group {
             if self.controller.board_id == -2 {
@@ -261,11 +262,18 @@ struct CommunityCommentView: View {
                                     
                             }
                             
-                            Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id) { result in
+                            Button(action:{self.controller.delete_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id) { (result, error) in
                             if result {
-                                self.presentationMode.wrappedValue.dismiss()
+                                self.errorText = ""
+                                self.showError = false
+                                //self.presentationMode.wrappedValue.dismiss()
+                                self.temp_nickname = ""
+                                self.temp_password = ""
+                                self.comment_content = ""
+                                self.is_edited = false
                             } else {
-                                print("성공 못함")
+                                self.errorText = (error?.localizedDescription)!
+                                self.showError = true
                             }
                             }}) {
                                 Text("삭제")
@@ -276,11 +284,18 @@ struct CommunityCommentView: View {
                                         
                             }
                             
-                            Button(action: {self.controller.update_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { result in
+                            Button(action: {self.controller.update_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { (result, error) in
                                     if result {
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        self.errorText = ""
+                                        self.showError = false
+                                        //self.presentationMode.wrappedValue.dismiss()
+                                        self.temp_nickname = ""
+                                        self.temp_password = ""
+                                        self.comment_content = ""
+                                        self.is_edited = false
                                     } else {
-                                        print("성공 못함")
+                                        self.errorText = (error?.localizedDescription)!
+                                        self.showError = true
                                     }
                                 }}) {
                                 Text("수정")
@@ -292,10 +307,18 @@ struct CommunityCommentView: View {
                             
                         } else {
                             
-                            Button(action: {self.controller.put_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.community_id, nickname: self.temp_nickname, content: self.comment_content) { result in
+                            Button(action: {self.controller.put_temp_comment(password: self.hashed(pw:self.temp_password), article_id: self.community_id, nickname: self.temp_nickname, content: self.comment_content) { (result, error) in
                                     if result {
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        self.errorText = ""
+                                        self.showError = false
+                                        //self.presentationMode.wrappedValue.dismiss()
+                                        self.temp_nickname = ""
+                                        self.temp_password = ""
+                                        self.comment_content = ""
+                                        self.is_edited = false
                                     } else {
+                                        self.errorText = (error?.localizedDescription)!
+                                        self.showError = true
                                         print("성공 못함")
                                     }
                                 }}) {
@@ -449,11 +472,16 @@ struct CommunityCommentView: View {
                             }
                             
                             Button(action: {
-                                self.controller.delete_comment(token: self.user.get_token(),article_id: self.edited_article_id, comment_id: self.edited_comment_id) { result in
+                                self.controller.delete_comment(token: self.user.get_token(),article_id: self.edited_article_id, comment_id: self.edited_comment_id) { (result, error) in
                                 if result {
-                                    self.presentationMode.wrappedValue.dismiss()
+                                    self.errorText = ""
+                                    self.showError = false
+                                    //self.presentationMode.wrappedValue.dismiss()
+                                    self.comment_content = ""
+                                    self.is_edited = false
                                 } else {
-                                    print("성공 못함")
+                                    self.errorText = (error?.localizedDescription)!
+                                    self.showError = true
                                 }
                                 }
                             }) {
@@ -465,11 +493,16 @@ struct CommunityCommentView: View {
                                     
                             }
                             
-                            Button(action: {self.controller.update_comment(token: self.user.get_token(), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { result in
+                            Button(action: {self.controller.update_comment(token: self.user.get_token(), article_id: self.edited_article_id, comment_id: self.edited_comment_id, content: self.comment_content) { (result, error) in
                                     if result {
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        self.errorText = ""
+                                        self.showError = false
+                                        //self.presentationMode.wrappedValue.dismiss()
+                                        self.comment_content = ""
+                                        self.is_edited = false
                                     } else {
-                                        print("성공 못함")
+                                        self.errorText = (error?.localizedDescription)!
+                                        self.showError = true
                                     }
                                 }}) {
                                 Text("수정")
@@ -481,11 +514,16 @@ struct CommunityCommentView: View {
                             
                         } else {
                             
-                            Button(action: {self.controller.put_comment(token: self.user.get_token(),article_id: self.community_id, content: self.comment_content) { result in
+                            Button(action: {self.controller.put_comment(token: self.user.get_token(),article_id: self.community_id, content: self.comment_content) { (result, error) in
                                     if result {
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        self.errorText = ""
+                                        self.showError = false
+                                        //self.presentationMode.wrappedValue.dismiss()
+                                        self.comment_content = ""
+                                        self.is_edited = false
                                     } else {
-                                        print("성공 못함")
+                                        self.errorText = (error?.localizedDescription)!
+                                        self.showError = true
                                     }
                                 }}) {
                                 Text("등록")
@@ -501,6 +539,12 @@ struct CommunityCommentView: View {
 
                 }.padding()
             }
+        }.alert(isPresented: $showError) {
+            // 이메일을 확인해보라는 Alert을 띄운 다음
+            Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
+            // 돌아가기 버튼을 누르면 Alert은 꺼지고
+            self.showError = false
+            })
         }
         
     }

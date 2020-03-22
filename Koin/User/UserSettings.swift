@@ -14,6 +14,8 @@ import Foundation
 import Combine
 
 
+// There is no such ID : 인증 안된 상태 또는 회원가입이 안된 상태
+// invalid authenticate : 이미 가입되어있는 상태
 
 class UserSettings: ObservableObject {
     var isTest = true
@@ -29,6 +31,24 @@ class UserSettings: ObservableObject {
     
     let didChange = PassthroughSubject<UserSettings,Never>()
 
+    struct UserError: LocalizedError, Equatable {
+
+       private var description: String!
+
+       init(description: String) {
+           self.description = description
+       }
+
+       var errorDescription: String? {
+           return description
+       }
+
+       public static func ==(lhs: UserError, rhs: UserError) -> Bool {
+           return lhs.description == rhs.description
+       }
+    }
+    
+    
     
     @Published var nameValue = "" {
         didSet {
@@ -119,6 +139,15 @@ class UserSettings: ObservableObject {
         return ""
     }
     
+    func convertToDictionary(data: Data?) -> [String: Any]? {
+            do {
+                return try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        return nil
+    }
+    
     func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
@@ -184,7 +213,7 @@ class UserSettings: ObservableObject {
     }
     
     // 주는 값 없이 유저 정보를 업데이트하는 함수(대부분 유저 정보를 받는 쪽으로 활용)
-    func update_data(token: String) {
+    func update_data(token: String, result: @escaping (User?, Error?) -> Void) {
         // Bearer Auth를 이용하기 위한 Header 추가
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
@@ -195,30 +224,40 @@ class UserSettings: ObservableObject {
         .request("\(api)/user/me", method: .put, encoding: JSONEncoding.prettyPrinted, headers: headers)
         .response { response in // 응답이 오면
             // 해당 응답에서 data를 꺼내
-            guard let data = response.data else { return }
-            do {
-                // 디코더를 설정하고
-                let decoder = JSONDecoder()
-                // 데이터를 User에 맞게 가공한다.
-                let user = try decoder.decode(User.self, from: data)
-                
-                // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                self.user?.user = user
+             let decoder = JSONDecoder()
+                                   switch response.result {
+                                       case .success(let data):
+                                           do{
+                                              let user = try decoder.decode(User.self, from: data!)
+                                               // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                                               self.user?.user = user
 
-                // 인코더를 설정하여
-                let encoder = JSONEncoder()
-                // 현재 user(UserRequest)를 인코딩할 수 있으면
-                if let encoded = try? encoder.encode(self.user) {
-                    //UserDefaults에 "user"란 이름으로 인코딩한 user를 저장한다.
-                    UserDefaults.standard.set(encoded, forKey: "user")
-                }
-                
-                
-            } catch let error {
-            }
+                                               // 인코더를 설정하여
+                                               let encoder = JSONEncoder()
+                                               // 현재 user(UserRequest)를 인코딩할 수 있으면
+                                               if let encoded = try? encoder.encode(self.user) {
+                                                   // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                                   UserDefaults.standard.set(encoded, forKey: "user")
+                                                   result(user, nil)
+                                               }
+                                           } catch(let error) {
+                                               result(nil, error)
+                                       }
+                                       case .failure(let error):
+                                           result(nil, error)
+                                   }
             
         }
     }
+    
+    // portal_account : ^[a-z_0-9]{1,12}$
+    
+    /*
+     public final static String FILTER_E_N_H = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55]+$";
+     public final static String FILTER_E_H = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55]+$";
+     public final static String FILTERPASSWORD = "^(?=.[a-zA-Z])(?=.[`₩~!@#$%<>^&*()\-=+?<>:;"',.{}|[]/\\]])(?=.*[0-9]).{6,18}$";
+     public final static String FILTER_EMAIL = "^[a-z_0-9]{1,12}$";
+     */
     
     // 학번을 넣어주면 전공을 반환해주는 함수
     func school_number_to_major(school_number: String) -> String {
@@ -251,144 +290,168 @@ class UserSettings: ObservableObject {
         }
     }
     
-    func update_name(token: String, updated_name: String = "", result: @escaping (Bool) -> Void) {
+    func update_name(token: String, updated_name: String = "", result: @escaping (Bool, Error?) -> Void) {
         
-        // 빈 파라미터를 생성
-        var parameters: [String: Any] = [:]
-        // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
-        if !updated_name.isEmpty {parameters["name"] = updated_name}
+        let range = NSRange(location: 0, length: updated_name.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]{1,10}$")
+        let filtered = regex.matches(in: updated_name, options: [], range: range)
         
-        
-        // Bearer Auth를 이용하기 위한 Header 추가
-        let headers: HTTPHeaders = [
-                        "Authorization": "Bearer " + token
-                    ]
-                    
-        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    AF
-                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
-                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                            self.user?.user = user
+        if (filtered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("이름 형태가 올바르지 않습니다.",comment: "")))
+        } else {
+            // 빈 파라미터를 생성
+            var parameters: [String: Any] = [:]
+            // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
+            if !updated_name.isEmpty {parameters["name"] = updated_name}
+            
+            
+            // Bearer Auth를 이용하기 위한 Header 추가
+            let headers: HTTPHeaders = [
+                            "Authorization": "Bearer " + token
+                        ]
+                        
+            // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                        AF
+                        .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                        .response { response in // 응답이 오면
+                             let decoder = JSONDecoder()
+                                                   switch response.result {
+                                                       case .success(let data):
+                                                           do{
+                                                              let user = try decoder.decode(User.self, from: data!)
+                                                               // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                                                               self.user?.user = user
 
-                            // 인코더를 설정하여
-                            let encoder = JSONEncoder()
-                            // 현재 user(UserRequest)를 인코딩할 수 있으면
-                            if let encoded = try? encoder.encode(self.user) {
-                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
-                                UserDefaults.standard.set(encoded, forKey: "user")
-                                // 데이터가 변경되었다고 알려준다.
-                                self.isChanged = true
-                                result(true)
-                            }
-                            
-                            
-                        } catch let error {
-                            result(false)
+                                                               // 인코더를 설정하여
+                                                               let encoder = JSONEncoder()
+                                                               // 현재 user(UserRequest)를 인코딩할 수 있으면
+                                                               if let encoded = try? encoder.encode(self.user) {
+                                                                   // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                                                   UserDefaults.standard.set(encoded, forKey: "user")
+                                                                   // 데이터가 변경되었다고 알려준다.
+                                                                   self.isChanged = true
+                                                                   result(true, nil)
+                                                               }
+                                                           } catch(let error) {
+                                                               result(false, error)
+                                                       }
+                                                       case .failure(let error):
+                                                           result(false, error)
+                                                   }
                         }
-                    }
+        }
+        
+        
     }
     
-    func update_nickname(token: String, updated_nickname: String = "", result: @escaping (Bool) -> Void) {
+    func update_nickname(token: String, updated_nickname: String = "", result: @escaping (Bool, Error?) -> Void) {
         
-        // 빈 파라미터를 생성
-        var parameters: [String: Any] = [:]
-        // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
-        if !updated_nickname.isEmpty {parameters["nickname"] = updated_nickname}
+        let range = NSRange(location: 0, length: updated_nickname.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]{1,10}$")
+        let filtered = regex.matches(in: updated_nickname, options: [], range: range)
         
-        
-        // Bearer Auth를 이용하기 위한 Header 추가
-        let headers: HTTPHeaders = [
-                        "Authorization": "Bearer " + token
-                    ]
-                    
-        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    AF
-                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
-                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                            self.user?.user = user
+        if (filtered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("닉네임 형태가 올바르지 않습니다.",comment: "")))
+        } else {
+            // 빈 파라미터를 생성
+            var parameters: [String: Any] = [:]
+            // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
+            if !updated_nickname.isEmpty {parameters["nickname"] = updated_nickname}
+            
+            
+            // Bearer Auth를 이용하기 위한 Header 추가
+            let headers: HTTPHeaders = [
+                            "Authorization": "Bearer " + token
+                        ]
+                        
+            // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                        AF
+                        .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                        .response { response in // 응답이 오면
+                             let decoder = JSONDecoder()
+                                                   switch response.result {
+                                                       case .success(let data):
+                                                           do{
+                                                              let user = try decoder.decode(User.self, from: data!)
+                                                               // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                                                               self.user?.user = user
 
-                            // 인코더를 설정하여
-                            let encoder = JSONEncoder()
-                            // 현재 user(UserRequest)를 인코딩할 수 있으면
-                            if let encoded = try? encoder.encode(self.user) {
-                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
-                                UserDefaults.standard.set(encoded, forKey: "user")
-                                // 데이터가 변경되었다고 알려준다.
-                                self.isChanged = true
-                                result(true)
-                            }
-                            
-                            
-                        } catch let error {
-                            result(false)
+                                                               // 인코더를 설정하여
+                                                               let encoder = JSONEncoder()
+                                                               // 현재 user(UserRequest)를 인코딩할 수 있으면
+                                                               if let encoded = try? encoder.encode(self.user) {
+                                                                   // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                                                   UserDefaults.standard.set(encoded, forKey: "user")
+                                                                   // 데이터가 변경되었다고 알려준다.
+                                                                   self.isChanged = true
+                                                                   result(true, nil)
+                                                               }
+                                                           } catch(let error) {
+                                                               result(false, error)
+                                                       }
+                                                       case .failure(let error):
+                                                           result(false, error)
+                                                   }
                         }
-                    }
+        }
+        
+        
     }
     
-    func update_phoneNumber(token: String, updated_phoneNumber: String = "", result: @escaping (Bool) -> Void) {
+    func update_phoneNumber(token: String, updated_phoneNumber: String = "", result: @escaping (Bool, Error?) -> Void) {
         
-        // 빈 파라미터를 생성
-        var parameters: [String: Any] = [:]
-        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
-        if !updated_phoneNumber.isEmpty {parameters["phone_number"] = updated_phoneNumber}
+        let range = NSRange(location: 0, length: updated_phoneNumber.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "^\\d{3}-\\d{3,4}-\\d{4}$")
+        let filtered = regex.matches(in: updated_phoneNumber, options: [], range: range)
         
-        // Bearer Auth를 이용하기 위한 Header 추가
-        let headers: HTTPHeaders = [
-                        "Authorization": "Bearer " + token
-                    ]
-                    
-        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    AF
-                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
-                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                            self.user?.user = user
+        if (filtered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("휴대폰 번호 형태가 올바르지 않습니다.",comment: "")))
+        } else {
+            // 빈 파라미터를 생성
+            var parameters: [String: Any] = [:]
+            // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
+            if !updated_phoneNumber.isEmpty {parameters["phone_number"] = updated_phoneNumber}
+            
+            // Bearer Auth를 이용하기 위한 Header 추가
+            let headers: HTTPHeaders = [
+                            "Authorization": "Bearer " + token
+                        ]
+                        
+            // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                        AF
+                        .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+                        .response { response in // 응답이 오면
+                             let decoder = JSONDecoder()
+                                                   switch response.result {
+                                                       case .success(let data):
+                                                           do{
+                                                              let user = try decoder.decode(User.self, from: data!)
+                                                               // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                                                               self.user?.user = user
 
-                            // 인코더를 설정하여
-                            let encoder = JSONEncoder()
-                            // 현재 user(UserRequest)를 인코딩할 수 있으면
-                            if let encoded = try? encoder.encode(self.user) {
-                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
-                                UserDefaults.standard.set(encoded, forKey: "user")
-                                // 데이터가 변경되었다고 알려준다.
-                                self.isChanged = true
-                                result(true)
-                            }
-                            
-                            
-                        } catch let error {
-                            result(false)
+                                                               // 인코더를 설정하여
+                                                               let encoder = JSONEncoder()
+                                                               // 현재 user(UserRequest)를 인코딩할 수 있으면
+                                                               if let encoded = try? encoder.encode(self.user) {
+                                                                   // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                                                   UserDefaults.standard.set(encoded, forKey: "user")
+                                                                   // 데이터가 변경되었다고 알려준다.
+                                                                   self.isChanged = true
+                                                                   result(true, nil)
+                                                               }
+                                                           } catch(let error) {
+                                                               result(false, error)
+                                                       }
+                                                       case .failure(let error):
+                                                           result(false, error)
+                                                   }
                         }
-                    }
+        }
+        
+        
     }
     
-    func update_gender(token: String, updated_gender: Int = -1, result: @escaping (Bool) -> Void) {
+    func update_gender(token: String, updated_gender: Int = -1, result: @escaping (Bool, Error?) -> Void) {
         
         // 빈 파라미터를 생성
         var parameters: [String: Any] = [:]
@@ -404,32 +467,30 @@ class UserSettings: ObservableObject {
                     AF
                     .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
                     .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
-                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                            self.user?.user = user
+                         let decoder = JSONDecoder()
+                                               switch response.result {
+                                                   case .success(let data):
+                                                       do{
+                                                          let user = try decoder.decode(User.self, from: data!)
+                                                           // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
+                                                           self.user?.user = user
 
-                            // 인코더를 설정하여
-                            let encoder = JSONEncoder()
-                            // 현재 user(UserRequest)를 인코딩할 수 있으면
-                            if let encoded = try? encoder.encode(self.user) {
-                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
-                                UserDefaults.standard.set(encoded, forKey: "user")
-                                // 데이터가 변경되었다고 알려준다.
-                                self.isChanged = true
-                                result(true)
-                            }
-                            
-                            
-                        } catch let error {
-                            result(false)
-                        }
+                                                           // 인코더를 설정하여
+                                                           let encoder = JSONEncoder()
+                                                           // 현재 user(UserRequest)를 인코딩할 수 있으면
+                                                           if let encoded = try? encoder.encode(self.user) {
+                                                               // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
+                                                               UserDefaults.standard.set(encoded, forKey: "user")
+                                                               // 데이터가 변경되었다고 알려준다.
+                                                               self.isChanged = true
+                                                               result(true, nil)
+                                                           }
+                                                       } catch(let error) {
+                                                           result(false, error)
+                                                   }
+                                                   case .failure(let error):
+                                                       result(false, error)
+                                               }
                     }
     }
     
@@ -439,32 +500,37 @@ class UserSettings: ObservableObject {
      parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
      */
     
-    func update_studentNumber(token: String, updated_studentNumber: String = "", result: @escaping (Bool) -> Void) {
+    func update_studentNumber(token: String, updated_studentNumber: String = "", result: @escaping (Bool, Error?) -> Void) {
         
-        // 빈 파라미터를 생성
-        var parameters: [String: Any] = [:]
-        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
-        parameters["student_number"] = updated_studentNumber
-        // school_number_to_major를 이용하여 학번에 전공을 추출하여 해당 값을 파라미터에 추가
-        parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
+        let range = NSRange(location: 0, length: updated_studentNumber.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "^\\d{10}$")
+        let filtered = regex.matches(in: updated_studentNumber, options: [], range: range)
         
-        // Bearer Auth를 이용하기 위한 Header 추가
-        let headers: HTTPHeaders = [
-                        "Authorization": "Bearer " + token
-                    ]
-                    
-        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    AF
-                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
+        
+        
+        if (filtered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("학번 형태가 올바르지 않습니다.",comment: "")))
+        } else {
+            var parameters: [String: Any] = [:]
+            // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
+            parameters["student_number"] = updated_studentNumber
+            // school_number_to_major를 이용하여 학번에 전공을 추출하여 해당 값을 파라미터에 추가
+            parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
+            
+            // Bearer Auth를 이용하기 위한 Header 추가
+            let headers: HTTPHeaders = [
+                            "Authorization": "Bearer " + token
+                        ]
+            
+            AF
+            .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
+            .response { response in // 응답이 오면
+                // 해당 응답에서 data를 꺼내
+                let decoder = JSONDecoder()
+                switch response.result {
+                    case .success(let data):
+                        do{
+                           let user = try decoder.decode(User.self, from: data!)
                             // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
                             self.user?.user = user
 
@@ -476,16 +542,23 @@ class UserSettings: ObservableObject {
                                 UserDefaults.standard.set(encoded, forKey: "user")
                                 // 데이터가 변경되었다고 알려준다.
                                 self.isChanged = true
-                                result(true)
+                                result(true, nil)
                             }
-                            
-                            
-                        } catch let error {
-                            result(false)
-                        }
+                        } catch(let error) {
+                            result(false, error)
                     }
+                    case .failure(let error):
+                        result(false, error)
+                }
+            }
+        }
+        
+        
+                    
+        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
+                    
     }
-    
+    /*
     // 유저 정보를 업데이트하는 함수
     func update_session(token: String, updated_password: String = "", updated_name: String = "", updated_nickname: String = "", updated_gender: Int = -1, updated_isGraduated: Bool = false, updated_studentNumber: String = "", updated_phoneNumber: String = "", changed_name: Bool = false, changed_gender: Bool = false, changed_phoneNumber: Bool = false, changed_studentNumber: Bool = false, changed_nickname: Bool = false, result: @escaping (Bool) -> Void) {
         
@@ -550,31 +623,43 @@ class UserSettings: ObservableObject {
                         }
                     }
     }
-    
+    */
     // 회원가입 기능을 담당하는 함수
-    func register_session(email: String, password: String, result: @escaping (Bool) -> Void) {
+    func register_session(email: String, password: String, result: @escaping (Bool, Error?) -> Void) {
         // 비밀번호를 hash 처리하고
         let hashPassword = hashed(pw: password)
         // post 메소드로, 이메일, 해시 비밀번호를 파라미터에 넣어 보내면
             AF
             .request("\(api)/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
-            .responseJSON { response in // JSON 형태로 응답을 받아
+            .response { response in // JSON 형태로 응답을 받아
                 
-                if let status = response.response?.statusCode { // 상태 코드를 받아서
-                                switch(status){
-                                case 201: // 잘 받아졌을 때(201)
-                                    result(true) // 회원가입이 잘 되었다고 알리고
-                                    
-                                default: // 잘 안 받아졌을 때
-                                    result(false) // 회원가입이 안 되었다고 알림
-                                }
-                            }
+                switch response.result {
+                case .success(let data):
+                    let data = self.convertToDictionary(data: data)
+                    if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                        switch(status){
+                        case 200:
+                            fallthrough
+                        case 201: // 겹치지 않으면(200)
+                            print(data)
+                            result(true, nil) // 겹치지 않는다고 알림
+                            break
+                        default: // 겹치거나 오류가 나면
+                            let error = data!["error"] as! [String:Any]
+                            let message = error["message"] as! String
+                            result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
+                            break
+                        }
+                    }
+                case .failure(let error):
+                    result(false, error)
+                }
                 
             }
     }
     
     // 로그인이 성공했는지 여부를 확인하는 함수
-    func login_succeed() {
+    func login_succeed(){
         // UserDefaults에서 인코딩된 유저 정보를 가져와서
         if let data = UserDefaults.standard.object(forKey:"user") as? Data {
             // 디코더를 가져와서
@@ -594,7 +679,7 @@ class UserSettings: ObservableObject {
     }
     
     // 회원 탈퇴 기능
-    func delete_session(token: String) {
+    func delete_session(token: String, result: @escaping (Bool, Error?) -> Void) {
         // Bearer Auth를 이용하기 위한 헤더
         let headers: HTTPHeaders = [
             "Authorization": "Bearer "+token
@@ -604,53 +689,97 @@ class UserSettings: ObservableObject {
         AF
         .request("\(api)/user/me", method: .delete, encoding: URLEncoding.httpBody,headers: headers)
         .response { response in // 응답을 받으면
-            // UserDefaults의 user값을 삭제하고
-            UserDefaults.standard.set(nil, forKey: "user")
-            // 내부 class의 user값을 지우고
-            self.user = nil
-            // 로그아웃시키기
-            self.isLogin = false
+            switch response.result {
+            case .success(let data):
+                let data = self.convertToDictionary(data: data)
+                print(data)
+                if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                    switch(status){
+                    case 200:
+                        fallthrough
+                    case 201: // 겹치지 않으면(200)
+                        // UserDefaults의 user값을 삭제하고
+                        UserDefaults.standard.set(nil, forKey: "user")
+                        // 내부 class의 user값을 지우고
+                        self.user = nil
+                        // 로그아웃시키기
+                        self.isLogin = false
+                        result(true, nil) // 겹치지 않는다고 알림
+                        break
+                    default: // 겹치거나 오류가 나면
+                        let error = data!["error"] as! [String:Any]
+                        let message = error["message"] as! String
+                        result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
+                        break
+                    }
+                }
+            case .failure(let error):
+                result(false, error)
+            }
         }
     }
 
     // 닉네임이 존재하는지 확인하는 함수
-    func check_nickname(nickname: String, result: @escaping (Bool) -> Void) {
+    func check_nickname(nickname: String, result: @escaping (Bool, Error?) -> Void) {
         // 한글을 그대로 넣을 수 없어 임의로 주소 string으로 url로 인코딩해서 변환
         let url = "\(api)/user/check/nickname/\(nickname)"
         if let url_encode = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-
             // 해당 주소를 get 메서드로 보내면
             AF
                     .request(url_encode, method: .get, encoding: JSONEncoding.default)
-                    .responseJSON { response in // JSON 형태로 응답받으면
-                        if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            switch(status){
-                            case 200: // 겹치지 않으면(200)
-                                result(true) // 겹치지 않는다고 알림
-
-                            default: // 겹치거나 오류가 나면
-                                result(false) // 겹친다고 알림
+                    .response { response in // JSON 형태로 응답받으면
+                        switch response.result {
+                        case .success(let data):
+                            let data = self.convertToDictionary(data: data)
+                            if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                                switch(status){
+                                case 200:
+                                    fallthrough
+                                case 201: // 겹치지 않으면(200)
+                                    result(true, nil) // 겹치지 않는다고 알림
+                                    break
+                                default: // 겹치거나 오류가 나면
+                                    let error = data!["error"] as! [String:Any]
+                                    let message = error["message"] as! String
+                                    result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
+                                    break
+                                }
                             }
+                        case .failure(let error):
+                            result(false, error)
                         }
-
                     }
-
+        } else {
+            result(false, UserError(description: NSLocalizedString("닉네임 방식에 문제가 있습니다. 다른 닉네임으로 입력하세요.",comment: "")))
         }
-
     }
     
     
-    func find_password(email: String, result: @escaping (Bool) -> Void) {
+    func find_password(email: String, result: @escaping (Bool, Error?) -> Void) {
         AF
         .request("\(api)/user/find/password", method: .post, parameters:  ["portal_account": email], encoding: JSONEncoding.prettyPrinted)
-        .responseJSON { response in // JSON 형태로 응답받으면
-            if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                switch(status){
-                case 201: // 겹치지 않으면(200)
-                    result(true) // 겹치지 않는다고 알림
-                default: // 겹치거나 오류가 나면
-                    result(false) // 겹친다고 알림
+        .response { response in // JSON 형태로 응답받으면
+            switch response.result {
+            case .success(let data):
+                let data = self.convertToDictionary(data: data)
+                print(data)
+                if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                    print(status)
+                    switch(status){
+                    case 200:
+                        fallthrough
+                    case 201: // 겹치지 않으면(200)
+                        result(true, nil) // 겹치지 않는다고 알림
+                        break
+                    default: // 겹치거나 오류가 나면
+                        let error = data!["error"] as! [String:Any]
+                        let message = error["message"] as! String
+                        result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
+                        break
+                    }
                 }
+            case .failure(let error):
+                result(false, error)
             }
 
         }
@@ -668,7 +797,7 @@ class UserSettings: ObservableObject {
     }
     
     // 로그인 기능을 담당하는 함수
-    func login_session(email: String, password: String, result: @escaping (Bool) -> Void) {
+    func login_session(email: String, password: String, result: @escaping (Bool, Error?) -> Void) {
         // 비밀번호를 해시 처리하여
         let hashPassword = hashed(pw: password)
         // post 메서드로, 아이디와 비밀번호를 파라미터에 같이 넣어 보내주면
@@ -676,41 +805,42 @@ class UserSettings: ObservableObject {
             AF
                 .request("\(api)/user/login", method: .post, parameters:  ["portal_account": email,"password": hashPassword], encoding: JSONEncoding.default)
             .response { response in // 응답을 받으면
-                // 응답 내부의 데이터를 가져와
-                print(response.response?.statusCode)
-                guard let data = response.data else { return }
-                do {
-                    // 디코더를 가져오고
-                    let decoder = JSONDecoder()
-                    // 데이터를 UserRequest의 형태로 가공하여
-                    let userRequest = try decoder.decode(UserRequest.self, from: data)
-                    print(userRequest)
-                    // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    if let checkToken = userRequest.token {
-                        self.user = userRequest
-                        
-                        // 인코더를 가져와서
-                        let encoder = JSONEncoder()
-                        // class의 user값이 인코딩이 가능하면
-                        if let encoded = try? encoder.encode(self.user) {
-                            // 인코딩된 user값은 UserDefaults에 저장한다.
-                            UserDefaults.standard.set(encoded, forKey: "user")
-                            // 로그인이 되었다고 알려준다.
-                            self.isLogin = true
-                            result(true)
+                let decoder = JSONDecoder()
+                switch response.result {
+                case .success(let data):
+                    let aaa = self.convertToDictionary(data: data)
+                    print(aaa)
+                    do{
+                        let userRequest = try decoder.decode(UserRequest.self, from: data!)
+                        print(userRequest)
+                        // 해당 class의 user값에 가공된 데이터를 넣어준다.
+                        if userRequest.token != nil {
+                            self.user = userRequest
+                            
+                            // 인코더를 가져와서
+                            let encoder = JSONEncoder()
+                            // class의 user값이 인코딩이 가능하면
+                            if let encoded = try? encoder.encode(self.user) {
+                                // 인코딩된 user값은 UserDefaults에 저장한다.
+                                UserDefaults.standard.set(encoded, forKey: "user")
+                                // 로그인이 되었다고 알려준다.
+                                self.isLogin = true
+                                result(true, nil)
+                            } else {
+                                self.isLogin = false
+                                result(false, UserError(description: NSLocalizedString("유저 데이터를 인코딩하는 과정에서 문제가 생겼습니다.",comment: "")))
+                            }
                         } else {
                             self.isLogin = false
-                            result(false)
+                            result(false, UserError(description: NSLocalizedString("유저 정보가 받아지지 않았습니다.",comment: "")))
                         }
-                    } else {
-                        self.isLogin = false
-                        result(false)
+                    } catch(let error) {
+                        result(false, error)
                     }
-                    
-                    
-                    
-                    
-                } catch let error {
+                        
+
+                case .failure(let error):
+                    result(false, error)
                 }
             }
     }

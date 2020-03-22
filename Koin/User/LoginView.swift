@@ -22,8 +22,6 @@ struct UserLoginView: View {
     // 유저 정보 변수
     @EnvironmentObject var settings: UserSettings
     
-
-    
     var body: some View {
     return NavigationView {
         VStack {
@@ -62,7 +60,7 @@ struct UserLoginView: View {
                     HUD.show(.progress)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1){
                         // 로그인 과정을 진행하고
-                        self.settings.login_session(email: self.login_email, password: self.login_password) { result in
+                        self.settings.login_session(email: self.login_email, password: self.login_password) { (result, error) in
                             if result {
                                 HUD.flash(.success, delay: 0.5)
                             } else {
@@ -142,10 +140,6 @@ struct UserLoginView: View {
     }
 }
 
-
-func submit() {
-    
-}
 
 
 

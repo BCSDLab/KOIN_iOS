@@ -9,10 +9,15 @@
 import SwiftUI
 import PKHUD
 
+//카테고리 누르다 오면 데이터 없어지는 현상 해결
+
 struct TempCommunityList: View {
     @EnvironmentObject var tabData: ViewRouter
     @EnvironmentObject var user: UserSettings
     @ObservedObject var communityData:CommunityController
+    
+    @State var errorText: String = ""
+    @State var showError: Bool = false
     
     func dateToString(string_date: String) -> String {
         let dateFormat = DateFormatter()
@@ -27,7 +32,6 @@ struct TempCommunityList: View {
     
     init() {
         self.communityData = CommunityController(board_id: -2)
-        self.communityData.temp_community_session()
     }
     
     var body: some View {
@@ -59,12 +63,29 @@ struct TempCommunityList: View {
                         }
                     }.onAppear {
                         if l == self.communityData.get_temp_articles().last && self.communityData.get_temp_articles().count % 10 == 0 {
-                            self.communityData.reload_temp_articles()
+                            self.communityData.reload_temp_articles() { (result, error) in
+                                if(result) {
+                                    self.errorText = ""
+                                    self.showError = false
+                                } else {
+                                    self.errorText = (error?.localizedDescription)!
+                                    self.showError = true
+                                }
+                            }
                     }
                     }
                     
                 }
-            }.onAppear() {
+            }.onAppear {
+                self.communityData.temp_community_session() { (result, error) in
+                    if(result) {
+                        self.errorText = ""
+                        self.showError = false
+                    } else {
+                        self.errorText = (error?.localizedDescription)!
+                        self.showError = true
+                    }
+                }
             }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
                 HStack {
                     Image(systemName: "chevron.left")
@@ -75,7 +96,13 @@ struct TempCommunityList: View {
                     )
                     { //네비게이션바 오른쪽엔 내정보를 수정할 수 있는 뷰로, 내정보 오브젝트랑 같이 이동한다.
                 Text("추가")
-            })
+            }).alert(isPresented: $showError) {
+                // 이메일을 확인해보라는 Alert을 띄운 다음
+                Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
+                // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                self.showError = false
+                })
+            }
         }
 }
 
@@ -84,6 +111,12 @@ struct CommunityList: View {
     @EnvironmentObject var user: UserSettings
     @ObservedObject var communityData:CommunityController
     var board_id: Int
+    /*
+     self.errorText = (error?.localizedDescription)!
+     self.showError = true
+     */
+    @State var errorText: String = ""
+    @State var showError: Bool = false
     
     func dateToString(string_date: String) -> String {
         let dateFormat = DateFormatter()
@@ -99,7 +132,7 @@ struct CommunityList: View {
     init(board_id: Int) {
         self.board_id = board_id
         self.communityData = CommunityController(board_id: board_id)
-        self.communityData.community_session()
+        
     }
     
     var body: some View {
@@ -131,12 +164,37 @@ struct CommunityList: View {
                     .onAppear {
                         
                     if l == self.communityData.get_articles().last && self.communityData.get_articles().count % 10 == 0 {
-                        self.communityData.reload_articles()
+                        self.communityData.reload_articles() {(result, error) in
+                            
+                            if(result) {
+                                self.errorText = ""
+                                self.showError = false
+                            } else {
+                                self.errorText = (error?.localizedDescription)!
+                                self.showError = true
+                            }
+                            
+                        }
                 }
                 }
                 
             }
+        }.alert(isPresented: $showError) {
+            // 이메일을 확인해보라는 Alert을 띄운 다음
+            Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
+            // 돌아가기 버튼을 누르면 Alert은 꺼지고
+            self.showError = false
+            })
         }.onAppear() {
+            self.communityData.community_session() { (result, error) in
+                if(result) {
+                    self.errorText = ""
+                    self.showError = false
+                } else {
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                }
+            }
         }.navigationBarItems(leading: Button(action: self.tabData.go_home) {
             HStack {
                 Image(systemName: "chevron.left")
@@ -150,7 +208,7 @@ struct CommunityList: View {
     }
 }
 
-
+/*
 struct CommunityView: View {
     @EnvironmentObject var tabData: ViewRouter
     @EnvironmentObject var user: UserSettings
@@ -178,3 +236,4 @@ struct CommunityView_Previews: PreviewProvider {
         CommunityView(board_id: -2)
     }
 }
+*/

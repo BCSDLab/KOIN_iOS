@@ -125,6 +125,24 @@ struct BusInfoView: View {
     var showStation = ["한기대", "천안역","야우리"]
     @State private var isDepartActionSheet = false
     @State private var isArrivalActionSheet = false
+    
+    @State var errorText: String = ""
+    @State var showError: Bool = false
+    
+    @State var nearCityBusTime : Date = Date()
+    @State var nextCityBusTime: Date = Date()
+    @State var nearCityBus : String = ""
+    @State var nextCityBus: String = ""
+    @State var shuttleTime: Date = Date()
+    @State var expressTime: Date = Date()
+    @State var nearShuttle: String = ""
+    @State var nearExpressTime : String = ""
+    @State var nextShuttleTime: Date = Date()
+    @State var nextExpressTime: Date = Date()
+    @State var nextShuttle: String = ""
+    @State var nextExpress : String = ""
+    
+    
     @State var selectedDepart = 0
     @State var selectedArrival = 2
     @State var nowDate: Date = Date()
@@ -133,14 +151,14 @@ struct BusInfoView: View {
             self.nowDate = Date()
         }
     }
-    
+    //시분초 단위로 분래
     func countDownString(from date: Date, until nowDate: Date) -> String {
             let calendar = Calendar(identifier: .gregorian)
             let components = calendar
                 .dateComponents([.hour, .minute, .second]
                     ,from: nowDate,
                      to: date)
-            return String(format: "%02d시간 %02d분 %02d초 남음",
+            return String(format: "%02d시간 %02d분 %02d초",
                           components.hour ?? 00,
                           components.minute ?? 00,
                           components.second ?? 00)
@@ -166,28 +184,8 @@ struct BusInfoView: View {
     }
     
     var body: some View {
-        var shuttleTime: Date = self.controller.getRemainShuttleTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        var expressTime: Date = self.controller.getRemainExpressTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        
-        var nearShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        var nearExpressTime : String =
-            self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true)
-        
-        var nearCityBusTime : Date = self.controller.getRemainCityBusTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival])
-        var nextCityBusTime: Date = self.controller.getNextCityBusTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival])
-        
-        var nearCityBus : String = self.controller.getRemainCityBusTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival])
-        var nextCityBus: String = self.controller.getNextCityBusTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival])
-        
-        var nextShuttleTime: Date = self.controller.getRemainShuttleTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-        var nextExpressTime: Date = self.controller.getRemainExpressTimeToDate(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-        var nextShuttle: String = self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-        var nextExpress : String =
-            self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: false)
-        
-        
-        return
-            VStack {
+
+        return VStack {
                 HStack {
                     HStack {
                         Text(showStation[selectedDepart])
@@ -274,6 +272,10 @@ struct BusInfoView: View {
                             .onAppear(perform: {
                                 let _ = self.timer
                             })
+                            Text("남음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                             Spacer()
                             Text("(\(self.controller.getNearShuttleTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발)")
                             .font(.system(size: 13))
@@ -315,6 +317,10 @@ struct BusInfoView: View {
                             .onAppear(perform: {
                                 let _ = self.timer
                             })
+                            Text("남음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                             Spacer()
                             Text("(\(nextShuttle)분 출발)")
                             .font(.system(size: 13))
@@ -375,6 +381,10 @@ struct BusInfoView: View {
                                        .onAppear(perform: {
                                            let _ = self.timer
                                        })
+                                        Text("남음")
+                                        .font(.system(size: 18))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
                                        Spacer()
                                        Text("(\(self.controller.getNearExpressTimeToString(depart: station[selectedDepart], arrival: station[selectedArrival], isNow: true))분 출발)")
                                        .font(.system(size: 13))
@@ -416,6 +426,10 @@ struct BusInfoView: View {
                             .onAppear(perform: {
                                 let _ = self.timer
                             })
+                            Text("남음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                             Spacer()
                             Text("(\(nextExpress)분 출발)")
                             .font(.system(size: 13))
@@ -476,6 +490,10 @@ struct BusInfoView: View {
                                        .onAppear(perform: {
                                            let _ = self.timer
                                        })
+                                    Text("남음")
+                                    .font(.system(size: 18))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
                                        Spacer()
                                        Text("(\(nearCityBus)분 출발)")
                                        .font(.system(size: 13))
@@ -517,6 +535,10 @@ struct BusInfoView: View {
                             .onAppear(perform: {
                                 let _ = self.timer
                             })
+                            Text("남음")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                             Spacer()
                             Text("(\(nextCityBus)분 출발)")
                             .font(.system(size: 13))
@@ -540,7 +562,70 @@ struct BusInfoView: View {
                 
                 
                 }
+            }.alert(isPresented: $showError) {
+                // 이메일을 확인해보라는 Alert을 띄운 다음
+                Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
+                // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                self.showError = false
+                })
+        }.onAppear {
+            self.controller.getRemainCityBusTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival]) { (result, error) in
+                if let date = result {
+                    self.nearCityBusTime = date
+                    self.errorText = ""
+                    self.showError = false
+                } else {
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                }
             }
+            self.controller.getNextCityBusTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival]) {(result, error) in
+                if let date = result {
+                    self.nextCityBusTime = date
+                    self.errorText = ""
+                    self.showError = false
+                } else {
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                }
+            }
+            
+            self.controller.getRemainCityBusTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival]) { (result, error) in
+                if let bus = result {
+                    self.nearCityBus = bus
+                    self.errorText = ""
+                    self.showError = false
+                } else {
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                }
+                
+            }
+            self.controller.getNextCityBusTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival]) {(result, error) in
+                if let bus = result {
+                    self.nextCityBus = bus
+                    self.errorText = ""
+                    self.showError = false
+                } else {
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                }
+                
+            }
+            self.shuttleTime = self.controller.getRemainShuttleTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: true)
+            self.expressTime = self.controller.getRemainExpressTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: true)
+            
+            self.nearShuttle = self.controller.getNearShuttleTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: true)
+            self.nearExpressTime =
+                self.controller.getNearExpressTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: true)
+            
+            
+            self.nextShuttleTime = self.controller.getRemainShuttleTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: false)
+            self.nextExpressTime = self.controller.getRemainExpressTimeToDate(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: false)
+            self.nextShuttle = self.controller.getNearShuttleTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: false)
+            self.nextExpress =
+                self.controller.getNearExpressTimeToString(depart: self.station[self.selectedDepart], arrival: self.station[self.selectedArrival], isNow: false)
+        }
         }
     
 }

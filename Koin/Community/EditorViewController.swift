@@ -94,12 +94,16 @@ class ViewController: UIViewController {
     var article_title:String = ""
     var token: String = ""
     
+    var showError: Bool = false
+    var errorText: String = ""
+    
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
         toolbar.options = RichEditorDefaultOption.all
         return toolbar
     }()
     
+    //var errorAlert = UIAlertController(title: "에러", message: "", preferredStyle: .actionSheet)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +124,7 @@ class ViewController: UIViewController {
         colorPickerView.delegate = self
         colorPickerView.layoutDelegate = self
         colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
+        
 
         
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
@@ -247,23 +252,41 @@ class ViewController: UIViewController {
     
     @objc func checkAction() {
         if is_edit {
-            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { result in
+            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
+                    self.errorText = ""
+                    self.showError = false
                     self.presentationMode?.wrappedValue.dismiss()
                 } else {
-                    print("성공 못함")
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                    let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                    errorAlert.addAction(cancel)
+                    self.present(errorAlert, animated: true, completion: nil)
                 }
                 
             }
         } else {
-            self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { result in
+            self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
+                    self.errorText = ""
+                    self.showError = false
                     self.parent?.navigationController?.popViewController(animated: true)
                 } else {
-                    print("성공 못함")
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                    let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                    errorAlert.addAction(cancel)
+                    self.present(errorAlert, animated: true, completion: nil)
                 }
             }
         }
+    }
+    
+    @objc func checkErrorAlert() {
+        
     }
     
     
@@ -409,6 +432,9 @@ class TempViewController: UIViewController {
     var content: String = ""
     var article_id: Int = -1
     var nickname: String = ""
+    
+    var showError: Bool = false
+    var errorText: String = ""
     
     lazy var toolbar: RichEditorToolbar = {
         let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
@@ -571,21 +597,34 @@ class TempViewController: UIViewController {
     
     @objc func checkAction() {
         if self.is_edit {
-            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
-                
+            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
+                    self.errorText = ""
+                    self.showError = false
                     self.presentationMode?.wrappedValue.dismiss()
                 } else {
-                    print("성공 못함")
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                    let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                    errorAlert.addAction(cancel)
+                    self.present(errorAlert, animated: true, completion: nil)
                 }
                 
             }
         } else {
-            communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { result in
+            communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
+                    self.errorText = ""
+                    self.showError = false
                     self.parent?.navigationController?.popViewController(animated: true)
                 } else {
-                    print("성공 못함")
+                    self.errorText = (error?.localizedDescription)!
+                    self.showError = true
+                    let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                    errorAlert.addAction(cancel)
+                    self.present(errorAlert, animated: true, completion: nil)
                 }
             }
         }

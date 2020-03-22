@@ -42,7 +42,7 @@ struct AddUserView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     // 회원가입 성공 시 Alert를 띄우는 목적의 변수
     @State private var showingSuccessAlert = false
-    
+    @State private var showingAlert = false
     @State private var showingKoin = false
     @State private var showingPersonal = false
     
@@ -75,40 +75,26 @@ struct AddUserView: View {
             // 이용약관 동의 여부를 모두 확인한 다음
             if self.property.personality_checked && self.property.koin_checked {
                 // 회원가입 정보를 서버로 보내준 후에
-                self.settings.register_session(email: email, password: password) { result in
+                self.settings.register_session(email: email, password: password) { (result, error) in
                     if result { // 성공하면
                         // 성공했다고 알려주는 Alert을 열고
                         self.showingSuccessAlert = true
+                        self.showingAlert = true
                     } else { // 아니면
                         // 에러 문자로 회원 가입에 실패했다고 알려주고
-                        self.errorText = "회원가입에 실패하였습니다."
-                        // 에러 HUD를 보여준다.
-                        yourLabel.text = self.errorText
-                        uiview.addSubview(yourLabel)
-                        PKHUD.sharedHUD.contentView = uiview
-                        PKHUD.sharedHUD.show()
-                        PKHUD.sharedHUD.hide(afterDelay: 1.0)
+                        self.errorText = (error?.localizedDescription)!
+                        self.showingAlert = true
                     }
                 }
             } else { // 동의되지 않은 약관이 있으면
                 // 동의되지 않은 약관이 있다고 알려주고
                 self.errorText = "동의되지 않은 약관이 있습니다."
-                // 에러 HUD를 보여준다.
-                yourLabel.text = self.errorText
-                uiview.addSubview(yourLabel)
-                PKHUD.sharedHUD.contentView = uiview
-                PKHUD.sharedHUD.show()
-                PKHUD.sharedHUD.hide(afterDelay: 1.0)
+                self.showingAlert = true
             }
         } else { // 비밀번호가 다르다면
             // 비밀번호가 다르다고 알려주고
             self.errorText = "비밀번호가 다릅니다."
-            // 에러 HUD를 보여준다.
-            yourLabel.text = self.errorText
-            uiview.addSubview(yourLabel)
-            PKHUD.sharedHUD.contentView = uiview
-            PKHUD.sharedHUD.show()
-            PKHUD.sharedHUD.hide(afterDelay: 1.0)
+            self.showingAlert = true
         }
         
     }
@@ -190,8 +176,6 @@ struct AddUserView: View {
                     TermsView(terms: false)
                 }
                 
-                
-                
                 Spacer()
                 Button(action: {
                     // 코인 이용약관이 체크되어있지 않으면 체크해주고
@@ -219,6 +203,7 @@ struct AddUserView: View {
             }.padding().background(Color("squash"))
                 .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
             
+            
             Spacer()
             HStack(alignment: .center, spacing: 0) {
                 Text("Copyright @ ")
@@ -237,20 +222,21 @@ struct AddUserView: View {
             
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], CGFloat(50))
-            
-            //showingSuccessAlert이 true일 때 Alert을 표시한다.
-        .alert(isPresented: $showingSuccessAlert) {
-            // 이메일을 확인해보라는 Alert을 띄운 다음
-                Alert(title: Text("이메일 확인"), message: Text("회원 가입을 완료하시려면 메일을 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
+            .alert(isPresented: $showingAlert) {
+                // 이메일을 확인해보라는 Alert을 띄운 다음
+                self.showingSuccessAlert ?
+                    Alert(title: Text("이메일 확인"), message: Text("회원 가입을 완료하시려면 메일을 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
+                        // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                        self.showingSuccessAlert = false
+                        self.showingAlert = false
+                        // 로그인 페이지로 돌아간다.
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) :
+                    Alert(title: Text("에러"), message: Text(self.errorText), dismissButton: .default(Text("닫기")) {
                     // 돌아가기 버튼을 누르면 Alert은 꺼지고
-                    self.showingSuccessAlert = false
-                   // 로그인 페이지로 돌아간다.
-                self.presentationMode.wrappedValue.dismiss()
+                    self.showingAlert = false
                     })
-        }
-        
-        
-        
+            }
     }
 }
 
