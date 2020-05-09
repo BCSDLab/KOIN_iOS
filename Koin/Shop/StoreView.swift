@@ -10,11 +10,12 @@ import PKHUD
 
 
 struct StoreView: View {
-    @ObservedObject var stores: StoreController
+    @ObservedObject var stores: StoreController = StoreController()
     @State var category: String = ""
-
+    
     init() {
-        self.stores = StoreController()
+        self.stores.store_session()
+        self.stores.load_stores()
     }
 
     //기타(S000), 콜벤(S001), 정식(S002), 족발(S003), 중국집(S004), 치킨(S005), 피자(S006), 탕수육(S007), 일반(S008), 미용실(S009)
@@ -34,7 +35,12 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S005")
                 } else {
                         self.category = ""
-                    self.stores.load_stores()
+                        HUD.show(.progress)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            self.stores.load_stores()
+                            HUD.hide()
+                        }
+                    
                     }
                     
                 }
@@ -54,7 +60,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S006")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_pizza")
@@ -71,7 +81,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S007")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_sweet_pork")
@@ -89,7 +103,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S002")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_sweet_dosirak")
@@ -106,7 +124,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S003")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_sweet_pork_feet")
@@ -125,7 +147,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S004")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_chinese")
@@ -142,7 +168,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S008")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_normal")
@@ -159,7 +189,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S009")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         Image("store_category_hair")
@@ -176,7 +210,11 @@ struct StoreView: View {
                     self.stores.get_stores(category: "S001")
                 } else {
                     self.category = ""
-                    self.stores.load_stores()
+                    HUD.show(.progress)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        self.stores.load_stores()
+                        HUD.hide()
+                    }
                     } }) {
                     VStack {
                         ZStack {
@@ -227,14 +265,17 @@ struct StoreView: View {
 
             }
             }
-        }.onAppear() {
+        }.onAppear {
+            /*
+            print("shop appear")
             HUD.show(.progress)
             DispatchQueue.main.async {
                 self.stores.store_session()
                 self.stores.load_stores()
                 HUD.hide()
-            }
-        }.onDisappear() {
+            }*/
+        }.onDisappear {
+            print("shop disappear")
         }
     }
 }

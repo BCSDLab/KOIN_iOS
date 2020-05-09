@@ -13,6 +13,10 @@ target 'Koin' do
   pod 'SDWebImageSwiftUI'
   pod "RichEditorView"
   pod 'IGColorPicker'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Firestore'
+  pod 'FirebaseFirestoreSwift'
 
 
 end

@@ -18,6 +18,7 @@ import IGColorPicker
 struct TempRichEditor: UIViewControllerRepresentable {
     var controller: TempViewController = UIStoryboard(name: "Editor", bundle: nil).instantiateViewController(identifier: "TempViewController") as! TempViewController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var parentViewModel: CommunityViewModel<TempArticle>
     var is_edit: Bool = false
     var title: String = ""
     var content: String = ""
@@ -40,6 +41,7 @@ struct TempRichEditor: UIViewControllerRepresentable {
         
     }
     
+    
     typealias UIViewControllerType = TempViewController
     
 }
@@ -47,6 +49,7 @@ struct TempRichEditor: UIViewControllerRepresentable {
 struct RichEditor: UIViewControllerRepresentable {
     var controller: ViewController = UIStoryboard(name: "Editor", bundle: nil).instantiateViewController(identifier: "ViewController") as! ViewController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var parentViewModel: CommunityViewModel<Article>
     var is_edit: Bool = false
     var board_id: Int = -1
     var title: String = ""
@@ -71,6 +74,10 @@ struct RichEditor: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
 
+    }
+    
+    func onDisappear(perform action: (() -> Void)? = nil) {
+        self.parentViewModel.fetchCommunity()
     }
     
     
@@ -240,7 +247,7 @@ class ViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let send = UIBarButtonItem(title: "제출", style: .plain, target: self, action: #selector(checkAction))
+        let send = UIBarButtonItem(title: "제출", style: .plain, target: self, action: #selector(sendAction))
         
         if is_edit {
             self.parent?.navigationItem.title = "수정"
@@ -248,6 +255,60 @@ class ViewController: UIViewController {
             self.parent?.navigationItem.title = "작성"
         }
         self.parent?.navigationItem.rightBarButtonItem = send
+    }
+    
+    @objc func sendAction() {
+        if self.is_edit {
+            let alert =  UIAlertController(title: "수정하기", message: "수정하시겠습니까?", preferredStyle: .actionSheet)
+
+            let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "수정", style: .default) { (action) in
+                self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                    if result {
+                        self.errorText = ""
+                        self.showError = false
+                        self.presentationMode?.wrappedValue.dismiss()
+                    } else {
+                        self.errorText = (error?.localizedDescription)!
+                        self.showError = true
+                        let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                        errorAlert.addAction(cancel)
+                        self.present(errorAlert, animated: true, completion: nil)
+                    }
+                    
+                }
+            }
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+        } else {
+            let alert =  UIAlertController(title: "제출하기", message: "제출하시겠습니까?", preferredStyle: .actionSheet)
+
+            let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "제출", style: .default) { (action) in
+                self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                    if result {
+                        self.errorText = ""
+                        self.showError = false
+                        self.parent?.navigationController?.popViewController(animated: true)
+                    } else {
+                        self.errorText = (error?.localizedDescription)!
+                        self.showError = true
+                        let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                        errorAlert.addAction(cancel)
+                        self.present(errorAlert, animated: true, completion: nil)
+                    }
+                }
+            }
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+            
+        }
     }
     
     @objc func checkAction() {
@@ -419,6 +480,7 @@ extension ViewController: RichEditorToolbarDelegate {
 
 class TempViewController: UIViewController {
     var communityData: CommunityController = CommunityController(board_id: -2)
+    @EnvironmentObject var parentViewModel: CommunityViewModel<TempArticle>
     var colorPickerView: ColorPickerView!
     var presentationMode: Binding<PresentationMode>? = nil
     @IBOutlet var tempEditorView: RichEditorView!
@@ -585,7 +647,7 @@ class TempViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let send = UIBarButtonItem(title: "제출", style: .plain, target: self, action: #selector(checkAction))
+        let send = UIBarButtonItem(title: "제출", style: .plain, target: self, action: #selector(sendAction))
         
         if is_edit {
             self.parent?.navigationItem.title = "수정"
@@ -594,10 +656,88 @@ class TempViewController: UIViewController {
         }
         self.parent?.navigationItem.rightBarButtonItem = send
     }
+    /*
+    override func viewWillDisappear(_ animated: Bool) {
+        let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
+
+        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "취소", style: .default) { (action) in
+            self.presentationMode?.wrappedValue.dismiss()
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
+
+        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "취소", style: .default) { (action) in
+            self.presentationMode?.wrappedValue.dismiss()
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    */
+    @objc func sendAction() {
+        if self.is_edit {
+            let alert =  UIAlertController(title: "수정하기", message: "수정하시겠습니까?", preferredStyle: .actionSheet)
+
+            let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "수정", style: .default) { (action) in
+                self.communityData.update_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                    if result {
+                        self.errorText = ""
+                        self.showError = false
+                        self.presentationMode?.wrappedValue.dismiss()
+                    } else {
+                        self.errorText = (error?.localizedDescription)!
+                        self.showError = true
+                        let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                        errorAlert.addAction(cancel)
+                        self.present(errorAlert, animated: true, completion: nil)
+                    }
+                    
+                }
+            }
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+        } else {
+            let alert =  UIAlertController(title: "제출하기", message: "제출하시겠습니까?", preferredStyle: .actionSheet)
+
+            let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+            let ok = UIAlertAction(title: "제출", style: .default) { (action) in
+                self.communityData.put_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                    if result {
+                        self.errorText = ""
+                        self.showError = false
+                        self.parent?.navigationController?.popViewController(animated: true)
+                    } else {
+                        self.errorText = (error?.localizedDescription)!
+                        self.showError = true
+                        let errorAlert = UIAlertController(title: "에러", message: self.errorText, preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+                        errorAlert.addAction(cancel)
+                        self.present(errorAlert, animated: true, completion: nil)
+                    }
+                }
+            }
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+            
+        }
+    }
     
     @objc func checkAction() {
         if self.is_edit {
-            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
                     self.errorText = ""
                     self.showError = false

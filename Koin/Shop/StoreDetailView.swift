@@ -55,8 +55,6 @@ struct ExpandImageView: View {
                                     .placeholder {
                                         Rectangle().foregroundColor(.gray)
                                     }
-                                    .animated() // Supports Animated Image
-                                    .indicator(.activity) // Activity Indicator
                                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                                     .transition(.fade) // Fade Transition
                                     .scaledToFit()
@@ -89,10 +87,10 @@ struct StoreDetailView: View {
     }
     
     var body: some View {
-        var storeName: String = "가게이름"
-        var store_phone: String = "폰"
-        var store_openTime: String = "오픈시간"
-        var store_closeTime: String = "종료시간"
+        var storeName: String = ""
+        var store_phone: String = ""
+        var store_openTime: String = ""
+        var store_closeTime: String = ""
         var store_deliveryPrice: Int = 0
         var store_delivery: Bool = false
         var store_payCard: Bool = false
@@ -284,7 +282,6 @@ let b = [store_phone, "\(store_openTime) ~ \(store_closeTime)", store_address, "
                                         .placeholder {
                                             Rectangle().foregroundColor(.gray)
                                         }
-                                        .animated() // Supports Animated Image
                                         .indicator(.activity) // Activity Indicator
                                         .animation(.easeInOut(duration: 0.5)) // Animation Duration
                                         .transition(.fade) // Fade Transition
@@ -335,6 +332,9 @@ struct StoreMenuCellView: View {
                     HStack {
                         if (price.size != "기본") {
                             Text(price.size)
+                            .font(.system(size: 15))
+                            .fontWeight(.medium)
+                            .foregroundColor(Color("black"))
                         }
                         Spacer()
                         Text(price.price)

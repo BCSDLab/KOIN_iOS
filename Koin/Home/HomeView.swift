@@ -188,7 +188,8 @@ struct HomeView: View {
                                 }
 
                                         .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {self.prepare_project()}) {
+                                Button(action: {self.viewRouter.currentView = "search"
+                                    self.viewRouter.dismiss_menu()}) {
                                     VStack{
                                         Spacer()
                                         Image("market")

@@ -13,7 +13,6 @@ import CryptoTokenKit
 import Foundation
 import Combine
 
-
 // There is no such ID : 인증 안된 상태 또는 회원가입이 안된 상태
 // invalid authenticate : 이미 가입되어있는 상태
 
@@ -626,36 +625,52 @@ class UserSettings: ObservableObject {
     */
     // 회원가입 기능을 담당하는 함수
     func register_session(email: String, password: String, result: @escaping (Bool, Error?) -> Void) {
-        // 비밀번호를 hash 처리하고
-        let hashPassword = hashed(pw: password)
-        // post 메소드로, 이메일, 해시 비밀번호를 파라미터에 넣어 보내면
-            AF
-            .request("\(api)/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
-            .response { response in // JSON 형태로 응답을 받아
-                
-                switch response.result {
-                case .success(let data):
-                    let data = self.convertToDictionary(data: data)
-                    if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                        switch(status){
-                        case 200:
-                            fallthrough
-                        case 201: // 겹치지 않으면(200)
-                            print(data)
-                            result(true, nil) // 겹치지 않는다고 알림
-                            break
-                        default: // 겹치거나 오류가 나면
-                            let error = data!["error"] as! [String:Any]
-                            let message = error["message"] as! String
-                            result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
-                            break
+        
+        let passwordRange = NSRange(location: 0, length: password.utf16.count)
+        let passwordRegex = try! NSRegularExpression(pattern: "^.*(?=^.{6,18}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$")
+        let passwordFiltered = passwordRegex.matches(in: password, options: [], range: passwordRange)
+        
+        let emailRange = NSRange(location: 0, length: email.utf16.count)
+        let emailRegex = try! NSRegularExpression(pattern: "^[a-z_0-9]{1,12}$")
+        let emailFiltered = emailRegex.matches(in: email, options: [], range: emailRange)
+        
+        if (emailFiltered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("이메일 형식이 올바르지 않습니다.",comment: "")))
+        } else if (passwordFiltered.isEmpty) {
+            result(false, UserError(description: NSLocalizedString("비밀번호 형식이 올바르지 않습니다.",comment: "")))
+        } else {
+            let hashPassword = hashed(pw: password)
+            // post 메소드로, 이메일, 해시 비밀번호를 파라미터에 넣어 보내면
+                AF
+                .request("\(api)/user/register", method: .post, parameters:  ["portal_account": email, "password": hashPassword], encoding: JSONEncoding.prettyPrinted)
+                .response { response in // JSON 형태로 응답을 받아
+                    
+                    switch response.result {
+                    case .success(let data):
+                        let data = self.convertToDictionary(data: data)
+                        if let status = response.response?.statusCode { // 상태 코드를 가져와서
+                            switch(status){
+                            case 200:
+                                fallthrough
+                            case 201: // 겹치지 않으면(200)
+                                print(data)
+                                result(true, nil) // 겹치지 않는다고 알림
+                                break
+                            default: // 겹치거나 오류가 나면
+                                let error = data!["error"] as! [String:Any]
+                                let message = error["message"] as! String
+                                result(false, UserError(description: NSLocalizedString(message,comment: ""))) // 겹친다고 알림
+                                break
+                            }
                         }
+                    case .failure(let error):
+                        result(false, error)
                     }
-                case .failure(let error):
-                    result(false, error)
+                    
                 }
-                
-            }
+        }
+        // 비밀번호를 hash 처리하고
+        
     }
     
     // 로그인이 성공했는지 여부를 확인하는 함수

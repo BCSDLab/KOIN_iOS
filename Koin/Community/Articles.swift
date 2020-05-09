@@ -8,16 +8,17 @@
 
 import Foundation
 
-struct Articles: Codable {
+struct Articles: Codable, CommonArticles{
     var articles: [Article]
+    
     private enum CodingKeys: String, CodingKey {
         case articles = "articles"
     }
-    init(articles: [Article]) {
+    
+    init(articles: [Article]){
         self.articles = articles
     }
-
-    init() {
+    init () {
         self.articles = [Article()]
     }
 }

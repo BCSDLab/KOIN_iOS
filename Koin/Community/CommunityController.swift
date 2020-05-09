@@ -43,6 +43,16 @@ class CommunityController: ObservableObject {
        }
     }
     
+    init() {
+        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
+        self.articles = Articles()
+        self.detail_article = Article()
+        self.board_id = -1
+        //self.community_session()
+        self.temp_articles = TempArticles()
+        self.detail_temp_article = TempArticle()
+    }
+    
     init(board_id: Int) {
         api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
         self.articles = Articles()
@@ -315,10 +325,10 @@ class CommunityController: ObservableObject {
                 }
     }
     
-    func update_temp_article(password: String, article_id: Int, title: String, content: String, result: @escaping (Bool, Error?) -> Void) {
+    func update_temp_article(password: String, article_id: Int, title: String, nickname: String, content: String, result: @escaping (Bool, Error?) -> Void) {
 
         AF
-                .request("\(api)/temp/articles/\(article_id)", method: .put, parameters: ["password": password, "title": title, "content": content], encoding: JSONEncoding.prettyPrinted)
+            .request("\(api)/temp/articles/\(article_id)", method: .put, parameters: ["password": password, "title": title, "content": content, "nickname": nickname], encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     switch response.result {
                     case .success(let data):
@@ -606,7 +616,14 @@ class CommunityController: ObservableObject {
                             case 200:
                                 fallthrough
                             case 201: // 겹치지 않으면(200)
-                                result(true, nil) // 겹치지 않는다고 알림
+                                let a = data!["grantEdit"]
+                                let b = a as! Int
+                                print(a)
+                                    if(b == 1) {
+                                        result(true, nil)
+                                    } else {
+                                        result(false, nil)
+                                    }
                                 break
                             default: // 겹치거나 오류가 나면
                                 let error = data!["error"] as! [String:Any]

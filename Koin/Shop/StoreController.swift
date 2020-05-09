@@ -9,7 +9,7 @@ import Combine
 import PKHUD
 
 class StoreController: ObservableObject {
-    var isTest = true
+    var isTest = false
     var api = ""
     
     @Published var stores: Shops?
@@ -42,7 +42,7 @@ class StoreController: ObservableObject {
         self.store_session()
         self.load_store(store_id: store_id)
     }
-
+/*
     func load_stores() {
         if let data = UserDefaults.standard.object(forKey: "stores") as? Data {
             let decoder = JSONDecoder()
@@ -52,7 +52,23 @@ class StoreController: ObservableObject {
         }
         objectWillChange.send(self)
     }
+    */
     
+    func load_stores() {
+        var filtered_stores: [Store] = []
+        
+        if let data = UserDefaults.standard.object(forKey: "stores") as? Data {
+            let decoder = JSONDecoder()
+            if let loaded = try? decoder.decode(Shops.self, from: data) {
+                    for store in loaded.shops {
+                        filtered_stores.append(store)
+                    }
+            }
+        }
+        
+        self.stores = Shops(shops: filtered_stores)
+        self.objectWillChange.send(self)
+    }
     
     
     func load_store(store_id: Int){
@@ -82,6 +98,8 @@ class StoreController: ObservableObject {
         }
         return []
     }
+    
+    
     
     func get_stores(category: String){
         var filtered_stores: [Store] = []

@@ -161,19 +161,60 @@ struct MenuView: View {
     @ObservedObject var observed: DiningFetcher
 
     var body: some View {
-        List {
-            ForEach(self.observed.meals) { meal in
-                if (meal.type == self.menu_switch[self.menu_type]) { // 해당 메뉴일 경우 표시하기
-                    CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
+        let data = self.observed.get_meal(type: self.menu_type)
+        return Group {
+            if (data.isEmpty) {
+                List {
+                    EmptyCardView()
+                }
+            } else {
+                List {
+                    ForEach(observed.meals) { meal in
+                        if (meal.type == self.menu_switch[self.menu_type]) { // 해당 메뉴일 경우 표시하기
+                            CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)
+
+                        }
+                    }
+                    
                 }
             }
-            
         }
     }
 }
 
 
+struct EmptyCardView: View{
 
+    
+    var body: some View{
+                VStack(alignment: .leading){
+                    
+                    
+                    Text("메뉴 정보가 없습니다.")
+                    .font(.system(size: 12, weight: .regular))
+                        .lineSpacing(6)
+                        .foregroundColor(Color("black"))
+          
+        }
+                
+                    .fixedSize(horizontal: false,vertical: true)
+                    .frame(maxWidth: .infinity)
+                .padding()
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 1)
+                .stroke(Color("cloudy_blue"), lineWidth: 1)
+        )
+        .background(Color.white)
+        .padding([.top, .horizontal], 16)
+        .clipped()
+        .shadow(color: Color.black.opacity(0.25), radius: 6, x: 0, y: 0)
+        
+        
+    }
+ 
+    
+}
 
 
 struct CardView: View{

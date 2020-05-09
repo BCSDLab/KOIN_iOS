@@ -34,6 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 탭 정보가 있는 오브젝트 생성 및 초기화
         let viewRouter = ViewRouter(initialIndex: 1, customItemIndex: 2)
         
+        
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

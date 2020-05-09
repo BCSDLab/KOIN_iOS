@@ -15,8 +15,30 @@ class ViewRouter: ObservableObject {
     let customActionteminidex: Int
     // 홈 액션이 위치해있는 탭 번호
     let homeActionteminidex: Int
+    
+    var board_id: Int
+    
+    var community_id: Int
+    
+    //@ObservedObject var communityController : CommunityController
+    
     // 현재 뷰
-    var currentView: String = "home"
+    var currentView: String {
+        // 값이 설정되었을 때
+        didSet {
+            // 만약 설정된 값이 커스텀 액션이 일어나는 값이랑 같을 때
+            if currentView == "board_free" {
+                board_id = 1
+                //communityController = CommunityController(board_id: 1)
+            } else if currentView == "board_recruit" {
+                board_id = 2
+            } else if currentView == "board_secret" {
+                board_id = -2
+            }
+            // 오브젝트가 바뀌었다고 알려준다.
+            objectWillChange.send(self)
+        }
+    }
 
     // 오브젝트가 바뀌는 것을 인식해주는 오브젝트
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
@@ -67,5 +89,8 @@ class ViewRouter: ObservableObject {
         self.customActionteminidex = customItemIndex
         self.itemSelected = initialIndex
         self.homeActionteminidex = 1
+        self.currentView = "home"
+        self.board_id = -1
+        self.community_id = -1
     }
 }

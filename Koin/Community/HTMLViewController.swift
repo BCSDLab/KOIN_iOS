@@ -18,11 +18,15 @@ struct HTMLView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: HTMLViewControler, context: Context) {
-        print(context)
+        controller.reload()
     }
     
     func loadHTML(_ htmlContent: String) {
         controller.loadHTML(htmlContent)
+    }
+    
+    func getObservation() -> NSKeyValueObservation? {
+        return controller.observation
     }
     
     
@@ -31,9 +35,12 @@ struct HTMLView: UIViewControllerRepresentable {
 }
 
 final class HTMLViewControler: UIViewController {
+    var observation: NSKeyValueObservation?
+    var activityIndicator = UIActivityIndicatorView()
+    
     private lazy var webview: WKWebView = {
         let preferences = WKPreferences()
-        preferences.javaScriptEnabled = false
+        preferences.javaScriptEnabled = true
         let configuration = WKWebViewConfiguration()
         configuration.preferences = preferences
         let webview = WKWebView(frame: .zero, configuration: configuration)
@@ -43,9 +50,22 @@ final class HTMLViewControler: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        webview.navigationDelegate = self
         setupViews()
 
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        
+        observation = webview.observe(\WKWebView.estimatedProgress, options: .new) { _, change in
+            print("Loaded: \(change)")
+        }
+    }
+    
+    deinit {
+        self.observation = nil
+    }
+    
+    func reload() {
+        webview.reload()
     }
 
     private func setupViews() {
@@ -73,9 +93,35 @@ final class HTMLViewControler: UIViewController {
 <body>
 """
             webview.loadHTMLString(headerString+styleString + htmlContent + "</body>", baseURL: nil)
+            webview.allowsBackForwardNavigationGestures = true
     }
 
     @objc private func contentSizeDidChange(_ notification: Notification) {
         webview.reload()
     }
+}
+
+extension HTMLViewControler: WKNavigationDelegate {
+    
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        // 1. 가운데 로딩 이미지를 띄워주면서
+        activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
+        activityIndicator.frame = CGRect(x: view.frame.midX - 25, y: view.frame.midY - 25 , width: 50, height: 50)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        
+        view.addSubview(activityIndicator)
+        
+        // 2. 상단 status bar에도 activity indicator가 나오게 할 것이다.
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        // 1. 제거
+        self.activityIndicator.removeFromSuperview()
+        
+        // 2. 제거
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+    
 }

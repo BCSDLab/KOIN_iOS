@@ -19,6 +19,17 @@ public class DiningFetcher: ObservableObject {
     init(date: Date) {
         meal_session(date: date)
     }
+    
+    func get_meal(type: Int) -> [DiningRequest?] {
+        var filtered_meal: [DiningRequest?] = []
+        let menu_switch: Array<String> = ["BREAKFAST", "LUNCH", "DINNER"]
+        for meal in meals {
+            if meal.type == menu_switch[type] {
+                filtered_meal.append(meal)
+            }
+        }
+        return filtered_meal
+    }
 
     //dining 데이터 가져오는 함수
     func meal_session(date: Date) {

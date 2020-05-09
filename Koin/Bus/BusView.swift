@@ -167,7 +167,9 @@ struct BusInfoView: View {
     
     var departActionSheet: ActionSheet {
         ActionSheet(title: Text("출발"), buttons: [
-            .default(Text("한기대"), action: {self.selectedDepart = 0}),
+            .default(Text("한기대"), action: {
+                self.selectedDepart = 0
+            }),
             .default(Text("천안역"), action: {self.selectedDepart = 1}),
             .default(Text("야우리"), action: {self.selectedDepart = 2}),
             .destructive(Text("취소"), action: {self.isDepartActionSheet.toggle()})

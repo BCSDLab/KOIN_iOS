@@ -12,7 +12,7 @@ import Combine
 import Alamofire
 
 class BusController {
-    var isTest = true
+    var isTest = false
     
     var api = ""
     
@@ -734,9 +734,7 @@ class BusController {
         let weekday = dayType % 7
         
         if (depart == "station" && arrival == "koreatech") {
-            return shuttleFromStationToKoreatech[weekday]
-        } else if(depart == "station" && arrival == "terminal") {
-            return shuttleFromStationToTerminal[weekday]
+            shuttleTimeTable = arrival == "koreatech" ? shuttleFromStationToKoreatech[weekday] : shuttleFromStationToTerminal[weekday]
         } else if (depart == arrival) {
             return []
         } else {

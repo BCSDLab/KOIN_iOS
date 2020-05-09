@@ -9,6 +9,23 @@
 import SwiftUI
 import PKHUD
 
+extension Color {
+    init(hex: Int, alpha: Double = 1) {
+        let components = (
+            R: Double((hex >> 16) & 0xff) / 255,
+            G: Double((hex >> 08) & 0xff) / 255,
+            B: Double((hex >> 00) & 0xff) / 255
+        )
+        self.init(
+            .sRGB,
+            red: components.R,
+            green: components.G,
+            blue: components.B,
+            opacity: alpha
+        )
+    }
+}
+
 extension UIDevice {
     var hasNotch: Bool {
         print(UIApplication.shared.keyWindow?.safeAreaInsets.bottom)
@@ -36,6 +53,10 @@ struct ContentView: View {
     @EnvironmentObject var tabData: ViewRouter
     // 유저와 관련된 데이터를 가지고 있는 오브젝트
     @EnvironmentObject var settings: UserSettings
+    
+    @ObservedObject var searchViewModel: SearchViewModel = SearchViewModel(searchFetcher: SearchFetcher())
+    
+    
 
     init() {
         // 네비게이션 바 색 설정
@@ -48,7 +69,7 @@ struct ContentView: View {
 
     var body: some View {
         //현재 화면의 가로, 세로 넓이를 인식할 수 있게 해주는 뷰
-        GeometryReader { geometry in
+        return GeometryReader { geometry in
             // 레이어 맨 위에 SideMenu가 오도록 배치
             ZStack {
                 // SideMenu의 가로 길이는 현재 화면의 2/3 차지할 수 있게
@@ -62,6 +83,7 @@ struct ContentView: View {
 
                     if self.tabData.currentView == "home" { // 현재 뷰가 home이면 HomeView를 보여준다.
                         HomeView()
+                            //.environmentObject(self.tabData)
                                 .navigationBarTitle("") //네비게이션바의 제목은 없고
                                 .navigationBarHidden(true) //네비게이션바를 숨긴다.
                     } else if self.tabData.currentView == "dining" { // 현재 뷰가 dining이면 MealView를 보여준다.
@@ -93,17 +115,20 @@ struct ContentView: View {
                                     }
                                 }, trailing: EmptyView())
                     } else if self.tabData.currentView == "board_free" {
-                        CommunityList(board_id: 1)
-                                .navigationBarTitle("자유게시판", displayMode: .inline)
-                            .environmentObject(self.tabData)
+                        
+                        //CommunityList()
+                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 1, userId: self.settings.get_userId()))
+                            //.environmentObject(self.tabData)
+                            .navigationBarTitle("자유게시판", displayMode: .inline)
+                            
                     } else if self.tabData.currentView == "board_recruit" {
-                        CommunityList(board_id: 2)
-                                .navigationBarTitle("취업게시판", displayMode: .inline)
-                            .environmentObject(self.tabData)
+                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 2, userId: self.settings.get_userId()))
+                            //.environmentObject(self.tabData)
+                            .navigationBarTitle("취업게시판", displayMode: .inline)
                     } else if self.tabData.currentView == "board_secret" {
-                        TempCommunityList()
-                                .navigationBarTitle("익명게시판", displayMode: .inline)
-                            .environmentObject(self.tabData)
+                        BetaCommunityView<TempArticle,TempComment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: -2, userId: self.settings.get_userId()))
+                            //.environmentObject(self.tabData)
+                            .navigationBarTitle("익명게시판", displayMode: .inline)
                     }  else if self.tabData.currentView == "bus" {
                         BusView()
                                 .navigationBarTitle("버스", displayMode: .inline)
@@ -113,8 +138,19 @@ struct ContentView: View {
                                         Text("홈")
                                     }
                                 }, trailing: EmptyView())
+                    } else if self.tabData.currentView == "search" {
+                        SearchView(viewModel: self.searchViewModel)
+                            .navigationBarTitle(Text("검색"), displayMode: .inline)
+                            .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                    Text("홈")
+                                }
+                                }, trailing: Button(action: self.searchViewModel.fetchSearch) {
+                                Image(systemName: "magnifyingglass")
+                            })
                     }
-                }
+                }.environmentObject(self.tabData)
 
                         .tabItem {  // 첫번째 탭에 해당되는 아이템 레이아웃
                             VStack {
@@ -178,7 +214,7 @@ struct ContentView: View {
 
             }
                     .font(.headline)
-                    .edgesIgnoringSafeArea(.top)
+                    //.edgesIgnoringSafeArea(.top)
         }
     }
 }

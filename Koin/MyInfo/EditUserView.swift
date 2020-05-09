@@ -2,7 +2,7 @@
 // Created by 정태훈 on 2020/01/12.
 // Copyright (c) 2020 정태훈. All rights reserved.
 //
-
+/*
 import Foundation
 import PKHUD
 import SwiftUI
@@ -148,6 +148,7 @@ struct EditUserView: View {
         }
     }
 
+
     // 닉네임이 겹치는지 확인해주는 함수
     func check_nickname() {
         // HUD로 보여주기 위한 뷰 오브젝트
@@ -264,3 +265,4 @@ struct EditUserView_Previews: PreviewProvider {
         EditUserView()
     }
 }
+*/

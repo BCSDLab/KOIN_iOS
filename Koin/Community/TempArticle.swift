@@ -8,28 +8,35 @@
 
 import Foundation
 
-struct TempComment: Codable, Hashable {
-    let id: Int
-    let articleId: Int
-    let content: String
-    let nickname: String
-    //let password: String?
-    let isDeleted: Bool?
-    let createdAt: String
-    let updateAt: String
+struct TempComment: Codable, Hashable, CommonComment {
+    var id: Int
+    var articleId: Int
+    var content: String
+    var nickname: String
+    var isDeleted: Bool?
+    var createdAt: String?
+    var updatedAt: String?
     private enum CodingKeys: String, CodingKey {
             case id = "id"
             case articleId = "article_id"
             case content = "content"
             case nickname = "nickname"
             case isDeleted = "is_deleted"
-            //case password = "password"
             case createdAt = "created_at"
-            case updateAt = "updated_at"
+            case updatedAt = "updated_at"
+    }
+    init() {
+        self.id = -1
+        self.articleId = -1
+        self.content = ""
+        self.nickname = ""
+        self.isDeleted = nil
+        self.createdAt = nil
+        self.updatedAt = nil
     }
 }
 
-struct TempArticle: Codable, Hashable {
+struct TempArticle: Codable, Hashable, CommonArticle {
     var comments: [TempComment]?
     var commentCount: Int?
     var content: String?
@@ -38,7 +45,6 @@ struct TempArticle: Codable, Hashable {
     var hit: Int
     var id: Int
     var isDeleted: Bool?
-    //let password: String?
     var nickname: String
     var title: String
     var updatedAt: String

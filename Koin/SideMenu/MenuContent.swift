@@ -67,130 +67,122 @@ struct MenuContent: View {
                 Text("학교정보")
                         .font(.system(size: 13))
                         .foregroundColor(Color("warm_grey_two"))) {
-                    Text("주변 상점")
-                            .font(.system(size: 15))
-                            .foregroundColor(self.viewRouter.currentView == "store" ? Color("squash"): Color("black"))
-                            .onTapGesture {
+                            Button(action: {
                                 self.viewRouter.currentView = "store"
                                 self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("주변 상점")
+                                .font(.system(size: 15))
+                                .foregroundColor(self.viewRouter.currentView == "store" ? Color("squash"): Color("black"))
                             }
-                    Text("버스 / 교통")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "bus" ? Color("squash"): Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                            // 현재 view를 dining으로 변경
-                            self.viewRouter.currentView = "bus"
-
-                            // 메뉴 닫음
-                            self.viewRouter.dismiss_menu()
-                        }
-                    Text("식단")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "dining" ? Color("squash"): Color("black"))
-                            .onTapGesture { // 식단 누를 시
-                                // 현재 view를 dining으로 변경
-                                self.viewRouter.currentView = "dining"
-
-                                // 메뉴 닫음
+                            Button(action: {
+                                self.viewRouter.currentView = "bus"
                                 self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("버스 / 교통")
+                                .font(.system(size: 15))
+                                .foregroundColor(self.viewRouter.currentView == "bus" ? Color("squash"): Color("black"))
+                            }
+                            Button(action: {
+                                self.viewRouter.currentView = "dining"
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("식단")
+                                .font(.system(size: 15))
+                                .foregroundColor(self.viewRouter.currentView == "dining" ? Color("squash"): Color("black"))
                             }
 
-                    Text("동아리")
-                        .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                            // 현재 view를 dining으로 변경
-                            self.prepare_project()
-
-                            // 메뉴 닫음
-                            self.viewRouter.dismiss_menu()
-                        }
+                            Button(action: {
+                                self.prepare_project()
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("동아리")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("black"))
+                            }
                 }
                 Section(header:
                 Text("커뮤니티")
                         .font(.system(size: 13))
                         .foregroundColor(Color("warm_grey_two"))) {
-                    Text("익명게시판")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "board_secret" ? Color("squash"): Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                                                    // 현재 view를 dining으로 변경
-                        self.viewRouter.currentView = "board_secret"
-                        //board_recruit
-                                                    // 메뉴 닫음
-                        self.viewRouter.dismiss_menu()
-                                                }
-                    Text("자유게시판")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "board_free" ? Color("squash"): Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                            // 현재 view를 dining으로 변경
-                            self.viewRouter.currentView = "board_free"
-//board_recruit
-                            // 메뉴 닫음
-                            self.viewRouter.dismiss_menu()
-                        }
-                    Text("취업게시판")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "board_recruit" ? Color("squash"): Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                                                    // 현재 view를 dining으로 변경
-                                                    self.viewRouter.currentView = "board_recruit"
-                                                    // 메뉴 닫음
-                                                    self.viewRouter.dismiss_menu()
-                                                }
-                    Text("분실물")
-                        .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                            // 현재 view를 dining으로 변경
-                            self.prepare_project()
-
-                            // 메뉴 닫음
-                            self.viewRouter.dismiss_menu()
-                        }
-                    Text("중고장터")
-                        .font(.system(size: 15))
-                        .foregroundColor(Color("black"))
-                        .onTapGesture { // 식단 누를 시
-                            // 현재 view를 dining으로 변경
-                            self.prepare_project()
-
-                            // 메뉴 닫음
-                            self.viewRouter.dismiss_menu()
-                        }
+                            Button(action: {
+                                self.viewRouter.currentView = "board_secret"
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("익명게시판")
+                                .font(.system(size: 15))
+                                .foregroundColor(self.viewRouter.currentView == "board_secret" ? Color("squash"): Color("black"))
+                            }
+                            Button(action: {
+                                self.viewRouter.currentView = "board_free"
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("자유게시판")
+                                    .font(.system(size: 15))
+                                    .foregroundColor(self.viewRouter.currentView == "board_free" ? Color("squash"): Color("black"))
+                            }
+                            Button(action: {
+                                self.viewRouter.currentView = "board_recruit"
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("취업게시판")
+                                .font(.system(size: 15))
+                                .foregroundColor(self.viewRouter.currentView == "board_recruit" ? Color("squash"): Color("black"))
+                            }
+                            Button(action: {
+                                self.prepare_project()
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("분실물")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("black"))
+                            }
+                            Button(action: {
+                                self.prepare_project()
+                                self.viewRouter.dismiss_menu()
+                            }) {
+                                Text("중고장터")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color("black"))
+                            }
                 }
                 Section(header:
                 Text("고객지원")
                         .font(.system(size: 13))
                         .foregroundColor(Color("warm_grey_two"))) {
-                    HStack {
-                        Text("카카오톡 1:1 대화")
-                                .font(.system(size: 15))
-                                .foregroundColor(Color("black"))
-                        Spacer()
-                        Image("kakaotalk")
-                                .renderingMode(.template)
-                                .foregroundColor(.gray)
-                                .opacity(0.5)
-                    }.onTapGesture {
-                        let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
-
-                        UIApplication.shared.open(url as URL)
+                            Button(action: {
+                                let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
+                                UIApplication.shared.open(url as URL)
+                            }) {
+                                HStack {
+                                    Text("카카오톡 1:1 대화")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(Color("black"))
+                                    Spacer()
+                                    Image("kakaotalk")
+                                            .renderingMode(.template)
+                                            .foregroundColor(.gray)
+                                            .opacity(0.5)
+                                }
                             }
 
-                    HStack {
-                        Text("만든이")
-                                .font(.system(size: 15))
-                                .foregroundColor(Color("black"))
-                        Spacer()
-                        Image("logo_white")
-                            .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 16)
-                        .opacity(0.5)
-                    }
+                            Button(action: {
+                                let url: NSURL = URL(string: "https://bcsdlab.com")! as NSURL
+                                UIApplication.shared.open(url as URL)
+                            }) {
+                                HStack {
+                                    Text("만든이")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(Color("black"))
+                                    Spacer()
+                                    Image("logo_white")
+                                        .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 16)
+                                    .opacity(0.5)
+                                }
+                            }
                 }
             }
 

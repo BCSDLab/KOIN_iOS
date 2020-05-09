@@ -37,51 +37,60 @@ struct Board: Codable, Hashable {
     }
 }
 
-struct Comment: Codable, Hashable {
-    let id: Int
-    let articleId: Int
-    let content: String
-    let userId: Int
-    let nickname: String
-    let isDeleted: Bool
-    let grantEdit: Bool
-    let grantDelete: Bool
-    let createdAt: String
-    let updateAt: String
+struct Comment: Codable, Hashable, CommonComment {
+    var id: Int
+    var articleId: Int
+    var content: String
+    var nickname: String
+    var isDeleted: Bool?
+    let grantEdit: Bool?
+    let grantDelete: Bool?
+    var createdAt: String?
+    var updatedAt: String?
     private enum CodingKeys: String, CodingKey {
             case id = "id"
             case articleId = "article_id"
             case content = "content"
-            case userId = "user_id"
             case nickname = "nickname"
             case isDeleted = "is_deleted"
             case grantEdit = "grantEdit"
             case grantDelete = "grantDelete"
             case createdAt = "created_at"
-            case updateAt = "updated_at"
+            case updatedAt = "updated_at"
+    }
+    init() {
+        self.id = -1
+        self.articleId = -1
+        self.content = ""
+        self.nickname = ""
+        self.isDeleted = nil
+        self.grantEdit = nil
+        self.grantDelete = nil
+        self.createdAt = nil
+        self.updatedAt = nil
     }
 }
 
-struct Article: Codable, Hashable {
+struct Article: Codable, Hashable, CommonArticle {
     let boardId: Int
     let board: Board?
-    let comments: [Comment]?
-    let commentCount: Int
-    let content: String
-    let contentSummary: String
-    let createdAt: String
-    let hit: Int
-    let id: Int
+    var comments: [Comment]?
+    var commentCount: Int?
+    var content: String?
+    var contentSummary: String?
+    var createdAt: String
+    var hit: Int
+    var id: Int
     let ip: String?
-    let isDeleted: Bool?
+    var isDeleted: Bool?
     let isNotice: Bool
     let isSolved: Bool
     let meta: String?
-    let nickname: String
+    var nickname: String
     let noticeArticleId: String?
     let summary: String?
-    let title: String
-    let updatedAt: String
+    var title: String
+    var updatedAt: String
     let userId: Int?
     private enum CodingKeys: String, CodingKey {
         case board = "board"
