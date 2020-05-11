@@ -85,7 +85,10 @@ struct HomeView: View {
                         Spacer()
                         VStack(alignment: .center, spacing: 0) {
                             HStack(alignment: .center, spacing: 0) {
-                                Button(action: {self.prepare_project()}) {
+                                Button(action: {
+                                    self.viewRouter.currentView = "circle"
+                                    self.viewRouter.dismiss_menu()
+                                }) {
                                     VStack{
                                         Spacer()
                                         Image("circles")

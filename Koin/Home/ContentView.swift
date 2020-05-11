@@ -149,6 +149,15 @@ struct ContentView: View {
                                 }, trailing: Button(action: self.searchViewModel.fetchSearch) {
                                 Image(systemName: "magnifyingglass")
                             })
+                    } else if self.tabData.currentView == "circle" {
+                        CircleView(viewModel: CircleViewModel())
+                            .navigationBarTitle(Text("동아리"), displayMode: .inline)
+                            .navigationBarItems(leading: Button(action: self.tabData.go_home) {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                    Text("홈")
+                                }
+                                }, trailing: EmptyView())
                     }
                 }.environmentObject(self.tabData)
 
