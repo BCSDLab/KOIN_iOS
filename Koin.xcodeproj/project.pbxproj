@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0679507B5C2C36698C3F0652 /* Pods_Koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 360A986A1F5AB4673A771091 /* Pods_Koin.framework */; };
 		6C502032899D2A0E23D901CA /* DiningRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5028DB77A514429A0DE7CF /* DiningRequest.swift */; };
 		6C502075EC7F3649CCEB4166 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C50272BFA8B83DB664C0DAD /* ViewRouter.swift */; };
 		6C50216DD7967886938C4286 /* AddUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C50268D78402BFCD0030F2D /* AddUserView.swift */; };
@@ -30,6 +29,12 @@
 		A0045A612466916300119529 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A602466916300119529 /* CircleView.swift */; };
 		A0045A672466B05300119529 /* CircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A662466B05300119529 /* CircleCell.swift */; };
 		A0045A692466B06200119529 /* CircleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A682466B06200119529 /* CircleDetailView.swift */; };
+		A0045A6B2466D12A00119529 /* CircleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A6A2466D12A00119529 /* CircleViewModel.swift */; };
+		A0045A6D2466D13C00119529 /* CircleCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A6C2466D13C00119529 /* CircleCellViewModel.swift */; };
+		A0045A6F2466D15400119529 /* CircleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A6E2466D15400119529 /* CircleDetailViewModel.swift */; };
+		A0045A712466D6EF00119529 /* CircleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A702466D6EF00119529 /* CircleFetcher.swift */; };
+		A0045A732466D94F00119529 /* CircleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A722466D94F00119529 /* CircleData.swift */; };
+		A0045A752466E00300119529 /* CircleError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0045A742466E00300119529 /* CircleError.swift */; };
 		A01F0E0223FC116A000339A7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F0E0123FC116A000339A7 /* KeyboardManager.swift */; };
 		A01F0E0823FC1A8B000339A7 /* Editor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A01F0E0723FC1A8B000339A7 /* Editor.storyboard */; };
 		A023E99323E6CB540012E56F /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A023E99223E6CB540012E56F /* EditorViewController.swift */; };
@@ -56,7 +61,7 @@
 		A065E93E243A121800010D6F /* CommunityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A065E93D243A121800010D6F /* CommunityRequest.swift */; };
 		A06B731123F57BFD00720789 /* FindPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06B731023F57BFD00720789 /* FindPasswordView.swift */; };
 		A06E5C8924436F1500FA7DE8 /* GrantCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E5C8824436F1500FA7DE8 /* GrantCheckResponse.swift */; };
-		A072A804243F5D970041CF00 /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */; };
+		A072A804243F5D970041CF00 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A072A803243F5D970041CF00 /* SwiftPackageProductDependency */; };
 		A0879E692444A5E200E87D5A /* CommonArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0879E682444A5E200E87D5A /* CommonArticles.swift */; };
 		A0879E6D2444C63300E87D5A /* CommonCommunityDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0879E6C2444C63300E87D5A /* CommonCommunityDetailViewModel.swift */; };
 		A092376623B5EBB900C60C2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A092376823B5EBB900C60C2F /* InfoPlist.strings */; };
@@ -97,7 +102,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		360A986A1F5AB4673A771091 /* Pods_Koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C502151208ED93E0E4D5051 /* MealView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealView.swift; sourceTree = "<group>"; };
 		6C5021768B6664C27612C7DA /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		6C5021831929A9DFCE7A7890 /* DiningFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningFetcher.swift; sourceTree = "<group>"; };
@@ -120,6 +124,12 @@
 		A0045A602466916300119529 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		A0045A662466B05300119529 /* CircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCell.swift; sourceTree = "<group>"; };
 		A0045A682466B06200119529 /* CircleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleDetailView.swift; sourceTree = "<group>"; };
+		A0045A6A2466D12A00119529 /* CircleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViewModel.swift; sourceTree = "<group>"; };
+		A0045A6C2466D13C00119529 /* CircleCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CircleCellViewModel.swift; path = /Users/wxg12/Documents/workspace/Koin/Koin/Circle/ViewModel/CircleCellViewModel.swift; sourceTree = "<absolute>"; };
+		A0045A6E2466D15400119529 /* CircleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleDetailViewModel.swift; sourceTree = "<group>"; };
+		A0045A702466D6EF00119529 /* CircleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleFetcher.swift; sourceTree = "<group>"; };
+		A0045A722466D94F00119529 /* CircleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleData.swift; sourceTree = "<group>"; };
+		A0045A742466E00300119529 /* CircleError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleError.swift; sourceTree = "<group>"; };
 		A00DD7572406C9C2003528C9 /* libM13Checkbox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libM13Checkbox.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01F0E0123FC116A000339A7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KeyboardManager.swift; path = ../../KeyboardManager.swift; sourceTree = "<group>"; };
 		A01F0E0723FC1A8B000339A7 /* Editor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Editor.storyboard; path = ../../Editor.storyboard; sourceTree = "<group>"; };
@@ -188,8 +198,6 @@
 		A0FF711E23D8869400D61E13 /* CommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CommunityController.swift; path = ../../CommunityController.swift; sourceTree = "<group>"; };
 		A0FF712223D886AE00D61E13 /* Articles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Articles.swift; path = ../../Articles.swift; sourceTree = "<group>"; };
 		A0FF712423D886B700D61E13 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Article.swift; path = ../../Article.swift; sourceTree = "<group>"; };
-		D8A400E293D8B0FA35523BC5 /* Pods-Koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.release.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.release.xcconfig"; sourceTree = "<group>"; };
-		FEDC5D3290CC4A9C1469F825 /* Pods-Koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.debug.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,8 +205,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A072A804243F5D970041CF00 /* SwiftUIPullToRefresh in Frameworks */,
-				0679507B5C2C36698C3F0652 /* Pods_Koin.framework in Frameworks */,
+				A072A804243F5D970041CF00 /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +216,6 @@
 			isa = PBXGroup;
 			children = (
 				A00DD7572406C9C2003528C9 /* libM13Checkbox.a */,
-				360A986A1F5AB4673A771091 /* Pods_Koin.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -306,6 +312,9 @@
 		A0045A632466917C00119529 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				A0045A6C2466D13C00119529 /* CircleCellViewModel.swift */,
+				A0045A6A2466D12A00119529 /* CircleViewModel.swift */,
+				A0045A6E2466D15400119529 /* CircleDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -313,6 +322,7 @@
 		A0045A642466918500119529 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A0045A722466D94F00119529 /* CircleData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,8 +330,17 @@
 		A0045A652466918D00119529 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				A0045A702466D6EF00119529 /* CircleFetcher.swift */,
+				A0045A742466E00300119529 /* CircleError.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		A0132A4724684BEE00FD9600 /* Beta */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Beta;
 			sourceTree = "<group>";
 		};
 		A02D57EA240683F5007A6168 /* Bus */ = {
@@ -484,6 +503,7 @@
 		A0D11B0423CF09A70001C2D1 /* Shop */ = {
 			isa = PBXGroup;
 			children = (
+				A0132A4724684BEE00FD9600 /* Beta */,
 				A0D11B0923CF09B60001C2D1 /* Shops.swift */,
 				A0D11B0623CF09B60001C2D1 /* StoreController.swift */,
 				A0D11B0523CF09B60001C2D1 /* StoreEvent.swift */,
@@ -533,8 +553,6 @@
 		A81BB2738787A6169454BF6B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FEDC5D3290CC4A9C1469F825 /* Pods-Koin.debug.xcconfig */,
-				D8A400E293D8B0FA35523BC5 /* Pods-Koin.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -546,12 +564,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0C637D2239D25790041DE96 /* Build configuration list for PBXNativeTarget "Koin" */;
 			buildPhases = (
-				DC874373E5391E2FC98919BF /* [CP] Check Pods Manifest.lock */,
 				A0C637BA239D25770041DE96 /* Sources */,
 				A0C637BB239D25770041DE96 /* Frameworks */,
 				A0C637BC239D25770041DE96 /* Resources */,
 				A0FCB34B24421C97001F81AE /* ShellScript */,
-				D3C67A207EDC9026338A52B2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -559,7 +575,7 @@
 			);
 			name = Koin;
 			packageProductDependencies = (
-				A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */,
+				A072A803243F5D970041CF00 /* SwiftPackageProductDependency */,
 			);
 			productName = dev_koin;
 			productReference = A0C637BE239D25770041DE96 /* koin.app */;
@@ -591,7 +607,7 @@
 			);
 			mainGroup = A0C637B5239D25770041DE96;
 			packageReferences = (
-				A072A802243F5D970041CF00 /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */,
+				A072A802243F5D970041CF00 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = A0C637BF239D25770041DE96 /* Products */;
 			projectDirPath = "";
@@ -642,45 +658,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
-		D3C67A207EDC9026338A52B2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DC874373E5391E2FC98919BF /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Koin-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -698,14 +675,18 @@
 				A0D11B1623CF18510001C2D1 /* PriceType.swift in Sources */,
 				A0D11B1223CF18240001C2D1 /* Store.swift in Sources */,
 				A0F20956243B621300779D06 /* BetaCommunityCommentView.swift in Sources */,
+				A0045A712466D6EF00119529 /* CircleFetcher.swift in Sources */,
 				A0D11B0A23CF09B60001C2D1 /* StoreEvent.swift in Sources */,
 				A02D57F6240683F5007A6168 /* BusSearchView.swift in Sources */,
 				A065E9392439E6F300010D6F /* CommunityError.swift in Sources */,
 				A0F2094E243B510A00779D06 /* BetaCommunityDetailView.swift in Sources */,
 				A0C637C2239D25770041DE96 /* AppDelegate.swift in Sources */,
 				A0BFB57F24572E2E00589CEE /* SearchViewModel.swift in Sources */,
+				A0045A6D2466D13C00119529 /* CircleCellViewModel.swift in Sources */,
 				A031FFEA245C4FBD00F03037 /* SearchError.swift in Sources */,
 				A0FABFFC23EAFF6000E22754 /* HTMLViewController.swift in Sources */,
+				A0045A6F2466D15400119529 /* CircleDetailViewModel.swift in Sources */,
+				A0045A6B2466D12A00119529 /* CircleViewModel.swift in Sources */,
 				A003C77A244DF09A0026A11B /* ActivityIndicator.swift in Sources */,
 				A0C637C4239D25770041DE96 /* SceneDelegate.swift in Sources */,
 				6C50285299235A55BC781346 /* MyInfoView.swift in Sources */,
@@ -713,6 +694,7 @@
 				A0D11B1423CF18370001C2D1 /* Menus.swift in Sources */,
 				A0F2094C243B50BA00779D06 /* CommunityRow.swift in Sources */,
 				A01F0E0223FC116A000339A7 /* KeyboardManager.swift in Sources */,
+				A0045A732466D94F00119529 /* CircleData.swift in Sources */,
 				A065E93E243A121800010D6F /* CommunityRequest.swift in Sources */,
 				A0FF712523D886B700D61E13 /* Article.swift in Sources */,
 				A0F2095C243B656400779D06 /* CommentRow.swift in Sources */,
@@ -746,6 +728,7 @@
 				6C502F1ECC43A12A07005335 /* User.swift in Sources */,
 				A0D11B1023CF0FD10001C2D1 /* StoreDetailView.swift in Sources */,
 				A0879E692444A5E200E87D5A /* CommonArticles.swift in Sources */,
+				A0045A752466E00300119529 /* CircleError.swift in Sources */,
 				A02D57F8240683F5007A6168 /* BusView.swift in Sources */,
 				A031FFE7245C489900F03037 /* SearchRowViewModel.swift in Sources */,
 				A0F2094A243B4F9D00779D06 /* BetaCommunityView.swift in Sources */,
@@ -908,7 +891,6 @@
 		};
 		A0C637D3239D25790041DE96 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FEDC5D3290CC4A9C1469F825 /* Pods-Koin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -933,7 +915,6 @@
 		};
 		A0C637D4239D25790041DE96 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D8A400E293D8B0FA35523BC5 /* Pods-Koin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -980,7 +961,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A072A802243F5D970041CF00 /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */ = {
+		A072A802243F5D970041CF00 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AppPear/SwiftUI-PullToRefresh";
 			requirement = {
@@ -991,9 +972,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */ = {
+		A072A803243F5D970041CF00 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A072A802243F5D970041CF00 /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */;
+			package = A072A802243F5D970041CF00 /* RemoteSwiftPackageReference */;
 			productName = SwiftUIPullToRefresh;
 		};
 /* End XCSwiftPackageProductDependency section */
