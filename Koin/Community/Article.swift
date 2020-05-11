@@ -45,10 +45,12 @@ struct Comment: Codable, Hashable, CommonComment {
     var isDeleted: Bool?
     let grantEdit: Bool?
     let grantDelete: Bool?
+    let userId: Int
     var createdAt: String?
     var updatedAt: String?
     private enum CodingKeys: String, CodingKey {
             case id = "id"
+            case userId = "user_id"
             case articleId = "article_id"
             case content = "content"
             case nickname = "nickname"
@@ -68,6 +70,7 @@ struct Comment: Codable, Hashable, CommonComment {
         self.grantDelete = nil
         self.createdAt = nil
         self.updatedAt = nil
+        self.userId = -1
     }
 }
 

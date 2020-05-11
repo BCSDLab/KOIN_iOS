@@ -104,6 +104,15 @@ class CommentRowViewModel<T: CommonComment>: Identifiable {
         return item.nickname
     }
     
+    var userId: Int {
+        if (T.self == Comment.self) {
+            let c = item as! Comment
+            return c.userId
+        } else {
+            return -1
+        }
+    }
+    
     var createAt: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"

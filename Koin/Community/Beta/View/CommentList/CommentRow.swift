@@ -120,21 +120,23 @@ struct CommentRow<T: CommonArticle, C: CommonComment>: View {
                     .fontWeight(.light)
             }.padding(.bottom, 8.5)
             HStack {
-                Button(action:{
-                    if C.self == TempComment.self {
-                        self.parentViewModel.editComment(id: self.viewModel.id,nickname: self.viewModel.nickname, content: self.viewModel.content)
-                    } else {
-                        self.parentViewModel.editComment(id: self.viewModel.id, content: self.viewModel.content)
+                if(self.user.get_userId() == viewModel.userId || C.self == TempComment.self) {
+                    Button(action:{
+                        if C.self == TempComment.self {
+                            self.parentViewModel.editComment(id: self.viewModel.id,nickname: self.viewModel.nickname, content: self.viewModel.content)
+                        } else {
+                            self.parentViewModel.editComment(id: self.viewModel.id, content: self.viewModel.content)
+                        }
+                    }) {
+                        HStack {
+                            Text("수정")
+                                .font(.system(size: 12))
+                                .fontWeight(.light)
+                                .foregroundColor(.black)
+                                .frame(width: 50, height: 30, alignment: .center)
+                        }
+                        .border(Color.gray.opacity(0.8), width: 1)
                     }
-                }) {
-                    HStack {
-                        Text("수정")
-                            .font(.system(size: 12))
-                            .fontWeight(.light)
-                            .foregroundColor(.black)
-                            .frame(width: 50, height: 30, alignment: .center)
-                    }
-                    .border(Color.gray.opacity(0.8), width: 1)
                 }
                 
                 
