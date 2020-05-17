@@ -10,7 +10,8 @@ import Foundation
 import SwiftUI
 
 struct CommunityRow<T: CommonArticle, C: CommonComment>: View{
-    @EnvironmentObject var user: UserSettings
+    //@EnvironmentObject var user: UserSettings
+    @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityViewModel<T>
     private let viewModel: CommunityRowViewModel<T>
     
@@ -19,7 +20,7 @@ struct CommunityRow<T: CommonArticle, C: CommonComment>: View{
     }
     
     var body: some View {
-        NavigationLink(destination: BetaCommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: user.get_token(), articleId: viewModel.id, userId: self.user.get_userId())).environmentObject(self.user).navigationBarTitle(viewModel.title).onDisappear {
+        NavigationLink(destination: BetaCommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: self.config.token, articleId: viewModel.id, userId: -1)).navigationBarTitle(viewModel.title).onDisappear {
             if (T.self == Article.self) {
                 self.parentViewModel.fetchCommunity()
             } else {

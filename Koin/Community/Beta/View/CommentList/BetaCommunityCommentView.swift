@@ -12,7 +12,8 @@ import SwiftUI
 // 익명 댓글 적용
 
 struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
-    @EnvironmentObject var user: UserSettings
+    //@EnvironmentObject var user: UserSettings
+    @EnvironmentObject var config: UserConfig
     @ObservedObject var viewModel: CommunityCommentViewModel<T,C>
     
     @State var showDelete: Bool = false
@@ -78,14 +79,6 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
                         .font(.system(size: 16))
                         .foregroundColor(Color("light_navy"))
                     Spacer()
-                    Button(action: {
-                        let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
-                        UIApplication.shared.open(url as URL)
-                    }){
-                        Text("신고")
-                            .font(.system(size: 12))
-                            .foregroundColor(Color("warm_grey"))
-                    }
                 }.padding(.bottom, 8)
                 HStack {
                     Text("조회\(viewModel.hit) · \(viewModel.nickname)")
@@ -102,7 +95,7 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
             }.padding(.bottom, 8)
             Divider()
             ForEach(viewModel.dataSource) { r in
-                CommentRow<T,C>(viewModel: r).environmentObject(self.viewModel).environmentObject(self.user)
+                CommentRow<T,C>(viewModel: r).environmentObject(self.viewModel)
             }
             VStack {
                 //수정모드일 때는 취소와 수정 버튼, 작성모드일 때는 등록 버튼만
@@ -126,21 +119,24 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
                             .padding(.vertical, 7.8)
                             .border(Color.gray.opacity(0.8), width: 1)
                     } else {
-                        Text(user.get_nickname())
+                        Text(self.config.nickname)
                             .font(.system(size: 14))
                             .foregroundColor(Color("black"))
                             .padding(.top, 6)
                     }
                     
+                    if(self.config.hasUser || C.self == TempComment.self) {
+                        TextField("댓글을 작성해주세요.", text: self.$viewModel.content)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color("black"))
+                            .lineLimit(.max)
+                            .multilineTextAlignment(.leading)
+                            .frame(height: 112, alignment: .top)
+                            .padding(.all, 15.5)
+                            .border(Color.gray.opacity(0.8), width: 1)
+                    }
                     
-                    TextField("댓글을 작성해주세요.", text: self.$viewModel.content)
-                        .font(.system(size: 14))
-                        .foregroundColor(Color("black"))
-                        .lineLimit(.max)
-                        .multilineTextAlignment(.leading)
-                        .frame(height: 112, alignment: .top)
-                        .padding(.all, 15.5)
-                        .border(Color.gray.opacity(0.8), width: 1)
+                    
                 }
                 
                 HStack(spacing: 17) {
@@ -181,16 +177,18 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
                             self.editActionSheet
                         }
                     } else {
-                        Button(action: {
-                            self.showSend.toggle()
-                        }) {
-                            Text("등록")
-                                .font(.system(size: 12))
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
-                                .border(Color.gray.opacity(0.8), width: 1)
-                            
-                        }.actionSheet(isPresented: $showSend) {
-                            self.sendActionSheet
+                        if(self.config.hasUser || C.self == TempComment.self) {
+                            Button(action: {
+                                self.showSend.toggle()
+                            }) {
+                                Text("등록")
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 27)
+                                    .border(Color.gray.opacity(0.8), width: 1)
+                                
+                            }.actionSheet(isPresented: $showSend) {
+                                self.sendActionSheet
+                            }
                         }
                     }
                 }.frame(height: 27)

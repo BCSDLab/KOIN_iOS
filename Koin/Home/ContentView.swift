@@ -52,7 +52,8 @@ struct ContentView: View {
     // 탭과 관련된 데이터를 가지고 있는 오브젝트
     @EnvironmentObject var tabData: ViewRouter
     // 유저와 관련된 데이터를 가지고 있는 오브젝트
-    @EnvironmentObject var settings: UserSettings
+    //@EnvironmentObject var settings: UserSettings
+    @EnvironmentObject var config: UserConfig
     
     @ObservedObject var searchViewModel: SearchViewModel = SearchViewModel(searchFetcher: SearchFetcher())
     
@@ -96,7 +97,7 @@ struct ContentView: View {
                                     }
                                 }, trailing: EmptyView()) //네비게이션바 오른쪽엔 아무것도 설정하지 않는다.
                     } else if self.tabData.currentView == "myinfo" { // 현재 뷰가 myinfo이면 MyInfoView를 보여준다.
-                        MyInfoView()
+                        BetaMyInfoView(viewModel: MyInfoViewModel(userFetcher: UserFetcher(), user: self.config.user))
                                 .navigationBarTitle("내정보", displayMode: .inline) // 네비게이션바의 제목은 내정보이며, 한줄로 표시
                                 .navigationBarItems(leading: Button(action: self.tabData.go_home) { //네비게이션바 왼쪽엔 홈으로 가는 버튼을
                                     HStack {
@@ -117,16 +118,16 @@ struct ContentView: View {
                     } else if self.tabData.currentView == "board_free" {
                         
                         //CommunityList()
-                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 1, userId: self.settings.get_userId()))
+                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 1, userId: -1))
                             //.environmentObject(self.tabData)
                             .navigationBarTitle("자유게시판", displayMode: .inline)
                             
                     } else if self.tabData.currentView == "board_recruit" {
-                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 2, userId: self.settings.get_userId()))
+                        BetaCommunityView<Article,Comment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: 2, userId:-1))
                             //.environmentObject(self.tabData)
                             .navigationBarTitle("취업게시판", displayMode: .inline)
                     } else if self.tabData.currentView == "board_secret" {
-                        BetaCommunityView<TempArticle,TempComment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: -2, userId: self.settings.get_userId()))
+                        BetaCommunityView<TempArticle,TempComment>(viewModel: CommunityViewModel(communityFetcher: CommunityFetcher(), boardId: -2, userId:-1))
                             //.environmentObject(self.tabData)
                             .navigationBarTitle("익명게시판", displayMode: .inline)
                     }  else if self.tabData.currentView == "bus" {
@@ -195,7 +196,7 @@ struct ContentView: View {
                         .tag(2)
 
                 NavigationView { // 세번째 탭으로, 네비게이션 뷰를 통해 네이게이션 바를 생성해준다.
-                    MyInfoView()
+                    BetaMyInfoView(viewModel: MyInfoViewModel(userFetcher: UserFetcher(), user: self.config.user))
                             .navigationBarTitle("내정보", displayMode: .inline) // 네비게이션바의 제목은 내정보이며, 한줄로 표시
                             .navigationBarItems(leading: Button(action: self.tabData.go_home) { //네비게이션바 왼쪽엔 홈으로 가는 버튼을
                                 HStack {

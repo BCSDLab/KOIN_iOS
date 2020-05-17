@@ -15,12 +15,12 @@ import Combine
 
 // There is no such ID : 인증 안된 상태 또는 회원가입이 안된 상태
 // invalid authenticate : 이미 가입되어있는 상태
-
+/*
 class UserSettings: ObservableObject {
     var isTest = true
     var api = ""
     // 유저 정보
-    @Published var user: UserRequest? = nil
+    @Published var user: UserData? = nil
     // 업데이트할 유저 정보
     @Published var userInfo: [String: String] = [:]
     // 로그인이 되어있는지 여부
@@ -249,14 +249,6 @@ class UserSettings: ObservableObject {
         }
     }
     
-    // portal_account : ^[a-z_0-9]{1,12}$
-    
-    /*
-     public final static String FILTER_E_N_H = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55]+$";
-     public final static String FILTER_E_H = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55]+$";
-     public final static String FILTERPASSWORD = "^(?=.[a-zA-Z])(?=.[`₩~!@#$%<>^&*()\-=+?<>:;"',.{}|[]/\\]])(?=.*[0-9]).{6,18}$";
-     public final static String FILTER_EMAIL = "^[a-z_0-9]{1,12}$";
-     */
     
     // 학번을 넣어주면 전공을 반환해주는 함수
     func school_number_to_major(school_number: String) -> String {
@@ -557,72 +549,7 @@ class UserSettings: ObservableObject {
         // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
                     
     }
-    /*
-    // 유저 정보를 업데이트하는 함수
-    func update_session(token: String, updated_password: String = "", updated_name: String = "", updated_nickname: String = "", updated_gender: Int = -1, updated_isGraduated: Bool = false, updated_studentNumber: String = "", updated_phoneNumber: String = "", changed_name: Bool = false, changed_gender: Bool = false, changed_phoneNumber: Bool = false, changed_studentNumber: Bool = false, changed_nickname: Bool = false, result: @escaping (Bool) -> Void) {
-        
-        // 빈 파라미터를 생성
-        var parameters: [String: Any] = [:]
-        // 패스워드가 비워있지 않으면, 해시 형태의 페스워드를 파라미터에 추가
-        if !updated_password.isEmpty {parameters["password"] = hashed(pw: updated_password)}
-        // 이름이 비어있지 않고 전과 똑같은 이름이 아니라면, 이름을 파라미터에 추가
-        if !updated_name.isEmpty && changed_name {parameters["name"] = updated_name}
-        // 닉네임이 비어있지 않고 전과 똑같은 닉네임이 아니라면, 닉네임을 파라미터에 추가
-        if !updated_nickname.isEmpty && changed_nickname {parameters["nickname"] = updated_nickname}
-        // 성별이 비어있지 않고(-1) 성별이 바뀌었다면, 성별을 파라미터에 추가
-        if updated_gender != -1 && changed_gender {parameters["gender"] = updated_gender}
-        // 졸업 여부가 있다면, 졸업 여부를 파라미터에 추가(현재 이용하지 않음)
-        if updated_isGraduated {parameters["is_graduated"] = updated_isGraduated}
-        // 학번이 비어있지 않고 학번이 바뀌었으면
-        if !updated_studentNumber.isEmpty && changed_studentNumber {
-            // 학번을 파라미터에 추가하고
-            parameters["student_number"] = updated_studentNumber
-            // school_number_to_major를 이용하여 학번에 전공을 추출하여 해당 값을 파라미터에 추가
-            parameters["major"] = self.school_number_to_major(school_number: updated_studentNumber)
-        }
-        // 폰 번호가 비어있지않고 폰 번호가 바뀌었다면, 폰 번호를 파라미터에 추가
-        if !updated_phoneNumber.isEmpty && changed_phoneNumber {parameters["phone_number"] = updated_phoneNumber}
-        
-        // 이제 변경된 정보는 모두 파라미터에 저장된 상태
-        
-        // Bearer Auth를 이용하기 위한 Header 추가
-        let headers: HTTPHeaders = [
-                        "Authorization": "Bearer " + token
-                    ]
-                    
-        // put 메서드로, header추가하고, 변경된 값을 parameter에 넣어 request를 보내주면
-                    AF
-                    .request("\(api)/user/me", method: .put, parameters:  parameters, encoding: JSONEncoding.prettyPrinted, headers: headers)
-                    .response { response in // 응답이 오면
-                        // 해당 응답에서 data를 꺼내
-                        guard let data = response.data else { return }
-                        do {
-                            // 디코더를 설정하고
-                            let decoder = JSONDecoder()
-                            // 데이터를 User에 맞게 가공한다.
-                            let user = try decoder.decode(User.self, from: data)
-                            
-                            // 받은 user(User)는 해당 user(UserRequest) 내부의 user(User)에 넣어준다.
-                            self.user?.user = user
-
-                            // 인코더를 설정하여
-                            let encoder = JSONEncoder()
-                            // 현재 user(UserRequest)를 인코딩할 수 있으면
-                            if let encoded = try? encoder.encode(self.user) {
-                                // UserDefaults에 "user"란 이름으로 인코딩된 user를 저장하고
-                                UserDefaults.standard.set(encoded, forKey: "user")
-                                // 데이터가 변경되었다고 알려준다.
-                                self.isChanged = true
-                                result(true)
-                            }
-                            
-                            
-                        } catch let error {
-                            result(false)
-                        }
-                    }
-    }
-    */
+    
     // 회원가입 기능을 담당하는 함수
     func register_session(email: String, password: String, result: @escaping (Bool, Error?) -> Void) {
         
@@ -680,7 +607,7 @@ class UserSettings: ObservableObject {
             // 디코더를 가져와서
             let decoder = JSONDecoder()
             // 해당 값을 UserReqeust 형태로 가공해서
-            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+            if let loaded = try? decoder.decode(UserData.self, from: data) {
                 // 토큰이 비어있지 않으면
                 if loaded.token != nil {
                     // user(UserRequest)에 가공된 값을 저장하고
@@ -826,7 +753,7 @@ class UserSettings: ObservableObject {
                     let aaa = self.convertToDictionary(data: data)
                     print(aaa)
                     do{
-                        let userRequest = try decoder.decode(UserRequest.self, from: data!)
+                        let userRequest = try decoder.decode(UserData.self, from: data!)
                         print(userRequest)
                         // 해당 class의 user값에 가공된 데이터를 넣어준다.
                         if userRequest.token != nil {
@@ -860,3 +787,4 @@ class UserSettings: ObservableObject {
             }
     }
 }
+*/

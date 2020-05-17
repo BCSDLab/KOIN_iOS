@@ -28,7 +28,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         
         // 유저 정보가 있는 오브젝트 생성 및 초기화
-        let settings = UserSettings()
+        //let settings = UserSettings()
+        let config = UserConfig()
         // 첫 시작 화면 생성
         let startView = StartView()
         // 탭 정보가 있는 오브젝트 생성 및 초기화
@@ -41,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             // 상단바 색 변경을 위해 기존 UIHostingController에서 커스터마이징한 HostingController로 변경
             // 첫 시작 화면을 startView로 하고, 유저정보와 탭 정보를 같이 보내준다.
-            window.rootViewController = UIHostingController(rootView: startView.environmentObject(settings).environmentObject(viewRouter))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(viewRouter).environmentObject(config))
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -81,23 +82,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 struct StartView: View {
-    @EnvironmentObject var settings: UserSettings
+    //@EnvironmentObject var settings: UserSettings
     @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var config: UserConfig
     
     
     var body: some View {
         // 만약 로그인이 되어있는 상태이면
-        if settings.isLogin {
+        if self.config.isLogin {
             // 메인 화면으로 보여주고
-            if (!settings.expired_token()) {
-                return AnyView(ContentView())
-            } else {
-                return AnyView(UserLoginView())
-            }
+            return AnyView(ContentView())
             
         } else { // 아니면
             // 로그인 페이지를 보여준다.
-            return AnyView(UserLoginView())
+            return AnyView(BetaLoginView().environmentObject(self.config))
         }
     }
 }

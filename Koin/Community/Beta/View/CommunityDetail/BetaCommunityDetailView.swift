@@ -18,7 +18,8 @@ import FirebaseFirestoreSwift
 struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var controller = CommunityController()
-    @EnvironmentObject var user: UserSettings
+    //@EnvironmentObject var user: UserSettings
+    @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityViewModel<T>
     @ObservedObject var viewModel: CommunityDetailViewModel<T, C>
     @State var showDelete: Bool = false
@@ -119,14 +120,17 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                         self.declarationActionSheet
                     }.alert(isPresented: $showingAlert) {
                         // 이메일을 확인해보라는 Alert을 띄운 다음
-                        Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다.\n\n추가로 게시글 차단이 필요하시다면 \"게시글 차단하기\" 버튼을 누르시면 됩니다."), primaryButton: .default(Text("돌아가기")) {
+                        self.config.hasUser ?
+                            Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."), primaryButton: .default(Text("돌아가기")) {
                             self.showingAlert = false
                             },
-                              secondaryButton:  .destructive(Text("게시글 차단하기"), action: {
-                                self.viewModel.blockArticle(userId: self.user.get_userId())
+                            secondaryButton: .destructive(Text("게시글 차단하기"), action: {
+                            self.viewModel.blockArticle(userId: -1)
+                            self.showingAlert = false
+                            self.presentationMode.wrappedValue.dismiss()
+                            })) : Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."),dismissButton: .default(Text("돌아가기")) {
                                 self.showingAlert = false
-                                self.presentationMode.wrappedValue.dismiss()
-                              }))
+                                })
                     }
                 }.padding(.bottom, 8)
                 
@@ -143,7 +147,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                 }
                 
                 HStack {
-                    NavigationLink(destination: BetaCommunityCommentView(viewModel: CommunityCommentViewModel(token: user.get_token(), article: viewModel.item, comments: viewModel.comments ?? [C()])).environmentObject(self.user).onDisappear {
+                    NavigationLink(destination: BetaCommunityCommentView(viewModel: CommunityCommentViewModel(token: self.config.token, article: viewModel.item, comments: viewModel.comments ?? [C()])).environmentObject(self.config).onDisappear {
                         if(T.self == Article.self) {
                             self.viewModel.fetchDetailCommunity()
                         } else {
@@ -196,7 +200,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                     }
                     
                     if(viewModel.granted) {
-                        NavigationLink(destination: RichEditor(is_edit: true, board_id: viewModel.boardId, title: viewModel.title, content: viewModel.content, article_id: viewModel.article, token: self.user.get_token()).onDisappear {
+                        NavigationLink(destination: RichEditor(is_edit: true, board_id: viewModel.boardId, title: viewModel.title, content: viewModel.content, article_id: viewModel.article, token: self.config.token).onDisappear {
                             self.viewModel.fetchDetailCommunity()
                             }
                         ) {
@@ -242,7 +246,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                 }
         }.onAppear {
             self.viewModel.password = ""
-            self.viewModel.loadBlockComment(userId: self.user.get_userId())
+            self.viewModel.loadBlockComment(userId: -1)
         }
 
     }

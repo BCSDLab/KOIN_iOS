@@ -19,3 +19,25 @@ func decode<T: Decodable>(_ data: Data) -> AnyPublisher<T, KoinCommunityError> {
     }
     .eraseToAnyPublisher()
 }
+
+func decode<T: Decodable>(_ data: Data) -> AnyPublisher<T, UserError> {
+    let decoder = JSONDecoder()
+    
+    return Just(data)
+        .decode(type: T.self, decoder: decoder)
+        .mapError { error in
+            return UserError.parsing(description: error.localizedDescription)
+    }
+    .eraseToAnyPublisher()
+}
+
+func errorDecode<T: Decodable>(_ data: Data) -> AnyPublisher<T, UserError> {
+    let decoder = JSONDecoder()
+    
+    return Just(data)
+        .decode(type: T.self, decoder: decoder)
+        .mapError { error in
+            return UserError.parsing(description: error.localizedDescription)
+    }
+    .eraseToAnyPublisher()
+}

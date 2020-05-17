@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-struct UserRequest: Codable {
+struct UserData: Codable {
     let token: String?
     let ttl: Int?
     var user: User?

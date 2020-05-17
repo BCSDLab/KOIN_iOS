@@ -99,5 +99,158 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Koin/User/Beta/API/UserFetcher.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "UserFetcher"
+            landmarkType = "21">
+            <Locations>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - 480488485e6bbab0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 1 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - c94b52a1b7acc8b1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 2 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - 468a1bbfefe11eb2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 3 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - c7cae4954725acb3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 4 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - 4709ade2bf66e2b4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 5 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - c44876f810bb30b5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 6 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "6">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - 458f3fd648fc46b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 7 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - c2ce082fa03094b7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 8 of koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  uuid = "2B3E55F1-F3E1-44EB-A2D2-3C5DACA06F21 - 432029a5ada19ca8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "koin.UserFetcher.PutUser(token: Swift.String, password: Swift.Optional&lt;Swift.String&gt;, name: Swift.Optional&lt;Swift.String&gt;, nickname: Swift.Optional&lt;Swift.String&gt;, gender: Swift.Optional&lt;Swift.Int&gt;, identity: Swift.Optional&lt;Swift.Int&gt;, isGraduated: Swift.Optional&lt;Swift.Bool&gt;, studentNumber: Swift.Optional&lt;Swift.String&gt;, phoneNumber: Swift.Optional&lt;Swift.String&gt;) -&gt; Combine.AnyPublisher&lt;koin.User, koin.UserError&gt;"
+                  moduleName = "koin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wxg12/Documents/workspace/Koin/Koin/User/Beta/API/UserFetcher.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "313">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

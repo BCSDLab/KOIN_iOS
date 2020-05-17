@@ -23,7 +23,7 @@ extension String {
         return self.replacingOccurrences(of: "(\\d{3})(\\d{4})(\\d{3})", with: "$1-$2-$3", options: .regularExpression, range: nil)
     }
 }
-
+/*
 struct MyInfoView: View {
     // 유저 정보가 들어있는 오브젝트
     @EnvironmentObject var settings: UserSettings
@@ -97,7 +97,7 @@ struct MyInfoView: View {
             // JSON 디코더를 불러온 다음
             let decoder = JSONDecoder()
             // UserRequest에 맞게 데이터를 가공한 다음
-            if let loaded = try? decoder.decode(UserRequest.self, from: data) {
+            if let loaded = try? decoder.decode(UserData.self, from: data) {
                 // 유저 정보가 nil이 아니면
                 if let userInfo = loaded.user {
                     // 정보가 nil일때의 기본 출력 생성
@@ -466,4 +466,4 @@ struct MyInfoView: View {
 
 
     }
-}
+}*/

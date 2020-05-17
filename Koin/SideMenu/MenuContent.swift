@@ -9,7 +9,8 @@ import PKHUD
 
 struct MenuContent: View {
     // 유저 정보가 들어있는 오브젝트
-    @EnvironmentObject var settings: UserSettings
+    //@EnvironmentObject var settings: UserSettings
+    @EnvironmentObject var config: UserConfig
     // 탭 정보가 들어있는 오브젝트
     @EnvironmentObject var viewRouter: ViewRouter
 
@@ -37,7 +38,7 @@ struct MenuContent: View {
     var body: some View {
         VStack {
             HStack {
-                Text(self.settings.get_nickname())
+                Text(self.config.nickname)
                         .font(.system(size: 15))
                         .fontWeight(.medium)
                         .foregroundColor(Color("light_navy"))

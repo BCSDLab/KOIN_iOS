@@ -14,7 +14,8 @@ import FirebaseFirestoreSwift
 struct CommentRow<T: CommonArticle, C: CommonComment>: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     private let viewModel: CommentRowViewModel<C>
-    @EnvironmentObject var user: UserSettings
+    //@EnvironmentObject var user: UserSettings
+    @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityCommentViewModel<T,C>
     @State var showDeclaration: Bool = false
     @State var showingAlert: Bool = false
@@ -101,14 +102,18 @@ struct CommentRow<T: CommonArticle, C: CommonComment>: View {
                     self.declarationActionSheet
                 }.alert(isPresented: $showingAlert) {
                     // 이메일을 확인해보라는 Alert을 띄운 다음
-                    Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다.\n\n추가로 댓글 차단이 필요하시다면 \"댓긇 차단하기\" 버튼을 누르시면 됩니다."), primaryButton: .default(Text("돌아가기")) {
+                    self.config.hasUser ?
+                        Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다.\n\n추가로 댓글 차단이 필요하시다면 \"댓긇 차단하기\" 버튼을 누르시면 됩니다."), primaryButton: .default(Text("돌아가기")) {
                         self.showingAlert = false
                         },
-                          secondaryButton:  .destructive(Text("댓글 차단하기"), action: {
-                            self.viewModel.blockComment(userId: self.user.get_userId())
+                        secondaryButton:  .destructive(Text("댓글 차단하기"), action: {
+                        self.viewModel.blockComment(userId: -1)
+                        self.showingAlert = false
+                        self.presentationMode.wrappedValue.dismiss()
+                        })):
+                        Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."), dismissButton: .default(Text("돌아가기")) {
                             self.showingAlert = false
-                            self.presentationMode.wrappedValue.dismiss()
-                          }))
+                            })
                 }
                 
                 
@@ -120,7 +125,7 @@ struct CommentRow<T: CommonArticle, C: CommonComment>: View {
                     .fontWeight(.light)
             }.padding(.bottom, 8.5)
             HStack {
-                if(self.user.get_userId() == viewModel.userId || C.self == TempComment.self) {
+                if(self.config.hasUser && self.config.id == viewModel.userId || C.self == TempComment.self) {
                     Button(action:{
                         if C.self == TempComment.self {
                             self.parentViewModel.editComment(id: self.viewModel.id,nickname: self.viewModel.nickname, content: self.viewModel.content)
