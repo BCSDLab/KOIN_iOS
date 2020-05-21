@@ -398,7 +398,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
                     let imageData = image.jpegData(compressionQuality: 0.50)
-            let url = "http://stage.api.koreatech.in/upload/image"
+            let url = CommonVariables.isStage ? "http://stage.api.koreatech.in/upload/image" : "https://api.koreatech.in/upload/image"
             
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer " + token
@@ -861,7 +861,7 @@ extension TempViewController: UIImagePickerControllerDelegate, UINavigationContr
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
                     let imageData = image.jpegData(compressionQuality: 0.50)
-            let url = "http://stage.api.koreatech.in/temp/items/image/thumbnail/upload"
+            let url = CommonVariables.isStage ? "http://stage.api.koreatech.in/temp/items/image/thumbnail/upload" : "https://api.koreatech.in/temp/items/image/thumbnail/upload"
 
             AF.upload(multipartFormData: { multiPart in
                 multiPart.append( imageData! , withName: "image", fileName: "uploaded_ios.png", mimeType: "image/png")

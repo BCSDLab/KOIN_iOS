@@ -14,10 +14,25 @@ class LoginViewModel: ObservableObject {
     @Published var password = ""
     
     var loginResult = PassthroughSubject<UserData, Never>()
+    var errorResult = PassthroughSubject<UserError, Never>()
     private var disposables = Set<AnyCancellable>()
     let userFetcher: UserFetchable
     
-    var error = UserError.parsing(description: "")
+    @Published var showingSuccessAlert = false
+    @Published var showingAlert = false
+    
+    var error: UserError? = nil
+    
+    var errorText: String {
+        switch(error) {
+            case .network(let description):
+                return description
+            case .parsing(let description):
+                return description
+            default:
+                return ""
+        }
+    }
     
     init(userFetcher: UserFetcher) {
         self.userFetcher = userFetcher
@@ -29,13 +44,17 @@ class LoginViewModel: ObservableObject {
         .sink(receiveCompletion: { value in
             print(value)
             switch value {
-                case .failure:
+                case .failure(let error):
+                    print(error)
+                    self.error = error
+                    self.showingSuccessAlert = false
+                    self.errorResult.send(error)
                     break
                 case .finished:
                 break
             }
         }, receiveValue: { user in
-            print(user.token!)
+            self.showingSuccessAlert = true
             self.loginResult.send(user)
         }).store(in: &disposables)
     }

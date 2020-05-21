@@ -13,7 +13,7 @@ import Combine
 import PKHUD
 
 class CommunityController: ObservableObject {
-    var isTest = true
+    var isTest = CommonVariables.isStage
     
     var api = ""
     

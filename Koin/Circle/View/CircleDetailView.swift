@@ -70,8 +70,14 @@ struct CircleDetailView: View {
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                     }.padding()
                 } else {
-                    Rectangle().foregroundColor(.white)
+                    VStack {
+                        Text("no image")
+                            .font(.system(size: 15))
+                            .fontWeight(.medium)
+                        .foregroundColor(Color("warm_grey"))
+                    }
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 180, maxHeight: 180, alignment: .center)
+                        .border(Color("warm_grey"))
                     .padding()
                 }
                 

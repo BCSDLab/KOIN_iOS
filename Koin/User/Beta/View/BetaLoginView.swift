@@ -63,6 +63,8 @@ struct BetaLoginView: View {
                         }
                     }.onReceive(viewModel.loginResult) { user in
                         self.config.checkUser(user: user)
+                    }.onReceive(self.viewModel.errorResult) { result in
+                        self.viewModel.showingAlert.toggle()
                     }.padding().background(Color("squash"))
                         .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
                     
@@ -121,6 +123,13 @@ struct BetaLoginView: View {
                 .offset(y: 15)
                 .padding(.bottom, CGFloat(30))
             }
+        }.alert(isPresented: self.$viewModel.showingAlert) {
+            // 이메일을 확인해보라는 Alert을 띄운 다음
+            Alert(title: Text("에러"), message: Text(self.viewModel.errorText), dismissButton: .default(Text("닫기")) {
+                // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                self.viewModel.showingAlert = false
+                })
+                
         }
         
         
