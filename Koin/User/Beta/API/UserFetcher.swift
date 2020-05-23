@@ -23,7 +23,7 @@ protocol UserFetchable {
 }
 
 class UserFetcher {
-    let isStage: Bool = CommonVariables.isStage
+    let isStage: Bool = true
     private let session: URLSession
     init(session: URLSession = .shared) {
         self.session = session
@@ -118,7 +118,7 @@ extension UserFetcher: UserFetchable {
             }
             .mapError { error in
                 print(error)
-                return error as! UserError
+                return UserError.network(description: error.localizedDescription)
             }
             .flatMap { data -> AnyPublisher<T, UserError> in
                 return decode(data)

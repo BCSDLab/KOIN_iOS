@@ -192,15 +192,14 @@ class CommunityController: ObservableObject {
     }
     
     func put_temp_article(password: String, title: String, nickname:String, content: String, result: @escaping (Bool, Error?) -> Void) {
+        print(content)
         AF
             .request("\(api)/temp/articles", method: .post, parameters: ["password": password, "title": title, "content": content, "nickname": nickname], encoding: JSONEncoding.prettyPrinted)
                 .response { response in
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -233,9 +232,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -268,9 +265,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -302,9 +297,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -333,9 +326,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -373,9 +364,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -411,9 +400,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -442,7 +429,6 @@ class CommunityController: ObservableObject {
     }
 
     func put_comment(token: String, article_id: Int, content: String, result: @escaping (Bool, Error?) -> Void) {
-        print(content)
         let headers: HTTPHeaders = [
             "Authorization": "Bearer " + token
         ]
@@ -453,9 +439,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -494,9 +478,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -534,9 +516,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -571,9 +551,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -609,16 +587,13 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
                             case 201: // 겹치지 않으면(200)
                                 let a = data!["grantEdit"]
                                 let b = a as! Int
-                                print(a)
                                     if(b == 1) {
                                         result(true, nil)
                                     } else {
@@ -646,9 +621,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough
@@ -679,9 +652,7 @@ class CommunityController: ObservableObject {
                     switch response.result {
                     case .success(let data):
                         let data = self.convertToDictionary(data: data)
-                        print(data)
                         if let status = response.response?.statusCode { // 상태 코드를 가져와서
-                            print(status)
                             switch(status){
                             case 200:
                                 fallthrough

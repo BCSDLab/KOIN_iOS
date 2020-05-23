@@ -9,8 +9,9 @@
 import Foundation
 import Combine
 
+
 class CircleFetcher {
-    let isStage: Bool = CommonVariables.isStage
+    let isStage: Bool = true
     let session: URLSession
     init(session: URLSession = .shared) {
         self.session = session

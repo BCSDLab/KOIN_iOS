@@ -107,7 +107,7 @@ struct ContentView: View {
                                 })
 
                     } else if self.tabData.currentView == "store" {
-                        BetaStoreView(viewModel: StoreViewModel())
+                        StoreView()
                                 .navigationBarTitle("주변식당", displayMode: .inline)
                                 .navigationBarItems(leading: Button(action: self.tabData.go_home) {
                                     HStack {

@@ -16,7 +16,7 @@ protocol SearchFetchable {
 }
 
 class SearchFetcher {
-    let isStage: Bool = CommonVariables.isStage
+    let isStage: Bool = true
     private let session: URLSession
     
     init(session: URLSession = .shared) {

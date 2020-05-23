@@ -33,7 +33,7 @@ struct CircleDetail: Codable {
     let id: Int
     let introduce_url: String?
     let line_description: String
-    let description: String?
+    let description: String
     let link_urls: [Link]?
     let location: String?
     let logo_url: String?

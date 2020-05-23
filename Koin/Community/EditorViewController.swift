@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftUI
-import RichEditorView
 import Alamofire
 import CryptoKit
 import CryptoTokenKit
@@ -39,6 +38,10 @@ struct TempRichEditor: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: TempViewController, context: Context) {
         
+    }
+    
+    func onDisappear(perform action: (() -> Void)? = nil) {
+        self.parentViewModel.fetchCommunity()
     }
     
     
@@ -110,7 +113,6 @@ class ViewController: UIViewController {
         return toolbar
     }()
     
-    //var errorAlert = UIAlertController(title: "에러", message: "", preferredStyle: .actionSheet)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,7 +135,6 @@ class ViewController: UIViewController {
         colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
         
 
-        
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
             toolbar.editor?.html = ""
         }
@@ -174,9 +175,7 @@ class ViewController: UIViewController {
 
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "입력", style: .default) { (action) in
-                if toolbar.editor?.hasRangeSelection == true {
-                toolbar.editor?.insertLink((alert.textFields?[0].text)!, title: "ios link")
-                }
+                toolbar.editor?.insertLink(href: (alert.textFields?[0].text)!, text: "ios Text")
             }
             alert.addAction(ok)
             alert.addAction(cancel)
@@ -238,10 +237,10 @@ class ViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         
-        options[options.count-2] = image
-        options[options.count-1] = link_action
-        options[9] = text_color_action
-        options[10] = back_color_action
+        options.append(image)
+        options.append(link_action)
+        options[6] = text_color_action
+        options[7] = back_color_action
         toolbar.options = options
          
     }
@@ -263,7 +262,7 @@ class ViewController: UIViewController {
 
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "수정", style: .default) { (action) in
-                self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                     if result {
                         self.errorText = ""
                         self.showError = false
@@ -313,7 +312,7 @@ class ViewController: UIViewController {
     
     @objc func checkAction() {
         if is_edit {
-            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+            self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
                     self.errorText = ""
                     self.showError = false
@@ -397,7 +396,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-                    let imageData = image.jpegData(compressionQuality: 0.50)
+            let imageData = image.jpegData(compressionQuality: 0.01)
             let url = CommonVariables.isStage ? "http://stage.api.koreatech.in/upload/image" : "https://api.koreatech.in/upload/image"
             
             let headers: HTTPHeaders = [
@@ -412,6 +411,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
                     print("Upload Progress: \(progress.fractionCompleted)")
                 })
                 .responseString { response in
+                    print(response)
                     if let image_url = response.value {
                         self.toolbar.editor?.insertImage("https://\(image_url)", alt: "koin")
                     }
@@ -471,9 +471,11 @@ extension ViewController: RichEditorToolbarDelegate {
 
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
-        if toolbar.editor?.hasRangeSelection == true {
-            toolbar.editor?.insertLink("http://naver.com",title: "aaaa")
-        }
+        toolbar.editor?.hasRangeSelection(handler: { r in
+            if r {
+                toolbar.editor?.insertLink(href: "http://naver.com",text: "aaaa")
+            }
+        })
     }
 }
 
@@ -527,27 +529,26 @@ class TempViewController: UIViewController {
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
             toolbar.editor?.html = ""
         }
-        tempEditorView.html = content
-        tempNicknameField.text = nickname
-
+        
         var options = toolbar.options
+        
         
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
             let alert =  UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
-
+            
             let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in
                 self.picker.sourceType = .photoLibrary
                 self.present(self.picker, animated: false, completion: nil)
             }
-
+            
             let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in
                 self.picker.sourceType = .camera
                 self.present(self.picker, animated: false, completion: nil)
             }
-
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-
+            
             alert.addAction(library)
             alert.addAction(camera)
             alert.addAction(cancel)
@@ -561,13 +562,11 @@ class TempViewController: UIViewController {
             alert.addTextField() {
                 $0.placeholder = "주소를 입력하세요."
             }
-
-
+            
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "입력", style: .default) { (action) in
-                if toolbar.editor?.hasRangeSelection == true {
-                toolbar.editor?.insertLink((alert.textFields?[0].text)!, title: "ios link")
-                }
+                toolbar.editor?.insertLink(href: (alert.textFields?[0].text)!, text: "ios Text")
             }
             alert.addAction(ok)
             alert.addAction(cancel)
@@ -587,8 +586,8 @@ class TempViewController: UIViewController {
             self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
                 .isActive = true
             self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
-            .isActive = true
-
+                .isActive = true
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
                 
@@ -604,6 +603,7 @@ class TempViewController: UIViewController {
         let back_color_action = RichEditorOptionItem(image: UIImage(named: "bg_color"), title: "backColor") { toolbar in
             
             let alert =  UIAlertController(title: "색을 선택해주세요", message: "\n\n\n\n", preferredStyle: .actionSheet)
+            
             alert.view.addSubview(self.colorPickerView)
             self.colorPickerView.translatesAutoresizingMaskIntoConstraints = false
             
@@ -614,23 +614,24 @@ class TempViewController: UIViewController {
             self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
                 .isActive = true
             self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
-            .isActive = true
-
+                .isActive = true
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
                 
                 let color = self.colorPickerView.colors[self.colorPickerView.indexOfSelectedColor!]
                 toolbar.editor?.setTextBackgroundColor(color)
             }
+            
             alert.addAction(ok)
             alert.addAction(cancel)
             self.present(alert, animated: true, completion: nil)
         }
         
-        options[options.count-2] = image
-        options[options.count-1] = link_action
-        options[9] = text_color_action
-        options[10] = back_color_action
+        options.append(image)
+        options.append(link_action)
+        options[6] = text_color_action
+        options[7] = back_color_action
         toolbar.options = options
          
         
@@ -687,7 +688,7 @@ class TempViewController: UIViewController {
 
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "수정", style: .default) { (action) in
-                self.communityData.update_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                self.communityData.update_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                     if result {
                         self.errorText = ""
                         self.showError = false
@@ -712,7 +713,9 @@ class TempViewController: UIViewController {
 
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "제출", style: .default) { (action) in
-                self.communityData.put_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+                print(self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p"))
+                print(self.tempEditorView.contentHTML)
+                self.communityData.put_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                     if result {
                         self.errorText = ""
                         self.showError = false
@@ -737,7 +740,7 @@ class TempViewController: UIViewController {
     
     @objc func checkAction() {
         if self.is_edit {
-            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+            communityData.update_temp_article(password: hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
                     self.errorText = ""
                     self.showError = false
@@ -753,7 +756,7 @@ class TempViewController: UIViewController {
                 
             }
         } else {
-            communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.html.replacingOccurrences(of: "div", with: "p")) { (result, error) in
+            communityData.put_temp_article(password: hashed(pw: self.tempPasswordField.text!), title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
                 if result {
                     self.errorText = ""
                     self.showError = false
@@ -775,7 +778,7 @@ class TempViewController: UIViewController {
 extension TempViewController: RichEditorDelegate {
 
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
-        
+        print(content)
     }
     
 }
@@ -812,9 +815,11 @@ extension TempViewController: RichEditorToolbarDelegate {
 
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
-        if toolbar.editor?.hasRangeSelection == true {
-            toolbar.editor?.insertLink("http://naver.com",title: "aaaa")
-        }
+        toolbar.editor?.hasRangeSelection(handler: { r in
+            if r {
+                toolbar.editor?.insertLink(href: "http://naver.com",text: "ios link")
+            }
+        })
     }
 }
     

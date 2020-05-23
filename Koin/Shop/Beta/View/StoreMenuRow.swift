@@ -9,45 +9,13 @@
 import SwiftUI
 
 struct StoreMenuRow: View {
-    
-    let viewModel: StoreMenuRowViewModel
-    
-    init(viewModel: StoreMenuRowViewModel) {
-        self.viewModel = viewModel
-    }
-    
     var body: some View {
-        return HStack {
-            Text(self.viewModel.name)
-                .font(.system(size: 15))
-                .fontWeight(.medium)
-                .foregroundColor(Color("black"))
-            Spacer()
-            VStack {
-                ForEach(self.viewModel.priceType, id: \.self) { price in
-                    HStack {
-                        if (price.size != "기본") {
-                            Text(price.size)
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
-                                .foregroundColor(Color("black"))
-                                .frame(width: 40,alignment: .leading)
-                        }
-                        Text("\(price.price)원")
-                            .font(.system(size: 15))
-                            .fontWeight(.medium)
-                            .foregroundColor(Color("light_navy"))
-                            .frame(width: 70, alignment: .trailing)
-                    }.frame(width: 110, alignment: .trailing)
-                    
-                }
-            }
-        }.padding(.horizontal,16)
-            .padding(.vertical, 24)
-            .background(Color.white)
-            .frame(maxWidth: .infinity)
-        .border(Color("store_menu_border"))
-            
+        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    }
+}
 
+struct StoreMenuRow_Previews: PreviewProvider {
+    static var previews: some View {
+        StoreMenuRow()
     }
 }

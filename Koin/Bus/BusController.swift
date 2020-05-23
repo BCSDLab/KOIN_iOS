@@ -12,7 +12,7 @@ import Combine
 import Alamofire
 
 class BusController {
-    var isTest = CommonVariables.isStage
+    var isTest = false
     
     var api = ""
     
