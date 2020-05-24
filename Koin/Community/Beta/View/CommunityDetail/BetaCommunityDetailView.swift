@@ -18,6 +18,7 @@ import FirebaseFirestoreSwift
 struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var controller = CommunityController()
+    //@ObservedObject var webViewStore = WebViewStore()
     //@EnvironmentObject var user: UserSettings
     @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityViewModel<T>
@@ -26,9 +27,10 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     @State var showDeclaration: Bool = false
     @State var showingBlock: Bool = false
     @State var showingAlert: Bool = false
-    @State var grantValue : Bool = false
-    var htmlView: HTMLView = HTMLView()
-    
+    @State var grantValue: Bool = false
+    //var htmlView: HTMLView = HTMLView()
+
+
     var deleteActionSheet: ActionSheet {
         ActionSheet(title: Text("삭제하시겠습니까?"), buttons: [
             .destructive(Text("삭제"), action: {
@@ -98,7 +100,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     }
 
     var body: some View {
-        self.htmlView.loadHTML(self.viewModel.content)
+        //self.htmlView.loadHTML(self.viewModel.content)
         return VStack {
             VStack(alignment: .leading) {
                 HStack {
@@ -231,11 +233,10 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                 
             }
             Divider()
-            VStack {
-               htmlView
-            }
+            //WebView(webView: webViewStore.webView)
             
             //viewModel.html
+            WebView(htmlString: self.$viewModel.content, baseURL: .constant(nil))
             
             
             

@@ -16,21 +16,37 @@ import CryptoTokenKit
 
 class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableObject, Identifiable {
     var viewDismissalModePublisher = PassthroughSubject<Bool, Never>()
-    
-    func hashed(pw: String) -> String{
+
+    func hashed(pw: String) -> String {
         // 비밀번호를 먼전 Data로 변환하여
         let inputData = Data(pw.utf8)
         // SHA256을 이용해 해시 처리한 다음
         let hashed = SHA256.hash(data: inputData)
         // 해시 당 16진수 2자리로 설정하여 합친다.
-        let hashPassword = hashed.compactMap {String(format: "%02x", $0)}.joined().trimmingCharacters(in: CharacterSet.newlines)
+        let hashPassword = hashed.compactMap {
+            String(format: "%02x", $0)
+        }.joined().trimmingCharacters(in: CharacterSet.newlines)
         return hashPassword
     }
-    
+
+    let headerString = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0'></header>"
+    let styleString = """
+                          <style type='text/css'>
+                              img {
+                                  max-width: 100%;
+                              }
+                              body {
+                                  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                              }
+                              
+                              </style>
+                      <body>
+                      """
+
     @Published var item: T = T()
     @Published var password: String = ""
     private let communityFetcher: CommunityFetchable
-    
+
     private var disposables = Set<AnyCancellable>()
     var article: Int
     var token: String
@@ -98,10 +114,8 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
     var createdAt: String {
         return dateToString(string_date: item.createdAt)
     }
-    
-    var content: String {
-        return item.content ?? ""
-    }
+
+    @Published var content: String = ""
     
     var comments: [C]? {
         return item.comments as? [C]
@@ -132,14 +146,15 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
             var filteredComments: [Comment] = []
             for c in item.comments! {
                 print(c)
-                if(!self.block.contains(c.id)) {
+                if (!self.block.contains(c.id)) {
                     filteredComments.append(c)
                 }
             }
             item.comments = filteredComments
             self.item = item as! T
-            self.htmlView.loadHTML(community.content ?? "")
-    })
+            self.content = self.headerString + self.styleString + (item.content ?? "") + "</body>"
+            //self.htmlView.loadHTML(community.content ?? "")
+        })
         .store(in: &disposables)
     }
     
@@ -163,14 +178,15 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
                     //self.item = community as! T
                     var filteredComments: [TempComment] = []
                     for c in item.comments! {
-                        if(!self.block.contains(c.id)) {
+                        if (!self.block.contains(c.id)) {
                             filteredComments.append(c)
                         }
                     }
                     item.comments = filteredComments
                     self.item = item as! T
-                    self.htmlView.loadHTML(community.content ?? "")
-            })
+                    self.content = self.headerString + self.styleString + (item.content ?? "") + "</body>"
+                    //self.htmlView.loadHTML(community.content ?? "")
+                })
             .store(in: &disposables)
     }
     
