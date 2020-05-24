@@ -39,7 +39,7 @@ protocol CommonCommunityDetailViewModel {
     
     var comments: [C] { get set }
     
-    var html: HTMLView { get set }
+    //var html: HTMLView { get set }
     
     
     func declarationArticle(type: String)

@@ -53,7 +53,7 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
     var granted: Bool = false
     @Published var block: [Int] = []
     
-    let htmlView = HTMLView()
+    //let htmlView = HTMLView()
     @Published var passwordGranted: Bool = false
     
     init(communityFetcher: CommunityFetcher,token: String, articleId: Int, userId: Int) {
@@ -120,11 +120,11 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
     var comments: [C]? {
         return item.comments as? [C]
     }
-    
+    /*
     var html: HTMLView {
         htmlView.loadHTML(content)
         return htmlView
-    }
+    }*/
     
     func fetchDetailCommunity() {
         communityFetcher.Community(article: article)
