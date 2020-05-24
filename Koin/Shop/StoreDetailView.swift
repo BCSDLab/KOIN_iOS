@@ -9,21 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 import PKHUD
 
-extension String{
-    func getArrayAfterRegex(regex: String) -> [String] {
-        do {
-            let regex = try NSRegularExpression(pattern: regex)
-            let results = regex.matches(in: self,
-                                        range: NSRange(self.startIndex..., in: self))
-            return results.map {
-                String(self[Range($0.range, in: self)!])
-            }
-        } catch let error {
-            print("invalid regex: \(error.localizedDescription)")
-            return []
-        }
-    }
-}
+
 
 struct ExpandImageView: View {
     @EnvironmentObject var ImageData: StoreController
@@ -75,7 +61,7 @@ struct ExpandImageView: View {
         }
     }
 }
-
+/*
 struct StoreDetailView: View {
     @ObservedObject var controller: StoreController = StoreController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -364,3 +350,4 @@ struct StoreDetailView_Previews: PreviewProvider {
         StoreDetailView(store_id: 3)
     }
 }
+*/

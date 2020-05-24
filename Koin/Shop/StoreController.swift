@@ -9,7 +9,7 @@ import Combine
 import PKHUD
 
 class StoreController: ObservableObject {
-    var isTest = false
+    var isTest = CommonVariables.isStage
     var api = ""
     
     @Published var stores: Shops?

@@ -8,7 +8,7 @@
 import SwiftUI
 import PKHUD
 
-
+/*
 struct StoreView: View {
     @ObservedObject var stores: StoreController = StoreController()
     @State var category: String = ""
@@ -388,3 +388,4 @@ struct StoreView_Previews: PreviewProvider {
         StoreView()
     }
 }
+*/
