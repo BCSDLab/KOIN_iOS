@@ -58,12 +58,14 @@ struct BetaLoginView: View {
                         HStack {
                             Spacer()
                             Text("로그인")
-                                .foregroundColor(Color.white)
+                                    .foregroundColor(Color.white)
                             Spacer()
                         }
                     }.onReceive(viewModel.loginResult) { user in
-                        self.config.checkUser(user: user)
-                    }.padding().background(Color("squash"))
+                                self.config.checkUser(user: user)
+                            }.onReceive(self.viewModel.errorResult) { result in
+                                self.viewModel.showingAlert.toggle()
+                            }.padding().background(Color("squash"))
                         .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
                     
                     
@@ -112,15 +114,22 @@ struct BetaLoginView: View {
                         .font(.caption)
                         .fontWeight(.light)
                     Text("BCSD Lab")
-                        .font(.caption)
-                        .fontWeight(.medium)
+                            .font(.caption)
+                            .fontWeight(.medium)
                     Text(" All rights reserved.")
-                        .font(.caption)
-                        .fontWeight(.light)
+                            .font(.caption)
+                            .fontWeight(.light)
                 }
-                .offset(y: 15)
-                .padding(.bottom, CGFloat(30))
+                        .offset(y: 15)
+                        .padding(.bottom, CGFloat(30))
             }
+        }.alert(isPresented: self.$viewModel.showingAlert) {
+            // 이메일을 확인해보라는 Alert을 띄운 다음
+            Alert(title: Text("에러"), message: Text(self.viewModel.errorText), dismissButton: .default(Text("닫기")) {
+                // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                self.viewModel.showingAlert = false
+            })
+
         }
         
         
