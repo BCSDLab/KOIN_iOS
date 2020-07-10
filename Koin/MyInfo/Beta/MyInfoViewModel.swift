@@ -14,14 +14,14 @@ class MyInfoViewModel: ObservableObject {
     @Published var editNickname: String = ""
     @Published var editPhoneNumber: String = ""
     @Published var editStudentNumber: String = ""
-    @Published var gender: Int
+    @Published var gender: Int = -1
     
     @Published var showNicknameModal: Bool = false
     @Published var showPhoneModal: Bool = false
     @Published var showNameModal: Bool = false
     @Published var showStudentNumberModal: Bool = false
     
-    var user: UserData?
+    var user: UserData? = nil
     
     //@Published var showingSuccessAlert = false
     @Published var showingErrorAlert = false
@@ -47,8 +47,11 @@ class MyInfoViewModel: ObservableObject {
         }
     }
     
-    init(userFetcher: UserFetcher, user: UserData?) {
+    init(userFetcher: UserFetcher) {
         self.userFetcher = userFetcher
+    }
+    
+    func loadUser(user: UserData?) {
         self.user = user
         self.gender = user?.user?.gender ?? -1
     }
