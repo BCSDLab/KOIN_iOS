@@ -11,6 +11,7 @@ import SwiftUI
 
 class CommunityRowViewModel<T: CommonArticle>: Identifiable{
     private var item: T
+    
     func dateToString(string_date: String) -> String {
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"

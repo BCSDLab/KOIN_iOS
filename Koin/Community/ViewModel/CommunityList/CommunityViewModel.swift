@@ -22,6 +22,8 @@ public extension Array where Element: Hashable {
 class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
     @Published var dataSource: [CommunityRowViewModel<T>] = []
     
+    var result = PassthroughSubject<[CommunityRowViewModel<T>], Never>()
+    
     private let communityFetcher: CommunityFetchable
     
     private var disposables = Set<AnyCancellable>()
@@ -51,10 +53,8 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
             if let document = document, document.exists {
                 let data = document.data()?["Article"] as? [Int] ?? []
                 self.block = data
-                self.fetchCommunity()
             } else {
                 print("not exist")
-                self.fetchCommunity()
             }
         }
     }
@@ -65,17 +65,13 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
             if let document = document, document.exists {
                 let data = document.data()?["TempArticle"] as? [Int] ?? []
                 self.block = data
-                self.fetchTempCommunity()
             } else {
                 print("not exist")
-                self.fetchTempCommunity()
             }
         }
     }
     
     func fetchCommunity(){
-        dataSource = []
-        progress = true
             self.communityFetcher.CommunityList(boardId: self.boardId, page: 1)
                 .map { response in
                     response.articles.map {
@@ -101,14 +97,12 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
                             self.dataSource.append(c)
                         }
                     }
-                    self.progress = false
+                    self.result.send(self.dataSource)
             })
                 .store(in: &self.disposables)
     }
     
     func fetchTempCommunity() {
-        dataSource = []
-        progress = true
         communityFetcher.AnonymousCommunityList(page: 1)
             .map { response in
                 response.articles.map {
@@ -134,14 +128,13 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
                         self.dataSource.append(c)
                     }
                 }
+                self.result.send(self.dataSource)
                 //self.dataSource = community
-                self.progress = false
         })
             .store(in: &disposables)
     }
     
     func reloadCommunity() {
-        progress = true
         page += 1
         communityFetcher.CommunityList(boardId: boardId, page: page)
             .map { response in
@@ -168,14 +161,13 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
                         self.dataSource.append(c)
                     }
                 }
-                self.progress = false
+                self.result.send(self.dataSource)
                 //self.dataSource += community
         })
             .store(in: &disposables)
     }
     
     func reloadTempCommunity() {
-        progress = true
         page += 1
         communityFetcher.AnonymousCommunityList(page: page)
             .map { response in
@@ -202,7 +194,7 @@ class CommunityViewModel<T: CommonArticle>: ObservableObject, Identifiable {
                         self.dataSource.append(c)
                     }
                 }
-                self.progress = false
+                self.result.send(self.dataSource)
                 //self.dataSource += community
         })
             .store(in: &disposables)

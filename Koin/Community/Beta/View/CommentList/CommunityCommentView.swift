@@ -11,7 +11,7 @@ import SwiftUI
 
 // 익명 댓글 적용
 
-struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
+struct CommunityCommentView<T:CommonArticle, C: CommonComment>: View {
     //@EnvironmentObject var user: UserSettings
     @EnvironmentObject var config: UserConfig
     @ObservedObject var viewModel: CommunityCommentViewModel<T,C>
@@ -118,7 +118,7 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
                             .padding(.horizontal, 15.5)
                             .padding(.vertical, 7.8)
                             .border(Color.gray.opacity(0.8), width: 1)
-                    } else {
+                    } else if (self.config.hasUser) {
                         Text(self.config.nickname)
                             .font(.system(size: 14))
                             .foregroundColor(Color("black"))
@@ -195,6 +195,6 @@ struct BetaCommunityCommentView<T:CommonArticle, C: CommonComment>: View {
                     .padding(.top, 9)
             }
         }.padding()
-            
+        
     }
 }

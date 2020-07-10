@@ -15,11 +15,9 @@ import FirebaseFirestoreSwift
 
 // TODO: 수정 완료 시 수정된 게시글 불러오게 하기
 
-struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
+struct CommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var controller = CommunityController()
-    //@ObservedObject var webViewStore = WebViewStore()
-    //@EnvironmentObject var user: UserSettings
     @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityViewModel<T>
     @ObservedObject var viewModel: CommunityDetailViewModel<T, C>
@@ -28,9 +26,8 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     @State var showingBlock: Bool = false
     @State var showingAlert: Bool = false
     @State var grantValue: Bool = false
-    //var htmlView: HTMLView = HTMLView()
-
-
+    
+    
     var deleteActionSheet: ActionSheet {
         ActionSheet(title: Text("삭제하시겠습니까?"), buttons: [
             .destructive(Text("삭제"), action: {
@@ -98,7 +95,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
     init(viewModel: CommunityDetailViewModel<T, C>) {
         self.viewModel = viewModel
     }
-
+    
     var body: some View {
         //self.htmlView.loadHTML(self.viewModel.content)
         return VStack {
@@ -114,7 +111,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                     Spacer()
                     Button(action: {
                         self.showDeclaration.toggle()
-                        }){
+                    }){
                         Text("신고")
                             .font(.system(size: 12))
                             .foregroundColor(Color("warm_grey"))
@@ -124,15 +121,15 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                         // 이메일을 확인해보라는 Alert을 띄운 다음
                         self.config.hasUser ?
                             Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."), primaryButton: .default(Text("돌아가기")) {
-                            self.showingAlert = false
-                            },
-                            secondaryButton: .destructive(Text("게시글 차단하기"), action: {
-                            self.viewModel.blockArticle(userId: -1)
-                            self.showingAlert = false
-                            self.presentationMode.wrappedValue.dismiss()
-                            })) : Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."),dismissButton: .default(Text("돌아가기")) {
                                 self.showingAlert = false
-                                })
+                                },
+                                  secondaryButton: .destructive(Text("게시글 차단하기"), action: {
+                                    self.viewModel.blockArticle(userId: -1)
+                                    self.showingAlert = false
+                                    self.presentationMode.wrappedValue.dismiss()
+                                  })) : Alert(title: Text("신고해 주셔서 감사합니다."), message: Text("회원님의 의견은 코인 커뮤니티를 안전하게 유지하기 위해 사용하겠습니다."),dismissButton: .default(Text("돌아가기")) {
+                                    self.showingAlert = false
+                                    })
                     }
                 }.padding(.bottom, 8)
                 
@@ -149,7 +146,7 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                 }
                 
                 HStack {
-                    NavigationLink(destination: BetaCommunityCommentView(viewModel: CommunityCommentViewModel(token: self.config.token, article: viewModel.item, comments: viewModel.comments ?? [C()])).environmentObject(self.config).onDisappear {
+                    NavigationLink(destination: CommunityCommentView(viewModel: CommunityCommentViewModel(token: self.config.token, article: viewModel.item, comments: viewModel.comments ?? [C()])).environmentObject(self.config).onDisappear {
                         if(T.self == Article.self) {
                             self.viewModel.fetchDetailCommunity()
                         } else {
@@ -233,23 +230,26 @@ struct BetaCommunityDetailView<T: CommonArticle, C: CommonComment>: View {
                 
             }
             Divider()
-            //WebView(webView: webViewStore.webView)
-            
-            //viewModel.html
             WebView(htmlString: self.$viewModel.content, baseURL: .constant(nil))
-            
-            
-            
+                .navigationBarTitle(self.viewModel.title)
         }.padding()
             .onReceive(viewModel.viewDismissalModePublisher) { shouldDismiss in
                 if shouldDismiss {
                     self.presentationMode.wrappedValue.dismiss()
                 }
         }.onAppear {
+            print("detail appear")
             self.viewModel.password = ""
             self.viewModel.loadBlockComment(userId: -1)
+            if (T.self == Article.self) {
+                self.viewModel.fetchDetailCommunity()
+            } else {
+                self.viewModel.fetchAnonymousDetailCommunity()
+            }
+        }.onDisappear {
+            print("detail disappear")
         }
-
+        
     }
 }
 

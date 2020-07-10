@@ -65,6 +65,20 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
         }
     }
     
+    deinit {
+        self.token = ""
+        self.article = -1
+        self.item = T()
+        self.content = ""
+    }
+    
+    func clear() {
+            self.token = ""
+            self.article = -1
+            self.item = T()
+            self.content = ""
+    }
+    
     private var shouldDismissView = false {
         didSet {
             viewDismissalModePublisher.send(shouldDismissView)
@@ -213,19 +227,20 @@ class CommunityDetailViewModel<T: CommonArticle, C: CommonComment>: ObservableOb
                     data = document.data()?["Comment"] as? [Int] ?? []
                     print(data)
                     self.block = data
-                    self.fetchDetailCommunity()
+                    //self.fetchDetailCommunity()
                 } else {
                    data = document.data()?["TempComment"] as? [Int] ?? []
                     self.block = data
-                    self.fetchAnonymousDetailCommunity()
+                    //self.fetchAnonymousDetailCommunity()
                 }
             } else {
                 print("not exist")
+                /*
                 if (T.self == Article.self) {
                     self.fetchDetailCommunity()
                 } else {
                     self.fetchAnonymousDetailCommunity()
-                }
+                }*/
             }
         }
     }

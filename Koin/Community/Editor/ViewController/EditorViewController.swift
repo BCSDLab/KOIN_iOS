@@ -72,11 +72,11 @@ struct RichEditor: UIViewControllerRepresentable {
             controller.article_id = article_id
         }
         return controller
-
+        
     }
     
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-
+        
     }
     
     func onDisappear(perform action: (() -> Void)? = nil) {
@@ -125,7 +125,7 @@ class ViewController: UIViewController {
         editorView.placeholder = "내용을 입력해주세요."
         editorView.html = content
         editorView.setEditorFontColor(UIColor(named: "black")!)
-
+        
         toolbar.delegate = self
         toolbar.editor = editorView
         
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
         colorPickerView.layoutDelegate = self
         colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
         
-
+        
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
             toolbar.editor?.html = ""
         }
@@ -145,19 +145,19 @@ class ViewController: UIViewController {
         let image = RichEditorOptionItem(image: UIImage(named: "insert_image"), title: "image") { toolbar in
             
             let alert =  UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
-
+            
             let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in
                 self.picker.sourceType = .photoLibrary
                 self.present(self.picker, animated: false, completion: nil)
             }
-
+            
             let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in
                 self.picker.sourceType = .camera
                 self.present(self.picker, animated: false, completion: nil)
             }
-
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-
+            
             alert.addAction(library)
             alert.addAction(camera)
             alert.addAction(cancel)
@@ -171,8 +171,8 @@ class ViewController: UIViewController {
             alert.addTextField() {
                 $0.placeholder = "주소를 입력하세요."
             }
-
-
+            
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "입력", style: .default) { (action) in
                 toolbar.editor?.insertLink(href: (alert.textFields?[0].text)!, text: "ios Text")
@@ -195,8 +195,8 @@ class ViewController: UIViewController {
             self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
                 .isActive = true
             self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
-            .isActive = true
-
+                .isActive = true
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
                 
@@ -223,8 +223,8 @@ class ViewController: UIViewController {
             self.colorPickerView.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 40)
                 .isActive = true
             self.colorPickerView.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 16)
-            .isActive = true
-
+                .isActive = true
+            
             let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "추가", style: .default) { (action) in
                 
@@ -242,7 +242,7 @@ class ViewController: UIViewController {
         options[6] = text_color_action
         options[7] = back_color_action
         toolbar.options = options
-         
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -259,7 +259,7 @@ class ViewController: UIViewController {
     @objc func sendAction() {
         if self.is_edit {
             let alert =  UIAlertController(title: "수정하기", message: "수정하시겠습니까?", preferredStyle: .actionSheet)
-
+            
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "수정", style: .default) { (action) in
                 self.communityData.update_article(token: self.token, article_id: self.article_id, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
@@ -284,7 +284,7 @@ class ViewController: UIViewController {
             
         } else {
             let alert =  UIAlertController(title: "제출하기", message: "제출하시겠습니까?", preferredStyle: .actionSheet)
-
+            
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "제출", style: .default) { (action) in
                 self.communityData.put_article(token: self.token, board_id: self.board_id, title: self.titleField.text!, content: self.editorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
@@ -355,40 +355,40 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: ColorPickerViewDelegate {
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
-    // A color has been selected
-  }
-
-  // This is an optional method
-  func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
-    // A color has been deselected
-  }
-
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
+        // A color has been selected
+    }
+    
+    // This is an optional method
+    func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
+        // A color has been deselected
+    }
+    
 }
 
 extension ViewController: ColorPickerViewDelegateFlowLayout {
-
-  // ------------------------------------------------------------------
-  // All these methods are optionals, your are not to implement them 🖖🏻
-  // ------------------------------------------------------------------
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    // The size for each cell
-    // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
-    return CGSize(width: 48, height: 48)
-  }
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    // Space between cells
-    return 22
-  }
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-    // Space between rows
-    return 0
-  }
-
+    
+    // ------------------------------------------------------------------
+    // All these methods are optionals, your are not to implement them 🖖🏻
+    // ------------------------------------------------------------------
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // The size for each cell
+        // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
+        return CGSize(width: 48, height: 48)
+    }
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        // Space between cells
+        return 22
+    }
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        // Space between rows
+        return 0
+    }
+    
 }
 
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -402,7 +402,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
             let headers: HTTPHeaders = [
                 "Authorization": "Bearer " + token
             ]
-
+            
             AF.upload(multipartFormData: { multiPart in
                 multiPart.append( imageData! , withName: "image", fileName: "uploaded_ios.png", mimeType: "image/png")
             }, to: url, headers: headers)
@@ -424,7 +424,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
 }
 
 extension ViewController: RichEditorDelegate {
-
+    
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
         //self.editorView = editor
     }
@@ -440,7 +440,7 @@ extension ViewController: UITextFieldDelegate {
 }
 
 extension ViewController: RichEditorToolbarDelegate {
-
+    
     fileprivate func randomColor() -> UIColor {
         let colors: [UIColor] = [
             .red,
@@ -454,21 +454,21 @@ extension ViewController: RichEditorToolbarDelegate {
         let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
         return color
     }
-
+    
     func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
         let color = randomColor()
         toolbar.editor?.setTextColor(color)
     }
-
+    
     func richEditorToolbarChangeBackgroundColor(_ toolbar: RichEditorToolbar) {
         let color = randomColor()
         toolbar.editor?.setTextBackgroundColor(color)
     }
-
+    
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
         toolbar.editor?.insertImage("https://stage-static.koreatech.in/upload/2020/02/20/a929792f-5fbd-4195-bd09-cbdd649dd221-1582206890825.jpg", alt: "Gravatar")
     }
-
+    
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
         toolbar.editor?.hasRangeSelection(handler: { r in
@@ -515,7 +515,7 @@ class TempViewController: UIViewController {
         tempEditorView.delegate = self
         tempEditorView.inputAccessoryView = toolbar
         tempEditorView.placeholder = "내용을 입력해주세요."
-
+        
         toolbar.delegate = self
         toolbar.editor = tempEditorView
         
@@ -524,7 +524,7 @@ class TempViewController: UIViewController {
         colorPickerView.delegate = self
         colorPickerView.layoutDelegate = self
         colorPickerView.colors = [UIColor.black, UIColor.white, UIColor(red: 1, green: 0.24, blue: 0, alpha: 1), UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), UIColor(red: 1, green: 0.77, blue: 0, alpha: 1), UIColor(red: 0.75, green: 0, blue: 1, alpha: 1), UIColor(red: 0, green: 0.82, blue: 0.18, alpha: 1)]
-
+        
         // We will create a custom action that clears all the input text when it is pressed
         let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
             toolbar.editor?.html = ""
@@ -633,7 +633,7 @@ class TempViewController: UIViewController {
         options[6] = text_color_action
         options[7] = back_color_action
         toolbar.options = options
-         
+        
         
     }
     
@@ -658,34 +658,34 @@ class TempViewController: UIViewController {
         self.parent?.navigationItem.rightBarButtonItem = send
     }
     /*
-    override func viewWillDisappear(_ animated: Bool) {
-        let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
-
-        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
-        let ok = UIAlertAction(title: "취소", style: .default) { (action) in
-            self.presentationMode?.wrappedValue.dismiss()
-        }
-        alert.addAction(ok)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
-
-        let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
-        let ok = UIAlertAction(title: "취소", style: .default) { (action) in
-            self.presentationMode?.wrappedValue.dismiss()
-        }
-        alert.addAction(ok)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
-    }
-    */
+     override func viewWillDisappear(_ animated: Bool) {
+     let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
+     
+     let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+     let ok = UIAlertAction(title: "취소", style: .default) { (action) in
+     self.presentationMode?.wrappedValue.dismiss()
+     }
+     alert.addAction(ok)
+     alert.addAction(cancel)
+     self.present(alert, animated: true, completion: nil)
+     }
+     
+     override func viewDidDisappear(_ animated: Bool) {
+     let alert =  UIAlertController(title: "뒤로 가기", message: "작성을 취소하시겠습니까?", preferredStyle: .actionSheet)
+     
+     let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
+     let ok = UIAlertAction(title: "취소", style: .default) { (action) in
+     self.presentationMode?.wrappedValue.dismiss()
+     }
+     alert.addAction(ok)
+     alert.addAction(cancel)
+     self.present(alert, animated: true, completion: nil)
+     }
+     */
     @objc func sendAction() {
         if self.is_edit {
             let alert =  UIAlertController(title: "수정하기", message: "수정하시겠습니까?", preferredStyle: .actionSheet)
-
+            
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "수정", style: .default) { (action) in
                 self.communityData.update_temp_article(password: self.hashed(pw: self.tempPasswordField.text!), article_id: self.article_id, title: self.tempTitleField.text!, nickname: self.tempNicknameField.text!, content: self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p")) { (result, error) in
@@ -710,7 +710,7 @@ class TempViewController: UIViewController {
             
         } else {
             let alert =  UIAlertController(title: "제출하기", message: "제출하시겠습니까?", preferredStyle: .actionSheet)
-
+            
             let cancel = UIAlertAction(title: "닫기", style: .cancel, handler: nil)
             let ok = UIAlertAction(title: "제출", style: .default) { (action) in
                 print(self.tempEditorView.contentHTML.replacingOccurrences(of: "div", with: "p"))
@@ -776,7 +776,7 @@ class TempViewController: UIViewController {
 }
 
 extension TempViewController: RichEditorDelegate {
-
+    
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
         print(content)
     }
@@ -784,7 +784,7 @@ extension TempViewController: RichEditorDelegate {
 }
 
 extension TempViewController: RichEditorToolbarDelegate {
-
+    
     fileprivate func randomColor() -> UIColor {
         let colors: [UIColor] = [
             .red,
@@ -798,21 +798,21 @@ extension TempViewController: RichEditorToolbarDelegate {
         let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
         return color
     }
-
+    
     func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
         let color = randomColor()
         toolbar.editor?.setTextColor(color)
     }
-
+    
     func richEditorToolbarChangeBackgroundColor(_ toolbar: RichEditorToolbar) {
         let color = randomColor()
         toolbar.editor?.setTextBackgroundColor(color)
     }
-
+    
     func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
         toolbar.editor?.insertImage("https://stage-static.koreatech.in/upload/2020/02/20/a929792f-5fbd-4195-bd09-cbdd649dd221-1582206890825.jpg", alt: "Gravatar")
     }
-
+    
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
         toolbar.editor?.hasRangeSelection(handler: { r in
@@ -822,42 +822,42 @@ extension TempViewController: RichEditorToolbarDelegate {
         })
     }
 }
+
+extension TempViewController: ColorPickerViewDelegate {
     
-    extension TempViewController: ColorPickerViewDelegate {
-
-      func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
+    func colorPickerView(_ colorPickerView: ColorPickerView, didSelectItemAt indexPath: IndexPath) {
         // A color has been selected
-      }
-
-      // This is an optional method
-      func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
-        // A color has been deselected
-      }
-
     }
+    
+    // This is an optional method
+    func colorPickerView(_ colorPickerView: ColorPickerView, didDeselectItemAt indexPath: IndexPath) {
+        // A color has been deselected
+    }
+    
+}
 
 extension TempViewController: ColorPickerViewDelegateFlowLayout {
-
-  // ------------------------------------------------------------------
-  // All these methods are optionals, your are not to implement them 🖖🏻
-  // ------------------------------------------------------------------
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    // The size for each cell
-    // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
-    return CGSize(width: 48, height: 48)
-  }
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    // Space between cells
-    return 22
-  }
-
-  func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-    // Space between rows
-    return 0
-  }
-
+    
+    // ------------------------------------------------------------------
+    // All these methods are optionals, your are not to implement them 🖖🏻
+    // ------------------------------------------------------------------
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // The size for each cell
+        // 👉🏻 WIDTH AND HEIGHT MUST BE EQUALS!
+        return CGSize(width: 48, height: 48)
+    }
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        // Space between cells
+        return 22
+    }
+    
+    func colorPickerView(_ colorPickerView: ColorPickerView, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        // Space between rows
+        return 0
+    }
+    
 }
 
 extension TempViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -865,9 +865,9 @@ extension TempViewController: UIImagePickerControllerDelegate, UINavigationContr
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-                    let imageData = image.jpegData(compressionQuality: 0.50)
+            let imageData = image.jpegData(compressionQuality: 0.50)
             let url = CommonVariables.isStage ? "http://stage.api.koreatech.in/temp/items/image/thumbnail/upload" : "https://api.koreatech.in/temp/items/image/thumbnail/upload"
-
+            
             AF.upload(multipartFormData: { multiPart in
                 multiPart.append( imageData! , withName: "image", fileName: "uploaded_ios.png", mimeType: "image/png")
             }, to: url)
@@ -877,13 +877,13 @@ extension TempViewController: UIImagePickerControllerDelegate, UINavigationContr
                 })
                 .responseJSON { response in
                     switch response.result {
-                    case .success(let value as [String: Any]):
-                        let image_url = value["url"]
-                        self.toolbar.editor?.insertImage(image_url as! String, alt: "koin")
-                    case .failure(let error):
-                        print(error)
-                    default:
-                        fatalError("received non-dictionary JSON response")
+                        case .success(let value as [String: Any]):
+                            let image_url = value["url"]
+                            self.toolbar.editor?.insertImage(image_url as! String, alt: "koin")
+                        case .failure(let error):
+                            print(error)
+                        default:
+                            fatalError("received non-dictionary JSON response")
                     }
             }
             

@@ -125,11 +125,11 @@ extension CommunityFetcher: CommunityFetchable{
         return session.dataTaskPublisher(for: URLRequest(url: url))
             .mapError { error in
                 return KoinCommunityError.network(description: error.localizedDescription)
-            }
-            .flatMap(maxPublishers: .max(1)) { pair in
-                decode(pair.data)
-            }
-            .eraseToAnyPublisher()
+        }
+        .flatMap(maxPublishers: .max(1)) { pair in
+            decode(pair.data)
+        }
+        .eraseToAnyPublisher()
     }
     
     // MARK: 게시판 생성, 수정, 삭제 기능
