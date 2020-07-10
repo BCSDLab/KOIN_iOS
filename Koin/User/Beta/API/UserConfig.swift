@@ -26,7 +26,7 @@ class UserConfig: ObservableObject {
     }
     
     var nickname: String {
-        return user?.user?.nickname ?? ""
+        return user?.user?.nickname ?? "익명"
     }
     
     var id: Int {

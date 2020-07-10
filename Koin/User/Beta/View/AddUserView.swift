@@ -29,7 +29,7 @@ struct TermsView: View {
     }
 }
 
-struct BetaAddUserView: View {
+struct AddUserView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     // 회원가입 성공 시 Alert를 띄우는 목적의 변수
     
@@ -210,21 +210,21 @@ struct BetaAddUserView: View {
                 // 이메일을 확인해보라는 Alert을 띄운 다음
                 self.viewModel.showingSuccessAlert ?
                     Alert(title: Text("이메일 확인"), message: Text("회원 가입을 완료하시려면 메일을 확인해보세요."), dismissButton: .default(Text("돌아가기")) {
-                    // 돌아가기 버튼을 누르면 Alert은 꺼지고
-                    self.viewModel.showingAlert = false
-                    self.presentationMode.wrappedValue.dismiss()
-                    }) :
+                        // 돌아가기 버튼을 누르면 Alert은 꺼지고
+                        self.viewModel.showingAlert = false
+                        self.presentationMode.wrappedValue.dismiss()
+                        }) :
                     Alert(title: Text("에러"), message: Text(self.viewModel.errorText), dismissButton: .default(Text("닫기")) {
                         // 돌아가기 버튼을 누르면 Alert은 꺼지고
                         self.viewModel.showingAlert = false
                         })
         }
-            
+        
     }
 }
 
 struct BetaAddUserView_Previews: PreviewProvider {
     static var previews: some View {
-        BetaAddUserView()
+        AddUserView()
     }
 }

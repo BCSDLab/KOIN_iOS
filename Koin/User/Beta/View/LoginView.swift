@@ -14,7 +14,7 @@ import Foundation
 import PKHUD
 
 
-struct BetaLoginView: View {
+struct LoginView: View {
     @EnvironmentObject var config: UserConfig
     @ObservedObject var viewModel: LoginViewModel = LoginViewModel(userFetcher: UserFetcher())
     
@@ -58,21 +58,21 @@ struct BetaLoginView: View {
                         HStack {
                             Spacer()
                             Text("로그인")
-                                    .foregroundColor(Color.white)
+                                .foregroundColor(Color.white)
                             Spacer()
                         }
                     }.onReceive(viewModel.loginResult) { user in
-                                self.config.checkUser(user: user)
-                            }.onReceive(self.viewModel.errorResult) { result in
-                                self.viewModel.showingAlert.toggle()
-                            }.padding().background(Color("squash"))
+                        self.config.checkUser(user: user)
+                    }.onReceive(self.viewModel.errorResult) { result in
+                        self.viewModel.showingAlert.toggle()
+                    }.padding().background(Color("squash"))
                         .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 0))
                     
                     
                     
                     HStack {
                         Spacer()
-                        NavigationLink(destination: BetaAddUserView()) {
+                        NavigationLink(destination: AddUserView()) {
                             Text("회원가입")
                                 .foregroundColor(Color.white)
                         }
@@ -82,7 +82,7 @@ struct BetaLoginView: View {
                     
                     HStack(alignment: .center) {
                         
-                        NavigationLink(destination: BetaFindPasswordView()) {
+                        NavigationLink(destination: FindPasswordView()) {
                             HStack {
                                 Image("password").accentColor(.gray)
                                 Text("비밀번호 찾기")
@@ -91,19 +91,19 @@ struct BetaLoginView: View {
                             }
                         }
                         
-                         Divider()
-                         .frame(width: 0, height: 20)
-                         
+                        Divider()
+                            .frame(width: 0, height: 20)
+                        
                         Button(action: {
                             self.config.isLogin = true
                         }) {
-                         HStack {
-                         Image("face").accentColor(.gray)
-                         Text("둘러보기")
-                         .font(.subheadline)
-                         .foregroundColor(Color.gray)
-                         }
-                         }
+                            HStack {
+                                Image("face").accentColor(.gray)
+                                Text("둘러보기")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.gray)
+                            }
+                        }
                     }
                     .padding()
                     
@@ -114,22 +114,22 @@ struct BetaLoginView: View {
                         .font(.caption)
                         .fontWeight(.light)
                     Text("BCSD Lab")
-                            .font(.caption)
-                            .fontWeight(.medium)
+                        .font(.caption)
+                        .fontWeight(.medium)
                     Text(" All rights reserved.")
-                            .font(.caption)
-                            .fontWeight(.light)
+                        .font(.caption)
+                        .fontWeight(.light)
                 }
-                        .offset(y: 15)
-                        .padding(.bottom, CGFloat(30))
+                .offset(y: 15)
+                .padding(.bottom, CGFloat(30))
             }
         }.alert(isPresented: self.$viewModel.showingAlert) {
             // 이메일을 확인해보라는 Alert을 띄운 다음
             Alert(title: Text("에러"), message: Text(self.viewModel.errorText), dismissButton: .default(Text("닫기")) {
                 // 돌아가기 버튼을 누르면 Alert은 꺼지고
                 self.viewModel.showingAlert = false
-            })
-
+                })
+            
         }
         
         

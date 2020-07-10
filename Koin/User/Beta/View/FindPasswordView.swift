@@ -11,11 +11,11 @@ import SwiftUI
 import SwiftUI
 import PKHUD
 
-struct BetaFindPasswordView: View {
+struct FindPasswordView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var viewModel: FindPasswordViewModel
-
+    
     var FILTER_EMAIL = "^[a-z_0-9]{1,12}$"
     
     init() {
@@ -99,6 +99,6 @@ struct BetaFindPasswordView: View {
 
 struct BetaFindPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        BetaFindPasswordView()
+        FindPasswordView()
     }
 }
