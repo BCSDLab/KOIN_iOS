@@ -17,420 +17,420 @@ class BusController {
     var api = ""
     
     struct BusError: LocalizedError, Equatable {
-
-       private var description: String!
-
-       init(description: String) {
-           self.description = description
-       }
-
-       var errorDescription: String? {
-           return description
-       }
-
-       public static func ==(lhs: BusError, rhs: BusError) -> Bool {
-           return lhs.description == rhs.description
-       }
+        
+        private var description: String!
+        
+        init(description: String) {
+            self.description = description
+        }
+        
+        var errorDescription: String? {
+            return description
+        }
+        
+        public static func ==(lhs: BusError, rhs: BusError) -> Bool {
+            return lhs.description == rhs.description
+        }
     }
     
     /*
+     let expressFromKoreatechToTerminal:[String] = [
+     "08:00",
+     "09:35",
+     "10:30",
+     "11:45",
+     "12:35",
+     "14:00",
+     "15:05",
+     "16:00",
+     "16:55",
+     "18:05",
+     "18:55",
+     "20:00",
+     "21:05",
+     "21:55"
+     ]*/
     let expressFromKoreatechToTerminal:[String] = [
-            "08:00",
-            "09:35",
-            "10:30",
-            "11:45",
-            "12:35",
-            "14:00",
-            "15:05",
-            "16:00",
-            "16:55",
-            "18:05",
-            "18:55",
-            "20:00",
-            "21:05",
-            "21:55"
-    ]*/
-    let expressFromKoreatechToTerminal:[String] = [
-            "08:35",
-            "10:35",
-            "12:35",
-            "14:35",
-            "16:35",
-            "18:35",
-            "20:35"
+        "08:35",
+        "10:35",
+        "12:35",
+        "14:35",
+        "16:35",
+        "18:35",
+        "20:35"
     ]
     let objectWillChange = PassthroughSubject<BusController, Never>()
     /*
+     let expressFromTerminalToKoreatech:[String]  = [
+     "07:00",
+     "07:30",
+     "09:00",
+     "10:00",
+     "10:30",
+     "11:00",
+     "12:00",
+     "13:00",
+     "14:00",
+     "14:30",
+     "15:00",
+     "16:00",
+     "17:00",
+     "17:50",
+     "19:30",
+     "20:30",
+     "21:00"
+     ]*/
     let expressFromTerminalToKoreatech:[String]  = [
-            "07:00",
-            "07:30",
-            "09:00",
-            "10:00",
-            "10:30",
+        "08:00",
+        "10:00",
+        "12:00",
+        "14:00",
+        "16:00",
+        "18:00",
+        "20:30"
+    ]
+    
+    let shuttleFromKoreatech:[[String]]  = [
+        [ // 월요일
+            
+            "09:10",
             "11:00",
-            "12:00",
-            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "16:30",
+            "17:00",
+            "19:30",
+            "21:00",
+            "22:40"
+            
+            // 2019-동계방학
+            //"14:00"
+        ],
+        [ // 화요일
+            
+            "09:10",
+            "11:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "16:30",
+            "17:00",
+            "19:30",
+            "21:00",
+            "22:40"
+            
+            // 2019-동계방학
+            //"14:00"
+        ],
+        [ // 수요일
+            
+            "09:10",
+            "11:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "16:30",
+            "17:00",
+            "19:30",
+            "21:00",
+            "22:40"
+            
+            // 2019-동계방학
+            //"14:00"
+        ],
+        [ // 목요일
+            
+            "09:10",
+            "11:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "16:30",
+            "17:00",
+            "19:30",
+            "21:00",
+            "22:40"
+            
+            // 2019-동계방학
+            //"14:00"
+        ],
+        [ // 금요일
+            
+            "09:10",
+            "11:00",
             "14:00",
             "14:30",
             "15:00",
             "16:00",
+            "16:30",
             "17:00",
-            "17:50",
             "19:30",
-            "20:30",
-            "21:00"
-    ]*/
-    let expressFromTerminalToKoreatech:[String]  = [
-            "08:00",
-            "10:00",
-            "12:00",
-            "14:00",
-            "16:00",
-            "18:00",
-            "20:30"
-    ]
-    
-    let shuttleFromKoreatech:[[String]]  = [
-            [ // 월요일
-                    
-                        "09:10",
-                        "11:00",
-                        "14:00",
-                        "15:00",
-                        "16:00",
-                        "16:30",
-                        "17:00",
-                        "19:30",
-                        "21:00",
-                        "22:40"
-                     
-                    // 2019-동계방학
-                    //"14:00"
-            ],
-            [ // 화요일
-                    
-                        "09:10",
-                        "11:00",
-                        "14:00",
-                        "15:00",
-                        "16:00",
-                        "16:30",
-                        "17:00",
-                        "19:30",
-                        "21:00",
-                        "22:40"
-                     
-                    // 2019-동계방학
-                    //"14:00"
-            ],
-            [ // 수요일
-                    
-                        "09:10",
-                        "11:00",
-                        "14:00",
-                        "15:00",
-                        "16:00",
-                        "16:30",
-                        "17:00",
-                        "19:30",
-                        "21:00",
-                        "22:40"
-                     
-                    // 2019-동계방학
-                    //"14:00"
-            ],
-            [ // 목요일
-                    
-                        "09:10",
-                        "11:00",
-                        "14:00",
-                        "15:00",
-                        "16:00",
-                        "16:30",
-                        "17:00",
-                        "19:30",
-                        "21:00",
-                        "22:40"
-                     
-                    // 2019-동계방학
-                    //"14:00"
-            ],
-            [ // 금요일
-                    
-                        "09:10",
-                        "11:00",
-                        "14:00",
-                        "14:30",
-                        "15:00",
-                        "16:00",
-                        "16:30",
-                        "17:00",
-                        "19:30",
-                        "21:00",
-                        "22:40"
-                     
-                    // 2019-동계방학
-                    //"14:00"
-            ],
-            [ // 토요일
-                    
-                        "14:00"
-                     
-            ],
-            [ // 일요일
-                    
-                        "17:00"
-                     
-            ]
+            "21:00",
+            "22:40"
+            
+            // 2019-동계방학
+            //"14:00"
+        ],
+        [ // 토요일
+            
+            "14:00"
+            
+        ],
+        [ // 일요일
+            
+            "17:00"
+            
+        ]
     ]
     
     let shuttleFromTerminal:[[String]] = [
-            [ // 월요일
-                    
-                        "08:00",
-                        "10:10",
-                        "11:25",
-                        "14:25",
-                        "16:05",
-                        "16:25",
-                        "16:55",
-                        "17:25",
-                        "18:45",
-                        "19:55",
-                        "22:00"
-                     
-                    // 2019-동계방학
-                    //"08:00",
-                    //"14:25"
-            ],
-            [ // 화요일
-                    
-                        "08:00",
-                        "10:10",
-                        "11:25",
-                        "14:25",
-                        "16:05",
-                        "16:25",
-                        "16:55",
-                        "17:25",
-                        "18:45",
-                        "19:55",
-                        "22:00"
-                     
-                    // 2019-동계방학
-                    //"08:00",
-                    //"14:25"
-            ],
-            [ // 수요일
-                    
-                        "08:00",
-                        "10:10",
-                        "11:25",
-                        "14:25",
-                        "16:05",
-                        "16:25",
-                        "16:55",
-                        "17:25",
-                        "18:45",
-                        "19:55",
-                        "22:00"
-                     
-                    // 2019-동계방학
-                    //"08:00",
-                    //"14:25"
-            ],
-            [ // 목요일
-                    
-                        "08:00",
-                        "10:10",
-                        "11:25",
-                        "14:25",
-                        "16:05",
-                        "16:25",
-                        "16:55",
-                        "17:25",
-                        "18:45",
-                        "19:55",
-                        "22:00"
-                     
-                    // 2019-동계방학
-                    //"08:00",
-                    //"14:25"
-            ],
-            [ // 금요일
-                    
-                        "08:00",
-                        "10:10",
-                        "11:25",
-                        "14:25",
-                        "16:05",
-                        "16:25",
-                        "16:55",
-                        "17:25",
-                        "18:45",
-                        "19:55",
-                        "22:00"
-                     
-                    // 2019-동계방학
-                    //"08:00",
-                    //"14:25"
-            ],
-            [ // 토요일
-                    
-                        "14:25",
-                        "18:45"
-                     
-            ],
-            [ // 일요일
-                    
-                        "17:30",
-                        "21:15",
-                        "21:30"
-                     
-            ]
+        [ // 월요일
+            
+            "08:00",
+            "10:10",
+            "11:25",
+            "14:25",
+            "16:05",
+            "16:25",
+            "16:55",
+            "17:25",
+            "18:45",
+            "19:55",
+            "22:00"
+            
+            // 2019-동계방학
+            //"08:00",
+            //"14:25"
+        ],
+        [ // 화요일
+            
+            "08:00",
+            "10:10",
+            "11:25",
+            "14:25",
+            "16:05",
+            "16:25",
+            "16:55",
+            "17:25",
+            "18:45",
+            "19:55",
+            "22:00"
+            
+            // 2019-동계방학
+            //"08:00",
+            //"14:25"
+        ],
+        [ // 수요일
+            
+            "08:00",
+            "10:10",
+            "11:25",
+            "14:25",
+            "16:05",
+            "16:25",
+            "16:55",
+            "17:25",
+            "18:45",
+            "19:55",
+            "22:00"
+            
+            // 2019-동계방학
+            //"08:00",
+            //"14:25"
+        ],
+        [ // 목요일
+            
+            "08:00",
+            "10:10",
+            "11:25",
+            "14:25",
+            "16:05",
+            "16:25",
+            "16:55",
+            "17:25",
+            "18:45",
+            "19:55",
+            "22:00"
+            
+            // 2019-동계방학
+            //"08:00",
+            //"14:25"
+        ],
+        [ // 금요일
+            
+            "08:00",
+            "10:10",
+            "11:25",
+            "14:25",
+            "16:05",
+            "16:25",
+            "16:55",
+            "17:25",
+            "18:45",
+            "19:55",
+            "22:00"
+            
+            // 2019-동계방학
+            //"08:00",
+            //"14:25"
+        ],
+        [ // 토요일
+            
+            "14:25",
+            "18:45"
+            
+        ],
+        [ // 일요일
+            
+            "17:30",
+            "21:15",
+            "21:30"
+            
+        ]
     ]
     
     let shuttleFromStationToKoreatech:[[String]] = [
-            [ // 월요일
-                    
-                        "08:05",
-                        "10:15",
-                        "11:30",
-                        "14:30",
-                        "16:10",
-                        "16:30",
-                        "17:00",
-                        "17:30",
-                        "18:50",
-                        "20:00",
-                        "22:05"
-                     
-                    // 2019-동계방학
-                    //"08:05",
-                    //"14:30"
-            ],
-            [ // 화요일
-                    
-                        "08:05",
-                        "10:15",
-                        "11:30",
-                        "14:30",
-                        "16:10",
-                        "16:30",
-                        "17:00",
-                        "17:30",
-                        "18:50",
-                        "20:00",
-                        "22:05"
-                     
-                    // 2019-동계방학
-                    //"08:05",
-                    //"14:30"
-            ],
-            [ // 수요일
-                    
-                        "08:05",
-                        "10:15",
-                        "11:30",
-                        "14:30",
-                        "16:10",
-                        "16:30",
-                        "17:00",
-                        "17:30",
-                        "18:50",
-                        "20:00",
-                        "22:05"
-                     
-                    // 2019-동계방학
-                    //"08:05",
-                    //"14:30"
-            ],
-            [ // 목요일
-                    
-                        "08:05",
-                        "10:15",
-                        "11:30",
-                        "14:30",
-                        "16:10",
-                        "16:30",
-                        "17:00",
-                        "17:30",
-                        "18:50",
-                        "20:00",
-                        "22:05"
-                     
-                    // 2019-동계방학
-                    //"08:05",
-                    //"14:30"
-            ],
-            [ // 금요일
-                    
-                        "08:05",
-                        "10:15",
-                        "11:30",
-                        "14:30",
-                        "16:10",
-                        "16:30",
-                        "17:00",
-                        "17:30",
-                        "18:50",
-                        "20:00",
-                        "22:05"
-                     
-                    // 2019-동계방학
-                    //"08:05",
-                    //"14:30"
-            ],
-            [ // 토요일
-                    
-                        "14:30",
-                        "18:50"
-                     
-            ],
-            [ // 일요일
-                    
-                        "17:35",
-                        "21:20",
-                        "21:35"
-                     
-            ]
+        [ // 월요일
+            
+            "08:05",
+            "10:15",
+            "11:30",
+            "14:30",
+            "16:10",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:50",
+            "20:00",
+            "22:05"
+            
+            // 2019-동계방학
+            //"08:05",
+            //"14:30"
+        ],
+        [ // 화요일
+            
+            "08:05",
+            "10:15",
+            "11:30",
+            "14:30",
+            "16:10",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:50",
+            "20:00",
+            "22:05"
+            
+            // 2019-동계방학
+            //"08:05",
+            //"14:30"
+        ],
+        [ // 수요일
+            
+            "08:05",
+            "10:15",
+            "11:30",
+            "14:30",
+            "16:10",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:50",
+            "20:00",
+            "22:05"
+            
+            // 2019-동계방학
+            //"08:05",
+            //"14:30"
+        ],
+        [ // 목요일
+            
+            "08:05",
+            "10:15",
+            "11:30",
+            "14:30",
+            "16:10",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:50",
+            "20:00",
+            "22:05"
+            
+            // 2019-동계방학
+            //"08:05",
+            //"14:30"
+        ],
+        [ // 금요일
+            
+            "08:05",
+            "10:15",
+            "11:30",
+            "14:30",
+            "16:10",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:50",
+            "20:00",
+            "22:05"
+            
+            // 2019-동계방학
+            //"08:05",
+            //"14:30"
+        ],
+        [ // 토요일
+            
+            "14:30",
+            "18:50"
+            
+        ],
+        [ // 일요일
+            
+            "17:35",
+            "21:20",
+            "21:35"
+            
+        ]
     ]
     
     let shuttleFromStationToTerminal:[[String]] = [
-            [ // 월요일
-                    
-                        "09:30",
-                        "15:20"
-                     
-            ],
-            [ // 화요일
-                    
-                        "09:30",
-                        "15:20"
-                     
-            ],
-            [ // 수요일
-                    
-                        "09:30",
-                        "15:20"
-                     
-            ],
-            [ // 목요일
-                    
-                        "09:30",
-                        "15:20"
-                     
-            ],
-            [ // 금요일
-                    
-                        "09:30",
-                        "15:20"
-                     
-            ],
-            [ // 토요일
-            ],
-            [ // 일요일
-            ]
+        [ // 월요일
+            
+            "09:30",
+            "15:20"
+            
+        ],
+        [ // 화요일
+            
+            "09:30",
+            "15:20"
+            
+        ],
+        [ // 수요일
+            
+            "09:30",
+            "15:20"
+            
+        ],
+        [ // 목요일
+            
+            "09:30",
+            "15:20"
+            
+        ],
+        [ // 금요일
+            
+            "09:30",
+            "15:20"
+            
+        ],
+        [ // 토요일
+        ],
+        [ // 일요일
+        ]
     ]
     
     let shuttleTimeTables: Dictionary<String, [[String]]>
@@ -490,7 +490,7 @@ class BusController {
         
         let stringTime = String(format: "%02d", hour) + ":" + String(format: "%02d", min)
         let endDate = dateformatter.date(from: stringTime)!
-
+        
         
         if timetable.count == 0 {
             return -1
@@ -507,27 +507,27 @@ class BusController {
     
     func getRemainCityBusTimeToDate(depart: String, arrival: String, result: @escaping (Date?, Error?) -> Void){
         AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
-        .response { response in
-            switch response.result {
-            case .success(let data):
-                do{
-                    let decoder = JSONDecoder()
-                    let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
-                    print(cityBusRequest)
-                    // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    if let remain = cityBusRequest.remainTime {
-                        result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
-                    } else {
-                        result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
+            .response { response in
+                switch response.result {
+                    case .success(let data):
+                        do{
+                            let decoder = JSONDecoder()
+                            let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
+                            print(cityBusRequest)
+                            // 해당 class의 user값에 가공된 데이터를 넣어준다.
+                            if let remain = cityBusRequest.remainTime {
+                                result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
+                            } else {
+                                result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
+                            }
+                            // 겹치지 않는다고 알림
+                            break
+                        } catch(let error) {
+                            result(nil, error)
                     }
-                     // 겹치지 않는다고 알림
-                    break
-                } catch(let error) {
-                    result(nil, error)
+                    case .failure(let error):
+                        result(nil, error)
                 }
-            case .failure(let error):
-                result(nil, error)
-            }
         }
     }
     
@@ -566,28 +566,28 @@ class BusController {
     }
     
     func getNextCityBusTimeToDate(depart: String, arrival: String, result: @escaping (Date?, Error?) -> Void){
-       AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
-        .response { response in
-            switch response.result {
-            case .success(let data):
-                do{
-                    let decoder = JSONDecoder()
-                    let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
-                    print(cityBusRequest)
-                    // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                    if let remain = cityBusRequest.nextRemainTime {
-                        result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
-                    } else {
-                        result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
+        AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
+            .response { response in
+                switch response.result {
+                    case .success(let data):
+                        do{
+                            let decoder = JSONDecoder()
+                            let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
+                            print(cityBusRequest)
+                            // 해당 class의 user값에 가공된 데이터를 넣어준다.
+                            if let remain = cityBusRequest.nextRemainTime {
+                                result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
+                            } else {
+                                result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
+                            }
+                            // 겹치지 않는다고 알림
+                            break
+                        } catch(let error) {
+                            result(nil, error)
                     }
-                     // 겹치지 않는다고 알림
-                    break
-                } catch(let error) {
-                    result(nil, error)
+                    case .failure(let error):
+                        result(nil, error)
                 }
-            case .failure(let error):
-                result(nil, error)
-            }
         }
     }
     
@@ -619,7 +619,7 @@ class BusController {
             return Date()
         }
         resultNowIndex = getBusTimeIndex(timetable: expressTimeTable, startIndex: 0)
-
+        
         if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
             return Date()
         }

@@ -275,6 +275,7 @@ PODS:
   - IGColorPicker (0.4.3):
     - M13Checkbox
   - leveldb-library (1.22)
+  - lottie-ios (3.1.8)
   - M13Checkbox (3.4.0)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -283,7 +284,6 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PKHUD (5.3.0)
   - PromisesObjC (1.2.8)
-  - RichEditorView (5.0.0)
   - SDWebImage (5.6.1):
     - SDWebImage/Core (= 5.6.1)
   - SDWebImage/Core (5.6.1)
@@ -297,8 +297,8 @@ DEPENDENCIES:
   - Firebase/Firestore
   - FirebaseFirestoreSwift
   - IGColorPicker
+  - lottie-ios
   - PKHUD
-  - RichEditorView
   - SDWebImageSwiftUI
 
 SPEC REPOS:
@@ -325,11 +325,11 @@ SPEC REPOS:
     - gRPC-Core
     - IGColorPicker
     - leveldb-library
+    - lottie-ios
     - M13Checkbox
     - nanopb
     - PKHUD
     - PromisesObjC
-    - RichEditorView
     - SDWebImage
     - SDWebImageSwiftUI
 
@@ -356,14 +356,14 @@ SPEC CHECKSUMS:
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   IGColorPicker: f6034f8629aa90cce308a76ecc0fdf2afed0bf34
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
   SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
   SDWebImageSwiftUI: 52dabce85cfc575e08ca4ce26bed1334159dbc2b
 
-PODFILE CHECKSUM: 2304da39dff4fce3cb296ee009a6930e3215e09b
+PODFILE CHECKSUM: dd90f53cdcad18673c1e4dfa0273f711ce2fb01d
 
 COCOAPODS: 1.9.1

@@ -19,7 +19,7 @@ struct BusSearchView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: BusSearchController, context: Context) {
-
+        
     }
     
     
@@ -47,7 +47,7 @@ class BusSearchController: UIViewController {
     @IBOutlet var dateText: UILabel!
     @IBOutlet var timeText: UILabel!
     @IBOutlet var searchButton: UIButton!
-
+    
     let alert =  UIAlertController(title: "날짜를 설정해주세요", message: "\n\n\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
     
     @IBOutlet weak var dateButton: UIButton!
@@ -56,53 +56,53 @@ class BusSearchController: UIViewController {
     let picker: UIDatePicker = UIDatePicker()
     
     @objc func departAction(_ sender:UITapGestureRecognizer){
-       let depart =  UIAlertController(title: "출발지", message: "출발지를 선택해주세요.", preferredStyle: .actionSheet)
-       
-       let koreatech = UIAlertAction(title: "한기대", style: .default) { (action) in
-           self.departButton.setTitle("한기대", for: .normal)
-       }
-       let terminal = UIAlertAction(title: "야우리", style: .default) { (action) in
-           self.departButton.setTitle("야우리", for: .normal)
-       }
-       
-       let station = UIAlertAction(title: "천안역", style: .default) { (action) in
-           self.departButton.setTitle("천안역", for: .normal)
-       }
-       let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-       
-       depart.addAction(koreatech)
-       depart.addAction(terminal)
-       depart.addAction(station)
-       depart.addAction(cancel)
-       self.present(depart, animated: true, completion: nil)
+        let depart =  UIAlertController(title: "출발지", message: "출발지를 선택해주세요.", preferredStyle: .actionSheet)
+        
+        let koreatech = UIAlertAction(title: "한기대", style: .default) { (action) in
+            self.departButton.setTitle("한기대", for: .normal)
+        }
+        let terminal = UIAlertAction(title: "야우리", style: .default) { (action) in
+            self.departButton.setTitle("야우리", for: .normal)
+        }
+        
+        let station = UIAlertAction(title: "천안역", style: .default) { (action) in
+            self.departButton.setTitle("천안역", for: .normal)
+        }
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        depart.addAction(koreatech)
+        depart.addAction(terminal)
+        depart.addAction(station)
+        depart.addAction(cancel)
+        self.present(depart, animated: true, completion: nil)
     }
     
     @objc func arrivalAction(_ sender:UITapGestureRecognizer){
-       let arrival =  UIAlertController(title: "도착지", message: "도착지를 선택해주세요.", preferredStyle: .actionSheet)
-       
-       let koreatech = UIAlertAction(title: "한기대", style: .default) { (action) in
-           self.arrivalButton.setTitle("한기대", for: .normal)
-       }
-       let terminal = UIAlertAction(title: "야우리", style: .default) { (action) in
-           self.arrivalButton.setTitle("야우리", for: .normal)
-       }
-       
-       let station = UIAlertAction(title: "천안역", style: .default) { (action) in
-           self.arrivalButton.setTitle("천안역", for: .normal)
-       }
-       let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-       
-       arrival.addAction(koreatech)
-       arrival.addAction(terminal)
-       arrival.addAction(station)
-       arrival.addAction(cancel)
-       self.present(arrival, animated: true, completion: nil)
+        let arrival =  UIAlertController(title: "도착지", message: "도착지를 선택해주세요.", preferredStyle: .actionSheet)
+        
+        let koreatech = UIAlertAction(title: "한기대", style: .default) { (action) in
+            self.arrivalButton.setTitle("한기대", for: .normal)
+        }
+        let terminal = UIAlertAction(title: "야우리", style: .default) { (action) in
+            self.arrivalButton.setTitle("야우리", for: .normal)
+        }
+        
+        let station = UIAlertAction(title: "천안역", style: .default) { (action) in
+            self.arrivalButton.setTitle("천안역", for: .normal)
+        }
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        arrival.addAction(koreatech)
+        arrival.addAction(terminal)
+        arrival.addAction(station)
+        arrival.addAction(cancel)
+        self.present(arrival, animated: true, completion: nil)
     }
     
     @objc func dateAction(_ sender:UITapGestureRecognizer){
-            self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
-
+    
     @IBAction func searchBusTime(_ sender: UIButton) {
         var depart = "koreatech"
         var arrival = "terminal"
@@ -158,7 +158,7 @@ class BusSearchController: UIViewController {
         self.present(search, animated: true, completion: nil)
         
     }
- 
+    
     
     @IBAction func selectDate() {
         self.present(alert, animated: true, completion: nil)
@@ -177,15 +177,15 @@ class BusSearchController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-         let dateFormatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone.autoupdatingCurrent
         dateFormatter.locale = Locale.current
-         dateFormatter.dateFormat = "yyyy/MM/dd"
+        dateFormatter.dateFormat = "yyyy/MM/dd"
         
         let currentDateFormatter = DateFormatter()
         currentDateFormatter.timeZone = TimeZone.autoupdatingCurrent
         currentDateFormatter.locale = Locale.current
-         currentDateFormatter.dateFormat = "MMM dd일 EEEE"
+        currentDateFormatter.dateFormat = "MMM dd일 EEEE"
         
         
         let departGesture = UITapGestureRecognizer(target: self, action: Selector(("departAction:")))
@@ -196,7 +196,7 @@ class BusSearchController: UIViewController {
         self.arrivalView.addGestureRecognizer(arrivalGesture)
         
         self.dateView.addGestureRecognizer(dateGesture)
-
+        
         dateButton.setTitle(currentDateFormatter.string(from: Date()), for: .normal)
         
         dateText.text = dateFormatter.string(from: Date())
@@ -229,8 +229,8 @@ class BusSearchController: UIViewController {
         picker.widthAnchor.constraint(equalToConstant: alert.view.frame.width - 20)
             .isActive = true
         picker.heightAnchor.constraint(equalToConstant: alert.view.frame.height / 4)
-        .isActive = true
-
+            .isActive = true
+        
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"

@@ -1,286 +1,175 @@
 //
-// Created by 정태훈 on 2020/01/12.
-// Copyright (c) 2020 정태훈. All rights reserved.
+//  BetaHomeView.swift
+//  Koin
+//
+//  Created by 정태훈 on 2020/06/23.
+//  Copyright © 2020 정태훈. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 import PKHUD
 
 struct HomeView: View {
-    // 탭과 관련된 데이터를 가지고 있는 오브젝트
-    @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var tabData: ViewRouter
+    @EnvironmentObject var config: UserConfig
+    
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @State var pushActive = false
+    
+    @State var currentView = AnyView(Text(""))
+    
+    let coloredNavAppearance = UINavigationBarAppearance()
+
     init() {
-        // 네비게이션 바 색 설정
-        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
-        // 네비게이션 강조 색 설정
-        UINavigationBar.appearance().tintColor = UIColor.white
-        // 네비게이션 글자 색 설정
+        UIBarButtonItem.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
-    }
-
-    // 전체 버튼들의 가로 길이 설정
-    func getItemWidth(containerWidth: CGFloat) -> CGFloat {
-        return (containerWidth - 50) / 3
-    }
-
-    // 전체 버튼들의 세로 길이 설정
-    func getItemHeight(containerHeight: CGFloat) -> CGFloat {
-        return (containerHeight) / 3
+        UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
+        
     }
     
-    func prepare_project() {
-        // 에러 HUD를 위한 임의의 뷰 객체
-        let uiview = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
-        // 에러 HUD 내에서의 에러 문자 뷰 객체
-        let yourLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
-        yourLabel.center = CGPoint(x: uiview.frame.size.width  / 2,
-        y: uiview.frame.size.height / 2)
-        yourLabel.textAlignment = .center
-        
-        yourLabel.text = "서비스 준비중입니다."
-        uiview.addSubview(yourLabel)
-        PKHUD.sharedHUD.contentView = uiview
-        PKHUD.sharedHUD.show()
-        PKHUD.sharedHUD.hide(afterDelay: 1.0)
+    var icons: Array<String> = ["circles", "bus", "timetable","store", "restaurant", "market", "board_free", "board_recruit","board_secret"]
+    
+    var titles: Array<String> = ["동아리", "버스/교통", "시간표","주변상점", "식단", "중고장터", "자유게시판", "취업게시판","익명게시판"]
+    
+    func getView(current: String) -> some View {
+        if (current != "home") {
+            coloredNavAppearance.backgroundColor = UIColor(named: "light_navy")
+        }
+        if current == "dining" {
+            return AnyView(MealView())
+        } else if current == "myinfo" {
+            return AnyView(MyInfoView()
+                .navigationBarTitle("내정보", displayMode: .inline))
+        } else if current == "store" {
+            return AnyView(StoreView())
+        } else if current == "board_free" {
+            return AnyView(
+                CommunityView<Article,Comment>(boardId: 1).environmentObject(self.config))
+        } else if current == "board_recruit" {
+            return AnyView(
+                CommunityView<Article,Comment>(boardId: 2).environmentObject(self.config))
+        } else if current == "board_secret" {
+            return AnyView(CommunityView<TempArticle,TempComment>(boardId: -2).environmentObject(self.config))
+        }  else if current == "bus" {
+            return AnyView(BusView())
+        } else if current == "circle" {
+            return AnyView(CircleView())
+        } else if current == "search" {
+            return AnyView(SearchView().environmentObject(self.tabData).environment(\.managedObjectContext, self.managedObjectContext))
+        } else if current == "home" {
+            return AnyView(ContentView())
+        }
+        return AnyView(Text("준비중입니다."))
     }
-
+    
+    func setLink(index: Int) -> String {
+        switch(index) {
+            case 0:
+                return "circle"
+            case 1:
+                return "bus"
+            case 3:
+                return "store"
+            case 4:
+                return "dining"
+            case 6:
+                return "board_free"
+            case 7:
+                return "board_recruit"
+            case 8:
+                return "board_secret"
+            default:
+                return ""
+        }
+    }
+    
     var body: some View {
-        NavigationView{
-            GeometryReader { geometry in
-                ZStack {
-                    VStack {
-                        Image("img_bg")
-                                .resizable()
-                                .frame(width: geometry.size.width, height: 400)
-                                .background(Color("squash"))
-                        Spacer()
-                    }
-                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
-                            .edgesIgnoringSafeArea(.top)
-
-                    VStack(alignment: .leading) {
-                        VStack(alignment: .leading) {
-                            Image("logo_footer")
+        GeometryReader { geometry in
+            //MARK:- 버튼
+            VStack(alignment: .center){
+                Spacer()
+                VStack(alignment: .center){
+                    GridView(rows: 3, columns: 3) { index in
+                        Button(action: {
+                            if ([0,1,3,4,6,7,8].contains(index)) {
+                                self.tabData.currentView = self.setLink(index: index)
+                            } else {
+                                prepare_project()
+                            }
+                        }) {
+                            VStack{
+                                Image(self.icons[index])
                                     .renderingMode(.original)
                                     .resizable()
-                                    .frame(width: 65, height: 37)
-                            Text("\'코인\' ios앱 출시")
-                                    .fontWeight(.light)
-                                    .foregroundColor(Color.white.opacity(0.5))
+                                    .frame(width: 24, height: 24, alignment: .center)
+                                    .padding(.bottom, 13)
+                                Text(self.titles[index])
                                     .font(.system(size: 15))
-                            Text("코리아텍 학생들이\n함께 만들어가는 커뮤니티")
-                                    .font(.system(size: 25))
                                     .fontWeight(.medium)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                                .frame(width: geometry.size.height, height: 400, alignment: .top)
-                                .padding(.leading, 30)
-                        Spacer()
-                    }
-                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
-                    VStack() {
-                        Spacer()
-                        VStack(alignment: .center, spacing: 0) {
-                            HStack(alignment: .center, spacing: 0) {
-                                Button(action: {
-                                    self.viewRouter.currentView = "circle"
-                                    self.viewRouter.dismiss_menu()
-                                }) {
-                                    VStack{
-                                        Spacer()
-                                        Image("circles")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("동아리")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .clipped()
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {
-                                    self.viewRouter.currentView = "bus"
-                                    self.viewRouter.dismiss_menu()
-                                }) {
-                                    VStack{
-                                        Spacer()
-                                        Image("bus")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("버스/교통")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {self.prepare_project()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("timetable")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("시간표")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                            }
-                            HStack(alignment: .center, spacing: 0) {
-                                Button(action: {
-                                    self.viewRouter.currentView = "store"
-                                    self.viewRouter.dismiss_menu()
-                                }) {
-                                    VStack {
-                                        Spacer()
-                                        Image("store")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("주변상점")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .clipped()
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                // 식단 버튼 클릭 시, dining 화면으로 바꾼 후에 sidemenu를 닫는다.
-                                Button(action: {self.viewRouter.currentView = "dining"
-                                    self.viewRouter.dismiss_menu()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("restaurant")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("식단")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {self.viewRouter.currentView = "search"
-                                    self.viewRouter.dismiss_menu()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("market")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("중고장터")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                            }
-                            HStack(alignment: .center, spacing: 0) {
-                                Button(action: {self.viewRouter.currentView = "board_free"
-                                    self.viewRouter.dismiss_menu()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("board_free")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("자유게시판")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {self.viewRouter.currentView = "board_recruit"
-                                self.viewRouter.dismiss_menu()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("board_recruit")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("취업게시판")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                                Button(action: {self.viewRouter.currentView = "board_secret"
-                                self.viewRouter.dismiss_menu()}) {
-                                    VStack{
-                                        Spacer()
-                                        Image("board_secret")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                        Spacer()
-                                        Text("익명게시판")
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.black)
-                                                .opacity(0.6)
-                                                .padding(.bottom, 20)
-                                    }
-                                            .frame(width: self.getItemWidth(containerWidth: geometry.size.width), height: self.getItemWidth(containerWidth: geometry.size.width))
-                                            .background(Color.white)
-                                }
-                                        .border(Color.gray.opacity(0.2), width: 0.5)
-                            }
-                        }
+                                    .foregroundColor(Color(red: 112/255, green: 112/255, blue: 112/255))
+                            }.frame(width: (geometry.size.width - 54)/3, height: (geometry.size.width - 54)/3, alignment: .center)
                                 .background(Color.white)
-                                .frame(maxWidth: .infinity)
+                        }
                     }
-                            .clipped()
-                            .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 5)
-                            .padding(.bottom, 50)
+                }.frame(width: geometry.size.width - 52, height: geometry.size.width - 52, alignment: .center)
+                    .background(Color(hex: 0xf2f2f2))
+                    .padding(.bottom, 26)
+                //.padding(.bottom, UIDevice.current.NotchBottomHeight)
+                
+                //MARK: 사이드메뉴용 navigation링크
+                NavigationLink(destination: self.currentView, isActive: self.$pushActive) {
+                    EmptyView()
+                }.hidden()
+                    .onReceive(self.tabData.currentViewChange) { current in
+                        if (current != "home") {
+                            self.coloredNavAppearance.backgroundColor = UIColor(named: "light_navy")
+                            self.currentView = self.getView(current: current) as! AnyView
+                            self.pushActive = true
+                        }
                 }
-
-            }
+                    
+                .navigationBarHidden(true)
+            }.background(
+                // MARK:- 배경
+                VStack{
+                    VStack{
+                        VStack(alignment: .leading, spacing: 0){
+                            Image("logo_footer")
+                                .renderingMode(.original)
+                                .resizable()
+                                .frame(width: 70, height: 40)
+                                .padding(.bottom, 30)
+                                .padding(.top,0 + UIDevice.current.NotchTopHeight)
+                                .padding(.leading, 25)
+                            Text("\'코인\' ios앱 출시")
+                                .fontWeight(.medium)
+                                .foregroundColor(Color.white.opacity(0.6))
+                                .font(.system(size: 15))
+                                .padding(.bottom, 10)
+                                .padding(.leading, 25)
+                            Text("코리아텍 학생들이\n함께 만들어가는 커뮤니티")
+                                .font(.system(size: 24))
+                                .fontWeight(.medium)
+                                .lineSpacing(5)
+                                .foregroundColor(.white)
+                                .frame(height: 72, alignment: .leading)
+                                .padding(.leading, 25)
+                        }.frame(width: geometry.size.width, height: 300 + UIDevice.current.NotchTopHeight, alignment: .leading)
+                            .background(Image("img_bg").resizable().frame(width: geometry.size.width, height: 300))
+                    }.frame(width: geometry.size.width, height: 376 + UIDevice.current.NotchTopHeight, alignment: .top)
+                        .background(Color("squash"))
+                        .navigationBarHidden(true)
+                    Spacer()
+                }.frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
+                    .edgesIgnoringSafeArea(.top).background(Color(red: 247/255, green: 247/255, blue: 247/255))).padding(.horizontal, 50)
         }
+    }
+}
 
+struct BetaHomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 }

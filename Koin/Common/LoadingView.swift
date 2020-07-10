@@ -23,13 +23,9 @@ struct LoadingView<Content>: View where Content: View {
                     .blur(radius: self.isShowing ? 3 : 0)
                 
                 VStack {
-                    ActivityIndicator(isAnimating: .constant(true), style: .large)
+                    LottieView(filename: "data")
+                        .edgesIgnoringSafeArea(.all)
                 }
-                .frame(width: geometry.size.width / 3,
-                       height: geometry.size.width / 3)
-                    .background(Color.secondary.colorInvert())
-                    .foregroundColor(Color.primary)
-                    .cornerRadius(20)
                     .opacity(self.isShowing ? 1 : 0)
                 
             }
