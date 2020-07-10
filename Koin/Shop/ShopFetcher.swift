@@ -38,7 +38,6 @@ class StoreFetcher {
                 .mapError { error in
                     return error
                 }
-                .print()
                 .map {
                     $0.data
                 }

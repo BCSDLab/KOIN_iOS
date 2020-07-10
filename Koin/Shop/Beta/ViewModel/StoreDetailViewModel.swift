@@ -24,7 +24,6 @@ class StoreDetailViewModel: ObservableObject {
     func load(id: Int) {
         self.storeFetcher.getDetailStore(id: id)
                 .receive(on: DispatchQueue.main)
-                .print()
                 .sink(receiveCompletion: { value in
                     switch value {
                     case .failure:

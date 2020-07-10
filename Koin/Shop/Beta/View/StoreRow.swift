@@ -16,7 +16,7 @@ struct StoreRow: View {
     }
 
     var body: some View {
-        return NavigationLink(destination: BetaStoreDetailView(viewModel: StoreDetailViewModel(id: self.viewModel.id))) {
+        return NavigationLink(destination: StoreDetailView(viewModel: StoreDetailViewModel(id: self.viewModel.id))) {
             HStack {
                 Text(self.viewModel.storeName)
                         .font(.system(size: 15))
