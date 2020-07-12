@@ -20,49 +20,37 @@ class ViewRouter: ObservableObject {
     
     var community_id: Int
     
-    //@ObservedObject var communityController : CommunityController
+    let currentViewChange = PassthroughSubject<String, Never>()
+    
+    let customItemSelectedChange = PassthroughSubject<Bool, Never>()
+    
+    let loadingChange = PassthroughSubject<Bool, Never>()
+    
+    func openLoading() {
+        loadingChange.send(true)
+    }
+    
+    func closeLoading() {
+        loadingChange.send(false)
+    }
     
     // 현재 뷰
     var currentView: String {
         // 값이 설정되었을 때
         didSet {
-            // 만약 설정된 값이 커스텀 액션이 일어나는 값이랑 같을 때
-            if currentView == "board_free" {
-                board_id = 1
-                //communityController = CommunityController(board_id: 1)
-            } else if currentView == "board_recruit" {
-                board_id = 2
-            } else if currentView == "board_secret" {
-                board_id = -2
-            }
             // 오브젝트가 바뀌었다고 알려준다.
+            currentViewChange.send(currentView)
             objectWillChange.send(self)
         }
     }
 
     // 오브젝트가 바뀌는 것을 인식해주는 오브젝트
     let objectWillChange = PassthroughSubject<ViewRouter, Never>()
-
-    // 선택된 아이템을 저장하는 값
-    var itemSelected: Int {
-        // 값이 설정되었을 때
-        didSet {
-            // 만약 설정된 값이 커스텀 액션이 일어나는 값이랑 같을 때
-            if itemSelected == customActionteminidex {
-                // 전에 위치해있던 값으로 바꾼 후에
-                itemSelected = oldValue
-                // 커스텀 아이템이 눌렸다고 알려준다.(사이드메뉴가 열린다.)
-                isCustomItemSelected = true
-                // 만약 설정된 값이 홈 액션이 일어나는 값이랑 같을 때
-            } else if itemSelected == homeActionteminidex {
-                // 홈 아이템이 눌렸다고 알려주고
-                isHomeItemSelected = true
-                // 현재 위치를 home으로 변경해준다.
-                currentView = "home"
-            }
-            // 오브젝트가 바뀌었다고 알려준다.
-            objectWillChange.send(self)
-        }
+    
+    func open_menu() {
+        isCustomItemSelected = true
+        // 오브젝트가 바뀌었다고 알려준다.
+        customItemSelectedChange.send(true)
     }
 
     // 사이드메뉴를 닫는 기능
@@ -70,24 +58,19 @@ class ViewRouter: ObservableObject {
         // 커스텀 아이템 선택을 해제한다.(사이드메뉴가 닫힌다.)
         isCustomItemSelected = false
         // 오브젝트가 바뀌었다고 알려준다.
-        objectWillChange.send(self)
+        customItemSelectedChange.send(false)
     }
 
-    // 홈으로 돌아가는 기능
-    func go_home() {
-        // 선택된 탭을 홈으로 바꿔준다.
-        itemSelected = 1
-    }
 
     // 홈 아이템이 선택되었는지 여부를 저장하는 값
-    var isHomeItemSelected: Bool = false
+    @Published var isHomeItemSelected: Bool = false
 
     // 커스텀 액션 아이템이 선택되었는지 여부를 저장하는 값
     var isCustomItemSelected: Bool = false
 
     init(initialIndex: Int = 1, customItemIndex: Int) {
         self.customActionteminidex = customItemIndex
-        self.itemSelected = initialIndex
+        //self.itemSelected = initialIndex
         self.homeActionteminidex = 1
         self.currentView = "home"
         self.board_id = -1

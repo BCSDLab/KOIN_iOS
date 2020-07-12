@@ -10,10 +10,10 @@ import SwiftUI
 
 struct CircleView: View {
     @ObservedObject var viewModel: CircleViewModel
+    @EnvironmentObject var tabData: ViewRouter
     
-    init(viewModel: CircleViewModel) {
-        self.viewModel = viewModel
-        self.viewModel.load()
+    init() {
+        self.viewModel = CircleViewModel()
     }
     
     var body: some View {
@@ -34,7 +34,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "" ? Color("squash") : Color("circle_unselect_color"))
                             Text("전체보기")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -49,7 +49,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C001" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C001" ? Color("squash") : Color("circle_unselect_color"))
                             Text("예술분야")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -79,7 +79,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C003" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C003" ? Color("squash") : Color("circle_unselect_color"))
                             Text("운동분야")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -98,7 +98,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C004" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C004" ? Color("squash") : Color("circle_unselect_color"))
                             Text("학술분야")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -113,7 +113,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C005" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C005" ? Color("squash") : Color("circle_unselect_color"))
                             Text("종교분야")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -128,7 +128,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C006" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C006" ? Color("squash") : Color("circle_unselect_color"))
                             Text("사회분야")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -143,7 +143,7 @@ struct CircleView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                                 .padding(.bottom, 8)
-                            .foregroundColor(self.viewModel.category == "C007" ? Color("squash") : Color("circle_unselect_color"))
+                                .foregroundColor(self.viewModel.category == "C007" ? Color("squash") : Color("circle_unselect_color"))
                             Text("준동아리")
                                 .font(.system(size: 13))
                                 .foregroundColor(.black)
@@ -157,7 +157,7 @@ struct CircleView: View {
             HStack {
                 Text("동아리 목록")
                     .font(.system(size: 13))
-                .foregroundColor(Color("warm_grey"))
+                    .foregroundColor(Color("warm_grey"))
                     .padding(.leading, 16)
                     .padding(.vertical, 8)
                 Spacer()
@@ -176,6 +176,11 @@ struct CircleView: View {
             }
             
         }.padding(0)
+            .navigationBarTitle(Text("동아리"), displayMode: .inline)
+            .onAppear{
+                self.viewModel.load()
+                
+        }
     }
 }
 

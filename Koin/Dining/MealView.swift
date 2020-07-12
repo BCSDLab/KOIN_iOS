@@ -19,6 +19,8 @@ struct MealView: View {
     // 날짜 정보를 출력하기 위해 만든 변수(Date -> String)
     @State var dateString: String = dateToString(date: Date())
     
+    @EnvironmentObject var tabData: ViewRouter
+    
     init() {
         // List의 separator 색을 투명하게 만들어줌
         UITableView.appearance().separatorColor = .clear
@@ -47,108 +49,108 @@ struct MealView: View {
                     }
         }
         
-            return VStack {
-                VStack {
-                    HStack {
-                        
-                        Image(systemName: "chevron.left").onTapGesture { // 왼쪽 화살표를 클릭시
-                            // 날짜를 어제로 바꾸기
-                            self.date = Date(timeInterval: -86400, since: self.date)
-                            // 그 값을 String으로 바꿔주기
-                            self.dateString = dateToString(date: self.date)
-                            // 어제의 식단 데이터를 불러오기
-                            self.observed.meal_session(date: self.date)
-                        }.padding(.leading, 52)
-                        Spacer()
-                        Text(dateString)
-                            .font(.system(size: 15, weight: .medium))
-                        Spacer()
-                        Image(systemName: "chevron.right").onTapGesture { //오른쪽 화살표를 클릭 시
-                            //날짜를 내일로 바꾸기
-                            self.date = Date(timeInterval: 86400, since: self.date)
-                            // 그 값을 String으로 바꿔주기
-                            self.dateString = dateToString(date: self.date)
-                            // 내일의 식단 데이터를 불러오기
-                            self.observed.meal_session(date: self.date)
-                        }.padding(.trailing, 52)
-                        
-                    }.padding(.bottom, 30)
-                    HStack(alignment: .center, spacing: 40) {
-                Spacer()
-                        Text("아침")
-                            .font(.system(size: 15, weight: .regular))
-                                .onTapGesture { //이 탭을 누르면
-                                    //선택된 탭을 "breakfast"로 변경
-                                    self.diningViewRouter.currentView = "breakfast"
-                                }
-                .foregroundColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
+        return VStack {
+            VStack {
+                HStack {
+                    
+                    Image(systemName: "chevron.left").onTapGesture { // 왼쪽 화살표를 클릭시
+                        // 날짜를 어제로 바꾸기
+                        self.date = Date(timeInterval: -86400, since: self.date)
+                        // 그 값을 String으로 바꿔주기
+                        self.dateString = dateToString(date: self.date)
+                        // 어제의 식단 데이터를 불러오기
+                        self.observed.meal_session(date: self.date)
+                    }.padding(.leading, 52)
+                    Spacer()
+                    Text(dateString)
+                        .font(.system(size: 15, weight: .medium))
+                    Spacer()
+                    Image(systemName: "chevron.right").onTapGesture { //오른쪽 화살표를 클릭 시
+                        //날짜를 내일로 바꾸기
+                        self.date = Date(timeInterval: 86400, since: self.date)
+                        // 그 값을 String으로 바꿔주기
+                        self.dateString = dateToString(date: self.date)
+                        // 내일의 식단 데이터를 불러오기
+                        self.observed.meal_session(date: self.date)
+                    }.padding(.trailing, 52)
+                    
+                }.padding(.bottom, 30)
+                HStack(alignment: .center, spacing: 40) {
+                    Spacer()
+                    Text("아침")
+                        .font(.system(size: 15, weight: .regular))
+                        .onTapGesture { //이 탭을 누르면
+                            //선택된 탭을 "breakfast"로 변경
+                            self.diningViewRouter.currentView = "breakfast"
+                    }
+                    .foregroundColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
                     .accentColor(self.diningViewRouter.currentView == "breakfast" ? Color("squash") : Color.black.opacity(0.7))
-
-                        Text("점심")
-                            .font(.system(size: 15, weight: .regular))
-                                .onTapGesture { //이 탭을 누르면
-                                    //선택된 탭을 "lunch"로 변경
-                                    self.diningViewRouter.currentView = "lunch"
-                                }
-                .foregroundColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
-                .accentColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
-
-                        Text("저녁")
-                            .font(.system(size: 15, weight: .regular))
-                                .onTapGesture {//이 탭을 누르면
-                                    //선택된 탭을 "dinner"로 변경
-                                    self.diningViewRouter.currentView = "dinner"
-                                }
+                    
+                    Text("점심")
+                        .font(.system(size: 15, weight: .regular))
+                        .onTapGesture { //이 탭을 누르면
+                            //선택된 탭을 "lunch"로 변경
+                            self.diningViewRouter.currentView = "lunch"
+                    }
+                    .foregroundColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
+                    .accentColor(self.diningViewRouter.currentView == "lunch" ? Color("squash") : Color.black.opacity(0.7))
+                    
+                    Text("저녁")
+                        .font(.system(size: 15, weight: .regular))
+                        .onTapGesture {//이 탭을 누르면
+                            //선택된 탭을 "dinner"로 변경
+                            self.diningViewRouter.currentView = "dinner"
+                    }
                     .foregroundColor(self.diningViewRouter.currentView == "dinner" ? Color("squash") : Color.black.opacity(0.7))
                     .accentColor(self.diningViewRouter.currentView == "dinner" ? Color("squash") : Color.black.opacity(0.7))
                     Spacer()
                 }
-                }
+            }
+            
+            if self.diningViewRouter.currentView == "breakfast" {
+                MenuView(menu_type: 0, observed: self.observed)
+            } else if self.diningViewRouter.currentView == "lunch" {
+                MenuView(menu_type: 1, observed: self.observed)
+            } else if self.diningViewRouter.currentView == "dinner" {
+                MenuView(menu_type: 2, observed: self.observed)
+            }
+            
+            
+        }.padding(.top, 32)
+            .navigationBarTitle("식단", displayMode: .inline)
+            .accentColor(.white)
+            .gesture(drag)
+            .onAppear {
                 
-                if self.diningViewRouter.currentView == "breakfast" {
-                    MenuView(menu_type: 0, observed: self.observed)
-                } else if self.diningViewRouter.currentView == "lunch" {
-                    MenuView(menu_type: 1, observed: self.observed)
-                } else if self.diningViewRouter.currentView == "dinner" {
-                    MenuView(menu_type: 2, observed: self.observed)
-                }
+                // 현재 시간
+                let hour = Calendar.current.component(.hour, from: self.date)
+                // 현재 분
+                let minute = Calendar.current.component(.minute, from: self.date)
                 
-                
-            }.padding(.top, 32)
-        .navigationBarTitle(Text("식단"), displayMode: .inline)
-                .gesture(drag)
-        .onAppear {
-            // 현재 시간
-            let hour = Calendar.current.component(.hour, from: self.date)
-            // 현재 분
-            let minute = Calendar.current.component(.minute, from: self.date)
-
-            if (hour >= 0 && hour < 9) { // 0 ~ 9시까지 아침
-                self.diningViewRouter.currentView = "breakfast"
-            } else if (hour >= 9 && hour < 14) { // 9시부터 13시 반까지 점심
-                if (hour == 13 && minute > 30) { // 13시 반을 넘으면 저녁
-                    self.diningViewRouter.currentView = "dinner"
-                } else {
-                    self.diningViewRouter.currentView = "lunch"
-                }
-            } else if (hour >= 14 && hour < 19) { // 14시부터 18시 반까지 저녁
-                if (hour == 18 && minute > 30) { // 18시 반을 넘으면 다음 날로 이동해서 아침
-                    self.date = Date(timeInterval: 86400, since: self.date)
+                if (hour >= 0 && hour < 9) { // 0 ~ 9시까지 아침
+                    self.diningViewRouter.currentView = "breakfast"
+                } else if (hour >= 9 && hour < 14) { // 9시부터 13시 반까지 점심
+                    if (hour == 13 && minute > 30) { // 13시 반을 넘으면 저녁
+                        self.diningViewRouter.currentView = "dinner"
+                    } else {
+                        self.diningViewRouter.currentView = "lunch"
+                    }
+                } else if (hour >= 14 && hour < 19) { // 14시부터 18시 반까지 저녁
+                    if (hour == 18 && minute > 30) { // 18시 반을 넘으면 다음 날로 이동해서 아침
+                        self.date = Date(timeInterval: 86400, since: self.date)
+                        self.dateString = dateToString(date: self.date)
+                        self.observed.meal_session(date: self.date)
+                        self.diningViewRouter.currentView = "breakfast"
+                    } else {
+                        self.diningViewRouter.currentView = "dinner"
+                    }
+                } else if (hour >= 19 && hour < 24) { // 19시부터 24시까지 다음날로 이동해서 아침
+                    self.date = Date(timeInterval: 86400, since: Date())
                     self.dateString = dateToString(date: self.date)
                     self.observed.meal_session(date: self.date)
                     self.diningViewRouter.currentView = "breakfast"
-                } else {
-                    self.diningViewRouter.currentView = "dinner"
                 }
-            } else if (hour >= 19 && hour < 24) { // 19시부터 24시까지 다음날로 이동해서 아침
-                self.date = Date(timeInterval: 86400, since: Date())
-                self.dateString = dateToString(date: self.date)
-                self.observed.meal_session(date: self.date)
-                self.diningViewRouter.currentView = "breakfast"
-            }
         }
-                
-        
     }
 }
 

@@ -16,7 +16,6 @@ import UIKit
 
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var isTest = true
     var window: UIWindow?
 
 
@@ -36,18 +35,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewRouter = ViewRouter(initialIndex: 1, customItemIndex: 2)
         
         
+        
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
+            let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            
             let window = UIWindow(windowScene: windowScene)
             // 상단바 색 변경을 위해 기존 UIHostingController에서 커스터마이징한 HostingController로 변경
             // 첫 시작 화면을 startView로 하고, 유저정보와 탭 정보를 같이 보내준다.
-            window.rootViewController = UIHostingController(rootView: startView.environmentObject(viewRouter).environmentObject(config))
+            window.rootViewController = UIHostingController(rootView: startView.environmentObject(viewRouter).environmentObject(config).environment(\.managedObjectContext, managedObjectContext))
             self.window = window
             window.makeKeyAndVisible()
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(popToRoot(notification:)), name: Notification.Name("popToRoot"), object: nil)
         }
     }
 
+    @objc func popToRoot(notification: NSNotification) {
+        if let navigationController = self.findNavigationController(withinController: self.window!.rootViewController!) {
+            navigationController.popToRootViewController(animated: true)
+        }
+    }
+    
+    private func findNavigationController(withinController controller: UIViewController) -> UINavigationController? {
+        for child in controller.children {
+            if child is UINavigationController {
+                return child as? UINavigationController
+            } else {
+                return findNavigationController(withinController: child)
+            }
+        }
+        return nil
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
@@ -74,6 +95,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
     
     
@@ -95,7 +117,7 @@ struct StartView: View {
             
         } else { // 아니면
             // 로그인 페이지를 보여준다.
-            return AnyView(BetaLoginView().environmentObject(self.config))
+            return AnyView(LoginView().environmentObject(self.config))
         }
     }
 }

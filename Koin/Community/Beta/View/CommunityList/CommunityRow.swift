@@ -13,14 +13,14 @@ struct CommunityRow<T: CommonArticle, C: CommonComment>: View{
     //@EnvironmentObject var user: UserSettings
     @EnvironmentObject var config: UserConfig
     @EnvironmentObject var parentViewModel: CommunityViewModel<T>
-    private let viewModel: CommunityRowViewModel<T>
+    let viewModel: CommunityRowViewModel<T>
     
     init(viewModel: CommunityRowViewModel<T>) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        NavigationLink(destination: BetaCommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: self.config.token, articleId: viewModel.id, userId: -1)).navigationBarTitle(viewModel.title).onDisappear {
+        NavigationLink(destination: CommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: self.config.token, articleId: viewModel.id, userId: -1)).onDisappear {
             if (T.self == Article.self) {
                 self.parentViewModel.fetchCommunity()
             } else {

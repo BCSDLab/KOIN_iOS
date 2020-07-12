@@ -11,12 +11,12 @@ target 'Koin' do
   pod 'Alamofire', '~> 5.0.0'
   pod 'PKHUD'
   pod 'SDWebImageSwiftUI'
-  pod "RichEditorView"
   pod 'IGColorPicker'
   pod 'Firebase/Analytics'
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
+  pod 'lottie-ios'
 
 
 end
