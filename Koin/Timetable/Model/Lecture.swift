@@ -9,9 +9,10 @@
 import Foundation
 
 struct Lecture: Codable, Hashable {
-    let id: Int
+    let id: Int?
     let code: String
-    let classTitle: String
+    let classTitle: String?
+    let name: String?
     let classPlace: String?
     let memo: String?
     let grades: String
@@ -26,6 +27,7 @@ struct Lecture: Codable, Hashable {
         case id = "id"
         case code = "code"
         case classTitle = "class_title"
+        case name = "name"
         case classPlace = "class_place"
         case memo = "memo"
         case grades = "grades"

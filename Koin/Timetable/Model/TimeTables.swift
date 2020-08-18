@@ -11,8 +11,9 @@ import Foundation
 struct TimeTables: Codable {
     let semester: String
     let timetable: Array<Lecture>
+    
     private enum CodingKeys: String, CodingKey {
-        case semester = "semester"
-        case timetable = "timetable"
+        case semester
+        case timetable
     }
 }

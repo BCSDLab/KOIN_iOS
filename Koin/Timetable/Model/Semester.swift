@@ -13,6 +13,6 @@ struct Semester: Codable, Hashable {
     let semester: String
     private enum CodingKeys: String, CodingKey {
         case id = "id"
-        case semester = "samester"
+        case semester = "semester"
     }
 }
