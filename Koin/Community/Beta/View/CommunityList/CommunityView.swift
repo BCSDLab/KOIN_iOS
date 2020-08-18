@@ -29,15 +29,15 @@ struct CommunityView<T: CommonArticle, C: CommonComment>: View{
     var body: some View {
         List{
             ForEach(self.viewModel.dataSource) { r in
-                CommunityRow<T,C>(viewModel: r).environmentObject(self.viewModel)
-                    .onAppear{
-                        if(r.id == self.viewModel.dataSource.last?.id) {
-                            if (T.self == Article.self) {
-                                self.viewModel.reloadCommunity()
-                            } else {
-                                self.viewModel.reloadTempCommunity()
+                    CommunityRow<T,C>(viewModel: r).environmentObject(self.viewModel)
+                        .onAppear{
+                            if(r.id == self.viewModel.dataSource.last?.id) {
+                                if (T.self == Article.self) {
+                                    self.viewModel.reloadCommunity()
+                                } else {
+                                    self.viewModel.reloadTempCommunity()
+                                }
                             }
-                        }
                 }
             }
         }.onPull(perform: {
