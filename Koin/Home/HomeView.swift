@@ -44,6 +44,8 @@ struct HomeView: View {
                 .navigationBarTitle("내정보", displayMode: .inline))
         } else if current == "store" {
             return AnyView(StoreView())
+        } else if current == "timetable" {
+            return AnyView(TimeTableView())
         } else if current == "board_free" {
             return AnyView(
                 CommunityView<Article,Comment>(boardId: 1).environmentObject(self.config))
@@ -70,6 +72,8 @@ struct HomeView: View {
                 return "circle"
             case 1:
                 return "bus"
+            case 2:
+                return "timetable"
             case 3:
                 return "store"
             case 4:
@@ -93,7 +97,7 @@ struct HomeView: View {
                 VStack(alignment: .center){
                     GridView(rows: 3, columns: 3) { index in
                         Button(action: {
-                            if ([0,1,3,4,6,7,8].contains(index)) {
+                            if ([0,1,2,3,4,6,7,8].contains(index)) {
                                 self.tabData.currentView = self.setLink(index: index)
                             } else {
                                 prepare_project()
@@ -157,8 +161,8 @@ struct HomeView: View {
                                 .frame(height: 72, alignment: .leading)
                                 .padding(.leading, 25)
                         }.frame(width: geometry.size.width, height: 300 + UIDevice.current.NotchTopHeight, alignment: .leading)
-                            .background(Image("img_bg").resizable().frame(width: geometry.size.width, height: 300))
-                    }.frame(width: geometry.size.width, height: 376 + UIDevice.current.NotchTopHeight, alignment: .top)
+                        .background(Image("img_bg").resizable().frame(width: geometry.size.width, height: 300,alignment: .leading))
+                    }.frame(width: geometry.size.width, height: 376 + UIDevice.current.NotchTopHeight, alignment: .topLeading)
                         .background(Color("squash"))
                         .navigationBarHidden(true)
                     Spacer()
@@ -168,7 +172,7 @@ struct HomeView: View {
     }
 }
 
-struct BetaHomeView_Previews: PreviewProvider {
+struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }

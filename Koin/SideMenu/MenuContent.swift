@@ -21,35 +21,34 @@ struct MenuContent: View {
     
     var body: some View {
         VStack {
-            HStack {
-                VStack(alignment: .leading){
+            VStack(alignment: .leading){
+                HStack{
                     Button(action: {
                         self.viewRouter.dismiss_menu()
                     }) {
                         Image(systemName: "chevron.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 24)
+                            .foregroundColor(Color("black"))
+                    }.padding(.bottom, 16)
+                    Spacer()
+                    Image("img_menu_logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 24)
-                        .foregroundColor(Color("black"))
-                    }.padding(16)
-                    HStack{
-                        Text(self.config.nickname)
-                            .font(.system(size: 15))
-                            .fontWeight(.medium)
-                            .foregroundColor(Color("light_navy"))
-                        Text("님,안녕하세요!")
-                            .font(.system(size: 13))
-                            .foregroundColor(Color("light_navy"))
-                    }.padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
+                        .frame(height: 40)
                 }
-                Spacer()
-                Image("img_menu_logo")
-                .scaledToFit()
-                .frame(width: 40)
+                HStack(spacing: 4){
+                    Text(self.config.nickname)
+                        .font(.system(size: 15))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color("light_navy"))
+                    Text("님,안녕하세요!")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color("light_navy"))
+                }
             }
-                //.padding(.leading, CGFloat(20))
-                .padding(.trailing, 16)
-                .padding(.top, UIDevice.current.NotchTopHeight)
+                .padding(EdgeInsets(top: 8 + UIDevice.current.NotchTopHeight, leading: 16, bottom: 8, trailing: 16))
             
             Button(action: {
                 // 현재 view를 myinfo로 변경
@@ -57,18 +56,18 @@ struct MenuContent: View {
                 // 메뉴 닫음
                 self.viewRouter.dismiss_menu()
             }) {
-                HStack{
+                HStack(spacing: 0){
                     Image("bottom_myinfo")
                         .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(self.viewRouter.currentView == "myinfo" ? Color("squash"): Color("black"))
-                        .frame(width:36)
+                        .frame(height:24)
                     Text("내정보")
                         .font(.system(size: 15))
                         .foregroundColor(self.viewRouter.currentView == "myinfo" ? Color("squash"): Color("black"))
                 }.frame(maxWidth: .infinity,alignment: .leading)
-                    .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
+                    .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 0))
             }
             VStack{
                 Text("학교정보")
@@ -76,7 +75,7 @@ struct MenuContent: View {
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
                     .frame(maxWidth: .infinity,alignment: .leading)
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
-            }.background(Color(red: 210/255, green: 218/255, blue: 226/255))
+            }.background(Color(red: 246/255, green: 248/255, blue: 249/255))
             HStack{
                 Button(action: {
                     self.viewRouter.currentView = "store"
@@ -125,7 +124,7 @@ struct MenuContent: View {
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
                     .frame(maxWidth: .infinity,alignment: .leading)
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
-            }.background(Color(red: 210/255, green: 218/255, blue: 226/255))
+            }.background(Color(red: 246/255, green: 248/255, blue: 249/255))
             HStack{
                 Button(action: {
                     self.viewRouter.currentView = "board_secret"
@@ -185,24 +184,20 @@ struct MenuContent: View {
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
                     .frame(maxWidth: .infinity,alignment: .leading)
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
-            }.background(Color(red: 210/255, green: 218/255, blue: 226/255))
+            }.background(Color(red: 246/255, green: 248/255, blue: 249/255))
             
             VStack{
                 Button(action: {
                     let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
                     UIApplication.shared.open(url as URL)
                 }) {
-                    HStack {
+                    HStack{
                         Text("카카오톡 1:1 대화")
                             .font(.system(size: 15))
                             .foregroundColor(Color("black"))
                         Spacer()
-                        Image("kakaotalk")
-                            .renderingMode(.template)
-                            .foregroundColor(.gray)
-                            .opacity(0.5)
                     }
-                }.padding(EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16))
+                }.padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
                 Spacer()
                 Button(action: {
                     let url: NSURL = URL(string: "https://bcsdlab.com")! as NSURL
@@ -221,6 +216,8 @@ struct MenuContent: View {
             }
             
         }.frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topLeading)
-          //.padding(.top, UIDevice.current.NotchTopHeight)
+            .onReceive(self.viewRouter.currentViewChange) { current in
+
+        }
     }
 }
