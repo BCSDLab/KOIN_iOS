@@ -12,7 +12,7 @@ import PKHUD
 struct StoreView: View {
     @ObservedObject var viewModel: StoreViewModel
     @EnvironmentObject var tabData: ViewRouter
-    @State var isShowing: Bool = true
+    @State var isChanged: Bool = true
     
     init() {
         self.viewModel = StoreViewModel()
@@ -30,6 +30,7 @@ struct StoreView: View {
             
             HStack(alignment: .center, spacing: 20) {
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S005") {
                         self.viewModel.category = ""
                     } else {
@@ -47,6 +48,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S006") {
                         self.viewModel.category = ""
                     } else {
@@ -65,6 +67,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S007") {
                         self.viewModel.category = ""
                     } else {
@@ -83,6 +86,7 @@ struct StoreView: View {
                 }
                 
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S002") {
                         self.viewModel.category = ""
                     } else {
@@ -100,6 +104,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S003") {
                         self.viewModel.category = ""
                     } else {
@@ -119,6 +124,7 @@ struct StoreView: View {
             }
             HStack(alignment: .center, spacing: 20) {
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S004") {
                         self.viewModel.category = ""
                     } else {
@@ -136,6 +142,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S008") {
                         self.viewModel.category = ""
                     } else {
@@ -153,6 +160,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S009") {
                         self.viewModel.category = ""
                     } else {
@@ -170,6 +178,7 @@ struct StoreView: View {
                     }
                 }
                 Button(action: {
+                    self.isChanged = false
                     if (self.viewModel.category == "S001") {
                         self.viewModel.category = ""
                     } else {
@@ -214,21 +223,30 @@ struct StoreView: View {
                 .background(Color("store_list_title"))
             
             
-            ForEach(self.viewModel.data) { c in
-                if (c.category == self.viewModel.category || self.viewModel.category == "") {
-                    StoreRow(viewModel: c)
-                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                }
-            }
+                VStack{
+                    ForEach(self.viewModel.showList) { c in
+                        StoreRow(viewModel: c)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                        
+                    }
+                }.animation(.easeInOut).transition(.flipFromLeft)
         }.onAppear{
             self.tabData.openLoading()
             self.viewModel.load()
         }.onReceive(self.viewModel.result) { result in
             self.tabData.closeLoading()
-        }
+        }/*.onReceive(self.viewModel.changeCategory) { category in
+            self.isChanged = true
+        }*/
         
         .navigationBarTitle("주변식당", displayMode: .inline)
     }
     
 }
 
+
+struct StoreView_Previews: PreviewProvider {
+    static var previews: some View {
+        StoreView()
+    }
+}

@@ -20,13 +20,7 @@ struct CommunityRow<T: CommonArticle, C: CommonComment>: View{
     }
     
     var body: some View {
-        NavigationLink(destination: CommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: self.config.token, articleId: viewModel.id, userId: -1)).onDisappear {
-            if (T.self == Article.self) {
-                self.parentViewModel.fetchCommunity()
-            } else {
-                self.parentViewModel.fetchTempCommunity()
-            }
-        }) {
+        VStack{
             VStack(alignment: .leading) {
                 HStack {
                     Text("\(viewModel.title)")
@@ -48,6 +42,16 @@ struct CommunityRow<T: CommonArticle, C: CommonComment>: View{
                         .foregroundColor(Color("warm_grey"))
                 }
             }
+            NavigationLink(destination: CommunityDetailView<T,C>(viewModel: CommunityDetailViewModel(communityFetcher: CommunityFetcher(), token: self.config.token, articleId: viewModel.id, userId: -1)).onDisappear {
+                if (T.self == Article.self) {
+                    self.parentViewModel.fetchCommunity()
+                } else {
+                    self.parentViewModel.fetchTempCommunity()
+                }
+            }) {
+                EmptyView()
+            }
         }
+        
     }
 }
