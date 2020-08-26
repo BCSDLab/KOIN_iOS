@@ -37,6 +37,7 @@
 		A01816A02470496400A0E86C /* UserResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018169F2470496400A0E86C /* UserResponseData.swift */; };
 		A01F0E0223FC116A000339A7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F0E0123FC116A000339A7 /* KeyboardManager.swift */; };
 		A01F0E0823FC1A8B000339A7 /* Editor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A01F0E0723FC1A8B000339A7 /* Editor.storyboard */; };
+		A021D17224EEB8F4008EAA17 /* TimeTableResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021D17124EEB8F4008EAA17 /* TimeTableResult.swift */; };
 		A023E99323E6CB540012E56F /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A023E99223E6CB540012E56F /* EditorViewController.swift */; };
 		A02AD36F24EBDFBC00887914 /* BetaHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AD36E24EBDFBC00887914 /* BetaHomeView.swift */; };
 		A02D57F4240683F5007A6168 /* BusSearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A02D57EC240683F5007A6168 /* BusSearch.storyboard */; };
@@ -207,6 +208,8 @@
 		A0DD669F24E579D0009D48BD /* TimeTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD669E24E579D0009D48BD /* TimeTableViewModel.swift */; };
 		A0DD66A124E58889009D48BD /* TimeTableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD66A024E58889009D48BD /* TimeTableError.swift */; };
 		A0DD66A324E588B8009D48BD /* ParsingTimeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD66A224E588B8009D48BD /* ParsingTimeTable.swift */; };
+		A0EB403324F67DB30061F687 /* TimeDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EB403224F67DB30061F687 /* TimeDuration.swift */; };
+		A0EB403524F67DD50061F687 /* RectGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EB403424F67DD50061F687 /* RectGetter.swift */; };
 		A0F20945243B42DA00779D06 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F20944243B42DA00779D06 /* CommunityViewModel.swift */; };
 		A0F20947243B433A00779D06 /* CommunityRowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F20946243B433A00779D06 /* CommunityRowViewModel.swift */; };
 		A0F2094A243B4F9D00779D06 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F20949243B4F9D00779D06 /* CommunityView.swift */; };
@@ -257,6 +260,7 @@
 		A018169F2470496400A0E86C /* UserResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseData.swift; sourceTree = "<group>"; };
 		A01F0E0123FC116A000339A7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		A01F0E0723FC1A8B000339A7 /* Editor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Editor.storyboard; sourceTree = "<group>"; };
+		A021D17124EEB8F4008EAA17 /* TimeTableResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableResult.swift; sourceTree = "<group>"; };
 		A023E99223E6CB540012E56F /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		A02AD36E24EBDFBC00887914 /* BetaHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaHomeView.swift; sourceTree = "<group>"; };
 		A02D57EC240683F5007A6168 /* BusSearch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BusSearch.storyboard; sourceTree = "<group>"; };
@@ -430,6 +434,8 @@
 		A0DD669E24E579D0009D48BD /* TimeTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableViewModel.swift; sourceTree = "<group>"; };
 		A0DD66A024E58889009D48BD /* TimeTableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableError.swift; sourceTree = "<group>"; };
 		A0DD66A224E588B8009D48BD /* ParsingTimeTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingTimeTable.swift; sourceTree = "<group>"; };
+		A0EB403224F67DB30061F687 /* TimeDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDuration.swift; sourceTree = "<group>"; };
+		A0EB403424F67DD50061F687 /* RectGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectGetter.swift; sourceTree = "<group>"; };
 		A0F20944243B42DA00779D06 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		A0F20946243B433A00779D06 /* CommunityRowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityRowViewModel.swift; sourceTree = "<group>"; };
 		A0F20949243B4F9D00779D06 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
@@ -744,6 +750,8 @@
 				A060F16F24C5D08F00C34898 /* Lecture.swift */,
 				A060F17124C5D3B600C34898 /* Semester.swift */,
 				A0B54A4924E428140047F09A /* TimeTables.swift */,
+				A021D17124EEB8F4008EAA17 /* TimeTableResult.swift */,
+				A0EB403224F67DB30061F687 /* TimeDuration.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -751,6 +759,7 @@
 		A060F16D24C5D06500C34898 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A0EB403424F67DD50061F687 /* RectGetter.swift */,
 				A060F16924C5C5F400C34898 /* TimeTableView.swift */,
 			);
 			path = View;
@@ -1525,6 +1534,7 @@
 				A03C5AA324E0175B00BC3F9D /* Tracks.swift in Sources */,
 				A0BFB57B2457276A00589CEE /* SearchView.swift in Sources */,
 				A08EC91824699FD2001D11AA /* CommonVariables.swift in Sources */,
+				A0EB403324F67DB30061F687 /* TimeDuration.swift in Sources */,
 				6C5022BA4A60BE017B01F044 /* DiningFetcher.swift in Sources */,
 				A060F17024C5D08F00C34898 /* Lecture.swift in Sources */,
 				A0D72DC12483DFE9007290EB /* MarketFetcher.swift in Sources */,
@@ -1566,10 +1576,12 @@
 				A02D57F7240683F5007A6168 /* BusController.swift in Sources */,
 				A03C5AAF24E0175B00BC3F9D /* Grid.swift in Sources */,
 				A02D57F5240683F5007A6168 /* BusTimeTableView.swift in Sources */,
+				A021D17224EEB8F4008EAA17 /* TimeTableResult.swift in Sources */,
 				A061ABB9247A602C007853A5 /* UIColor+Extensions.swift in Sources */,
 				A0F20958243B627700779D06 /* CommunityCommentViewModel.swift in Sources */,
 				A0F2095A243B655500779D06 /* CommentRowViewModel.swift in Sources */,
 				A0D72DB524839316007290EB /* PrepareView.swift in Sources */,
+				A0EB403524F67DD50061F687 /* RectGetter.swift in Sources */,
 				A06EB8DC24715DA90051A0B8 /* CommonFunction.swift in Sources */,
 				A061ABFB247A602C007853A5 /* RichEditorToolbar.swift in Sources */,
 				A0FCB3432441E9E0001F81AE /* CommunityResponse.swift in Sources */,

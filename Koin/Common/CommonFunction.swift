@@ -50,6 +50,15 @@ extension AnyTransition {
     }
 }
 
+extension UIView {
+    func asImage(rect: CGRect) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: rect)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
+}
+
 
 struct ResignKeyboardOnDragGesture: ViewModifier {
     var gesture = DragGesture().onChanged{_ in
@@ -297,6 +306,16 @@ struct EdgeBorder: Shape {
         }
         
         return Path( CGRect(x: x, y: y, width: w, height: h) )
+    }
+}
+
+class ImageSaver: NSObject {
+    func writeToPhotoAlbum(image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
+    }
+    
+    @objc func saveError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        print("Save finished!")
     }
 }
 
