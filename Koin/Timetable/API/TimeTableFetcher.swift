@@ -42,10 +42,8 @@ class TimeTableFetcher {
             .mapError { error in
                 return error
         }
-        .print()
         .map{ $0.data }
         .decode(type: TimeTables.self, decoder: JSONDecoder())
-        .print()
         .eraseToAnyPublisher()
     }
     
@@ -63,10 +61,8 @@ class TimeTableFetcher {
             .mapError { error in
                 return error
         }
-        .print()
         .map{ $0.data }
         .decode(type: Array<Semester>.self, decoder: JSONDecoder())
-        .print()
         .eraseToAnyPublisher()
     }
     
@@ -87,10 +83,66 @@ class TimeTableFetcher {
             .mapError { error in
                 return error
         }
-        .print()
         .map{ $0.data }
         .decode(type: Array<Lecture>.self, decoder: JSONDecoder())
-        .print()
+        .eraseToAnyPublisher()
+    }
+    /*
+     {
+     "success": true
+     }
+     */
+    func deleteLecture(id: Int, token: String) -> AnyPublisher<TimeTableResult, Error> {
+        var components = URLComponents()
+        components.scheme = isStage ? TimeTableAPI.stageScheme : TimeTableAPI.scheme
+        components.host = isStage ? TimeTableAPI.stageHost : TimeTableAPI.productionHost
+        components.path = "/timetable"
+        components.queryItems = [
+            URLQueryItem(name: "id", value: String(id)),
+        ]
+        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return session.dataTaskPublisher(for: request)
+            .mapError { error in
+                return error
+        }
+        .map{ $0.data }
+        .decode(type: TimeTableResult.self, decoder: JSONDecoder())
+        .eraseToAnyPublisher()
+    }
+    
+    func addLecture(semester: String, lecture: Lecture, token: String) -> AnyPublisher<TimeTables, Error> {
+        var components = URLComponents()
+        components.scheme = isStage ? TimeTableAPI.stageScheme : TimeTableAPI.scheme
+        components.host = isStage ? TimeTableAPI.stageHost : TimeTableAPI.productionHost
+        components.path = "/timetables"
+        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let timetableData = TimeTables(semester: semester, timetable: [
+            lecture
+        ])
+        
+        
+        do {
+            request.httpBody = try JSONEncoder().encode(timetableData)
+        } catch let error {
+            print(error)
+        }
+        
+        return session.dataTaskPublisher(for: request)
+            .mapError { error in
+                return error
+        }
+        .map{ $0.data }
+        .decode(type: TimeTables.self, decoder: JSONDecoder())
         .eraseToAnyPublisher()
     }
     

@@ -9,20 +9,6 @@
 import SwiftUI
 import Foundation
 
-struct TimeDuration {
-    let start: Int
-    let end: Int
-}
-
-extension TimeDuration: Hashable {
-    static func == (lhs: TimeDuration, rhs: TimeDuration) -> Bool {
-        return lhs.start == rhs.start
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.start)
-    }
-}
-
 struct TimeTableView: View {
     
     @ObservedObject var viewModel: TimeTableViewModel
@@ -33,7 +19,14 @@ struct TimeTableView: View {
     @State private var showLectureDetail = false
     @State private var showSemester = false
     
-    @State var query = ""
+    @State private var timeTableRect: CGRect = .zero
+    @State private var uiimage: UIImage? = nil
+    
+    @State private var showingAlert = false
+    @State private var showingDuplicate = false
+    @State private var duplicateTime = -1
+    
+    let imageSaver = ImageSaver()
     
     init() {
         self.viewModel = TimeTableViewModel()
@@ -43,11 +36,49 @@ struct TimeTableView: View {
         let buttons = options.map { option in
             Alert.Button.default(Text("\(String(option.semester.prefix(4)))년 \(String(option.semester.suffix(1)))학기"), action: {
                 self.viewModel.semester = option.semester
-                self.viewModel.load(token: self.userData.token)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.viewModel.load(token: self.userData.token)
+                    self.viewModel.getLectures()
+                }
             } )
         }
         return ActionSheet(title: Text("학기를 선택해주세요."),
                            buttons: buttons + [Alert.Button.cancel()])
+    }
+    
+    var TimeTableAlertDialog: Alert {
+        if(self.showingDuplicate) {
+            return Alert(title: Text("시간 중복"), message: Text("선택한 시간에 이미 다른수업이 있습니다.\n바꾸시겠습니까?"),primaryButton: .default(Text("확인")) {
+                
+                var deletedLectures: [Lecture] = []
+                
+                self.viewModel.data.timetable.forEach { l in
+                    self.viewModel.selectedLecture?.classTime.forEach { c in
+                        if (!deletedLectures.contains(l) && l.classTime.contains(c)) {
+                            deletedLectures.append(l)
+                        }
+                    }
+                }
+                
+                deletedLectures.forEach { d in
+                    DispatchQueue.main.async {
+                        self.viewModel.deleteLecture(token: self.userData.token, lecture: d)
+                    }
+                }
+                
+                self.viewModel.addLecture(token: self.userData.token, lecture: self.viewModel.selectedLecture!)
+                self.viewModel.selectedLecture = nil
+                
+                self.showingAlert = false
+                self.showingDuplicate = false
+                }, secondaryButton: .cancel(Text("취소")))
+        } else {
+            return Alert(title: Text("수업 삭제"), message: Text("해당 수업을 삭제하시겠습니까?"), primaryButton: .default(Text("확인")) {
+                    self.viewModel.deleteLecture(token: self.userData.token, lecture: self.viewModel.detailLecture!)
+                    self.showLectureDetail = false
+                    self.showingAlert = false
+                }, secondaryButton: .cancel(Text("취소")))
+        }
     }
     
     let colors: Array<Color> = [
@@ -91,7 +122,6 @@ struct TimeTableView: View {
     
     func getClassTime(list: Array<Int>) -> String {
         var center: Array<Int> = []
-        var result: Array<TimeDuration> = []
         var classTime: String = ""
         
         if(list.isEmpty) {
@@ -149,9 +179,9 @@ struct TimeTableView: View {
     func getHeight(start: Int, end: Int) -> CGFloat {
         return CGFloat(25*(end-start+1))
     }
-    
+        
     func getX(start: Int, width: Double) -> CGFloat {
-        return CGFloat(0.2 * width * Double(start + 1) - (12.0 * Double(start)) - 43.5)
+        return CGFloat(0.2 * width * Double(start + 1) - (12.0 * Double(start)) - ((width - 60)/25*3.5) + 1.5)
     }
     
     func getY(start: Int, end: Int) -> CGFloat {
@@ -174,7 +204,8 @@ struct TimeTableView: View {
                             .border(Color(red: 210/255, green: 218/255, blue: 226/255), width: 1)
                         }
                         Button(action: {
-                            print("aa")
+                            let image = UIApplication.shared.windows[0].rootViewController?.view.asImage(rect: self.timeTableRect)
+                            self.imageSaver.writeToPhotoAlbum(image: image!)
                         }) {
                             Text("이미지로 저장하기")
                                 .foregroundColor(.white)
@@ -215,7 +246,7 @@ struct TimeTableView: View {
                                                     .font(.system(size: 9))
                                                     .foregroundColor(Color(red: 37/255, green: 37/255, blue: 37/255))
                                                     .frame(width: 30,height: 25, alignment: .center)
-                                            }.frame(maxWidth: 60,maxHeight: 25)
+                                            }.frame(width: 60,height: 25)
                                             Rectangle()
                                                 .frame(height: 1)
                                                 .border(Color(red: 244/255, green: 244/255, blue: 244/255), width: 1)
@@ -231,9 +262,9 @@ struct TimeTableView: View {
                                                     .font(.system(size: 9))
                                                     .foregroundColor(Color(red: 37/255, green: 37/255, blue: 37/255))
                                                     .frame(width: 30,height: 25, alignment: .center)
-                                            }.frame(maxWidth: 60,maxHeight: 25)
+                                            }.frame(width: 60,height: 25)
                                         }
-                                        .frame(maxWidth: 60,maxHeight: 50)
+                                        .frame(width: 60,height: 50)
                                         .border(Color(red: 218/255, green: 218/255, blue: 218/255), width: 1)
                                         .foregroundColor(.white)
                                     }
@@ -276,13 +307,25 @@ struct TimeTableView: View {
                                                     
                                             }
                                         }
+                                        
+                                        if(self.viewModel.selectedLecture != nil) {
+                                            ForEach(self.filterClassTime(list: self.viewModel.selectedLecture!.classTime), id: \.self) { duration in
+                                                Rectangle()
+                                                    
+                                                    .foregroundColor(Color.white)
+                                                    .frame(width: (geometry.size.width - 60)/5+1, height: self.getHeight(start: duration.start, end: duration.end), alignment: .top)
+                                                    .border(Color.red, width: 1)
+                                                .position(x: self.getX(start: Int(floor(Double(duration.start)/100.0)), width: Double(geometry.size.width)), y: self.getY(start: duration.start, end: duration.end)+1.5)
+                                                
+                                            }
+                                        }
                                     }
                                     
                                     
                                 }
                                 
                             }
-                        }
+                        }.background(RectGetter(rect: self.$timeTableRect))
                     }
                 }
                 .gridStyle(
@@ -300,7 +343,7 @@ struct TimeTableView: View {
                             .font(.system(size: 17))
                             .foregroundColor(.white)
                     })
-                
+                    
                 Group{
                         BottomSheetModal(display: self.$showLectures) {
                             VStack(spacing: 0){
@@ -312,6 +355,7 @@ struct TimeTableView: View {
                                         .frame(height: 48,alignment: .center)
                                     Button(action: {
                                         self.showLectures = false
+                                        self.viewModel.selectedLecture = nil
                                     }) {
                                         Text("완료")
                                             .font(.system(size: 15))
@@ -330,9 +374,9 @@ struct TimeTableView: View {
                                         .padding(.trailing, 16)
                                     
                                     VStack{
-                                        TextField("", text: self.$query)
+                                        TextField("", text: self.$viewModel.query)
                                             .font(.system(size: 14))
-                                            .foregroundColor(Color(hex: 0xd2dae2))
+                                            .foregroundColor(Color("black"))
                                             .padding(.horizontal, 16)
                                     }.frame(maxWidth: .infinity, minHeight : 36)
                                         .border(Color(red: 210/255, green: 218/255, blue: 226/255), width: 1)
@@ -342,16 +386,65 @@ struct TimeTableView: View {
                                 Rectangle()
                                     .border(Color("cloudy_blue"))
                                     .frame(maxWidth: .infinity, maxHeight: 1)
-                                List(self.viewModel.lectures, id: \.self) { l in
-                                    VStack(alignment: .leading){
-                                        Text(l.name ?? "")
-                                            .font(.system(size: 15))
-                                            .foregroundColor(Color("black"))
-                                        // 추가: classTime
-                                        Text("\(self.getClassTime(list: l.classTime))\(l.classPlace ?? "") / \(l.grades)학점 / \(l.code) / \(l.professor)")
-                                            .font(.system(size: 13))
-                                            .foregroundColor(Color("black"))
-                                    }
+                                List(self.viewModel.lectures.filter({ self.viewModel.query.isEmpty ? true : $0.name!.contains(self.viewModel.query)}), id: \.self) { l in
+                                    HStack{
+                                        VStack(alignment: .leading){
+                                            Text(l.name ?? "")
+                                                .font(.system(size: 15))
+                                                .foregroundColor(Color("black"))
+                                                .padding(.bottom, 12)
+                                            // 추가: classTime
+                                            Text("\(self.getClassTime(list: l.classTime))\(l.classPlace ?? "") / \(l.grades)학점 / \(l.code) / \(l.professor)")
+                                                .font(.system(size: 13))
+                                                .foregroundColor(Color("black"))
+                                        }
+                                        Spacer()
+                                        
+                                        Group{
+                                            if(self.viewModel.data.timetable.contains{ t in
+                                                t.code == l.code && t.lectureClass == l.lectureClass
+                                            }) {
+                                                Button(action: {
+                                                    let lecture: Lecture? = self.viewModel.data.timetable.first { t in
+                                                        t.code == l.code && t.lectureClass == l.lectureClass
+                                                    }
+                                                    self.viewModel.deleteLecture(token: self.userData.token, lecture: lecture!)
+                                                }) {
+                                                    Image(systemName: "minus.circle.fill")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 24, alignment: .center)
+                                                        .foregroundColor(Color(red: 255/255, green: 108/255, blue: 108/255))
+                                                }
+                                            } else {
+                                                Button(action: {
+                                                    if(self.viewModel.selectedLecture != nil && self.viewModel.selectedLecture!.code == l.code && self.viewModel.selectedLecture!.lectureClass == l.lectureClass) {
+                                                        let duplicateResult = self.viewModel.checkDuplicate(classTime: l.classTime)
+                                                        
+                                                        if(duplicateResult.0) {
+                                                            self.duplicateTime = duplicateResult.1
+                                                            self.showingDuplicate = true
+                                                            self.showingAlert = true
+                                                        } else {
+                                                            self.viewModel.addLecture(token: self.userData.token, lecture: l)
+                                                            self.viewModel.selectedLecture = nil
+                                                        }
+                                                        
+                                                    } else {
+                                                        self.viewModel.selectedLecture = l
+                                                    }
+                                                    
+                                                }) {
+                                                    Image(systemName: "plus.circle.fill")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 24, alignment: .center)
+                                                        .foregroundColor(Color(red: 77/255, green: 178/255, blue: 151/255))
+                                                }
+                                            }
+                                        }
+                                        
+                                    }.frame(height: 80)
                                 }
                             }
                             
@@ -361,7 +454,7 @@ struct TimeTableView: View {
                             VStack(spacing: 0){
                                 HStack{
                                     Button(action: {
-                                        self.showLectureDetail = false
+                                        self.showingAlert = true
                                     }) {
                                         Text("삭제")
                                             .font(.system(size: 15))
@@ -391,12 +484,12 @@ struct TimeTableView: View {
                                     .frame(maxWidth: .infinity, maxHeight: 1)
                                 
                                 VStack(alignment: .leading, spacing: 0){
-                                    Text(self.viewModel.selectedLecture?.classTitle ?? "aaa")
+                                    Text(self.viewModel.detailLecture?.classTitle ?? "aaa")
                                         .font(.system(size: 15))
                                         .fontWeight(.medium)
                                         .foregroundColor(Color("black"))
                                         .padding(.bottom, 21)
-                                    Text("\(self.getClassTime(list: self.viewModel.selectedLecture?.classTime ?? []))\n\(self.viewModel.selectedLecture?.department ?? "") / \(self.viewModel.selectedLecture?.code ?? "") / \(self.viewModel.selectedLecture?.grades ?? "")학점 / \(self.viewModel.selectedLecture?.professor ?? "")")
+                                    Text("\(self.getClassTime(list: self.viewModel.detailLecture?.classTime ?? []))\n\(self.viewModel.detailLecture?.department ?? "") / \(self.viewModel.detailLecture?.code ?? "") / \(self.viewModel.detailLecture?.grades ?? "")학점 / \(self.viewModel.detailLecture?.professor ?? "")")
                                         .font(.system(size: 15))
                                         .fontWeight(.regular)
                                         .foregroundColor(Color("black"))
@@ -413,6 +506,9 @@ struct TimeTableView: View {
                             
                         }
                 }
+            }
+            .alert(isPresented: self.$showingAlert) {
+                self.TimeTableAlertDialog
             }
         }.onAppear{
             DispatchQueue.main.async {
