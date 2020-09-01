@@ -9,6 +9,9 @@
 import UIKit
 import Firebase
 import CoreData
+import FirebaseRemoteConfig
+
+var remoteConfig = RemoteConfig.remoteConfig()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        
+        //setupRemoteConfigDefaults()
+        //fetchRemoteConfig()
+        
+        
+        
         return true
     }
 
@@ -80,6 +89,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    
 
 
 }

@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RectGetter: View {
     @Binding var rect: CGRect
+    @EnvironmentObject var tabData: ViewRouter
     
     var body: some View {
         GeometryReader { proxy in
@@ -19,8 +20,10 @@ struct RectGetter: View {
     }
     
     func createView(proxy: GeometryProxy) -> some View {
-        DispatchQueue.main.async {
-            self.rect = proxy.frame(in: .global)
+        if(self.tabData.currentView == "timetable") {
+            DispatchQueue.main.async {
+                self.rect = proxy.frame(in: .global)
+            }
         }
         
         return Rectangle().fill(Color.clear)

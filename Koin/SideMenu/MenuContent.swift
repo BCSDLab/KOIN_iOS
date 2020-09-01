@@ -34,6 +34,7 @@ struct MenuContent: View {
                     }.padding(.bottom, 16)
                     Spacer()
                     Image("img_menu_logo")
+                        .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 40)
@@ -70,7 +71,7 @@ struct MenuContent: View {
                     .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 0))
             }
             VStack{
-                Text("학교정보")
+                Text("서비스")
                     .font(.system(size: 15))
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
                     .frame(maxWidth: .infinity,alignment: .leading)
@@ -86,17 +87,7 @@ struct MenuContent: View {
                         .foregroundColor(self.viewRouter.currentView == "store" ? Color("squash"): Color("black"))
                         .frame(maxWidth: .infinity,alignment: .leading)
                 }
-                Button(action: {
-                    self.viewRouter.currentView = "dining"
-                    self.viewRouter.dismiss_menu()
-                }) {
-                    Text("식단")
-                        .font(.system(size: 15))
-                        .foregroundColor(self.viewRouter.currentView == "dining" ? Color("squash"): Color("black"))
-                        .frame(maxWidth: .infinity,alignment: .leading)
-                }
-            }.padding(EdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 0))
-            HStack{
+                
                 Button(action: {
                     self.viewRouter.currentView = "bus"
                     self.viewRouter.dismiss_menu()
@@ -107,7 +98,44 @@ struct MenuContent: View {
                         .frame(maxWidth: .infinity,alignment: .leading)
                 }
                 
+            }.padding(EdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 0))
+            HStack{
                 
+                Button(action: {
+                    self.viewRouter.currentView = "dining"
+                    self.viewRouter.dismiss_menu()
+                }) {
+                    Text("식단")
+                        .font(.system(size: 15))
+                        .foregroundColor(self.viewRouter.currentView == "dining" ? Color("squash"): Color("black"))
+                        .frame(maxWidth: .infinity,alignment: .leading)
+                }
+                
+                Button(action: {
+                    self.viewRouter.currentView = "timetable"
+                    self.viewRouter.dismiss_menu()
+                }) {
+                    Text("시간표")
+                        .font(.system(size: 15))
+                        .foregroundColor(self.viewRouter.currentView == "timetable" ? Color("squash"): Color("black"))
+                        .frame(maxWidth: .infinity,alignment: .leading)
+                }
+                
+                
+            }.padding(EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 0))
+            
+            HStack{
+                
+                Button(action: {
+                    self.viewRouter.currentView = "circle"
+                    self.viewRouter.dismiss_menu()
+                }) {
+                    Text("동아리")
+                        .font(.system(size: 15))
+                        .foregroundColor(self.viewRouter.currentView == "circle" ? Color("squash"): Color("black"))
+                        .frame(maxWidth: .infinity,alignment: .leading)
+                }
+                /*
                 Button(action: {
                     self.viewRouter.currentView = "circle"
                     self.viewRouter.dismiss_menu()
@@ -116,9 +144,9 @@ struct MenuContent: View {
                         .font(.system(size: 15))
                         .foregroundColor(Color("black"))
                         .frame(maxWidth: .infinity,alignment: .leading)
-                }
+                }*/
             }.padding(EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 0))
-            VStack{
+            /*VStack{
                 Text("커뮤니티")
                     .font(.system(size: 15))
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
@@ -167,7 +195,7 @@ struct MenuContent: View {
                         .foregroundColor(Color("black"))
                     .frame(maxWidth: .infinity,alignment: .leading)
                 }
-            }.padding(EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 0))
+            }.padding(EdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 0))*/
             /*
              Button(action: {
              prepare_project()
@@ -178,16 +206,16 @@ struct MenuContent: View {
              .foregroundColor(Color("black"))
              }
              */
-            VStack{
+            /*VStack{
                 Text("고객지원")
                     .font(.system(size: 15))
                     .foregroundColor(Color(red: 133/255, green: 133/255, blue: 133/255))
                     .frame(maxWidth: .infinity,alignment: .leading)
                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
-            }.background(Color(red: 246/255, green: 248/255, blue: 249/255))
+            }.background(Color(red: 246/255, green: 248/255, blue: 249/255))*/
             
             VStack{
-                Button(action: {
+                /*Button(action: {
                     let url: NSURL = URL(string: "http://pf.kakao.com/_twMBd")! as NSURL
                     UIApplication.shared.open(url as URL)
                 }) {
@@ -197,7 +225,7 @@ struct MenuContent: View {
                             .foregroundColor(Color("black"))
                         Spacer()
                     }
-                }.padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+                }.padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))*/
                 Spacer()
                 Button(action: {
                     let url: NSURL = URL(string: "https://bcsdlab.com")! as NSURL
@@ -205,14 +233,13 @@ struct MenuContent: View {
                 }) {
                     HStack {
                         Spacer()
-                        Image("logo_white")
+                        Image("BCSDIcon")
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 16)
-                            .opacity(0.5)
+                            .frame(width: 33)
                     }.padding(.trailing, 16)
-                }.padding(.bottom, UIDevice.current.NotchBottomHeight + 75)
+                }.padding(.bottom, UIDevice.current.NotchBottomHeight + 24)
             }
             
         }.frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topLeading)

@@ -335,15 +335,44 @@ struct TimeTableView: View {
                         self.generateActionSheet(options: self.viewModel.semesters)
                 }
                     .navigationBarTitle("시간표", displayMode: .inline)
-                    .navigationBarItems(trailing: Button(action: {
+                .navigationBarItems(trailing: Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        if(self.tabData.isCustomItemSelected) {
+                            self.tabData.dismiss_menu()
+                        } else {
+                            self.tabData.open_menu()
+                        }
+                        
+                    }
+                }) {
+                    Image("menu")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24)
+                        .foregroundColor(.white)
+                })
+                
+                VStack{
+                    Button(action: {
                         self.showLectureDetail = false
                         self.showLectures = true
                     }) {
-                        Text("작성")
-                            .font(.system(size: 17))
-                            .foregroundColor(.white)
-                    })
-                    
+                        VStack{
+                            Image("createIcon")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.white)
+                            .frame(width: 24)
+                        }.frame(width: 48, height: 48, alignment: .center).background(Color("light_navy"))
+                    }
+                            .mask(Circle())
+                        .padding(.bottom, 60)
+                        .padding(.trailing, 20)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                
                 Group{
                         BottomSheetModal(display: self.$showLectures) {
                             VStack(spacing: 0){
@@ -505,6 +534,7 @@ struct TimeTableView: View {
                             
                             
                         }
+                    
                 }
             }
             .alert(isPresented: self.$showingAlert) {

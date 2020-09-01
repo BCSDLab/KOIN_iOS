@@ -1,36 +1,32 @@
 //
-//  BusController.swift
-//  dev_koin
+//  HomeFetcher.swift
+//  Koin
 //
-//  Created by 정태훈 on 2020/02/08.
+//  Created by 정태훈 on 2020/08/31.
 //  Copyright © 2020 정태훈. All rights reserved.
 //
 
 import Foundation
-import SwiftUI
 import Combine
-import Alamofire
 
-class BusController {
-    var isTest = CommonVariables.isStage
+class HomeFetcher {
+    let isStage: Bool = CommonVariables.isStage
+    let session: URLSession
     
-    var api = ""
+    init(session: URLSession = .shared) {
+        self.session = session
+        shuttleTimeTables = [
+            "koreatech": shuttleFromKoreatech,
+            "terminal": shuttleFromTerminal
+        ]
+    }
     
-    struct BusError: LocalizedError, Equatable {
-        
-        private var description: String!
-        
-        init(description: String) {
-            self.description = description
-        }
-        
-        var errorDescription: String? {
-            return description
-        }
-        
-        public static func ==(lhs: BusError, rhs: BusError) -> Bool {
-            return lhs.description == rhs.description
-        }
+    struct HomeAPI {
+        static let scheme = "https"
+        static let stageScheme = "http"
+        static let productionHost = "api.koreatech.in"
+        static let stageHost = "stage.api.koreatech.in"
+        //static let path = "/shops"
     }
     
     /*
@@ -449,14 +445,6 @@ class BusController {
     
     let shuttleTimeTables: Dictionary<String, [[String]]>
     
-    init() {
-        shuttleTimeTables = [
-            "koreatech": shuttleFromKoreatech,
-            "terminal": shuttleFromTerminal
-        ]
-        api = isTest ? "http://stage.api.koreatech.in" : "https://api.koreatech.in"
-    }
-    
     func getRemainTimeToDate(timetable: [String], startIndex: Int) -> Date {
         let date = DateFormatter()
         date.locale = Locale(identifier: "ko_kr")
@@ -519,93 +507,7 @@ class BusController {
         return -1
     }
     
-    func getRemainCityBusTimeToDate(depart: String, arrival: String, result: @escaping (Date?, Error?) -> Void){
-        AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
-            .response { response in
-                switch response.result {
-                    case .success(let data):
-                        do{
-                            let decoder = JSONDecoder()
-                            let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
-                            print(cityBusRequest)
-                            // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                            if let remain = cityBusRequest.remainTime {
-                                result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
-                            } else {
-                                result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
-                            }
-                            // 겹치지 않는다고 알림
-                            break
-                        } catch(let error) {
-                            result(nil, error)
-                    }
-                    case .failure(let error):
-                        result(nil, error)
-                }
-        }
-    }
-    
-    func getRemainCityBusTimeToString(depart: String, arrival: String, result: @escaping (String?, Error?) -> Void){
-        //let remainDate = getRemainCityBusTimeToDate(depart: depart, arrival: arrival)
-        
-        let dateformatter = DateFormatter()
-        dateformatter.locale = Locale(identifier: "ko_kr")
-        dateformatter.timeZone = TimeZone(abbreviation: "KST")
-        dateformatter.dateFormat = "hh:mm"
-        
-        self.getRemainCityBusTimeToDate(depart: depart, arrival: arrival) { (date, error) in
-            if let remainBus = date {
-                result(dateformatter.string(from: remainBus), error)
-            } else {
-                result(nil, error)
-            }
-        }
-        //return dateformatter.string(from: remainDate)
-    }
-    
-    func getNextCityBusTimeToString(depart: String, arrival: String, result: @escaping (String?, Error?) -> Void){
-        let dateformatter = DateFormatter()
-        dateformatter.locale = Locale(identifier: "ko_kr")
-        dateformatter.timeZone = TimeZone(abbreviation: "KST")
-        dateformatter.dateFormat = "hh:mm"
-        
-        self.getNextCityBusTimeToDate(depart: depart, arrival: arrival) { (date, error) in
-            if let nextBus = date {
-                result(dateformatter.string(from: nextBus), error)
-            } else {
-                result(nil, error)
-            }
-        }
-        
-    }
-    
-    func getNextCityBusTimeToDate(depart: String, arrival: String, result: @escaping (Date?, Error?) -> Void){
-        AF.request("\(api)/buses?depart=\(depart)&arrival=\(arrival)", method: .get, encoding: JSONEncoding.prettyPrinted)
-            .response { response in
-                switch response.result {
-                    case .success(let data):
-                        do{
-                            let decoder = JSONDecoder()
-                            let cityBusRequest = try decoder.decode(CityBus.self, from: data!)
-                            print(cityBusRequest)
-                            // 해당 class의 user값에 가공된 데이터를 넣어준다.
-                            if let remain = cityBusRequest.nextRemainTime {
-                                result(Date(timeIntervalSinceNow: TimeInterval(remain)), nil)
-                            } else {
-                                result(Date(timeIntervalSinceNow: TimeInterval(0)), nil)
-                            }
-                            // 겹치지 않는다고 알림
-                            break
-                        } catch(let error) {
-                            result(nil, error)
-                    }
-                    case .failure(let error):
-                        result(nil, error)
-                }
-        }
-    }
-    
-    func getRemainShuttleTimeToDate(depart: String, arrival: String, isNow: Bool) -> Date {
+    func getShuttle(depart: String, arrival: String) -> Date {
         let shuttleTimeTable = getCurrentDayShuttleDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
@@ -616,16 +518,10 @@ class BusController {
         if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
             return Date()
         }
-        if (isNow) {
-            return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: 0)
-        } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
-            return Date()
-        } else {
-            return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: resultNowIndex + 1)
-        }
+        return getRemainTimeToDate(timetable: shuttleTimeTable, startIndex: 0)
     }
     
-    func getRemainExpressTimeToDate(depart: String, arrival: String, isNow: Bool) -> Date {
+    func getExpress(depart: String, arrival: String) -> Date {
         let expressTimeTable = getCurrentDayExpressDayStringArray(depart: depart, arrival: arrival)
         var resultNowIndex: Int
         
@@ -637,127 +533,15 @@ class BusController {
         if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
             return Date()
         }
-        if (isNow) {
-            return getRemainTimeToDate(timetable: expressTimeTable, startIndex: 0)
-        } else if (resultNowIndex + 1 >= expressTimeTable.count) {
-            return Date()
-        } else {
-            return getRemainTimeToDate(timetable: expressTimeTable, startIndex: resultNowIndex + 1)
-        }
-    }
-    
-    func getNearShuttleTimeToString(depart: String, arrival: String, isNow: Bool) -> String {
-        let shuttleTimeTable = getCurrentDayShuttleDayStringArray(depart: depart, arrival: arrival)
-        var resultNowIndex: Int
-        
-        if shuttleTimeTable.isEmpty {
-            return ""
-        }
-        resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, startIndex: 0)
-        if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
-            return ""
-        }
-        
-        if (isNow) {
-            return shuttleTimeTable[resultNowIndex]
-        } else if (resultNowIndex + 1 >= shuttleTimeTable.count) {
-            return ""
-        } else {
-            return shuttleTimeTable[resultNowIndex+1]
-        }
-    }
-    
-    func getNearShuttleTimeToString(depart: String, arrival: String, year:Int,month:Int, day:Int, hour: Int, min: Int) -> String {
-        let dateformatter = DateFormatter()
-        dateformatter.locale = Locale(identifier: "ko_kr")
-        dateformatter.timeZone = TimeZone(abbreviation: "KST")
-        dateformatter.dateFormat = "yyyyMMdd"
-        
-        let stringDate = String(format: "%04d", year) + String(format: "%02d", month) + String(format: "%02d", day)
-        let endDate = dateformatter.date(from: stringDate)!
-        let weekday = (Calendar.current.component(.weekday, from: endDate) + 6) % 7
-        
-        let shuttleTimeTable = getCurrentDayShuttleDayStringArray(depart: depart, arrival: arrival, dayType: weekday)
-        var resultNowIndex: Int
-        
-        if shuttleTimeTable.isEmpty {
-            return ""
-        }
-        resultNowIndex = getBusTimeIndex(timetable: shuttleTimeTable, hour: hour, min: min)
-        if (resultNowIndex == -1 || resultNowIndex >= shuttleTimeTable.count) {
-            return ""
-        }
-        return shuttleTimeTable[resultNowIndex]
-        
-    }
-    
-    func getNearExpressTimeToString(depart: String, arrival: String, isNow:Bool) -> String {
-        let expressTimeTable = getCurrentDayExpressDayStringArray(depart: depart, arrival: arrival)
-        
-        var resultNowIndex: Int
-        
-        if (expressTimeTable.isEmpty) {
-            return ""
-        }
-        resultNowIndex = getBusTimeIndex(timetable: expressTimeTable, startIndex: 0)
-        if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
-            return ""
-        }
-        if (isNow) {
-            return expressTimeTable[resultNowIndex]
-        } else if (resultNowIndex + 1 >= expressTimeTable.count) {
-            return ""
-        } else {
-            return expressTimeTable[resultNowIndex+1]
-        }
-        
-    }
-    
-    func getNearExpressTimeToString(depart: String, arrival: String, hour: Int, min: Int) -> String {
-        let expressTimeTable = getCurrentDayExpressDayStringArray(depart: depart, arrival: arrival)
-        var resultNowIndex: Int
-        
-        if (expressTimeTable.isEmpty) {
-            return ""
-        }
-        resultNowIndex = getBusTimeIndex(timetable: expressTimeTable, hour: hour, min: min)
-        if (resultNowIndex == -1 || resultNowIndex >= expressTimeTable.count) {
-            return ""
-        }
-        return expressTimeTable[resultNowIndex]
+        return getRemainTimeToDate(timetable: expressTimeTable, startIndex: 0)
     }
     
     func getCurrentDayShuttleDayStringArray(depart: String, arrival: String) -> [String] {
         var shuttleTimeTable: [String]
         let weekday = (Calendar.current.component(.weekday, from: Date()) + 5) % 7
-        if (depart == "station" && arrival == "koreatech") {
-            return shuttleFromStationToKoreatech[weekday]
-        } else if (depart == "station" && arrival == "terminal") {
-            return shuttleFromStationToTerminal[weekday]
-        } else if (depart == arrival) {
-            return []
-        }else {
-            let timeTable = shuttleTimeTables[depart]!
-            shuttleTimeTable = timeTable[weekday]
-        }
+        let timeTable = shuttleTimeTables[depart]!
+        shuttleTimeTable = timeTable[weekday]
         return shuttleTimeTable
-    }
-    
-    func getCurrentDayShuttleDayStringArray(depart: String, arrival: String, dayType: Int) -> [String] {
-        var shuttleTimeTable: [String]
-        let weekday = dayType % 7
-        
-        if (depart == "station" && arrival == "koreatech") {
-            shuttleTimeTable = arrival == "koreatech" ? shuttleFromStationToKoreatech[weekday] : shuttleFromStationToTerminal[weekday]
-        } else if (depart == arrival) {
-            return []
-        } else {
-            let timeTable = shuttleTimeTables[depart]
-            shuttleTimeTable = timeTable![weekday]
-        }
-        
-        return shuttleTimeTable
-        
     }
     
     func getCurrentDayExpressDayStringArray(depart: String, arrival: String) -> [String] {
@@ -770,5 +554,80 @@ class BusController {
         return expressTimeTable
     }
     
+    func getCityBus(depart: String, arrival: String) -> AnyPublisher<CityBus, Error> {
+        
+        var components = URLComponents()
+        components.scheme = isStage ? HomeAPI.stageScheme : HomeAPI.scheme
+        components.host = isStage ? HomeAPI.stageHost : HomeAPI.productionHost
+        components.path = "/buses"
+        components.queryItems = [
+            URLQueryItem(name: "depart", value: depart),
+            URLQueryItem(name: "arrival", value: arrival)
+        ]
+        
+        var request = URLRequest(url: components.url!)
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        return session.dataTaskPublisher(for: request)
+            .mapError { error in
+                return error
+        }
+        .map {
+            $0.data
+        }
+        .print()
+        .decode(type: CityBus.self, decoder: JSONDecoder())
+        .eraseToAnyPublisher()
+    }
+    
+    func getMeal() -> AnyPublisher<Array<DiningRequest>, Error> {
+        var date = Date()
+        
+        let hour = Calendar.current.component(.hour, from: date)
+        // 현재 분
+        let minute = Calendar.current.component(.minute, from: date)
+        
+        if (hour >= 14 && hour < 19) { // 14시부터 18시 반까지 저녁
+            if (hour == 18 && minute > 30) { // 18시 반을 넘으면 다음 날로 이동해서 아침
+                date = Date(timeInterval: 86400, since: date)
+            }
+        } else if (hour >= 19 && hour < 24) { // 19시부터 24시까지 다음날로 이동해서 아침
+            date = Date(timeInterval: 86400, since: date)
+        }
+        
+        //date 포맷 설정하는 오브젝트 불러오기
+        let dateFormatter = DateFormatter()
+        // 시간대 설정
+        dateFormatter.locale = Locale(identifier: "ko_kr")
+        // date 포맷 설정
+        dateFormatter.dateFormat = "yyMMdd"
+        // date 포맷에 맞춰 Date에서 String으로 변경
+        let dateString: String = dateFormatter.string(from: date)
+        
+        print(dateString)
+        
+        var components = URLComponents()
+        components.scheme = isStage ? HomeAPI.stageScheme : HomeAPI.scheme
+        components.host = isStage ? HomeAPI.stageHost : HomeAPI.productionHost
+        components.path = "/dinings"
+        components.queryItems = [
+            URLQueryItem(name: "date", value: dateString),
+        ]
+        
+        var request = URLRequest(url: components.url!)
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        return session.dataTaskPublisher(for: request)
+            .mapError { error in
+                return error
+        }
+        .map {
+            $0.data
+        }
+            .print()
+        .decode(type: Array<DiningRequest>.self, decoder: JSONDecoder())
+    
+        .eraseToAnyPublisher()
+    }
     
 }

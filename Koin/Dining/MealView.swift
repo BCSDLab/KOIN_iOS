@@ -18,13 +18,7 @@ struct MealView: View {
     @State var date: Date = Date()
     // 날짜 정보를 출력하기 위해 만든 변수(Date -> String)
     @State var dateString: String = dateToString(date: Date())
-    
     @EnvironmentObject var tabData: ViewRouter
-    
-    init() {
-        // List의 separator 색을 투명하게 만들어줌
-        UITableView.appearance().separatorColor = .clear
-    }
     
     var body: some View {
         // 오른쪽, 왼쪽으로 드래그하는 것을 인식하는 오브젝트
@@ -118,6 +112,23 @@ struct MealView: View {
             
         }.padding(.top, 32)
             .navigationBarTitle("식단", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    if(self.tabData.isCustomItemSelected) {
+                        self.tabData.dismiss_menu()
+                    } else {
+                        self.tabData.open_menu()
+                    }
+                    
+                }
+            }) {
+                Image("menu")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .foregroundColor(.white)
+            })
             .accentColor(.white)
             .gesture(drag)
             .onAppear {
@@ -166,11 +177,11 @@ struct MenuView: View {
         let data = self.observed.get_meal(type: self.menu_type)
         return Group {
             if (data.isEmpty) {
-                List {
+                ScrollView(.vertical, showsIndicators: false) {
                     EmptyCardView()
                 }
             } else {
-                List {
+                ScrollView(.vertical, showsIndicators: false) {
                     ForEach(observed.meals) { meal in
                         if (meal.type == self.menu_switch[self.menu_type]) { // 해당 메뉴일 경우 표시하기
                             CardView(place: meal.place, priceCard: meal.priceCard, priceCash: meal.priceCash, kcal: meal.kcal, menu: meal.menu)

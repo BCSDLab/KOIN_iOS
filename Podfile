@@ -15,6 +15,7 @@ target 'Koin' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Firestore'
+  pod 'Firebase/RemoteConfig'
   pod 'FirebaseFirestoreSwift'
   pod 'lottie-ios'
 
