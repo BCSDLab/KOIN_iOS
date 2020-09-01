@@ -14,8 +14,8 @@ struct StoreView: View {
     @EnvironmentObject var tabData: ViewRouter
     @State var isChanged: Bool = true
     
-    init() {
-        self.viewModel = StoreViewModel()
+    init(category: String?) {
+        self.viewModel = StoreViewModel(category: category)
     }
     
     //기타(S000), 콜벤(S001), 정식(S002), 족발(S003), 중국집(S004), 치킨(S005), 피자(S006), 탕수육(S007), 일반(S008), 미용실(S009)
@@ -27,7 +27,6 @@ struct StoreView: View {
                 .foregroundColor(Color("black"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-            
             HStack(alignment: .center, spacing: 20) {
                 Button(action: {
                     self.isChanged = false
@@ -179,10 +178,10 @@ struct StoreView: View {
                 }
                 Button(action: {
                     self.isChanged = false
-                    if (self.viewModel.category == "S001") {
+                    if (self.viewModel.category == "S000") {
                         self.viewModel.category = ""
                     } else {
-                        self.viewModel.category = "S001"
+                        self.viewModel.category = "S000"
                     }
                 }) {
                     VStack {
@@ -195,7 +194,7 @@ struct StoreView: View {
                                 .foregroundColor(.white)
                                 .font(.largeTitle)
                         }.padding(.bottom, 5)
-                        Text("기타").accentColor(self.viewModel.category == "S001" ? Color("squash") : Color("black"))
+                        Text("기타").accentColor(self.viewModel.category == "S000" ? Color("squash") : Color("black"))
                             .font(.system(size: 13))
                     }
                     
@@ -224,7 +223,7 @@ struct StoreView: View {
             
             
                 VStack{
-                    ForEach(self.viewModel.showList) { c in
+                    ForEach(self.viewModel.data.filter({ self.viewModel.category.isEmpty ? true : $0.category == self.viewModel.category})) { c in
                         StoreRow(viewModel: c)
                             .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         
@@ -240,6 +239,23 @@ struct StoreView: View {
         }*/
         
         .navigationBarTitle("주변식당", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    if(self.tabData.isCustomItemSelected) {
+                        self.tabData.dismiss_menu()
+                    } else {
+                        self.tabData.open_menu()
+                    }
+                    
+                }
+            }) {
+                Image("menu")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .foregroundColor(.white)
+            })
     }
     
 }
@@ -247,6 +263,6 @@ struct StoreView: View {
 
 struct StoreView_Previews: PreviewProvider {
     static var previews: some View {
-        StoreView()
+        StoreView(category: nil)
     }
 }

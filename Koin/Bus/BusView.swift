@@ -748,6 +748,23 @@ struct BusView: View {
                 CommuterListView()
             }
             .navigationBarTitle("버스", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    if(self.tabData.isCustomItemSelected) {
+                        self.tabData.dismiss_menu()
+                    } else {
+                        self.tabData.open_menu()
+                    }
+                    
+                }
+            }) {
+                Image("menu")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .foregroundColor(.white)
+            })
         }.onAppear {
             
         }

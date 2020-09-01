@@ -16,15 +16,13 @@ class ViewRouter: ObservableObject {
     // 홈 액션이 위치해있는 탭 번호
     let homeActionteminidex: Int
     
-    var board_id: Int
-    
-    var community_id: Int
-    
     let currentViewChange = PassthroughSubject<String, Never>()
     
     let customItemSelectedChange = PassthroughSubject<Bool, Never>()
     
     let loadingChange = PassthroughSubject<Bool, Never>()
+    
+    var storeCategory: String?
     
     func openLoading() {
         loadingChange.send(true)
@@ -73,7 +71,6 @@ class ViewRouter: ObservableObject {
         //self.itemSelected = initialIndex
         self.homeActionteminidex = 1
         self.currentView = "home"
-        self.board_id = -1
-        self.community_id = -1
+        self.storeCategory = nil
     }
 }

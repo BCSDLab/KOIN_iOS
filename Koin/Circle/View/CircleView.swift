@@ -177,6 +177,23 @@ struct CircleView: View {
             
         }.padding(0)
             .navigationBarTitle(Text("동아리"), displayMode: .inline)
+            .navigationBarItems(trailing: Button(action: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    if(self.tabData.isCustomItemSelected) {
+                        self.tabData.dismiss_menu()
+                    } else {
+                        self.tabData.open_menu()
+                    }
+                    
+                }
+            }) {
+                Image("menu")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .foregroundColor(.white)
+            })
             .onAppear{
                 self.viewModel.load()
                 

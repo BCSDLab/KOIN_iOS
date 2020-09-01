@@ -188,6 +188,7 @@ class UserConfig: ObservableObject {
         let tm = Date(timeIntervalSince1970: result["exp"] as! TimeInterval)
         if Date() < tm {
             hasUser = true
+            print(token)
             return true
         } else {
             print("exp fail")

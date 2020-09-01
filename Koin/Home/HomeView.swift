@@ -26,7 +26,6 @@ struct HomeView: View {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
-        
     }
     
     var icons: Array<String> = ["circles", "bus", "timetable","store", "restaurant", "market", "board_free", "board_recruit","board_secret"]
@@ -43,7 +42,7 @@ struct HomeView: View {
             return AnyView(MyInfoView()
                 .navigationBarTitle("내정보", displayMode: .inline))
         } else if current == "store" {
-            return AnyView(StoreView())
+            return AnyView(StoreView(category: nil))
         } else if current == "timetable" {
             return AnyView(TimeTableView())
         } else if current == "board_free" {

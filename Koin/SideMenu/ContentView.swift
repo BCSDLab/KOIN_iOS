@@ -162,7 +162,7 @@ struct ContentView: View {
     }
 }
 
-struct BetaContentView_Previews: PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
