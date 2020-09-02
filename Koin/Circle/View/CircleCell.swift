@@ -38,7 +38,7 @@ struct CircleCell: View {
             VStack {
                 WebImage(url: URL(string: self.viewModel.backgroudImageUrl))
                     .placeholder {
-                        Rectangle().foregroundColor(.gray)
+                        Rectangle().foregroundColor(Color("light_navy"))
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 111, maxHeight: 111, alignment: .center)
                 }
                 .resizable()
@@ -48,7 +48,7 @@ struct CircleCell: View {
                 VStack {
                     WebImage(url: URL(string: self.viewModel.logoImageUrl))
                         .placeholder {
-                            Circle().foregroundColor(.gray)
+                            Circle().foregroundColor(Color("warm_grey"))
                                 .frame(minWidth: 72, maxWidth: 72, minHeight: 72, maxHeight: 72, alignment: .center)
                     }
                     .resizable()

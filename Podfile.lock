@@ -178,6 +178,13 @@ PODS:
   - Firebase/Firestore (6.21.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.11.2)
+  - Firebase/RemoteConfig (6.21.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 4.4.9)
+  - FirebaseABTesting (3.2.0):
+    - FirebaseAnalyticsInterop (~> 1.3)
+    - FirebaseCore (~> 6.1)
+    - Protobuf (>= 3.9.2, ~> 3.9)
   - FirebaseAnalytics (6.4.0):
     - FirebaseCore (~> 6.6)
     - FirebaseInstallations (~> 1.1)
@@ -228,6 +235,14 @@ PODS:
     - FirebaseCore (~> 6.6)
     - GoogleUtilities/UserDefaults (~> 6.5)
     - PromisesObjC (~> 1.2)
+  - FirebaseRemoteConfig (4.4.11):
+    - FirebaseABTesting (~> 3.1)
+    - FirebaseAnalyticsInterop (~> 1.4)
+    - FirebaseCore (~> 6.2)
+    - FirebaseInstallations (~> 1.1)
+    - GoogleUtilities/Environment (~> 6.2)
+    - "GoogleUtilities/NSData+zlib (~> 6.2)"
+    - Protobuf (>= 3.9.2, ~> 3.9)
   - GoogleAppMeasurement (6.4.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -275,6 +290,7 @@ PODS:
   - IGColorPicker (0.4.3):
     - M13Checkbox
   - leveldb-library (1.22)
+  - lottie-ios (3.1.8)
   - M13Checkbox (3.4.0)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -283,7 +299,7 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PKHUD (5.3.0)
   - PromisesObjC (1.2.8)
-  - RichEditorView (5.0.0)
+  - Protobuf (3.13.0)
   - SDWebImage (5.6.1):
     - SDWebImage/Core (= 5.6.1)
   - SDWebImage/Core (5.6.1)
@@ -295,10 +311,11 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Crashlytics
   - Firebase/Firestore
+  - Firebase/RemoteConfig
   - FirebaseFirestoreSwift
   - IGColorPicker
+  - lottie-ios
   - PKHUD
-  - RichEditorView
   - SDWebImageSwiftUI
 
 SPEC REPOS:
@@ -307,6 +324,7 @@ SPEC REPOS:
     - Alamofire
     - BoringSSL-GRPC
     - Firebase
+    - FirebaseABTesting
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
     - FirebaseAuthInterop
@@ -317,6 +335,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseFirestoreSwift
     - FirebaseInstallations
+    - FirebaseRemoteConfig
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -325,11 +344,12 @@ SPEC REPOS:
     - gRPC-Core
     - IGColorPicker
     - leveldb-library
+    - lottie-ios
     - M13Checkbox
     - nanopb
     - PKHUD
     - PromisesObjC
-    - RichEditorView
+    - Protobuf
     - SDWebImage
     - SDWebImageSwiftUI
 
@@ -338,6 +358,7 @@ SPEC CHECKSUMS:
   Alamofire: 0fe5fd24b4298dc377a6550da7d5f1b30e286fcb
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   Firebase: f378c80340dd41c0ad0914af740c021eb282a04b
+  FirebaseABTesting: 821a3a3e4a145987e80fee3657c4de1cb9adf693
   FirebaseAnalytics: a1a0b3327ceb5cd5b4bacffdb293f6c909aa087d
   FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
   FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
@@ -348,6 +369,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 71925e62a5d1cbfaff46aa4d5107e525cc48356a
   FirebaseFirestoreSwift: 0437bb10d83f8161a9131da1739998254c78fdf5
   FirebaseInstallations: acb3216eb9784d3b1d2d2d635ff74fa892cc0c44
+  FirebaseRemoteConfig: 3d189cf0c3c5abc0c924ef1cce60c4add8d3262c
   GoogleAppMeasurement: 6e68a94d0eaeb1d73ef6b0ed4f7334e29d63ae29
   GoogleDataTransport: b29a21d813e906014ca16c00897827e40e4a24ab
   GoogleDataTransportCCTSupport: 6f15a89b0ca35d6fa523e1f752ef818588885988
@@ -356,14 +378,15 @@ SPEC CHECKSUMS:
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   IGColorPicker: f6034f8629aa90cce308a76ecc0fdf2afed0bf34
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  RichEditorView: 1bbb07b87ca2d479ac29a6877014b38b8df233ef
+  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
   SDWebImageSwiftUI: 52dabce85cfc575e08ca4ce26bed1334159dbc2b
 
-PODFILE CHECKSUM: 2304da39dff4fce3cb296ee009a6930e3215e09b
+PODFILE CHECKSUM: 66dd4aada626308b9561e3ee59c02f8476ada9c3
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

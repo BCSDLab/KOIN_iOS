@@ -10,6 +10,7 @@ import SwiftUI
 struct SideMenu: View {
     let width: CGFloat
     @EnvironmentObject var tabData: ViewRouter
+    @State var isMenuOpen: Bool = false
 
     var body: some View {
         ZStack {
@@ -18,9 +19,13 @@ struct SideMenu: View {
                 EmptyView()
             }
                     .background(Color.gray.opacity(0.3))
-                    .opacity(self.tabData.isCustomItemSelected ? 1.0 : 0.0)
+                    .opacity(isMenuOpen ? 1.0 : 0.0)
+            .onReceive(self.tabData.customItemSelectedChange) { change in
+                self.isMenuOpen = change
+                
+            }
                     .animation(Animation.easeIn.delay(0.25))
-                    .edgesIgnoringSafeArea(.top)
+                    //.edgesIgnoringSafeArea(.top)
                     .onTapGesture { // 빈 부분 클릭 시
                         // 사이드 메뉴 닫힘
                         self.tabData.dismiss_menu()
@@ -30,8 +35,8 @@ struct SideMenu: View {
                 MenuContent()
                         .frame(width: self.width)
                         .background(Color.white)
-                        .offset(x: self.tabData.isCustomItemSelected ? 0 : -self.width)
-                        .animation(.default).edgesIgnoringSafeArea(.top)
+                        .offset(x: isMenuOpen ? 0 : -self.width)
+                        .animation(.default)//.edgesIgnoringSafeArea(.top)
                 Spacer()
             }
         }

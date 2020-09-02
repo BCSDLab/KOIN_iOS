@@ -26,7 +26,7 @@ class UserConfig: ObservableObject {
     }
     
     var nickname: String {
-        return user?.user?.nickname ?? ""
+        return user?.user?.nickname ?? "익명"
     }
     
     var id: Int {
@@ -82,13 +82,42 @@ class UserConfig: ObservableObject {
         }
         return nil
     }
-    
+
+    func decode(jwtToken jwt: String) -> [String: Any] {
+        let segments = jwt.components(separatedBy: ".")
+        return decodeJWTPart(segments[1]) ?? [:]
+    }
+
+    func base64UrlDecode(_ value: String) -> Data? {
+        var base64 = value
+                .replacingOccurrences(of: "-", with: "+")
+                .replacingOccurrences(of: "_", with: "/")
+
+        let length = Double(base64.lengthOfBytes(using: String.Encoding.utf8))
+        let requiredLength = 4 * ceil(length / 4.0)
+        let paddingLength = requiredLength - length
+        if paddingLength > 0 {
+            let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+            base64 = base64 + padding
+        }
+        return Data(base64Encoded: base64, options: .ignoreUnknownCharacters)
+    }
+
+    func decodeJWTPart(_ value: String) -> [String: Any]? {
+        guard let bodyData = base64UrlDecode(value),
+              let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
+            return nil
+        }
+
+        return payload
+    }
+
     func saveUser(user: UserData) {
         let encoder = JSONEncoder()
         do {
             let encoded = try encoder.encode(user)
             UserDefaults.standard.set(encoded, forKey: "user")
-        } catch(let error) {
+        } catch (let error) {
             print(error)
             isLogin = false
         }
@@ -155,32 +184,17 @@ class UserConfig: ObservableObject {
             hasUser = false
             return false
         }
-        if let decodedData = Data(base64Encoded: String(d[1])) {
-            if let decodedString = String(data: decodedData, encoding: .utf8) {
-                let decodedDict = convertToDictionary(text: decodedString)
-                if let expTime = decodedDict!["exp"] {
-                    print(expTime)
-                    let tm = Date(timeIntervalSince1970: expTime as! TimeInterval)
-                    if Date() < tm {
-                        hasUser = true
-                        return true
-                    } else {
-                        print("exp fail")
-                        hasUser = false
-                        return false
-                    }
-                }
-                hasUser = false
-                print("dict fail")
-                return false
-            }
+        let result = decode(jwtToken: token)
+        let tm = Date(timeIntervalSince1970: result["exp"] as! TimeInterval)
+        if Date() < tm {
+            hasUser = true
+            print(token)
+            return true
+        } else {
+            print("exp fail")
             hasUser = false
-            print("string fail")
             return false
         }
-        hasUser = false
-        print("data fail")
-        return false
     }
     
     func check_expired() -> Bool {
