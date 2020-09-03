@@ -60,7 +60,7 @@ struct HomeView: View {
         } else if current == "search" {
             return AnyView(SearchView().environmentObject(self.tabData).environment(\.managedObjectContext, self.managedObjectContext))
         } else if current == "home" {
-            return AnyView(ContentView())
+            return AnyView(BetaContentView())
         }
         return AnyView(Text("준비중입니다."))
     }

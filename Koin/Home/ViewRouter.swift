@@ -22,6 +22,8 @@ class ViewRouter: ObservableObject {
     
     let loadingChange = PassthroughSubject<Bool, Never>()
     
+    let isNavigationBarChange = PassthroughSubject<Bool, Never>()
+    
     var storeCategory: String?
     
     func openLoading() {
@@ -30,6 +32,14 @@ class ViewRouter: ObservableObject {
     
     func closeLoading() {
         loadingChange.send(false)
+    }
+    
+    func openNavigationBar() {
+        isNavigationBarChange.send(true)
+    }
+    
+    func closeNavigationBar() {
+        isNavigationBarChange.send(false)
     }
     
     // 현재 뷰
