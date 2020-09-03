@@ -110,9 +110,8 @@ struct BetaHomeView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ScrollView(.vertical) {
-                VStack(alignment: .center){
-                    
+            //ScrollView(.vertical) {
+            VStack(alignment: .center, spacing: 0){
                     
                     Text("버스/교통")
                         .font(.system(size: 15))
@@ -143,12 +142,6 @@ struct BetaHomeView: View {
                             .background(Color("squash").frame(maxWidth: .infinity))
                                 .frame(maxWidth: .infinity)
                             
-                            /*Text("00분 00초 남음")
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                                .kerning(-0.8)
-                                .foregroundColor(Color("black"))
-                                .padding(.top, 23)*/
                             if(self.viewModel.shuttleTime.timeIntervalSince(Date()) > 0) {
                                 HStack(spacing: 0){
                                     Text(self.countDownString(from: self.viewModel.shuttleTime, until: self.nowDate))
@@ -215,12 +208,6 @@ struct BetaHomeView: View {
                             }
                             .background(Color("shark").frame(maxWidth: .infinity))
                             .frame(maxWidth: .infinity)
-                            /*Text("00분 00초 남음")
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                                .kerning(-0.8)
-                                .foregroundColor(Color("black"))
-                                .padding(.top, 23)*/
                             if(self.viewModel.expressTime.timeIntervalSince(Date()) > 0) {
                                 HStack(spacing: 0){
                                     Text(self.countDownString(from: self.viewModel.expressTime, until: self.nowDate))
@@ -286,12 +273,6 @@ struct BetaHomeView: View {
                             }
                             .background(Color("mint").frame(maxWidth: .infinity))
                             .frame(maxWidth: .infinity)
-                            /*Text("00분 00초 남음")
-                                .font(.system(size: 16))
-                                .fontWeight(.medium)
-                                .kerning(-0.8)
-                                .foregroundColor(Color("black"))
-                                .padding(.top, 23)*/
                             if(self.viewModel.cityBusTime.timeIntervalSince(Date()) > 0) {
                                 HStack(spacing: 0){
                                     Text(self.countDownString(from: self.viewModel.cityBusTime, until: self.nowDate))
@@ -338,7 +319,401 @@ struct BetaHomeView: View {
                             }.padding(.top, 12)
                             Spacer()
                         }),
-                    ]).padding(.bottom, 40)
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                .padding(.trailing, 4)
+                                Text("학교셔틀")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("squash").frame(maxWidth: .infinity))
+                                .frame(maxWidth: .infinity)
+                            
+                            if(self.viewModel.shuttleTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.shuttleTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" : "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                .padding(.trailing, 4)
+                                Text("대성고속")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("shark").frame(maxWidth: .infinity))
+                            .frame(maxWidth: .infinity)
+                            if(self.viewModel.expressTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.expressTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" :  "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                    .padding(.trailing, 4)
+                                Text("시내버스")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("mint").frame(maxWidth: .infinity))
+                            .frame(maxWidth: .infinity)
+                            if(self.viewModel.cityBusTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.cityBusTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" :  "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                .padding(.trailing, 4)
+                                Text("학교셔틀")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("squash").frame(maxWidth: .infinity))
+                                .frame(maxWidth: .infinity)
+                            
+                            if(self.viewModel.shuttleTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.shuttleTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" : "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                .padding(.trailing, 4)
+                                Text("대성고속")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("shark").frame(maxWidth: .infinity))
+                            .frame(maxWidth: .infinity)
+                            if(self.viewModel.expressTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.expressTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" :  "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                        AnyView(VStack(spacing: 0){
+                            HStack(spacing: 0){
+                                Spacer()
+                                Image("homeBus")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 14)
+                                    .foregroundColor(.white)
+                                    .padding(.trailing, 4)
+                                Text("시내버스")
+                                    .font(.system(size: 12))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 9)
+                                Spacer()
+                            }
+                            .background(Color("mint").frame(maxWidth: .infinity))
+                            .frame(maxWidth: .infinity)
+                            if(self.viewModel.cityBusTime.timeIntervalSince(Date()) > 0) {
+                                HStack(spacing: 0){
+                                    Text(self.countDownString(from: self.viewModel.cityBusTime, until: self.nowDate))
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                        .onAppear(perform: {
+                                            let _ = self.timer
+                                        })
+                                    Text(" 남음")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.medium)
+                                        .kerning(-0.8)
+                                        .foregroundColor(Color("black"))
+                                }.padding(.top, 23)
+                            } else {
+                                Text("운행 정보 없음")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.medium)
+                                    .kerning(-0.8)
+                                    .foregroundColor(Color("black"))
+                                    .padding(.top, 23)
+                            }
+                            HStack(spacing: 0){
+                                Text(self.viewModel.isChange ? "야우리" : "한기대")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                                Button(action: {
+                                    self.viewModel.changeBusPlace()
+                                }) {
+                                    Image("homeBusChangeIcon")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 16)
+                                        .padding(.horizontal, 11)
+                                }
+                                Text(self.viewModel.isChange ? "한기대" :  "야우리")
+                                    .font(.system(size: 12))
+                                    .kerning(-0.6)
+                                    .foregroundColor(Color("black"))
+                            }.padding(.top, 12)
+                            Spacer()
+                        }),
+                    ]).padding(.bottom, 30)
                     
                     Text("주변상점")
                         .font(.system(size: 15))
@@ -392,7 +767,7 @@ struct BetaHomeView: View {
                                 }
                             }
                         }.padding(.horizontal, 20)
-                    }.padding(.bottom, 40)
+                    }.padding(.bottom, 30)
                     
                     
                     Text("식단")
@@ -461,9 +836,13 @@ struct BetaHomeView: View {
                     
                     
                     
-                }.padding(EdgeInsets(top: 40, leading: 0, bottom: 60, trailing: 0))
-            }
-                .navigationBarHidden(true)
+                }.padding(EdgeInsets(top: 50, leading: 0, bottom: 60, trailing: 0))
+            //}
+                //.navigationBarHidden(true)
+                
+        }.onAppear{
+            self.tabData.openNavigationBar()
+            self.tabData.currentView = "home"
         }
     }
 }

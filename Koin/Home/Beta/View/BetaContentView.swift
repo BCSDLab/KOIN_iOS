@@ -86,22 +86,10 @@ struct BetaContentView: View {
         } else if current == "search" {
             return AnyView(SearchView().environmentObject(self.tabData).environment(\.managedObjectContext, self.managedObjectContext))
         } else if current == "home" {
-            return AnyView(ContentView())
+            return AnyView(BetaContentView())
         }
         return AnyView(Text("준비중입니다."))
     }
-    
-    /*var UpdateAlertDialog: Alert {
-        if(self.isForce) {
-            return Alert(title: Text("업데이트 알림"), message: Text("새로운 업데이트가 출시되었습니다."), dismissButton: .default(Text("확인")) {
-                print("aaa")
-                })
-        } else {
-            return Alert(title: Text("업데이트 알림"), message: Text("새로운 업데이트가 출시되었습니다."), primaryButton: .default(Text("확인")) {
-                print("aaa")
-                }, secondaryButton: .cancel(Text("취소")))
-        }
-    }*/
     
     var body: some View {
         GeometryReader { geometry in
@@ -140,12 +128,12 @@ struct BetaContentView: View {
                         }
                     }
                     .frame(alignment: .bottom)
-                    .padding(EdgeInsets(top: 80, leading: 20, bottom: 23, trailing: 20))
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 23, trailing: 20))
                     .background(RoundedCorners(color:Color("light_navy"),tl: 0, tr: 0, bl: 20, br: 20)
-                    .frame(height: 110 + UIDevice.current.NotchTopHeight)
+                    .frame(height: (UIDevice.current.hasNotch ? 110 : 90) + UIDevice.current.NotchTopHeight)
                         .edgesIgnoringSafeArea(.top)
                         .shadow(color: Color.black.opacity(0.34), radius: 4, x: 0, y: 2))
-                    .offset(y: self.isHome ? -40: -200)
+                    .offset(y: self.isHome ? 0: -160)
                         .animation(.easeInOut(duration: 0.3))
                     Spacer()
                 }
@@ -160,9 +148,8 @@ struct BetaContentView: View {
                             .disabled(self.isLoading)
                             .blur(radius: self.isLoading ? 3 : 0)
                         //MARK: 사이드메뉴용 navigation링크
-                        NavigationLink(destination: self.currentView.onDisappear {
-                            self.isHome = true
-                            self.tabData.currentView = "home"
+                        NavigationLink(destination: self.currentView.onAppear {
+                            self.tabData.closeNavigationBar()
                         }, isActive: self.$pushActive) {
                             EmptyView()
                         }.hidden()
@@ -172,10 +159,7 @@ struct BetaContentView: View {
                                     self.pushActive = true
                                 }
                         }
-                    }.navigationBarHidden(true)
-                        /*.alert(isPresented: self.$isUpdate) {
-                            self.UpdateAlertDialog
-                    }*/
+                    }.navigationBarTitle("",displayMode: .inline)
                 }
             }.zIndex(5)
                 
@@ -193,14 +177,8 @@ struct BetaContentView: View {
             self.isLoading = loading
         }.onReceive(self.tabData.customItemSelectedChange) { category in
             self.isCategory = category
-        }.onReceive(self.tabData.currentViewChange) { current in
-            if(current != "home") {
-                UINavigationBar.appearance().barTintColor = UIColor(named: "light_navy")
-                self.isHome = false
-            } else {
-                UINavigationBar.appearance().barTintColor = UIColor.white
-                self.isHome = true
-            }
+        }.onReceive(self.tabData.isNavigationBarChange) { isNavigationBar in
+            self.isHome = isNavigationBar
         }
         
     }
