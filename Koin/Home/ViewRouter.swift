@@ -35,6 +35,7 @@ class ViewRouter: ObservableObject {
     }
     
     func openNavigationBar() {
+        self.currentView = "home"
         isNavigationBarChange.send(true)
     }
     

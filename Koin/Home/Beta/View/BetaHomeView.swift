@@ -94,6 +94,13 @@ struct BetaHomeView: View {
             self.nowDate = Date()
         }
     }
+    
+    var cityBusTimer: Timer {
+        Timer.scheduledTimer(withTimeInterval: 60, repeats: true) {_ in
+            self.nowDate = Date()
+        }
+    }
+    
     //시분초 단위로 분래
     func countDownString(from date: Date, until nowDate: Date) -> String {
         let calendar = Calendar(identifier: .gregorian)
@@ -817,7 +824,7 @@ struct BetaHomeView: View {
                                 }*/
                                 Grid(self.viewModel.currentMeal.first(where: {
                                     $0.type == self.viewModel.currentMealTime && $0.place == self.viewModel.selectedPlace
-                                })?.menu ?? [], id: \.self) { m in
+                                })?.menu/*.filter({ !$0.isEmpty })*/ ?? [], id: \.self) { m in
                                     Text(m)
                                         .font(.system(size: 12))
                                         .foregroundColor(Color("black"))
@@ -833,16 +840,12 @@ struct BetaHomeView: View {
                     
                     
                     Spacer()
-                    
-                    
-                    
+
                 }.padding(EdgeInsets(top: 50, leading: 0, bottom: 60, trailing: 0))
             //}
-                //.navigationBarHidden(true)
                 
-        }.onAppear{
+        }.onAppear {
             self.tabData.openNavigationBar()
-            self.tabData.currentView = "home"
         }
     }
 }

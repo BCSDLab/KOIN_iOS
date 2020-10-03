@@ -128,12 +128,12 @@ struct BetaContentView: View {
                         }
                     }
                     .frame(alignment: .bottom)
-                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 23, trailing: 20))
+                    .padding(EdgeInsets(top: (UIDevice.current.hasNotch ? 50 : 80), leading: 20, bottom: 23, trailing: 20))
                     .background(RoundedCorners(color:Color("light_navy"),tl: 0, tr: 0, bl: 20, br: 20)
-                    .frame(height: (UIDevice.current.hasNotch ? 110 : 90) + UIDevice.current.NotchTopHeight)
+                    .frame(height: (UIDevice.current.hasNotch ? 70 : 110) + UIDevice.current.NotchTopHeight)
                         .edgesIgnoringSafeArea(.top)
                         .shadow(color: Color.black.opacity(0.34), radius: 4, x: 0, y: 2))
-                    .offset(y: self.isHome ? 0: -160)
+                    .offset(y: self.isHome ? -40: -200)
                         .animation(.easeInOut(duration: 0.3))
                     Spacer()
                 }
