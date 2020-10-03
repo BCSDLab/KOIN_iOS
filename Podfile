@@ -18,6 +18,7 @@ target 'Koin' do
   pod 'Firebase/RemoteConfig'
   pod 'FirebaseFirestoreSwift'
   pod 'lottie-ios'
+  pod 'NMapsMap'
 
 
 end
