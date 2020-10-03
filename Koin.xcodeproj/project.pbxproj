@@ -64,9 +64,6 @@
 		A03C5AAD24E0175B00BC3F9D /* ModularGridStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03C5A9E24E0175B00BC3F9D /* ModularGridStyle.swift */; };
 		A03C5AAE24E0175B00BC3F9D /* GridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03C5A9F24E0175B00BC3F9D /* GridItem.swift */; };
 		A03C5AAF24E0175B00BC3F9D /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03C5AA024E0175B00BC3F9D /* Grid.swift */; };
-		A047AD7524FE982B0035F5C1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A047AD7424FE982B0035F5C1 /* Alamofire */; };
-		A047AD7824FE98920035F5C1 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = A047AD7724FE98920035F5C1 /* Lottie */; };
-		A047AD7B24FE98D30035F5C1 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A047AD7A24FE98D30035F5C1 /* SDWebImageSwiftUI */; };
 		A04FC16C24387C1500F33CC3 /* ShopFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04FC16B24387C1500F33CC3 /* ShopFetcher.swift */; };
 		A058F54923C23B58002155DA /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058F54823C23B58002155DA /* HostingController.swift */; };
 		A060F16A24C5C5F400C34898 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A060F16924C5C5F400C34898 /* TimeTableView.swift */; };
@@ -151,7 +148,6 @@
 		A06E567724F806E50001664A /* UINavigationControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E567624F806E50001664A /* UINavigationControllerProtocol.swift */; };
 		A06E5C8924436F1500FA7DE8 /* GrantCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E5C8824436F1500FA7DE8 /* GrantCheckResponse.swift */; };
 		A06EB8DC24715DA90051A0B8 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06EB8DB24715DA90051A0B8 /* CommonFunction.swift */; };
-		A072A804243F5D970041CF00 /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */; };
 		A07BCFE024A60BE600396FAC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A07BCFDF24A60BE600396FAC /* GoogleService-Info.plist */; };
 		A0879E692444A5E200E87D5A /* CommonArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0879E682444A5E200E87D5A /* CommonArticles.swift */; };
 		A0879E6D2444C63300E87D5A /* CommonCommunityDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0879E6C2444C63300E87D5A /* CommonCommunityDetailViewModel.swift */; };
@@ -234,18 +230,19 @@
 		A0FF711F23D8869400D61E13 /* CommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF711E23D8869400D61E13 /* CommunityController.swift */; };
 		A0FF712323D886AE00D61E13 /* Articles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF712223D886AE00D61E13 /* Articles.swift */; };
 		A0FF712523D886B700D61E13 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF712423D886B700D61E13 /* Article.swift */; };
-		B788DE4498406732BBB7F50C /* Pods_Koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0E386B4ACB7EAAE1E39194 /* Pods_Koin.framework */; };
+		C573A5E92FB34202D3BA3E8F /* Pods_Koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5493D5BC905BD56B0C9B43D6 /* Pods_Koin.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3A2ED0D453134A88452C224B /* Pods-Koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.debug.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.debug.xcconfig"; sourceTree = "<group>"; };
+		32C9DC7D00B5C8B4D1ED8D22 /* Pods-Koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.debug.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.debug.xcconfig"; sourceTree = "<group>"; };
+		5493D5BC905BD56B0C9B43D6 /* Pods_Koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C502151208ED93E0E4D5051 /* MealView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealView.swift; sourceTree = "<group>"; };
 		6C5021831929A9DFCE7A7890 /* DiningFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningFetcher.swift; sourceTree = "<group>"; };
 		6C50227354F2CEBAE3FD6A26 /* DiningViewRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningViewRouter.swift; sourceTree = "<group>"; };
 		6C5028DB77A514429A0DE7CF /* DiningRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningRequest.swift; sourceTree = "<group>"; };
 		6C502993B075013A5D3C9BA6 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserData.swift; path = ../../UserData.swift; sourceTree = "<group>"; };
 		6C502CC7399AA606D22720A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = ../../User.swift; sourceTree = "<group>"; };
-		7E36542D8642D334212468F1 /* Pods-Koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.release.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.release.xcconfig"; sourceTree = "<group>"; };
+		8C78CC4D4486BD75AABAE7CF /* Pods-Koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Koin.release.xcconfig"; path = "Target Support Files/Pods-Koin/Pods-Koin.release.xcconfig"; sourceTree = "<group>"; };
 		A003C779244DF09A0026A11B /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		A003C77B244DF14B0026A11B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		A0045A602466916300119529 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
@@ -468,7 +465,6 @@
 		A0FF711E23D8869400D61E13 /* CommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityController.swift; sourceTree = "<group>"; };
 		A0FF712223D886AE00D61E13 /* Articles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Articles.swift; path = ../../Articles.swift; sourceTree = "<group>"; };
 		A0FF712423D886B700D61E13 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Article.swift; path = ../../Article.swift; sourceTree = "<group>"; };
-		CD0E386B4ACB7EAAE1E39194 /* Pods_Koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -476,11 +472,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A047AD7B24FE98D30035F5C1 /* SDWebImageSwiftUI in Frameworks */,
-				A072A804243F5D970041CF00 /* SwiftUIPullToRefresh in Frameworks */,
-				A047AD7524FE982B0035F5C1 /* Alamofire in Frameworks */,
-				A047AD7824FE98920035F5C1 /* Lottie in Frameworks */,
-				B788DE4498406732BBB7F50C /* Pods_Koin.framework in Frameworks */,
+				C573A5E92FB34202D3BA3E8F /* Pods_Koin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,7 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				A00DD7572406C9C2003528C9 /* libM13Checkbox.a */,
-				CD0E386B4ACB7EAAE1E39194 /* Pods_Koin.framework */,
+				5493D5BC905BD56B0C9B43D6 /* Pods_Koin.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1278,8 +1270,8 @@
 		A81BB2738787A6169454BF6B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3A2ED0D453134A88452C224B /* Pods-Koin.debug.xcconfig */,
-				7E36542D8642D334212468F1 /* Pods-Koin.release.xcconfig */,
+				32C9DC7D00B5C8B4D1ED8D22 /* Pods-Koin.debug.xcconfig */,
+				8C78CC4D4486BD75AABAE7CF /* Pods-Koin.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1291,23 +1283,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0C637D2239D25790041DE96 /* Build configuration list for PBXNativeTarget "Koin" */;
 			buildPhases = (
-				5B0F0682424F722565896F9F /* [CP] Check Pods Manifest.lock */,
+				46CE6FBF9DEBCF4D03500347 /* [CP] Check Pods Manifest.lock */,
 				A0C637BA239D25770041DE96 /* Sources */,
 				A0C637BB239D25770041DE96 /* Frameworks */,
 				A0C637BC239D25770041DE96 /* Resources */,
-				1C0190FBD4185AB1080B838C /* [CP] Embed Pods Frameworks */,
+				C5B8762CD8BF888B0B30F76D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Koin;
-			packageProductDependencies = (
-				A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */,
-				A047AD7424FE982B0035F5C1 /* Alamofire */,
-				A047AD7724FE98920035F5C1 /* Lottie */,
-				A047AD7A24FE98D30035F5C1 /* SDWebImageSwiftUI */,
-			);
 			productName = dev_koin;
 			productReference = A0C637BE239D25770041DE96 /* koin.app */;
 			productType = "com.apple.product-type.application";
@@ -1441,24 +1427,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1C0190FBD4185AB1080B838C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5B0F0682424F722565896F9F /* [CP] Check Pods Manifest.lock */ = {
+		46CE6FBF9DEBCF4D03500347 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1478,6 +1447,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5B8762CD8BF888B0B30F76D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Koin/Pods-Koin-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1777,11 +1763,11 @@
 		};
 		A0C637D3239D25790041DE96 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A2ED0D453134A88452C224B /* Pods-Koin.debug.xcconfig */;
+			baseConfigurationReference = 32C9DC7D00B5C8B4D1ED8D22 /* Pods-Koin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"Koin/Preview Content\"";
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
@@ -1792,7 +1778,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = koin;
 				SWIFT_VERSION = 5.0;
@@ -1802,11 +1788,11 @@
 		};
 		A0C637D4239D25790041DE96 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E36542D8642D334212468F1 /* Pods-Koin.release.xcconfig */;
+			baseConfigurationReference = 8C78CC4D4486BD75AABAE7CF /* Pods-Koin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"Koin/Preview Content\"";
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
@@ -1817,7 +1803,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = koin;
 				SWIFT_VERSION = 5.0;
@@ -1882,29 +1868,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A047AD7424FE982B0035F5C1 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A047AD7324FE982B0035F5C1 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		A047AD7724FE98920035F5C1 /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A047AD7624FE98920035F5C1 /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = Lottie;
-		};
-		A047AD7A24FE98D30035F5C1 /* SDWebImageSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A047AD7924FE98D30035F5C1 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
-		};
-		A072A803243F5D970041CF00 /* SwiftUIPullToRefresh */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A072A802243F5D970041CF00 /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */;
-			productName = SwiftUIPullToRefresh;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		A0B9EC28247FF32A00F9557F /* RecentSearchData.xcdatamodeld */ = {
