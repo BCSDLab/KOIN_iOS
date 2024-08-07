@@ -295,6 +295,7 @@ extension DiningViewController {
     
     @objc private func navigationButtonTapped() {
         let diningNoticeViewController = DiningNoticeViewController(viewModel: DiningNoticeViewModel(fetchCoopShopListUseCase: DefaultFetchCoopShopListUseCase(diningRepository: DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService()))))
+        diningNoticeViewController.title = "학생식당 정보"
         navigationController?.pushViewController(diningNoticeViewController, animated: true)
     }
     
