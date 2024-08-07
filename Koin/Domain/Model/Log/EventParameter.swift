@@ -93,5 +93,10 @@ enum EventParameter {
         case swipe
     }
     
-    
+    enum EventLabelNeededDuration {
+        case shopCategories
+        case shopClick
+        case mainShopCategories
+        case shopCall
+    }
 }
