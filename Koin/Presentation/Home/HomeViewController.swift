@@ -92,7 +92,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     
     private let menuLabel: UILabel = {
         let label = UILabel()
-        label.text = "식단"
+        label.text = "오늘식단"
         label.textColor = UIColor.appColor(.primary500)
         label.font = UIFont.appFont(.pretendardBold, size: 15)
         return label
@@ -208,8 +208,8 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateDining(diningItem, diningType):
-                self?.updateDining(item: diningItem, type: diningType)
+            case let .updateDining(diningItem, diningType, diningDate):
+                self?.updateDining(item: diningItem, type: diningType, date: diningDate)
             case let .putImage(response):
                 self?.putImage(data: response)
             case let .updateBus(response):
@@ -377,8 +377,11 @@ extension HomeViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))
     }
     
-    private func updateDining(item: DiningItem?, type: DiningType) {
+    private func updateDining(item: DiningItem?, type: DiningType, date: Date) {
         menuBackgroundView.updateDining(item, type)
+        if date.formatDateToYYMMDD() != Date().formatDateToYYMMDD() {
+            self.menuLabel.text = "내일식단"
+        }
     }
     
     private func putImage(data: ShopCategoryDTO) {
