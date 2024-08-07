@@ -17,7 +17,7 @@ final class HomeViewModel: ViewModelProtocol {
         case categorySelected(DiningPlace)
         case getBusInfo(String, String, String)
         case getDiningInfo
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
     
     // MARK: - Output
@@ -60,8 +60,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getBusInformation(from, to, type)
             case .getDiningInfo:
                 self?.getDiningInformation()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, category, value, previousPage, currentPage, durationTime, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: eventLabelNeededDuration)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -120,8 +120,9 @@ extension HomeViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationTime: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        
+        logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: eventLabelNeededDuration)
     }
 }
 
