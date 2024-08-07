@@ -30,7 +30,7 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         let circleView = UIView()
         let underlineView = UIView()
         let totalView = UIView()
-        circleView.layer.cornerRadius = 15
+        circleView.layer.cornerRadius = 14
         circleView.backgroundColor = UIColor.clear
         circleView.layer.borderColor = UIColor.appColor(.primary500).cgColor
         circleView.layer.borderWidth = 1
@@ -58,7 +58,7 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
     
     private let selectedCircleView: UIView = {
         let circleView = UIView()
-        circleView.layer.cornerRadius = 15
+        circleView.layer.cornerRadius = 14
         circleView.backgroundColor = UIColor.appColor(.primary500)
         
         return circleView
