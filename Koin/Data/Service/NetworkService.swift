@@ -1,0 +1,94 @@
+//
+//  NetworkService.swift
+//  koin
+//
+//  Created by 김나훈 on 7/27/24.
+//
+
+
+import Alamofire
+import Combine
+
+class NetworkService {
+    func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
+        return AF.request(api)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                guard let httpResponse = response.response else {
+                    throw URLError(.badServerResponse)
+                }
+                if 200..<300 ~= httpResponse.statusCode {
+                    return ()
+                } else if httpResponse.statusCode == 401 {
+                    throw ErrorResponse(code: "401", message: "")
+                } else {
+                    if let data = response.data {
+                        let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
+                        throw errorResponse
+                    } else {
+                        let afError = AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: httpResponse.statusCode))
+                        throw afError
+                    }
+                }
+            }
+            .mapError { error -> ErrorResponse in
+                self.handleError(error)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, ErrorResponse> {
+        return AF.request(api)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                guard let httpResponse = response.response else {
+                    throw URLError(.badServerResponse)
+                }
+                if 200..<300 ~= httpResponse.statusCode {
+                    guard let data = response.data else {
+                        throw ErrorResponse(code: "", message: "알 수 없는 에러")
+                    }
+                    let decodedResponse = try JSONDecoder().decode(T.self, from: data)
+                    return decodedResponse
+                } else if httpResponse.statusCode == 401 {
+                    throw ErrorResponse(code: "401", message: "")
+                } else {
+                    if let data = response.data {
+                        let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
+                        throw errorResponse
+                    } else {
+                        let afError = AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: httpResponse.statusCode))
+                        throw afError
+                    }
+                }
+            }
+            .mapError { error -> ErrorResponse in
+                self.handleError(error)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func handleError(_ error: Error) -> ErrorResponse {
+        if let errorResponse = error as? ErrorResponse {
+            return errorResponse
+        }
+        return ErrorResponse(code: "", message: "알 수 없는 에러")
+    }
+    
+    func refreshToken() -> AnyPublisher<Void, ErrorResponse> {
+        return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeyChainWorker.shared.read(key: .refresh) ?? "")))
+            .map { (tokenDTO: TokenDTO) -> Void in
+                KeyChainWorker.shared.create(key: .access, token: tokenDTO.token)
+                KeyChainWorker.shared.create(key: .refresh, token: tokenDTO.refreshToken)
+                return ()
+            }
+            .catch { error -> AnyPublisher<Void, ErrorResponse> in
+                KeyChainWorker.shared.delete(key: .access)
+                KeyChainWorker.shared.delete(key: .refresh)
+                return Fail(error: ErrorResponse(code: "401", message: "리프레시토큰 만료")).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+}
