@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 3/13/24.
 //
 
+import Kingfisher
 import UIKit
 
 // TODO: NS Cache는 앱이 실행되는 동안에만 캐싱. 앱이 종료되면 메모리에서 해제
@@ -36,5 +37,54 @@ extension UIImageView {
                 self.image = downloadedImage
             }
         }.resume()
+    }
+    
+    func loadImageFromBothDiskAndMemory(from URLString: String, radius: Int, transitionTime: TimeInterval? = nil, defaultImage: UIImage? = nil) {
+        let url = URL(string: URLString)
+        let processor = DownsamplingImageProcessor(size: self.bounds.size)
+        |> RoundCornerImageProcessor(cornerRadius: CGFloat(radius))
+        
+        if let transitionTime = transitionTime {
+            self.kf.indicatorType = .activity
+            self.kf.setImage(
+                with: url,
+                placeholder: defaultImage,
+                options: [
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(transitionTime)),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                switch result{
+                case .success:
+                    print("[SUCCESS] Fetching image was succeed with transition")
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        else {
+            self.kf.indicatorType = .none
+            self.kf.setImage(
+                with: url,
+                placeholder: defaultImage,
+                options: [
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                switch result{
+                case .success:
+                    print("[SUCCESS] Fetching image was succeed without transition")
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
     }
 }

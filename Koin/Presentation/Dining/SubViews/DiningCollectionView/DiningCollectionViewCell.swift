@@ -230,10 +230,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
         menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
-        if let imageUrl = info.imageUrl {
-            menuImageView.loadImage(from: imageUrl)
-            menuImageView.contentMode = .scaleAspectFill
-        }
+        if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
             menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
             menuImageView.contentMode = .scaleToFill
