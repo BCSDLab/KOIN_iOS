@@ -8,8 +8,7 @@
 import Foundation
 
 final class MockAnalyticsService: LogAnalyticsService {
-    
-    func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        debugPrint("\(label.rawValue)  \(category.rawValue)  \(value)")
+    func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration?) {
+        debugPrint("\(label) \(category) \(value) \(previousPage ?? "") \(currentPage ?? "") \(durationTime ?? "")")
     }
 }
