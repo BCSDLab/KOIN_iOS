@@ -16,10 +16,15 @@ final class BusCollectionViewCell: UICollectionViewCell {
     var cancellables = Set<AnyCancellable>()
     // MARK: - UI Components
     
+    private let wrapperView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
     private let busLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.appFont(.pretendardBold, size: 12)
-        label.backgroundColor = UIColor.appColor(.bus1)
         label.textColor = UIColor.appColor(.neutral0)
         label.textAlignment = .center
         return label
@@ -119,7 +124,7 @@ extension BusCollectionViewCell {
     func configure(busType: BusType, redirectedText: String, colorAsset: SceneColorAsset) {
         busLabel.text = busType.koreanDescription
         redirectedLabel.text = redirectedText
-        busLabel.backgroundColor = UIColor.appColor(colorAsset)
+        self.contentView.backgroundColor = .appColor(colorAsset)
     }
         
     func getBusEnumType(busType: BusType) -> BusType {
@@ -199,8 +204,11 @@ extension BusCollectionViewCell {
 
 extension BusCollectionViewCell {
     private func setUpLayouts() {
-        [busLabel, timeLabel, startAreaLabel, exchangeAreaButton, endAreaLabel, startTimeLabel, redirectedButton].forEach {
+        [busLabel, wrapperView].forEach {
             contentView.addSubview($0)
+        }
+        [timeLabel, startAreaLabel, exchangeAreaButton, endAreaLabel, startTimeLabel, redirectedButton].forEach {
+            wrapperView.addSubview($0)
         }
         [redirectedLabel, arrowImage].forEach {
             redirectedButton.addSubview($0)
@@ -210,11 +218,15 @@ extension BusCollectionViewCell {
     private func setUpConstraints() {
         busLabel.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top)
-            make.width.equalTo(self.snp.width)
-            make.height.equalTo(30)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(35)
+        }
+        wrapperView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(35)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         timeLabel.snp.makeConstraints { make in
-            make.top.equalTo(busLabel.snp.bottom).offset(15)
+            make.top.equalToSuperview().offset(15)
             make.centerX.equalTo(self.snp.centerX)
             make.height.equalTo(16)
         }
@@ -259,6 +271,8 @@ extension BusCollectionViewCell {
     private func setUpBorder() {
         self.layer.borderWidth = 1.0
         self.layer.borderColor = UIColor.appColor(.neutral500).withAlphaComponent(0.2).cgColor
+        self.layer.cornerRadius = 8
+        self.contentView.layer.cornerRadius = 8
     }
     
     private func configureView() {
