@@ -25,6 +25,8 @@ final class DefaultGetUserScreenTimeUseCase: GetUserScreenTimeUseCase {
     
     func enterVc(enterVcTime: Date) {
         self.enterVcTime = enterVcTime
+        timeInBackgroundForEvent = 0
+        timeInBackground = 0
     }
     
     func enterBackground(enterBackgroundTime: Date) {
@@ -34,6 +36,7 @@ final class DefaultGetUserScreenTimeUseCase: GetUserScreenTimeUseCase {
     func backForeground(backForegroundTime: Date) {
         if let enterBackgroundTime = enterBackgroundTime {
             self.timeInBackground += backForegroundTime.timeIntervalSince(enterBackgroundTime)
+            self.timeInBackgroundForEvent += backForegroundTime.timeIntervalSince(enterBackgroundTime)
         }
     }
     
@@ -50,9 +53,10 @@ final class DefaultGetUserScreenTimeUseCase: GetUserScreenTimeUseCase {
     func endEvent(endEventTime: Date, eventLabel: EventParameter.EventLabelNeededDuration) -> String {
         if let beginBusinessEventTime = beginEventTimes[eventLabel] {
             let allEventTime = endEventTime.timeIntervalSince(beginBusinessEventTime)
-            return "\(allEventTime - timeInBackground)"
+            let tempTimeInBackground = timeInBackgroundForEvent
+            timeInBackgroundForEvent = 0
+            return "\(allEventTime - tempTimeInBackground)"
         }
-        timeInBackgroundForEvent = 0
         return ""
     }
 }
