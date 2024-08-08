@@ -13,7 +13,7 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     
     private var shops: [ShopDTO] = []
     weak var shopDelegate: CollectionViewDelegate?
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -68,6 +68,6 @@ extension ShopInfoCollectionView {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.makeAnalyticsForClickStoreList(shops[indexPath.row].name)
-        cellTapPublisher.send(shops[indexPath.row].id)
+        cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
     }
 }

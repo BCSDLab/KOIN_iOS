@@ -14,6 +14,7 @@ final class ShopViewModel: ViewModelProtocol {
         case changeCategory(Int)
         case searchTextChanged(String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
     
     enum Output {
@@ -55,8 +56,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeCategory(id)
             case let .searchTextChanged(text):
                 self?.searchShop(text)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, category, value, currentPage, durationTime, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: eventLabelNeededDuration)
             }
         }.store(in: &subscriptions)
         
@@ -112,11 +113,24 @@ extension ShopViewModel {
     private func changeCategory(_ id: Int) {
         if selectedId == id { selectedId = 0 }
         else { selectedId = id }
-        
-        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategories, category: .click, value: MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId))
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-    }
-}
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, durationTime: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if eventLabelNeededDuration == .shopClick {
+            if let currentPage = currentPage,
+               let durationTime = durationTime {
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId), currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: .shopClick)
+            }
+        }
+        else if eventLabelNeededDuration == .shopCategories {
+            if let currentPage = currentPage,
+               let durationTime = durationTime {
+                let selectedOldShopName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
+                let selectedNewShopName = selectedOldShopName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: selectedOldShopName, currentPage: selectedNewShopName, durationTime: durationTime, eventLabelNeededDuration: .shopCategories)
+            }
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
+    }}
