@@ -14,8 +14,8 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     private var shops: [Shop] = []
     weak var shopDelegate: CollectionViewDelegate?
     private var cancellables = Set<AnyCancellable>()
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
     let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
+    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -96,6 +96,6 @@ extension ShopInfoCollectionView {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.makeAnalyticsForClickStoreList(shops[indexPath.row].name)
-        cellTapPublisher.send(shops[indexPath.row].id)
+        cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
     }
 }

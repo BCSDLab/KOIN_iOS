@@ -16,6 +16,7 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var scrollDirection: ScrollLog = .scrollToDown
+    private let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
     
     // MARK: - UI Components
     
@@ -111,6 +112,8 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         hideKeyboardWhenTappedAround()
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         self.scrollView.delegate = self
     }
     
@@ -123,6 +126,16 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         super.viewWillAppear(animated)
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getShopInfo)
+        getUserScreenTimeUseCase.enterVc(enterVcTime: Date())
+        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCategories)
+    }
+    
+    @objc private func appWillResignActive() {
+        getUserScreenTimeUseCase.enterBackground(enterBackgroundTime: Date())
+    }
+    
+    @objc private func appDidBecomeActive() {
+        getUserScreenTimeUseCase.backForeground(backForegroundTime: Date())
     }
     
     // MARK: - Bind
@@ -143,8 +156,10 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
             }
         }.store(in: &subscriptions)
         
-        shopCollectionView.cellTapPublisher.sink { [weak self] shopId in
-                self?.navigateToShopDataViewController(id: shopId)
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
+            self?.navigateToShopDataViewController(id: shopId)
+            let moveVcTime = self?.getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, moveVcTime, .shopClick))
             }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId in
@@ -244,6 +259,10 @@ extension ShopViewController {
     }
     
     func didTapCell(at id: Int) {
+        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
+        let categoryDurationTime = getUserScreenTimeUseCase.endEvent(endEventTime: Date(), eventLabel: .shopCategories)
+        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCategories)
+        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, categoryDurationTime, .shopCategories))
         inputSubject.send(.changeCategory(id))
         searchTextField.text = ""
     }
