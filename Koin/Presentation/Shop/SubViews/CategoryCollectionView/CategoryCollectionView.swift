@@ -12,7 +12,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
     
     private var shopCategories: [ShopCategory] = []
     var cellTapPublisher = PassthroughSubject<Int, Never>()
-    var selectedCategoryPublisher = PassthroughSubject<Int, Never>()
+    var selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
     private var selectedId = 0
     private var layout = UICollectionViewFlowLayout()
     
