@@ -60,7 +60,6 @@ extension RegisterViewModel {
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.dissMissView)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.completeSignUp, category: .click, value: "회원가입 완료")
         }.store(in: &subscriptions)
 
     }

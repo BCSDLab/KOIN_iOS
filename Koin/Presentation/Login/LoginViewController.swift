@@ -181,8 +181,6 @@ extension LoginViewController {
         let registerViewController = RegisterViewController(viewModel: RegisterViewModel(fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: timetableRepositoy), registerUseCase: DefaultRegisterUseCase(userRepository: userRepository), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: logRepoository)))
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작"))
     }
 }
 
