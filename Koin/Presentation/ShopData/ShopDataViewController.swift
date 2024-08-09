@@ -17,6 +17,7 @@ final class ShopDataViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var isSwipedToPopView: Bool = false
     private var scrollDirection: ScrollLog = .scrollToDown
+    private var getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
     
     // MARK: - UI Components
     
@@ -173,24 +174,36 @@ final class ShopDataViewController: UIViewController {
         scrollView.delegate = self
         categorySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         stickySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         menuTitleImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .call), style: .plain, target: self, action: #selector(callButtonTapped))
+    }
+    
+    @objc private func appWillResignActive() {
+        getUserScreenTimeUseCase.enterBackground(enterBackgroundTime: Date())
+    }
+    
+    @objc private func appDidBecomeActive() {
+        getUserScreenTimeUseCase.backForeground(backForegroundTime: Date())
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         enablePopGestureRecognizer()
+        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCall)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         disablePopGestureRecognizer()
+        let durationTime = getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
         if self.isMovingFromParent {
             if isSwipedToPopView == false {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBackButton, .click, shopTitleLabel.text ?? ""))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, durationTime, .shopDetailViewBack))
             }
             else {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopSwipeBack, .swipe, shopTitleLabel.text ?? ""))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, durationTime, .shopDetailViewBack))
             }
         }
     }
@@ -286,7 +299,14 @@ extension ShopDataViewController: UIScrollViewDelegate {
         let screenHeight = self.scrollView.frame.height
         if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
             scrollDirection = .scrollChecked
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopTitleLabel.text ?? ""))
+            switch categorySelectSegmentControl.selectedSegmentIndex {
+            case 0:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopTitleLabel.text ?? ""))
+            case 1:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewEvent, .scroll, shopTitleLabel.text ?? ""))
+            default:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, shopTitleLabel.text ?? ""))
+            }
         }
     }
 }
@@ -348,8 +368,10 @@ extension ShopDataViewController {
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitleLabel.text ?? ""))
+        let durationTime = getUserScreenTimeUseCase.endEvent(endEventTime: Date(), eventLabel: .shopCall)
+        let shopTitle = shopTitleLabel.text ?? ""
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, durationTime, .shopCall))
+        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCall)
     }
     
     private func showShopData(data: ShopData) {

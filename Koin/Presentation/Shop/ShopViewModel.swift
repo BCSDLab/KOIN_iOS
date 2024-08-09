@@ -13,7 +13,6 @@ final class ShopViewModel: ViewModelProtocol {
         case viewDidLoad
         case changeCategory(Int)
         case searchTextChanged(String)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
     
