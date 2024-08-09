@@ -242,6 +242,7 @@ extension ServiceSelectViewController {
     @objc func logOutButtonTapped() {
         if viewModel.isLogined {
             showLogOutAlert()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그아웃"))
         } else {
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
@@ -345,6 +346,7 @@ extension ServiceSelectViewController {
             let myPageViewController = MyPageViewController(viewModel: MyPageViewModel(fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, modifyUseCase: modifyUseCase, revokeUseCase: revokeUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase))
             myPageViewController.title = "내 정보"
             navigationController?.pushViewController(myPageViewController, animated: true)
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정"))
         } else {
             showLoginAlert()
         }
