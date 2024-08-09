@@ -157,6 +157,7 @@ extension LoginViewController {
     @objc private func findIdButtonTapped() {
         if let url = URL(string: "https://portal.koreatech.ac.kr/kut/page/findUser.jsp") {
             let safariViewController = SFSafariViewController(url: url)
+            inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "아이디찾기"))
             present(safariViewController, animated: true)
         }
     }
@@ -164,6 +165,7 @@ extension LoginViewController {
     @objc private func findPasswordButtonTapped() {
         let findPasswordViewController = FindPasswordViewController(viewModel: FindPasswordViewModel(findPasswordUseCase: DefaultFindPasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
         findPasswordViewController.title = "비밀번호 찾기"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "비밀번호찾기"))
         navigationController?.pushViewController(findPasswordViewController, animated: true)
     }
     
@@ -180,6 +182,7 @@ extension LoginViewController {
         let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let registerViewController = RegisterViewController(viewModel: RegisterViewModel(fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: timetableRepositoy), registerUseCase: DefaultRegisterUseCase(userRepository: userRepository), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: logRepoository)))
         registerViewController.title = "회원가입"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "회원가입"))
         navigationController?.pushViewController(registerViewController, animated: true)
     }
 }
