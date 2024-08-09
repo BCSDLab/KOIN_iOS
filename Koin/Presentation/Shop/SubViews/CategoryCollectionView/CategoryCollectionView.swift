@@ -5,12 +5,14 @@
 //  Created by 김나훈 on 3/12/24.
 //
 
+import Combine
 import UIKit
 
 final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     private var shopCategories: [ShopCategory] = []
-    weak var categoryDelegate: CollectionViewDelegate?
+    var cellTapPublisher = PassthroughSubject<Int, Never>()
+    var selectedCategoryPublisher = PassthroughSubject<Int, Never>()
     private var selectedId = 0
     private var layout = UICollectionViewFlowLayout()
     
@@ -57,6 +59,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
 
             }
         }
+        selectedCategoryPublisher.send(selectedId)
     }
 
 }
@@ -94,7 +97,7 @@ extension CategoryCollectionView {
         else {
             selectedCategory = shopCategories[indexPath.row + 5]
         }
-        categoryDelegate?.didTapCell(at: selectedCategory.id)
+        cellTapPublisher.send(selectedCategory.id)
     }
 }
 

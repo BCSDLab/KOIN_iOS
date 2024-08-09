@@ -12,6 +12,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let shopId: Int
+    private let categoryId: Int?
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let fetchShopMenuListUseCase: FetchShopMenuListUseCase
     private let fetchShopEventListUseCase: FetchShopEventListUseCase
@@ -34,9 +35,9 @@ final class ShopDataViewModel: ViewModelProtocol {
         case fetchShopMenuList
         case fetchShopReviewList
         case deleteReview(Int, Int)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case changeFetchStandard(ReviewSortType?, Bool?)
         case updateReviewCount
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
     enum Output {
         case showShopData(ShopData)
@@ -49,7 +50,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case disappearReview(Int, Int)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int, categoryId: Int?) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
@@ -58,6 +59,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         self.deleteReviewUseCase = deleteReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.shopId = shopId
+        self.categoryId = categoryId
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -68,8 +70,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopData()
                 self?.fetchShopMenuList()
                 self?.updateReviewCount()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, category, value, currentPage, duration, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, currentPage: currentPage, duration: duration, eventLabelNeededDuration: eventLabelNeededDuration)
             case .fetchShopEventList:
                 self?.fetchShopEventList()
             case .fetchShopMenuList:
@@ -184,7 +186,12 @@ extension ShopDataViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, duration: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if eventLabelNeededDuration == .shopDetailViewBack {
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: nil, currentPage: MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId ?? 0), durationTime: duration, eventLabelNeededDuration: eventLabelNeededDuration)
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
     }
 }

@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class ShopViewController: UIViewController, CollectionViewDelegate {
+final class ShopViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -107,7 +107,6 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
-        categoryCollectionView.categoryDelegate = self
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         hideKeyboardWhenTappedAround()
         searchTextField.delegate = self
@@ -156,14 +155,24 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
             }
         }.store(in: &subscriptions)
         
-        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
-            self?.navigateToShopDataViewController(id: shopId)
+        shopCollectionView.cellTapPublisher.combineLatest(categoryCollectionView.selectedCategoryPublisher).sink { [weak self] shopInfo in
+            self?.navigateToShopDataViewController(shopId: shopInfo.0.0, categoryId: shopInfo.1)
             let moveVcTime = self?.getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
+            let shopName = shopInfo.0.1
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, moveVcTime, .shopClick))
-            }.store(in: &subscriptions)
+        }.store(in: &subscriptions)
+        
+        categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
+            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
+            let categoryDurationTime = self?.getUserScreenTimeUseCase.endEvent(endEventTime: Date(), eventLabel: .shopCategories)
+            self?.getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCategories)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, categoryDurationTime, .shopCategories))
+            self?.inputSubject.send(.changeCategory(categoryId))
+            self?.searchTextField.text = ""
+        }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId in
-            self?.navigateToShopDataViewController(id: shopId)
+            self?.navigateToShopDataViewController(shopId: shopId)
         }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapTitlePublisher.sink { [weak self] shopName in
@@ -226,7 +235,7 @@ extension ShopViewController: UIScrollViewDelegate {
 
 extension ShopViewController {
     
-    private func navigateToShopDataViewController(id: Int) {
+    private func navigateToShopDataViewController(shopId: Int, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
@@ -236,7 +245,7 @@ extension ShopViewController {
         let fetchMyReviewUseCase = DefaultFetchMyReviewUseCase(shopRepository: shopRepository)
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, shopId: id)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, shopId: shopId, categoryId: categoryId)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
@@ -257,16 +266,7 @@ extension ShopViewController {
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
-    
-    func didTapCell(at id: Int) {
-        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-        let categoryDurationTime = getUserScreenTimeUseCase.endEvent(endEventTime: Date(), eventLabel: .shopCategories)
-        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCategories)
-        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, categoryDurationTime, .shopCategories))
-        inputSubject.send(.changeCategory(id))
-        searchTextField.text = ""
-    }
-    
+
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         inputSubject.send(.searchTextChanged(text))

@@ -32,6 +32,19 @@ final class GA4AnalyticsService: LogAnalyticsService {
                 Analytics.logEvent(label.team, parameters: parameters)
             }
         }
+        else if eventLabelNeededDuration == .shopDetailViewBack {
+            if let durationTime = durationTime,
+               let currentPage = currentPage {
+                let parameters = [
+                    "event_label": label.rawValue,
+                    "event_category": category.rawValue,
+                    "value": value,
+                    "currentPage": currentPage,
+                    "duration_time": durationTime
+                ]
+                Analytics.logEvent(label.team, parameters: parameters)
+            }
+        }
         else {
             if let previousPage = previousPage,
                let currentPage = currentPage,

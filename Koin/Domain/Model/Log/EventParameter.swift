@@ -30,8 +30,8 @@ enum EventParameter {
             case shopDetailViewEvent = "shop_detailView_event"
             case shopCategoriesSearch = "shop_categories_search"
             case shopDetailView = "shop_detailView"
-            case shopBackButton = "shop_backButton"
-            case shopSwipeBack = "shop_swipe_back"
+            case shopDetailViewReview = "shop_detail_view_review"
+            case shopDetailViewBack = "shop_detail_view_back"
             
             var team: String {
                 return "BUSINESS"
@@ -98,5 +98,6 @@ enum EventParameter {
         case shopClick
         case mainShopCategories
         case shopCall
+        case shopDetailViewBack
     }
 }
