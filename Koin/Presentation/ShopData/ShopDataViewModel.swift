@@ -114,7 +114,7 @@ extension ShopDataViewModel {
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: nil, currentPage: MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId ?? 0), durationTime: duration, eventLabelNeededDuration: eventLabelNeededDuration)
         }
         else {
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: nil, currentPage: nil, durationTime: duration, eventLabelNeededDuration: eventLabelNeededDuration)
         }
     }
 }
