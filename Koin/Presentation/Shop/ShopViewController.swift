@@ -155,10 +155,10 @@ final class ShopViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        shopCollectionView.cellTapPublisher.combineLatest(categoryCollectionView.selectedCategoryPublisher).sink { [weak self] shopInfo in
-            self?.navigateToShopDataViewController(shopId: shopInfo.0.0, categoryId: shopInfo.1)
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
+            let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
+            self?.navigateToShopDataViewController(shopId: shopId, categoryId: categoryId)
             let moveVcTime = self?.getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
-            let shopName = shopInfo.0.1
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, moveVcTime, .shopClick))
         }.store(in: &subscriptions)
         
