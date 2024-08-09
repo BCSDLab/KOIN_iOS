@@ -20,6 +20,9 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "value": value
         ]
         Analytics.logEvent(label.team, parameters: parameters)
+        
+        let mockAnalyticsService = MockAnalyticsService()
+        mockAnalyticsService.logEvent(label: label, category: category, value: value)
     }
     
 }

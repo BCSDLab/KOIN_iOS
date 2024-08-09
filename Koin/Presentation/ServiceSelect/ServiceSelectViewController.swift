@@ -247,7 +247,7 @@ extension ServiceSelectViewController {
             loginViewController.title = "로그인"
             navigationController?.pushViewController(loginViewController, animated: true)
             
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerLogin, .click, "햄버거 로그인"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그인"))
         }
     }
     
