@@ -39,8 +39,8 @@ extension UIImageView {
         }.resume()
     }
     
-    func loadImageFromBothDiskAndMemory(from URLString: String, radius: Int, transitionTime: TimeInterval? = nil, defaultImage: UIImage? = nil) {
-        let url = URL(string: URLString)
+    func loadImageFromBothDiskAndMemory(from urlString: String, radius: Int, transitionTime: TimeInterval? = nil, defaultImage: UIImage? = nil) {
+        let url = URL(string: urlString)
         let processor = DownsamplingImageProcessor(size: self.bounds.size)
         |> RoundCornerImageProcessor(cornerRadius: CGFloat(radius))
         
@@ -55,15 +55,6 @@ extension UIImageView {
                     .transition(.fade(transitionTime)),
                     .cacheOriginalImage
                 ])
-            {
-                result in
-                switch result{
-                case .success:
-                    print("[SUCCESS] Fetching image was succeed with transition")
-                case .failure(let error):
-                    print(error)
-                }
-            }
         }
         else {
             self.kf.indicatorType = .none
@@ -75,15 +66,6 @@ extension UIImageView {
                     .scaleFactor(UIScreen.main.scale),
                     .cacheOriginalImage
                 ])
-            {
-                result in
-                switch result{
-                case .success:
-                    print("[SUCCESS] Fetching image was succeed without transition")
-                case .failure(let error):
-                    print(error)
-                }
-            }
         }
         
     }
