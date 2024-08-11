@@ -5,10 +5,17 @@
 //  Created by 김나훈 on 7/9/24.
 //
 
+import Combine
+import DropDown
 import Then
 import UIKit
 
 final class ReviewListCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Properties
+    private let modifyButtonPublisher = PassthroughSubject<Void, Never>()
+    private let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    private let reportButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     
@@ -57,6 +64,8 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
+    private let dropDown = DropDown()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -77,6 +86,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         myReviewImageView.isHidden = !review.isMine
         reviewImageCollectionView.isHidden = review.imageUrls.isEmpty
         if review.isMine { showMyReviewImageView() }
+        optionButton.isSelected = review.isMine
         if review.imageUrls.isEmpty { disappearImageCollectionView() }
         self.backgroundColor = backgroundColor
     }
