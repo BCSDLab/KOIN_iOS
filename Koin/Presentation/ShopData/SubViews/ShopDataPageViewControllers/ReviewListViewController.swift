@@ -125,7 +125,7 @@ extension ReviewListViewController {
         
         reviewListCollectionView.snp.makeConstraints {
             $0.top.equalTo(scoreChartCollectionView.snp.bottom).offset(14)
-            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.leading.equalTo(view.snp.leading)
             $0.trailing.equalTo(view.snp.trailing)
             $0.height.equalTo(1)
         }

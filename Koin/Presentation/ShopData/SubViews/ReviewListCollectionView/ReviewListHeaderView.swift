@@ -138,14 +138,14 @@ extension ReviewListHeaderView {
         
         separateView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top)
-            make.leading.equalTo(self.snp.leading)
+            make.leading.equalTo(self.snp.leading).offset(24)
             make.trailing.equalTo(self.snp.trailing).offset(-16)
             make.height.equalTo(1)
         }
         
         sortTypeButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(self.snp.leading)
+            make.leading.equalTo(self.snp.leading).offset(24)
             make.width.equalTo(100)
             make.height.equalTo(22)
         }

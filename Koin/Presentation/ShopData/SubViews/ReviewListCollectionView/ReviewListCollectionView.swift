@@ -73,21 +73,23 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
             return UICollectionViewCell()
         }
         let reviewItem = reviewList[indexPath.row]
-        cell.configure(review: reviewItem)
+        let color: UIColor = indexPath.row % 2 == 0 ? .systemBackground : UIColor.appColor(.primary500).withAlphaComponent(0.03)
+        cell.configure(review: reviewItem, backgroundColor: color)
         
         return cell
     }
     
+ 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width
-        let dummyCell = ReviewListCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: 150))
-        dummyCell.configure(review: reviewList[indexPath.row])
+        let width = collectionView.frame.width
+        let estimatedHeight: CGFloat = 1000
+        let dummyCell = ReviewListCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
+        let color: UIColor = indexPath.row % 2 == 0 ? .systemBackground : UIColor.appColor(.primary500).withAlphaComponent(0.03)
+        dummyCell.configure(review: reviewList[indexPath.row], backgroundColor: color)
+        dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
-        
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
         let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        
-        return CGSize(width: width, height: max(estimatedSize.height, 362))
+        return CGSize(width: width, height: estimatedSize.height)
     }
-    
 }
