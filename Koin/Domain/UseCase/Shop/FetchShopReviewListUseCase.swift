@@ -52,9 +52,9 @@ final class MockFetchShopReviewListUseCase: FetchShopReviewListUseCase {
             reviews.append(review)
         }
         
-        let reviewStatistics = ReviewStatisticsDTO(
+        let reviewStatistics = StatisticsDTO(
             averageRating: 2.7,
-            statistics: ["1": 1, "2": 2, "3": 3, "4": 2, "5": 2]
+            ratings: ["1": 1, "2": 2, "3": 3, "4": 2, "5": 2]
         )
         
         let shopReview = ShopReview(reviewStatistics: reviewStatistics, review: reviews)

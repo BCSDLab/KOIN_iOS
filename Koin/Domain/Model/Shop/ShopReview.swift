@@ -8,7 +8,7 @@
 import Foundation
 
 struct ShopReview {
-    let reviewStatistics: ReviewStatisticsDTO
+    let reviewStatistics: StatisticsDTO
     let review: [Review]
 }
 
