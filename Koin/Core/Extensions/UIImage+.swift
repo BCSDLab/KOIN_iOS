@@ -66,6 +66,8 @@ enum ImageAsset: String {
     case myReview
     case option
     case optionFill
+    case circle
+    case circleFill
 }
 
 enum SFSymbols: String {
