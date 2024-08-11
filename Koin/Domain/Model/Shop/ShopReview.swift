@@ -13,7 +13,7 @@ struct ShopReview {
 }
 
 struct Review {
-    let nickName: String?
+    let nickName: String
     let rating: Int
     let content: String
     let imageUrls: [String]

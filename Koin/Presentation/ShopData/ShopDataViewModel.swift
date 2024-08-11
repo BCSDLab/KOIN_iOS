@@ -66,7 +66,7 @@ final class ShopDataViewModel: ViewModelProtocol {
 extension ShopDataViewModel {
     
     private func fetchShopReviewList() {
-        fetchShopReviewListUseCase.execute().sink { completion in
+        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: 77, page: 1, sorter: .highestRaiting)).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

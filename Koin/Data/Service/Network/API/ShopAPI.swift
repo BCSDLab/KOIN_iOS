@@ -14,6 +14,7 @@ enum ShopAPI {
     case fetchShopData(FetchShopInfoRequest)
     case fetchShopMenuList(FetchShopInfoRequest)
     case fetchShopEventList(FetchShopInfoRequest)
+    case fetchShopReviewList(FetchShopReviewRequest)
 }
 
 extension ShopAPI: Router, URLRequestConvertible {
@@ -30,6 +31,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .fetchShopData(let request): return "/shops/\(request.shopId)"
         case .fetchShopMenuList(let request): return "/shops/\(request.shopId)/menus"
         case .fetchShopEventList(let request): return "/shops/\(request.shopId)/events"
+        case .fetchShopReviewList(let request): return "/shops/\(request.shopId)/reviews"
         }
     }
     
@@ -47,14 +49,20 @@ extension ShopAPI: Router, URLRequestConvertible {
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()
+        case .fetchShopReviewList(let request):
+            return [
+                "limit": request.limit,
+                "page": request.page,
+                "sorter": request.sorter.rawValue
+            ]
         }
     }
-    
+
     public var encoding: ParameterEncoding? {
         switch self {
         case .fetchShopList, .fetchEventList, .fetchShopCategoryList:
             return URLEncoding.default
-        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
+        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopReviewList:
             return URLEncoding.queryString
         }
     }

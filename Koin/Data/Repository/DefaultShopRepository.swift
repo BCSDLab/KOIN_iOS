@@ -38,4 +38,8 @@ final class DefaultShopRepository: ShopRepository {
     func fetchShopEventList(requestModel: FetchShopInfoRequest) -> AnyPublisher<EventsDTO, Error> {
         return service.fetchShopEventList(requestModel: requestModel)
     }
+    
+    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
+        return service.fetchShopReviewList(requestModel: requestModel)
+    }
 }

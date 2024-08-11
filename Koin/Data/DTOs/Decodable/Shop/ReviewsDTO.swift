@@ -1,5 +1,5 @@
 //
-//  ShopReviewDTO.swift
+//  ReviewsDTO.swift
 //  koin
 //
 //  Created by 김나훈 on 7/8/24.
@@ -48,5 +48,36 @@ struct StatisticsDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case averageRating = "average_rating"
         case ratings
+    }
+}
+
+extension ReviewDTO {
+    func toDomain() -> Review {
+        return Review(
+            nickName: nickName,
+            rating: rating,
+            content: content,
+            imageUrls: imageUrls,
+            menuNames: menuNames,
+            createdAt: createdAt
+        )
+    }
+}
+
+extension StatisticsDTO {
+    func toDomain() -> StatisticsDTO {
+        return StatisticsDTO(
+            averageRating: averageRating,
+            ratings: ratings
+        )
+    }
+}
+
+extension ReviewsDTO {
+    func toDomain() -> ShopReview {
+        return ShopReview(
+            reviewStatistics: statistics.toDomain(),
+            review: reviews.map { $0.toDomain() }
+        )
     }
 }
