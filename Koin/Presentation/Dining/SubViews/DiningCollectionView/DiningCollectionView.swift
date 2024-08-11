@@ -48,6 +48,11 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
             } else {
                 diningList[index].decreaseLike()
             }
+            let indexPath = IndexPath(item: index, section: 0)
+            
+            if let cell = self.cellForItem(at: indexPath) as? DiningCollectionViewCell {
+                cell.updateLikeButtonText(isLiked: isLiked, likeCount: diningList[indexPath.row].likes)
+            }
         }
     }
     
@@ -89,7 +94,6 @@ extension DiningCollectionView {
         cell.likeButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
             self.likeButtonPublisher.send((self.diningList[indexPath.row].id, self.diningList[indexPath.row].isLiked))
-            cell.likeCount = self.diningList[indexPath.row].isLiked ? cell.likeCount-1 : cell.likeCount+1
         }.store(in: &cell.cancellables)
         return cell
     }

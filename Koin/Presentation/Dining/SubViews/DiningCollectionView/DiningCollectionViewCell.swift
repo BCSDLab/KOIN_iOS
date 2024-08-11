@@ -16,16 +16,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     let shareButtonPublisher = PassthroughSubject<Void, Never>()
     let likeButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
-    var likeCount: Int = 0 {
-        didSet {
-            if oldValue > likeCount {
-                self.updateLikeButtonText(isLiked: false, likeCount: likeCount)
-            }
-            else {
-                self.updateLikeButtonText(isLiked: true, likeCount: likeCount)
-            }
-        }
-    }
+    
     // MARK: - UI Components
     
     private let diningPlaceLabel: UILabel = {
@@ -184,7 +175,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(info: DiningItem) {
-        self.likeCount = info.likes
         diningPlaceLabel.text = info.place.rawValue
         updateLikeButtonText(isLiked: info.isLiked, likeCount: info.likes)
         
