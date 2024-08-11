@@ -105,6 +105,8 @@
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
+		D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C545E2C68C7EB000826DA /* ScoreChartCollectionView.swift */; };
+		D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54602C68C904000826DA /* ScoreChartCollectionViewCell.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -440,6 +442,8 @@
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
+		D22C545E2C68C7EB000826DA /* ScoreChartCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreChartCollectionView.swift; sourceTree = "<group>"; };
+		D22C54602C68C904000826DA /* ScoreChartCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreChartCollectionViewCell.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -868,6 +872,15 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
+		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D22C545E2C68C7EB000826DA /* ScoreChartCollectionView.swift */,
+				D22C54602C68C904000826DA /* ScoreChartCollectionViewCell.swift */,
+			);
+			path = ScoreChartCollectionView;
+			sourceTree = "<group>";
+		};
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
 			isa = PBXGroup;
 			children = (
@@ -1198,6 +1211,7 @@
 				D2D380DE2BA69591009AD5A9 /* MenuImageCollectionView */,
 				D2D380DF2BA6959F009AD5A9 /* MenuListCollectionView */,
 				D239448A2C3C9D3000048F45 /* ReviewListCollectionView */,
+				D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */,
 				D27DD0482BA608310081FD36 /* GuideLabel.swift */,
 				D27DD0492BA608310081FD36 /* PossibilityLabel.swift */,
 				D23944A12C3CFAA500048F45 /* ScoreView.swift */,
@@ -2148,6 +2162,7 @@
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
+				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
@@ -2279,6 +2294,7 @@
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
+				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,

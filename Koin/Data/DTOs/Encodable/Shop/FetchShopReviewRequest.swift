@@ -15,7 +15,7 @@ struct FetchShopReviewRequest: Encodable {
 }
 
 enum ReviewSortType: String, Encodable {
-    case latest = "LASTEST"
+    case latest = "LATEST"
     case oldest = "OLDEST"
     case highestRaiting = "HIGHEST_RATING"
     case lowestRaiting = "LOWEST_RATING"
