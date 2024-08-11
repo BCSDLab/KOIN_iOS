@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class DiningNoticeViewController: UIViewController {
+final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -22,6 +22,12 @@ final class DiningNoticeViewController: UIViewController {
         let label = UILabel()
         label.text = "학생식당 정보"
         return label
+    }()
+    
+    private let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
+        return button
     }()
 
     private let diningGuideLabel: UILabel = {
@@ -105,16 +111,19 @@ final class DiningNoticeViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.fetchCoopShopList)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        setUpOriginalNavigationBar()
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        setUpNavigationBar()
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
     // MARK: - Bind
@@ -157,49 +166,25 @@ extension DiningNoticeViewController {
 }
 
 extension DiningNoticeViewController {
-    
-    private func setUpNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.shadowColor = .white
-        appearance.backgroundColor = .white
-        let backBtnAppearance = UIBarButtonItemAppearance()
-        backBtnAppearance.normal.backgroundImage = UIImage.appImage(asset: .arrowBack)?.withTintColor(.black)
-        appearance.backButtonAppearance = backBtnAppearance
-        let font = UIFont.appFont(.pretendardMedium, size: 20)
-        let titleAttribute = [
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.foregroundColor: UIColor.black
-        ]
-        appearance.titleTextAttributes = titleAttribute
-        self.navigationController?.navigationBar.standardAppearance = appearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-    
-    private func setUpOriginalNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .appColor(.primary500)
-        
-        let font = UIFont.appFont(.pretendardMedium, size: 20)
-        let titleAttribute = [
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ]
-        appearance.titleTextAttributes = titleAttribute
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-    
     private func setUpLayOuts() {
-        [navigationTitle, updateDateLabel, diningGuideLabel, placeGuideLabel, placeTextLabel, phoneGuideLabel, phoneTextLabel, separateView, weekdayTimeLabel, weekdayTimeCollectionView, weekendTimeLabel, weekendTimeCollectionView].forEach {
+        [backButton, navigationTitle, updateDateLabel, diningGuideLabel, placeGuideLabel, placeTextLabel, phoneGuideLabel, phoneTextLabel, separateView, weekdayTimeLabel, weekdayTimeCollectionView, weekendTimeLabel, weekendTimeCollectionView].forEach {
             self.view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        backButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        }
+        navigationTitle.snp.makeConstraints { make in
+            make.centerY.equalTo(backButton.snp.centerY)
+            make.centerX.equalTo(view.snp.centerX)
+        }
         diningGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(backButton.snp.bottom).offset(28)
             make.leading.equalTo(updateDateLabel.snp.leading)
             make.height.equalTo(32)
         }
