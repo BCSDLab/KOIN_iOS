@@ -38,9 +38,12 @@ final class ReviewListViewController: UIViewController {
         $0.settings.updateOnTouch = false
     }
     
-    private let scoreChartCollectionView = UIView().then { _ in
-        
-    }
+    private let scoreChartCollectionView: ScoreChartCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0
+        let collectionView = ScoreChartCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
     
     private let reviewListCollectionView: ReviewListCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -60,6 +63,8 @@ final class ReviewListViewController: UIViewController {
     func setReviewList(_ review: ShopReview) {
         totalScoreLabel.text = "\(review.reviewStatistics.averageRating)"
         reviewListCollectionView.setReviewList(review.review)
+        scoreChartCollectionView.setStatistics(review.reviewStatistics)
+        
         
         reviewListCollectionView.snp.updateConstraints { make in
             make.height.equalTo(3000)
@@ -109,7 +114,7 @@ extension ReviewListViewController {
         scoreChartCollectionView.snp.makeConstraints {
             $0.top.equalTo(writeReviewButton.snp.bottom).offset(14)
             $0.leading.equalTo(totalScoreView.snp.trailing).offset(14)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.trailing.equalTo(view.snp.trailing)
             $0.height.equalTo(95)
         }
         
