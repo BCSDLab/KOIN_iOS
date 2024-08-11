@@ -39,13 +39,14 @@ final class DiningViewModel: ViewModelProtocol {
     private let sendDeviceTokenUseCase: SendDeviceTokenUseCase
     private let dateProvider: DateProvider
     private var subscriptions: Set<AnyCancellable> = []
+    private var sharedDiningItem: CurrentDiningTime?
     private var currentDate: CurrentDiningTime = .init(date: Date(), diningType: .breakfast) {
         didSet {
             updateDiningList()
         }
     }
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, sendDeviceTokenUseCase: SendDeviceTokenUseCase) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, sendDeviceTokenUseCase: SendDeviceTokenUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder
@@ -55,6 +56,7 @@ final class DiningViewModel: ViewModelProtocol {
         self.fetchNotiListUseCase = fetchNotiListUsecase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
         self.sendDeviceTokenUseCase = sendDeviceTokenUseCase
+        self.sharedDiningItem = sharedDiningItem
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -64,8 +66,12 @@ final class DiningViewModel: ViewModelProtocol {
             case let .updateDisplayDateTime(date, diningType):
                 self.updateDisplayDateTime(date: date, type: diningType)
             case .determineInitDate:
+                if let sharedDiningItem {
+                    outputSubject.send(.initCalendar(sharedDiningItem.date.dayOfMonth()))
+                } else {
+                    outputSubject.send(.initCalendar(self.currentDate.date.dayOfMonth()))
+                }
                 self.currentDate = self.dateProvider.execute(date: Date())
-                outputSubject.send(.initCalendar(self.currentDate.date.dayOfMonth()))
             case let .logEvent(label, category, value):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case let .shareMenuList(shareModel):
@@ -93,7 +99,7 @@ extension DiningViewModel {
         } receiveValue: { response in
             print(response)
         }.store(in: &subscriptions)
-
+        
     }
     private func fetchNotiList() {
         fetchNotiListUseCase.execute().sink { completion in
@@ -164,8 +170,17 @@ extension DiningViewModel {
         shareMenuListUseCase.execute(shareModel: shareModel)
     }
     
+    // TODO: 로직 고치기.. 맘에 들지 않는다...
     private func updateDiningList() {
-        fetchDiningListUseCase.execute(diningInfo: currentDate).sink { completion in
+        let fetchDate: CurrentDiningTime
+        if let sharedDiningItem {
+            fetchDate = sharedDiningItem
+        } else {
+            fetchDate = currentDate
+        }
+        sharedDiningItem = nil
+        
+        fetchDiningListUseCase.execute(diningInfo: fetchDate).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
