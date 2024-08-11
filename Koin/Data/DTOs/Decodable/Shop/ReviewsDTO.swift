@@ -59,7 +59,9 @@ extension ReviewDTO {
             content: content,
             imageUrls: imageUrls,
             menuNames: menuNames,
-            createdAt: createdAt
+            createdAt: createdAt,
+            isMine: isMine,
+            isModified: isModified
         )
     }
 }

@@ -19,4 +19,6 @@ struct Review {
     let imageUrls: [String]
     let menuNames: [String]
     let createdAt: String
+    let isMine: Bool
+    let isModified: Bool
 }
