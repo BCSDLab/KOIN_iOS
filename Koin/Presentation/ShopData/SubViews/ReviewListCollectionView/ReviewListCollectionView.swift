@@ -12,6 +12,8 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     
     private var reviewList: [Review] = []
     private var cancellables = Set<AnyCancellable>()
+    let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
+    let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -25,6 +27,7 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     
     private func commonInit() {
         register(ReviewListCollectionViewCell.self, forCellWithReuseIdentifier: ReviewListCollectionViewCell.identifier)
+        register(ReviewListHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ReviewListHeaderView.identifier)
         isScrollEnabled = false
         dataSource = self
         delegate = self
@@ -38,6 +41,28 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
 }
 
 extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+         return CGSize(width: collectionView.bounds.width, height: 64)
+     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewListHeaderView.identifier, for: indexPath) as? ReviewListHeaderView else {
+                return UICollectionReusableView()
+            }
+            cancellables.removeAll()
+            headerView.sortTypeButtonPublisher.sink { [weak self] type in
+                self?.sortTypeButtonPublisher.send(type)
+            }.store(in: &cancellables)
+            headerView.myReviewButtonPublisher.sink { [weak self] bool in
+                self?.myReviewButtonPublisher.send(bool)
+            }.store(in: &cancellables)
+            
+            return headerView
+        }
+        return UICollectionReusableView()
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return reviewList.count
