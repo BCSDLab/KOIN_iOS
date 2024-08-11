@@ -161,7 +161,6 @@ final class DiningViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        inputSubject.send(.sendDeviceToken)
         checkAndShowBottomSheet()
         if viewDidAppeared {
             switch diningTypeSegmentControl.selectedSegmentIndex {

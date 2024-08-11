@@ -12,7 +12,6 @@ final class ServiceSelectViewModel: ViewModelProtocol {
     enum Input {
         case logOut
         case fetchUserData
-        case sendDeviceToken
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
@@ -22,15 +21,13 @@ final class ServiceSelectViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private let fetchUserDataUseCase: FetchUserDataUseCase
-    private let sendDeviceTokenUseCase: SendDeviceTokenUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private (set) var isLogined = false
     
-    init(fetchUserDataUseCase: FetchUserDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, sendDeviceTokenUseCase: SendDeviceTokenUseCase) {
+    init(fetchUserDataUseCase: FetchUserDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.sendDeviceTokenUseCase = sendDeviceTokenUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -42,8 +39,6 @@ final class ServiceSelectViewModel: ViewModelProtocol {
                 self?.fetchUserData()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
-            case .sendDeviceToken:
-                self?.sendDeviceToken()
             }
             
         }.store(in: &subscriptions)
@@ -52,17 +47,6 @@ final class ServiceSelectViewModel: ViewModelProtocol {
 }
 
 extension ServiceSelectViewModel {
-    
-    private func sendDeviceToken() {
-        sendDeviceTokenUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { response in
-            print(response)
-        }.store(in: &subscriptions)
-
-    }
     
     private func fetchUserData() {
         fetchUserDataUseCase.execute().sink { [weak self] completion in

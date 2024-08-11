@@ -17,7 +17,6 @@ final class DiningViewModel: ViewModelProtocol {
         case diningLike(Int, Bool)
         case changeNoti(Bool, SubscribeType)
         case fetchNotiList
-        case sendDeviceToken
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
@@ -36,7 +35,6 @@ final class DiningViewModel: ViewModelProtocol {
     private let changeNotiUseCase: ChangeNotiUseCase
     private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
-    private let sendDeviceTokenUseCase: SendDeviceTokenUseCase
     private let dateProvider: DateProvider
     private var subscriptions: Set<AnyCancellable> = []
     private var sharedDiningItem: CurrentDiningTime?
@@ -46,7 +44,7 @@ final class DiningViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, sendDeviceTokenUseCase: SendDeviceTokenUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder
@@ -55,7 +53,6 @@ final class DiningViewModel: ViewModelProtocol {
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUsecase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
-        self.sendDeviceTokenUseCase = sendDeviceTokenUseCase
         self.sharedDiningItem = sharedDiningItem
     }
     
@@ -82,8 +79,6 @@ final class DiningViewModel: ViewModelProtocol {
                 self.changeNoti(isOn: isOn, type: subscribeType)
             case .fetchNotiList:
                 self.fetchNotiList()
-            case .sendDeviceToken:
-                self.sendDeviceToken()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -91,16 +86,7 @@ final class DiningViewModel: ViewModelProtocol {
 }
 
 extension DiningViewModel {
-    private func sendDeviceToken() {
-        sendDeviceTokenUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { response in
-            print(response)
-        }.store(in: &subscriptions)
-        
-    }
+
     private func fetchNotiList() {
         fetchNotiListUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
