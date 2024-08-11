@@ -15,6 +15,7 @@ protocol ShopService {
     func fetchShopData(requestModel: FetchShopInfoRequest) -> AnyPublisher<ShopDataDTO, Error>
     func fetchShopMenuList(requestModel: FetchShopInfoRequest) -> AnyPublisher<MenuDTO, Error>
     func fetchShopEventList(requestModel: FetchShopInfoRequest) -> AnyPublisher<EventsDTO, Error>
+    func fetchShopReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error>
 }
 
 final class DefaultShopService: ShopService {
@@ -41,6 +42,10 @@ final class DefaultShopService: ShopService {
     
     func fetchShopEventList(requestModel: FetchShopInfoRequest) -> AnyPublisher<EventsDTO, Error> {
         return request(.fetchShopEventList(requestModel))
+    }
+    
+    func fetchShopReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
+        return request(.fetchShopReviewList(requestModel))
     }
 
     private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {
