@@ -15,7 +15,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let shopId: Int
     
     enum Input {
-       
+        case writeReview
     }
     
     enum Output {
@@ -29,10 +29,22 @@ final class ShopReviewViewModel: ViewModelProtocol {
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
-          
+            guard let self = self else { return }
+            switch input {
+            case .writeReview:
+                if let reviewId = self.reviewId { self.modifyReview(reviewId: reviewId) }
+                else { self.postReview() }
+            }
             
         }.store(in: &subscriptions)
         
         return outputSubject.eraseToAnyPublisher()
+    }
+    private func postReview() {
+        // 최초 작성
+    }
+    
+    private func modifyReview(reviewId: Int) {
+        // 수정
     }
 }
