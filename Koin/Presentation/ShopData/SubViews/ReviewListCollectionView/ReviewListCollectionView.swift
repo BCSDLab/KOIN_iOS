@@ -11,9 +11,13 @@ import UIKit
 final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSource {
     
     private var reviewList: [Review] = []
-    private var cancellables = Set<AnyCancellable>()
+    private var headerCancellables = Set<AnyCancellable>()
+    private var cellCancellables = Set<AnyCancellable>()
     let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
     let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
+    let modifyButtonPublisher = PassthroughSubject<Void, Never>()
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let reportButtonPublisher = PassthroughSubject<Void, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -51,13 +55,13 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewListHeaderView.identifier, for: indexPath) as? ReviewListHeaderView else {
                 return UICollectionReusableView()
             }
-            cancellables.removeAll()
+            headerCancellables.removeAll()
             headerView.sortTypeButtonPublisher.sink { [weak self] type in
                 self?.sortTypeButtonPublisher.send(type)
-            }.store(in: &cancellables)
+            }.store(in: &headerCancellables)
             headerView.myReviewButtonPublisher.sink { [weak self] bool in
                 self?.myReviewButtonPublisher.send(bool)
-            }.store(in: &cancellables)
+            }.store(in: &headerCancellables)
             
             return headerView
         }
@@ -75,6 +79,17 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         let reviewItem = reviewList[indexPath.row]
         let color: UIColor = reviewList[indexPath.row].isMine ? UIColor.appColor(.primary500).withAlphaComponent(0.03) : .systemBackground
         cell.configure(review: reviewItem, backgroundColor: color)
+        
+        cell.deleteButtonPublisher.sink { [weak self] _ in
+            self?.deleteButtonPublisher.send(())
+        }.store(in: &cellCancellables)
+        cell.modifyButtonPublisher.sink { [weak self] _ in
+            self?.modifyButtonPublisher.send(())
+        }.store(in: &cellCancellables)
+        cell.reportButtonPublisher.sink { [weak self] _ in
+            self?.reportButtonPublisher.send(())
+        }.store(in: &cellCancellables)
+        
         
         return cell
     }
