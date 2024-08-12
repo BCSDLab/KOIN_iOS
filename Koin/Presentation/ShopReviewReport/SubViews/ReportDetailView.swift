@@ -62,6 +62,10 @@ extension ReportDetailView {
         return checkButton.isSelected
     }
     
+    func getReportInfo() -> (title: String, content: String) {
+        return (title: reportTitleLabel.text ?? "", content: reportDescriptionLabel.text ?? "")
+    }
+    
 }
 extension ReportDetailView {
     private func setUpLayOuts() {
