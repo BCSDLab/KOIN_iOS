@@ -8,7 +8,7 @@
 import Combine
 
 protocol ReportReviewReviewUseCase {
-    func execute(reviewId: Int, shopId: Int, requestModel: ReportReviewRequest) -> AnyPublisher<Void, ErrorResponse>
+    func execute(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultReportReviewUseCase: ReportReviewReviewUseCase {
@@ -19,7 +19,7 @@ final class DefaultReportReviewUseCase: ReportReviewReviewUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(reviewId: Int, shopId: Int, requestModel: ReportReviewRequest) -> AnyPublisher<Void, ErrorResponse> {
-        return shopRepository.reportReview(reviewId: reviewId, shopId: shopId, requestModel: requestModel)
+    func execute(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return shopRepository.reportReview(requestModel: requestModel, reviewId: reviewId, shopId: shopId)
     }
 }
