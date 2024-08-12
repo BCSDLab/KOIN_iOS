@@ -16,9 +16,11 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let fetchShopMenuListUseCase: FetchShopMenuListUseCase
     private let fetchShopEventListUseCase: FetchShopEventListUseCase
     private let fetchShopReviewListUseCase: FetchShopReviewListUseCase
+    private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private (set) var eventItem: [ShopEvent] = []
-    private (set) var menuItem: [MenuCategory] = []
+    private(set) var eventItem: [ShopEvent] = []
+    private(set) var menuItem: [MenuCategory] = []
+    private var reviewSortType: ReviewSortType = .latest
     
     enum Input {
         case viewDidLoad
@@ -31,14 +33,16 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopData(ShopData)
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
-        case showShopReviewList(ShopReview)
+        case showShopReviewList([Review])
+        case showShopReviewStatistics(StatisticsDTO)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
         self.fetchShopReviewListUseCase = fetchShopReviewListUseCase
+        self.fetchMyReviewUseCase = fetchMyReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.shopId = shopId
     }
@@ -65,13 +69,24 @@ final class ShopDataViewModel: ViewModelProtocol {
 
 extension ShopDataViewModel {
     
-    private func fetchShopReviewList() {
-        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: .latest)).sink { completion in
+    private func fetchMyReviewList() {
+        fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: reviewSortType), shopId: shopId).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showShopReviewList(response))
+        }.store(in: &subscriptions)
+    }
+    
+    private func fetchShopReviewList() {
+        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: reviewSortType)).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showShopReviewList(response.review))
+            self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
         }.store(in: &subscriptions)
     }
     

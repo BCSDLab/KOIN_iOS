@@ -13,6 +13,7 @@ final class ReviewListViewController: UIViewController {
     
     // MARK: - Properties
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    let deletePublisher = PassthroughSubject<(Int, Int), Never>()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -62,17 +63,20 @@ final class ReviewListViewController: UIViewController {
         print(KeyChainWorker.shared.read(key: .access))
     }
     
-    func setReviewList(_ review: ShopReview) {
-        totalScoreLabel.text = "\(review.reviewStatistics.averageRating)"
-        reviewListCollectionView.setReviewList(review.review)
-        scoreChartCollectionView.setStatistics(review.reviewStatistics)
-        
+    func setReviewList(_ review: [Review]) {
+        reviewListCollectionView.setReviewList(review)
+       
         
         reviewListCollectionView.snp.updateConstraints { make in
             make.height.equalTo(3000)
         }
-        
         viewControllerHeightPublisher.send(4000)
+    }
+    
+    func setReviewStatistics(statistics: StatisticsDTO) {
+        totalScoreLabel.text = "\(statistics.averageRating)"
+        totalScoreView.rating = statistics.averageRating
+        scoreChartCollectionView.setStatistics(statistics)
     }
     
     private func bind() {
