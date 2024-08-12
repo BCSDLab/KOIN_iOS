@@ -153,7 +153,10 @@ final class ShopReviewViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-                
+            case .fillComponent(_):
+                print(1)
+            case .dissmissView:
+                print(2)
             }
         }.store(in: &subscriptions)
         
@@ -165,7 +168,7 @@ final class ShopReviewViewController: UIViewController {
 
 extension ShopReviewViewController {
     @objc private func submitReviewButtonTapped() {
-        inputSubject.send(.writeReview)
+       // inputSubject.send(.writeReview()
     }
     
 }

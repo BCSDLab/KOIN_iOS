@@ -91,4 +91,32 @@ class NetworkService {
             }
             .eraseToAnyPublisher()
     }
+    
+    func uploadFiles(api: ShopAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        // ShopAPI 타입을 명시적으로 사용하는지 확인합니다.
+        guard case ShopAPI.uploadFiles(let files) = api else {
+            return Fail(error: ErrorResponse(code: "invalid_api", message: "Invalid API case for file upload"))
+                .eraseToAnyPublisher()
+        }
+        
+        return Future<FileUploadResponse, ErrorResponse> { promise in
+            api.asMultipartRequest(data: files, withName: "files", fileName: "file", mimeType: "image/png")
+                .responseDecodable(of: FileUploadResponse.self) { response in
+                    switch response.result {
+                    case .success(let fileUploadResponse):
+                        promise(.success(fileUploadResponse))
+                    case .failure:
+                        if let data = response.data {
+                            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+                            promise(.failure(errorResponse ?? ErrorResponse(code: "unknown", message: "An unknown error occurred")))
+                        } else {
+                            promise(.failure(ErrorResponse(code: "unknown", message: "An unknown error occurred")))
+                        }
+                    }
+                }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    
 }

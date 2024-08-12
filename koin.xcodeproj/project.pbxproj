@@ -118,6 +118,8 @@
 		D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */; };
 		D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */; };
 		D22C547D2C6A2BC9000826DA /* FetchMyReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */; };
+		D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54802C6A5957000826DA /* FileUploadResponse.swift */; };
+		D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -466,6 +468,8 @@
 		D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewUseCase.swift; sourceTree = "<group>"; };
 		D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewUseCase.swift; sourceTree = "<group>"; };
 		D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyReviewRequest.swift; sourceTree = "<group>"; };
+		D22C54802C6A5957000826DA /* FileUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadResponse.swift; sourceTree = "<group>"; };
+		D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileUseCase.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -947,6 +951,7 @@
 				D27DD0E12BA609740081FD36 /* MenuDTO.swift */,
 				D27DD07B2BA608310081FD36 /* ShopCategoryDTO.swift */,
 				D23944812C3C24A200048F45 /* ReviewsDTO.swift */,
+				D22C54802C6A5957000826DA /* FileUploadResponse.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -1817,6 +1822,7 @@
 				D22C54762C6A2A8A000826DA /* ModifyReviewUseCase.swift */,
 				D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */,
 				D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */,
+				D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2327,6 +2333,7 @@
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
+				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
@@ -2391,6 +2398,7 @@
 				D27DD0AB2BA608310081FD36 /* ShopInfoColletionView.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
 				D27DD0AD2BA608310081FD36 /* CategoryCollectionView.swift in Sources */,
+				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,

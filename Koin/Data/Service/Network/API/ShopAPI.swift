@@ -22,6 +22,8 @@ enum ShopAPI {
     case modifyReview(WriteReviewRequest, Int, Int)
     case deleteReview(Int, Int)
     case reportReview(ReportReviewRequest, Int, Int)
+    
+    case uploadFiles([Data])
 }
 
 extension ShopAPI: Router, URLRequestConvertible {
@@ -45,12 +47,13 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .modifyReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
         case .deleteReview(let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
         case .reportReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)/reports"
+        case .uploadFiles: return "/shops/upload/files"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .postReview, .reportReview: .post
+        case .postReview, .reportReview, .uploadFiles: .post
         case .modifyReview: .put
         case .deleteReview: .delete
         default: .get
@@ -71,15 +74,16 @@ extension ShopAPI: Router, URLRequestConvertible {
         switch self {
         case .postReview, .reportReview, .modifyReview, .deleteReview:
             baseHeaders["Content-Type"] = "application/json"
+        case .uploadFiles:
+            baseHeaders["Content-Type"] = "multipart/form-data"
         default: break
         }
-        print(baseHeaders)
         return baseHeaders
     }
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview:
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()

@@ -58,6 +58,8 @@ final class ReviewListViewController: UIViewController {
         configureView()
         bind()
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
+        // FIXME: 테스트코드
+        print(KeyChainWorker.shared.read(key: .access))
     }
     
     func setReviewList(_ review: ShopReview) {
@@ -88,7 +90,12 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
-            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(reviewId: parameter.0, shopId: parameter.1))
+            let shopRepository = DefaultShopRepository(service: DefaultShopService())
+            let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
+            let modifyReviewUseCase = DefaultModifyReviewUseCase(shopRepository: shopRepository)
+            let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
+            
+            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, reviewId: parameter.0, shopId: parameter.1))
             shopReviewViewController.navigationController?.title = "리뷰 수정하기"
             self?.navigationController?.pushViewController(shopReviewViewController, animated: true)
         }.store(in: &cancellables)
@@ -106,7 +113,13 @@ extension ReviewListViewController {
     @objc private func writeReviewButtonTapped() {
         
         // TODO: 이거 임시 값 준거임. 수정 필요
-        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(shopId: 0))
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
+        let modifyReviewUseCase = DefaultModifyReviewUseCase(shopRepository: shopRepository)
+        let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
+        
+        // FIXME: shopid는 임시값임
+        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, shopId: 0))
         shopReviewViewController.navigationController?.title = "리뷰 작성하기"
         navigationController?.pushViewController(shopReviewViewController, animated: true)
     }
