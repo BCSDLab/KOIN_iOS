@@ -239,6 +239,10 @@ final class ShopDataViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        pageViewController.fetchStandardPublisher.sink { [weak self] tuple in
+            self?.inputSubject.send(.changeFetchStandard(tuple.0, tuple.1))
+        }.store(in: &subscriptions)
+        
         menuImageCollectionView.didSelectImage.sink { [weak self] image in
             let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
             let imageHeight: CGFloat = imageWidth * 1.2

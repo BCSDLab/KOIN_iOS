@@ -20,7 +20,12 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private(set) var eventItem: [ShopEvent] = []
     private(set) var menuItem: [MenuCategory] = []
-    private var reviewSortType: ReviewSortType = .latest
+    private var fetchStandard: (ReviewSortType, Bool) = (.latest, false) {
+        didSet {
+            if fetchStandard.1 { fetchMyReviewList() }
+            else { fetchShopReviewList() }
+        }
+    }
     
     enum Input {
         case viewDidLoad
@@ -28,6 +33,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case fetchShopMenuList
         case fetchShopReviewList
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case changeFetchStandard(ReviewSortType?, Bool?)
     }
     enum Output {
         case showShopData(ShopData)
@@ -61,6 +67,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopMenuList()
             case .fetchShopReviewList:
                 self?.fetchShopReviewList()
+            case let .changeFetchStandard(type, isMine):
+                self?.changeFetchStandard(type, isMine)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -69,8 +77,17 @@ final class ShopDataViewModel: ViewModelProtocol {
 
 extension ShopDataViewModel {
     
+    private func changeFetchStandard(_ type: ReviewSortType?, _ isMine: Bool?) {
+        if let type = type {
+            fetchStandard.0 = type
+        }
+        if let isMine = isMine {
+            fetchStandard.1 = isMine
+        }
+    }
+    
     private func fetchMyReviewList() {
-        fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: reviewSortType), shopId: shopId).sink { completion in
+        fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: fetchStandard.0), shopId: shopId).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
@@ -80,7 +97,7 @@ extension ShopDataViewModel {
     }
     
     private func fetchShopReviewList() {
-        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: reviewSortType)).sink { completion in
+        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: fetchStandard.0)).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
