@@ -18,6 +18,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let fetchShopReviewListUseCase: FetchShopReviewListUseCase
     private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let deleteReviewUseCase: DeleteReviewUseCase
     private(set) var eventItem: [ShopEvent] = []
     private(set) var menuItem: [MenuCategory] = []
     private var fetchStandard: (ReviewSortType, Bool) = (.latest, false) {
@@ -32,6 +33,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case fetchShopEventList
         case fetchShopMenuList
         case fetchShopReviewList
+        case deleteReview(Int, Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case changeFetchStandard(ReviewSortType?, Bool?)
     }
@@ -43,12 +45,13 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopReviewStatistics(StatisticsDTO)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
         self.fetchShopReviewListUseCase = fetchShopReviewListUseCase
         self.fetchMyReviewUseCase = fetchMyReviewUseCase
+        self.deleteReviewUseCase = deleteReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.shopId = shopId
     }
@@ -69,6 +72,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopReviewList()
             case let .changeFetchStandard(type, isMine):
                 self?.changeFetchStandard(type, isMine)
+            case let .deleteReview(reviewId, shopId):
+                self?.deleteReview(reviewId, shopId)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -76,6 +81,17 @@ final class ShopDataViewModel: ViewModelProtocol {
 }
 
 extension ShopDataViewModel {
+    
+    private func deleteReview(_ reviewId: Int, _ shopId: Int) {
+        deleteReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            print(response)
+        }.store(in: &subscriptions)
+
+    }
     
     private func changeFetchStandard(_ type: ReviewSortType?, _ isMine: Bool?) {
         if let type = type {
