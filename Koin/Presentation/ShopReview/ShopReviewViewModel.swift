@@ -50,7 +50,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
             case let .uploadFile(data):
                 self.uploadFile(files: data)
             case .checkModify:
-                if let reviewId = reviewId { fetchShopReview() }
+                if let _ = reviewId { fetchShopReview() }
             }
             
         }.store(in: &subscriptions)
@@ -74,7 +74,9 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private func fetchShopReview() {
         guard let reviewId = reviewId else { return }
         fetchShopReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { completion in
-            print(completion)
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.fillComponent(response))
         }.store(in: &subscriptions)
@@ -82,7 +84,9 @@ final class ShopReviewViewModel: ViewModelProtocol {
     
     private func postReview(requestModel: WriteReviewRequest) {
         postReviewUseCase.execute(requestModel: requestModel, shopId: shopId).sink { completion in
-            print(completion)
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.dissmissView)
         }.store(in: &subscriptions)

@@ -49,6 +49,10 @@ extension ReviewImageUploadCollectionView {
             return UICollectionViewCell()
         }
         cell.configure(imageUrl: imageUrls[indexPath.row])
+        cell.cancelButtonPublisher.sink { [weak self] in
+            self?.imageUrls.remove(at: indexPath.row)
+            self?.reloadData()
+        }.store(in: &cell.cancellables)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
