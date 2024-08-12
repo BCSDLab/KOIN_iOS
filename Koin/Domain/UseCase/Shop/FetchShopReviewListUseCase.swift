@@ -10,7 +10,7 @@ import Combine
 protocol FetchShopReviewListUseCase {
     func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, Error>}
 
-final class MockFetchShopReviewListUseCase: FetchShopReviewListUseCase {
+final class DefaultFetchShopReviewListUseCase: FetchShopReviewListUseCase {
     
     private let shopRepository: ShopRepository
     

@@ -112,6 +112,13 @@
 		D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54672C692518000826DA /* ShopReviewReportViewController.swift */; };
 		D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C546A2C6926DC000826DA /* ReportDetailView.swift */; };
 		D22C546D2C699780000826DA /* ImageDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C546C2C699780000826DA /* ImageDropDownCell.swift */; };
+		D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54702C6A2A60000826DA /* FetchShopReviewUseCase.swift */; };
+		D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54722C6A2A73000826DA /* FetchMyReviewUseCase.swift */; };
+		D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54742C6A2A80000826DA /* PostReviewUseCase.swift */; };
+		D22C54772C6A2A8A000826DA /* ModifyReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54762C6A2A8A000826DA /* ModifyReviewUseCase.swift */; };
+		D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */; };
+		D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */; };
+		D22C547D2C6A2BC9000826DA /* FetchMyReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -454,6 +461,13 @@
 		D22C54672C692518000826DA /* ShopReviewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReviewReportViewController.swift; sourceTree = "<group>"; };
 		D22C546A2C6926DC000826DA /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
 		D22C546C2C699780000826DA /* ImageDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropDownCell.swift; sourceTree = "<group>"; };
+		D22C54702C6A2A60000826DA /* FetchShopReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C54722C6A2A73000826DA /* FetchMyReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C54742C6A2A80000826DA /* PostReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C54762C6A2A8A000826DA /* ModifyReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewUseCase.swift; sourceTree = "<group>"; };
+		D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyReviewRequest.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -1495,6 +1509,7 @@
 				D22C54552C68B033000826DA /* WriteReviewRequest.swift */,
 				D22C54572C68B033000826DA /* ReportReviewRequest.swift */,
 				D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */,
+				D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -1799,6 +1814,12 @@
 				D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */,
 				D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */,
 				D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */,
+				D22C54702C6A2A60000826DA /* FetchShopReviewUseCase.swift */,
+				D22C54722C6A2A73000826DA /* FetchMyReviewUseCase.swift */,
+				D22C54742C6A2A80000826DA /* PostReviewUseCase.swift */,
+				D22C54762C6A2A8A000826DA /* ModifyReviewUseCase.swift */,
+				D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */,
+				D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2147,11 +2168,13 @@
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
 				D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */,
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
+				D22C547D2C6A2BC9000826DA /* FetchMyReviewRequest.swift in Sources */,
 				D27DD0DC2BA6090F0081FD36 /* MenuImageCollectionViewCell.swift in Sources */,
 				D2D380E32BA6D1AC009AD5A9 /* BaseViewContoller.swift in Sources */,
 				83DD0DE82C57478200278ABD /* FetchCityBusTimetableRequest.swift in Sources */,
 				D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */,
 				D2078C012BC5DD0D00A39861 /* EventShopCollectionView.swift in Sources */,
+				D22C54772C6A2A8A000826DA /* ModifyReviewUseCase.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				D249CD342C14734B000813F9 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
 				D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */,
@@ -2187,6 +2210,7 @@
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */,
+				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D27DD0912BA608310081FD36 /* ShopCollectionViewCell.swift in Sources */,
@@ -2221,6 +2245,7 @@
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D239448C2C3C9D6D00048F45 /* ReviewListCollectionView.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
+				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
@@ -2301,6 +2326,7 @@
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
+				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,
@@ -2351,6 +2377,7 @@
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
+				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
@@ -2383,6 +2410,7 @@
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
+				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */,
 				D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */,
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
