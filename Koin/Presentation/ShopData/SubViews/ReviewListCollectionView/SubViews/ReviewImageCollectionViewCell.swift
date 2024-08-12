@@ -14,6 +14,7 @@ final class ReviewImageCollectionViewCell: UICollectionViewCell {
     
     private let menuImageView = UIImageView().then {
         $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
     }
     
     override init(frame: CGRect) {
