@@ -41,6 +41,26 @@ struct ReviewDTO: Decodable {
     }
 }
 
+struct OneReviewDTO: Decodable {
+    let reviewId, rating: Int
+    let nickName, content: String
+    let imageUrls: [String]
+    let menuNames: [String]
+    let isModified: Bool
+    let createdAt: String
+
+    enum CodingKeys: String, CodingKey {
+        case reviewId = "review_id"
+        case rating
+        case nickName = "nick_name"
+        case content
+        case imageUrls = "image_urls"
+        case menuNames = "menu_names"
+        case isModified = "is_modified"
+        case createdAt = "created_at"
+    }
+}
+
 struct StatisticsDTO: Decodable {
     let averageRating: Double
     let ratings: [String: Int]
