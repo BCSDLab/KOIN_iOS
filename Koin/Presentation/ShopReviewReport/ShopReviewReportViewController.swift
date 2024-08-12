@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class ShopReviewReportViewController: UIViewController {
+final class ShopReviewReportViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Properties
     
@@ -58,7 +58,6 @@ final class ShopReviewReportViewController: UIViewController {
     
     private let textCountLabel = UILabel().then {
         $0.text = "0/150"
-        $0.textColor = UIColor.appColor(.sub500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     
@@ -66,17 +65,22 @@ final class ShopReviewReportViewController: UIViewController {
         $0.layer.cornerRadius = 5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
+        $0.isEditable = false
+        $0.layer.borderColor = UIColor.appColor(.neutral800).cgColor
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
     private let reportButton = UIButton().then {
         $0.setTitle("신고하기", for: .normal)
         $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
+        $0.isEnabled = false
+        $0.titleLabel?.textColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = UIColor.appColor(.neutral400)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.backgroundColor = UIColor.appColor(.primary500)
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
     }
-
+    
     // MARK: - Initialization
     
     init(viewModel: ShopReviewReportViewModel) {
@@ -96,27 +100,82 @@ final class ShopReviewReportViewController: UIViewController {
         navigationItem.title = "리뷰 신고하기"
         bind()
         configureView()
+        etcReportTextView.delegate = self
+        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
     }
-
+    
     // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-      
+        
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-           
+                
             }
         }.store(in: &subscriptions)
-      
+        
+        let reportViews = [
+            nonSubjectReportView.checkButtonPublisher,
+            spamReportView.checkButtonPublisher,
+            curseReportView.checkButtonPublisher,
+            personalInfoReportView.checkButtonPublisher
+        ]
+        
+        for publisher in reportViews {
+            publisher
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
+                    self?.updateReportButtonState()
+                }
+                .store(in: &subscriptions)
+        }
     }
+    
     
 }
 
 extension ShopReviewReportViewController {
     
+    private func updateReportButtonState() {
+        let anySelectedInReportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView].contains { $0.isCheckButtonSelected() }
+        let anySelectedInViewController = checkButton.isSelected
+        
+        let anySelected = anySelectedInReportViews || anySelectedInViewController
+        
+        reportButton.isEnabled = anySelected
+        reportButton.titleLabel?.textColor = anySelected ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
+        reportButton.backgroundColor = anySelected ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral400)
+    }
     
-   
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        return updatedText.count <= 150
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let characterCount = textView.text.count
+        textCountLabel.text = "\(characterCount)/150"
+    }
+    
+    @objc private func checkButtonTapped() {
+        checkButton.isSelected.toggle()
+        
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .circleFill) : UIImage.appImage(asset: .circle), for: .normal)
+        textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.sub500) : UIColor.appColor(.neutral800)
+        etcReportTextView.layer.borderColor = checkButton.isSelected ? UIColor.appColor(.sub500).cgColor : UIColor.appColor(.neutral800).cgColor
+        etcReportTextView.isEditable = checkButton.isSelected
+        
+        updateReportButtonState()
+    }
+    @objc private func reportButtonTapped() {
+       
+    }
+    
 }
 
 extension ShopReviewReportViewController {
@@ -131,11 +190,12 @@ extension ShopReviewReportViewController {
     private func setUpConstraints() {
         
         scrollView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-68)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-100)
         }
         reportReasonLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.top.equalTo(scrollView.snp.top).offset(24)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         reportGuideLabel.snp.makeConstraints { make in
@@ -185,6 +245,7 @@ extension ShopReviewReportViewController {
             make.leading.equalTo(view.snp.leading).offset(28)
             make.trailing.equalTo(view.snp.trailing).offset(-20)
             make.height.equalTo(156)
+            make.bottom.equalTo(scrollView.snp.bottom)
         }
         reportButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.snp.bottom).offset(-20)
