@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class ShopReviewViewModel: ViewModelProtocol {
     
@@ -14,22 +15,26 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let postReviewUseCase: PostReviewUseCase
     private let modifyReviewUseCase: ModifyReviewUseCase
     private let fetchShopReviewUseCase: FetchShopReviewUseCase
+    private let uploadFileUseCase: UploadFileUseCase
     private let reviewId: Int?
     private let shopId: Int
     
     enum Input {
         case writeReview(WriteReviewRequest)
+        case uploadFile([Data])
     }
     
     enum Output {
         case fillComponent(OneReviewDTO)
+        case updateImage([String])
         case dissmissView
     }
     
-    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, reviewId: Int? = nil, shopId: Int) {
+    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, reviewId: Int? = nil, shopId: Int) {
         self.postReviewUseCase = postReviewUseCase
         self.modifyReviewUseCase = modifyReviewUseCase
         self.fetchShopReviewUseCase = fetchShopReviewUseCase
+        self.uploadFileUseCase = uploadFileUseCase
         self.reviewId = reviewId
         self.shopId = shopId
     }
@@ -41,11 +46,24 @@ final class ShopReviewViewModel: ViewModelProtocol {
             case let .writeReview(requestModel):
                 if let reviewId = self.reviewId { self.modifyReview(requestModel: requestModel, reviewId: reviewId) }
                 else { self.postReview(requestModel: requestModel) }
+            case let .uploadFile(data):
+                self.uploadFile(files: data)
             }
             
         }.store(in: &subscriptions)
         
         return outputSubject.eraseToAnyPublisher()
+    }
+    
+    private func uploadFile(files: [Data]) {
+        uploadFileUseCase.execute(files: files).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateImage(response.fileUrls))
+        }.store(in: &subscriptions)
+
     }
     
     private func fetchShopReview() {
