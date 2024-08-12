@@ -15,9 +15,9 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     private var cellCancellables = Set<AnyCancellable>()
     let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
     let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
-    let modifyButtonPublisher = PassthroughSubject<Void, Never>()
-    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
-    let reportButtonPublisher = PassthroughSubject<Void, Never>()
+    let modifyButtonPublisher = PassthroughSubject<(Int, Int), Never>()
+    let deleteButtonPublisher = PassthroughSubject<(Int, Int), Never>()
+    let reportButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -81,13 +81,16 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         cell.configure(review: reviewItem, backgroundColor: color)
         
         cell.deleteButtonPublisher.sink { [weak self] _ in
-            self?.deleteButtonPublisher.send(())
+            guard let self = self else { return }
+            self.deleteButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
         }.store(in: &cellCancellables)
         cell.modifyButtonPublisher.sink { [weak self] _ in
-            self?.modifyButtonPublisher.send(())
+            guard let self = self else { return }
+            self.modifyButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
         }.store(in: &cellCancellables)
         cell.reportButtonPublisher.sink { [weak self] _ in
-            self?.reportButtonPublisher.send(())
+            guard let self = self else { return }
+            self.reportButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
         }.store(in: &cellCancellables)
         
         

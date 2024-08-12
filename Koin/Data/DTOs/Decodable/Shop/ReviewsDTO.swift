@@ -52,7 +52,7 @@ struct StatisticsDTO: Decodable {
 }
 
 extension ReviewDTO {
-    func toDomain() -> Review {
+    func toDomain(shopId: Int) -> Review {
         return Review(
             nickName: nickName,
             rating: rating,
@@ -61,25 +61,18 @@ extension ReviewDTO {
             menuNames: menuNames,
             createdAt: createdAt,
             isMine: isMine,
-            isModified: isModified
-        )
-    }
-}
-
-extension StatisticsDTO {
-    func toDomain() -> StatisticsDTO {
-        return StatisticsDTO(
-            averageRating: averageRating,
-            ratings: ratings
+            isModified: isModified,
+            shopId: shopId,
+            reviewId: reviewId
         )
     }
 }
 
 extension ReviewsDTO {
-    func toDomain() -> ShopReview {
+    func toDomain(shopId: Int) -> ShopReview {
         return ShopReview(
-            reviewStatistics: statistics.toDomain(),
-            review: reviews.map { $0.toDomain() }
+            reviewStatistics: statistics,
+            review: reviews.map { $0.toDomain(shopId: shopId) }
         )
     }
 }

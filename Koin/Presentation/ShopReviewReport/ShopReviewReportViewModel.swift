@@ -25,8 +25,15 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private let reviewId: Int
+    private let shopId: Int
     
     // MARK: - Initialization
+    
+    init(reviewId: Int, shopId: Int) {
+        self.reviewId = reviewId
+        self.shopId = shopId
+    }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in

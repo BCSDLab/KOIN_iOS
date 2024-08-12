@@ -21,7 +21,7 @@ final class MockFetchShopReviewListUseCase: FetchShopReviewListUseCase {
     func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, Error> {
         return shopRepository.fetchReviewList(requestModel: requestModel)
             .map { reviewsDTO in
-                reviewsDTO.toDomain() 
+                reviewsDTO.toDomain(shopId: requestModel.shopId) 
             }
             .eraseToAnyPublisher()
     }
