@@ -5,10 +5,16 @@
 //  Created by 김나훈 on 8/12/24.
 //
 
+import Combine
 import Then
 import UIKit
 
 final class ReportDetailView: UIView {
+    
+    // MARK: - Properties
+    let checkButtonPublisher = PassthroughSubject<Void, Never>()
+    
+    // MARK: - UI Components
     
     private let checkButton = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .circle), for: .normal)
@@ -39,11 +45,24 @@ final class ReportDetailView: UIView {
     
     convenience init(frame: CGRect, title: String, description: String) {
         self.init(frame: frame)
+        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
         reportTitleLabel.text = title
         reportDescriptionLabel.text = description
     }
 }
 
+extension ReportDetailView {
+    @objc private func checkButtonTapped() {
+        checkButton.isSelected.toggle()
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .circleFill) : UIImage.appImage(asset: .circle), for: .normal)
+        checkButtonPublisher.send(())
+    }
+    
+    func isCheckButtonSelected() -> Bool {
+        return checkButton.isSelected
+    }
+    
+}
 extension ReportDetailView {
     private func setUpLayOuts() {
         [checkButton, reportTitleLabel, reportDescriptionLabel, separateView].forEach {
