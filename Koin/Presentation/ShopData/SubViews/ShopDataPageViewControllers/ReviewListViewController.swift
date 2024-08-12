@@ -80,6 +80,15 @@ final class ReviewListViewController: UIViewController {
         reviewListCollectionView.sortTypeButtonPublisher.sink { type in
             print(type)
         }.store(in: &cancellables)
+        reviewListCollectionView.deleteButtonPublisher.sink { _ in
+            print(1)
+        }.store(in: &cancellables)
+        reviewListCollectionView.modifyButtonPublisher.sink { _ in
+            print(2)
+        }.store(in: &cancellables)
+        reviewListCollectionView.reportButtonPublisher.sink { _ in
+            print(3)
+        }.store(in: &cancellables)
     }
     
     @objc private func writeReviewButtonTapped() {

@@ -13,9 +13,9 @@ import UIKit
 final class ReviewListCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
-    private let modifyButtonPublisher = PassthroughSubject<Void, Never>()
-    private let deleteButtonPublisher = PassthroughSubject<Void, Never>()
-    private let reportButtonPublisher = PassthroughSubject<Void, Never>()
+    let modifyButtonPublisher = PassthroughSubject<Void, Never>()
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let reportButtonPublisher = PassthroughSubject<Void, Never>()
     private let dropDown = DropDown()
     
     // MARK: - UI Components
@@ -106,8 +106,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         
         dropDown.dataSource = items.map { $0.text }
         
-        dropDown.customCellConfiguration = { [weak self] (index: Int, item: String, cell: DropDownCell) in
-            guard let self = self else { return }
+        dropDown.customCellConfiguration = { (index: Int, item: String, cell: DropDownCell) in
             if let customCell = cell as? ImageDropDownCell {
                 let itemData = items[index]
                 customCell.configure(text: itemData.text, image: itemData.image)
