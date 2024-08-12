@@ -144,6 +144,7 @@ final class ShopReviewViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Bind
@@ -163,7 +164,9 @@ final class ShopReviewViewController: UIViewController {
 }
 
 extension ShopReviewViewController {
-    
+    @objc private func submitReviewButtonTapped() {
+        inputSubject.send(.writeReview)
+    }
     
 }
 

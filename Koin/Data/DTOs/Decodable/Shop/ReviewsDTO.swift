@@ -19,6 +19,11 @@ struct ReviewsDTO: Decodable {
     }
 }
 
+struct MyReviewDTO: Decodable {
+    let count: Int
+    let reviews: [ReviewDTO]
+}
+
 // MARK: - Review
 struct ReviewDTO: Decodable {
     let reviewId, rating: Int

@@ -50,7 +50,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .postReview: .post
+        case .postReview, .reportReview: .post
         case .modifyReview: .put
         case .deleteReview: .delete
         default: .get
@@ -58,17 +58,23 @@ extension ShopAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
+        var baseHeaders: [String: String] = [:]
         switch self {
-            
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList: return [:]
-        default: 
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList: break
+        default:
             if let token = KeyChainWorker.shared.read(key: .access) {
-                let headers = ["Authorization": "Bearer \(token)"]
-                return headers
+                baseHeaders["Authorization"] = "Bearer \(token)"
             } else {
                 return [:]
             }
         }
+        switch self {
+        case .postReview, .reportReview, .modifyReview, .deleteReview:
+            baseHeaders["Content-Type"] = "application/json"
+        default: break
+        }
+        print(baseHeaders)
+        return baseHeaders
     }
     
     public var parameters: Any? {
