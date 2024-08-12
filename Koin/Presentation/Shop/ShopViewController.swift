@@ -210,7 +210,7 @@ extension ShopViewController {
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
         let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: shopRepository)
         let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
-        let fetchShopReviewListUsecase = MockFetchShopReviewListUseCase(shopRepository: shopRepository)
+        let fetchShopReviewListUsecase = DefaultFetchShopReviewListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, shopId: id)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
