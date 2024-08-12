@@ -10,9 +10,18 @@ import UIKit
 
 final class ScoreView: CosmosView {
     
+    var onRatingChanged: ((Double) -> Void)?
+    
+    override var rating: Double {
+        didSet {
+            onRatingChanged?(rating)
+        }
+    }
+    
     override init(frame: CGRect, settings: CosmosSettings) {
         super.init(frame: frame, settings: settings)
         configureView()
+        bind()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -22,5 +31,11 @@ final class ScoreView: CosmosView {
     private func configureView() {
         settings.filledImage = UIImage.appImage(asset: .star)
         settings.emptyImage = UIImage.appImage(asset: .emptyStar)
+    }
+    
+    private func bind() {
+        didFinishTouchingCosmos = { [weak self] score in
+            self?.onRatingChanged?(score)
+        }
     }
 }
