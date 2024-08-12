@@ -12,6 +12,7 @@ final class ReviewImageUploadCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
     
@@ -34,6 +35,12 @@ final class ReviewImageUploadCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    
     func configure(imageUrl: String) {
         imageView.loadImage(from: imageUrl)
     }
