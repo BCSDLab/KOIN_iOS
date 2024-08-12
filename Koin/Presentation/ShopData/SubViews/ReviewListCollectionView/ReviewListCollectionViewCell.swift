@@ -17,6 +17,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let reportButtonPublisher = PassthroughSubject<Void, Never>()
     private let dropDown = DropDown()
+    var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
     
@@ -65,6 +66,14 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+        myReviewImageView.isHidden = true
+        reviewImageCollectionView.isHidden = false
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -76,8 +85,8 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     func configure(review: Review, backgroundColor: UIColor) {
-        
         writerLabel.text = review.nickName
         writtenDayLabel.text = review.createdAt
         reviewTextLabel.text = review.content
@@ -92,7 +101,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         self.backgroundColor = backgroundColor
         
     }
-    
+    // TODO: 셀재사용떄문에 꼬인 로직 고치기
     @objc private func optionButtonTapped() {
         
         let items: [(text: String, image: UIImage?)]

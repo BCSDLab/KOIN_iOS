@@ -76,23 +76,22 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewListCollectionViewCell.identifier, for: indexPath) as? ReviewListCollectionViewCell else {
             return UICollectionViewCell()
         }
+     
         let reviewItem = reviewList[indexPath.row]
         let color: UIColor = reviewList[indexPath.row].isMine ? UIColor.appColor(.primary500).withAlphaComponent(0.03) : .systemBackground
         cell.configure(review: reviewItem, backgroundColor: color)
-        
         cell.deleteButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
             self.deleteButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
-        }.store(in: &cellCancellables)
+        }.store(in: &cell.cancellables)
         cell.modifyButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
             self.modifyButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
-        }.store(in: &cellCancellables)
+        }.store(in: &cell.cancellables)
         cell.reportButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
             self.reportButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
-        }.store(in: &cellCancellables)
-        
+        }.store(in: &cell.cancellables)
         
         return cell
     }
