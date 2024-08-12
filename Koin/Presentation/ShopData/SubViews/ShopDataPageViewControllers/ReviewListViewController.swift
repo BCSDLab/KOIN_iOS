@@ -77,23 +77,37 @@ final class ReviewListViewController: UIViewController {
         reviewListCollectionView.myReviewButtonPublisher.sink { bool in
             print(bool)
         }.store(in: &cancellables)
+        
         reviewListCollectionView.sortTypeButtonPublisher.sink { type in
             print(type)
         }.store(in: &cancellables)
-        reviewListCollectionView.deleteButtonPublisher.sink { _ in
+        
+        reviewListCollectionView.deleteButtonPublisher.sink { parameter in
             print(1)
+            // TODO: delete publisher send
         }.store(in: &cancellables)
-        reviewListCollectionView.modifyButtonPublisher.sink { _ in
-            print(2)
+        
+        reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
+            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(reviewId: parameter.0, shopId: parameter.1))
+            shopReviewViewController.navigationController?.title = "리뷰 수정하기"
+            self?.navigationController?.pushViewController(shopReviewViewController, animated: true)
         }.store(in: &cancellables)
-        reviewListCollectionView.reportButtonPublisher.sink { _ in
-            print(3)
+        
+        reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
+            let viewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reviewId: parameter.0, shopId: parameter.1))
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &cancellables)
     }
     
+}
+
+extension ReviewListViewController {
+    
     @objc private func writeReviewButtonTapped() {
-        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel())
-        shopReviewViewController.title = "리뷰 작성하기"
+        
+        // TODO: 이거 임시 값 준거임. 수정 필요
+        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(shopId: 0))
+        shopReviewViewController.navigationController?.title = "리뷰 작성하기"
         navigationController?.pushViewController(shopReviewViewController, animated: true)
     }
 }
@@ -112,7 +126,7 @@ extension ReviewListViewController {
             $0.trailing.equalTo(view.snp.trailing).offset(-16)
             $0.height.equalTo(40)
         }
-       
+        
         totalScoreLabel.snp.makeConstraints {
             $0.top.equalTo(writeReviewButton.snp.bottom).offset(26)
             $0.leading.equalTo(view.snp.leading).offset(45)
