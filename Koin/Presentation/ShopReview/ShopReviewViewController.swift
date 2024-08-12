@@ -10,7 +10,7 @@ import PhotosUI
 import Then
 import UIKit
 
-final class ShopReviewViewController: UIViewController {
+final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     // MARK: - Properties
     
     private let viewModel: ShopReviewViewModel
@@ -57,33 +57,35 @@ final class ShopReviewViewController: UIViewController {
         $0.text = "더 많은 정보를 작성해보세요!"
     }
     
-    private let photoLabel = UILabel().then {
+    private let imageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.text = "사진"
     }
     
-    private let photoDescriptionLabel = UILabel().then {
+    private let imageDescriptionLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.text = "리뷰와 관련된 사진을 업로드해주세요."
     }
     
-    private let photoNumberLabel = UILabel().then {
+    private let imageCountLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textColor = UIColor.appColor(.sub500)
         $0.text = "0/3"
     }
     
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 13
+        flowLayout.minimumLineSpacing = 9
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         flowLayout.scrollDirection = .horizontal
         let collectionView = ReviewImageUploadCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = UIColor.appColor(.neutral100)
         return collectionView
     }()
     
-    private let uploadPhotoButton = UIButton().then {
+    private let uploadimageButton = UIButton().then {
         $0.setTitle("사진 등록하기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
         $0.backgroundColor = UIColor.appColor(.neutral100)
@@ -98,7 +100,7 @@ final class ShopReviewViewController: UIViewController {
     
     private let reviewDescriptionWordLimitLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textColor = UIColor.appColor(.sub500)
         $0.text = "0/500"
     }
     
@@ -155,9 +157,10 @@ final class ShopReviewViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        reviewTextView.delegate = self
         inputSubject.send(.checkModify)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
-        uploadPhotoButton.addTarget(self, action: #selector(uploadPhotoButtonTapped), for: .touchUpInside)
+        uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Bind
@@ -178,10 +181,27 @@ final class ShopReviewViewController: UIViewController {
         totalScoreView.onRatingChanged = { [weak self] score in
             self?.totalScoreLabel.text = "\(Int(score))"
         }
+        
+        imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
+            self?.uploadimageButton.isEnabled = count < 3
+            self?.imageCountLabel.text = "\(count)/3"
+        }.store(in: &subscriptions)
     }
 }
 
 extension ShopReviewViewController {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let characterCount = textView.text.count
+        reviewDescriptionWordLimitLabel.text = "\(characterCount)/500"
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        return updatedText.count <= 500
+    }
     
     private func fillComponent(_ response: OneReviewDTO) {
         totalScoreView.rating = Double(response.rating)
@@ -189,7 +209,7 @@ extension ShopReviewViewController {
         reviewTextView.text = response.content
     }
     
-    @objc private func uploadPhotoButtonTapped() {
+    @objc private func uploadImageButtonTapped() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
         configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
@@ -233,7 +253,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, photoLabel, photoDescriptionLabel, photoNumberLabel, imageUploadCollectionView, uploadPhotoButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMyselfButton].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMyselfButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -274,37 +294,37 @@ extension ShopReviewViewController {
             $0.top.equalTo(separateView.snp.bottom).offset(24)
             $0.leading.equalTo(scrollView.snp.leading).offset(20)
         }
-        photoLabel.snp.makeConstraints {
+        imageLabel.snp.makeConstraints {
             $0.top.equalTo(moreInfoLabel.snp.bottom).offset(16)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
-        photoDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(photoLabel.snp.bottom)
+        imageDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(imageLabel.snp.bottom)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
-        photoNumberLabel.snp.makeConstraints {
-            $0.top.equalTo(photoDescriptionLabel.snp.top)
+        imageCountLabel.snp.makeConstraints {
+            $0.top.equalTo(imageDescriptionLabel.snp.top)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
         }
         imageUploadCollectionView.snp.makeConstraints {
-            $0.top.equalTo(photoDescriptionLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(scrollView.snp.leading).offset(20)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(112)
         }
-        uploadPhotoButton.snp.makeConstraints {
+        uploadimageButton.snp.makeConstraints {
             $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(8)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
         }
         reviewDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(uploadPhotoButton.snp.bottom).offset(27)
+            $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
             $0.leading.equalTo(scrollView.snp.leading).offset(32)
         }
         reviewDescriptionWordLimitLabel.snp.makeConstraints {
             $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
-            $0.trailing.equalTo(photoNumberLabel.snp.trailing)
+            $0.trailing.equalTo(imageCountLabel.snp.trailing)
         }
         reviewTextView.snp.makeConstraints {
             $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(5)

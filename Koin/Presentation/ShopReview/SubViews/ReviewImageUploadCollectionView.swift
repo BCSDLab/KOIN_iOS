@@ -5,11 +5,17 @@
 //  Created by 김나훈 on 8/13/24.
 //
 
+import Combine
 import UIKit
 
 final class ReviewImageUploadCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var imageUrls: [String] = []
+    let imageCountPublisher = PassthroughSubject<Int, Never>()
+    private var imageUrls: [String] = [] {
+        didSet {
+            imageCountPublisher.send(imageUrls.count)
+        }
+    }
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
