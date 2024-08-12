@@ -16,6 +16,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     private let modifyButtonPublisher = PassthroughSubject<Void, Never>()
     private let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     private let reportButtonPublisher = PassthroughSubject<Void, Never>()
+    private let dropDown = DropDown()
     
     // MARK: - UI Components
     
@@ -64,11 +65,11 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
-    private let dropDown = DropDown()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        configureDropDown()
+        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -76,19 +77,67 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(review: Review, backgroundColor: UIColor) {
+        
         writerLabel.text = review.nickName
         writtenDayLabel.text = review.createdAt
         reviewTextLabel.text = review.content
         scoreView.rating = Double(review.rating)
         reviewImageCollectionView.setReviewImageList(review.imageUrls)
         setUpOrderedMenuNames(list: review.menuNames)
-    
         myReviewImageView.isHidden = !review.isMine
         reviewImageCollectionView.isHidden = review.imageUrls.isEmpty
         if review.isMine { showMyReviewImageView() }
         optionButton.isSelected = review.isMine
         if review.imageUrls.isEmpty { disappearImageCollectionView() }
         self.backgroundColor = backgroundColor
+        
+    }
+    
+    @objc private func optionButtonTapped() {
+        
+        let items: [(text: String, image: UIImage?)]
+        
+        if optionButton.isSelected {
+            items = [("수정하기", UIImage.appImage(asset: .heartFill)),
+                     ("삭제하기", UIImage.appImage(asset: .heart))]
+        } else {
+            items = [("신고하기", UIImage.appImage(asset: .koinLogo))]
+        }
+        
+        dropDown.dataSource = items.map { $0.text }
+        
+        dropDown.customCellConfiguration = { [weak self] (index: Int, item: String, cell: DropDownCell) in
+            guard let self = self else { return }
+            if let customCell = cell as? ImageDropDownCell {
+                let itemData = items[index]
+                customCell.configure(text: itemData.text, image: itemData.image)
+            }
+        }
+        
+        dropDown.show()
+    }
+    
+    
+    private func configureDropDown() {
+        dropDown.anchorView = optionButton
+        dropDown.direction = .any
+        dropDown.width = 109
+        
+        dropDown.selectionAction = { [weak self] (index: Int, _) in
+            
+            self?.handleDropDownSelection(at: index)
+        }
+    }
+    private func handleDropDownSelection(at index: Int) {
+        
+        if optionButton.isSelected {
+            switch index {
+            case 0: modifyButtonPublisher.send(())
+            default: deleteButtonPublisher.send(())
+            }
+        } else {
+            reportButtonPublisher.send(())
+        }
     }
     
     private func showMyReviewImageView() {
@@ -114,7 +163,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
             make.bottom.equalTo(self.snp.bottom)
         }
     }
-
+    
     private func setUpOrderedMenuNames(list: [String]) {
         for menuName in list {
             let label = UILabel()
@@ -178,7 +227,7 @@ extension ReviewListCollectionViewCell {
         orderedMenuNameStackView.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(10)
             $0.leading.equalTo(self.snp.leading).offset(24)
-           // $0.trailing.equalTo(self.snp.trailing)
+            // $0.trailing.equalTo(self.snp.trailing)
             $0.height.equalTo(25)
             $0.bottom.equalTo(self.snp.bottom)
         }

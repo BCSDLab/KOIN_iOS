@@ -73,7 +73,7 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
             return UICollectionViewCell()
         }
         let reviewItem = reviewList[indexPath.row]
-        let color: UIColor = indexPath.row % 2 == 0 ? .systemBackground : UIColor.appColor(.primary500).withAlphaComponent(0.03)
+        let color: UIColor = reviewList[indexPath.row].isMine ? UIColor.appColor(.primary500).withAlphaComponent(0.03) : .systemBackground
         cell.configure(review: reviewItem, backgroundColor: color)
         
         return cell
@@ -84,7 +84,7 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1000
         let dummyCell = ReviewListCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        let color: UIColor = indexPath.row % 2 == 0 ? .systemBackground : UIColor.appColor(.primary500).withAlphaComponent(0.03)
+        let color: UIColor = reviewList[indexPath.row].isMine ? UIColor.appColor(.primary500).withAlphaComponent(0.03) : .systemBackground
         dummyCell.configure(review: reviewList[indexPath.row], backgroundColor: color)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
