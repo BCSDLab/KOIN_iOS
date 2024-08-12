@@ -28,7 +28,6 @@ final class ReviewImageUploadCollectionView: UICollectionView, UICollectionViewD
     }
     
     private func commonInit() {
-        isScrollEnabled = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
