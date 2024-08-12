@@ -36,6 +36,14 @@ extension Router {
         
         return request
     }
+    public func asMultipartRequest(data: [Data], withName: String, fileName: String, mimeType: String) -> DataRequest {
+           return AF.upload(multipartFormData: { multipartFormData in
+               for (index, fileData) in data.enumerated() {
+                   let uniqueFileName = "\(fileName)_\(index + 1)"
+                   multipartFormData.append(fileData, withName: withName, fileName: uniqueFileName, mimeType: mimeType)
+               }
+           }, to: baseURL + path, method: method, headers: Alamofire.HTTPHeaders(headers))
+       }
 }
 
 extension Encodable {

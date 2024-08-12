@@ -24,11 +24,28 @@ protocol ShopService {
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     
+    func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
+    
 }
 
 final class DefaultShopService: ShopService {
     
     private let networkService = NetworkService()
+    
+    func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        return networkService.uploadFiles(api: ShopAPI.uploadFiles(files))
+            .catch { [weak self] error -> AnyPublisher<FileUploadResponse, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.uploadFiles(api: ShopAPI.uploadFiles(files)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchReviewList(requestModel))

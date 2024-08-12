@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 protocol ShopRepository {
     func fetchShopList() -> AnyPublisher<ShopsDTO, Error>
@@ -23,5 +24,7 @@ protocol ShopRepository {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    
+    func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }
 
