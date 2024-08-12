@@ -87,13 +87,12 @@ class NetworkService {
             .catch { error -> AnyPublisher<Void, ErrorResponse> in
                 KeyChainWorker.shared.delete(key: .access)
                 KeyChainWorker.shared.delete(key: .refresh)
-                return Fail(error: ErrorResponse(code: "401", message: "리프레시토큰 만료")).eraseToAnyPublisher()
+                return Fail(error: ErrorResponse(code: "401", message: "인증정보가 만료되었습니다. 다시 로그인해주세요.")).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
     
     func uploadFiles(api: ShopAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
-        // ShopAPI 타입을 명시적으로 사용하는지 확인합니다.
         guard case ShopAPI.uploadFiles(let files) = api else {
             return Fail(error: ErrorResponse(code: "invalid_api", message: "Invalid API case for file upload"))
                 .eraseToAnyPublisher()

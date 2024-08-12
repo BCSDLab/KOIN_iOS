@@ -6,6 +6,7 @@
 //
 
 import Combine
+import PhotosUI
 import Then
 import UIKit
 
@@ -23,7 +24,6 @@ final class ShopReviewViewController: UIViewController {
     
     private let shopNameLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 20)
-        
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
@@ -38,16 +38,23 @@ final class ShopReviewViewController: UIViewController {
         $0.settings.starSize = 40
         $0.settings.starMargin = 2
         $0.settings.fillMode = .full
+        $0.rating = 0
     }
     
     private let totalScoreLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.text = "3"
+        $0.text = "0"
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
     private let separateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral200)
+    }
+    
+    private let moreInfoLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral600)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.text = "더 많은 정보를 작성해보세요!"
     }
     
     private let photoLabel = UILabel().then {
@@ -68,9 +75,13 @@ final class ShopReviewViewController: UIViewController {
         $0.text = "0/3"
     }
     
-    private let uploadPhotoView = UIView().then {
-        $0.isHidden = true
-    }
+    private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 13
+        flowLayout.scrollDirection = .horizontal
+        let collectionView = ReviewImageUploadCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
     
     private let uploadPhotoButton = UIButton().then {
         $0.setTitle("사진 등록하기", for: .normal)
@@ -145,6 +156,7 @@ final class ShopReviewViewController: UIViewController {
         bind()
         configureView()
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
+        uploadPhotoButton.addTarget(self, action: #selector(uploadPhotoButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Bind
@@ -157,6 +169,8 @@ final class ShopReviewViewController: UIViewController {
                 print(1)
             case .dissmissView:
                 print(2)
+            case let .updateImage(imageUrls):
+                self?.imageUploadCollectionView.updateImageUrls(imageUrls)
             }
         }.store(in: &subscriptions)
         
@@ -167,17 +181,51 @@ final class ShopReviewViewController: UIViewController {
 }
 
 extension ShopReviewViewController {
-    @objc private func submitReviewButtonTapped() {
-       // inputSubject.send(.writeReview()
+    @objc private func uploadPhotoButtonTapped() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images // 이미지만 가져오기
+        configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
     }
     
+    @objc private func submitReviewButtonTapped() {
+        // inputSubject.send(.writeReview()
+    }
+    
+}
+extension ShopReviewViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    if let selectedImage = image as? UIImage {
+                        self?.handleSelectedImage(image: selectedImage)
+                    }
+                }
+            }
+        }
+    }
+    private func handleSelectedImage(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        inputSubject.send(.uploadFile([imageData]))
+    }
 }
 
 extension ShopReviewViewController {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, photoLabel, photoDescriptionLabel, photoNumberLabel, uploadPhotoView, uploadPhotoButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMyselfButton, submitReviewButton].forEach {
+        view.addSubview(submitReviewButton)
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, photoLabel, photoDescriptionLabel, photoNumberLabel, imageUploadCollectionView, uploadPhotoButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMyselfButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -185,7 +233,8 @@ extension ShopReviewViewController {
     private func setUpConstraints() {
         
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.snp.bottom).offset(-100)
         }
         shopNameLabel.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.top).offset(24)
@@ -213,8 +262,12 @@ extension ShopReviewViewController {
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             $0.height.equalTo(1)
         }
+        moreInfoLabel.snp.makeConstraints {
+            $0.top.equalTo(separateView.snp.bottom).offset(24)
+            $0.leading.equalTo(scrollView.snp.leading).offset(20)
+        }
         photoLabel.snp.makeConstraints {
-            $0.top.equalTo(separateView.snp.bottom).offset(19)
+            $0.top.equalTo(moreInfoLabel.snp.bottom).offset(16)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
         photoDescriptionLabel.snp.makeConstraints {
@@ -225,8 +278,14 @@ extension ShopReviewViewController {
             $0.top.equalTo(photoDescriptionLabel.snp.top)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
         }
+        imageUploadCollectionView.snp.makeConstraints {
+            $0.top.equalTo(photoDescriptionLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(scrollView.snp.leading).offset(20)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            $0.height.equalTo(112)
+        }
         uploadPhotoButton.snp.makeConstraints {
-            $0.top.equalTo(photoDescriptionLabel.snp.bottom).offset(5)
+            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(8)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
@@ -243,7 +302,7 @@ extension ShopReviewViewController {
             $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(5)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.height.equalTo(46)
+            $0.height.equalTo(398)
         }
         reviewMenuLabel.snp.makeConstraints {
             $0.top.equalTo(reviewTextView.snp.bottom).offset(27)
@@ -260,6 +319,7 @@ extension ShopReviewViewController {
             $0.leading.equalTo(scrollView.snp.centerX).offset(2)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
+            $0.bottom.equalTo(scrollView.snp.bottom)
         }
         submitReviewButton.snp.makeConstraints {
             $0.leading.equalTo(view.snp.leading).offset(24)

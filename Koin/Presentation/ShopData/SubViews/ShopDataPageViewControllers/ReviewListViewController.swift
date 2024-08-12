@@ -98,8 +98,9 @@ final class ReviewListViewController: UIViewController {
             let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
             let modifyReviewUseCase = DefaultModifyReviewUseCase(shopRepository: shopRepository)
             let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
+            let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
             
-            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, reviewId: parameter.0, shopId: parameter.1))
+            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, reviewId: parameter.0, shopId: parameter.1))
             shopReviewViewController.navigationController?.title = "리뷰 수정하기"
             self?.navigationController?.pushViewController(shopReviewViewController, animated: true)
         }.store(in: &cancellables)
@@ -121,9 +122,11 @@ extension ReviewListViewController {
         let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
         let modifyReviewUseCase = DefaultModifyReviewUseCase(shopRepository: shopRepository)
         let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
+        
         
         // FIXME: shopid는 임시값임
-        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, shopId: 0))
+        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, shopId: 0))
         shopReviewViewController.navigationController?.title = "리뷰 작성하기"
         navigationController?.pushViewController(shopReviewViewController, animated: true)
     }
