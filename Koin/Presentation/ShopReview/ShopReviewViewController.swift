@@ -155,6 +155,7 @@ final class ShopReviewViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        inputSubject.send(.checkModify)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
         uploadPhotoButton.addTarget(self, action: #selector(uploadPhotoButtonTapped), for: .touchUpInside)
     }
@@ -165,25 +166,32 @@ final class ShopReviewViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case .fillComponent(_):
-                print(1)
+            case let .fillComponent(response):
+                self?.fillComponent(response)
             case .dissmissView:
                 print(2)
-            case let .updateImage(imageUrls):
-                self?.imageUploadCollectionView.updateImageUrls(imageUrls)
+            case let .addImage(imageUrl):
+                self?.imageUploadCollectionView.addImageUrl(imageUrl)
             }
         }.store(in: &subscriptions)
         
-        totalScoreView.didFinishTouchingCosmos = { [weak self] score in
+        totalScoreView.onRatingChanged = { [weak self] score in
             self?.totalScoreLabel.text = "\(Int(score))"
         }
     }
 }
 
 extension ShopReviewViewController {
+    
+    private func fillComponent(_ response: OneReviewDTO) {
+        totalScoreView.rating = Double(response.rating)
+        imageUploadCollectionView.updateImageUrls(response.imageUrls)
+        reviewTextView.text = response.content
+    }
+    
     @objc private func uploadPhotoButtonTapped() {
         var configuration = PHPickerConfiguration()
-        configuration.filter = .images // 이미지만 가져오기
+        configuration.filter = .images
         configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
         
         let picker = PHPickerViewController(configuration: configuration)

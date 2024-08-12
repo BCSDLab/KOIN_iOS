@@ -22,11 +22,12 @@ final class ShopReviewViewModel: ViewModelProtocol {
     enum Input {
         case writeReview(WriteReviewRequest)
         case uploadFile([Data])
+        case checkModify
     }
     
     enum Output {
         case fillComponent(OneReviewDTO)
-        case updateImage([String])
+        case addImage(String)
         case dissmissView
     }
     
@@ -48,6 +49,8 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 else { self.postReview(requestModel: requestModel) }
             case let .uploadFile(data):
                 self.uploadFile(files: data)
+            case .checkModify:
+                if let reviewId = reviewId { fetchShopReview() }
             }
             
         }.store(in: &subscriptions)
@@ -61,7 +64,9 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateImage(response.fileUrls))
+            if let imageUrl = response.fileUrls.first {
+                self?.outputSubject.send(.addImage(imageUrl))
+            }
         }.store(in: &subscriptions)
 
     }

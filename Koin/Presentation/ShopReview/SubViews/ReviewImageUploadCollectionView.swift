@@ -31,11 +31,14 @@ final class ReviewImageUploadCollectionView: UICollectionView, UICollectionViewD
         delegate = self
     }
     
+    func addImageUrl(_ imageUrl: String) {
+        self.imageUrls.append(imageUrl)
+        self.reloadData()
+    }
+    
     func updateImageUrls(_ imageUrls: [String]) {
-        if let imageUrl = imageUrls.first {
-            self.imageUrls.append(imageUrl)
-            self.reloadData()
-        }
+        self.imageUrls = imageUrls
+        self.reloadData()
     }
 }
 
