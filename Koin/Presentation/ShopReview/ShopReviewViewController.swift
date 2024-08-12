@@ -124,12 +124,14 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
-    private let addMyselfButton = UIButton().then {
-        $0.setTitle("직접 추가하기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-    }
+    private let addMenuCollectionView: AddMenuCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 9
+        flowLayout.scrollDirection = .vertical
+        let collectionView = AddMenuCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.isHidden = true
+        return collectionView
+    }()
     
     private let submitReviewButton = UIButton().then {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
@@ -161,6 +163,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         inputSubject.send(.checkModify)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
+        addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Bind
@@ -186,10 +189,21 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             self?.uploadimageButton.isEnabled = count < 3
             self?.imageCountLabel.text = "\(count)/3"
         }.store(in: &subscriptions)
+        
+        addMenuCollectionView.menuItemCountPublisher.sink { [weak self] count in
+            self?.addMenuCollectionView.isHidden = count == 0
+            self?.addMenuCollectionView.snp.updateConstraints {
+                $0.height.equalTo(55 * count)
+            }
+        }.store(in: &subscriptions)
     }
 }
 
 extension ShopReviewViewController {
+    
+    @objc private func addMenuButtonTapped() {
+        addMenuCollectionView.addMenuItem()
+    }
     
     func textViewDidChange(_ textView: UITextView) {
         let characterCount = textView.text.count
@@ -253,7 +267,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMyselfButton].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMenuCollectionView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -339,15 +353,15 @@ extension ShopReviewViewController {
         addMenuButton.snp.makeConstraints {
             $0.top.equalTo(reviewMenuLabel.snp.bottom).offset(5)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.centerX).offset(-2)
-            $0.height.equalTo(46)
-        }
-        addMyselfButton.snp.makeConstraints {
-            $0.top.equalTo(reviewMenuLabel.snp.bottom).offset(5)
-            $0.leading.equalTo(scrollView.snp.centerX).offset(2)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
-            $0.bottom.equalTo(scrollView.snp.bottom)
+        }
+        addMenuCollectionView.snp.makeConstraints {
+            $0.top.equalTo(addMenuButton.snp.bottom).offset(8)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-40)
+            $0.height.equalTo(1)
         }
         submitReviewButton.snp.makeConstraints {
             $0.leading.equalTo(view.snp.leading).offset(24)

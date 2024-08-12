@@ -122,6 +122,8 @@
 		D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */; };
 		D22C54862C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */; };
 		D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */; };
+		D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */; };
+		D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -474,6 +476,8 @@
 		D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileUseCase.swift; sourceTree = "<group>"; };
 		D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionView.swift; sourceTree = "<group>"; };
 		D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionView.swift; sourceTree = "<group>"; };
+		D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -931,10 +935,28 @@
 		D22C54842C6AAE31000826DA /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */,
+				D22C548A2C6AC746000826DA /* AddMenuCollectionView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */ = {
+			isa = PBXGroup;
+			children = (
 				D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */,
 				D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */,
 			);
-			path = SubViews;
+			path = ReviewImageUploadCollectionView;
+			sourceTree = "<group>";
+		};
+		D22C548A2C6AC746000826DA /* AddMenuCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */,
+				D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */,
+			);
+			path = AddMenuCollectionView;
 			sourceTree = "<group>";
 		};
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
@@ -2244,6 +2266,7 @@
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
+				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2908D2A2BB9B1F90008F908 /* SemesterSelectTableView.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
@@ -2392,6 +2415,7 @@
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
+				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
