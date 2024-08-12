@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchMyReviewUseCase {
-    func execute(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse>
+    func execute(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<[Review], ErrorResponse>
 }
 
 final class DefaultFetchMyReviewUseCase: FetchMyReviewUseCase {
@@ -19,7 +19,11 @@ final class DefaultFetchMyReviewUseCase: FetchMyReviewUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse> {
+    func execute(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<[Review], ErrorResponse> {
         return shopRepository.fetchMyReviewList(requestModel: requestModel, shopId: shopId)
+            .map { myReviewDTO in
+                return myReviewDTO.toDomain(shopId: shopId)
+            }
+            .eraseToAnyPublisher()
     }
 }

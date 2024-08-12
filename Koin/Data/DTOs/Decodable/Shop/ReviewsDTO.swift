@@ -46,6 +46,12 @@ struct ReviewDTO: Decodable {
     }
 }
 
+extension MyReviewDTO {
+    func toDomain(shopId: Int) -> [Review] {
+        return self.reviews.map { $0.toDomain(shopId: shopId) }
+    }
+}
+
 struct OneReviewDTO: Decodable {
     let reviewId, rating: Int
     let nickName, content: String

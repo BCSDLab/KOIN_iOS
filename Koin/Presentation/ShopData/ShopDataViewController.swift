@@ -214,6 +214,8 @@ final class ShopDataViewController: UIViewController {
                 self?.pageViewController.setEventList(eventList)
             case let .showShopReviewList(shopReviewList):
                 self?.pageViewController.setReviewList(shopReviewList)
+            case let .showShopReviewStatistics(statistics):
+                self?.pageViewController.setReviewStatistic(statistics)
             }
         }.store(in: &subscriptions)
         
