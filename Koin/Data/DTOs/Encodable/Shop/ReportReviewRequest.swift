@@ -8,10 +8,10 @@
 import Foundation
 
 struct ReportReviewRequest: Encodable {
-    let reports: Reports
+    let reports: [Report]
 }
 
-struct Reports: Encodable {
+struct Report: Encodable {
     let title: String
     let content: String
 }

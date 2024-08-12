@@ -191,7 +191,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
 
 extension ReviewListCollectionViewCell {
     private func setUpLayouts() {
-        [writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reviewImageCollectionView, orderedMenuNameStackView].forEach {
+        [myReviewImageView, writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reviewImageCollectionView, orderedMenuNameStackView].forEach {
             contentView.addSubview($0)
         }
     }
