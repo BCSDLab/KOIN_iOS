@@ -12,7 +12,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
-        case reportReview
+        case reportReview(ReportReviewRequest)
     }
     
     // MARK: - Output
@@ -25,12 +25,14 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private let reportReviewReviewUseCase: ReportReviewReviewUseCase
     private let reviewId: Int
     private let shopId: Int
     
     // MARK: - Initialization
     
-    init(reviewId: Int, shopId: Int) {
+    init(reportReviewReviewUseCase: ReportReviewReviewUseCase, reviewId: Int, shopId: Int) {
+        self.reportReviewReviewUseCase = reportReviewReviewUseCase
         self.reviewId = reviewId
         self.shopId = shopId
     }
@@ -38,8 +40,8 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .reportReview:
-                self?.reportReview()
+            case let .reportReview(requestModel):
+                self?.reportReview(requestModel)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -49,8 +51,15 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
 
 extension ShopReviewReportViewModel {
    
-    private func reportReview() {
-    
+    private func reportReview(_ requestModel: ReportReviewRequest) {
+        reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            print(response)
+        }.store(in: &subscriptions)
+
     }
 
 }

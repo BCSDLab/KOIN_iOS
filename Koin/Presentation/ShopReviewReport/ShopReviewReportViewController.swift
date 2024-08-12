@@ -173,7 +173,23 @@ extension ShopReviewReportViewController {
         updateReportButtonState()
     }
     @objc private func reportButtonTapped() {
-       
+        var reports: [Report] = []
+        let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
+        
+        for reportView in reportViews {
+            if reportView.isCheckButtonSelected() {
+                let reportInfo = reportView.getReportInfo()
+                let report = Report(title: reportInfo.title, content: reportInfo.content)
+                reports.append(report)
+            }
+        }
+        if checkButton.isSelected, let etcText = etcReportTextView.text {
+            let report = Report(title: "기타", content: etcText)
+            reports.append(report)
+        }
+    
+        let requestModel = ReportReviewRequest(reports: reports)
+        inputSubject.send(.reportReview(requestModel))
     }
     
 }

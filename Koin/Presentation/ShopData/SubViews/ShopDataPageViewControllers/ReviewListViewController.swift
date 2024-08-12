@@ -105,7 +105,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            let viewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reviewId: parameter.0, shopId: parameter.1))
+            let viewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &cancellables)
     }
