@@ -15,19 +15,137 @@ protocol ShopService {
     func fetchShopData(requestModel: FetchShopInfoRequest) -> AnyPublisher<ShopDataDTO, Error>
     func fetchShopMenuList(requestModel: FetchShopInfoRequest) -> AnyPublisher<MenuDTO, Error>
     func fetchShopEventList(requestModel: FetchShopInfoRequest) -> AnyPublisher<EventsDTO, Error>
-    func fetchShopReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error>
+    
+    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse>
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse>
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<ReviewsDTO, ErrorResponse>
+    func postReview(requestModel: WriteReviewRequest, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    
 }
 
 final class DefaultShopService: ShopService {
     
+    private let networkService = NetworkService()
+    
+    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: ShopAPI.fetchReviewList(requestModel))
+            .catch { [weak self] error -> AnyPublisher<ReviewsDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" && !retry {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: ShopAPI.fetchReviewList(requestModel)) }
+                        .catch { refreshError -> AnyPublisher<ReviewsDTO, ErrorResponse> in
+                            return self.fetchReviewList(requestModel: requestModel, retry: true)
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: ShopAPI.fetchReview(reviewId, shopId))
+            .catch { [weak self] error -> AnyPublisher<OneReviewDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: ShopAPI.fetchReview(reviewId, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: ShopAPI.fetchMyReviewList(requestModel, shopId))
+            .catch { [weak self] error -> AnyPublisher<ReviewsDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: ShopAPI.fetchMyReviewList(requestModel, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func postReview(requestModel: WriteReviewRequest, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.postReview(requestModel, shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.postReview(requestModel, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.modifyReview(requestModel, reviewId, shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.modifyReview(requestModel, reviewId, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.deleteReview(reviewId, shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.deleteReview(reviewId, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.reportReview(requestModel, reviewId, shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.reportReview(requestModel, reviewId, shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
     func fetchShopList() -> AnyPublisher<ShopsDTO, Error> {
         return request(.fetchShopList)
     }
-
+    
     func fetchEventList() -> AnyPublisher<EventsDTO, Error> {
         return request(.fetchEventList)
     }
-
+    
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error> {
         return request(.fetchShopCategoryList)
     }
@@ -44,10 +162,12 @@ final class DefaultShopService: ShopService {
         return request(.fetchShopEventList(requestModel))
     }
     
-    func fetchShopReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
-        return request(.fetchShopReviewList(requestModel))
+    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
+        return request(.fetchReviewList(requestModel))
     }
-
+    
+    
+    
     private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)

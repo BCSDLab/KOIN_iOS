@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopReviewListUseCase {
-    func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, Error>}
+    func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, ErrorResponse>}
 
 final class DefaultFetchShopReviewListUseCase: FetchShopReviewListUseCase {
     
@@ -18,7 +18,7 @@ final class DefaultFetchShopReviewListUseCase: FetchShopReviewListUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, Error> {
+    func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, ErrorResponse> {
         return shopRepository.fetchReviewList(requestModel: requestModel)
             .map { reviewsDTO in
                 reviewsDTO.toDomain(shopId: requestModel.shopId) 

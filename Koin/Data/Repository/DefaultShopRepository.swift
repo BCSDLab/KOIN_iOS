@@ -8,7 +8,7 @@
 import Combine
 
 final class DefaultShopRepository: ShopRepository {
-    
+
     private let service: ShopService
     
     init(service: ShopService) {
@@ -39,7 +39,32 @@ final class DefaultShopRepository: ShopRepository {
         return service.fetchShopEventList(requestModel: requestModel)
     }
     
-    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
-        return service.fetchShopReviewList(requestModel: requestModel)
+    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+        return service.fetchReviewList(requestModel: requestModel, retry: false)
     }
+    
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse> {
+        return service.fetchReview(reviewId: reviewId, shopId: shopId)
+    }
+    
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+        return service.fetchMyReviewList(requestModel: requestModel, shopId: shopId)
+    }
+    
+    func postReview(requestModel: WriteReviewRequest, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.postReview(requestModel: requestModel, shopId: shopId)
+    }
+    
+    func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.modifyReview(requestModel: requestModel, reviewId: reviewId, shopId: shopId)
+    }
+    
+    func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.deleteReview(reviewId: reviewId, shopId: shopId)
+    }
+    
+    func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.reportReview(requestModel: requestModel, reviewId: reviewId, shopId: shopId)
+    }
+    
 }

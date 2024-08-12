@@ -14,7 +14,14 @@ enum ShopAPI {
     case fetchShopData(FetchShopInfoRequest)
     case fetchShopMenuList(FetchShopInfoRequest)
     case fetchShopEventList(FetchShopInfoRequest)
-    case fetchShopReviewList(FetchShopReviewRequest)
+    
+    case fetchReviewList(FetchShopReviewRequest)
+    case fetchReview(Int, Int)
+    case fetchMyReviewList(FetchMyReviewRequest, Int)
+    case postReview(WriteReviewRequest, Int)
+    case modifyReview(WriteReviewRequest, Int, Int)
+    case deleteReview(Int, Int)
+    case reportReview(ReportReviewRequest, Int, Int)
 }
 
 extension ShopAPI: Router, URLRequestConvertible {
@@ -31,39 +38,69 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .fetchShopData(let request): return "/shops/\(request.shopId)"
         case .fetchShopMenuList(let request): return "/shops/\(request.shopId)/menus"
         case .fetchShopEventList(let request): return "/shops/\(request.shopId)/events"
-        case .fetchShopReviewList(let request): return "/shops/\(request.shopId)/reviews"
+        case .fetchReviewList(let request): return "/shops/\(request.shopId)/reviews"
+        case .fetchReview(let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
+        case .fetchMyReviewList(_, let shopId): return "/shops/\(shopId)/reviews/me"
+        case .postReview(_, let shopId): return "/shops/\(shopId)/reviews"
+        case .modifyReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
+        case .deleteReview(let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
+        case .reportReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)/reports"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
-        return .get
+        switch self {
+        case .postReview: .post
+        case .modifyReview: .put
+        case .deleteReview: .delete
+        default: .get
+        }
     }
     
     public var headers: [String: String] {
-        return [:]
+        switch self {
+            
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList: return [:]
+        default: 
+            if let token = KeyChainWorker.shared.read(key: .access) {
+                let headers = ["Authorization": "Bearer \(token)"]
+                return headers
+            } else {
+                return [:]
+            }
+        }
     }
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList:
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()
-        case .fetchShopReviewList(let request):
+        case .fetchReviewList(let request):
             return [
                 "limit": request.limit,
                 "page": request.page,
                 "sorter": request.sorter.rawValue
             ]
+        case .fetchMyReviewList(let request, _):
+            return try? request.toDictionary()
+        case .postReview(let request, _), .modifyReview(let request, _, _):
+            return try? JSONEncoder().encode(request)
+        case .reportReview(let request, _, _):
+            return try? JSONEncoder().encode(request)
         }
     }
-
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList:
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReviewList:
             return URLEncoding.default
-        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopReviewList:
+        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
             return URLEncoding.queryString
+        case .postReview, .modifyReview, .reportReview:
+            return JSONEncoding.default  
+        default:
+            return URLEncoding.default
         }
     }
 }
