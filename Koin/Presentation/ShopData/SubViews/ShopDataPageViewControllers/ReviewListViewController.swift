@@ -13,8 +13,8 @@ final class ReviewListViewController: UIViewController {
     
     // MARK: - Properties
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
-    let deletePublisher = PassthroughSubject<(Int, Int), Never>()
     let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
+    let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -89,9 +89,8 @@ final class ReviewListViewController: UIViewController {
             self?.fetchStandardPublisher.send((type, nil))
         }.store(in: &cancellables)
         
-        reviewListCollectionView.deleteButtonPublisher.sink { parameter in
-            print(1)
-            // TODO: delete publisher send
+        reviewListCollectionView.deleteButtonPublisher.sink { [weak self] parameter in
+            self?.deleteReviewPublisher.send(parameter)
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
