@@ -13,6 +13,7 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     // MARK: - Properties
     
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -48,6 +49,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         
         reviewListViewController.viewControllerHeightPublisher.sink { [weak self] height in
             self?.viewControllerHeightPublisher.send(height)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.fetchStandardPublisher.sink { [weak self] tuple in
+            self?.fetchStandardPublisher.send(tuple)
         }.store(in: &subscriptions)
         
     }
