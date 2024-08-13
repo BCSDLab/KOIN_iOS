@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIViewController {
-    func showToast(message: String) {
+    func showToast(message: String, success: Bool) {
         guard let windowScene = UIApplication.shared.connectedScenes
             .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
@@ -16,8 +16,13 @@ extension UIViewController {
         }
         
         let toastLabel = PaddingLabel(frame: CGRect(x: 16, y: window.frame.height - 81, width: window.frame.width - 32, height: 54))
-        toastLabel.backgroundColor = UIColor.appColor(.primary900).withAlphaComponent(0.8)
-        toastLabel.textColor = UIColor.appColor(.neutral0)
+        if success {
+            toastLabel.backgroundColor = UIColor.appColor(.primary900).withAlphaComponent(0.8)
+            toastLabel.textColor = UIColor.appColor(.neutral0)
+        } else {
+            toastLabel.backgroundColor = UIColor.appColor(.danger700).withAlphaComponent(0.8)
+            toastLabel.textColor = UIColor.appColor(.neutral0)
+        }
         toastLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         toastLabel.textAlignment = .left
         toastLabel.text = message
