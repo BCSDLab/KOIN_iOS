@@ -20,7 +20,7 @@ final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
     }
     
     func execute(shopId: Int) -> AnyPublisher<[MenuCategory], Error> {
-        return shopRepository.fetchShopMenuList(requestModel: FetchShopInfoRequest(shopId: shopId)).map { menuDTO in
+        return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDTO in
             menuDTO.menuCategories ?? []
         }.eraseToAnyPublisher()
     }

@@ -20,8 +20,8 @@ final class DefaultShopRepository: ShopRepository {
         service.uploadFiles(files: files)
     }
     
-    func fetchShopList() -> AnyPublisher<ShopsDTO, Error> {
-        return service.fetchShopList()
+    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error> {
+        return service.fetchShopList(requestModel: requestModel)
     }
     
     func fetchEventList() -> AnyPublisher<EventsDTO, Error> {
@@ -32,15 +32,15 @@ final class DefaultShopRepository: ShopRepository {
         return service.fetchShopCategoryList()
     }
     
-    func fetchShopData(requestModel: FetchShopInfoRequest) -> AnyPublisher<ShopDataDTO, Error> {
+    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error> {
         return service.fetchShopData(requestModel: requestModel)
     }
     
-    func fetchShopMenuList(requestModel: FetchShopInfoRequest) -> AnyPublisher<MenuDTO, Error> {
+    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error> {
         return service.fetchShopMenuList(requestModel: requestModel)
     }
     
-    func fetchShopEventList(requestModel: FetchShopInfoRequest) -> AnyPublisher<EventsDTO, Error> {
+    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error> {
         return service.fetchShopEventList(requestModel: requestModel)
     }
     

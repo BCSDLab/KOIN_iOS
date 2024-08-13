@@ -164,6 +164,7 @@
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
 		D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */; };
 		D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D992C6B97D200C4275F /* InsetLabel.swift */; };
+		D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */; };
 		D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */; };
 		D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0272BA608310081FD36 /* LandCollectionView.swift */; };
 		D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD02A2BA608310081FD36 /* HomeViewModel.swift */; };
@@ -250,7 +251,7 @@
 		D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21D42C4E1A8300994554 /* RegisterUseCase.swift */; };
 		D29F21D92C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21D82C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift */; };
 		D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21DA2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift */; };
-		D29F21DF2C4F2E3000994554 /* FetchShopInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21DE2C4F2E3000994554 /* FetchShopInfoRequest.swift */; };
+		D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21DE2C4F2E3000994554 /* FetchShopDataRequest.swift */; };
 		D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */; };
 		D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E42C4F4C3700994554 /* AgreementText.swift */; };
 		D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21EB2C4F609000994554 /* LoginUseCase.swift */; };
@@ -525,6 +526,7 @@
 		D249CD402C15CBAA000813F9 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		D27A5D992C6B97D200C4275F /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
+		D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListRequest.swift; sourceTree = "<group>"; };
 		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = koin/Info.plist; sourceTree = "<group>"; };
 		D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0272BA608310081FD36 /* LandCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
@@ -612,7 +614,7 @@
 		D29F21D42C4E1A8300994554 /* RegisterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUseCase.swift; sourceTree = "<group>"; };
 		D29F21D82C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedNicknameUseCase.swift; sourceTree = "<group>"; };
 		D29F21DA2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedNicknameRequest.swift; sourceTree = "<group>"; };
-		D29F21DE2C4F2E3000994554 /* FetchShopInfoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopInfoRequest.swift; sourceTree = "<group>"; };
+		D29F21DE2C4F2E3000994554 /* FetchShopDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopDataRequest.swift; sourceTree = "<group>"; };
 		D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListRequest.swift; sourceTree = "<group>"; };
 		D29F21E42C4F4C3700994554 /* AgreementText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementText.swift; sourceTree = "<group>"; };
 		D29F21EB2C4F609000994554 /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
@@ -1563,11 +1565,12 @@
 		D29F21DD2C4F2E2400994554 /* Shop */ = {
 			isa = PBXGroup;
 			children = (
-				D29F21DE2C4F2E3000994554 /* FetchShopInfoRequest.swift */,
+				D29F21DE2C4F2E3000994554 /* FetchShopDataRequest.swift */,
 				D22C54552C68B033000826DA /* WriteReviewRequest.swift */,
 				D22C54572C68B033000826DA /* ReportReviewRequest.swift */,
 				D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */,
 				D22C547C2C6A2BC9000826DA /* FetchMyReviewRequest.swift */,
+				D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2298,6 +2301,7 @@
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */,
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,
+				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
@@ -2359,7 +2363,7 @@
 				D27DD0A02BA608310081FD36 /* DiningViewModel.swift in Sources */,
 				D2078C122BC7BE8100A39861 /* MenuSectionFooterView.swift in Sources */,
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
-				D29F21DF2C4F2E3000994554 /* FetchShopInfoRequest.swift in Sources */,
+				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D2BD36882BA9D5AB00FAE609 /* MyPageViewController.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
