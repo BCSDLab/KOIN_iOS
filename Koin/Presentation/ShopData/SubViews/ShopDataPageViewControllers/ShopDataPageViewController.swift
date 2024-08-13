@@ -15,6 +15,7 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
     let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
     let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
+    let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -58,6 +59,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         
         reviewListViewController.deleteReviewPublisher.sink { [weak self] tuple in
             self?.deleteReviewPublisher.send(tuple)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
+            self?.reviewCountFetchRequestPublisher.send(())
         }.store(in: &subscriptions)
     }
     

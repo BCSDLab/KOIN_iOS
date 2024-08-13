@@ -36,6 +36,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case deleteReview(Int, Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case changeFetchStandard(ReviewSortType?, Bool?)
+        case updateReviewCount
     }
     enum Output {
         case showShopData(ShopData)
@@ -77,6 +78,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.changeFetchStandard(type, isMine)
             case let .deleteReview(reviewId, shopId):
                 self?.deleteReview(reviewId, shopId)
+            case .updateReviewCount:
+                self?.updateReviewCount()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()

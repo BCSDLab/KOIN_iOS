@@ -15,6 +15,7 @@ final class ReviewListViewController: UIViewController {
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
     let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
     let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
+    let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     private let viewModel = ReviewListViewModel()
@@ -75,6 +76,11 @@ final class ReviewListViewController: UIViewController {
         bind()
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
         print(KeyChainWorker.shared.read(key: .access))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        reviewCountFetchRequestPublisher.send(())
     }
     
     func setReviewList(_ review: [Review], _ shopId: Int) {

@@ -237,6 +237,10 @@ final class ShopDataViewController: UIViewController {
             self?.inputSubject.send(.deleteReview(tuple.0, tuple.1))
         }.store(in: &subscriptions)
         
+        pageViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
+            self?.inputSubject.send(.updateReviewCount)
+        }.store(in: &subscriptions)
+        
         menuImageCollectionView.didSelectImage.sink { [weak self] image in
             let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
             let imageHeight: CGFloat = imageWidth * 1.2
