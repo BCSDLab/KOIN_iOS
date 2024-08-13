@@ -42,7 +42,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopData(ShopData)
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
-        case showShopReviewList([Review], Int)
+        case showShopReviewList([Review], Int, ReviewSortType, Bool)
         case showShopReviewStatistics(StatisticsDTO)
         case showToast(String, Bool)
         case updateReviewCount(Int)
@@ -62,6 +62,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let strongSelf = self else { return }
             switch input {
             case .viewDidLoad:
                 self?.fetchShopData()
@@ -74,7 +75,11 @@ final class ShopDataViewModel: ViewModelProtocol {
             case .fetchShopMenuList:
                 self?.fetchShopMenuList()
             case .fetchShopReviewList:
-                self?.fetchShopReviewList()
+                if strongSelf.fetchStandard.1 {
+                    self?.fetchMyReviewList()
+                } else {
+                    self?.fetchShopReviewList()
+                }
             case let .changeFetchStandard(type, isMine):
                 self?.changeFetchStandard(type, isMine)
             case let .deleteReview(reviewId, shopId):
@@ -126,8 +131,9 @@ extension ShopDataViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showShopReviewList(response, self?.shopId ?? 0))
-            self?.updateReviewCount()
+            guard let self = self else { return }
+            self.outputSubject.send(.showShopReviewList(response, self.shopId, self.fetchStandard.0, self.fetchStandard.1))
+            self.updateReviewCount()
         }.store(in: &subscriptions)
     }
     
@@ -137,9 +143,10 @@ extension ShopDataViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showShopReviewList(response.review, self?.shopId ?? 0))
-            self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
-            self?.updateReviewCount()
+            guard let self = self else { return }
+            self.outputSubject.send(.showShopReviewList(response.review, self.shopId, self.fetchStandard.0, self.fetchStandard.1))
+            self.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
+            self.updateReviewCount()
         }.store(in: &subscriptions)
     }
     

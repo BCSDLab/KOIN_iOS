@@ -212,8 +212,8 @@ final class ShopDataViewController: UIViewController {
                 self?.pageViewController.setMenuCategories(shopMenuList)
             case let .showShopEventList(eventList):
                 self?.pageViewController.setEventList(eventList)
-            case let .showShopReviewList(shopReviewList, shopId):
-                self?.pageViewController.setReviewList(shopReviewList, shopId)
+            case let .showShopReviewList(shopReviewList, shopId, fetchStandard, isMine):
+                self?.pageViewController.setReviewList(shopReviewList, shopId, fetchStandard, isMine)
             case let .showShopReviewStatistics(statistics):
                 self?.pageViewController.setReviewStatistic(statistics)
             case let .showToast(message, success):

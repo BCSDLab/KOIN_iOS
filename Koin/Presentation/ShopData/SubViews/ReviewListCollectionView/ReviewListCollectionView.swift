@@ -43,6 +43,13 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         reloadData()
     }
     
+    func setHeader(_ fetchStandard: ReviewSortType, _ isMine: Bool) {
+            guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ReviewListHeaderView else {
+                return
+            }
+            headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
+        }
+    
     func disappearReview(_ reviewId: Int, shopId: Int) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
             return

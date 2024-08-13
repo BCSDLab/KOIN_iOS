@@ -42,6 +42,13 @@ final class ReviewListHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updateHeader(fetchStandard: ReviewSortType, isMine: Bool) {
+            setUpSortTypeButtonText(type: fetchStandard)
+        myReviewButton.isSelected = isMine
+                setUpMyReviewButtonText()
+        }
+
+    
     private func setUpDropDown() {
         dropDown.anchorView = sortTypeButton
         dropDown.bottomOffset = CGPoint(x: 0, y: sortTypeButton.bounds.height + 22)

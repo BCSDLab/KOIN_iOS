@@ -105,7 +105,7 @@ final class ReviewListViewController: UIViewController {
         reviewCountFetchRequestPublisher.send(())
     }
     
-    func setReviewList(_ review: [Review], _ shopId: Int) {
+    func setReviewList(_ review: [Review], _ shopId: Int, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
         reviewListCollectionView.setReviewList(review)
         viewModel.shopId = shopId
         let height = reviewListCollectionView.calculateDynamicHeight()
@@ -113,13 +113,14 @@ final class ReviewListViewController: UIViewController {
             make.height.equalTo(height)
         }
         nonReviewImageView.isHidden = !review.isEmpty
-        reviewListCollectionView.isHidden = review.isEmpty
+     // ???: 이거 숨기는게 맞긴한데 이거 숨기면 플로우가 어색하다. 회의 때 말해보기
+      //  reviewListCollectionView.isHidden = review.isEmpty
         if review.isEmpty {
             viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 400)
         } else {
             viewControllerHeightPublisher.send(height + writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
         }
-        
+        reviewListCollectionView.setHeader(fetchStandard, isMine)
     }
     
     func setReviewStatistics(statistics: StatisticsDTO) {
