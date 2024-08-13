@@ -162,6 +162,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         hideKeyboardWhenTappedAround()
         reviewTextView.delegate = self
         inputSubject.send(.checkModify)
+        inputSubject.send(.updateShopName)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
@@ -182,6 +183,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
                 }
             case let .addImage(imageUrl):
                 self?.imageUploadCollectionView.addImageUrl(imageUrl)
+            case let .updateShopName(shopName):
+                self?.shopNameLabel.text = shopName
             }
         }.store(in: &subscriptions)
         
@@ -292,7 +295,7 @@ extension ShopReviewViewController {
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
         }
         reviewGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(shopNameLabel.snp.bottom).offset(5)
+            $0.top.equalTo(shopNameLabel.snp.bottom).offset(10)
             $0.leading.equalTo(shopNameLabel.snp.leading)
             $0.trailing.equalTo(scrollView.snp.trailing)
             $0.trailing.equalTo(view.snp.trailing)
@@ -369,7 +372,7 @@ extension ShopReviewViewController {
             $0.top.equalTo(addMenuButton.snp.bottom).offset(8)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.bottom.equalTo(scrollView.snp.bottom).offset(-40)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
             $0.height.equalTo(1)
         }
         submitReviewButton.snp.makeConstraints {
