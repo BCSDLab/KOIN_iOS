@@ -126,6 +126,7 @@
 		D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */; };
 		D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */; };
 		D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */; };
+		D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -482,6 +483,7 @@
 		D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Publisher.swift"; sourceTree = "<group>"; };
 		D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
+		D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLoginModalViewController.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -1302,6 +1304,7 @@
 				D27DD0482BA608310081FD36 /* GuideLabel.swift */,
 				D27DD0492BA608310081FD36 /* PossibilityLabel.swift */,
 				D23944A12C3CFAA500048F45 /* ScoreView.swift */,
+				D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2248,6 +2251,7 @@
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
+				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
