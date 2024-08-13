@@ -90,3 +90,10 @@ extension AddMenuCollectionViewCell {
         setUpConstraints()
     }
 }
+
+extension AddMenuCollectionViewCell {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()  
+        return true
+    }
+}

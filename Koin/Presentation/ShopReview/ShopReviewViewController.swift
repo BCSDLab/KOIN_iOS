@@ -159,6 +159,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         bind()
         configureView()
+        hideKeyboardWhenTappedAround()
         reviewTextView.delegate = self
         inputSubject.send(.checkModify)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)

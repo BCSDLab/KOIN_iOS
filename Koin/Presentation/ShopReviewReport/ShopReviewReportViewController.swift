@@ -100,6 +100,7 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
         navigationItem.title = "리뷰 신고하기"
         bind()
         configureView()
+        hideKeyboardWhenTappedAround()
         etcReportTextView.delegate = self
         checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
         reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
