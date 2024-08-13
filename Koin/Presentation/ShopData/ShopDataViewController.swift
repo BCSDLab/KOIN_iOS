@@ -218,6 +218,8 @@ final class ShopDataViewController: UIViewController {
                 self?.pageViewController.setReviewStatistic(statistics)
             case let .showToast(message, success):
                 self?.showToast(message: message, success: success)
+            case let .updateReviewCount(count):
+                self?.categorySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
             }
         }.store(in: &subscriptions)
         

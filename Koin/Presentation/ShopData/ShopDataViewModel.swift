@@ -44,6 +44,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopReviewList([Review], Int)
         case showShopReviewStatistics(StatisticsDTO)
         case showToast(String, Bool)
+        case updateReviewCount(Int)
     }
     
     init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
@@ -63,6 +64,7 @@ final class ShopDataViewModel: ViewModelProtocol {
             case .viewDidLoad:
                 self?.fetchShopData()
                 self?.fetchShopMenuList()
+                self?.updateReviewCount()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case .fetchShopEventList:
@@ -82,6 +84,15 @@ final class ShopDataViewModel: ViewModelProtocol {
 }
 
 extension ShopDataViewModel {
+    private func updateReviewCount() {
+        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: fetchStandard.0)).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateReviewCount(response.review.count))
+        }.store(in: &subscriptions)
+    }
     
     private func deleteReview(_ reviewId: Int, _ shopId: Int) {
         deleteReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
