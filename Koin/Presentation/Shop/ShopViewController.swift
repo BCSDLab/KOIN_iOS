@@ -37,7 +37,7 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
     
     private let eventShopCollectionView: EventShopCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 72)
+        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 80)
         flowLayout.scrollDirection = .horizontal
         let collectionView = EventShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.isHidden = true
@@ -79,10 +79,10 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         let screenWidth = UIScreen.main.bounds.width
-        let cellWidth = screenWidth - 32
+        let cellWidth = screenWidth - 40
         let collectionView = ShopInfoCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: 51)
-        flowLayout.minimumLineSpacing = 4
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 72)
+        flowLayout.minimumLineSpacing = 8
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -290,8 +290,8 @@ extension ShopViewController {
         
         eventShopCollectionView.snp.makeConstraints { make in
             make.top.equalTo(shopGuideView.snp.bottom).offset(12)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(63)
         }
         
@@ -304,8 +304,8 @@ extension ShopViewController {
         
         shopCollectionView.snp.makeConstraints { make in
             make.top.equalTo(shopGuideView.snp.bottom).offset(14)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)
             make.bottom.equalTo(scrollView.snp.bottom)
         }
