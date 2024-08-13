@@ -112,7 +112,9 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-                
+            case let .showToast(message):
+                self?.showToast(message: message)
+                self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
         
