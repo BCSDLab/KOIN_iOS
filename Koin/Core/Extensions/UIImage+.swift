@@ -70,6 +70,7 @@ enum ImageAsset: String {
     case circleFill
     case cancelYellow
     case trashcan
+    case nonReview
 }
 
 enum SFSymbols: String {
