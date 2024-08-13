@@ -16,6 +16,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let viewModel: ShopReviewViewModel
     private let inputSubject: PassthroughSubject<ShopReviewViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    let writeCompletePublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - UI Components
     
@@ -185,6 +186,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
                 self?.imageUploadCollectionView.addImageUrl(imageUrl)
             case let .updateShopName(shopName):
                 self?.shopNameLabel.text = shopName
+            case let .reviewWriteSuccess(isPost):
+                self?.writeCompletePublisher.send(isPost)
             }
         }.store(in: &subscriptions)
         

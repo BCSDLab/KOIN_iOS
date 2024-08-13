@@ -81,6 +81,16 @@ final class ReviewListViewController: UIViewController {
         }
     }
     
+    private var shopReviewViewController: ShopReviewViewController? {
+        didSet {
+            shopReviewViewController?.writeCompletePublisher.sink { [weak self] isPost in
+                if isPost {
+                    self?.fetchStandardPublisher.send((.latest ,false))
+                }
+            }.store(in: &cancellables)
+        }
+    }
+    
     // MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,7 +176,10 @@ final class ReviewListViewController: UIViewController {
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
             let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, reviewId: parameter.0, shopId: parameter.1))
             shopReviewViewController.title = "리뷰 수정하기"
-            self?.navigationController?.pushViewController(shopReviewViewController, animated: true)
+            self?.shopReviewViewController = shopReviewViewController
+            if let viewController = self?.shopReviewViewController {
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
@@ -211,7 +224,10 @@ extension ReviewListViewController {
         
         let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, shopId: viewModel.shopId))
         shopReviewViewController.title = "리뷰 작성하기"
-        navigationController?.pushViewController(shopReviewViewController, animated: true)
+        self.shopReviewViewController = shopReviewViewController
+        if let viewController = self.shopReviewViewController {
+           navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }
 
