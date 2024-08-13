@@ -78,7 +78,6 @@ final class ReviewListHeaderView: UICollectionReusableView {
     
     @objc private func myReviewButtonTapped() {
         myReviewButton.isSelected.toggle()
-        setUpMyReviewButtonText()
         myReviewButtonPublisher.send(myReviewButton.isSelected)
     }
     

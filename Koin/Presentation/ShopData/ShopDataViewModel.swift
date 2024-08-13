@@ -126,9 +126,10 @@ extension ShopDataViewModel {
     }
     
     private func fetchMyReviewList() {
-        fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: fetchStandard.0), shopId: shopId).sink { completion in
+        fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: fetchStandard.0), shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false))
+                self?.fetchStandard.1 = false
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
