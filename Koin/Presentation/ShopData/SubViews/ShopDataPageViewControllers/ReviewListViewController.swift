@@ -62,13 +62,18 @@ final class ReviewListViewController: UIViewController {
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private let deleteReviewModalViewController = DeleteReviewModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    
     // MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         bind()
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
-        // FIXME: 테스트코드
         print(KeyChainWorker.shared.read(key: .access))
     }
     
@@ -109,11 +114,18 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.deleteButtonPublisher.sink { [weak self] parameter in
-            self?.deleteReviewPublisher.send(parameter)
+            guard let self = self else { return }
+            self.viewModel.deleteParameter = parameter
+            self.present(self.deleteReviewModalViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
         
         reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
+        }.store(in: &cancellables)
+        
+        deleteReviewModalViewController.deleteButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            self.deleteReviewPublisher.send(self.viewModel.deleteParameter)
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
