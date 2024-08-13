@@ -16,6 +16,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let modifyReviewUseCase: ModifyReviewUseCase
     private let fetchShopReviewUseCase: FetchShopReviewUseCase
     private let uploadFileUseCase: UploadFileUseCase
+    private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
     private let shopId: Int
     
@@ -23,19 +24,22 @@ final class ShopReviewViewModel: ViewModelProtocol {
         case writeReview(WriteReviewRequest)
         case uploadFile([Data])
         case checkModify
+        case updateShopName
     }
     
     enum Output {
         case fillComponent(OneReviewDTO)
         case addImage(String)
         case showToast(String, Bool)
+        case updateShopName(String)
     }
     
-    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, reviewId: Int? = nil, shopId: Int) {
+    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, reviewId: Int? = nil, shopId: Int) {
         self.postReviewUseCase = postReviewUseCase
         self.modifyReviewUseCase = modifyReviewUseCase
         self.fetchShopReviewUseCase = fetchShopReviewUseCase
         self.uploadFileUseCase = uploadFileUseCase
+        self.fetchShopDataUseCase = fetchShopDataUseCase
         self.reviewId = reviewId
         self.shopId = shopId
     }
@@ -51,6 +55,8 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 self.uploadFile(files: data)
             case .checkModify:
                 if let _ = reviewId { fetchShopReview() }
+            case .updateShopName:
+                self.updateShopName()
             }
             
         }.store(in: &subscriptions)
@@ -58,10 +64,20 @@ final class ShopReviewViewModel: ViewModelProtocol {
         return outputSubject.eraseToAnyPublisher()
     }
     
-    private func uploadFile(files: [Data]) {
-        uploadFileUseCase.execute(files: files).sink { completion in
+    private func updateShopName() {
+        fetchShopDataUseCase.execute(shopId: shopId) .sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateShopName(response.name))
+        }.store(in: &subscriptions)
+    }
+    
+    private func uploadFile(files: [Data]) {
+        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
             if let imageUrl = response.fileUrls.first {
