@@ -11,7 +11,7 @@ import UIKit
 final class ReviewImageUploadCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let imageCountPublisher = PassthroughSubject<Int, Never>()
-    private var imageUrls: [String] = [] {
+    private(set) var imageUrls: [String] = [] {
         didSet {
             imageCountPublisher.send(imageUrls.count)
         }

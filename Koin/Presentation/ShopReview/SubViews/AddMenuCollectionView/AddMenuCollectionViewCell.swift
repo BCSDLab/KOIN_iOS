@@ -8,11 +8,12 @@
 import Combine
 import UIKit
 
-final class AddMenuCollectionViewCell: UICollectionViewCell {
+final class AddMenuCollectionViewCell: UICollectionViewCell, UITextFieldDelegate {
     
     // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    let textPublisher = PassthroughSubject<String, Never>()
     
     // MARK: - UI Components
     
@@ -27,21 +28,28 @@ final class AddMenuCollectionViewCell: UICollectionViewCell {
         $0.leftView = paddingView
         $0.leftViewMode = .always
     }
-
+    
     private let cancelButton =  UIButton().then {
         $0.setImage(UIImage.appImage(asset: .trashcan), for: .normal)
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        addMenuTextField.delegate = self
+        
+        addMenuTextField.textPublisher()
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.textPublisher.send(text)
+            }.store(in: &cancellables)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellables.forEach { $0.cancel() }
@@ -50,6 +58,13 @@ final class AddMenuCollectionViewCell: UICollectionViewCell {
     
     @objc private func cancelButtonTapped() {
         cancelButtonPublisher.send(())
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textPublisher.send(textField.text ?? "")
+    }
+    func configure(text: String) {
+        addMenuTextField.text = text
     }
 }
 
