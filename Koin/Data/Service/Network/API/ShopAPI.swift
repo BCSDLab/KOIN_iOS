@@ -67,9 +67,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         default:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
-            } else {
-                return [:]
-            }
+            } 
         }
         switch self {
         case .postReview, .reportReview, .modifyReview, .deleteReview:

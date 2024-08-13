@@ -175,8 +175,10 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             case let .fillComponent(response):
                 self?.fillComponent(response)
             case let .showToast(message, success):
-                self?.navigationController?.popViewController(animated: true)
                 self?.showToast(message: message, success: success)
+                if success {
+                    self?.navigationController?.popViewController(animated: true)
+                }
             case let .addImage(imageUrl):
                 self?.imageUploadCollectionView.addImageUrl(imageUrl)
             }
