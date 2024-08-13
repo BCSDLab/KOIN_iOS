@@ -16,6 +16,7 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
     private let viewModel: ShopReviewReportViewModel
     private let inputSubject: PassthroughSubject<ShopReviewReportViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    let reviewInfoPublisher = PassthroughSubject<(Int, Int), Never>()
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then { _ in
@@ -118,6 +119,8 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
                 if success {
                     self?.navigationController?.popViewController(animated: true)
                 }
+            case let .sendReviewInfo(reviewId, shopId):
+                self?.reviewInfoPublisher.send((reviewId, shopId))
             }
         }.store(in: &subscriptions)
         

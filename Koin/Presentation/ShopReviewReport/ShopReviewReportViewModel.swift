@@ -19,6 +19,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     
     enum Output {
         case showToast(String, Bool)
+        case sendReviewInfo(Int, Int)
     }
     
     // MARK: - Properties
@@ -58,6 +59,7 @@ extension ShopReviewReportViewModel {
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 신고되었습니다.", true))
+            self?.outputSubject.send(.sendReviewInfo(self?.reviewId ?? 0, self?.shopId ?? 0))
         }.store(in: &subscriptions)
 
     }
