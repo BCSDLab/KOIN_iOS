@@ -21,7 +21,7 @@ final class ScoreChartCollectionViewCell: UICollectionViewCell {
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral300)
         $0.progressTintColor = UIColor.appColor(.warning500)
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.translatesAutoresizingMaskIntoConstraints = false
            NSLayoutConstraint.activate([

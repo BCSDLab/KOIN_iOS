@@ -135,10 +135,10 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     private let submitReviewButton = UIButton().then {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
-        $0.backgroundColor = UIColor.appColor(.primary500)
         $0.setTitle("작성하기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+        $0.isEnabled = false
     }
     
     // MARK: - Initialization
@@ -183,6 +183,10 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         
         totalScoreView.onRatingChanged = { [weak self] score in
             self?.totalScoreLabel.text = "\(Int(score))"
+            self?.submitReviewButton.titleLabel?.textColor = UIColor.appColor(.neutral0)
+            self?.submitReviewButton.backgroundColor = UIColor.appColor(.primary500)
+            self?.submitReviewButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+            self?.submitReviewButton.isEnabled = true
         }
         
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
@@ -234,7 +238,8 @@ extension ShopReviewViewController {
     }
     
     @objc private func submitReviewButtonTapped() {
-        // inputSubject.send(.writeReview()
+        let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem)
+        inputSubject.send(.writeReview(requestModel))
     }
     
 }

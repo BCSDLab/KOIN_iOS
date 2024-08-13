@@ -124,6 +124,7 @@
 		D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */; };
 		D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */; };
 		D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */; };
+		D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -478,6 +479,7 @@
 		D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionViewCell.swift; sourceTree = "<group>"; };
 		D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionView.swift; sourceTree = "<group>"; };
 		D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Publisher.swift"; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -1381,6 +1383,7 @@
 				8360D28D2BEAFC2D00909861 /* UIApplication.swift */,
 				D249CD402C15CBAA000813F9 /* Date+.swift */,
 				D2A513422C5B43180064941A /* Bundle+APIKey.swift */,
+				D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2318,6 +2321,8 @@
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
+				D20AB9712C58E2FF006BC684 /* SendDeviceTokenUseCase.swift in Sources */,
+				D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
