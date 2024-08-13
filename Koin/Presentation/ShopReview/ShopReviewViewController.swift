@@ -174,8 +174,9 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             switch output {
             case let .fillComponent(response):
                 self?.fillComponent(response)
-            case .dissmissView:
-                print(2)
+            case let .dissmissView(message):
+                self?.navigationController?.popViewController(animated: true)
+                self?.showToast(message: message)
             case let .addImage(imageUrl):
                 self?.imageUploadCollectionView.addImageUrl(imageUrl)
             }

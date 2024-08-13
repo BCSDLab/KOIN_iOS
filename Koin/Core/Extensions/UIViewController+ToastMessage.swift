@@ -9,7 +9,13 @@ import UIKit
 
 extension UIViewController {
     func showToast(message: String) {
-        let toastLabel = PaddingLabel(frame: CGRect(x: 16, y: view.frame.height - 81, width: view.frame.width - 32, height: 54))
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+            return
+        }
+        
+        let toastLabel = PaddingLabel(frame: CGRect(x: 16, y: window.frame.height - 81, width: window.frame.width - 32, height: 54))
         toastLabel.backgroundColor = UIColor.appColor(.primary900).withAlphaComponent(0.8)
         toastLabel.textColor = UIColor.appColor(.neutral0)
         toastLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
@@ -18,14 +24,17 @@ extension UIViewController {
         toastLabel.alpha = 1.0
         toastLabel.layer.cornerRadius = 5
         toastLabel.clipsToBounds = true
-        self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: 3.0, delay: 0.1, options: .curveEaseOut, animations: {
+        
+        window.addSubview(toastLabel)
+        
+        UIView.animate(withDuration: 5.0, delay: 0.1, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
+        }, completion: { _ in
             toastLabel.removeFromSuperview()
         })
     }
 }
+
 
 // TODO: 이거 공통으로 사용가능한 컴포넌트로 만들기. left를 init으로 받기
 final class PaddingLabel: UILabel {

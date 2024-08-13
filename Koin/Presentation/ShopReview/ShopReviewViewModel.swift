@@ -28,7 +28,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     enum Output {
         case fillComponent(OneReviewDTO)
         case addImage(String)
-        case dissmissView
+        case dissmissView(String)
     }
     
     init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, reviewId: Int? = nil, shopId: Int) {
@@ -88,7 +88,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.dissmissView)
+            self?.outputSubject.send(.dissmissView("리뷰가 작성되었습니다."))
         }.store(in: &subscriptions)
     }
     
@@ -96,7 +96,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         modifyReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { completion in
             print(completion)
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.dissmissView)
+            self?.outputSubject.send(.dissmissView("리뷰가 수정되었습니다."))
         }.store(in: &subscriptions)
         
     }
