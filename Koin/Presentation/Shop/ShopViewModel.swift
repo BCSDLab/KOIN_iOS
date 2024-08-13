@@ -14,11 +14,13 @@ final class ShopViewModel: ViewModelProtocol {
         case changeCategory(Int)
         case searchTextChanged(String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case changeSortStandard(Any)
     }
     
     enum Output {
         case putImage(ShopCategoryDTO)
         case changeFilteredShops([Shop], Int)
+        case updateSeletecButtonColor(FetchShopListRequest)
         case updateEventShops([EventDTO])
     }
     
@@ -30,12 +32,17 @@ final class ShopViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
+    private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
+        didSet {
+            getShopInfo(id: selectedId)
+        }
+    }
     private (set) var selectedId: Int {
         didSet {
             getShopInfo(id: selectedId)
         }
     }
-  
+    
     init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
@@ -57,6 +64,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.searchShop(text)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .changeSortStandard(standard):
+                self?.changeSortStandard(standard)
             }
         }.store(in: &subscriptions)
         
@@ -66,14 +75,30 @@ final class ShopViewModel: ViewModelProtocol {
 
 extension ShopViewModel {
     
+    private func changeSortStandard(_ standard: Any) {
+        if let sortType = standard as? FetchShopSortType {
+            if sortStandard.sorter == sortType {
+                sortStandard.sorter = .none
+            } else {
+                sortStandard.sorter = sortType
+            }
+        } else if let filterType = standard as? FetchShopFilterType {
+            if let index = sortStandard.filter.firstIndex(of: filterType) {
+                sortStandard.filter.remove(at: index)
+            } else {
+                sortStandard.filter.append(filterType)
+            }
+        }
+    }
     private func getShopInfo(id: Int) {
-        fetchShopListUseCase.execute(requestModel: FetchShopListRequest(sorter: .count, filter: [.delivery]))
+        fetchShopListUseCase.execute(requestModel: FetchShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
+                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
                 if self.selectedId != 0 {
                     self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
                 } else {
@@ -110,7 +135,7 @@ extension ShopViewModel {
         let filteredShops = searchShopUseCase.execute(text: text, shops: shopList, categoryId: selectedId)
         outputSubject.send(.changeFilteredShops(filteredShops, selectedId))
         
-       makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearch, category: .click, value: selectedId)
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearch, category: .click, value: selectedId)
     }
     
     private func changeCategory(_ id: Int) {
