@@ -150,12 +150,13 @@ extension AppDelegate {
             let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
             let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
             
             let viewModel = ShopViewModel(
                 fetchShopListUseCase: fetchShopListUseCase,
                 fetchEventListUseCase: fetchEventListUseCase,
                 fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                 selectedId: 0
             )
             let movingVc = ShopViewController(viewModel: viewModel)

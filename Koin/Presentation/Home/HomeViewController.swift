@@ -17,7 +17,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     private var subscriptions: Set<AnyCancellable> = []
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
-    private let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+    
     // MARK: - UI Components
     
     private let wrapperView: UIView = {
@@ -170,11 +170,11 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
-        getUserScreenTimeUseCase.backForeground(backForegroundTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground))
     }
     
     @objc private func appDidEnterBackground() {
-        getUserScreenTimeUseCase.enterBackground(enterBackgroundTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground))
     }
     
     deinit {
@@ -190,7 +190,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         } else {
             inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
         }
-        getUserScreenTimeUseCase.enterVc(enterVcTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -401,13 +401,14 @@ extension HomeViewController {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: id
         )
         let shopViewController = ShopViewController(viewModel: viewModel)
@@ -415,8 +416,8 @@ extension HomeViewController {
         navigationController?.pushViewController(shopViewController, animated: true)
         
         let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-        let homeVcTime = getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
-        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, homeVcTime, .mainShopCategories))
+        self.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
+        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
     }
     
     @objc private func refresh() {
