@@ -74,8 +74,11 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                
-                self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
+                if self.selectedId != 0 {
+                    self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
+                } else {
+                    self.outputSubject.send(.changeFilteredShops(response, self.selectedId))
+                }
                 self.shopList = response
             }).store(in: &subscriptions)
     }
