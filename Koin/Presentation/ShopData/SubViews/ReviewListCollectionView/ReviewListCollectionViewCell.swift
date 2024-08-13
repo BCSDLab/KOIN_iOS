@@ -97,6 +97,9 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         setUpOrderedMenuNames(list: review.menuNames)
         myReviewImageView.isHidden = !review.isMine
         reviewImageCollectionView.isHidden = review.imageUrls.isEmpty
+        reviewImageCollectionView.backgroundColor = backgroundColor
+        self.contentView.backgroundColor = backgroundColor
+        self.backgroundColor = backgroundColor
         optionButton.isSelected = review.isMine
         self.backgroundColor = backgroundColor
         showMyReviewImageView(review.isMine)
@@ -133,8 +136,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
             make.bottom.equalTo(self.snp.bottom)
         }
     }
-    
-    // TODO: 셀재사용떄문에 꼬인 로직 고치기
+
     @objc private func optionButtonTapped() {
         
         let items: [(text: String, image: UIImage?)]
@@ -183,18 +185,17 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     
     private func setUpOrderedMenuNames(list: [String]) {
         for menuName in list {
-            let label = UILabel()
-            label.text = " \(menuName) "
-            label.font = UIFont.appFont(.pretendardRegular, size: 12)
-            label.textColor = UIColor.appColor(.primary300)
-            label.layer.cornerRadius = 5
-            label.layer.borderWidth = 1.0
-            label.layer.borderColor = UIColor.appColor(.primary300).cgColor
-            label.layer.masksToBounds = true
-            label.textAlignment = .center
-            label.sizeToFit()
-            orderedMenuNameStackView.addArrangedSubview(label)
-        }
+            let label = InsetLabel(top: 0, left: 10, bottom: 0, right: 10)
+               label.text = menuName
+               label.font = UIFont.appFont(.pretendardRegular, size: 12)
+               label.textColor = UIColor.appColor(.primary300)
+               label.layer.cornerRadius = 5
+               label.layer.borderWidth = 1.0
+               label.layer.borderColor = UIColor.appColor(.primary300).cgColor
+               label.layer.masksToBounds = true
+               label.textAlignment = .center
+               orderedMenuNameStackView.addArrangedSubview(label)
+           }
     }
 }
 
