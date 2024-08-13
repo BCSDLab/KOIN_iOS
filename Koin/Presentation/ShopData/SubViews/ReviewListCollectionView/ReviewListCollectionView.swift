@@ -18,6 +18,7 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     let modifyButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     let deleteButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     let reportButtonPublisher = PassthroughSubject<(Int, Int), Never>()
+    let heightChangePublisher = PassthroughSubject<Void, Never>()
     let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -73,7 +74,9 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         let indexPath = IndexPath(item: index, section: 0)
         performBatchUpdates({
             reloadItems(at: [indexPath])
-        }, completion: nil)
+        }, completion: { [weak self] _ in
+            self?.heightChangePublisher.send(())
+        })
     }
     
 }

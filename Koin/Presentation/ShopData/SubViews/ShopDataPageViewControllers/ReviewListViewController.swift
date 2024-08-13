@@ -188,6 +188,16 @@ final class ReviewListViewController: UIViewController {
             }
         }.store(in: &cancellables)
         
+        reviewListCollectionView.heightChangePublisher.sink { [weak self] in
+            //TODO: 이거 저깄는 다른 함수랑 통합해야 삭제했을때도 이미지 빈거로 나오는 등 예외 계산할수있을듯
+            guard let self = self else { return }
+            let height = self.reviewListCollectionView.calculateDynamicHeight()
+            reviewListCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(height)
+            }
+            self.viewControllerHeightPublisher.send(height + self.writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
+        }.store(in: &cancellables)
+        
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
             self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
             if let viewController = self?.shopReviewReportViewController {
