@@ -162,6 +162,7 @@
 		D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3C2C159350000813F9 /* DateProvider.swift */; };
 		D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */; };
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
+		D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */; };
 		D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */; };
 		D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0272BA608310081FD36 /* LandCollectionView.swift */; };
 		D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD02A2BA608310081FD36 /* HomeViewModel.swift */; };
@@ -521,6 +522,7 @@
 		D249CD3C2C159350000813F9 /* DateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
 		D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDiningTime.swift; sourceTree = "<group>"; };
 		D249CD402C15CBAA000813F9 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = koin/Info.plist; sourceTree = "<group>"; };
 		D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0272BA608310081FD36 /* LandCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
@@ -1311,6 +1313,7 @@
 				D27DD0492BA608310081FD36 /* PossibilityLabel.swift */,
 				D23944A12C3CFAA500048F45 /* ScoreView.swift */,
 				D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */,
+				D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2374,6 +2377,7 @@
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
+				D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */,
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,

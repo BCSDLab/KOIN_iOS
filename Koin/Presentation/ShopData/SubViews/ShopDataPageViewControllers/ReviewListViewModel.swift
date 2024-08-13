@@ -13,6 +13,7 @@ final class ReviewListViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchUserDataUseCase: FetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     var shopId: Int = 0
+    var deleteParameter: (Int, Int) = (0, 0)
 
     
     enum Input {

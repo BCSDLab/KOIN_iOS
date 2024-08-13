@@ -1,5 +1,5 @@
 //
-//  ReviewLoginModalViewController.swift
+//  DeleteReviewModalViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 8/13/24.
@@ -9,19 +9,19 @@
 import Combine
 import UIKit
 
-final class ReviewLoginModalViewController: UIViewController {
+final class DeleteReviewModalViewController: UIViewController {
     
-    let loginButtonPublisher = PassthroughSubject<Void, Never>()
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
-        let text = "리뷰 작성시 로그인을 해주세요."
+        let text = "리뷰를 삭제 하시겠습니까?"
         let attributedString = NSMutableAttributedString(string: text)
 
-        let loginRange = (text as NSString).range(of: "로그인")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.primary500), range: loginRange)
+        let loginRange = (text as NSString).range(of: "삭제")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.sub500), range: loginRange)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
         $0.attributedText = attributedString
         $0.textAlignment = .center
@@ -33,11 +33,10 @@ final class ReviewLoginModalViewController: UIViewController {
         $0.textColor = UIColor.appColor(.neutral500)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
-        let text = "리뷰 작성은 회원만 사용 가능합니다.\n회원가입 또는 로그인 후 이용해주세요 :-)"
+        let text = "삭제한 리뷰는 되돌릴 수 없습니다."
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
         $0.attributedText = attributedString
-        $0.numberOfLines = 2
         $0.textAlignment = .center
     }
     
@@ -52,9 +51,9 @@ final class ReviewLoginModalViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    private let loginButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitle("로그인하기", for: .normal)
+    private let deleteButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.sub500)
+        $0.setTitle("삭제하기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.layer.cornerRadius = 4
@@ -72,7 +71,7 @@ final class ReviewLoginModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
     
@@ -80,19 +79,19 @@ final class ReviewLoginModalViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc private func loginButtonTapped() {
+    @objc private func deleteButtonTapped() {
         dismiss(animated: true, completion: nil)
-        loginButtonPublisher.send(())
+        deleteButtonPublisher.send(())
     }
 }
 
-extension ReviewLoginModalViewController {
+extension DeleteReviewModalViewController {
     
     private func setUpLayOuts() {
         [containerView].forEach {
             view.addSubview($0)
         }
-        [messageLabel, subMessageLabel, closeButton, loginButton].forEach {
+        [messageLabel, subMessageLabel, closeButton, deleteButton].forEach {
             containerView.addSubview($0)
         }
     }
@@ -102,7 +101,7 @@ extension ReviewLoginModalViewController {
             make.centerX.equalTo(view.snp.centerX)
             make.centerY.equalTo(view.snp.centerY)
             make.width.equalTo(301)
-            make.height.equalTo(201)
+            make.height.equalTo(179)
         }
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.top).offset(24)
@@ -118,7 +117,7 @@ extension ReviewLoginModalViewController {
             make.width.equalTo(114.5)
             make.height.equalTo(48)
         }
-        loginButton.snp.makeConstraints { make in
+        deleteButton.snp.makeConstraints { make in
             make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
             make.leading.equalTo(containerView.snp.centerX).offset(2)
             make.width.equalTo(114.5)
