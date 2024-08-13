@@ -14,10 +14,10 @@ struct ShopReview {
 
 struct Review {
     let nickName: String
-    let rating: Int
-    let content: String
-    let imageUrls: [String]
-    let menuNames: [String]
+    var rating: Int
+    var content: String
+    var imageUrls: [String]
+    var menuNames: [String]
     let createdAt: String
     let isMine: Bool
     var isModified: Bool

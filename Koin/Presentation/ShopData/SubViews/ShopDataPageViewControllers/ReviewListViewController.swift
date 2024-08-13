@@ -89,7 +89,7 @@ final class ReviewListViewController: UIViewController {
                     self?.fetchStandardPublisher.send((.latest, false))
                 } else {
                     if let reviewId = tuple.1 {
-                        self?.reviewListCollectionView.modifySuccess(reviewId)
+                        self?.reviewListCollectionView.modifySuccess(reviewId, tuple.2)
                     }
                 }
             }.store(in: &cancellables)
