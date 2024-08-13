@@ -8,12 +8,12 @@
 import Alamofire
 
 enum ShopAPI {
-    case fetchShopList
+    case fetchShopList(FetchShopListRequest)
     case fetchEventList
     case fetchShopCategoryList
-    case fetchShopData(FetchShopInfoRequest)
-    case fetchShopMenuList(FetchShopInfoRequest)
-    case fetchShopEventList(FetchShopInfoRequest)
+    case fetchShopData(FetchShopDataRequest)
+    case fetchShopMenuList(FetchShopDataRequest)
+    case fetchShopEventList(FetchShopDataRequest)
     
     case fetchReviewList(FetchShopReviewRequest)
     case fetchReview(Int, Int)
@@ -34,7 +34,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var path: String {
         switch self {
-        case .fetchShopList: return "/shops"
+        case .fetchShopList: return "/v2/shops"
         case .fetchEventList: return "/shops/events"
         case .fetchShopCategoryList: return "/shops/categories"
         case .fetchShopData(let request): return "/shops/\(request.shopId)"
@@ -81,9 +81,11 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
+            return try? request.toDictionary()
+        case .fetchShopList(let request):
             return try? request.toDictionary()
         case .fetchReviewList(let request):
             return [
@@ -101,9 +103,9 @@ extension ShopAPI: Router, URLRequestConvertible {
     }
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchReviewList:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList:
             return URLEncoding.default
-        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
+        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopList:
             return URLEncoding.queryString
         case .postReview, .modifyReview, .reportReview:
             return JSONEncoding.default  

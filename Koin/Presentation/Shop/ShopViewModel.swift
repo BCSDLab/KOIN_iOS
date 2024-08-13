@@ -67,7 +67,7 @@ final class ShopViewModel: ViewModelProtocol {
 extension ShopViewModel {
     
     private func getShopInfo(id: Int) {
-        fetchShopListUseCase.execute(id: id)
+        fetchShopListUseCase.execute(requestModel: FetchShopListRequest(sorter: .count, filter: [.delivery]))
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
