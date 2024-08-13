@@ -98,7 +98,7 @@ final class ReviewListViewController: UIViewController {
         nonReviewImageView.isHidden = !review.isEmpty
         reviewListCollectionView.isHidden = review.isEmpty
         if review.isEmpty {
-            viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 230)
+            viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 400)
         } else {
             viewControllerHeightPublisher.send(height + writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
         }
@@ -154,13 +154,23 @@ final class ReviewListViewController: UIViewController {
             let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
             
             let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, reviewId: parameter.0, shopId: parameter.1))
-            shopReviewViewController.navigationController?.title = "리뷰 수정하기"
+            shopReviewViewController.title = "리뷰 수정하기"
             self?.navigationController?.pushViewController(shopReviewViewController, animated: true)
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
             let viewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
             self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &cancellables)
+        
+        reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
+            guard let image = image else { return }
+            let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
+            let smallProportion: CGFloat = image.size.width / imageWidth
+            let imageHeight: CGFloat = image.size.height / smallProportion
+            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageHeight.isNaN ? 100 : imageHeight)
+            zoomedImageViewController.setImage(image)
+            self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
     }
     
@@ -187,7 +197,7 @@ extension ReviewListViewController {
         
         
         let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, shopId: viewModel.shopId))
-        shopReviewViewController.navigationController?.title = "리뷰 작성하기"
+        shopReviewViewController.title = "리뷰 작성하기"
         navigationController?.pushViewController(shopReviewViewController, animated: true)
     }
 }

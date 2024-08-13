@@ -16,6 +16,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     let modifyButtonPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let reportButtonPublisher = PassthroughSubject<Void, Never>()
+    let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
     private let dropDown = DropDown()
     var cancellables = Set<AnyCancellable>()
     
@@ -84,10 +85,18 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         configureView()
         configureDropDown()
         optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private func bind() {
+        reviewImageCollectionView.imageTapPublisher.sink { [weak self] image in
+            self?.imageTapPublisher.send(image)
+        }.store(in: &cancellables)
     }
     
     
