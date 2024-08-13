@@ -41,7 +41,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopData(ShopData)
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
-        case showShopReviewList([Review])
+        case showShopReviewList([Review], Int)
         case showShopReviewStatistics(StatisticsDTO)
     }
     
@@ -108,7 +108,7 @@ extension ShopDataViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showShopReviewList(response))
+            self?.outputSubject.send(.showShopReviewList(response, self?.shopId ?? 0))
         }.store(in: &subscriptions)
     }
     
@@ -118,7 +118,7 @@ extension ShopDataViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showShopReviewList(response.review))
+            self?.outputSubject.send(.showShopReviewList(response.review, self?.shopId ?? 0))
             self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
         }.store(in: &subscriptions)
     }
