@@ -8,8 +8,8 @@
 import Foundation
 
 struct FetchShopListRequest: Encodable {
-    let sorter: FetchShopSortType
-    let filter: [FetchShopFilterType]
+    var sorter: FetchShopSortType
+    var filter: [FetchShopFilterType]
 }
 
 enum FetchShopSortType: String, Encodable {

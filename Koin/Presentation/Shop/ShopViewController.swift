@@ -137,6 +137,8 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
                 self?.putImage(data: response)
             case let .updateEventShops(eventShops):
                 self?.updateEventShops(eventShops)
+            case let .updateSeletecButtonColor(standard):
+                self?.shopCollectionView.updateSeletecButtonColor(standard)
             }
         }.store(in: &subscriptions)
         
@@ -154,6 +156,10 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         
         eventShopCollectionView.scrollPublisher.sink { [weak self] index in
             self?.eventIndexLabel.text = index
+        }.store(in: &subscriptions)
+        
+        shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
+            self?.inputSubject.send(.changeSortStandard(standard))
         }.store(in: &subscriptions)
     }
 }
