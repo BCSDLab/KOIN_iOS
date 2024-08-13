@@ -60,7 +60,9 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         let indexPath = IndexPath(item: index, section: 0)
         performBatchUpdates({
             deleteItems(at: [indexPath])
-        }, completion: nil)
+        },  completion: { [weak self] _ in
+            self?.reloadData()
+        })
     }
     
     func modifySuccess(_ reviewId: Int, _ reviewItem: WriteReviewRequest) {
@@ -119,6 +121,8 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         cell.configure(review: reviewItem, backgroundColor: color)
         cell.deleteButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
+            print(reviewList.count)
+            print(indexPath.row)
             self.deleteButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
         }.store(in: &cell.cancellables)
         cell.modifyButtonPublisher.sink { [weak self] _ in
