@@ -11,7 +11,7 @@ import FirebaseAnalytics
 
 final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    private var shops: [ShopDTO] = []
+    private var shops: [Shop] = []
     weak var shopDelegate: CollectionViewDelegate?
     let cellTapPublisher = PassthroughSubject<Int, Never>()
     
@@ -36,7 +36,7 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         delegate = self
     }
     
-    func updateShop(_ shops: [ShopDTO]) {
+    func updateShop(_ shops: [Shop]) {
         self.shops = shops
         self.reloadData()
     }

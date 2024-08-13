@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopListUseCase {
-    func execute(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
+    func execute(requestModel: FetchShopListRequest) -> AnyPublisher<[Shop], Error>
 }
 
 final class DefaultFetchShopListUseCase: FetchShopListUseCase {
@@ -19,19 +19,12 @@ final class DefaultFetchShopListUseCase: FetchShopListUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error> {
+    func execute(requestModel: FetchShopListRequest) -> AnyPublisher<[Shop], Error> {
         return shopRepository.fetchShopList(requestModel: requestModel)
+            .map { dto in
+                return dto.toDomain() 
+            }
+            .eraseToAnyPublisher()
     }
-    
-//    private func filterShops(by selectedId: Int, in shopDTO: ShopsDTO) -> ShopsDTO {
-//        var updatedShopDTO = shopDTO
-//        
-//        if selectedId != 0 {
-//            updatedShopDTO.shops = updatedShopDTO.shops?.filter { shop in
-//                shop.categoryIds.contains(selectedId)
-//            }
-//        }
-//        return updatedShopDTO
-//    }
 }
 

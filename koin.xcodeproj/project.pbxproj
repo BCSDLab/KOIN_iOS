@@ -165,6 +165,7 @@
 		D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */; };
 		D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D992C6B97D200C4275F /* InsetLabel.swift */; };
 		D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */; };
+		D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9D2C6BE8B700C4275F /* Shop.swift */; };
 		D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */; };
 		D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0272BA608310081FD36 /* LandCollectionView.swift */; };
 		D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD02A2BA608310081FD36 /* HomeViewModel.swift */; };
@@ -527,6 +528,7 @@
 		D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		D27A5D992C6B97D200C4275F /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListRequest.swift; sourceTree = "<group>"; };
+		D27A5D9D2C6BE8B700C4275F /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = koin/Info.plist; sourceTree = "<group>"; };
 		D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0272BA608310081FD36 /* LandCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
@@ -1681,6 +1683,7 @@
 				D2CA2DCF2C1CAC550036F02C /* ShopData.swift */,
 				D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */,
 				D23944832C3C3ABC00048F45 /* ShopReview.swift */,
+				D27A5D9D2C6BE8B700C4275F /* Shop.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2312,6 +2315,7 @@
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
+				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				D239448C2C3C9D6D00048F45 /* ReviewListCollectionView.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,

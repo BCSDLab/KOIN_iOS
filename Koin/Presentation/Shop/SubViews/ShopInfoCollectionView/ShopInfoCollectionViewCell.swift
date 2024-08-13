@@ -89,7 +89,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(info: ShopDTO) {
+    func configure(info: Shop) {
         shopTitleLabel.text = info.name
         deliveryLabel.textColor = info.delivery ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
         cardLabel.textColor = info.payCard ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)

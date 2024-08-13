@@ -18,7 +18,7 @@ final class ShopViewModel: ViewModelProtocol {
     
     enum Output {
         case putImage(ShopCategoryDTO)
-        case changeFilteredShops([ShopDTO], Int)
+        case changeFilteredShops([Shop], Int)
         case updateEventShops([EventDTO])
     }
     
@@ -29,7 +29,7 @@ final class ShopViewModel: ViewModelProtocol {
     private let searchShopUseCase: SearchShopUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var subscriptions: Set<AnyCancellable> = []
-    private var shopDTO: ShopsDTO = ShopsDTO(count: 0, shops: [])
+    private var shopList: [Shop] = []
     private (set) var selectedId: Int {
         didSet {
             getShopInfo(id: selectedId)
@@ -74,8 +74,9 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.outputSubject.send(.changeFilteredShops(response.shops ?? [], self.selectedId))
-                self.shopDTO = response
+                
+                self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
+                self.shopList = response
             }).store(in: &subscriptions)
     }
     
@@ -103,8 +104,8 @@ extension ShopViewModel {
             }).store(in: &subscriptions)
     }
     private func searchShop(_ text: String) {
-        let filteredShops = searchShopUseCase.execute(text: text, shop: shopDTO)
-        outputSubject.send(.changeFilteredShops(filteredShops.shops ?? [], selectedId))
+        let filteredShops = searchShopUseCase.execute(text: text, shops: shopList, categoryId: selectedId)
+        outputSubject.send(.changeFilteredShops(filteredShops, selectedId))
         
        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearch, category: .click, value: selectedId)
     }
