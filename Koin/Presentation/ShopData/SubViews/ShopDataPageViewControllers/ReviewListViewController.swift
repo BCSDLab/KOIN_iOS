@@ -58,6 +58,11 @@ final class ReviewListViewController: UIViewController {
         return collectionView
     }()
     
+    private let nonReviewImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .nonReview)
+        $0.isHidden = true
+    }
+    
     private let reviewLoginModalViewController = ReviewLoginModalViewController().then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
@@ -86,11 +91,18 @@ final class ReviewListViewController: UIViewController {
     func setReviewList(_ review: [Review], _ shopId: Int) {
         reviewListCollectionView.setReviewList(review)
         viewModel.shopId = shopId
-        
+        let height = reviewListCollectionView.calculateDynamicHeight()
         reviewListCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(3000)
+            make.height.equalTo(height)
         }
-        viewControllerHeightPublisher.send(4000)
+        nonReviewImageView.isHidden = !review.isEmpty
+        reviewListCollectionView.isHidden = review.isEmpty
+        if review.isEmpty {
+            viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 230)
+        } else {
+            viewControllerHeightPublisher.send(height + writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
+        }
+        
     }
     
     func setReviewStatistics(statistics: StatisticsDTO) {
@@ -182,7 +194,7 @@ extension ReviewListViewController {
 
 extension ReviewListViewController {
     private func setUpLayOuts() {
-        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView].forEach {
+        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView].forEach {
             view.addSubview($0)
         }
     }
@@ -221,6 +233,12 @@ extension ReviewListViewController {
             $0.height.equalTo(1)
         }
         
+        nonReviewImageView.snp.makeConstraints {
+            $0.top.equalTo(scoreChartCollectionView.snp.bottom).offset(95)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.width.equalTo(244)
+            $0.height.equalTo(262)
+        }
     }
     
     private func configureView() {
