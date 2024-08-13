@@ -43,6 +43,18 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         reloadData()
     }
     
+    func disappearReview(_ reviewId: Int, shopId: Int) {
+        guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
+            return
+        }
+        reviewList.remove(at: index)
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        performBatchUpdates({
+            deleteItems(at: [indexPath])
+        }, completion: nil)
+    }
+
 }
 
 extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {

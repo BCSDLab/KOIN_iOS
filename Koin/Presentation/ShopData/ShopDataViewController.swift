@@ -220,6 +220,8 @@ final class ShopDataViewController: UIViewController {
                 self?.showToast(message: message, success: success)
             case let .updateReviewCount(count):
                 self?.categorySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
+            case let .disappearReview(reviewId, shopId):
+                self?.pageViewController.disappearReview(reviewId, shopId: shopId)
             }
         }.store(in: &subscriptions)
         
