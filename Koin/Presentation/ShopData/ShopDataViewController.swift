@@ -230,6 +230,8 @@ final class ShopDataViewController: UIViewController {
                 self?.pageViewController.setReviewList(shopReviewList, shopId)
             case let .showShopReviewStatistics(statistics):
                 self?.pageViewController.setReviewStatistic(statistics)
+            case let .showToast(message):
+                self?.showToast(message: message)
             }
         }.store(in: &subscriptions)
         
