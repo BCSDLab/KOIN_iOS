@@ -44,11 +44,11 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     }
     
     func setHeader(_ fetchStandard: ReviewSortType, _ isMine: Bool) {
-            guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ReviewListHeaderView else {
-                return
-            }
-            headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
+        guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ReviewListHeaderView else {
+            return
         }
+        headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
+    }
     
     func disappearReview(_ reviewId: Int, shopId: Int) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
@@ -62,24 +62,27 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         }, completion: nil)
     }
     
-    func modifySuccess(_ reviewId: Int) {
+    func modifySuccess(_ reviewId: Int, _ reviewItem: WriteReviewRequest) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId }) else { return }
-         
-         reviewList[index].isModified = true
-
-         let indexPath = IndexPath(item: index, section: 0)
-         performBatchUpdates({
-             reloadItems(at: [indexPath])
-         }, completion: nil)
+        
+        reviewList[index].isModified = true
+        reviewList[index].imageUrls = reviewItem.imageUrls
+        reviewList[index].content = reviewItem.content
+        reviewList[index].menuNames = reviewItem.menuNames
+        reviewList[index].rating = reviewItem.rating
+        let indexPath = IndexPath(item: index, section: 0)
+        performBatchUpdates({
+            reloadItems(at: [indexPath])
+        }, completion: nil)
     }
-
+    
 }
 
 extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-         return CGSize(width: collectionView.bounds.width, height: 64)
-     }
+        return CGSize(width: collectionView.bounds.width, height: 64)
+    }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
@@ -107,7 +110,7 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewListCollectionViewCell.identifier, for: indexPath) as? ReviewListCollectionViewCell else {
             return UICollectionViewCell()
         }
-     
+        
         let reviewItem = reviewList[indexPath.row]
         let color: UIColor = reviewList[indexPath.row].isMine ? UIColor.appColor(.primary500).withAlphaComponent(0.03) : .systemBackground
         cell.configure(review: reviewItem, backgroundColor: color)
