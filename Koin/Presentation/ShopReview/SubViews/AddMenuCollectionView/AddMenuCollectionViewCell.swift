@@ -39,11 +39,7 @@ final class AddMenuCollectionViewCell: UICollectionViewCell, UITextFieldDelegate
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         addMenuTextField.delegate = self
         
-        addMenuTextField.textPublisher()
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-            .sink { [weak self] text in
-                self?.textPublisher.send(text)
-            }.store(in: &cancellables)
+        addMenuTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -60,9 +56,10 @@ final class AddMenuCollectionViewCell: UICollectionViewCell, UITextFieldDelegate
         cancelButtonPublisher.send(())
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
         textPublisher.send(textField.text ?? "")
     }
+   
     func configure(text: String) {
         addMenuTextField.text = text
     }
