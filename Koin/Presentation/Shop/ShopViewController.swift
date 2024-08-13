@@ -220,7 +220,7 @@ extension ShopViewController {
         navigationController?.pushViewController(shopDataViewController, animated: true)
     }
     
-    private func updateFilteredShops(_ shops: [ShopDTO]) {
+    private func updateFilteredShops(_ shops: [Shop]) {
         shopCollectionView.updateShop(shops)
 
         shopCollectionView.snp.updateConstraints { make in
