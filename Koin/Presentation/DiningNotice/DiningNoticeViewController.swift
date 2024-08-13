@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class DiningNoticeViewController: UIViewController {
+final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -29,7 +29,7 @@ final class DiningNoticeViewController: UIViewController {
         button.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
         return button
     }()
-    
+
     private let diningGuideLabel: UILabel = {
         let label = UILabel()
         return label
@@ -112,16 +112,18 @@ final class DiningNoticeViewController: UIViewController {
         bind()
         inputSubject.send(.fetchCoopShopList)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
     // MARK: - Bind
@@ -164,7 +166,6 @@ extension DiningNoticeViewController {
 }
 
 extension DiningNoticeViewController {
-    
     private func setUpLayOuts() {
         [backButton, navigationTitle, updateDateLabel, diningGuideLabel, placeGuideLabel, placeTextLabel, phoneGuideLabel, phoneTextLabel, separateView, weekdayTimeLabel, weekdayTimeCollectionView, weekendTimeLabel, weekendTimeCollectionView].forEach {
             self.view.addSubview($0)

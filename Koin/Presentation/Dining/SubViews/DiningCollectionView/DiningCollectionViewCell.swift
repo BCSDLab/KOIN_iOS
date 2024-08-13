@@ -160,7 +160,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         shareButtonPublisher.send(())
     }
     
-    private func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
+    func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
         var configuration = UIButton.Configuration.plain()
         configuration.image = isLiked ? UIImage.appImage(asset: .heartFill) : UIImage.appImage(asset: .heart)
         var text = AttributedString(likeCount == 0 ? "좋아요" : "\(likeCount)")
@@ -175,7 +175,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(info: DiningItem) {
-        
         diningPlaceLabel.text = info.place.rawValue
         updateLikeButtonText(isLiked: info.isLiked, likeCount: info.likes)
         
@@ -221,10 +220,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
         menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
-        if let imageUrl = info.imageUrl {
-            menuImageView.loadImage(from: imageUrl)
-            menuImageView.contentMode = .scaleAspectFill
-        }
+        if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
             menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
             menuImageView.contentMode = .scaleToFill

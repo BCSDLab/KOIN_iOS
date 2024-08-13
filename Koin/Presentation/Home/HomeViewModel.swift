@@ -23,7 +23,7 @@ final class HomeViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-        case updateDining(DiningItem?, DiningType)
+        case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusDTO)
         case putImage(ShopCategoryDTO)
         case moveBusItem
@@ -106,7 +106,7 @@ extension HomeViewModel {
             }
         } receiveValue: { [weak self] response in
             let result = response.filter { $0.place == diningPlace }.first
-            self?.outputSubject.send(.updateDining(result, dateInfo.diningType))
+            self?.outputSubject.send(.updateDining(result, dateInfo.diningType, dateInfo.date.formatDateToYYMMDD() == Date().formatDateToYYMMDD()))
         }.store(in: &subscriptions)
     }
     
