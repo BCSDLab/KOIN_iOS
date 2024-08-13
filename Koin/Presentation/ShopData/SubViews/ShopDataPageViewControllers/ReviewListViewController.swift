@@ -17,8 +17,8 @@ final class ReviewListViewController: UIViewController {
     let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    // FIXME:  여기 페이지는 뷰모델이 없으므로 shopId는 프로퍼티로 가지고있다. 추후에 ShopDataViewModel의 역할을 여기로 옮겨오면 좋지 않을까 생각
-    private var shopId: Int = 0
+    private let viewModel = ReviewListViewModel()
+    private let inputSubject: PassthroughSubject<ReviewListViewModel.Input, Never> = .init()
     
     // MARK: - UI Components
     
@@ -57,6 +57,11 @@ final class ReviewListViewController: UIViewController {
         return collectionView
     }()
     
+    private let reviewLoginModalViewController = ReviewLoginModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +74,7 @@ final class ReviewListViewController: UIViewController {
     
     func setReviewList(_ review: [Review], _ shopId: Int) {
         reviewListCollectionView.setReviewList(review)
-        self.shopId = shopId
+        viewModel.shopId = shopId
         
         reviewListCollectionView.snp.updateConstraints { make in
             make.height.equalTo(3000)
@@ -84,6 +89,17 @@ final class ReviewListViewController: UIViewController {
     }
     
     private func bind() {
+        
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self = self else { return }
+            switch output {
+            case let .updateLoginStatus(isLogined):
+                if isLogined { self.navigateToWriteReview() }
+                else { self.present(self.reviewLoginModalViewController, animated: true, completion: nil) }
+            }
+        }.store(in: &cancellables)
+        
         reviewListCollectionView.myReviewButtonPublisher.sink { [weak self] isMine in
             self?.fetchStandardPublisher.send((nil, isMine))
         }.store(in: &cancellables)
@@ -94,6 +110,10 @@ final class ReviewListViewController: UIViewController {
         
         reviewListCollectionView.deleteButtonPublisher.sink { [weak self] parameter in
             self?.deleteReviewPublisher.send(parameter)
+        }.store(in: &cancellables)
+        
+        reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.navigateToLogin()
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
@@ -119,7 +139,16 @@ final class ReviewListViewController: UIViewController {
 extension ReviewListViewController {
     
     @objc private func writeReviewButtonTapped() {
+        inputSubject.send(.checkLogin)
+    }
     
+    private func navigateToLogin() {
+        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        loginViewController.title = "로그인"
+        navigationController?.pushViewController(loginViewController, animated: true)
+    }
+    
+    private func navigateToWriteReview() {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
         let modifyReviewUseCase = DefaultModifyReviewUseCase(shopRepository: shopRepository)
@@ -127,8 +156,7 @@ extension ReviewListViewController {
         let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
         
         
-        // FIXME: shopid는 임시값임
-        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, shopId: shopId))
+        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, shopId: viewModel.shopId))
         shopReviewViewController.navigationController?.title = "리뷰 작성하기"
         navigationController?.pushViewController(shopReviewViewController, animated: true)
     }

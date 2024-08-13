@@ -128,6 +128,7 @@
 		D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */; };
 		D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */; };
 		D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */; };
+		D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -486,6 +487,7 @@
 		D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Publisher.swift"; sourceTree = "<group>"; };
 		D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
 		D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLoginModalViewController.swift; sourceTree = "<group>"; };
+		D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -1059,6 +1061,7 @@
 				D23944622C3842E900048F45 /* MenuListViewController.swift */,
 				D23944642C38432100048F45 /* EventListViewController.swift */,
 				D23944782C3BD97500048F45 /* ReviewListViewController.swift */,
+				D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */,
 			);
 			path = ShopDataPageViewControllers;
 			sourceTree = "<group>";
@@ -2373,6 +2376,7 @@
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
+				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				83DD0D8D2C51010900278ABD /* BusInformationCollectionView.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,

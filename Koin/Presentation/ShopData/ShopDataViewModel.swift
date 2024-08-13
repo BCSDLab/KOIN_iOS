@@ -101,6 +101,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 삭제되었습니다.", true))
+            self?.updateReviewCount()
         }.store(in: &subscriptions)
 
     }
@@ -121,6 +122,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showShopReviewList(response, self?.shopId ?? 0))
+            self?.updateReviewCount()
         }.store(in: &subscriptions)
     }
     
@@ -132,6 +134,7 @@ extension ShopDataViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showShopReviewList(response.review, self?.shopId ?? 0))
             self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
+            self?.updateReviewCount()
         }.store(in: &subscriptions)
     }
     
