@@ -11,12 +11,8 @@ import UIKit
 final class AddMenuCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let menuItemCountPublisher = PassthroughSubject<Int, Never>()
-    private(set) var menuItem: [String] = [] {
-        didSet {
-            menuItemCountPublisher.send(menuItem.count)
-            reloadData()
-        }
-    }
+    private(set) var menuItem: [String] = []
+    
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -39,6 +35,8 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDataSource,
     
     func addMenuItem() {
         menuItem.append("")
+        menuItemCountPublisher.send(menuItem.count)
+        reloadData()
     }
     
 }
@@ -52,7 +50,10 @@ extension AddMenuCollectionView {
         cell.configure(text: menuItem[indexPath.row])
         
         cell.cancelButtonPublisher.sink { [weak self] in
-            self?.menuItem.remove(at: indexPath.row)
+            guard let self = self else { return }
+            self.menuItem.remove(at: indexPath.row)
+            self.menuItemCountPublisher.send(self.menuItem.count)
+            self.reloadData()
         }.store(in: &cell.cancellables)
         
         cell.textPublisher.sink { [weak self] text in

@@ -72,7 +72,10 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
         myReviewImageView.snp.removeConstraints()
         writerLabel.snp.removeConstraints()
-        //          reviewImageCollectionView.snp.removeConstraints()
+        orderedMenuNameStackView.arrangedSubviews.forEach { view in
+                orderedMenuNameStackView.removeArrangedSubview(view)
+                view.removeFromSuperview()
+            }
         orderedMenuNameStackView.snp.removeConstraints()
     }
     
