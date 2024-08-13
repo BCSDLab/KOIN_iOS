@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class ShopViewModel: ViewModelProtocol {
     
@@ -15,7 +16,8 @@ final class ShopViewModel: ViewModelProtocol {
         case searchTextChanged(String)
         case changeSortStandard(Any)
         case getShopInfo
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
     
     enum Output {
@@ -31,6 +33,7 @@ final class ShopViewModel: ViewModelProtocol {
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let searchShopUseCase: SearchShopUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
@@ -43,13 +46,14 @@ final class ShopViewModel: ViewModelProtocol {
             getShopInfo(id: selectedId)
         }
     }
-    
-    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, selectedId: Int) {
+
+    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.searchShopUseCase = searchShopUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.selectedId = selectedId
     }
     
@@ -67,8 +71,10 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeSortStandard(standard)
             case .getShopInfo:
                 self?.getShopInfo(id: self?.selectedId ?? 0)
-            case let .logEvent(label, category, value, currentPage, durationTime, eventLabelNeededDuration):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: eventLabelNeededDuration)
+            case let .logEvent(label, category, value, currentPage, durationType, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
+                self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             }
         }.store(in: &subscriptions)
         
@@ -146,22 +152,28 @@ extension ShopViewModel {
         else { selectedId = id }
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, durationTime: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if eventLabelNeededDuration == .shopClick {
-            if let currentPage = currentPage,
-               let durationTime = durationTime {
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId), currentPage: currentPage, durationTime: durationTime, eventLabelNeededDuration: .shopClick)
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if let currentPage = currentPage,
+           let durationType = durationType {
+            let previousPage = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
+            
+            if eventLabelNeededDuration == .shopClick {
+                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
             }
-        }
-        else if eventLabelNeededDuration == .shopCategories {
-            if let currentPage = currentPage,
-               let durationTime = durationTime {
-                let selectedOldShopName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
-                let selectedNewShopName = selectedOldShopName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: selectedOldShopName, currentPage: selectedNewShopName, durationTime: durationTime, eventLabelNeededDuration: .shopCategories)
+            
+            else if eventLabelNeededDuration == .shopCategories {
+                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+                let selectedNewShopName = previousPage == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
             }
         }
         else {
             logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
         }
-    }}
+    }
+    
+    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+}

@@ -17,7 +17,6 @@ final class ShopDataViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var isSwipedToPopView: Bool = false
     private var scrollDirection: ScrollLog = .scrollToDown
-    private var getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
     
     // MARK: - UI Components
     
@@ -192,29 +191,33 @@ final class ShopDataViewController: UIViewController {
     }
     
     @objc private func appWillResignActive() {
-        getUserScreenTimeUseCase.enterBackground(enterBackgroundTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
     }
     
     @objc private func appDidBecomeActive() {
-        getUserScreenTimeUseCase.backForeground(backForegroundTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         enablePopGestureRecognizer()
-        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCall)
+        self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         disablePopGestureRecognizer()
-        let durationTime = getUserScreenTimeUseCase.leaveVc(leaveVcTime: Date())
+        inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
         if self.isMovingFromParent {
             if isSwipedToPopView == false {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, durationTime, .shopDetailViewBack))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, .leaveVC, .shopDetailViewBack))
             }
             else {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, durationTime, .shopDetailViewBack))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, .leaveVC, .shopDetailViewBack))
             }
         }
     }
@@ -455,10 +458,10 @@ extension ShopDataViewController {
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-        let durationTime = getUserScreenTimeUseCase.endEvent(endEventTime: Date(), eventLabel: .shopCall)
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
         let shopTitle = shopTitleLabel.text ?? ""
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, durationTime, .shopCall))
-        getUserScreenTimeUseCase.beginEvent(beginEventTime: Date(), eventLabel: .shopCall)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, .endEvent, .shopCall))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
     private func showShopData(data: ShopData) {
@@ -507,14 +510,18 @@ extension ShopDataViewController {
         case categorySelectSegmentControl: stickySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         default: categorySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         }
+        let shopTitle = shopTitleLabel.text ?? ""
         switch sender.selectedSegmentIndex {
-        case 0: inputSubject.send(.fetchShopMenuList)
+        case 0: 
+            inputSubject.send(.fetchShopMenuList)
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .click, shopTitle))
         case 1: inputSubject.send(.fetchShopEventList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
         default: inputSubject.send(.fetchShopReviewList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewEvent, .click, shopTitle))
         }
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.underlineView.frame.origin.x = (sender.bounds.width / CGFloat(sender.numberOfSegments)) * CGFloat(sender.selectedSegmentIndex)
