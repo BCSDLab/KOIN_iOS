@@ -73,6 +73,13 @@ final class ReviewListViewController: UIViewController {
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private var shopReviewReportViewController: ShopReviewReportViewController? {
+        didSet {
+            shopReviewReportViewController?.reviewInfoPublisher.sink { [weak self] tuple in
+                self?.reviewListCollectionView.disappearReview(tuple.0, shopId: tuple.1)
+            }.store(in: &cancellables)
+        }
+    }
     
     // MARK: - Life Cycles
     override func viewDidLoad() {
@@ -163,8 +170,10 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            let viewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
+            if let viewController = self?.shopReviewReportViewController {
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
         }.store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
