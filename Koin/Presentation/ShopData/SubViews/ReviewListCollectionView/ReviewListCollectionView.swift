@@ -18,6 +18,7 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
     let modifyButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     let deleteButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     let reportButtonPublisher = PassthroughSubject<(Int, Int), Never>()
+    let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -92,7 +93,9 @@ extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
             guard let self = self else { return }
             self.reportButtonPublisher.send((reviewList[indexPath.row].reviewId, reviewList[indexPath.row].shopId))
         }.store(in: &cell.cancellables)
-        
+        cell.imageTapPublisher.sink { [weak self] image in
+            self?.imageTapPublisher.send(image)
+        }.store(in: &cell.cancellables)
         return cell
     }
     
