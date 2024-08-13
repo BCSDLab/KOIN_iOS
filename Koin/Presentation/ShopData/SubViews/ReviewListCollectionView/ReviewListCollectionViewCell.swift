@@ -70,8 +70,10 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
-        myReviewImageView.isHidden = true
-        reviewImageCollectionView.isHidden = false
+        myReviewImageView.snp.removeConstraints()
+        writerLabel.snp.removeConstraints()
+        //          reviewImageCollectionView.snp.removeConstraints()
+        orderedMenuNameStackView.snp.removeConstraints()
     }
     
     override init(frame: CGRect) {
@@ -95,12 +97,43 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         setUpOrderedMenuNames(list: review.menuNames)
         myReviewImageView.isHidden = !review.isMine
         reviewImageCollectionView.isHidden = review.imageUrls.isEmpty
-        if review.isMine { showMyReviewImageView() }
         optionButton.isSelected = review.isMine
-        if review.imageUrls.isEmpty { disappearImageCollectionView() }
         self.backgroundColor = backgroundColor
-        
+        showMyReviewImageView(review.isMine)
+        disappearImageCollectionView(review.imageUrls.isEmpty)
     }
+    
+    private func showMyReviewImageView(_ isMine: Bool) {
+        if isMine {
+            myReviewImageView.snp.remakeConstraints { make in
+                make.top.equalTo(self.snp.top).offset(12)
+                make.leading.equalTo(self.snp.leading).offset(24)
+                make.width.equalTo(97)
+                make.height.equalTo(25)
+            }
+            writerLabel.snp.remakeConstraints { make in
+                make.top.equalTo(myReviewImageView.snp.bottom).offset(5)
+                make.leading.equalTo(self.snp.leading).offset(24)
+            }
+        } else {
+            myReviewImageView.snp.removeConstraints()
+            writerLabel.snp.makeConstraints {
+                $0.top.equalTo(self.snp.top).offset(12)
+                $0.leading.equalTo(self.snp.leading).offset(24)
+            }
+        }
+    }
+    
+    // TODO: 텍스트가 비었따면ㅇ ㅓ떻게되는거지 ?
+    private func disappearImageCollectionView(_ isEmpty: Bool) {
+        orderedMenuNameStackView.snp.remakeConstraints { make in
+            make.top.equalTo(isEmpty ? reviewTextLabel.snp.bottom : reviewImageCollectionView.snp.bottom).offset(10)
+            make.leading.equalTo(self.snp.leading).offset(24)
+            make.height.equalTo(25)
+            make.bottom.equalTo(self.snp.bottom)
+        }
+    }
+    
     // TODO: 셀재사용떄문에 꼬인 로직 고치기
     @objc private func optionButtonTapped() {
         
@@ -145,30 +178,6 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
             }
         } else {
             reportButtonPublisher.send(())
-        }
-    }
-    
-    private func showMyReviewImageView() {
-        myReviewImageView.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(12)
-            make.leading.equalTo(self.snp.leading).offset(24)
-            make.width.equalTo(97)
-            make.height.equalTo(25)
-        }
-        
-        writerLabel.snp.remakeConstraints { make in
-            make.top.equalTo(myReviewImageView.snp.bottom).offset(5)
-            make.leading.equalTo(self.snp.leading).offset(24)
-        }
-    }
-    
-    // TODO: 텍스트가 비었따면ㅇ ㅓ떻게되는거지 ?
-    private func disappearImageCollectionView() {
-        orderedMenuNameStackView.snp.remakeConstraints { make in
-            make.top.equalTo(reviewTextLabel.snp.bottom).offset(10)
-            make.leading.equalTo(self.snp.leading).offset(24)
-            make.height.equalTo(25)
-            make.bottom.equalTo(self.snp.bottom)
         }
     }
     
