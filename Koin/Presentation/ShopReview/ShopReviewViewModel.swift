@@ -32,7 +32,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         case addImage(String)
         case showToast(String, Bool)
         case updateShopName(String)
-        case reviewWriteSuccess(Bool)
+        case reviewWriteSuccess(Bool, Int?)
     }
     
     init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, reviewId: Int? = nil, shopId: Int) {
@@ -106,7 +106,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("리뷰가 작성되었습니다.", true))
-            self?.outputSubject.send(.reviewWriteSuccess(true))
+            self?.outputSubject.send(.reviewWriteSuccess(true, self?.reviewId))
         }.store(in: &subscriptions)
     }
     
@@ -117,7 +117,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("리뷰가 수정되었습니다.", true))
-            self?.outputSubject.send(.reviewWriteSuccess(false))
+            self?.outputSubject.send(.reviewWriteSuccess(false, self?.reviewId))
         }.store(in: &subscriptions)
         
     }

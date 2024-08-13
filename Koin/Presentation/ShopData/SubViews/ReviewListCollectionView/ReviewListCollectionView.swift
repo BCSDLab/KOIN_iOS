@@ -61,6 +61,17 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
             deleteItems(at: [indexPath])
         }, completion: nil)
     }
+    
+    func modifySuccess(_ reviewId: Int) {
+        guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId }) else { return }
+         
+         reviewList[index].isModified = true
+
+         let indexPath = IndexPath(item: index, section: 0)
+         performBatchUpdates({
+             reloadItems(at: [indexPath])
+         }, completion: nil)
+    }
 
 }
 

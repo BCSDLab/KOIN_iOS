@@ -102,7 +102,11 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     
     func configure(review: Review, backgroundColor: UIColor) {
         writerLabel.text = review.nickName
-        writtenDayLabel.text = review.createdAt
+        if review.isModified {
+            writtenDayLabel.text = "\(review.createdAt) (수정됨)"
+        } else {
+            writtenDayLabel.text = review.createdAt
+        }
         reviewTextLabel.text = review.content
         scoreView.rating = Double(review.rating)
         reviewImageCollectionView.setReviewImageList(review.imageUrls)

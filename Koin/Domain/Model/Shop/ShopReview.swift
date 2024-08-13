@@ -20,7 +20,7 @@ struct Review {
     let menuNames: [String]
     let createdAt: String
     let isMine: Bool
-    let isModified: Bool
+    var isModified: Bool
     let shopId: Int
     let reviewId: Int
 }

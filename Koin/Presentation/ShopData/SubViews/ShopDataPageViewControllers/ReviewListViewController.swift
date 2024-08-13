@@ -83,9 +83,14 @@ final class ReviewListViewController: UIViewController {
     
     private var shopReviewViewController: ShopReviewViewController? {
         didSet {
-            shopReviewViewController?.writeCompletePublisher.sink { [weak self] isPost in
+            shopReviewViewController?.writeCompletePublisher.sink { [weak self] tuple in
+                let isPost = tuple.0
                 if isPost {
-                    self?.fetchStandardPublisher.send((.latest ,false))
+                    self?.fetchStandardPublisher.send((.latest, false))
+                } else {
+                    if let reviewId = tuple.1 {
+                        self?.reviewListCollectionView.modifySuccess(reviewId)
+                    }
                 }
             }.store(in: &cancellables)
         }
