@@ -73,9 +73,9 @@ final class ShopReviewViewModel: ViewModelProtocol {
     
     private func fetchShopReview() {
         guard let reviewId = reviewId else { return }
-        fetchShopReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { completion in
+        fetchShopReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.fillComponent(response))
@@ -83,9 +83,9 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     private func postReview(requestModel: WriteReviewRequest) {
-        postReviewUseCase.execute(requestModel: requestModel, shopId: shopId).sink { completion in
+        postReviewUseCase.execute(requestModel: requestModel, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("리뷰가 작성되었습니다.", true))
@@ -93,8 +93,10 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     private func modifyReview(requestModel: WriteReviewRequest, reviewId: Int) {
-        modifyReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { completion in
-            print(completion)
+        modifyReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToast(error.message, false))
+            }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("리뷰가 수정되었습니다.", true))
         }.store(in: &subscriptions)

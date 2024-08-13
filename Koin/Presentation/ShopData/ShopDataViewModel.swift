@@ -84,9 +84,9 @@ final class ShopDataViewModel: ViewModelProtocol {
 extension ShopDataViewModel {
     
     private func deleteReview(_ reviewId: Int, _ shopId: Int) {
-        deleteReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { completion in
+        deleteReviewUseCase.execute(reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 삭제되었습니다.", true))

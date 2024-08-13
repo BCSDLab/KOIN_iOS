@@ -52,9 +52,9 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
 extension ShopReviewReportViewModel {
    
     private func reportReview(_ requestModel: ReportReviewRequest) {
-        reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { completion in
+        reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 신고되었습니다.", true))

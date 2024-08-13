@@ -114,7 +114,9 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
             switch output {
             case let .showToast(message, success):
                 self?.showToast(message: message, success: success)
-                self?.navigationController?.popViewController(animated: true)
+                if success {
+                    self?.navigationController?.popViewController(animated: true)
+                }
             }
         }.store(in: &subscriptions)
         
