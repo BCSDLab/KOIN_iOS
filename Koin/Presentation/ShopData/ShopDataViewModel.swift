@@ -46,6 +46,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopReviewStatistics(StatisticsDTO)
         case showToast(String, Bool)
         case updateReviewCount(Int)
+        case disappearReview(Int, Int)
     }
     
     init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, shopId: Int) {
@@ -104,6 +105,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 삭제되었습니다.", true))
+            self?.outputSubject.send(.disappearReview(reviewId, shopId))
             self?.updateReviewCount()
         }.store(in: &subscriptions)
 

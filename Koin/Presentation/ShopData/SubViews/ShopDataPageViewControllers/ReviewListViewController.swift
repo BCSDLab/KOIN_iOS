@@ -111,6 +111,10 @@ final class ReviewListViewController: UIViewController {
         scoreChartCollectionView.setStatistics(statistics)
     }
     
+    func disappearReview(_ reviewId: Int, _ shopId: Int) {
+        reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
+    }
+    
     private func bind() {
         
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())

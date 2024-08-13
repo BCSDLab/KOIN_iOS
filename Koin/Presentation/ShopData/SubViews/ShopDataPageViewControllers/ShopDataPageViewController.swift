@@ -92,6 +92,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         reviewListViewController.setReviewStatistics(statistics: statistic)
     }
     
+    func disappearReview(_ reviewId: Int, shopId: Int) {
+        reviewListViewController.disappearReview(reviewId, shopId)
+    }
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
         let previousIndex = viewControllerIndex - 1
