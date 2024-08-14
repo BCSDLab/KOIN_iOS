@@ -277,8 +277,10 @@ extension ShopDataViewController: UIScrollViewDelegate {
         let segmentPosition = categorySelectSegmentControl.frame.origin.y
         stickyShopTitleLabel.isHidden = !(scrollViewContentOffsetY > labelPosition)
         stickySelectSegmentControl.isHidden = !(scrollViewContentOffsetY > segmentPosition)
-        stickyButtonStackView.isHidden = !(scrollViewContentOffsetY > 600)
-        emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
+        if categorySelectSegmentControl.selectedSegmentIndex == 0 {
+            stickyButtonStackView.isHidden = !(scrollViewContentOffsetY > 600)
+            emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
+        }
 
     }
     
@@ -475,7 +477,11 @@ extension ShopDataViewController {
         switch sender.selectedSegmentIndex {
         case 0: inputSubject.send(.fetchShopMenuList)
         case 1: inputSubject.send(.fetchShopEventList)
+            stickyButtonStackView.isHidden = true
+            emptyWhiteView.isHidden = true
         default: inputSubject.send(.fetchShopReviewList)
+            stickyButtonStackView.isHidden = true
+            emptyWhiteView.isHidden = true
         }
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.underlineView.frame.origin.x = (sender.bounds.width / CGFloat(sender.numberOfSegments)) * CGFloat(sender.selectedSegmentIndex)
