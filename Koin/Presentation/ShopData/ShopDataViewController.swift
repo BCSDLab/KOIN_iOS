@@ -148,6 +148,16 @@ final class ShopDataViewController: UIViewController {
         return view
     }()
     
+    private let stickyButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = UIColor.appColor(.neutral0)
+        stackView.axis = .horizontal
+        stackView.isHidden = true
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
     private let pageViewController = ShopDataPageViewController()
     
     // MARK: - Initialization
@@ -170,6 +180,7 @@ final class ShopDataViewController: UIViewController {
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
+        addButtonItems()
         scrollView.delegate = self
         categorySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         stickySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
@@ -205,11 +216,14 @@ final class ShopDataViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case let .showShopData(shopData):
                 self?.showShopData(data: shopData)
             case let .showShopMenuList(shopMenuList):
                 self?.pageViewController.setMenuCategories(shopMenuList)
+                self?.updateButtons(for: strongSelf.pageViewController.menuListViewController.buttonStackView, with: shopMenuList)
+                self?.updateButtons(for: strongSelf.stickyButtonStackView, with: shopMenuList)
             case let .showShopEventList(eventList):
                 self?.pageViewController.setEventList(eventList)
             case let .showShopReviewList(shopReviewList, shopId, fetchStandard, isMine):
@@ -251,42 +265,82 @@ final class ShopDataViewController: UIViewController {
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
         
-        //        menuListCollectionView.imageTapPublisher.sink { [weak self] image in
-        //            self?.zoomImage(image: image)
-        //        }.store(in: &subscriptions)
     }
 }
 
 
 extension ShopDataViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollViewContentOffsetY = scrollView.contentOffset.y
         
-        //        if scrollView.contentOffset.y <= 0 { return }
-        //        let titleOverScrolled = shopTitleLabel.frame.origin.y - 20 - scrollView.contentOffset.y > 0
-        //        let segmentOverScrolled = categorySelectSegmentControl.frame.origin.y - 60 - scrollView.contentOffset.y > 0
-        //        let stackViewOverScrolled = buttonStackView.frame.origin.y - 80 - scrollView.contentOffset.y > 0
-        //
-        //        var emptyViewHeight: CGFloat = 0
-        //        if stackViewOverScrolled { emptyViewHeight = 56 }
-        //        else if segmentOverScrolled { emptyViewHeight = 95 }
-        //        else { emptyViewHeight = 136 }
-        //        emptyWhiteView.snp.updateConstraints { make in
-        //            make.height.equalTo(emptyViewHeight)
-        //        }
-        //        emptyWhiteView.isHidden = titleOverScrolled
-        //        stickyShopTitleLabel.isHidden = titleOverScrolled
-        //        stickySelectSegmentControl.isHidden = segmentOverScrolled
-        //        stickyButtonStackView.isHidden = stackViewOverScrolled || menuListCollectionView.isHidden
-        //        let visibleRect = CGRect(origin: menuListCollectionView.contentOffset, size: menuListCollectionView.bounds.size)
-        //        guard let layoutAttributes = menuListCollectionView.collectionViewLayout.layoutAttributesForElements(in: visibleRect) else { return }
-        //        let adjustedOffsetY = scrollView.contentOffset.y - (menuListCollectionView.frame.minY - 110)
-        //        let topMostItem = layoutAttributes.filter { $0.frame.minY >= adjustedOffsetY }.min(by: { $0.frame.minY < $1.frame.minY })
-        //
-        //        buttonStackView.arrangedSubviews.compactMap { $0 as? UIButton }.forEach { button in
-        //            if button.tag == topMostItem?.indexPath.section {
-        //                changeCategoryButtonColor(button)
-        //            }
-        //        }
+        let labelPosition = shopTitleLabel.frame.origin.y
+        let segmentPosition = categorySelectSegmentControl.frame.origin.y
+        stickyShopTitleLabel.isHidden = !(scrollViewContentOffsetY > labelPosition)
+        stickySelectSegmentControl.isHidden = !(scrollViewContentOffsetY > segmentPosition)
+        stickyButtonStackView.isHidden = !(scrollViewContentOffsetY > 600)
+        emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
+
+    }
+    
+    private func addButtonItems() {
+        let categories = ["추천 메뉴", "메인 메뉴", "세트 메뉴", "사이드 메뉴"]
+        let widthSize: [CGFloat] = [73, 73, 73, 84]
+        
+        for (index, categoryTitle) in categories.enumerated() {
+            let button1 = UIButton(type: .system)
+            configureButton(button: button1, title: categoryTitle, width: widthSize[index])
+            stickyButtonStackView.addArrangedSubview(button1)
+            
+            let button2 = UIButton(type: .system)
+            configureButton(button: button2, title: categoryTitle, width: widthSize[index])
+            pageViewController.menuListViewController.buttonStackView.addArrangedSubview(button2)
+        }
+    }
+    private func configureButton(button: UIButton, title: String, width: CGFloat) {
+        button.setTitle(title, for: .normal)
+        button.layer.borderWidth = 1.0
+        button.clipsToBounds = true
+        button.isEnabled = false
+        button.layer.cornerRadius = 4
+        button.tintColor = .clear
+        button.tag = -1
+        button.layer.borderColor = UIColor.appColor(.neutral100).cgColor
+        button.setTitleColor(UIColor.appColor(.neutral400), for: .normal)
+        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 13)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: width).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    @objc func categoryButtonTapped(_ sender: UIButton) {
+        scrollToMenuSection(at: sender.tag)
+        changeCategoryButtonColor(sender)
+    }
+    
+    private func changeCategoryButtonColor(_ sender: UIButton) {
+        if !sender.isSelected {
+            sender.backgroundColor = UIColor.appColor(.primary500)
+            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+            sender.layer.borderWidth = 0
+            sender.isSelected = true
+        }
+        
+        [stickyButtonStackView, pageViewController.menuListViewController.buttonStackView].forEach { stackView in
+            stackView.arrangedSubviews.compactMap { $0 as? UIButton }.forEach { button in
+                if button.titleLabel?.text == sender.titleLabel?.text && button != sender {
+                    button.backgroundColor = UIColor.appColor(.primary500)
+                    button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+                    button.layer.borderWidth = 0
+                    button.isSelected = true
+                } else if button != sender {
+                    button.backgroundColor = .systemBackground
+                    button.setTitleColor(button.tag == -1 ? UIColor.appColor(.neutral400) : UIColor.appColor(.neutral500), for: .normal)
+                    button.layer.borderWidth = 1.0
+                    button.isSelected = false
+                }
+            }
+        }
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -414,6 +468,10 @@ extension ShopDataViewController {
         
         pageViewController.switchToPage(index: sender.selectedSegmentIndex)
         
+        switch sender {
+        case categorySelectSegmentControl: stickySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
+        default: categorySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
+        }
         switch sender.selectedSegmentIndex {
         case 0: inputSubject.send(.fetchShopMenuList)
         case 1: inputSubject.send(.fetchShopEventList)
@@ -426,22 +484,24 @@ extension ShopDataViewController {
     }
     
     
-    //    private func scrollToMenuSection(at section: Int) {
-    //        let indexPath = IndexPath(row: 0, section: section)
-    //        guard let attributes = menuListCollectionView.layoutAttributesForItem(at: indexPath) else { return }
-    //
-    //        let scrollViewSpacing: CGFloat = stickyButtonStackView.isHidden ? 150 : 140
-    //
-    //        let itemOffset = attributes.frame.origin.y + menuListCollectionView.frame.origin.y - scrollView.contentInset.top - buttonStackView.frame.height - scrollViewSpacing
-    //        if #available(iOS 17.0, *) {
-    //            UIView.animate {
-    //                scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
-    //            }
-    //        } else {
-    //            scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
-    //        }
-    //
-    //    }
+        private func scrollToMenuSection(at section: Int) {
+            let indexPath = IndexPath(row: 0, section: section)
+            let collectionView = pageViewController.menuListViewController.menuListCollectionView
+            
+            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return }
+    
+            let scrollViewSpacing: CGFloat = stickyButtonStackView.isHidden ? 150 : 140
+    
+            let itemOffset = attributes.frame.origin.y + collectionView.frame.origin.y - scrollView.contentInset.top - pageViewController.menuListViewController.buttonStackView.frame.height - scrollViewSpacing + 650
+            if #available(iOS 17.0, *) {
+                UIView.animate {
+                    scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
+                }
+            } else {
+                scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
+            }
+    
+        }
     //
     
 }
@@ -457,7 +517,7 @@ extension ShopDataViewController {
         [menuTitleImageView, shopTitleLabel, phoneGuideLabel, timeGuideLabel, addressGuideLabel, etcGuideLabel, deliveryGuideLabel, deliveryPossibilityLabel, cardPossibilityLabel, bankPossibilityLabel, lastUpdateDayLabel, grayView, menuImageCollectionView, categorySelectSegmentControl, pageViewController.view].forEach {
             scrollView.addSubview($0)
         }
-        [emptyWhiteView, stickyShopTitleLabel, stickySelectSegmentControl].forEach { component in
+        [emptyWhiteView, stickyShopTitleLabel, stickySelectSegmentControl, stickyButtonStackView].forEach { component in
             view.addSubview(component)
         }
         categorySelectSegmentControl.addSubview(underlineView)
@@ -465,11 +525,6 @@ extension ShopDataViewController {
     }
     
     private func setUpConstraints() {
-        emptyWhiteView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(72)
-        }
         
         stickyShopTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -482,6 +537,18 @@ extension ShopDataViewController {
             make.top.equalTo(stickyShopTitleLabel.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(39)
+        }
+        
+        stickyButtonStackView.snp.makeConstraints { make in
+            make.top.equalTo(stickySelectSegmentControl.snp.bottom).offset(9)
+            make.leading.equalTo(view.snp.leading).offset(16)
+            make.trailing.equalTo(view.snp.trailing).offset(-16)
+            make.height.equalTo(32)
+        }
+        emptyWhiteView.snp.makeConstraints { make in
+            make.top.equalTo(stickySelectSegmentControl.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(50)
         }
         
         scrollView.snp.makeConstraints { make in
