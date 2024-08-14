@@ -113,18 +113,7 @@ final class ReviewListViewController: UIViewController {
     func setReviewList(_ review: [Review], _ shopId: Int, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
         reviewListCollectionView.setReviewList(review)
         viewModel.shopId = shopId
-        let height = reviewListCollectionView.calculateDynamicHeight()
-        reviewListCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(height)
-        }
-        nonReviewImageView.isHidden = !review.isEmpty
-     // ???: 이거 숨기는게 맞긴한데 이거 숨기면 플로우가 어색하다. 회의 때 말해보기
-      //  reviewListCollectionView.isHidden = review.isEmpty
-        if review.isEmpty {
-            viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 400)
-        } else {
-            viewControllerHeightPublisher.send(height + writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
-        }
+        changeCollectionViewHeight(reviewCount: review.count)
         reviewListCollectionView.setHeader(fetchStandard, isMine)
     }
     
@@ -136,6 +125,21 @@ final class ReviewListViewController: UIViewController {
     
     func disappearReview(_ reviewId: Int, _ shopId: Int) {
         reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
+    }
+    
+    private func changeCollectionViewHeight(reviewCount: Int) {
+        let height = reviewListCollectionView.calculateDynamicHeight()
+        reviewListCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+        nonReviewImageView.isHidden = reviewCount != 0
+     // ???: 이거 숨기는게 맞긴한데 이거 숨기면 플로우가 어색하다. 회의 때 말해보기
+      //  reviewListCollectionView.isHidden = review.isEmpty
+        if reviewCount == 0 {
+            viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 400)
+        } else {
+            viewControllerHeightPublisher.send(height + writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
+        }
     }
     
     private func bind() {
@@ -188,14 +192,8 @@ final class ReviewListViewController: UIViewController {
             }
         }.store(in: &cancellables)
         
-        reviewListCollectionView.heightChangePublisher.sink { [weak self] in
-            //TODO: 이거 저깄는 다른 함수랑 통합해야 삭제했을때도 이미지 빈거로 나오는 등 예외 계산할수있을듯
-            guard let self = self else { return }
-            let height = self.reviewListCollectionView.calculateDynamicHeight()
-            reviewListCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(height)
-            }
-            self.viewControllerHeightPublisher.send(height + self.writeReviewButton.frame.height + scoreChartCollectionView.frame.height + 50)
+        reviewListCollectionView.heightChangePublisher.sink { [weak self] count in
+            self?.changeCollectionViewHeight(reviewCount: count)
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
