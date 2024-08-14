@@ -19,7 +19,13 @@ final class DefaultSearchShopUseCase: SearchShopUseCase {
     }
     
     func execute(text: String, shops: [Shop], categoryId: Int) -> [Shop] {
-        if text.isEmpty { return shops.filter{ $0.categoryIds.contains(categoryId)}  }
+        if text.isEmpty {
+            if categoryId != 0 {
+                return shops.filter{ $0.categoryIds.contains(categoryId)}
+            } else {
+                return shops
+            }
+        }
         return shops.filter { $0.name.contains(upperText(text)) }
     }
     
