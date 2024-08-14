@@ -15,6 +15,7 @@ final class ShopViewModel: ViewModelProtocol {
         case searchTextChanged(String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case changeSortStandard(Any)
+        case getShopInfo
     }
     
     enum Output {
@@ -66,6 +67,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case let .changeSortStandard(standard):
                 self?.changeSortStandard(standard)
+            case .getShopInfo:
+                self?.getShopInfo(id: self?.selectedId ?? 0)
             }
         }.store(in: &subscriptions)
         

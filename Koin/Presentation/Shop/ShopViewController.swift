@@ -122,6 +122,7 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         eventShopCollectionView.startAutoScroll()
+        inputSubject.send(.getShopInfo)
     }
     
     // MARK: - Bind
