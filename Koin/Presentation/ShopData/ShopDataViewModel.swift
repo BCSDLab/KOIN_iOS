@@ -100,6 +100,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateReviewCount(response.review.count))
+            self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
         }.store(in: &subscriptions)
     }
     
