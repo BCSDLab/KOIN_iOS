@@ -235,6 +235,7 @@ extension ShopReviewViewController {
         totalScoreView.rating = Double(response.rating)
         imageUploadCollectionView.updateImageUrls(response.imageUrls)
         reviewTextView.text = response.content
+        addMenuCollectionView.setMenuItem(item: response.menuNames)
     }
     
     @objc private func uploadImageButtonTapped() {

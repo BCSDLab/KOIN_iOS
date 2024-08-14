@@ -39,6 +39,12 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDataSource,
         reloadData()
     }
     
+    func setMenuItem(item: [String]) {
+        menuItem = item
+        menuItemCountPublisher.send(menuItem.count)
+        reloadData()
+    }
+    
 }
 
 extension AddMenuCollectionView {
