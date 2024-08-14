@@ -18,14 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         
-//        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-//        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-//        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-//        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-//        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-//        let dateProvider = DefaultDateProvider()
-//        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, dateProvder: dateProvider))
-        let mainViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel())
+        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+         let shopRepository = DefaultShopRepository(service: DefaultShopService())
+         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+         let dateProvider = DefaultDateProvider()
+         let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, dateProvder: dateProvider))
         let navigationController = CustomNavigationController(rootViewController: mainViewController)
         window.rootViewController = navigationController
         self.window = window
