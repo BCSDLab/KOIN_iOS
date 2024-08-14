@@ -15,10 +15,6 @@ final class DefaultNotiRepository: NotiRepository {
         self.service = service
     }
     
-    func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
-        service.sendDeviceToken()
-    }
-    
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.changeNoti(method: method, requestModel: requestModel)
     }
