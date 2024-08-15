@@ -53,7 +53,7 @@ extension LoginViewModel {
             KeyChainWorker.shared.create(key: .access, token: response.token)
             KeyChainWorker.shared.create(key: .refresh, token: response.refreshToken)
             self?.outputSubject.send(.loginSuccess)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인완료")
         }.store(in: &subscriptions)
     }
     
