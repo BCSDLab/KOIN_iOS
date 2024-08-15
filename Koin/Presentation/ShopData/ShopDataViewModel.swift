@@ -116,10 +116,15 @@ extension ShopDataViewModel {
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if eventLabelNeededDuration != nil {
+        if eventLabelNeededDuration == .shopCall {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+        }
+        else if eventLabelNeededDuration == .shopDetailViewBack {
+            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId ?? 0)
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: categoryName, durationTime: "\(durationTime)")
         }
         else {
             logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
