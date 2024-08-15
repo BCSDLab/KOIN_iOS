@@ -163,12 +163,12 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
         
         categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
-            self?.inputSubject.send(.changeCategory(categoryId))
             let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, .endEvent, .shopCategories))
             self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self?.searchTextField.text = ""
+            self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId in
