@@ -273,7 +273,7 @@ extension ServiceSelectViewController {
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburgerShop, .click, "주변상점"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
     @objc func busSelectButtonTapped() {
@@ -321,6 +321,7 @@ extension ServiceSelectViewController {
         let viewModel = LandViewModel(fetchLandListUseCase: fetchLandListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let landViewController = LandViewController(viewModel: viewModel)
         landViewController.title = "복덕방"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "복덕방"))
         navigationController?.pushViewController(landViewController, animated: true)
     }
     
