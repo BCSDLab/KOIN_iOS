@@ -346,7 +346,7 @@ extension ServiceSelectViewController {
             let myPageViewController = MyPageViewController(viewModel: MyPageViewModel(fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, modifyUseCase: modifyUseCase, revokeUseCase: revokeUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase))
             myPageViewController.title = "내 정보"
             navigationController?.pushViewController(myPageViewController, animated: true)
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정"))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "내정보"))
         } else {
             showLoginAlert()
         }
