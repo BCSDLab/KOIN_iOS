@@ -52,12 +52,12 @@ final class KakaoShareService: ShareService {
         if let imageUrlString = shareModel.imageUrl, let imageUrl = URL(string: imageUrlString) {
             content = Content(
                 imageUrl: imageUrl,
-                description: " ",
+                description: "식단 메뉴가 공유되었습니다.",
                 link: link
             )
         } else {
             content = Content(
-                description: " ",
+                description: "식단 메뉴가 공유되었습니다.",
                 link: link
             )
         }
