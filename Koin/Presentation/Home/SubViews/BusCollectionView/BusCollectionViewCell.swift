@@ -11,7 +11,7 @@ import UIKit
 final class BusCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
-    var buttonTappedAction: (([String]) -> Void)?
+    var exchangeAreaButtonTappedAction: (() -> Void)?
     var redirectBtnTappedAction: ((Bool) -> Void)?
     var cancellables = Set<AnyCancellable>()
     // MARK: - UI Components
@@ -47,7 +47,6 @@ final class BusCollectionViewCell: UICollectionViewCell {
     
     private let startAreaLabel: UILabel = {
         let label = UILabel()
-        label.text = "한기대"
         label.font = UIFont.appFont(.pretendardRegular, size: 12)
         label.textAlignment = .center
         return label
@@ -61,13 +60,12 @@ final class BusCollectionViewCell: UICollectionViewCell {
     
     private let endAreaLabel: UILabel = {
         let label = UILabel()
-        label.text = "야우리"
         label.font = UIFont.appFont(.pretendardRegular, size: 12)
         label.textAlignment = .center
         return label
     }()
     
-    let redirectedLabel: UILabel = {
+    private let redirectedLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.appFont(.pretendardMedium, size: 12)
         label.textColor = UIColor.appColor(.neutral500)
@@ -75,7 +73,7 @@ final class BusCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let arrowImage: UIImageView = {
+    private let arrowImage: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage.appImage(symbol: .chevronRight)
         imageView.image = image
@@ -83,7 +81,7 @@ final class BusCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    let redirectedButton: UIView = {
+    private let redirectedButton: UIView = {
         let view = UIView()
         view.backgroundColor = .appColor(.neutral100)
         view.layer.cornerRadius = 8
@@ -96,7 +94,7 @@ final class BusCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        exchangeAreaButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        exchangeAreaButton.addTarget(self, action: #selector(exchangeAreaButtonButtonTapped), for: .touchUpInside)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(redirectBtnTapped))
         self.redirectedButton.addGestureRecognizer(tapGesture)
     }
@@ -108,98 +106,30 @@ final class BusCollectionViewCell: UICollectionViewCell {
     // MARK: - Life Cycles
     override func prepareForReuse() {
         super.prepareForReuse()
-        [busLabel, timeLabel, startTimeLabel].forEach { label in
-            label.text = ""
-        }
-        if startAreaLabel.text == "야우리" {
-            let tempText = startAreaLabel.text
-            startAreaLabel.text = endAreaLabel.text
-            endAreaLabel.text = tempText
-        }
+
     }
 }
 
 extension BusCollectionViewCell {
     
-    func configure(busType: BusType, redirectedText: String, colorAsset: SceneColorAsset) {
-        busLabel.text = busType.koreanDescription
-        redirectedLabel.text = redirectedText
-        self.contentView.backgroundColor = .appColor(colorAsset)
-    }
-        
-    func getBusEnumType(busType: BusType) -> BusType {
-        return busType
+    func configure(busInfo: BusInformation) {
+        busLabel.text = busInfo.busType.koreanDescription
+        redirectedLabel.text = busInfo.redirectedText
+        startAreaLabel.text = busInfo.startBusArea.koreanDescription
+        endAreaLabel.text = busInfo.endBusArea.koreanDescription
+        timeLabel.text = busInfo.remainTime
+        startTimeLabel.text = busInfo.departedTime
+        self.contentView.backgroundColor = .appColor(busInfo.color)
     }
     
-    // TODO: - 이것들 전부 별로다... 나중에 enum을 통한 rawValue로 바꿔야함..
-    func getBusType() -> [String] {
-        let from: String
-        let to: String
-        let type: String
-        switch busLabel.text {
-        case "학교셔틀": type = "shuttle"
-        case "대성고속": type = "express"
-        default: type = "city"
-        }
-        switch startAreaLabel.text {
-        case "한기대":
-            from = "koreatech"
-            to = "terminal"
-        default:
-            from = "terminal"
-            to = "koreatech"
-        }
-        return [from, to, type, busLabel.text ?? ""]
-    }
-    @objc func buttonTapped() {
-        let tempText = startAreaLabel.text
-        startAreaLabel.text = endAreaLabel.text
-        endAreaLabel.text = tempText
-        buttonTappedAction?(getBusType())
+    @objc func exchangeAreaButtonButtonTapped() {
+        exchangeAreaButtonTappedAction?()
     }
     
     @objc func redirectBtnTapped() {
         redirectBtnTappedAction?(true)
     }
     
-    func updateText(data: BusDTO) {
-        timeLabel.text = ""
-        startTimeLabel.text = ""
-        if let remainTime = data.nowBus?.remainTime {
-            updateTimeLabel(time: remainTime)
-            calculateAndDisplayDepartureTime(remainTime: remainTime)
-        } else {
-            timeLabel.text = "운행정보없음"
-        }
-    }
-    
-    private func calculateAndDisplayDepartureTime(remainTime: Int) {
-    
-        let remainTimeInMinutes = Double(remainTime) / 60.0
-        let roundedMinutes = ceil(remainTimeInMinutes)
-        let roundedRemainTime = Int(roundedMinutes * 60.0)
-        let currentTime = Date()
-        let departureTime = currentTime.addingTimeInterval(TimeInterval(roundedRemainTime))
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH시 mm분"
-        let departureTimeString = dateFormatter.string(from: departureTime)
-        
-        startTimeLabel.text = "\(departureTimeString)에 출발"
-    }
-    
-    private func updateTimeLabel(time: Int) {
-   
-        let hours = time / 3600
-        let minutes = (time % 3600) / 60
-        let timeString: String
-        if hours > 0 {
-            timeString = "\(hours)시간 \(minutes)분 전"
-        } else {
-            timeString = "\(minutes)분 전"
-        }
-        timeLabel.text = timeString
-    }
 }
 
 extension BusCollectionViewCell {

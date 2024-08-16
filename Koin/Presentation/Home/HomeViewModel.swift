@@ -15,7 +15,7 @@ final class HomeViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case categorySelected(DiningPlace)
-        case getBusInfo(String, String, String)
+        case getBusInfo(BusPlace, BusPlace, BusType)
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
@@ -24,7 +24,7 @@ final class HomeViewModel: ViewModelProtocol {
     
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
-        case updateBus(BusDTO)
+        case updateBus(BusCardInformation)
         case putImage(ShopCategoryDTO)
         case moveBusItem
     }
@@ -36,15 +36,17 @@ final class HomeViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let dateProvider: DateProvider
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
+    private let fetchBusInformationListUseCase: FetchBusInformationListUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
     // MARK: - Initialization
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, dateProvder: DateProvider) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
+        self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
         self.dateProvider = dateProvder
     }
     
@@ -52,7 +54,7 @@ final class HomeViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad:
-                self?.getBusInformation("koreatech", "terminal", "shuttle")
+                self?.getBusInformation(.koreatech, .terminal, .shuttleBus)
                 self?.getShopCategory()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
@@ -71,35 +73,29 @@ final class HomeViewModel: ViewModelProtocol {
 
 extension HomeViewModel {
     // TODO: 아직 버스 리팩토링이 완료되지 않았으므로 여기서 Alamofire 호출.
-    private func getBusInformation(_ from: String, _ to: String, _ type: String) {
-        let url = "\(Bundle.main.baseUrl)/bus"
-        let parameters: [String: String] = [
-            "bus_type": type,
-            "depart": from,
-            "arrival": to
-        ]
+    private func getBusInformation(_ from: BusPlace, _ to: BusPlace, _ type: BusType) {
         
-        AF.request(url, method: .get, parameters: parameters, encoder: URLEncodedFormParameterEncoder.default)
-            .validate()
-            .responseDecodable(of: BusDTO.self) { [weak self] response in
-                guard let self = self else { return }
-                switch response.result {
-                case .success(let busDTO):
-                    self.outputSubject.send(.updateBus(busDTO))
-                    if !self.moved {
-                        outputSubject.send(.moveBusItem)
-                        self.moved = true
-                    }
-                case .failure(let error):
-                    print(error)
-                }
+        fetchBusInformationListUseCase.execute(departedPlace: from, arrivedPlace: to).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            if let filteredResponse = response.filter({ $0.busTitle == type }).first {
+                if !self.moved {
+                    outputSubject.send(.moveBusItem)
+                    self.moved = true
+                }
+                self.outputSubject.send(.updateBus(filteredResponse))
+            }
+        }.store(in: &subscriptions)
+        
     }
     
     private func getDiningInformation(diningPlace: DiningPlace = .cornerA) {
         
         let dateInfo = dateProvider.execute(date: Date())
-
+        
         fetchDiningListUseCase.execute(diningInfo: dateInfo).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")

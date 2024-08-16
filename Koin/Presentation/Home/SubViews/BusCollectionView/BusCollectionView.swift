@@ -21,10 +21,14 @@ final class BusCollectionView: UICollectionView, UICollectionViewDataSource, UIC
     var departure: Int?
     var arrival: Int?
     var busTypePublisher = PassthroughSubject<BusType, Never>()
-    let busRequestPublisher = PassthroughSubject<[String], Never>()
+    let busRequestPublisher = PassthroughSubject<(BusPlace, BusPlace, BusType), Never>()
     let scrollPublisheer = PassthroughSubject<String, Never>()
     var subscriptions = Set<AnyCancellable>()
-    private var busItems: [BusInformation] = [.init(busType: .cityBus, redirectedText: "시간표 보러가기", color: .success600), .init(busType: .shuttleBus, redirectedText: "유니버스 보러가기", color: .sub500), .init(busType: .expressBus, redirectedText: "시간표 보러가기", color: .bus2)]
+    private(set) var busItems: [BusInformation] = [
+        .init(busType: .cityBus, startBusArea: .koreatech, endBusArea: .terminal, redirectedText: "시간표 보러가기", color: .success600, remainTime: "", departedTime: ""),
+        .init(busType: .shuttleBus, startBusArea: .koreatech, endBusArea: .terminal, redirectedText: "유니버스 보러가기", color: .sub500, remainTime: "", departedTime: "")
+        , .init(busType: .expressBus, startBusArea: .koreatech, endBusArea: .terminal,  redirectedText: "시간표 보러가기", color: .bus2, remainTime: "", departedTime: "")
+    ]
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -50,12 +54,12 @@ final class BusCollectionView: UICollectionView, UICollectionViewDataSource, UIC
 
 extension BusCollectionView: UICollectionViewDelegateFlowLayout {
     
-    func updateText(data: BusDTO) {
+    func updateText(data: BusCardInformation) {
         guard let centerIndexPath = centerCellIndex, let centerCell = cellForItem(at: centerIndexPath) as? BusCollectionViewCell else {
             return
         }
-        centerCell.updateText(data: data)
         
+        centerCell.configure(busInfo: .init(busType: data.busTitle, startBusArea: data.departedPlace, endBusArea: data.arrivedPlace, redirectedText: busItems[centerIndexPath.row].redirectedText, color: busItems[centerIndexPath.row].color, remainTime: data.remainTime, departedTime: data.departedTime))
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -64,7 +68,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
         if let newCenterCellIndex = self.indexPathForItem(at: center), newCenterCellIndex != centerCellIndex {
             centerCellIndex = newCenterCellIndex
             UIView.performWithoutAnimation {
-                self.reloadItems(at: [newCenterCellIndex])
+                reloadItems(at: [newCenterCellIndex])
             }
         }
     }
@@ -88,7 +92,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
             scrollPublisheer.send("\(busItems[departure ?? 0].busType.rawValue)>\(busItems[arrival ?? 0].busType.rawValue)")
         }
     }
-
+    
     private func adjustScrollPosition() {
         if let centerIndexPath = self.centerCellIndex {
             let adjustedIndex = (centerIndexPath.row % 3) + 6
@@ -98,7 +102,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard let layout = self.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-
+        
         let cellWidth = layout.itemSize.width
         let cellSpacing = layout.minimumLineSpacing
         let adjustedCellWidth = cellWidth - 10
@@ -108,21 +112,20 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
         let rawIndex = (proposedContentOffset.x + offsetAdjustment + cellSpacing / 2) / (adjustedCellWidth + cellSpacing)
         let index = round(rawIndex)
         let adjustedIndex = max(0, min(CGFloat(busItems.count - 1), index)) // 범위 보정
-
+        
         let newOffsetX = adjustedIndex * (adjustedCellWidth + cellSpacing) - scrollView.bounds.width / 2 + cellWidth / 2 + offsetAdjustment
-
+        
         targetContentOffset.pointee.x = newOffsetX
     }
-
-
+    
+    
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let visibleRect = CGRect(origin: self.contentOffset, size: self.bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         if let visibleIndexPath = self.indexPathForItem(at: visiblePoint) {
-            if let cell = cellForItem(at: visibleIndexPath) as? BusCollectionViewCell {
-                let data = cell.getBusType()
-                busRequestPublisher.send(data)
+            if cellForItem(at: visibleIndexPath) is BusCollectionViewCell {
+                busRequestPublisher.send((busItems[visibleIndexPath.row].startBusArea, busItems[visibleIndexPath.row].endBusArea, busItems[visibleIndexPath.row].busType))
             }
         }
         adjustScrollPosition()
@@ -136,15 +139,20 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusCollectionViewCell.identifier, for: indexPath) as? BusCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.buttonTappedAction = { [weak self] info in
-            self?.busRequestPublisher.send(info)
+        cell.exchangeAreaButtonTappedAction = { [weak self] in
+            guard let self = self else { return }
+            let temp = self.busItems[indexPath.row].startBusArea
+            self.busItems[indexPath.row].startBusArea = self.busItems[indexPath.row].endBusArea
+            self.busItems[indexPath.row].endBusArea = temp
+            
+            self.busRequestPublisher.send((self.busItems[indexPath.row].startBusArea, self.busItems[indexPath.row].endBusArea, self.busItems[indexPath.row].busType))
         }
         
         cell.redirectBtnTappedAction = { [weak self] _ in
             self?.busTypePublisher.send(self?.busItems[indexPath.row].busType ?? .shuttleBus)
         }
         
-        cell.configure(busType: busItems[indexPath.row].busType, redirectedText: busItems[indexPath.row].redirectedText, colorAsset: busItems[indexPath.row].color)
+        cell.configure(busInfo: busItems[indexPath.row])
         return cell
     }
     
