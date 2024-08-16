@@ -710,7 +710,7 @@ extension ShopDataViewController {
             segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
             segment.insertSegment(withTitle: "메뉴", at: 0, animated: true)
             segment.insertSegment(withTitle: "이벤트/공지", at: 1, animated: true)
-            segment.insertSegment(withTitle: "리뷰", at: 2, animated: true)
+  //          segment.insertSegment(withTitle: "리뷰", at: 2, animated: true)
             segment.selectedSegmentIndex = 0
             segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500).withAlphaComponent(0.2), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .normal)
             segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .selected)
