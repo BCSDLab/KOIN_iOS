@@ -12,6 +12,23 @@
 		0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */; };
 		5FC6F038443573F334361D2B /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */; };
+		833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */; };
+		833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C112C6B26A900982145 /* NoticeListType.swift */; };
+		833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */; };
+		833D9C162C6B3EB100982145 /* PageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C152C6B3EB100982145 /* PageCollectionView.swift */; };
+		833D9C182C6B3EC300982145 /* PageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */; };
+		833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */; };
+		833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */; };
+		833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */; };
+		833D9C242C6B565400982145 /* NoticeKeyWordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */; };
+		833D9C262C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */; };
+		833D9C282C6B58ED00982145 /* NoticeKeyWordDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C272C6B58ED00982145 /* NoticeKeyWordDTO.swift */; };
+		833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C2A2C6C679700982145 /* NoticeListViewController.swift */; };
+		833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */; };
+		833D9C2F2C70338200982145 /* PageControlCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C2E2C70338100982145 /* PageControlCollectionView.swift */; };
+		833D9C312C70339100982145 /* PageControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C302C70339100982145 /* PageControlCollectionViewCell.swift */; };
+		833D9C342C70418100982145 /* NoticeListPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C332C70418100982145 /* NoticeListPages.swift */; };
+		833D9C362C704BB400982145 /* PageControlHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
@@ -342,6 +359,24 @@
 		283DD76D2537E16B73AC5434 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67580553C7374E18362DDF7C /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
+		
+		833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
+		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
+		833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
+		833D9C152C6B3EB100982145 /* PageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionView.swift; sourceTree = "<group>"; };
+		833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionViewCell.swift; sourceTree = "<group>"; };
+		833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableView.swift; sourceTree = "<group>"; };
+		833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewCell.swift; sourceTree = "<group>"; };
+		833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDTO.swift; sourceTree = "<group>"; };
+		833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionView.swift; sourceTree = "<group>"; };
+		833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
+		833D9C272C6B58ED00982145 /* NoticeKeyWordDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordDTO.swift; sourceTree = "<group>"; };
+		833D9C2A2C6C679700982145 /* NoticeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewController.swift; sourceTree = "<group>"; };
+		833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewModel.swift; sourceTree = "<group>"; };
+		833D9C2E2C70338100982145 /* PageControlCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlCollectionView.swift; sourceTree = "<group>"; };
+		833D9C302C70339100982145 /* PageControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlCollectionViewCell.swift; sourceTree = "<group>"; };
+		833D9C332C70418100982145 /* NoticeListPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListPages.swift; sourceTree = "<group>"; };
+		833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlHeaderFooterView.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -678,6 +713,92 @@
 				148F3239B2693F99D65D8F3B /* Pods_koin.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		833D9C072C6B243400982145 /* NoticeList */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C292C6B643900982145 /* PageControlCollectionView */,
+				833D9C0A2C6B246F00982145 /* NoticeKeyWordCollectionView */,
+				833D9C092C6B246600982145 /* NoticeListTableView */,
+				833D9C082C6B244900982145 /* TabBar */,
+				833D9C2A2C6C679700982145 /* NoticeListViewController.swift */,
+				833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */,
+			);
+			path = NoticeList;
+			sourceTree = "<group>";
+		};
+		833D9C082C6B244900982145 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C0C2C6B24BD00982145 /* PageCollectionView */,
+				833D9C0B2C6B24AD00982145 /* TabBarCollectionView */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		833D9C092C6B246600982145 /* NoticeListTableView */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */,
+				833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */,
+			);
+			path = NoticeListTableView;
+			sourceTree = "<group>";
+		};
+		833D9C0A2C6B246F00982145 /* NoticeKeyWordCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */,
+				833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */,
+			);
+			path = NoticeKeyWordCollectionView;
+			sourceTree = "<group>";
+		};
+		833D9C0B2C6B24AD00982145 /* TabBarCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */,
+				833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */,
+			);
+			path = TabBarCollectionView;
+			sourceTree = "<group>";
+		};
+		833D9C0C2C6B24BD00982145 /* PageCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C152C6B3EB100982145 /* PageCollectionView.swift */,
+				833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */,
+			);
+			path = PageCollectionView;
+			sourceTree = "<group>";
+		};
+		833D9C102C6B269000982145 /* NoticeList */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C112C6B26A900982145 /* NoticeListType.swift */,
+				833D9C332C70418100982145 /* NoticeListPages.swift */,
+			);
+			path = NoticeList;
+			sourceTree = "<group>";
+		};
+		833D9C202C6B4F4C00982145 /* NoticeList */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */,
+				833D9C272C6B58ED00982145 /* NoticeKeyWordDTO.swift */,
+			);
+			path = NoticeList;
+			sourceTree = "<group>";
+		};
+		833D9C292C6B643900982145 /* PageControlCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C2E2C70338100982145 /* PageControlCollectionView.swift */,
+				833D9C302C70339100982145 /* PageControlCollectionViewCell.swift */,
+				833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */,
+			);
+			path = PageControlCollectionView;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -1044,6 +1165,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C072C6B243400982145 /* NoticeList */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D2BD36862BA9D58A00FAE609 /* MyPage */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
@@ -1294,6 +1416,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C202C6B4F4C00982145 /* NoticeList */,
 				D29F21EE2C4F611F00994554 /* Noti */,
 				D29F21ED2C4F610400994554 /* User */,
 				D23479D92BDB67AE00FA91BD /* Dining */,
@@ -1694,6 +1817,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C102C6B269000982145 /* NoticeList */,
 				D29F21EF2C4FD22900994554 /* Land */,
 				D29F21E32C4F4C2B00994554 /* User */,
 				D2A8F8B02C4946480090C7A4 /* Bus */,
@@ -2099,9 +2223,11 @@
 				D249CD342C14734B000813F9 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
 				D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */,
 				D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */,
+				833D9C242C6B565400982145 /* NoticeKeyWordCollectionView.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2D380E92BA714AC009AD5A9 /* ServiceSelectViewModel.swift in Sources */,
+				833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */,
 				D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */,
 				D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */,
 				D27DD0F02BA60D000081FD36 /* LandViewController.swift in Sources */,
@@ -2120,6 +2246,7 @@
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
+				833D9C162C6B3EB100982145 /* PageCollectionView.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
@@ -2169,6 +2296,7 @@
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
+				833D9C312C70339100982145 /* PageControlCollectionViewCell.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
 				D2D380F02BA71994009AD5A9 /* LoginViewController.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
@@ -2178,11 +2306,13 @@
 				D2908D382BBCA3460008F908 /* AddClassCollectionView.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
+				833D9C282C6B58ED00982145 /* NoticeKeyWordDTO.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
 				D27DD0FA2BA6292C0081FD36 /* LandOptionCollectionView.swift in Sources */,
 				D23944652C38432100048F45 /* EventListViewController.swift in Sources */,
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
+				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
@@ -2193,10 +2323,12 @@
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
 				D20AB9712C58E2FF006BC684 /* SendDeviceTokenUseCase.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
+				833D9C2F2C70338200982145 /* PageControlCollectionView.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
+				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
 				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
@@ -2206,12 +2338,15 @@
 				D29F21CA2C4E151000994554 /* TimetableRepository.swift in Sources */,
 				D27DD0A02BA608310081FD36 /* DiningViewModel.swift in Sources */,
 				D2078C122BC7BE8100A39861 /* MenuSectionFooterView.swift in Sources */,
+				833D9C342C70418100982145 /* NoticeListPages.swift in Sources */,
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopInfoRequest.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D2BD36882BA9D5AB00FAE609 /* MyPageViewController.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
+				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				837BFA542BB7E4A3001FCBD4 /* SearchBusViewController.swift in Sources */,
+				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
@@ -2229,6 +2364,7 @@
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
+				833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				83DD0D8D2C51010900278ABD /* BusInformationCollectionView.swift in Sources */,
@@ -2280,11 +2416,15 @@
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
+				833D9C362C704BB400982145 /* PageControlHeaderFooterView.swift in Sources */,
+				833D9C262C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift in Sources */,
+				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
+				833D9C182C6B3EC300982145 /* PageCollectionViewCell.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
@@ -2311,6 +2451,7 @@
 				83DD0DD02C568E7100278ABD /* BusTimetableTableViewHeaderView.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
+				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
