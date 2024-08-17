@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NoticeListDTO {
+struct NoticeListDTO: Decodable {
     let articles: [NoticeArticleDTO]
     let totalCount, currentCount, totalPage, currentPage: Int
     
@@ -20,7 +20,7 @@ struct NoticeListDTO {
     }
 }
 
-struct NoticeArticleDTO {
+struct NoticeArticleDTO: Decodable {
     let id, boardID: Int
     let title, content, nickname: String
     let hit: Int
