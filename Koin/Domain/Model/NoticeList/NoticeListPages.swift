@@ -8,12 +8,13 @@
 import Foundation
 
 struct NoticeListPages {
-    let isPreviousPage: pageReloadDirection?
+    let isPreviousPage: PageReloadDirection?
     let pages: [Int]
-    let isNextPage: pageReloadDirection?
+    let selectedIndex: Int
+    let isNextPage: PageReloadDirection?
 }
 
-enum pageReloadDirection: String {
+enum PageReloadDirection: String {
     case previousPage = "이전"
     case nextPage = "다음"
 }

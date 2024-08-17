@@ -31,6 +31,14 @@
 		833D9C312C70339100982145 /* PageControlCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C302C70339100982145 /* PageControlCollectionViewCell.swift */; };
 		833D9C342C70418100982145 /* NoticeListPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C332C70418100982145 /* NoticeListPages.swift */; };
 		833D9C362C704BB400982145 /* PageControlHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */; };
+		833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C382C7058C200982145 /* NoticeListRepository.swift */; };
+		833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */; };
+		833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */; };
+		833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */; };
+		833D9C452C70672C00982145 /* NoticeListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C442C70672C00982145 /* NoticeListService.swift */; };
+		833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C462C7067AE00982145 /* NoticeListAPI.swift */; };
+		833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */; };
+		833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
@@ -411,7 +419,14 @@
 		833D9C302C70339100982145 /* PageControlCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlCollectionViewCell.swift; sourceTree = "<group>"; };
 		833D9C332C70418100982145 /* NoticeListPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListPages.swift; sourceTree = "<group>"; };
 		833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlHeaderFooterView.swift; sourceTree = "<group>"; };
->>>>>>> 9c4b726 (add: 공지사항 목록 조회 UI 기본 틀 구현)
+		833D9C382C7058C200982145 /* NoticeListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListRepository.swift; sourceTree = "<group>"; };
+		833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeArticlesRequest.swift; sourceTree = "<group>"; };
+		833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
+		833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeArticlesInfo.swift; sourceTree = "<group>"; };
+		833D9C442C70672C00982145 /* NoticeListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListService.swift; sourceTree = "<group>"; };
+		833D9C462C7067AE00982145 /* NoticeListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListAPI.swift; sourceTree = "<group>"; };
+		833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNoticeListRepository.swift; sourceTree = "<group>"; };
+		833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchArticleRequest.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -842,6 +857,7 @@
 			isa = PBXGroup;
 			children = (
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
+				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
 			);
 			path = NoticeList;
@@ -864,6 +880,23 @@
 				833D9C352C704BB400982145 /* PageControlHeaderFooterView.swift */,
 			);
 			path = PageControlCollectionView;
+			sourceTree = "<group>";
+		};
+		833D9C3A2C705E3F00982145 /* NoticeList */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */,
+				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
+			);
+			path = NoticeList;
+			sourceTree = "<group>";
+		};
+		833D9C3F2C705F0E00982145 /* NoticeList */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */,
+			);
+			path = NoticeList;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -1867,6 +1900,7 @@
 		D2D380F72BA72F6A009AD5A9 /* Encodable */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C3A2C705E3F00982145 /* NoticeList */,
 				D20AB95B2C553ADF006BC684 /* Noti */,
 				D29F21F42C4FD2A000994554 /* Land */,
 				83DD0D792C4F8E4300278ABD /* Bus */,
@@ -1938,6 +1972,7 @@
 		D2FB23482BFD45180098BA2B /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C3F2C705F0E00982145 /* NoticeList */,
 				D20AB9502C5534DD006BC684 /* Noti */,
 				83DD0D7E2C4F921600278ABD /* Bus */,
 				D29F21C82C4E14F300994554 /* Timetable */,
@@ -1975,6 +2010,7 @@
 				D2D7C0CF2C28285600C85A85 /* LandRepository.swift */,
 				D20AB94D2C553427006BC684 /* NotiRepository.swift */,
 				83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */,
+				833D9C382C7058C200982145 /* NoticeListRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1990,6 +2026,7 @@
 				D29F21D02C4E164C00994554 /* DefaultTimetableRepository.swift */,
 				D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */,
 				83DD0D832C4FA7FF00278ABD /* DefaultBusRepository.swift */,
+				833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2035,6 +2072,7 @@
 				D2D7C0DA2C282B5600C85A85 /* LandAPI.swift */,
 				D20AB9592C55369F006BC684 /* NotiAPI.swift */,
 				83DD0D812C4FA6F300278ABD /* BusAPI.swift */,
+				833D9C462C7067AE00982145 /* NoticeListAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -2070,6 +2108,7 @@
 				D29F21CD2C4E162600994554 /* TimetableService.swift */,
 				D2D7C0D82C282A7400C85A85 /* LandService.swift */,
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
+				833D9C442C70672C00982145 /* NoticeListService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
 			);
 			path = Service;
@@ -2392,9 +2431,11 @@
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */,
+				833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
+				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */,
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
@@ -2433,6 +2474,7 @@
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				83DD0DCC2C56850A00278ABD /* BusTimetableTableViewCell.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
+				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
 				D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */,
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
@@ -2456,6 +2498,7 @@
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
+				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
@@ -2540,6 +2583,7 @@
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
+				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
@@ -2562,8 +2606,10 @@
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
+				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				83DD0DC22C5527F200278ABD /* BusTimetableTableView.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
+				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
 				D239448E2C3C9D7900048F45 /* ReviewListCollectionViewCell.swift in Sources */,
 				D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
@@ -2630,6 +2676,7 @@
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
+				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2908CA82BB5EB790008F908 /* TimetableViewModel.swift in Sources */,

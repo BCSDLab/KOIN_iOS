@@ -10,8 +10,9 @@ import UIKit
 
 final class PageControlCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
-    private var pageNumbers: NoticeListPages = .init(isPreviousPage: .previousPage, pages: [], isNextPage: .nextPage)
-    var pageReloadPublisher = PassthroughSubject<([Int], pageReloadDirection), Never>()
+    private var pageNumbers: NoticeListPages = .init(isPreviousPage: .previousPage, pages: [], selectedIndex: 0, isNextPage: .nextPage)
+    var pageReloadPublisher = PassthroughSubject<([Int], PageReloadDirection), Never>()
+    var selectPagePublisher = PassthroughSubject<Int, Never>()
     private var subscribtions = Set<AnyCancellable>()
     
     //MARK: - Initialization
@@ -41,6 +42,12 @@ extension PageControlCollectionView {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PageControlCollectionViewCell.identifier, for: indexPath) as? PageControlCollectionViewCell else {
             return UICollectionViewCell()
+        }
+        if indexPath.row == pageNumbers.selectedIndex {
+            cell.configure(page: "\(pageNumbers.pages[indexPath.row])", isSelected: true)
+        }
+        else {
+            cell.configure(page: "\(pageNumbers.pages[indexPath.row])", isSelected: false)
         }
         return cell
     }
@@ -73,7 +80,7 @@ extension PageControlCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        selectPagePublisher.send(indexPath.row)
     }
 }
 
