@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let dateProvider = DefaultDateProvider()
-        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, dateProvder: dateProvider))
+        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())) , dateProvder: dateProvider))
         let navigationController = CustomNavigationController(rootViewController: mainViewController)
         window.rootViewController = navigationController
         self.window = window

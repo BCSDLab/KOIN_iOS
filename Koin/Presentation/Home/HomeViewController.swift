@@ -147,7 +147,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         super.viewDidLoad()
         bind()
         inputSubject.send(.viewDidLoad)
-        inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -161,10 +161,9 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }
     
     @objc private func appWillEnterForeground() {
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+        if let centerIndexPath = busCollectionView.centerCellIndex {
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
@@ -177,10 +176,10 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         super.viewWillAppear(animated)
         if let centerIndexPath = busCollectionView.centerCellIndex,
            let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea, busItem.endBusArea, busItem.busType))
         } else {
-            inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+            inputSubject.send(.getBusInfo(.koreatech, .koreatech, .shuttleBus))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
@@ -221,9 +220,9 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         
         busCollectionView.busRequestPublisher
             .sink { [weak self] data in
-                self?.inputSubject.send(.getBusInfo(data[0], data[1], data[2]))
+                self?.inputSubject.send(.getBusInfo(data.0, data.1, data.2))
                 
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data[3]))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.2.koreanDescription))
             }
             .store(in: &subscriptions)
         
@@ -303,10 +302,10 @@ extension HomeViewController {
     private func scrollToBusItem() {
         let initialIndexPath = IndexPath(item: 4, section: 0)
         busCollectionView.scrollToItem(at: initialIndexPath, at: .centeredHorizontally, animated: false)
-        inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
     }
     
-    private func updateBusTime(_ data: BusDTO) {
+    private func updateBusTime(_ data: BusCardInformation) {
         busCollectionView.updateText(data: data)
     }
     
@@ -417,8 +416,8 @@ extension HomeViewController {
     @objc private func refresh() {
         if let centerIndexPath = busCollectionView.centerCellIndex,
            let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
