@@ -178,14 +178,26 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         diningPlaceLabel.text = info.place.rawValue
         updateLikeButtonText(isLiked: info.isLiked, likeCount: info.likes)
         
-        let kcalText =  info.kcal != 0 ? "\(info.kcal)kcal • " : ""
-        let priceCashText = info.priceCash.map { "\($0)원" } ?? ""
-        let priceCardText = info.priceCard.map { "\($0)원" } ?? ""
-        
-        if kcalText != "" && priceCardText != "" && priceCashText != "" {
-            diningInfoLabel.text = "\(kcalText) \(priceCashText)/\(priceCardText)"
+        let kcalText = info.kcal != 0 ? "\(info.kcal)kcal" : ""
+        let priceCashText = (info.priceCash != nil && info.priceCash != 0) ? "\(info.priceCash!)원" : ""
+        let priceCardText = (info.priceCard != nil && info.priceCard != 0) ? "\(info.priceCard!)원" : ""
+
+        var displayText = ""
+
+        if !kcalText.isEmpty {
+            displayText += kcalText
         }
-        else { diningInfoLabel.text = "" }
+
+        if !priceCashText.isEmpty && !priceCardText.isEmpty {
+            displayText += " • \(priceCashText)/\(priceCardText)"
+        } else if !priceCashText.isEmpty {
+            displayText += " • \(priceCashText)"
+        } else if !priceCardText.isEmpty {
+            displayText += " • \(priceCardText)"
+        }
+
+        diningInfoLabel.text = displayText.isEmpty ? "" : displayText
+
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2
