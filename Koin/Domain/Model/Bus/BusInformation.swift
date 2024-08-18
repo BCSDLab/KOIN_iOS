@@ -23,6 +23,10 @@ struct NextBusInformation {
 
 struct BusInformation {
     let busType: BusType
+    var startBusArea: BusPlace
+    var endBusArea: BusPlace
     let redirectedText: String
     let color: SceneColorAsset
+    let remainTime: String
+    let departedTime: String?
 }

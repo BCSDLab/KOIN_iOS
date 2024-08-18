@@ -17,4 +17,10 @@ extension String {
         let last = (value - 0xAC00) % 28
         return last > 0
     }
+    
+    func toDateFromYYMMDD() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyMMdd"
+        return dateFormatter.date(from: self)
+    }
 }

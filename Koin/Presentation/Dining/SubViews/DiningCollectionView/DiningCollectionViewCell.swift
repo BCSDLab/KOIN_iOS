@@ -160,7 +160,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         shareButtonPublisher.send(())
     }
     
-    private func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
+    func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
         var configuration = UIButton.Configuration.plain()
         configuration.image = isLiked ? UIImage.appImage(asset: .heartFill) : UIImage.appImage(asset: .heart)
         var text = AttributedString(likeCount == 0 ? "좋아요" : "\(likeCount)")
@@ -175,18 +175,29 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(info: DiningItem) {
-        
         diningPlaceLabel.text = info.place.rawValue
         updateLikeButtonText(isLiked: info.isLiked, likeCount: info.likes)
         
-        let kcalText =  info.kcal != 0 ? "\(info.kcal)kcal • " : ""
-        let priceCashText = info.priceCash.map { "\($0)원" } ?? ""
-        let priceCardText = info.priceCard.map { "\($0)원" } ?? ""
-        
-        if kcalText != "" && priceCardText != "" && priceCashText != "" {
-            diningInfoLabel.text = "\(kcalText) \(priceCashText)/\(priceCardText)"
+        let kcalText = info.kcal != 0 ? "\(info.kcal)kcal" : ""
+        let priceCashText = (info.priceCash != nil && info.priceCash != 0) ? "\(info.priceCash!)원" : ""
+        let priceCardText = (info.priceCard != nil && info.priceCard != 0) ? "\(info.priceCard!)원" : ""
+
+        var displayText = ""
+
+        if !kcalText.isEmpty {
+            displayText += kcalText
         }
-        else { diningInfoLabel.text = "" }
+
+        if !priceCashText.isEmpty && !priceCardText.isEmpty {
+            displayText += " • \(priceCashText)/\(priceCardText)"
+        } else if !priceCashText.isEmpty {
+            displayText += " • \(priceCashText)"
+        } else if !priceCardText.isEmpty {
+            displayText += " • \(priceCardText)"
+        }
+
+        diningInfoLabel.text = displayText.isEmpty ? "" : displayText
+
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2
@@ -221,10 +232,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
         menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
-        if let imageUrl = info.imageUrl {
-            menuImageView.loadImage(from: imageUrl)
-            menuImageView.contentMode = .scaleAspectFill
-        }
+        if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
             menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
             menuImageView.contentMode = .scaleToFill

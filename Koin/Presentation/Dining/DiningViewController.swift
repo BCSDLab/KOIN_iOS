@@ -161,7 +161,6 @@ final class DiningViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        inputSubject.send(.sendDeviceToken)
         checkAndShowBottomSheet()
         if viewDidAppeared {
             switch diningTypeSegmentControl.selectedSegmentIndex {
@@ -295,6 +294,7 @@ extension DiningViewController {
     
     @objc private func navigationButtonTapped() {
         let diningNoticeViewController = DiningNoticeViewController(viewModel: DiningNoticeViewModel(fetchCoopShopListUseCase: DefaultFetchCoopShopListUseCase(diningRepository: DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService()))))
+        diningNoticeViewController.title = "학생식당 정보"
         navigationController?.pushViewController(diningNoticeViewController, animated: true)
     }
     

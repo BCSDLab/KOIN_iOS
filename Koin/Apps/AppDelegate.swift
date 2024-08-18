@@ -134,8 +134,7 @@ extension AppDelegate {
             let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
             let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
             let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-            let sendDeviceTokenUseCase = DefaultSendDeviceTokenUseCase(notiRepository: notiRepository)
-            let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, sendDeviceTokenUseCase: sendDeviceTokenUseCase)
+            let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
             let diningViewController = DiningViewController(viewModel: viewModel)
             diningViewController.title = "식단"
             currentVc?.navigationController?.pushViewController(diningViewController, animated: true)

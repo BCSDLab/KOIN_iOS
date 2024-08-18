@@ -17,7 +17,7 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     
     // MARK: - UI Components
     
-    private let menuListViewController = MenuListViewController()
+    let menuListViewController = MenuListViewController()
     private let eventListViewController = EventListViewController()
     private let reviewListViewController = ReviewListViewController()
     private lazy var pages: [UIViewController] = {

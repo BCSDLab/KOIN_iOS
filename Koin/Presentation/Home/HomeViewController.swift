@@ -92,7 +92,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     
     private let menuLabel: UILabel = {
         let label = UILabel()
-        label.text = "식단"
         label.textColor = UIColor.appColor(.primary500)
         label.font = UIFont.appFont(.pretendardBold, size: 15)
         return label
@@ -148,7 +147,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         super.viewDidLoad()
         bind()
         inputSubject.send(.viewDidLoad)
-        inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -162,10 +161,9 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }
     
     @objc private func appWillEnterForeground() {
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+        if let centerIndexPath = busCollectionView.centerCellIndex {
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
@@ -178,10 +176,10 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         super.viewWillAppear(animated)
         if let centerIndexPath = busCollectionView.centerCellIndex,
            let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea, busItem.endBusArea, busItem.busType))
         } else {
-            inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+            inputSubject.send(.getBusInfo(.koreatech, .koreatech, .shuttleBus))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
@@ -208,8 +206,8 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateDining(diningItem, diningType):
-                self?.updateDining(item: diningItem, type: diningType)
+            case let .updateDining(diningItem, diningType, isToday):
+                self?.updateDining(item: diningItem, type: diningType, isToday: isToday)
             case let .putImage(response):
                 self?.putImage(data: response)
             case let .updateBus(response):
@@ -222,9 +220,9 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         
         busCollectionView.busRequestPublisher
             .sink { [weak self] data in
-                self?.inputSubject.send(.getBusInfo(data[0], data[1], data[2]))
+                self?.inputSubject.send(.getBusInfo(data.0, data.1, data.2))
                 
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data[3]))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.2.koreanDescription))
             }
             .store(in: &subscriptions)
         
@@ -297,17 +295,17 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), sendDeviceTokenUseCase: DefaultSendDeviceTokenUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))))
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
     
     private func scrollToBusItem() {
         let initialIndexPath = IndexPath(item: 4, section: 0)
         busCollectionView.scrollToItem(at: initialIndexPath, at: .centeredHorizontally, animated: false)
-        inputSubject.send(.getBusInfo("koreatech", "terminal", "shuttle"))
+        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
     }
     
-    private func updateBusTime(_ data: BusDTO) {
+    private func updateBusTime(_ data: BusCardInformation) {
         busCollectionView.updateText(data: data)
     }
     
@@ -360,8 +358,7 @@ extension HomeViewController {
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let sendDeviceTokenUseCase = DefaultSendDeviceTokenUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, sendDeviceTokenUseCase: sendDeviceTokenUseCase)
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
@@ -377,8 +374,14 @@ extension HomeViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))
     }
     
-    private func updateDining(item: DiningItem?, type: DiningType) {
+    private func updateDining(item: DiningItem?, type: DiningType, isToday: Bool) {
         menuBackgroundView.updateDining(item, type)
+        if isToday {
+            self.menuLabel.text = "오늘 식단"
+        }
+        else {
+            self.menuLabel.text = "내일 식단"
+        }
     }
     
     private func putImage(data: ShopCategoryDTO) {
@@ -413,8 +416,8 @@ extension HomeViewController {
     @objc private func refresh() {
         if let centerIndexPath = busCollectionView.centerCellIndex,
            let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busInfo = cell.getBusType()
-            inputSubject.send(.getBusInfo(busInfo[0], busInfo[1], busInfo[2]))
+            let busItem = busCollectionView.busItems[centerIndexPath.row]
+            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
