@@ -128,11 +128,18 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
+    private let noticeListSelectButton: UIButton = {
+        let button = UIButton()
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
     private let businessSelectButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
         return button
     }()
+    
     
     // MARK: - Initialization
     
@@ -218,6 +225,7 @@ extension ServiceSelectViewController {
         diningSelectButton.addTarget(self, action: #selector(diningSelectButtonTapped), for: .touchUpInside)
         //timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
+        noticeListSelectButton.addTarget(self, action: #selector(noticeListSelectButtonTapped), for: .touchUpInside)
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
         myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
@@ -330,6 +338,16 @@ extension ServiceSelectViewController {
         }
     }
     
+    @objc func noticeListSelectButtonTapped() {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase)
+        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
+        noticeListViewController.title = "공지사항"
+        navigationController?.pushViewController(noticeListViewController, animated: true)
+    }
+    
     @objc func myInfoButtonTapped() {
         
         if viewModel.isLogined {
@@ -397,7 +415,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, noticeListSelectButton,businessSelectButton, logOutButton, makeLoginDescription, notiButton].forEach {
             view.addSubview($0)
         }
     }
@@ -501,8 +519,14 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        businessSelectButton.snp.makeConstraints { make in
+        noticeListSelectButton.snp.makeConstraints { make in
             make.top.equalTo(landSelectButton.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(58)
+        }
+        businessSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(noticeListSelectButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)

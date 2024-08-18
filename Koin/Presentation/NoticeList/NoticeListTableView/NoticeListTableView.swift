@@ -27,6 +27,11 @@ final class NoticeListTableView: UITableView {
         dataSource = self
         delegate = self
     }
+    
+    func updateNoticeList(noticeArticleList: [NoticeArticleDTO]) {
+        self.noticeArticleList = noticeArticleList
+        reloadData()
+    }
 }
 
 extension NoticeListTableView: UITableViewDataSource {

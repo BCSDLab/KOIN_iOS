@@ -8,7 +8,7 @@
 import Foundation
 
 struct NoticeListDTO: Decodable {
-    let articles: [NoticeArticleDTO]
+    let articles: [NoticeArticleDTO]?
     let totalCount, currentCount, totalPage, currentPage: Int
     
     enum CodingKeys: String, CodingKey {
@@ -21,15 +21,15 @@ struct NoticeListDTO: Decodable {
 }
 
 struct NoticeArticleDTO: Decodable {
-    let id, boardID: Int
-    let title, content, nickname: String
+    let id, boardId: Int
+    let title, nickname: String
     let hit: Int
     let createdAt, updatedAt: String
     
     enum CodingKeys: String, CodingKey {
         case id
-        case boardID = "board_id"
-        case title, content, nickname, hit
+        case boardId = "board_id"
+        case title, nickname, hit
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }

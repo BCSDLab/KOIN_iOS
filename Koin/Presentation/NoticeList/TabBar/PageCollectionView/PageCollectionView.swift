@@ -25,8 +25,8 @@ final class PageCollectionView: UICollectionView, UICollectionViewDataSource {
     
     private func commonInit() {
         register(PageCollectionViewCell.self, forCellWithReuseIdentifier: PageCollectionViewCell.identifier)
-        self.decelerationRate = .fast
-        self.showsHorizontalScrollIndicator = false
+        decelerationRate = .fast
+        showsHorizontalScrollIndicator = false
         dataSource = self
         delegate = self
     }
@@ -34,10 +34,13 @@ final class PageCollectionView: UICollectionView, UICollectionViewDataSource {
 
 extension PageCollectionView {
     func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
-        self.isPagingEnabled = false
+        isPagingEnabled = false
         let indexPath = IndexPath(item: noticeListType.rawValue-1, section: 0)
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-        self.isPagingEnabled = true
+        isPagingEnabled = true
+        
+        guard let cell = cellForItem(at: indexPath) as? PageCollectionViewCell else { return }
+        cell.configure(noticeArticleList: noticeList)
     }
 }
 
@@ -50,14 +53,14 @@ extension PageCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PageCollectionViewCell.identifier, for: indexPath) as? PageCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(color: colors[indexPath.row])
+        
         return cell
     }
 }
 
 extension PageCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 90)
+        let size = CGSize(width: UIScreen.main.bounds.width, height: 1300)
         return size
     }
     
