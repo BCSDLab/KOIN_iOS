@@ -98,7 +98,6 @@
 		D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9662C572003006BC684 /* CancelableImageView.swift */; };
 		D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
-		D20AB9712C58E2FF006BC684 /* SendDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9702C58E2FF006BC684 /* SendDeviceTokenUseCase.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
 		D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */; };
 		D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D21460362BD09ACF006F579A /* GoogleService-Info.plist */; };
@@ -430,7 +429,6 @@
 		D20AB9662C572003006BC684 /* CancelableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImageView.swift; sourceTree = "<group>"; };
 		D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiContentViewController.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
-		D20AB9702C58E2FF006BC684 /* SendDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeLoginModalViewController.swift; sourceTree = "<group>"; };
 		D21460362BD09ACF006F579A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -846,7 +844,6 @@
 				D20AB9512C5534F7006BC684 /* FetchNotiListUseCase.swift */,
 				D20AB9532C553503006BC684 /* ChangeNotiUseCase.swift */,
 				D20AB9552C55352A006BC684 /* ChangeNotiDetailUseCase.swift */,
-				D20AB9702C58E2FF006BC684 /* SendDeviceTokenUseCase.swift */,
 			);
 			path = Noti;
 			sourceTree = "<group>";
@@ -2191,7 +2188,6 @@
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
-				D20AB9712C58E2FF006BC684 /* SendDeviceTokenUseCase.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,

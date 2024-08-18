@@ -68,13 +68,13 @@ extension CityBusTimetableDTO {
             }
             
             if numberOfAfternoon > numberOfMorning {
-                for idx in lastMorningAndAfternoonIdx + 1..<departInfos.count {
+                for idx in lastMorningAndAfternoonIdx * 2..<departInfos.count {
                     let arrivalInfo = BusArrivalInfo(leftNode: nil, rightNode: departInfos[idx])
                     arrivalInfos.append(arrivalInfo)
                 }
             }
-            else {
-                for idx in lastMorningAndAfternoonIdx + 1..<departInfos.count {
+            else if numberOfAfternoon < numberOfMorning {
+                for idx in lastMorningAndAfternoonIdx..<departInfos.count {
                     let arrivalInfo = BusArrivalInfo(leftNode: departInfos[idx], rightNode: nil)
                     arrivalInfos.append(arrivalInfo)
                 }
@@ -87,8 +87,6 @@ extension CityBusTimetableDTO {
         else {
             busCourseName = "병천 → 터미널"
         }
-        let arrival = self.busInfo.arrivalNode?.rawValue ?? ""
-        
         return BusTimetableInfo(courseName: busCourseName, routeName: "\(busInfo.number?.rawValue ?? 0)번", arrivalInfos: arrivalInfos, updatedAt: updatedAtText)
     }
     

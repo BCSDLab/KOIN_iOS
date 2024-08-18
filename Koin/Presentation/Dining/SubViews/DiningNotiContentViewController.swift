@@ -38,7 +38,7 @@ final class DiningNotiContentViewController: UIViewController {
     
     private let soldOutSwitch = UISwitch().then {
         $0.onTintColor = UIColor.appColor(.primary500)
-        $0.transform = CGAffineTransformMakeScale(0.9, 0.75)
+        $0.transform = CGAffineTransformMakeScale(0.8, 0.8)
     }
     
     private let imageUploadNotiLabel = UILabel().then {
@@ -48,7 +48,7 @@ final class DiningNotiContentViewController: UIViewController {
     
     private let imageUploadSwitch = UISwitch().then {
         $0.onTintColor = UIColor.appColor(.primary500)
-        $0.transform = CGAffineTransformMakeScale(0.9, 0.75)
+        $0.transform = CGAffineTransformMakeScale(0.8, 0.8)
     }
     
     private let notiShortcutButton = UIButton().then {

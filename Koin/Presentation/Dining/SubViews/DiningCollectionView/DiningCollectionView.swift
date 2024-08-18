@@ -49,7 +49,10 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
                 diningList[index].decreaseLike()
             }
             let indexPath = IndexPath(item: index, section: 0)
-            self.reloadItems(at: [indexPath])
+            
+            if let cell = self.cellForItem(at: indexPath) as? DiningCollectionViewCell {
+                cell.updateLikeButtonText(isLiked: isLiked, likeCount: diningList[indexPath.row].likes)
+            }
         }
     }
     
