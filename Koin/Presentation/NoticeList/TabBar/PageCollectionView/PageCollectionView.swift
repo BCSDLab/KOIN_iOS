@@ -60,7 +60,7 @@ extension PageCollectionView {
 
 extension PageCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = CGSize(width: UIScreen.main.bounds.width, height: 1300)
+        let size = CGSize(width: self.bounds.width, height: self.bounds.height)
         return size
     }
     
