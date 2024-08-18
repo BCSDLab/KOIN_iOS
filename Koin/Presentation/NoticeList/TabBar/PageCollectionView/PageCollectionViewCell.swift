@@ -17,12 +17,15 @@ final class PageCollectionViewCell: UICollectionViewCell {
         flowLayout?.scrollDirection = .horizontal
     }
     
-    //private let pageControlCollectionView = PageControlCollectionView(frame: .zero)
-    
     private let noticeTableView = NoticeListTableView(frame: .zero, style: .plain).then {
         $0.backgroundColor = .white
         $0.separatorStyle = .singleLine
+        $0.isScrollEnabled = false
     }
+    
+    private let scrollView = UIScrollView()
+
+    private let contentViewInScrollView = UIView()
     
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -41,12 +44,24 @@ final class PageCollectionViewCell: UICollectionViewCell {
 
 extension PageCollectionViewCell {
     private func setUpLayouts() {
+        contentView.addSubview(scrollView)
+        scrollView.addSubview(contentViewInScrollView)
+        
         [noticeKeyWordCollectionView, noticeTableView].forEach {
-            contentView.addSubview($0)
+            contentViewInScrollView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        contentViewInScrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalTo(scrollView)
+        }
+        
         noticeKeyWordCollectionView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(66)
@@ -56,15 +71,8 @@ extension PageCollectionViewCell {
             $0.top.equalTo(noticeKeyWordCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(110 * 10)
+            $0.bottom.equalToSuperview()
         }
-        
-        /*
-        pageControlCollectionView.snp.makeConstraints {
-            $0.top.equalTo(noticeTableView.snp.bottom).offset(32)
-            $0.bottom.equalTo(contentView.snp.bottom).inset(32)
-            $0.centerX.equalToSuperview()
-        }
-         */
     }
     
     private func configureView() {
@@ -72,5 +80,3 @@ extension PageCollectionViewCell {
         setUpConstraints()
     }
 }
-
-
