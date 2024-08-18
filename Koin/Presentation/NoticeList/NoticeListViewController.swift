@@ -12,7 +12,7 @@ import UIKit
 
 final class NoticeListViewController: UIViewController {
     // MARK: - Properties
-    private let viewModel = NoticeListViewModel()
+    private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -38,12 +38,24 @@ final class NoticeListViewController: UIViewController {
         bind()
     }
     
+    // MARK: - Initialization
+    init(viewModel: NoticeListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .updateBoard(noticeList, noticeListType):
                 self?.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
+            case .updatePageList(_):
+                print("")
             }
         }.store(in: &subscriptions)
         

@@ -11,7 +11,7 @@ protocol FetchNoticeArticlesUseCase {
     func fetchArticles(boardId: Int, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error>
 }
 
-final class DefaultNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
+final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     private let noticeListRepository: NoticeListRepository
     private let maxArticleListNumber: Int = 10
     private let maxPagesNumber: Int = 5
@@ -25,14 +25,14 @@ final class DefaultNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
             let requestModel = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
             return noticeListRepository.searchNoticeArticle(requestModel: requestModel).map { [weak self] articles in
                 let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-                return NoticeArticlesInfo(articles: articles.articles, pages: pages)
+                return NoticeArticlesInfo(articles: articles.articles ?? [], pages: pages)
             }.eraseToAnyPublisher()
         }
         else {
            let requestModel = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
             return noticeListRepository.fetchNoticeArticles(requestModel: requestModel).map { [weak self] articles in
                 let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-                return NoticeArticlesInfo(articles: articles.articles, pages: pages)
+                return NoticeArticlesInfo(articles: articles.articles ?? [], pages: pages)
             }.eraseToAnyPublisher()
         }
     }

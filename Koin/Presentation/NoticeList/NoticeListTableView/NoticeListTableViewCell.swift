@@ -55,7 +55,7 @@ final class NoticeListTableViewCell: UITableViewCell {
     }
     
     func configure(articleModel: NoticeArticleDTO) {
-        boardTitle.text = NoticeListType(rawValue: articleModel.boardID)?.displayName
+        boardTitle.text = NoticeListType(rawValue: articleModel.boardId)?.displayName
         noticeTitle.text = articleModel.title
         nickName.text = articleModel.nickname
         createdDate.text = articleModel.createdAt
@@ -65,7 +65,7 @@ final class NoticeListTableViewCell: UITableViewCell {
 
 extension NoticeListTableViewCell {
     private func setUpLayouts() {
-        [boardTitle, noticeTitle, nickName, createdDate].forEach {
+        [boardTitle, noticeTitle, nickName, separatorDot, createdDate].forEach {
             contentView.addSubview($0)
         }
     }
