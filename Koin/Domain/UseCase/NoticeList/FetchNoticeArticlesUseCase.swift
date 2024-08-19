@@ -40,17 +40,20 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     private func makePages(currentPage: Int, totalPage: Int) -> NoticeListPages {
         var isPreviousPage: PageReloadDirection? = nil
         var isNextPage: PageReloadDirection? = nil
-        if currentPage > (maxPagesNumber / 2) {
-            isPreviousPage = .previousPage
-        }
-        if currentPage + (maxPagesNumber / 2) < totalPage {
-            isNextPage = .nextPage
-        }
         var pages: [Int] = []
         
-        let startPage = max(1, currentPage - maxPagesNumber / 2)
-        let endPage = min(totalPage, currentPage + maxPagesNumber / 2)
+        let startPage = ((currentPage - 1) / maxPagesNumber * maxPagesNumber) + 1
+        var endPage = totalPage
         
+        if startPage > 5 {
+            isPreviousPage = .previousPage
+        }
+        if totalPage > maxPagesNumber && (totalPage - startPage) > maxPagesNumber {
+            endPage = (currentPage - 1) / maxPagesNumber * maxPagesNumber + maxPagesNumber
+        }
+        if endPage < totalPage {
+            isNextPage = .nextPage
+        }
         pages = Array(startPage...endPage)
         return NoticeListPages(isPreviousPage: isPreviousPage, pages: pages, selectedIndex: currentPage, isNextPage: isNextPage)
     }

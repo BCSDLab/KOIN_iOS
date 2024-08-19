@@ -11,6 +11,10 @@ import UIKit
 import Then
 
 final class PageCollectionViewCell: UICollectionViewCell {
+    // MARK: - Properties
+    let pageBtnPublisher = PassthroughSubject<Int, Never>()
+    private var subscribtions = Set<AnyCancellable>()
+    
     // MARK: - UI Components
     private let noticeTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .white
@@ -30,10 +34,10 @@ final class PageCollectionViewCell: UICollectionViewCell {
     func configure(noticeArticleList: [NoticeArticleDTO], noticeListPages: NoticeListPages) {
         noticeTableView.updateNoticeList(noticeArticleList: noticeArticleList, pageInfos: noticeListPages)
         noticeTableView.reloadData()
-    }
-    
-    func getPageInfos(pageInfos: NoticeListPages) {
         
+        noticeTableView.pageBtnPublisher.sink { [weak self] page in
+            self?.pageBtnPublisher.send(page)
+        }.store(in: &subscribtions)
     }
 }
 

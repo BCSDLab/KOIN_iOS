@@ -5,12 +5,15 @@
 //  Created by JOOMINKYUNG on 8/13/24.
 //
 
+import Combine
 import UIKit
 
 final class NoticeListTableView: UITableView {
     // MARK: - Properties
     private var noticeArticleList: [NoticeArticleDTO] = []
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
+    let pageBtnPublisher = PassthroughSubject<Int, Never>()
+    private var subscribtions = Set<AnyCancellable>()
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -69,6 +72,9 @@ extension NoticeListTableView: UITableViewDataSource {
             return UITableViewHeaderFooterView()
         }
         view.configure(pageInfo: pageInfos)
+        view.tapBtnPublisher.sink { [weak self] page in
+            self?.pageBtnPublisher.send(page)
+        }.store(in: &subscribtions)
         return view
     }
 }
