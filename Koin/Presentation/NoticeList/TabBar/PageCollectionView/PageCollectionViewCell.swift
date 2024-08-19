@@ -13,6 +13,7 @@ import Then
 final class PageCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
+    let tapNoticePublisher = PassthroughSubject<Int, Never>()
     private var subscribtions = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -37,6 +38,9 @@ final class PageCollectionViewCell: UICollectionViewCell {
         
         noticeTableView.pageBtnPublisher.sink { [weak self] page in
             self?.pageBtnPublisher.send(page)
+        }.store(in: &subscribtions)
+        noticeTableView.tapNoticePublisher.sink { [weak self] noticeId in
+            self?.tapNoticePublisher.send(noticeId)
         }.store(in: &subscribtions)
     }
 }

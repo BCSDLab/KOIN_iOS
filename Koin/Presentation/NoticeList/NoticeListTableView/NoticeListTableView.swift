@@ -13,7 +13,9 @@ final class NoticeListTableView: UITableView {
     private var noticeArticleList: [NoticeArticleDTO] = []
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
+    let tapNoticePublisher = PassthroughSubject<Int, Never>()
     private var subscribtions = Set<AnyCancellable>()
+    
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -76,6 +78,10 @@ extension NoticeListTableView: UITableViewDataSource {
             self?.pageBtnPublisher.send(page)
         }.store(in: &subscribtions)
         return view
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tapNoticePublisher.send(noticeArticleList[indexPath.row].id)
     }
 }
 

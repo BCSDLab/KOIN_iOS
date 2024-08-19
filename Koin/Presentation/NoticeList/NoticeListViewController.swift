@@ -74,6 +74,12 @@ final class NoticeListViewController: UIViewController {
             .sink { [weak self] page in
             self?.inputSubject.send(.changePage(page))
         }.store(in: &subscriptions)
+        
+        pageCollectionView.tapNoticePublisher.sink { [weak self] noticeId in
+            let viewModel = NoticeDataViewModel()
+            let vc = NoticeDataViewController(shopId: noticeId, viewModel: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
