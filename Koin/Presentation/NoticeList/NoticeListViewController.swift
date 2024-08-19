@@ -52,10 +52,8 @@ final class NoticeListViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateBoard(noticeList, noticeListType):
-                self?.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
-            case .updatePageList(_):
-                print("")
+            case let .updateBoard(noticeList, noticeListPages, noticeListType):
+                self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
             }
         }.store(in: &subscriptions)
         
@@ -74,9 +72,9 @@ final class NoticeListViewController: UIViewController {
 }
 
 extension NoticeListViewController {
-    private func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
+    private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
-        pageCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
+        pageCollectionView.updateBoard(noticeList: noticeList, noticeListPages: pageInfos, noticeListType: noticeListType)
     }
     
     func moveIndicator(at position: CGFloat, width: CGFloat) {

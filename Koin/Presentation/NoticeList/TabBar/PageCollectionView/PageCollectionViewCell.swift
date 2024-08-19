@@ -12,69 +12,42 @@ import Then
 
 final class PageCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
-    private let noticeKeyWordCollectionView = NoticeKeyWordCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
-        flowLayout?.scrollDirection = .horizontal
-    }
-    
-    private let noticeTableView = NoticeListTableView(frame: .zero, style: .plain).then {
+    private let noticeTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .white
         $0.separatorStyle = .singleLine
-        $0.isScrollEnabled = false
     }
-    
-    private let scrollView = UIScrollView()
-
-    private let contentViewInScrollView = UIView()
     
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func configure(noticeArticleList: [NoticeArticleDTO], noticeListPages: NoticeListPages) {
+        noticeTableView.updateNoticeList(noticeArticleList: noticeArticleList, pageInfos: noticeListPages)
+        noticeTableView.reloadData()
+    }
     
-    func configure(noticeArticleList: [NoticeArticleDTO]) {
-        noticeTableView.updateNoticeList(noticeArticleList: noticeArticleList)
+    func getPageInfos(pageInfos: NoticeListPages) {
+        
     }
 }
 
 extension PageCollectionViewCell {
     private func setUpLayouts() {
-        contentView.addSubview(scrollView)
-        scrollView.addSubview(contentViewInScrollView)
-        
-        [noticeKeyWordCollectionView, noticeTableView].forEach {
-            contentViewInScrollView.addSubview($0)
-        }
+        contentView.addSubview(noticeTableView)
     }
-    
+
     private func setUpConstraints() {
-        scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-        
-        contentViewInScrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalTo(scrollView)
-        }
-        
-        noticeKeyWordCollectionView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(66)
-        }
-        
         noticeTableView.snp.makeConstraints {
-            $0.top.equalTo(noticeKeyWordCollectionView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(110 * 10)
-            $0.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
-    
+
     private func configureView() {
         setUpLayouts()
         setUpConstraints()

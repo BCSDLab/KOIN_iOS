@@ -33,14 +33,14 @@ final class PageCollectionView: UICollectionView, UICollectionViewDataSource {
 }
 
 extension PageCollectionView {
-    func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
+    func updateBoard(noticeList: [NoticeArticleDTO], noticeListPages: NoticeListPages, noticeListType: NoticeListType) {
         isPagingEnabled = false
         let indexPath = IndexPath(item: noticeListType.rawValue-1, section: 0)
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
         isPagingEnabled = true
         
         guard let cell = cellForItem(at: indexPath) as? PageCollectionViewCell else { return }
-        cell.configure(noticeArticleList: noticeList)
+        cell.configure(noticeArticleList: noticeList, noticeListPages: noticeListPages)
     }
 }
 
