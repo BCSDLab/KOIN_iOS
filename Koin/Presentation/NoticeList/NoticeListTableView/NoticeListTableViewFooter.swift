@@ -5,11 +5,15 @@
 //  Created by JOOMINKYUNG on 8/18/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
 
 final class NoticeListTableViewFooter: UITableViewHeaderFooterView {
+    // MARK: - Properties
+    let tapBtnPublisher = PassthroughSubject<Int, Never>()
+    private var row = 0
     // MARK: - UIComponents
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
@@ -17,13 +21,9 @@ final class NoticeListTableViewFooter: UITableViewHeaderFooterView {
         $0.spacing = 4
     }
     
-    private let nextBtn = UIButton().then {
-        $0.setTitle("다음", for: .normal)
-    }
+    private let nextBtn = UIButton()
     
-    private let previousBtn = UIButton().then {
-        $0.setTitle("이전", for: .normal)
-    }
+    private let previousBtn = UIButton()
     
     private let firstPageBtn = UIButton()
     
@@ -53,16 +53,52 @@ extension NoticeListTableViewFooter {
         [previousBtn, firstPageBtn, secondPageBtn, thirdPageBtn, fourthPageBtn, fifthPageBtn, nextBtn].forEach {
             $0.isHidden = true
         }
-        let pageBtn =  [firstPageBtn, secondPageBtn, thirdPageBtn, fourthPageBtn, fifthPageBtn]
-        for page in pageInfo.pages {
-            pageBtn[page-1].isHidden = false
-            pageBtn[page-1].setTitle("\(page)", for: .normal)
+        
+        let buttons = [firstPageBtn, secondPageBtn, thirdPageBtn, fourthPageBtn, fifthPageBtn]
+        
+        for (index, page) in pageInfo.pages.enumerated() {
+            if index < buttons.count {
+                buttons[index].isHidden = false
+                buttons[index].setTitle("\(page)", for: .normal)
+                buttons[index].setTitleColor(.appColor(.neutral600), for: .normal) // 기본 텍스트 색
+                buttons[index].backgroundColor = .appColor(.neutral300) // 기본 배경은 투명하게
+            }
+        }
+        if pageInfo.pages.count > 0 {
+            row = (pageInfo.pages[0] - 1) / 5
+        }
+        if let selectedIndex = pageInfo.selectedIndex as Int?, selectedIndex > 0 {
+            let selectedButton = buttons[(selectedIndex-1) % 5]
+            selectedButton.setTitleColor(.appColor(.neutral0), for: .normal)
+            selectedButton.backgroundColor = .appColor(.primary500)
         }
         if let isNextPage = pageInfo.isNextPage {
             nextBtn.isHidden = false
+            nextBtn.setTitle(isNextPage.rawValue, for: .normal)
         }
         if let isPreviousPage = pageInfo.isPreviousPage {
             previousBtn.isHidden = false
+            previousBtn.setTitle(isPreviousPage.rawValue, for: .normal)
+        }
+    }
+
+    
+    @objc private func tapPageBtn(sender: UIButton) {
+        switch sender {
+        case previousBtn:
+            tapBtnPublisher.send(row * 5)
+        case firstPageBtn:
+            tapBtnPublisher.send(row * 5 + 1)
+        case secondPageBtn:
+            tapBtnPublisher.send(row * 5 + 2)
+        case thirdPageBtn:
+            tapBtnPublisher.send(row * 5 + 3)
+        case fourthPageBtn:
+            tapBtnPublisher.send(row * 5 + 4)
+        case fifthPageBtn:
+            tapBtnPublisher.send(row * 5 + 5)
+        default:
+            tapBtnPublisher.send(row * 5 + 6)
         }
     }
 }
@@ -71,14 +107,15 @@ extension NoticeListTableViewFooter {
     private func setUpButtons() {
         [firstPageBtn, secondPageBtn, thirdPageBtn, fourthPageBtn, fifthPageBtn].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
-            $0.setTitleColor(.appColor(.neutral600), for: .normal)
-            $0.backgroundColor = .appColor(.neutral300)
             $0.layer.cornerRadius = 4
         }
         [previousBtn, nextBtn].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
             $0.setTitleColor(.appColor(.neutral600), for: .normal)
             $0.backgroundColor = .clear
+        }
+        [previousBtn, firstPageBtn, secondPageBtn, thirdPageBtn, fourthPageBtn, fifthPageBtn, nextBtn].forEach {
+            $0.addTarget(self, action: #selector(tapPageBtn), for: .touchUpInside)
         }
     }
     

@@ -60,7 +60,6 @@ extension NoticeListViewModel {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] articleInfo in
-            print(articleInfo)
             guard let self = self else { return }
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
         }).store(in: &subscriptions)

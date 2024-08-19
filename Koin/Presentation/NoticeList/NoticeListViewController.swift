@@ -68,6 +68,12 @@ final class NoticeListViewController: UIViewController {
         pageCollectionView.scrollBoardPublisher.sink { [weak self] boardType in
             self?.inputSubject.send(.changeBoard(boardType))
         }.store(in: &subscriptions)
+        
+        pageCollectionView.pageBtnPublisher
+            .throttle(for: .milliseconds(300), scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] page in
+            self?.inputSubject.send(.changePage(page))
+        }.store(in: &subscriptions)
     }
 }
 
