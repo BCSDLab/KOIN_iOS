@@ -12,6 +12,8 @@ final class PageCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private let colors: [UIColor] = [.red, .blue, .green, .red, .blue, .green, .red, .blue, .green, .red, .blue, .green]
     let scrollBoardPublisher = PassthroughSubject<NoticeListType, Never>()
+    let pageBtnPublisher = PassthroughSubject<Int, Never>()
+    private var subscribtions = Set<AnyCancellable>()
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -53,7 +55,9 @@ extension PageCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PageCollectionViewCell.identifier, for: indexPath) as? PageCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
+        cell.pageBtnPublisher.sink { [weak self] page in
+            self?.pageBtnPublisher.send(page)
+        }.store(in: &subscribtions)
         return cell
     }
 }
