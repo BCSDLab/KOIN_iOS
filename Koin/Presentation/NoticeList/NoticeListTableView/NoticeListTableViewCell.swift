@@ -72,25 +72,26 @@ extension NoticeListTableViewCell {
     
     private func setUpConstraints() {
         boardTitle.snp.makeConstraints {
-            $0.top.equalTo(12)
-            $0.leading.equalTo(24)
+            $0.top.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(24)
         }
         noticeTitle.snp.makeConstraints {
-            $0.top.equalTo(boardTitle.snp.bottom)
-            $0.trailing.equalTo(24)
+            $0.top.equalTo(boardTitle.snp.bottom).offset(4)
             $0.leading.equalTo(boardTitle)
+            $0.trailing.equalToSuperview().inset(24)
         }
         nickName.snp.makeConstraints {
             $0.top.equalTo(noticeTitle.snp.bottom).offset(4)
             $0.leading.equalTo(boardTitle)
         }
         separatorDot.snp.makeConstraints {
-            $0.leading.equalTo(nickName.snp.trailing)
+            $0.leading.equalTo(nickName.snp.trailing).offset(2)
             $0.top.equalTo(nickName)
         }
         createdDate.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot.snp.trailing)
+            $0.leading.equalTo(separatorDot.snp.trailing).offset(2)
             $0.top.equalTo(nickName)
+            $0.bottom.equalToSuperview().inset(12)
         }
     }
     

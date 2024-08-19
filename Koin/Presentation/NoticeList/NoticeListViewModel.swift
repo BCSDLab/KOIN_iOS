@@ -15,8 +15,7 @@ final class NoticeListViewModel: ViewModelProtocol {
         case changePage(Int)
     }
     enum Output {
-        case updateBoard([NoticeArticleDTO], NoticeListType)
-        case updatePageList(NoticeListPages)
+        case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -63,8 +62,7 @@ extension NoticeListViewModel {
         }, receiveValue: { [weak self] articleInfo in
             print(articleInfo)
             guard let self = self else { return }
-            self.outputSubject.send(.updateBoard(articleInfo.articles, self.noticeListType))
-            self.outputSubject.send(.updatePageList(articleInfo.pages))
+            self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
         }).store(in: &subscriptions)
     }
 }
