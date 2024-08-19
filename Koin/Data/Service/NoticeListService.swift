@@ -11,6 +11,8 @@ import Combine
 protocol NoticeListService {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
+    func fetchHotArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
 }
 
 final class DefaultNoticeService: NoticeListService {
@@ -21,7 +23,15 @@ final class DefaultNoticeService: NoticeListService {
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return request(.searchNoticeArticle(requestModel))
     }
-
+    
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error> {
+        return request(.fetchNoticedata(requestModel))
+    }
+    
+    func fetchHotArticles() -> AnyPublisher<[NoticeArticleDTO], Error> {
+        return request(.fetchHotArticles)
+    }
+    
     private func request<T: Decodable>(_ api: NoticeListAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)
