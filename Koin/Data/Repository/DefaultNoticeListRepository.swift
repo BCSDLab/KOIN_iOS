@@ -21,5 +21,13 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return service.searchNoticeArticle(requestModel: requestModel)
     }
+    
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error> {
+        return service.fetchNoticeData(requestModel: requestModel)
+    }
+    
+    func fetchHotArticle() -> AnyPublisher<[NoticeArticleDTO], Error> {
+        return service.fetchHotArticles()
+    }
 }
 

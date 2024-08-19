@@ -10,6 +10,8 @@ import Alamofire
 enum NoticeListAPI {
     case fetchNoticeArticles(FetchNoticeArticlesRequest)
     case searchNoticeArticle(SearchNoticeArticleRequest)
+    case fetchNoticedata(FetchNoticeDataRequest)
+    case fetchHotArticles
 }
 
 extension NoticeListAPI: Router, URLRequestConvertible {
@@ -22,21 +24,20 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles: return "/articles"
         case .searchNoticeArticle: return "/articles/search"
+        case .fetchNoticedata(let request): return "/articles/\(request.noticeId)"
+        case .fetchHotArticles: return "/articles/hot"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchNoticeArticles: return .get
-        case .searchNoticeArticle: return .get
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticedata, .fetchHotArticles:
+            return .get
         }
     }
     
     public var headers: [String: String] {
-        switch self {
-        case .fetchNoticeArticles: return [:]
-        case .searchNoticeArticle: return [:]
-        }
+        return [:]
     }
     
     
@@ -46,13 +47,16 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .searchNoticeArticle(let request):
             return try? request.toDictionary()
+        case .fetchNoticedata, .fetchHotArticles:
+            return nil
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchNoticeArticles: return URLEncoding.default
-        case .searchNoticeArticle: return URLEncoding.default
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchHotArticles:
+            return URLEncoding.default
+        case .fetchNoticedata: return URLEncoding.queryString
         }
     }
  
