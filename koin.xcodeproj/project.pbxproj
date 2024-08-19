@@ -40,6 +40,8 @@
 		833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C532C73451B00982145 /* NoticeDataViewModel.swift */; };
 		833D9C572C735F6B00982145 /* PopularNoticeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C562C735F6B00982145 /* PopularNoticeTableView.swift */; };
 		833D9C592C735F7700982145 /* PopularNoticeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */; };
+		833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */; };
+		833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
@@ -399,6 +401,8 @@
 		833D9C532C73451B00982145 /* NoticeDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewModel.swift; sourceTree = "<group>"; };
 		833D9C562C735F6B00982145 /* PopularNoticeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularNoticeTableView.swift; sourceTree = "<group>"; };
 		833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularNoticeTableViewCell.swift; sourceTree = "<group>"; };
+		833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataRequest.swift; sourceTree = "<group>"; };
+		833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataUseCase.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -820,6 +824,7 @@
 			children = (
 				833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */,
 				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
+				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -828,6 +833,7 @@
 			isa = PBXGroup;
 			children = (
 				833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */,
+				833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2284,6 +2290,7 @@
 				D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */,
 				833D9C242C6B565400982145 /* NoticeKeyWordCollectionView.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
+				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2D380E92BA714AC009AD5A9 /* ServiceSelectViewModel.swift in Sources */,
 				833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */,
@@ -2491,6 +2498,7 @@
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
+				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				833D9C182C6B3EC300982145 /* PageCollectionViewCell.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,

@@ -24,12 +24,13 @@ struct NoticeArticleDTO: Decodable {
     let id, boardId: Int
     let title, nickname: String
     let hit: Int
+    let content: String?
     let createdAt, updatedAt: String
     
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
-        case title, nickname, hit
+        case title, nickname, hit, content
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
