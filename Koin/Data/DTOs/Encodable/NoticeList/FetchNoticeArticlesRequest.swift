@@ -1,5 +1,5 @@
 //
-//  fetchNoticeArticlesRequest.swift
+//  FetchNoticeArticlesRequest.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/17/24.

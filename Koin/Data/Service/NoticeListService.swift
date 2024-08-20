@@ -12,7 +12,7 @@ protocol NoticeListService {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
-    func fetchHotArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
 }
 
 final class DefaultNoticeService: NoticeListService {
@@ -28,8 +28,8 @@ final class DefaultNoticeService: NoticeListService {
         return request(.fetchNoticedata(requestModel))
     }
     
-    func fetchHotArticles() -> AnyPublisher<[NoticeArticleDTO], Error> {
-        return request(.fetchHotArticles)
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error> {
+        return request(.fetchHotNoticeArticles)
     }
     
     private func request<T: Decodable>(_ api: NoticeListAPI) -> AnyPublisher<T, Error> {
