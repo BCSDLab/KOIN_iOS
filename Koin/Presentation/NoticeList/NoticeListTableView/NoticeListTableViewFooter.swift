@@ -60,8 +60,8 @@ extension NoticeListTableViewFooter {
             if index < buttons.count {
                 buttons[index].isHidden = false
                 buttons[index].setTitle("\(page)", for: .normal)
-                buttons[index].setTitleColor(.appColor(.neutral600), for: .normal) // 기본 텍스트 색
-                buttons[index].backgroundColor = .appColor(.neutral300) // 기본 배경은 투명하게
+                buttons[index].setTitleColor(.appColor(.neutral600), for: .normal)
+                buttons[index].backgroundColor = .appColor(.neutral300)
             }
         }
         if pageInfo.pages.count > 0 {

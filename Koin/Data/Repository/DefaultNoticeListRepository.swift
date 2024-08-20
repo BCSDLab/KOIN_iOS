@@ -26,8 +26,8 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         return service.fetchNoticeData(requestModel: requestModel)
     }
     
-    func fetchHotArticle() -> AnyPublisher<[NoticeArticleDTO], Error> {
-        return service.fetchHotArticles()
+    func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDTO], Error> {
+        return service.fetchHotNoticeArticles()
     }
 }
 

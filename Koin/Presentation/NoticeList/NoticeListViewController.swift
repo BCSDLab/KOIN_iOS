@@ -81,7 +81,8 @@ final class NoticeListViewController: UIViewController {
             let noticeListService = DefaultNoticeService()
             let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
             let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, noticeId: noticeId)
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
             let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
@@ -95,7 +96,6 @@ extension NoticeListViewController {
     }
     
     func moveIndicator(at position: CGFloat, width: CGFloat) {
-        // 전달된 위치와 너비를 사용해 인디케이터 이동
         UIView.animate(withDuration: 0.2, animations: {[weak self] in
             self?.indicatorView.snp.updateConstraints {
                 $0.leading.equalToSuperview().offset(position)
