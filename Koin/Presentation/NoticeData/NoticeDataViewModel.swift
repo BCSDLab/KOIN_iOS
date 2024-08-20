@@ -40,14 +40,12 @@ final class NoticeDataViewModel: ViewModelProtocol {
 
 extension NoticeDataViewModel {
     func getNoticeData() {
-        print("asdaf")
         let request = FetchNoticeDataRequest(noticeId: noticeId)
         fetchNoticeDataUseCase.fetchNoticeData(request: request).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] noticeData in
-            print(noticeData)
             self?.outputSubject.send(.updateNoticeData(noticeData))
         }).store(in: &subscriptions)
     }
