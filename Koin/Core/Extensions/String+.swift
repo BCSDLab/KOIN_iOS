@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 extension String {
     func hasFinalConsonant() -> Bool {
@@ -16,5 +17,49 @@ extension String {
         if (value < 0xAC00 || value > 0xD7A3) { return false }
         let last = (value - 0xAC00) % 28
         return last > 0
+    }
+    
+    func extractFromHtmlTag(htmlTag: String) -> NSAttributedString? {
+        do {
+            let docs: Document = try SwiftSoup.parse(self)
+            let elements: Elements = try docs.select(htmlTag)
+            let resultString = NSMutableAttributedString()
+            
+            for element in elements {
+                let elementText = try element.text()
+                var attributedString: NSAttributedString
+
+                if let _ = try? element.select("b").first() {
+                    let attributes: [NSAttributedString.Key: Any] = [
+                        .font: UIFont.appFont(.pretendardRegular, size: 12)
+                    ]
+                    attributedString = NSAttributedString(string: elementText, attributes: attributes)
+                } else {
+                    let attributes: [NSAttributedString.Key: Any] = [
+                        .font: UIFont.appFont(.pretendardMedium, size: 12)
+                    ]
+                    attributedString = NSAttributedString(string: elementText, attributes: attributes)
+                }
+                
+                resultString.append(attributedString)
+            }
+            
+            let finalString = resultString.string.replacingOccurrences(of: "\n\n", with: "\n")
+            return NSAttributedString(string: finalString)
+        } catch {
+                return nil
+        }
+    }
+    
+    func extractImageStringFromHtmlTag() -> String? {
+        do {
+            let docs: Document = try SwiftSoup.parse(self)
+            let element: Elements = try docs.select("img")
+             
+            let imageUrl = try element.attr("src").description
+            return imageUrl.isEmpty ? nil : imageUrl
+        } catch {
+            return nil
+        }
     }
 }

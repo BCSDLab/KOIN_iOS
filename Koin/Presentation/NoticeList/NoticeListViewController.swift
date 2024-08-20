@@ -75,10 +75,15 @@ final class NoticeListViewController: UIViewController {
             self?.inputSubject.send(.changePage(page))
         }.store(in: &subscriptions)
         
-        pageCollectionView.tapNoticePublisher.sink { [weak self] noticeId in
-            let viewModel = NoticeDataViewModel()
-            let vc = NoticeDataViewController(shopId: noticeId, viewModel: viewModel)
-            self?.navigationController?.pushViewController(vc, animated: true)
+        pageCollectionView.tapNoticePublisher
+            .throttle(for: .milliseconds(300), scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] noticeId in
+            let noticeListService = DefaultNoticeService()
+            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, noticeId: noticeId)
+            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
     }
 }
