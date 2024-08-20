@@ -24,11 +24,11 @@ final class NoticeDataViewController: UIViewController {
     
     private let titleGuideLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 14)
-        $0.textColor = .appColor(.primary400)
+        $0.textColor = .appColor(.primary600)
     }
     
     private let titleLabel = UILabel().then {
-        $0.font = .appFont(.pretendardMedium, size: 14)
+        $0.font = .appFont(.pretendardMedium, size: 16)
         $0.textColor = .appColor(.neutral800)
     }
     
@@ -72,7 +72,7 @@ final class NoticeDataViewController: UIViewController {
     }
     
     private let popularNoticeGuideLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardBold, size: 14)
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = .appColor(.neutral800)
         $0.text = "인기있는 공지"
     }
@@ -82,7 +82,7 @@ final class NoticeDataViewController: UIViewController {
     private let scrollView = UIScrollView()
     
     private let contentView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
+        $0.backgroundColor = .appColor(.neutral100)
     }
     
     private let contentLabel = UILabel()
@@ -119,11 +119,22 @@ final class NoticeDataViewController: UIViewController {
 }
 
 extension NoticeDataViewController {
-    
+    private func testData() {
+        
+    }
   
 }
 
 extension NoticeDataViewController {
+    private func setUpButtons() {
+        [inventoryButton, previousButton, nextButton].forEach {
+            $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
+            $0.backgroundColor = .appColor(.neutral300)
+            $0.setTitleColor(.appColor(.neutral600), for: .normal)
+            $0.layer.cornerRadius = 4
+        }
+        previousButton.backgroundColor = .appColor(.neutral400)
+    }
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
@@ -131,7 +142,7 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [titleGuideLabel, titleLabel, createdDate, nickName].forEach {
+        [titleGuideLabel, titleLabel, createdDate, separatorDot, nickName].forEach {
             titleWrappedView.addSubview($0)
         }
         [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
@@ -149,6 +160,8 @@ extension NoticeDataViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(scrollView)
         }
         
         titleWrappedView.snp.makeConstraints {
@@ -161,8 +174,9 @@ extension NoticeDataViewController {
         }
         
         titleLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel)
             $0.leading.equalTo(titleGuideLabel)
-            $0.trailing.equalTo(24)
+            $0.trailing.equalToSuperview().inset(24)
         }
         
         createdDate.snp.makeConstraints {
@@ -182,34 +196,41 @@ extension NoticeDataViewController {
         }
         
         contentWrappedView.snp.makeConstraints {
-            $0.top.equalTo(titleWrappedView).offset(6)
+            $0.top.equalTo(titleWrappedView.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
         }
         
         contentLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.leading.trailing.equalTo(24)
+            $0.leading.trailing.equalToSuperview().offset(24)
         }
         
         contentImage.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(3)
-            $0.width.equalTo(500)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(8)
+            $0.width.equalTo(327)
+            $0.centerX.equalToSuperview()
         }
         
         inventoryButton.snp.makeConstraints {
-            $0.top.equalTo(contentImage).offset(20)
-            $0.leading.equalTo(contentImage)
+            $0.top.equalTo(contentImage).offset(32)
+            $0.leading.equalToSuperview().offset(24)
+            $0.width.equalTo(45)
+            $0.height.equalTo(31)
         }
         
         nextButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(inventoryButton)
+            $0.height.equalTo(31)
+            $0.width.equalTo(59)
         }
         
         previousButton.snp.makeConstraints {
-            $0.trailing.equalTo(nextButton).inset(3)
+            $0.trailing.equalTo(nextButton.snp.leading).offset(-8)
             $0.top.equalTo(inventoryButton)
             $0.bottom.equalToSuperview().inset(20)
+            $0.height.equalTo(31)
+            $0.width.equalTo(59)
         }
         
         popularNoticeWrappedView.snp.makeConstraints {
@@ -219,18 +240,19 @@ extension NoticeDataViewController {
         }
         
         popularNoticeGuideLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.leading.equalTo(previousButton)
+            $0.top.equalToSuperview().offset(14)
+            $0.leading.equalToSuperview().offset(24)
         }
         
         popularNoticeTableView.snp.makeConstraints {
-            $0.top.equalTo(popularNoticeGuideLabel).offset(20)
+            $0.top.equalTo(popularNoticeGuideLabel).offset(14)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(300)
+            $0.bottom.equalToSuperview().inset(129)
         }
     }
     
     private func configureView() {
+        setUpButtons()
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
