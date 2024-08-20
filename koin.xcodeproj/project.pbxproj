@@ -38,11 +38,12 @@
 		833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */; };
 		833D9C522C73451000982145 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C512C73451000982145 /* NoticeDataViewController.swift */; };
 		833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C532C73451B00982145 /* NoticeDataViewModel.swift */; };
-		833D9C572C735F6B00982145 /* PopularNoticeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C562C735F6B00982145 /* PopularNoticeTableView.swift */; };
-		833D9C592C735F7700982145 /* PopularNoticeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */; };
+		833D9C572C735F6B00982145 /* HotNoticeArticlesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C562C735F6B00982145 /* HotNoticeArticlesTableView.swift */; };
+		833D9C592C735F7700982145 /* HotArticlesNoticeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C582C735F7700982145 /* HotArticlesNoticeTableViewCell.swift */; };
 		833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */; };
 		833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */; };
 		833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */; };
+		833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
@@ -400,11 +401,12 @@
 		833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewFooter.swift; sourceTree = "<group>"; };
 		833D9C512C73451000982145 /* NoticeDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewController.swift; sourceTree = "<group>"; };
 		833D9C532C73451B00982145 /* NoticeDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewModel.swift; sourceTree = "<group>"; };
-		833D9C562C735F6B00982145 /* PopularNoticeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularNoticeTableView.swift; sourceTree = "<group>"; };
-		833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularNoticeTableViewCell.swift; sourceTree = "<group>"; };
+		833D9C562C735F6B00982145 /* HotNoticeArticlesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotNoticeArticlesTableView.swift; sourceTree = "<group>"; };
+		833D9C582C735F7700982145 /* HotArticlesNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotArticlesNoticeTableViewCell.swift; sourceTree = "<group>"; };
 		833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataRequest.swift; sourceTree = "<group>"; };
 		833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataUseCase.swift; sourceTree = "<group>"; };
 		833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataInfo.swift; sourceTree = "<group>"; };
+		833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -837,6 +839,7 @@
 			children = (
 				833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */,
 				833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */,
+				833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -844,20 +847,20 @@
 		833D9C502C7344F400982145 /* NoticeData */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C552C735F4500982145 /* PopularNoticeTableView */,
+				833D9C552C735F4500982145 /* HotNoticeArticlesTableView */,
 				833D9C512C73451000982145 /* NoticeDataViewController.swift */,
 				833D9C532C73451B00982145 /* NoticeDataViewModel.swift */,
 			);
 			path = NoticeData;
 			sourceTree = "<group>";
 		};
-		833D9C552C735F4500982145 /* PopularNoticeTableView */ = {
+		833D9C552C735F4500982145 /* HotNoticeArticlesTableView */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C562C735F6B00982145 /* PopularNoticeTableView.swift */,
-				833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */,
+				833D9C562C735F6B00982145 /* HotNoticeArticlesTableView.swift */,
+				833D9C582C735F7700982145 /* HotArticlesNoticeTableViewCell.swift */,
 			);
-			path = PopularNoticeTableView;
+			path = HotNoticeArticlesTableView;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -2256,7 +2259,7 @@
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
-				833D9C572C735F6B00982145 /* PopularNoticeTableView.swift in Sources */,
+				833D9C572C735F6B00982145 /* HotNoticeArticlesTableView.swift in Sources */,
 				837BFA562BB7E4B6001FCBD4 /* BusTimetableViewController.swift in Sources */,
 				D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */,
 				D27DD0D62BA6085E0081FD36 /* LandViewModel.swift in Sources */,
@@ -2280,7 +2283,7 @@
 				D2908D3A2BBCA35C0008F908 /* AddClassCollectionViewCell.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
 				D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */,
-				833D9C592C735F7700982145 /* PopularNoticeTableViewCell.swift in Sources */,
+				833D9C592C735F7700982145 /* HotArticlesNoticeTableViewCell.swift in Sources */,
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
 				D27DD0DC2BA6090F0081FD36 /* MenuImageCollectionViewCell.swift in Sources */,
 				D2D380E32BA6D1AC009AD5A9 /* BaseViewContoller.swift in Sources */,
@@ -2473,6 +2476,7 @@
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
 				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
 				D239448E2C3C9D7900048F45 /* ReviewListCollectionViewCell.swift in Sources */,
+				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
 				833D9C4D2C721A7D00982145 /* NoticeListTableViewHeader.swift in Sources */,

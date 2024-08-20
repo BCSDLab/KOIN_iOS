@@ -78,7 +78,7 @@ final class NoticeDataViewController: UIViewController {
         $0.text = "인기있는 공지"
     }
     
-    private let popularNoticeTableView = UITableView(frame: .zero, style: .plain)
+    private let hotNoticeArticlesTableView = HotNoticeArticlesTableView(frame: .zero, style: .plain)
     
     private let scrollView = UIScrollView()
     
@@ -113,6 +113,7 @@ final class NoticeDataViewController: UIViewController {
         super.viewDidLoad()
         bind()
         inputSubject.send(.getNoticeData)
+        inputSubject.send(.getPopularNotices)
         configureView()
     }
     
@@ -123,14 +124,16 @@ final class NoticeDataViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .updateNoticeData(noticeData):
-                self?.getNoticeData(noticeData: noticeData)
+                self?.updateNoticeData(noticeData: noticeData)
+            case let .updatePopularArticles(notices):
+                self?.updatePopularArticle(notices: notices)
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
-    private func getNoticeData(noticeData: NoticeDataInfo) {
+    private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
         titleLabel.text = noticeData.title
         nickName.text = noticeData.nickName
@@ -148,6 +151,10 @@ extension NoticeDataViewController {
                 $0.height.equalTo(31)
             }
         }
+    }
+    
+    private func updatePopularArticle(notices: [NoticeArticleDTO]) {
+        hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
     }
 }
 
@@ -174,7 +181,7 @@ extension NoticeDataViewController {
         [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
             contentWrappedView.addSubview($0)
         }
-        [popularNoticeGuideLabel, popularNoticeTableView].forEach {
+        [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
             popularNoticeWrappedView.addSubview($0)
         }
     }
@@ -186,8 +193,7 @@ extension NoticeDataViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            $0.width.equalTo(scrollView) // 스크롤 뷰와 폭이 동일하게 설정
-            // 여기서 스크롤 뷰가 높이를 계산할 수 있도록 내부 뷰들의 제약 조건을 설정
+            $0.width.equalTo(scrollView)
         }
         
         titleWrappedView.snp.makeConstraints {
@@ -264,7 +270,7 @@ extension NoticeDataViewController {
         popularNoticeWrappedView.snp.makeConstraints {
             $0.top.equalTo(contentWrappedView.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview() // 이 부분이 중요. contentView의 바닥과 연결
+            $0.bottom.equalToSuperview()
         }
         
         popularNoticeGuideLabel.snp.makeConstraints {
@@ -272,10 +278,11 @@ extension NoticeDataViewController {
             $0.leading.equalToSuperview().offset(24)
         }
         
-        popularNoticeTableView.snp.makeConstraints {
+        hotNoticeArticlesTableView.snp.makeConstraints {
             $0.top.equalTo(popularNoticeGuideLabel.snp.bottom).offset(14)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(129) // 바닥과의 여백 설정
+            $0.height.equalTo(184)
+            $0.bottom.equalToSuperview().inset(129) 
         }
     }
 

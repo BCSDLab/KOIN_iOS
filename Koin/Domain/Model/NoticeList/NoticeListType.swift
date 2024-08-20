@@ -1,5 +1,5 @@
 //
-//  NoticeListTab.swift
+//  NoticeListType.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.

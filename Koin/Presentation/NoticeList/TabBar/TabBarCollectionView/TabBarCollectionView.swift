@@ -54,12 +54,10 @@ extension TabBarCollectionView {
     private func moveIndicator(indexPath: IndexPath ){
         guard let cell = self.cellForItem(at: indexPath) as? TabBarCollectionViewCell else { return }
         
-        // 셀의 프레임을 화면 좌표계로 변환
         let cellFrameInSuperview = self.convert(cell.frame, to: self.superview)
         let cellPosition = cellFrameInSuperview.minX
         let cellWidth = cellFrameInSuperview.width
         
-        // 인디케이터 정보를 ViewController로 전송
         self.indicatorInfoPublisher.send((cellPosition, cellWidth))
     }
 }
