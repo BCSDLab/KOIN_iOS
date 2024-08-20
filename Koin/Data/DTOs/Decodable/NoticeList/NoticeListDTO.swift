@@ -38,8 +38,7 @@ struct NoticeArticleDTO: Decodable {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        let contentValue = content?.extractFromHtmlTag(htmlTag: "p") ?? NSAttributedString(string: "")
         let imageString = content?.extractImageStringFromHtmlTag()
-        return NoticeDataInfo(title: title, boardId: boardId, content: contentValue, nickName: nickname, hit: hit, createdAt: createdAt, updatedAt: updatedAt, imageString: imageString)
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", nickName: nickname, hit: hit, createdAt: createdAt, updatedAt: updatedAt, imageString: imageString)
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 struct NoticeDataInfo {
     let title: String
     let boardId: Int
-    let content: NSAttributedString
+    let content: String
     let nickName: String
     let hit: Int
     let createdAt: String

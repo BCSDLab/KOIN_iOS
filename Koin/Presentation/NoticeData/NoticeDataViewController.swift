@@ -135,7 +135,7 @@ extension NoticeDataViewController {
         titleLabel.text = noticeData.title
         nickName.text = noticeData.nickName
         createdDate.text = noticeData.createdAt
-        contentLabel.attributedText = noticeData.content
+        contentLabel.attributedText = noticeData.content.extractFromHtmlTag(regularFont: UIFont.appFont(.pretendardRegular, size: 14), boldFont: .appFont(.pretendardBold, size: 14))
         if let imageString = noticeData.imageString {
             contentImage.loadImage(from: imageString)
         }
@@ -235,6 +235,7 @@ extension NoticeDataViewController {
         contentImage.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom).offset(32)
             $0.width.equalTo(327)
+            $0.height.equalTo(457)
             $0.centerX.equalToSuperview()
         }
         
