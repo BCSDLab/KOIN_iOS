@@ -26,6 +26,7 @@ pod 'Cosmos'
 pod 'Kingfisher'
 pod 'KakaoSDKShare'  
 pod 'KakaoSDKTemplate'
+pod 'SwiftSoup'
 end
 
 target 'NotificationService' do

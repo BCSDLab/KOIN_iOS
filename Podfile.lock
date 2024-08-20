@@ -144,6 +144,7 @@ PODS:
     - NMapsGeometry
   - PromisesObjC (2.4.0)
   - SnapKit (5.7.1)
+  - SwiftSoup (2.7.3)
   - Then (3.0.0)
 
 DEPENDENCIES:
@@ -160,6 +161,7 @@ DEPENDENCIES:
   - Moya
   - NMapsMap
   - SnapKit
+  - SwiftSoup
   - Then
 
 SPEC REPOS:
@@ -186,6 +188,7 @@ SPEC REPOS:
     - NMapsMap
     - PromisesObjC
     - SnapKit
+    - SwiftSoup
     - Then
 
 SPEC CHECKSUMS:
@@ -211,8 +214,9 @@ SPEC CHECKSUMS:
   NMapsMap: e879088eeee2d1e3b97f0a609076e1824dce2cad
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftSoup: e3849c3293b1efee9cf892f91f6ae5c22bfeb5f7
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 9bddbc32322dcd8769d5651f16e4b6e14095f936
+PODFILE CHECKSUM: e992ad5f1a7054cd7f362158d1595195ab0453c3
 
 COCOAPODS: 1.15.2

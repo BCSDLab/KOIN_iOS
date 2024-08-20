@@ -44,6 +44,7 @@
 		833D9C592C735F7700982145 /* PopularNoticeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */; };
 		833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */; };
 		833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */; };
+		833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
@@ -437,6 +438,7 @@
 		833D9C582C735F7700982145 /* PopularNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularNoticeTableViewCell.swift; sourceTree = "<group>"; };
 		833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataRequest.swift; sourceTree = "<group>"; };
 		833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataUseCase.swift; sourceTree = "<group>"; };
+		833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataInfo.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
@@ -870,6 +872,7 @@
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
+				833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2582,6 +2585,7 @@
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				837BFA542BB7E4A3001FCBD4 /* SearchBusViewController.swift in Sources */,
+				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
