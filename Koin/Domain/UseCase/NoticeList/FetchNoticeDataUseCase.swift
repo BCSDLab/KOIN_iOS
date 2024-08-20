@@ -9,17 +9,19 @@ import Combine
 import Foundation
 
 protocol FetchNoticeDataUseCase {
-    //func fetchNoticeData(request: FetchNoticeDataRequest) -> AnyPublisher<[NoticeArticleDTO], Error>
+    func fetchNoticeData(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, Error>
 }
 
-final class DefaultFetchNoticedataUseCase: FetchNoticeDataUseCase {
+final class DefaultFetchNoticeDataUseCase: FetchNoticeDataUseCase {
     let noticeListRepository: NoticeListRepository
     
     init(noticeListRepository: NoticeListRepository) {
         self.noticeListRepository = noticeListRepository
     }
     
-    /* func fetchNoticeData(request: FetchNoticeDataRequest) -> AnyPublisher<[NoticeArticleDTO], any Error> {
-        
-    } */ 
+    func fetchNoticeData(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, Error> {
+        return noticeListRepository.fetchNoticeData(requestModel: request).map { data in
+            data.toDomain()
+        }.eraseToAnyPublisher()
+    }
 }

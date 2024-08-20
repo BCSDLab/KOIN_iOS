@@ -29,6 +29,7 @@ final class NoticeDataViewController: UIViewController {
     
     private let titleLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 16)
+        $0.numberOfLines = 0
         $0.textColor = .appColor(.neutral800)
     }
     
@@ -85,13 +86,18 @@ final class NoticeDataViewController: UIViewController {
         $0.backgroundColor = .appColor(.neutral100)
     }
     
-    private let contentLabel = UILabel()
+    private let contentLabel = UILabel().then {
+        $0.numberOfLines = 0
+    }
     
-    private let contentImage = UIImageView()
+    private let contentImage = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+    }
     
     // MARK: - Initialization
     
-    init(shopId: Int, viewModel: NoticeDataViewModel) {
+    init(viewModel: NoticeDataViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -105,6 +111,8 @@ final class NoticeDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
+        inputSubject.send(.getNoticeData)
         configureView()
     }
     
@@ -113,16 +121,34 @@ final class NoticeDataViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-           
+            switch output {
+            case let .updateNoticeData(noticeData):
+                self?.getNoticeData(noticeData: noticeData)
+            }
         }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
-    private func testData() {
-        
+    private func getNoticeData(noticeData: NoticeDataInfo) {
+        titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
+        titleLabel.text = noticeData.title
+        nickName.text = noticeData.nickName
+        createdDate.text = noticeData.createdAt
+        contentLabel.attributedText = noticeData.content
+        if let imageString = noticeData.imageString {
+            contentImage.loadImage(from: imageString)
+        }
+        else {
+            contentImage.isHidden = true
+            inventoryButton.snp.remakeConstraints {
+                $0.top.equalTo(contentLabel.snp.bottom).offset(32)
+                $0.leading.equalToSuperview().offset(24)
+                $0.width.equalTo(45)
+                $0.height.equalTo(31)
+            }
+        }
     }
-  
 }
 
 extension NoticeDataViewController {
@@ -160,8 +186,8 @@ extension NoticeDataViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            $0.width.equalTo(scrollView)
-            $0.height.equalTo(scrollView)
+            $0.width.equalTo(scrollView) // 스크롤 뷰와 폭이 동일하게 설정
+            // 여기서 스크롤 뷰가 높이를 계산할 수 있도록 내부 뷰들의 제약 조건을 설정
         }
         
         titleWrappedView.snp.makeConstraints {
@@ -174,7 +200,7 @@ extension NoticeDataViewController {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel)
+            $0.top.equalTo(titleGuideLabel.snp.bottom)
             $0.leading.equalTo(titleGuideLabel)
             $0.trailing.equalToSuperview().inset(24)
         }
@@ -202,17 +228,18 @@ extension NoticeDataViewController {
         
         contentLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.leading.trailing.equalToSuperview().offset(24)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().inset(24)
         }
         
         contentImage.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(8)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(32)
             $0.width.equalTo(327)
             $0.centerX.equalToSuperview()
         }
         
         inventoryButton.snp.makeConstraints {
-            $0.top.equalTo(contentImage).offset(32)
+            $0.top.equalTo(contentImage.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(45)
             $0.height.equalTo(31)
@@ -236,7 +263,7 @@ extension NoticeDataViewController {
         popularNoticeWrappedView.snp.makeConstraints {
             $0.top.equalTo(contentWrappedView.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview() // 이 부분이 중요. contentView의 바닥과 연결
         }
         
         popularNoticeGuideLabel.snp.makeConstraints {
@@ -245,11 +272,12 @@ extension NoticeDataViewController {
         }
         
         popularNoticeTableView.snp.makeConstraints {
-            $0.top.equalTo(popularNoticeGuideLabel).offset(14)
+            $0.top.equalTo(popularNoticeGuideLabel.snp.bottom).offset(14)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(129)
+            $0.bottom.equalToSuperview().inset(129) // 바닥과의 여백 설정
         }
     }
+
     
     private func configureView() {
         setUpButtons()
