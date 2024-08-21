@@ -18,6 +18,7 @@ final class NoticeDataViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    
     private let titleWrappedView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -78,6 +79,16 @@ final class NoticeDataViewController: UIViewController {
         $0.text = "인기있는 공지"
     }
     
+    private let navigationTitle = UILabel().then {
+        $0.text = "공지사항"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+    }
+    
+    private let backButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
+        $0.tintColor = UIColor.appColor(.neutral800)
+    }
+    
     private let hotNoticeArticlesTableView = HotNoticeArticlesTableView(frame: .zero, style: .plain)
     
     private let scrollView = UIScrollView()
@@ -111,10 +122,21 @@ final class NoticeDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Bind
@@ -133,6 +155,10 @@ final class NoticeDataViewController: UIViewController {
 }
 
 extension NoticeDataViewController {
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
         titleLabel.text = noticeData.title
@@ -175,7 +201,7 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [titleGuideLabel, titleLabel, createdDate, separatorDot, nickName].forEach {
+        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName].forEach {
             titleWrappedView.addSubview($0)
         }
         [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
@@ -200,9 +226,21 @@ extension NoticeDataViewController {
             $0.leading.top.trailing.equalToSuperview()
         }
         
+        backButton.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.width.equalTo(24)
+            $0.height.equalTo(24)
+        }
+        
+        navigationTitle.snp.makeConstraints {
+            $0.centerY.equalTo(backButton.snp.centerY)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
         titleGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalTo(backButton.snp.bottom).offset(28)
         }
         
         titleLabel.snp.makeConstraints {

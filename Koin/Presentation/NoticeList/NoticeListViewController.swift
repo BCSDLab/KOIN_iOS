@@ -12,11 +12,13 @@ import UIKit
 
 final class NoticeListViewController: UIViewController {
     // MARK: - Properties
+    
     private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    
     private let pageCollectionView = PageCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
@@ -31,14 +33,41 @@ final class NoticeListViewController: UIViewController {
         $0.backgroundColor = .appColor(.primary500)
     }
     
+    private let navigationTitle = UILabel().then {
+        $0.text = "공지사항"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+    }
+    
+    private let backButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
+        $0.tintColor = .appColor(.neutral800)
+    }
+    
+    private let navigationBarWrappedView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         super.viewDidLoad()
         configureView()
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     // MARK: - Initialization
+    
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -90,6 +119,10 @@ final class NoticeListViewController: UIViewController {
 }
 
 extension NoticeListViewController {
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         pageCollectionView.updateBoard(noticeList: noticeList, noticeListPages: pageInfos, noticeListType: noticeListType)
@@ -108,22 +141,44 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [tabBarCollectionView, pageCollectionView, indicatorView].forEach {
+        [navigationBarWrappedView, tabBarCollectionView, pageCollectionView, indicatorView].forEach {
             view.addSubview($0)
+        }
+        [backButton, navigationTitle].forEach {
+            navigationBarWrappedView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.bottom.equalTo(backButton).offset(13)
+        }
+        
+        backButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.equalToSuperview().offset(24)
+            $0.width.equalTo(24)
+            $0.height.equalTo(24)
+        }
+        
+        navigationTitle.snp.makeConstraints {
+            $0.centerY.equalTo(backButton.snp.centerY)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
         tabBarCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
             $0.height.equalTo(50)
         }
+        
         pageCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
         }
+        
         indicatorView.snp.makeConstraints {
             $0.top.equalTo(tabBarCollectionView.snp.bottom)
             $0.leading.equalToSuperview()
