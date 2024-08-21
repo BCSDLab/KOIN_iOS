@@ -346,7 +346,6 @@ extension ServiceSelectViewController {
         let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
         let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase)
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
-        noticeListViewController.title = "공지사항"
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }
     
