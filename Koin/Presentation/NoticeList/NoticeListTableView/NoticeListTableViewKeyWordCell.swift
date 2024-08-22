@@ -1,5 +1,5 @@
 //
-//  NoticeListTableViewHeader.swift
+//  NoticeListTableViewKeyWordCell.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/18/24.
@@ -9,17 +9,22 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeListTableViewHeader: UITableViewHeaderFooterView {
+final class NoticeListTableViewKeyWordCell: UITableViewCell {
+    // MARK: - Properties
+    
+    static let id = "NoticeListTableViewKeyWordCellIdentifier"
+    
     // MARK: - UIComponents
+    
     private let noticeKeyWordCollectionView = NoticeKeyWordCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
     }
     
     // MARK: - Initialization
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+ 
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
     }
     
@@ -27,16 +32,20 @@ final class NoticeListTableViewHeader: UITableViewHeaderFooterView {
         super.init(coder: coder)
         configureView()
     }
+    
+    func updateKeyWordsList(keyWordList: [NoticeKeyWordDTO]) {
+        noticeKeyWordCollectionView.updateUserKeyWordList(keyWordList: keyWordList)
+    }
 }
 
-extension NoticeListTableViewHeader {
+extension NoticeListTableViewKeyWordCell {
     private func setUpLayouts() {
-        addSubview(noticeKeyWordCollectionView)
+        contentView.addSubview(noticeKeyWordCollectionView)
     }
     
     private func setUpConstraints() {
         noticeKeyWordCollectionView.snp.makeConstraints {
-            $0.leading.edges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
     
