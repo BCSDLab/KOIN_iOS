@@ -12,9 +12,13 @@ import Then
 
 final class TabBarCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
-    let tabTitle = UILabel().then {
+    private let tabTitle = UILabel().then {
         $0.textAlignment = .center
         $0.font = .appFont(.pretendardMedium, size: 14)
+    }
+    
+    private let indicatorView = UIView().then {
+        $0.backgroundColor = .appColor(.primary500)
     }
     
     // MARK: - Initialization
@@ -33,19 +37,25 @@ final class TabBarCollectionViewCell: UICollectionViewCell {
     
     func selectTab(isSelected: Bool) {
         tabTitle.textColor = isSelected ? .appColor(.primary500) : .appColor(.neutral500)
+        indicatorView.isHidden = isSelected ? false : true
     }
 }
 
 extension TabBarCollectionViewCell {
     private func setUpLayouts() {
-        [tabTitle].forEach {
+        [tabTitle, indicatorView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        tabTitle.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+        tabTitle.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+        }
+        
+        indicatorView.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1.5)
         }
     }
     

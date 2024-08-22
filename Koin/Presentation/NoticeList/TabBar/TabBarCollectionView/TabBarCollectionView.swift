@@ -13,9 +13,6 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private let noticeTabList = NoticeListType.allCases
     let selectTabPublisher = PassthroughSubject<NoticeListType, Never>()
-    let indicatorInfoPublisher = PassthroughSubject<(CGFloat, CGFloat), Never>()
-    private let colors: [UIColor] = [.red, .blue, .green, .red, .blue, .green, .red, .blue, .green, .red, .blue, .green]
-    private var isScrolled: Bool = false
     private var pendingScrollIndex: IndexPath?
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -30,7 +27,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     
     private func commonInit() {
         register(TabBarCollectionViewCell.self, forCellWithReuseIdentifier: TabBarCollectionViewCell.identifier)
-        self.decelerationRate = .fast
+        self.decelerationRate = .normal
         self.showsHorizontalScrollIndicator = false
         dataSource = self
         delegate = self
@@ -39,27 +36,10 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
 
 extension TabBarCollectionView {
     func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
-        isScrolled = false
-        let indexPath = IndexPath(item: noticeListType.rawValue-1, section: 0)
+        let indexPath = IndexPath(item: noticeListType.rawValue-4, section: 0)
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            guard let self = self else { return }
-            if !self.isScrolled {
-                moveIndicator(indexPath: indexPath)
-                reloadData()
-            }
-        }
-    }
-    
-    private func moveIndicator(indexPath: IndexPath) {
-        guard let cell = self.cellForItem(at: indexPath) as? TabBarCollectionViewCell else { return }
-        
-        let cellFrameInSuperview = self.convert(cell.frame, to: self.superview)
-        let cellPosition = cellFrameInSuperview.minX
-        let cellWidth = cellFrameInSuperview.width
-        
-        self.indicatorInfoPublisher.send((cellPosition, cellWidth))
+        reloadData()
     }
 }
 
@@ -84,10 +64,7 @@ extension TabBarCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarCollectionViewCell.identifier, for: indexPath) as? TabBarCollectionViewCell {
-            cell.configure(title: noticeTabList[indexPath.row].displayName)
-            selectTabPublisher.send(noticeTabList[indexPath.row])
-        }
+        selectTabPublisher.send(noticeTabList[indexPath.row])
     }
 }
 
@@ -104,13 +81,3 @@ extension TabBarCollectionView: UICollectionViewDelegateFlowLayout {
         return 0
     }
 }
-
-extension TabBarCollectionView: UIScrollViewDelegate {
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        if let indexPath = pendingScrollIndex {
-            moveIndicator(indexPath: indexPath)
-        }
-        isScrolled = true
-    }
-}
-
