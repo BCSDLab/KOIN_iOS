@@ -15,8 +15,6 @@
 		833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */; };
 		833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C112C6B26A900982145 /* NoticeListType.swift */; };
 		833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */; };
-		833D9C162C6B3EB100982145 /* PageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C152C6B3EB100982145 /* PageCollectionView.swift */; };
-		833D9C182C6B3EC300982145 /* PageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */; };
 		833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */; };
 		833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */; };
 		833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */; };
@@ -409,8 +407,6 @@
 		833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
 		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
 		833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
-		833D9C152C6B3EB100982145 /* PageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionView.swift; sourceTree = "<group>"; };
-		833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionViewCell.swift; sourceTree = "<group>"; };
 		833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableView.swift; sourceTree = "<group>"; };
 		833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewCell.swift; sourceTree = "<group>"; };
 		833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDTO.swift; sourceTree = "<group>"; };
@@ -822,7 +818,6 @@
 		833D9C082C6B244900982145 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C0C2C6B24BD00982145 /* PageCollectionView */,
 				833D9C0B2C6B24AD00982145 /* TabBarCollectionView */,
 			);
 			path = TabBar;
@@ -855,15 +850,6 @@
 				833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */,
 			);
 			path = TabBarCollectionView;
-			sourceTree = "<group>";
-		};
-		833D9C0C2C6B24BD00982145 /* PageCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				833D9C152C6B3EB100982145 /* PageCollectionView.swift */,
-				833D9C172C6B3EC300982145 /* PageCollectionViewCell.swift */,
-			);
-			path = PageCollectionView;
 			sourceTree = "<group>";
 		};
 		833D9C102C6B269000982145 /* NoticeList */ = {
@@ -2678,7 +2664,6 @@
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
-				833D9C182C6B3EC300982145 /* PageCollectionViewCell.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
