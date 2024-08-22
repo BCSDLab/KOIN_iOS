@@ -13,9 +13,11 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Input {
         case changeBoard(NoticeListType)
         case changePage(Int)
+        case getUserKeyWordList
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
+        case updateUserKeyWordList([NoticeKeyWordDTO], NoticeListType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -43,6 +45,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.changeBoard(noticeListType: noticeListType)
             case let .changePage(page):
                 self?.getNoticeInfo(page: page)
+            case .getUserKeyWordList:
+                self?.getUserKeyWordList()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -63,6 +67,11 @@ extension NoticeListViewModel {
             guard let self = self else { return }
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
         }).store(in: &subscriptions)
+    }
+    
+    private func getUserKeyWordList() {
+        let testKeyWords = [NoticeKeyWordDTO(id: 0, keyWord: "교환학생"), NoticeKeyWordDTO(id: 1, keyWord: "학사")]
+        outputSubject.send(.updateUserKeyWordList(testKeyWords, noticeListType))
     }
 }
 

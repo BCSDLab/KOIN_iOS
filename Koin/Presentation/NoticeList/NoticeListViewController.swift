@@ -54,6 +54,7 @@ final class NoticeListViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        inputSubject.send(.getUserKeyWordList)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,6 +84,8 @@ final class NoticeListViewController: UIViewController {
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
+            case let .updateUserKeyWordList(noticeKeyWordList, noticeListType):
+                self?.updateUserKeyWordList(keyWords: noticeKeyWordList, noticeListType: noticeListType)
             }
         }.store(in: &subscriptions)
         
@@ -128,7 +131,7 @@ extension NoticeListViewController {
         pageCollectionView.updateBoard(noticeList: noticeList, noticeListPages: pageInfos, noticeListType: noticeListType)
     }
     
-    func moveIndicator(at position: CGFloat, width: CGFloat) {
+    private func moveIndicator(at position: CGFloat, width: CGFloat) {
         UIView.animate(withDuration: 0.2, animations: {[weak self] in
             self?.indicatorView.snp.updateConstraints {
                 $0.leading.equalToSuperview().offset(position)
@@ -136,6 +139,10 @@ extension NoticeListViewController {
             }
             self?.view.layoutIfNeeded()
         })
+    }
+    
+    private func updateUserKeyWordList(keyWords: [NoticeKeyWordDTO], noticeListType: NoticeListType) {
+        pageCollectionView.updateKeyWordList(keyWordList: keyWords, noticeListType: noticeListType)
     }
 }
 

@@ -21,7 +21,6 @@
 		833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */; };
 		833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */; };
 		833D9C242C6B565400982145 /* NoticeKeyWordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */; };
-		833D9C262C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */; };
 		833D9C282C6B58ED00982145 /* NoticeKeyWordDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C272C6B58ED00982145 /* NoticeKeyWordDTO.swift */; };
 		833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C2A2C6C679700982145 /* NoticeListViewController.swift */; };
 		833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */; };
@@ -34,7 +33,7 @@
 		833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C462C7067AE00982145 /* NoticeListAPI.swift */; };
 		833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */; };
 		833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */; };
-		833D9C4D2C721A7D00982145 /* NoticeListTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4C2C721A7D00982145 /* NoticeListTableViewHeader.swift */; };
+		833D9C4D2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4C2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift */; };
 		833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */; };
 		833D9C522C73451000982145 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C512C73451000982145 /* NoticeDataViewController.swift */; };
 		833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C532C73451B00982145 /* NoticeDataViewModel.swift */; };
@@ -58,6 +57,7 @@
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		83A261802C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2617F2C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
@@ -384,7 +384,6 @@
 		833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewCell.swift; sourceTree = "<group>"; };
 		833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDTO.swift; sourceTree = "<group>"; };
 		833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionView.swift; sourceTree = "<group>"; };
-		833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		833D9C272C6B58ED00982145 /* NoticeKeyWordDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordDTO.swift; sourceTree = "<group>"; };
 		833D9C2A2C6C679700982145 /* NoticeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewController.swift; sourceTree = "<group>"; };
 		833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewModel.swift; sourceTree = "<group>"; };
@@ -397,7 +396,7 @@
 		833D9C462C7067AE00982145 /* NoticeListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListAPI.swift; sourceTree = "<group>"; };
 		833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNoticeListRepository.swift; sourceTree = "<group>"; };
 		833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchArticleRequest.swift; sourceTree = "<group>"; };
-		833D9C4C2C721A7D00982145 /* NoticeListTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewHeader.swift; sourceTree = "<group>"; };
+		833D9C4C2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewKeyWordCell.swift; sourceTree = "<group>"; };
 		833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewFooter.swift; sourceTree = "<group>"; };
 		833D9C512C73451000982145 /* NoticeDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewController.swift; sourceTree = "<group>"; };
 		833D9C532C73451B00982145 /* NoticeDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewModel.swift; sourceTree = "<group>"; };
@@ -422,6 +421,7 @@
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		839D711A2BEB1570001BC7F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83A2617F2C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		83C509612BFA0CBB007379A0 /* ScrollLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLog.swift; sourceTree = "<group>"; };
 		83DD0D732C4F6FD000278ABD /* BusType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusType.swift; sourceTree = "<group>"; };
 		83DD0D752C4F6FDE00278ABD /* BusPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlace.swift; sourceTree = "<group>"; };
@@ -771,7 +771,7 @@
 			children = (
 				833D9C1A2C6B3F8600982145 /* NoticeListTableView.swift */,
 				833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */,
-				833D9C4C2C721A7D00982145 /* NoticeListTableViewHeader.swift */,
+				833D9C4C2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift */,
 				833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */,
 			);
 			path = NoticeListTableView;
@@ -780,8 +780,8 @@
 		833D9C0A2C6B246F00982145 /* NoticeKeyWordCollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				83A2617F2C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift */,
 				833D9C232C6B565300982145 /* NoticeKeyWordCollectionView.swift */,
-				833D9C252C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift */,
 			);
 			path = NoticeKeyWordCollectionView;
 			sourceTree = "<group>";
@@ -2454,6 +2454,7 @@
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
+				83A261802C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
@@ -2479,7 +2480,7 @@
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
-				833D9C4D2C721A7D00982145 /* NoticeListTableViewHeader.swift in Sources */,
+				833D9C4D2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
 				D29F21CE2C4E162600994554 /* TimetableService.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
@@ -2499,7 +2500,6 @@
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
-				833D9C262C6B565F00982145 /* NoticeKeyWordCollectionViewCell.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,

@@ -15,6 +15,10 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         $0.textAlignment = .center
     }
     
+    private let filterImageView = UIImageView().then {
+        $0.image = .appImage(asset: .filter)
+    }
+    
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,8 +29,19 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(keyWordModel: NoticeKeyWord, isSelected: Bool) {
+    func configure(keyWordModel: NoticeKeyWordDTO) {
+        contentView.backgroundColor = .appColor(.neutral100)
+        contentView.layer.cornerRadius = 17
+        
+        keyWord.font = .appFont(.pretendardMedium, size: 14)
+        keyWord.textColor = .appColor(.neutral500)
         keyWord.text = keyWordModel.keyWord
+        
+        keyWord.isHidden = false
+        filterImageView.isHidden = true
+    }
+    
+    func selectKeyWord(isSelected: Bool) {
         if isSelected {
             keyWord.font = .appFont(.pretendardBold, size: 14)
             keyWord.textColor = .appColor(.neutral0)
@@ -35,22 +50,37 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         else {
             keyWord.font = .appFont(.pretendardMedium, size: 14)
             keyWord.textColor = .appColor(.neutral500)
-            contentView.backgroundColor = .appColor(.neutral100)
+            contentView.backgroundColor = .appColor(.neutral100) 
         }
+    }
+    
+    func configureFilterImage() {
+        contentView.backgroundColor = .appColor(.neutral100)
+        contentView.layer.cornerRadius = 16
+        keyWord.isHidden = true
+        filterImageView.isHidden = false
     }
 }
 
 extension NoticeKeyWordCollectionViewCell {
     private func setUpLayouts() {
-        [keyWord].forEach {
+        [keyWord, filterImageView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
         keyWord.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(34)
+            $0.centerX.equalToSuperview()
+        }
+        
+        filterImageView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(20)
+            $0.width.equalTo(20)
+            $0.centerX.equalToSuperview()
         }
     }
     

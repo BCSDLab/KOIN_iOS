@@ -32,9 +32,8 @@ final class PageCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(noticeArticleList: [NoticeArticleDTO], noticeListPages: NoticeListPages) {
+    func configureBoard(noticeArticleList: [NoticeArticleDTO], noticeListPages: NoticeListPages) {
         noticeTableView.updateNoticeList(noticeArticleList: noticeArticleList, pageInfos: noticeListPages)
-        noticeTableView.reloadData()
         
         noticeTableView.pageBtnPublisher.sink { [weak self] page in
             self?.pageBtnPublisher.send(page)
@@ -42,6 +41,10 @@ final class PageCollectionViewCell: UICollectionViewCell {
         noticeTableView.tapNoticePublisher.sink { [weak self] noticeId in
             self?.tapNoticePublisher.send(noticeId)
         }.store(in: &subscribtions)
+    }
+    
+    func configureKeyWordList(keyWordList: [NoticeKeyWordDTO]) {
+        noticeTableView.updateKeyWordList(keyWordList: keyWordList)
     }
 }
 

@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct NoticeKeyWords: Decodable {
+struct NoticeKeyWordsDTO: Decodable {
     let counts: Int
-    let keyWords: [NoticeKeyWord]
+    let keyWords: [NoticeKeyWordDTO]
     
     enum CodingKeys: String, CodingKey {
         case counts
@@ -17,7 +17,7 @@ struct NoticeKeyWords: Decodable {
     }
 }
 
-struct NoticeKeyWord: Decodable {
+struct NoticeKeyWordDTO: Decodable {
     let id: Int
     let keyWord: String
     
