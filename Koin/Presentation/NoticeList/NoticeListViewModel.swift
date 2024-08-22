@@ -23,7 +23,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
-    private var noticeListType: NoticeListType = .자유게시판 {
+    private var noticeListType: NoticeListType = .전체공지 {
         didSet {
             getNoticeInfo(page: 1)
         }

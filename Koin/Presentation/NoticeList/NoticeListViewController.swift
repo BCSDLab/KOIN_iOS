@@ -19,18 +19,14 @@ final class NoticeListViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let pageCollectionView = PageCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
-        flowLayout?.scrollDirection = .horizontal
+    private let noticeTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
+        $0.backgroundColor = .white
+        $0.separatorStyle = .singleLine
     }
     
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
-    }
-    
-    private let indicatorView = UIView().then {
-        $0.backgroundColor = .appColor(.primary500)
     }
     
     private let navigationTitle = UILabel().then {
@@ -55,6 +51,8 @@ final class NoticeListViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.getUserKeyWordList)
+        configureSwipeGestures()
+        tabBarCollectionView.tag = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,24 +90,12 @@ final class NoticeListViewController: UIViewController {
         tabBarCollectionView.selectTabPublisher.sink { [weak self] boardType in
             self?.inputSubject.send(.changeBoard(boardType))
         }.store(in: &subscriptions)
-        
-        tabBarCollectionView.indicatorInfoPublisher.sink { [weak self] indicatorLocation in
-            self?.moveIndicator(at: indicatorLocation.0, width: indicatorLocation.1)
-        }.store(in: &subscriptions)
-        
-        pageCollectionView.scrollBoardPublisher.sink { [weak self] boardType in
-            self?.inputSubject.send(.changeBoard(boardType))
-        }.store(in: &subscriptions)
-        
-        pageCollectionView.pageBtnPublisher
-            .throttle(for: .milliseconds(300), scheduler: RunLoop.main, latest: true)
-            .sink { [weak self] page in
+    
+        noticeTableView.pageBtnPublisher.sink { [weak self] page in
             self?.inputSubject.send(.changePage(page))
         }.store(in: &subscriptions)
         
-        pageCollectionView.tapNoticePublisher
-            .throttle(for: .milliseconds(300), scheduler: RunLoop.main, latest: true)
-            .sink { [weak self] noticeId in
+        noticeTableView.tapNoticePublisher.sink { [weak self] noticeId in
             let noticeListService = DefaultNoticeService()
             let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
             let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
@@ -128,27 +114,41 @@ extension NoticeListViewController {
     
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
-        pageCollectionView.updateBoard(noticeList: noticeList, noticeListPages: pageInfos, noticeListType: noticeListType)
+        noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
+        tabBarCollectionView.tag = noticeListType.rawValue - 4
     }
-    
-    private func moveIndicator(at position: CGFloat, width: CGFloat) {
-        UIView.animate(withDuration: 0.2, animations: {[weak self] in
-            self?.indicatorView.snp.updateConstraints {
-                $0.leading.equalToSuperview().offset(position)
-                $0.width.equalTo(width)
-            }
-            self?.view.layoutIfNeeded()
-        })
-    }
-    
+ 
     private func updateUserKeyWordList(keyWords: [NoticeKeyWordDTO], noticeListType: NoticeListType) {
-        pageCollectionView.updateKeyWordList(keyWordList: keyWords, noticeListType: noticeListType)
+        noticeTableView.updateKeyWordList(keyWordList: keyWords)
+    }
+    
+    private func configureSwipeGestures() {
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeftGesture.direction = .left
+        noticeTableView.addGestureRecognizer(swipeLeftGesture)
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRightGesture.direction = .right
+        noticeTableView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let noticeListType = NoticeListType.allCases
+        if gesture.direction == .right {
+            if tabBarCollectionView.tag > 0 {
+                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag - 1]))
+            }
+        } else if gesture.direction == .left {
+            if tabBarCollectionView.tag < noticeListType.count {
+                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag + 1]))
+            }
+        }
+        
     }
 }
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, tabBarCollectionView, pageCollectionView, indicatorView].forEach {
+        [navigationBarWrappedView, tabBarCollectionView, noticeTableView].forEach {
             view.addSubview($0)
         }
         [backButton, navigationTitle].forEach {
@@ -180,17 +180,10 @@ extension NoticeListViewController {
             $0.height.equalTo(50)
         }
         
-        pageCollectionView.snp.makeConstraints {
+        noticeTableView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
-        }
-        
-        indicatorView.snp.makeConstraints {
-            $0.top.equalTo(tabBarCollectionView.snp.bottom)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(1.5)
-            $0.width.equalTo(50)
         }
     }
     
