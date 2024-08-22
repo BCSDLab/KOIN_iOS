@@ -27,18 +27,12 @@ final class TabBarCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(title: String, isSelected: Bool) {
+    func configure(title: String) {
         tabTitle.text = title
-        if isSelected {
-            tabTitle.textColor = .appColor(.primary500)
-        }
-        else {
-            tabTitle.textColor = .appColor(.neutral500)
-        }
     }
     
-    func configure(color: UIColor) {
-        self.backgroundColor = color
+    func selectTab(isSelected: Bool) {
+        tabTitle.textColor = isSelected ? .appColor(.primary500) : .appColor(.neutral500)
     }
 }
 
