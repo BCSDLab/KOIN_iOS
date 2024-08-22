@@ -47,11 +47,12 @@ extension TabBarCollectionView {
             guard let self = self else { return }
             if !self.isScrolled {
                 moveIndicator(indexPath: indexPath)
+                reloadData()
             }
         }
     }
     
-    private func moveIndicator(indexPath: IndexPath ){
+    private func moveIndicator(indexPath: IndexPath) {
         guard let cell = self.cellForItem(at: indexPath) as? TabBarCollectionViewCell else { return }
         
         let cellFrameInSuperview = self.convert(cell.frame, to: self.superview)
@@ -72,14 +73,19 @@ extension TabBarCollectionView {
             return UICollectionViewCell()
         }
        
-        cell.configure(title: noticeTabList[indexPath.row].displayName, isSelected: false)
-    
+        cell.configure(title: noticeTabList[indexPath.row].displayName)
+        if indexPath == pendingScrollIndex {
+            cell.selectTab(isSelected: true)
+        }
+        else {
+            cell.selectTab(isSelected: false)
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarCollectionViewCell.identifier, for: indexPath) as? TabBarCollectionViewCell {
-            cell.configure(title: noticeTabList[indexPath.row].displayName, isSelected: true)
+            cell.configure(title: noticeTabList[indexPath.row].displayName)
             selectTabPublisher.send(noticeTabList[indexPath.row])
         }
     }
@@ -90,8 +96,8 @@ extension TabBarCollectionView: UICollectionViewDelegateFlowLayout {
         let label = UILabel()
         label.text = noticeTabList[indexPath.row].displayName
         label.font = .appFont(.pretendardMedium, size: 14)
-        let size = CGSize(width: 100, height: label.bounds.height + 28)
-        return size
+        let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
+        return CGSize(width: size.width+24, height: 50)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
