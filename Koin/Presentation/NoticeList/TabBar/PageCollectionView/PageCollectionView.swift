@@ -44,7 +44,13 @@ extension PageCollectionView {
         isPagingEnabled = true
         
         guard let cell = cellForItem(at: indexPath) as? PageCollectionViewCell else { return }
-        cell.configure(noticeArticleList: noticeList, noticeListPages: noticeListPages)
+        cell.configureBoard(noticeArticleList: noticeList, noticeListPages: noticeListPages)
+    }
+    
+    func updateKeyWordList(keyWordList: [NoticeKeyWordDTO], noticeListType: NoticeListType) {
+        let indexPath = IndexPath(item: noticeListType.rawValue-1, section: 0)
+        guard let cell = cellForItem(at: indexPath) as? PageCollectionViewCell else { return }
+        cell.configureKeyWordList(keyWordList: keyWordList)
     }
 }
 
