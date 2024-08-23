@@ -39,6 +39,11 @@ final class NoticeListViewController: UIViewController {
         $0.tintColor = .appColor(.neutral800)
     }
     
+    private let searchButton = UIButton().then {
+        $0.setImage(.appImage(symbol: .magnifyingGlass), for: .normal)
+        $0.tintColor = .appColor(.neutral800)
+    }
+    
     private let navigationBarWrappedView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -47,6 +52,7 @@ final class NoticeListViewController: UIViewController {
     
     override func viewDidLoad() {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         super.viewDidLoad()
         configureView()
         bind()
@@ -112,6 +118,26 @@ extension NoticeListViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func searchButtonTapped() {
+        let viewModel = NoticeSearchViewModel()
+        let vc = NoticeSearchViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let noticeListType = NoticeListType.allCases
+        if gesture.direction == .right {
+            if tabBarCollectionView.tag > 0 {
+                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag - 1]))
+            }
+        } else if gesture.direction == .left {
+            if tabBarCollectionView.tag < noticeListType.count {
+                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag + 1]))
+            }
+        }
+        
+    }
+    
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
@@ -130,20 +156,6 @@ extension NoticeListViewController {
         swipeRightGesture.direction = .right
         noticeTableView.addGestureRecognizer(swipeRightGesture)
     }
-    
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        let noticeListType = NoticeListType.allCases
-        if gesture.direction == .right {
-            if tabBarCollectionView.tag > 0 {
-                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag - 1]))
-            }
-        } else if gesture.direction == .left {
-            if tabBarCollectionView.tag < noticeListType.count {
-                inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag + 1]))
-            }
-        }
-        
-    }
 }
 
 extension NoticeListViewController {
@@ -151,7 +163,7 @@ extension NoticeListViewController {
         [navigationBarWrappedView, tabBarCollectionView, noticeTableView].forEach {
             view.addSubview($0)
         }
-        [backButton, navigationTitle].forEach {
+        [backButton, navigationTitle, searchButton].forEach {
             navigationBarWrappedView.addSubview($0)
         }
     }
@@ -165,6 +177,13 @@ extension NoticeListViewController {
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview().offset(24)
+            $0.width.equalTo(24)
+            $0.height.equalTo(24)
+        }
+        
+        searchButton.snp.makeConstraints {
+            $0.top.equalTo(backButton)
+            $0.trailing.equalToSuperview().inset(24)
             $0.width.equalTo(24)
             $0.height.equalTo(24)
         }

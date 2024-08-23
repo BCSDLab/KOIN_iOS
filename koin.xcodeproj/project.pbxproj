@@ -45,6 +45,8 @@
 		833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */; };
 		834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */; };
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
+		8354BE152C7890AD009D4D7A /* NoticeSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */; };
+		8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
@@ -438,6 +440,8 @@
 		833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
+		8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchViewController.swift; sourceTree = "<group>"; };
+		8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchViewModel.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
@@ -913,6 +917,15 @@
 			path = HotNoticeArticlesTableView;
 			sourceTree = "<group>";
 		};
+		8354BE132C789096009D4D7A /* NoticeSearch */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */,
+				8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */,
+			);
+			path = NoticeSearch;
+			sourceTree = "<group>";
+		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
 			isa = PBXGroup;
 			children = (
@@ -1335,6 +1348,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				8354BE132C789096009D4D7A /* NoticeSearch */,
 				833D9C502C7344F400982145 /* NoticeData */,
 				833D9C072C6B243400982145 /* NoticeList */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
@@ -2545,6 +2559,7 @@
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
+				8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
@@ -2686,6 +2701,7 @@
 				D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */,
 				D27DD0AB2BA608310081FD36 /* ShopInfoColletionView.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
+				8354BE152C7890AD009D4D7A /* NoticeSearchViewController.swift in Sources */,
 				D27DD0AD2BA608310081FD36 /* CategoryCollectionView.swift in Sources */,
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
