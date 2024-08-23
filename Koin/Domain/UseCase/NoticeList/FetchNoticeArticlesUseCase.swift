@@ -38,6 +38,9 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     }
     
     private func makePages(currentPage: Int, totalPage: Int) -> NoticeListPages {
+        if totalPage == 0 {
+            return NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
+        }
         var isPreviousPage: PageReloadDirection? = nil
         var isNextPage: PageReloadDirection? = nil
         var pages: [Int] = []
