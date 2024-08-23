@@ -47,6 +47,11 @@
 		834E1CDC2BBCE3B1003D4271 /* BusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */; };
 		8354BE152C7890AD009D4D7A /* NoticeSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */; };
 		8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */; };
+		8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE1B2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift */; };
+		8354BE202C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE1F2C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift */; };
+		8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */; };
+		8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE232C78BC30009D4D7A /* RecentSearchTableView.swift */; };
+		8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE252C78BC3B009D4D7A /* RecentSearchTableViewCell.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
@@ -442,6 +447,11 @@
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchViewController.swift; sourceTree = "<group>"; };
 		8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchViewModel.swift; sourceTree = "<group>"; };
+		8354BE1B2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSearchCollectionView.swift; sourceTree = "<group>"; };
+		8354BE1F2C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionVIewFlowLayout.swift; sourceTree = "<group>"; };
+		8354BE232C78BC30009D4D7A /* RecentSearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableView.swift; sourceTree = "<group>"; };
+		8354BE252C78BC3B009D4D7A /* RecentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
@@ -920,10 +930,38 @@
 		8354BE132C789096009D4D7A /* NoticeSearch */ = {
 			isa = PBXGroup;
 			children = (
+				8354BE182C78AA77009D4D7A /* SubViews */,
 				8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */,
 				8354BE162C7890B6009D4D7A /* NoticeSearchViewModel.swift */,
 			);
 			path = NoticeSearch;
+			sourceTree = "<group>";
+		};
+		8354BE182C78AA77009D4D7A /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE1A2C78AA9A009D4D7A /* RecommendedSearchCollectionView */,
+				8354BE192C78AA80009D4D7A /* RecentSearchTableView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		8354BE192C78AA80009D4D7A /* RecentSearchTableView */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE232C78BC30009D4D7A /* RecentSearchTableView.swift */,
+				8354BE252C78BC3B009D4D7A /* RecentSearchTableViewCell.swift */,
+			);
+			path = RecentSearchTableView;
+			sourceTree = "<group>";
+		};
+		8354BE1A2C78AA9A009D4D7A /* RecommendedSearchCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE1B2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift */,
+				8354BE1F2C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift */,
+			);
+			path = RecommendedSearchCollectionView;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -1592,6 +1630,7 @@
 				D2A513422C5B43180064941A /* Bundle+APIKey.swift */,
 				D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */,
 				D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */,
+				8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2527,12 +2566,15 @@
 				D239448C2C3C9D6D00048F45 /* ReviewListCollectionView.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
+				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
+				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
+				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
@@ -2591,6 +2633,7 @@
 				837BFA542BB7E4A3001FCBD4 /* SearchBusViewController.swift in Sources */,
 				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
+				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
@@ -2633,6 +2676,7 @@
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
+				8354BE202C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */,
