@@ -122,7 +122,8 @@ final class NoticeDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
+        inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
@@ -155,7 +156,11 @@ final class NoticeDataViewController: UIViewController {
 }
 
 extension NoticeDataViewController {
-    @objc private func backButtonTapped() {
+    @objc private func tapBackButton() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func tapInventoryButton() {
         navigationController?.popViewController(animated: true)
     }
     
