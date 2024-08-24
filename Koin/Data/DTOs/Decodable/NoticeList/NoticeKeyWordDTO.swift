@@ -17,8 +17,8 @@ struct NoticeKeyWordsDTO: Decodable {
     }
 }
 
-struct NoticeKeyWordDTO: Decodable {
-    let id: Int
+struct NoticeKeyWordDTO: Codable {
+    let id: Int?
     let keyWord: String
     
     enum CodingKeys: String, CodingKey {
