@@ -152,6 +152,16 @@ final class NoticeDataViewController: UIViewController {
                 self?.updatePopularArticle(notices: notices)
             }
         }.store(in: &subscriptions)
+        
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
+            let noticeListService = DefaultNoticeService()
+            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
