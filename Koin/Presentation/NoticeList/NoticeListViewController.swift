@@ -110,6 +110,14 @@ final class NoticeListViewController: UIViewController {
             let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
+        
+        noticeTableView.keyWordAddBtnTapPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] in
+            let viewModel = ManageNoticeKeyWordViewModel()
+            let viewController = ManageNoticeKeyWordViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
