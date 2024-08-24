@@ -52,6 +52,10 @@
 		8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE252C78BC3B009D4D7A /* RecentSearchTableViewCell.swift */; };
 		8354BE292C78CF41009D4D7A /* ManageNoticeKeyWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE282C78CF41009D4D7A /* ManageNoticeKeyWordViewController.swift */; };
 		8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE2A2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift */; };
+		8354BE2E2C79A0BE009D4D7A /* MyKeyWordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE2D2C79A0BE009D4D7A /* MyKeyWordCollectionView.swift */; };
+		8354BE312C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE302C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift */; };
+		8354BE352C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE342C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift */; };
+		8354BE372C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
@@ -422,6 +426,10 @@
 		8354BE252C78BC3B009D4D7A /* RecentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		8354BE282C78CF41009D4D7A /* ManageNoticeKeyWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNoticeKeyWordViewController.swift; sourceTree = "<group>"; };
 		8354BE2A2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNoticeKeyWordViewModel.swift; sourceTree = "<group>"; };
+		8354BE2D2C79A0BE009D4D7A /* MyKeyWordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeyWordCollectionView.swift; sourceTree = "<group>"; };
+		8354BE302C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
+		8354BE342C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedKeyWordCollectionView.swift; sourceTree = "<group>"; };
+		8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
@@ -907,10 +915,38 @@
 		8354BE272C78CEE7009D4D7A /* ManageNoticeKeyWord */ = {
 			isa = PBXGroup;
 			children = (
+				8354BE2C2C79A0A2009D4D7A /* SubViews */,
 				8354BE282C78CF41009D4D7A /* ManageNoticeKeyWordViewController.swift */,
 				8354BE2A2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift */,
 			);
 			path = ManageNoticeKeyWord;
+			sourceTree = "<group>";
+		};
+		8354BE2C2C79A0A2009D4D7A /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE332C79C67E009D4D7A /* RecommendedKeyWordCollectionView */,
+				8354BE322C79C674009D4D7A /* MyKeyWordCollectionView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		8354BE322C79C674009D4D7A /* MyKeyWordCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE2D2C79A0BE009D4D7A /* MyKeyWordCollectionView.swift */,
+				8354BE302C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift */,
+			);
+			path = MyKeyWordCollectionView;
+			sourceTree = "<group>";
+		};
+		8354BE332C79C67E009D4D7A /* RecommendedKeyWordCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE342C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift */,
+				8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */,
+			);
+			path = RecommendedKeyWordCollectionView;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -2346,6 +2382,7 @@
 				D2078C012BC5DD0D00A39861 /* EventShopCollectionView.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				D249CD342C14734B000813F9 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
+				8354BE2E2C79A0BE009D4D7A /* MyKeyWordCollectionView.swift in Sources */,
 				D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */,
 				D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */,
 				833D9C242C6B565400982145 /* NoticeKeyWordCollectionView.swift in Sources */,
@@ -2423,6 +2460,7 @@
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
+				8354BE352C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
@@ -2461,6 +2499,7 @@
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
+				8354BE372C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
 				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
@@ -2508,6 +2547,7 @@
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
+				8354BE312C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
