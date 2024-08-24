@@ -29,6 +29,76 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         $0.tintColor = .appColor(.neutral800)
     }
     
+    private let myKeyWordGuideLabel = UILabel().then {
+        $0.text = "내 키워드"
+        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.textColor = .appColor(.neutral800)
+    }
+    
+    private let numberOfKeyWordLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = .appColor(.neutral500)
+    }
+    
+    private let addKeyWordDescriptionLabel = UILabel().then {
+        $0.text = "키워드는 최대 10개까지 추가 가능합니다."
+        $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.neutral500)
+    }
+    
+    private let textField = UITextField().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        let leftMarginView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+        $0.leftView = leftMarginView
+        $0.leftViewMode = .always
+        $0.attributedPlaceholder = NSAttributedString(string: "알림받을 키워드를 추가해주세요.", attributes: [.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.gray)])
+        $0.layer.cornerRadius = 4
+    }
+    
+    private let addKeyWordButton = UIButton().then {
+        $0.setTitle("추가", for: .normal)
+        $0.titleLabel?.font = .appFont(.pretendardMedium, size: 13)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.backgroundColor = .appColor(.neutral300)
+        $0.layer.cornerRadius = 4
+    }
+    
+    private let separatorView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
+    
+    private let keyWordNotificationGuideLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.textColor = .appColor(.neutral800)
+        $0.text = "키워드 알림"
+    }
+    
+    private let keyWordNotificationLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+        $0.textColor = .appColor(.neutral800)
+        $0.text = "키워드 알림받기"
+    }
+    
+    private let keyWordNotificationDescriptionLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.neutral500)
+        $0.text = "키워드가 포함된 게시물의 알림을 받을 수 있습니다."
+    }
+    
+    private let keyWordNotificationSwtich = UISwitch().then {
+        $0.preferredStyle = .sliding
+    }
+    
+    private let recommendedKeyWordGuideLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.textColor = .appColor(.neutral800)
+        $0.text = "추천 키워드"
+    }
+    
+    private let myKeyWordCollectionView = MyKeyWordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
+    
+    private let recommendedKeyWordCollectionView = RecommendedKeyWordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -64,7 +134,7 @@ extension ManageNoticeKeyWordViewController {
 
 extension ManageNoticeKeyWordViewController {
     private func setUpLayouts() {
-        [backButton, navigationTitle].forEach {
+        [backButton, navigationTitle, myKeyWordGuideLabel, numberOfKeyWordLabel, addKeyWordDescriptionLabel, addKeyWordButton, textField, myKeyWordCollectionView ,separatorView, recommendedKeyWordCollectionView, keyWordNotificationGuideLabel, keyWordNotificationLabel, keyWordNotificationDescriptionLabel, keyWordNotificationSwtich, recommendedKeyWordGuideLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -80,6 +150,84 @@ extension ManageNoticeKeyWordViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(24)
             $0.height.equalTo(24)
+        }
+        
+        myKeyWordGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(backButton.snp.bottom).offset(26.5)
+            $0.leading.equalToSuperview().offset(24)
+            $0.height.equalTo(29)
+        }
+        
+        numberOfKeyWordLabel.snp.makeConstraints {
+            $0.leading.equalTo(myKeyWordGuideLabel.snp.trailing)
+            $0.top.equalTo(myKeyWordGuideLabel)
+        }
+        
+        addKeyWordDescriptionLabel.snp.makeConstraints {
+            $0.leading.equalTo(myKeyWordGuideLabel)
+            $0.top.equalTo(myKeyWordGuideLabel.snp.bottom)
+        }
+        
+        textField.snp.makeConstraints {
+            $0.top.equalTo(addKeyWordDescriptionLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(addKeyWordDescriptionLabel)
+            $0.height.equalTo(38)
+            $0.trailing.equalTo(addKeyWordButton.snp.leading).offset(-8)
+        }
+        
+        addKeyWordButton.snp.makeConstraints {
+            $0.top.equalTo(textField)
+            $0.trailing.equalToSuperview().inset(36)
+            $0.height.equalTo(38)
+            $0.width.equalTo(47)
+        }
+        
+        myKeyWordCollectionView.snp.makeConstraints {
+            $0.top.equalTo(textField.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(100)
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(recommendedKeyWordCollectionView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(6)
+        }
+        
+        keyWordNotificationGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(24)
+        }
+        
+        keyWordNotificationLabel.snp.makeConstraints {
+            $0.top.equalTo(keyWordNotificationGuideLabel.snp.bottom).offset(32)
+            $0.leading.equalTo(keyWordNotificationGuideLabel)
+            $0.height.equalTo(26)
+        }
+        
+        keyWordNotificationDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(keyWordNotificationLabel.snp.bottom)
+            $0.leading.equalTo(keyWordNotificationLabel)
+            $0.height.equalTo(19)
+        }
+        
+        keyWordNotificationSwtich.snp.makeConstraints {
+            $0.top.equalTo(keyWordNotificationLabel)
+            $0.trailing.equalToSuperview().inset(25)
+            $0.width.equalTo(40)
+            $0.height.equalTo(16)
+        }
+        
+        recommendedKeyWordGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(myKeyWordCollectionView.snp.bottom).offset(8)
+            $0.leading.equalToSuperview().offset(24)
+            $0.height.equalTo(26)
+        }
+        
+        recommendedKeyWordCollectionView.snp.makeConstraints {
+            $0.top.equalTo(recommendedKeyWordGuideLabel.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(110)
         }
     }
     
