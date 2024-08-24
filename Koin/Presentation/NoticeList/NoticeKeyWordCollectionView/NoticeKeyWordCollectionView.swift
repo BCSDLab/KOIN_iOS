@@ -12,6 +12,7 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
     //MARK: - Properties
     private var noticeKeyWordList: [NoticeKeyWordDTO] = []
     let keyWordTapPublisher = PassthroughSubject<String, Never>()
+    let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -57,8 +58,8 @@ extension NoticeKeyWordCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoticeKeyWordCollectionViewCell.identifier, for: indexPath) as? NoticeKeyWordCollectionViewCell {
-            cell.selectKeyWord(isSelected: true)
+        if indexPath.item == 0 {
+            keyWordAddBtnTapPublisher.send()
         }
     }
 }

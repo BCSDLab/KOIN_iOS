@@ -14,6 +14,7 @@ final class NoticeListTableView: UITableView {
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<Int, Never>()
+    let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     private var subscribtions = Set<AnyCancellable>()
     
     // MARK: - Initialization
@@ -75,6 +76,9 @@ extension NoticeListTableView: UITableViewDataSource {
             else {
                 return UITableViewCell()
             }
+            cell.keyWordAddBtnTapPublisher.sink { [weak self] in
+                self?.keyWordAddBtnTapPublisher.send()
+            }.store(in: &subscribtions)
             return cell
         }
         else {
