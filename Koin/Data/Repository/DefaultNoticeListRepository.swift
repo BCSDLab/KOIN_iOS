@@ -29,5 +29,13 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDTO], Error> {
         return service.fetchHotNoticeArticles()
     }
+    
+    func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> {
+        return service.createNotificationKeyWord(requestModel: requestModel)
+    }
+    
+    func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.deleteNotificationKeyWord(requestModel: requestModel)
+    }
 }
 
