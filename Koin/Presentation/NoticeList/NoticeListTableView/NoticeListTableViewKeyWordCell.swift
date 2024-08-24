@@ -5,6 +5,7 @@
 //  Created by JOOMINKYUNG on 8/18/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
@@ -13,6 +14,8 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     // MARK: - Properties
     
     static let id = "NoticeListTableViewKeyWordCellIdentifier"
+    let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UIComponents
     
@@ -26,6 +29,9 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        noticeKeyWordCollectionView.keyWordAddBtnTapPublisher.sink { [weak self] in
+            self?.keyWordAddBtnTapPublisher.send()
+        }.store(in: &subscriptions)
     }
     
     required init?(coder: NSCoder) {
