@@ -12,6 +12,8 @@ enum NoticeListAPI {
     case searchNoticeArticle(SearchNoticeArticleRequest)
     case fetchNoticedata(FetchNoticeDataRequest)
     case fetchHotNoticeArticles
+    case createNotificationKeyWord(NoticeKeyWordDTO)
+    case deleteNotificationKeyWord(Int)
 }
 
 extension NoticeListAPI: Router, URLRequestConvertible {
@@ -26,6 +28,8 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .searchNoticeArticle: return "/articles/search"
         case .fetchNoticedata(let request): return "/articles/\(request.noticeId)"
         case .fetchHotNoticeArticles: return "/articles/hot"
+        case .createNotificationKeyWord: return "/articles/keyword"
+        case .deleteNotificationKeyWord(let request): return "/articles/keyword/\(request)"
         }
     }
     
@@ -33,10 +37,25 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticedata, .fetchHotNoticeArticles:
             return .get
+        case .createNotificationKeyWord:
+            return .post
+        case .deleteNotificationKeyWord:
+            return .delete
         }
     }
     
     public var headers: [String: String] {
+        switch self {
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticedata, .fetchHotNoticeArticles:
+            return [:]
+        case .createNotificationKeyWord, .deleteNotificationKeyWord:
+            if let token = KeyChainWorker.shared.read(key: .access) {
+                let headers = ["Authorization": "Bearer \(token)"]
+                return headers
+            } else {
+                return [:]
+            }
+        }
         return [:]
     }
     
@@ -49,6 +68,10 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchNoticedata, .fetchHotNoticeArticles:
             return nil
+        case .createNotificationKeyWord(let request):
+            return try? request.toDictionary()
+        case .deleteNotificationKeyWord(let request):
+            return try? request.toDictionary()
         }
     }
     
@@ -56,7 +79,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchHotNoticeArticles:
             return URLEncoding.default
-        case .fetchNoticedata: return URLEncoding.queryString
+        case .fetchNoticedata, .createNotificationKeyWord, .deleteNotificationKeyWord: return URLEncoding.queryString
         }
     }
  
