@@ -11,7 +11,7 @@ import UIKit
 final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private var noticeKeyWordList: [NoticeKeyWordDTO] = []
-    let keyWordTapPublisher = PassthroughSubject<String, Never>()
+    let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     
     //MARK: - Initialization
@@ -36,6 +36,17 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
         self.noticeKeyWordList = keyWordList
         reloadData()
     }
+    
+    func selectKeyWord(keyWordId: Int) {
+        for index in 0..<noticeKeyWordList.count {
+            let indexPath = IndexPath(item: index+1, section: 0)
+            if let cell = cellForItem(at: indexPath) as? NoticeKeyWordCollectionViewCell {
+                let isSelected = noticeKeyWordList[index].id == keyWordId
+                cell.configure(keyWordModel: noticeKeyWordList[index].keyWord, isSelected: isSelected)
+            }
+        }
+    }
+
 }
 
 extension NoticeKeyWordCollectionView {
@@ -52,7 +63,7 @@ extension NoticeKeyWordCollectionView {
             cell.configureFilterImage()
         }
         else {
-            cell.configure(keyWordModel: noticeKeyWordList[indexPath.item-1])
+            cell.configure(keyWordModel: noticeKeyWordList[indexPath.item-1].keyWord, isSelected: false)
         }
         return cell
     }
@@ -60,6 +71,9 @@ extension NoticeKeyWordCollectionView {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
             keyWordAddBtnTapPublisher.send()
+        }
+        else {
+            keyWordTapPublisher.send(noticeKeyWordList[indexPath.row-1])
         }
     }
 }

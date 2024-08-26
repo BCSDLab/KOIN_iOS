@@ -15,6 +15,7 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     
     static let id = "NoticeListTableViewKeyWordCellIdentifier"
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UIComponents
@@ -32,6 +33,9 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         noticeKeyWordCollectionView.keyWordAddBtnTapPublisher.sink { [weak self] in
             self?.keyWordAddBtnTapPublisher.send()
         }.store(in: &subscriptions)
+        noticeKeyWordCollectionView.keyWordTapPublisher.sink { [weak self] keyword in
+            self?.keyWordTapPublisher.send(keyword)
+        }.store(in: &subscriptions)
     }
     
     required init?(coder: NSCoder) {
@@ -41,6 +45,10 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     
     func updateKeyWordsList(keyWordList: [NoticeKeyWordDTO]) {
         noticeKeyWordCollectionView.updateUserKeyWordList(keyWordList: keyWordList)
+    }
+    
+    func updateSelectedKeyWord(keyWordId: Int) {
+        noticeKeyWordCollectionView.selectKeyWord(keyWordId: keyWordId)
     }
 }
 
