@@ -90,6 +90,8 @@ final class NoticeListViewController: UIViewController {
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
             case let .updateUserKeyWordList(noticeKeyWordList, noticeListType):
                 self?.updateUserKeyWordList(keyWords: noticeKeyWordList, noticeListType: noticeListType)
+            case let .updateSelectedKeyWord(keyWordId):
+                self?.updateSelectedKeyWord(keyWordId: keyWordId)
             }
         }.store(in: &subscriptions)
         
@@ -117,6 +119,12 @@ final class NoticeListViewController: UIViewController {
             let viewModel = ManageNoticeKeyWordViewModel()
             let viewController = ManageNoticeKeyWordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        noticeTableView.keyWordTapPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] keyWord in
+            self?.inputSubject.send(.changeKeyWord(keyWord))
         }.store(in: &subscriptions)
     }
 }
@@ -163,6 +171,10 @@ extension NoticeListViewController {
         let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
         swipeRightGesture.direction = .right
         noticeTableView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    private func updateSelectedKeyWord(keyWordId: Int) {
+        noticeTableView.updateSelectedKeyWord(keyWordId: keyWordId)
     }
 }
 

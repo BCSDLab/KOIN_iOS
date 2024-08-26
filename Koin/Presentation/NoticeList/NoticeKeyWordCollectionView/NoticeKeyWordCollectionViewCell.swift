@@ -29,19 +29,17 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(keyWordModel: NoticeKeyWordDTO) {
+    func configure(keyWordModel: String, isSelected: Bool) {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 17
         
         keyWord.font = .appFont(.pretendardMedium, size: 14)
         keyWord.textColor = .appColor(.neutral500)
-        keyWord.text = keyWordModel.keyWord
+        keyWord.text = keyWordModel
         
         keyWord.isHidden = false
         filterImageView.isHidden = true
-    }
-    
-    func selectKeyWord(isSelected: Bool) {
+        
         if isSelected {
             keyWord.font = .appFont(.pretendardBold, size: 14)
             keyWord.textColor = .appColor(.neutral0)
@@ -50,10 +48,10 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         else {
             keyWord.font = .appFont(.pretendardMedium, size: 14)
             keyWord.textColor = .appColor(.neutral500)
-            contentView.backgroundColor = .appColor(.neutral100) 
+            contentView.backgroundColor = .appColor(.neutral100)
         }
     }
-    
+
     func configureFilterImage() {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 16
