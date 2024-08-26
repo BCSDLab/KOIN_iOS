@@ -33,7 +33,11 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
         delegate = self
         contentInset = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
     }
- 
+    
+    func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
+        self.myKeyWordList = keyWords
+        reloadData()
+    }
 }
 
 extension MyKeyWordCollectionView {

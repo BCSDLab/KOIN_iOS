@@ -104,7 +104,12 @@ final class ManageNoticeKeyWordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        textField.addTarget(self, action: #selector(textFieldValueChanged), for: .allEditingEvents)
+        addKeyWordButton.addTarget(self, action: #selector(tapAddKeyWordButton), for: .touchUpInside)
+        keyWordNotificationSwtich.addTarget(self, action: #selector(changeNotificationKeyWordSwitch), for: .valueChanged)
         configureView()
+        bind()
+        inputSubject.send(.getMyKeyWord)
     }
     
     // MARK: - Initialization
@@ -121,7 +126,10 @@ final class ManageNoticeKeyWordViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-     
+            switch output {
+            case let .updateKeyWord(keyWords):
+                self?.updateMyKeyWords(keyWords: keyWords)
+            }
         }.store(in: &subscriptions)
     }
 }
@@ -129,6 +137,35 @@ final class ManageNoticeKeyWordViewController: UIViewController {
 extension ManageNoticeKeyWordViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func textFieldValueChanged(sender: UITextField) {
+        if sender.isEditing {
+            textField.layer.borderColor = UIColor.appColor(.primary400).cgColor
+            textField.layer.borderWidth = 1
+            addKeyWordButton.backgroundColor = .appColor(.primary500)
+            addKeyWordButton.setTitleColor(.appColor(.neutral0), for: .normal)
+        }
+        else {
+            textField.layer.borderWidth = 0
+            addKeyWordButton.backgroundColor = .appColor(.neutral600)
+            addKeyWordButton.setTitleColor(.appColor(.neutral300), for: .normal)
+        }
+    }
+    
+    @objc private func tapAddKeyWordButton() {
+        if let text = textField.text {
+            let keyWord = NoticeKeyWordDTO(id: nil, keyWord: text)
+            inputSubject.send(.addKeyWord(keyWord: keyWord))
+        }
+    }
+    
+    @objc private func changeNotificationKeyWordSwitch(sender: UISwitch) {
+       
+    }
+    
+    private func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
+        myKeyWordCollectionView.updateMyKeyWords(keyWords: keyWords)
     }
 }
 
