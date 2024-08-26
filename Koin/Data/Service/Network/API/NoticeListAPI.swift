@@ -56,7 +56,6 @@ extension NoticeListAPI: Router, URLRequestConvertible {
                 return [:]
             }
         }
-        return [:]
     }
     
     
@@ -79,7 +78,8 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchHotNoticeArticles:
             return URLEncoding.default
-        case .fetchNoticedata, .createNotificationKeyWord, .deleteNotificationKeyWord: return URLEncoding.queryString
+        case .fetchNoticeData: return URLEncoding.queryString
+        case .createNotificationKeyWord, .deleteNotificationKeyWord: return JSONEncoding.default
         }
     }
  
