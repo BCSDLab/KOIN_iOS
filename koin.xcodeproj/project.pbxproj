@@ -56,7 +56,9 @@
 		8354BE312C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE302C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift */; };
 		8354BE352C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE342C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift */; };
 		8354BE372C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */; };
-		8354BE3D2C79D709009D4D7A /* ChangeNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE3C2C79D709009D4D7A /* ChangeNotificationKeyWordUseCase.swift */; };
+		8354BE3D2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */; };
+		8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */; };
+		8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataManager.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
@@ -416,6 +418,8 @@
 		833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataUseCase.swift; sourceTree = "<group>"; };
 		833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataInfo.swift; sourceTree = "<group>"; };
 		833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
+		83417DAA2C7C80E500E7837C /* NoticeKeyWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoticeKeyWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		83417DAB2C7C80E500E7837C /* NoticeKeyWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoticeKeyWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
 		8354BE142C7890AD009D4D7A /* NoticeSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchViewController.swift; sourceTree = "<group>"; };
@@ -431,7 +435,9 @@
 		8354BE302C79A0F1009D4D7A /* MyKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		8354BE342C79C699009D4D7A /* RecommendedKeyWordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedKeyWordCollectionView.swift; sourceTree = "<group>"; };
 		8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
-		8354BE3C2C79D709009D4D7A /* ChangeNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
+		8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
+		8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		8354BE512C7A0566009D4D7A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
@@ -821,6 +827,7 @@
 		833D9C102C6B269000982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
+				83417DAC2C7C80E500E7837C /* NoticeKeyordInfo */,
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
@@ -854,7 +861,7 @@
 				833D9C402C705F3E00982145 /* FetchNoticeArticlesUseCase.swift */,
 				833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */,
 				833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */,
-				8354BE3C2C79D709009D4D7A /* ChangeNotificationKeyWordUseCase.swift */,
+				8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -876,6 +883,16 @@
 				833D9C582C735F7700982145 /* HotArticlesNoticeTableViewCell.swift */,
 			);
 			path = HotNoticeArticlesTableView;
+			sourceTree = "<group>";
+		};
+		83417DAC2C7C80E500E7837C /* NoticeKeyordInfo */ = {
+			isa = PBXGroup;
+			children = (
+				83417DAA2C7C80E500E7837C /* NoticeKeyWordInfo+CoreDataClass.swift */,
+				83417DAB2C7C80E500E7837C /* NoticeKeyWordInfo+CoreDataProperties.swift */,
+			);
+			name = NoticeKeyordInfo;
+			path = ../../../..;
 			sourceTree = "<group>";
 		};
 		8354BE132C789096009D4D7A /* NoticeSearch */ = {
@@ -950,6 +967,15 @@
 				8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */,
 			);
 			path = RecommendedKeyWordCollectionView;
+			sourceTree = "<group>";
+		};
+		8354BE482C7A0394009D4D7A /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */,
+				8354BE512C7A0566009D4D7A /* CoreDataManager.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -1587,6 +1613,7 @@
 		D27DD07D2BA608310081FD36 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				8354BE482C7A0394009D4D7A /* CoreData */,
 				D27DD0832BA608310081FD36 /* Workers */,
 				D27DD0712BA608310081FD36 /* Extensions */,
 				D2D380E42BA6EAE7009AD5A9 /* View */,
@@ -2529,7 +2556,7 @@
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
-				8354BE3D2C79D709009D4D7A /* ChangeNotificationKeyWordUseCase.swift in Sources */,
+				8354BE3D2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift in Sources */,
 				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,
 				D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */,
 				D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */,
@@ -2541,6 +2568,7 @@
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
+				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */,
@@ -2614,6 +2642,7 @@
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
+				8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
@@ -3075,6 +3104,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */,
+			);
+			currentVersion = 8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = A001E2AC2845091D00D6C310 /* Project object */;
 }
