@@ -9,18 +9,19 @@ import Combine
 import UIKit
 import FirebaseAnalytics
 
-final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
+final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    private var shops: [ShopDTO] = []
+    private var shops: [Shop] = []
     weak var shopDelegate: CollectionViewDelegate?
-    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     
+    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
+    private var cancellables = Set<AnyCancellable>()
+    let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
@@ -32,13 +33,21 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         showsVerticalScrollIndicator = false
         contentInset = .zero
         register(ShopInfoCollectionViewCell.self, forCellWithReuseIdentifier: ShopInfoCollectionViewCell.identifier)
+        register(ShopInfoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ShopInfoHeaderView.identifier)
         dataSource = self
         delegate = self
     }
     
-    func updateShop(_ shops: [ShopDTO]) {
+    func updateShop(_ shops: [Shop]) {
         self.shops = shops
         self.reloadData()
+    }
+    
+    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
+        guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ShopInfoHeaderView else {
+            return
+        }
+        headerView.updateButtonState(standard)
     }
     
     private func makeAnalyticsForClickStoreList(_ storeName: String) {
@@ -54,6 +63,26 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
 }
 
 extension ShopInfoCollectionView {
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
+                return UICollectionReusableView()
+            }
+            cancellables.removeAll()
+            headerView.shopSortStandardPublisher.sink { [weak self] standard in
+                self?.shopSortStandardPublisher.send(standard)
+            }.store(in: &cancellables)
+            
+            return headerView
+        }
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 25)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shops.count
     }

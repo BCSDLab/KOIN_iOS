@@ -13,11 +13,14 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     // MARK: - Properties
     
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
+    let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
+    let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     
-    private let menuListViewController = MenuListViewController()
+    let menuListViewController = MenuListViewController()
     private let eventListViewController = EventListViewController()
     private let reviewListViewController = ReviewListViewController()
     private lazy var pages: [UIViewController] = {
@@ -50,6 +53,17 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
             self?.viewControllerHeightPublisher.send(height)
         }.store(in: &subscriptions)
         
+        reviewListViewController.fetchStandardPublisher.sink { [weak self] tuple in
+            self?.fetchStandardPublisher.send(tuple)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.deleteReviewPublisher.sink { [weak self] tuple in
+            self?.deleteReviewPublisher.send(tuple)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
+            self?.reviewCountFetchRequestPublisher.send(())
+        }.store(in: &subscriptions)
     }
     
     func switchToPage(index: Int) {
@@ -70,8 +84,16 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         eventListViewController.setEventList(events)
     }
     
-    func setReviewList(_ review: ShopReview) {
-        reviewListViewController.setReviewList(review)
+    func setReviewList(_ review: [Review], _ shopId: Int, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
+        reviewListViewController.setReviewList(review, shopId, fetchStandard, isMine)
+    }
+    
+    func setReviewStatistic(_ statistic: StatisticsDTO) {
+        reviewListViewController.setReviewStatistics(statistics: statistic)
+    }
+    
+    func disappearReview(_ reviewId: Int, shopId: Int) {
+        reviewListViewController.disappearReview(reviewId, shopId)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {

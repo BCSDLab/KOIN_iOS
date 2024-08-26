@@ -20,7 +20,7 @@ final class DefaultFetchShopEventListUseCase: FetchShopEventListUseCase {
     }
     
     func execute(shopId: Int) -> AnyPublisher<[ShopEvent], Error> {
-        return shopRepository.fetchShopEventList(requestModel: FetchShopInfoRequest(shopId: shopId)).map { eventsDTO in
+        return shopRepository.fetchShopEventList(requestModel: FetchShopDataRequest(shopId: shopId)).map { eventsDTO in
              eventsDTO.events ?? []
         }.map { events in
             events.map { $0.toDomain() }
