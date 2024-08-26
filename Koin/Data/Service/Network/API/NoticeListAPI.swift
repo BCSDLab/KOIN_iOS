@@ -10,7 +10,7 @@ import Alamofire
 enum NoticeListAPI {
     case fetchNoticeArticles(FetchNoticeArticlesRequest)
     case searchNoticeArticle(SearchNoticeArticleRequest)
-    case fetchNoticedata(FetchNoticeDataRequest)
+    case fetchNoticeData(FetchNoticeDataRequest)
     case fetchHotNoticeArticles
     case createNotificationKeyWord(NoticeKeyWordDTO)
     case deleteNotificationKeyWord(Int)
@@ -26,7 +26,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles: return "/articles"
         case .searchNoticeArticle: return "/articles/search"
-        case .fetchNoticedata(let request): return "/articles/\(request.noticeId)"
+        case .fetchNoticeData(let request): return "/articles/\(request.noticeId)"
         case .fetchHotNoticeArticles: return "/articles/hot"
         case .createNotificationKeyWord: return "/articles/keyword"
         case .deleteNotificationKeyWord(let request): return "/articles/keyword/\(request)"
@@ -35,7 +35,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticedata, .fetchHotNoticeArticles:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles:
             return .get
         case .createNotificationKeyWord:
             return .post
@@ -46,7 +46,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
     
     public var headers: [String: String] {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticedata, .fetchHotNoticeArticles:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles:
             return [:]
         case .createNotificationKeyWord, .deleteNotificationKeyWord:
             if let token = KeyChainWorker.shared.read(key: .access) {
@@ -66,7 +66,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .searchNoticeArticle(let request):
             return try? request.toDictionary()
-        case .fetchNoticedata, .fetchHotNoticeArticles:
+        case .fetchNoticeData, .fetchHotNoticeArticles:
             return nil
         case .createNotificationKeyWord(let request):
             return try? request.toDictionary()
