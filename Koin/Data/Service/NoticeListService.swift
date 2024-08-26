@@ -29,7 +29,7 @@ final class DefaultNoticeService: NoticeListService {
     }
     
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error> {
-        return request(.fetchNoticedata(requestModel))
+        return request(.fetchNoticeData(requestModel))
     }
     
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error> {
