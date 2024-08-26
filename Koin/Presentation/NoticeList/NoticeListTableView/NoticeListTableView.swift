@@ -15,6 +15,7 @@ final class NoticeListTableView: UITableView {
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<Int, Never>()
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     private var subscribtions = Set<AnyCancellable>()
     
     // MARK: - Initialization
@@ -54,6 +55,14 @@ final class NoticeListTableView: UITableView {
             reloadData()
         }
     }
+    
+    func updateSelectedKeyWord(keyWordId: Int) {
+        let index = IndexPath(row: 0, section: 0)
+        if let cell = cellForRow(at: index) as? NoticeListTableViewKeyWordCell {
+            cell.updateSelectedKeyWord(keyWordId: keyWordId)
+            reloadData()
+        }
+    }
 }
 
 extension NoticeListTableView: UITableViewDataSource {
@@ -78,6 +87,9 @@ extension NoticeListTableView: UITableViewDataSource {
             }
             cell.keyWordAddBtnTapPublisher.sink { [weak self] in
                 self?.keyWordAddBtnTapPublisher.send()
+            }.store(in: &subscribtions)
+            cell.keyWordTapPublisher.sink { [weak self] keyWord in
+                self?.keyWordTapPublisher.send(keyWord)
             }.store(in: &subscribtions)
             return cell
         }
