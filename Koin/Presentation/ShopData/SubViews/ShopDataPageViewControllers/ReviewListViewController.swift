@@ -171,6 +171,12 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteLogin, .click, self?.viewModel.shopName ?? ""))
+            self?.navigateToLogin()
+        }.store(in: &cancellables)
+        
+        reviewLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, self?.viewModel.shopName ?? ""))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         

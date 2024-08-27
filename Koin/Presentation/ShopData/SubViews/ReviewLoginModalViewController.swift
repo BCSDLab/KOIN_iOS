@@ -12,6 +12,7 @@ import UIKit
 final class ReviewLoginModalViewController: UIViewController {
     
     let loginButtonPublisher = PassthroughSubject<Void, Never>()
+    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
@@ -78,6 +79,7 @@ final class ReviewLoginModalViewController: UIViewController {
     
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
+        cancelButtonPublisher.send()
     }
     
     @objc private func loginButtonTapped() {
