@@ -27,15 +27,19 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let reportReviewReviewUseCase: ReportReviewReviewUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let reviewId: Int
     private let shopId: Int
+    private let shopName: String
     
     // MARK: - Initialization
     
-    init(reportReviewReviewUseCase: ReportReviewReviewUseCase, reviewId: Int, shopId: Int) {
+    init(reportReviewReviewUseCase: ReportReviewReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, reviewId: Int, shopId: Int, shopName: String) {
         self.reportReviewReviewUseCase = reportReviewReviewUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.reviewId = reviewId
         self.shopId = shopId
+        self.shopName = shopName
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -60,8 +64,11 @@ extension ShopReviewReportViewModel {
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.showToast("리뷰가 신고되었습니다.", true))
             self?.outputSubject.send(.sendReviewInfo(self?.reviewId ?? 0, self?.shopId ?? 0))
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: self?.shopName ?? "")
         }.store(in: &subscriptions)
 
     }
-
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
 }

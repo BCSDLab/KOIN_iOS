@@ -205,7 +205,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
+            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), reviewId: parameter.0, shopId: parameter.1, shopName: self?.viewModel.shopName ?? ""))
             if let viewController = self?.shopReviewReportViewController {
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReport, .click, self?.viewModel.shopName ?? ""))
                 self?.navigationController?.pushViewController(viewController, animated: true)
