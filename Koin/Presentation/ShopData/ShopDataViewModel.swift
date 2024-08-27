@@ -36,7 +36,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case fetchShopEventList
         case fetchShopMenuList
         case fetchShopReviewList
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case deleteReview(Int, Int)
         case changeFetchStandard(ReviewSortType?, Bool?)
@@ -76,8 +76,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopData()
                 self?.fetchShopMenuList()
                 self?.updateReviewCount()
-            case let .logEvent(label, category, value, currentPage, screenActionType, eventLabelNeededDuration):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, currentPage: currentPage, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case let .logEvent(label, category, value, currentPage, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, currentPage: currentPage, eventLabelNeededDuration: eventLabelNeededDuration)
             case .fetchShopEventList:
                 self?.fetchShopEventList()
             case .fetchShopMenuList:
@@ -125,7 +125,7 @@ extension ShopDataViewModel {
             self?.outputSubject.send(.disappearReview(reviewId, shopId))
             self?.updateReviewCount()
         }.store(in: &subscriptions)
-
+        
     }
     
     private func changeFetchStandard(_ type: ReviewSortType?, _ isMine: Bool?) {
@@ -195,7 +195,7 @@ extension ShopDataViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration == .shopCall {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             
@@ -205,6 +205,24 @@ extension ShopDataViewModel {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
             let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId ?? 0)
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: categoryName, durationTime: "\(durationTime)")
+        }
+        else if let eventLabel = eventLabelNeededDuration?.rawValue, eventLabel.contains("shopDetailViewReviewBack") {
+            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId ?? 0)
+            var currentPage = currentPage
+            if eventLabelNeededDuration == .shopDetailViewReviewBackByCategory {
+                currentPage = categoryName
+            }
+            if durationTime != 0 {
+                logAnalyticsEventUseCase.executeWithDuration(
+                    label: label,
+                    category: category,
+                    value: value,
+                    previousPage: "리뷰",
+                    currentPage: currentPage,
+                    durationTime: "\(durationTime)"
+                )
+            }
         }
         else {
             logAnalyticsEventUseCase.execute(label: label, category: category, value: value)

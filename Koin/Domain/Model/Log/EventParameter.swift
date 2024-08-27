@@ -103,11 +103,14 @@ enum EventParameter {
         case swipe
     }
     
-    enum EventLabelNeededDuration {
+    enum EventLabelNeededDuration: String {
         case shopCategories
         case shopClick
         case mainShopCategories
         case shopCall
         case shopDetailViewBack
+        case shopDetailViewReviewBackByTab = "shopDetailViewReviewBackByTab"
+        case shopDetailViewReviewBackByCall = "shopDetailViewReviewBackByCall"
+        case shopDetailViewReviewBackByCategory = "shopDetailViewReviewBackByCategory"
     }
 }
