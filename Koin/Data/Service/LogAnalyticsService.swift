@@ -20,8 +20,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "value": value
         ]
         Analytics.logEvent(label.team, parameters: parameters)
-        let mockService = MockAnalyticsService()
-        mockService.logEvent(label: label, category: category, value: value)
     }
     
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationTime: String? = nil) {
