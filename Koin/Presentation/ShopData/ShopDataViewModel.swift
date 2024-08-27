@@ -13,6 +13,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let shopId: Int
+    private let shopName: String
     private let categoryId: Int?
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let fetchShopMenuListUseCase: FetchShopMenuListUseCase
@@ -45,14 +46,14 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopData(ShopData)
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
-        case showShopReviewList([Review], Int, ReviewSortType, Bool)
+        case showShopReviewList([Review], Int, String, ReviewSortType, Bool)
         case showShopReviewStatistics(StatisticsDTO)
         case showToast(String, Bool)
         case updateReviewCount(Int)
         case disappearReview(Int, Int)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, shopId: Int, categoryId: Int?) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, shopId: Int, shopName: String, categoryId: Int?) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
@@ -62,6 +63,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.shopId = shopId
+        self.shopName = shopName
         self.categoryId = categoryId
     }
     
@@ -141,7 +143,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
-            self.outputSubject.send(.showShopReviewList(response, self.shopId, self.fetchStandard.0, self.fetchStandard.1))
+            self.outputSubject.send(.showShopReviewList(response, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1))
             self.updateReviewCount()
         }.store(in: &subscriptions)
     }
@@ -153,7 +155,7 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
-            self.outputSubject.send(.showShopReviewList(response.review, self.shopId, self.fetchStandard.0, self.fetchStandard.1))
+            self.outputSubject.send(.showShopReviewList(response.review, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1))
             self.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
             self.updateReviewCount()
         }.store(in: &subscriptions)

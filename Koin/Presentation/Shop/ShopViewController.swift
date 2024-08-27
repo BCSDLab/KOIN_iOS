@@ -159,7 +159,7 @@ final class ShopViewController: UIViewController {
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
-            self?.navigateToShopDataViewController(shopId: shopId, categoryId: categoryId)
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
             self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
         }.store(in: &subscriptions)
@@ -173,11 +173,8 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
         
-        eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId in
-            self?.navigateToShopDataViewController(shopId: shopId)
-        }.store(in: &subscriptions)
-        
-        eventShopCollectionView.cellTapTitlePublisher.sink { [weak self] shopName in
+        eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesEvent, EventParameter.EventCategory.click, shopName))
         }.store(in: &subscriptions)
         
@@ -237,7 +234,7 @@ extension ShopViewController: UIScrollViewDelegate {
 
 extension ShopViewController {
     
-    private func navigateToShopDataViewController(shopId: Int, categoryId: Int? = nil) {
+    private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
@@ -248,7 +245,7 @@ extension ShopViewController {
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, categoryId: categoryId)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)

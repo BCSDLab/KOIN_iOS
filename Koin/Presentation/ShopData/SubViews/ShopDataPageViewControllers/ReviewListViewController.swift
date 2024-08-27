@@ -115,9 +115,10 @@ final class ReviewListViewController: UIViewController {
         reviewCountFetchRequestPublisher.send(())
     }
     
-    func setReviewList(_ review: [Review], _ shopId: Int, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
+    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
         reviewListCollectionView.setReviewList(review)
         viewModel.shopId = shopId
+        viewModel.shopName = shopName
         changeCollectionViewHeight(reviewCount: review.count)
         reviewListCollectionView.setHeader(fetchStandard, isMine)
     }
@@ -188,6 +189,7 @@ final class ReviewListViewController: UIViewController {
         reviewListCollectionView.deleteButtonPublisher.sink { [weak self] parameter in
             guard let self = self else { return }
             self.viewModel.deleteParameter = parameter
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDelete, .click, self.viewModel.shopName))
             self.present(self.deleteReviewModalViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
         
@@ -201,7 +203,13 @@ final class ReviewListViewController: UIViewController {
         
         deleteReviewModalViewController.deleteButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, self.viewModel.shopName))
             self.deleteReviewPublisher.send(self.viewModel.deleteParameter)
+        }.store(in: &cancellables)
+        
+        deleteReviewModalViewController.cancelButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteCancel, .click, self.viewModel.shopName))
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
@@ -225,6 +233,11 @@ final class ReviewListViewController: UIViewController {
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
             self?.inputSubject.send(.checkLogin(parameter))
+            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
+            if let viewController = self?.shopReviewReportViewController {
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReport, .click, self?.viewModel.shopName ?? ""))
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
         }.store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
@@ -270,6 +283,7 @@ extension ReviewListViewController {
         shopReviewViewController.title = "리뷰 작성하기"
         self.shopReviewViewController = shopReviewViewController
         if let viewController = self.shopReviewViewController {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWrite, .click, viewModel.shopName))
             navigationController?.pushViewController(viewController, animated: true)
         }
     }

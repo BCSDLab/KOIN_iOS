@@ -84,8 +84,8 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         eventListViewController.setEventList(events)
     }
     
-    func setReviewList(_ review: [Review], _ shopId: Int, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
-        reviewListViewController.setReviewList(review, shopId, fetchStandard, isMine)
+    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
+        reviewListViewController.setReviewList(review, shopId, shopName, fetchStandard, isMine)
     }
     
     func setReviewStatistic(_ statistic: StatisticsDTO) {
