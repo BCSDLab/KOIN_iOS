@@ -214,11 +214,13 @@ final class ShopDataViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
         if self.isMovingFromParent {
             if isSwipedToPopView == false {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, .leaveVC, .shopDetailViewBack))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, .shopDetailViewBack))
             }
             else {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, .leaveVC, .shopDetailViewBack))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, .shopDetailViewBack))
             }
+            inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBackByCategory))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", nil, .shopDetailViewReviewBackByCategory))
         }
     }
     
@@ -460,8 +462,11 @@ extension ShopDataViewController {
         }
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
         let shopTitle = shopTitleLabel.text ?? ""
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, .endEvent, .shopCall))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, .shopCall))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBackByCall))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBackByCall))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitle, "전화", .shopDetailViewReviewBackByCall))
     }
     
     private func showShopData(data: ShopData) {
@@ -515,13 +520,20 @@ extension ShopDataViewController {
         case 0: 
             inputSubject.send(.fetchShopMenuList)
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .click, shopTitle))
+            inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "메뉴", .shopDetailViewReviewBackByTab))
         case 1: inputSubject.send(.fetchShopEventList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
+            inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "이벤트/공지", .shopDetailViewReviewBackByTab))
         default: inputSubject.send(.fetchShopReviewList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewEvent, .click, shopTitle))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopTitle))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCall))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCategory))
         }
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.underlineView.frame.origin.x = (sender.bounds.width / CGFloat(sender.numberOfSegments)) * CGFloat(sender.selectedSegmentIndex)
