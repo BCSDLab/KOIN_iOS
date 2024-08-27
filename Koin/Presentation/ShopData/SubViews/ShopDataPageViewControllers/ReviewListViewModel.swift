@@ -11,13 +11,16 @@ final class ReviewListViewModel: ViewModelProtocol {
         
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     private let fetchUserDataUseCase: FetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     var shopId: Int = 0
+    var shopName: String = ""
     var deleteParameter: (Int, Int) = (0, 0)
 
     
     enum Input {
-       case checkLogin
+        case checkLogin
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateLoginStatus(Bool)
@@ -29,6 +32,8 @@ final class ReviewListViewModel: ViewModelProtocol {
             switch input {
             case .checkLogin:
                 self?.checkLogin()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -46,5 +51,8 @@ extension ReviewListViewModel {
             self?.outputSubject.send(.updateLoginStatus(true))
         }.store(in: &subscriptions)
     }
-   
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
 }

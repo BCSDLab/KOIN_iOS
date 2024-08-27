@@ -242,8 +242,8 @@ final class ShopDataViewController: UIViewController {
                 self?.updateButtons(for: strongSelf.stickyButtonStackView, with: shopMenuList)
             case let .showShopEventList(eventList):
                 self?.pageViewController.setEventList(eventList)
-            case let .showShopReviewList(shopReviewList, shopId, fetchStandard, isMine):
-                self?.pageViewController.setReviewList(shopReviewList, shopId, fetchStandard, isMine)
+            case let .showShopReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine):
+                self?.pageViewController.setReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine)
             case let .showShopReviewStatistics(statistics):
                 self?.pageViewController.setReviewStatistic(statistics)
             case let .showToast(message, success):

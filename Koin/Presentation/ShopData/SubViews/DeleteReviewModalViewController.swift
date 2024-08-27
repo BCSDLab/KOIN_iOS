@@ -12,6 +12,7 @@ import UIKit
 final class DeleteReviewModalViewController: UIViewController {
     
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
@@ -76,6 +77,7 @@ final class DeleteReviewModalViewController: UIViewController {
     }
     
     @objc private func closeButtonTapped() {
+        cancelButtonPublisher.send()
         dismiss(animated: true, completion: nil)
     }
     
