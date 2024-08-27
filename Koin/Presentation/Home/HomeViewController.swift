@@ -419,8 +419,8 @@ extension HomeViewController {
         navigationController?.pushViewController(shopViewController, animated: true)
         
         let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-        self.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
     }
     
     @objc private func refresh() {
