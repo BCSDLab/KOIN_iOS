@@ -198,7 +198,9 @@ final class ReviewListViewController: UIViewController {
             let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
             let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, reviewId: parameter.0, shopId: parameter.1))
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, reviewId: parameter.0, shopId: parameter.1, shopName: self?.viewModel.shopName ?? ""))
             shopReviewViewController.title = "리뷰 수정하기"
             self?.shopReviewViewController = shopReviewViewController
             if let viewController = self?.shopReviewViewController {
@@ -250,8 +252,10 @@ extension ReviewListViewController {
         let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
-        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, shopId: viewModel.shopId))
+        let shopReviewViewController = ShopReviewViewController(viewModel: ShopReviewViewModel(postReviewUseCase: postReviewUseCase, modifyReviewUseCase: modifyReviewUseCase, fetchShopReviewUseCase: fetchShopReviewUseCase, uploadFileUseCase: uploadFileUseCase, fetchShopDataUseCase: fetchShopDataUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: viewModel.shopId, shopName: viewModel.shopName))
         shopReviewViewController.title = "리뷰 작성하기"
         self.shopReviewViewController = shopReviewViewController
         if let viewController = self.shopReviewViewController {

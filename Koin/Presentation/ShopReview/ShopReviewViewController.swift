@@ -164,9 +164,16 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         reviewTextView.delegate = self
         inputSubject.send(.checkModify)
         inputSubject.send(.updateShopName)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
     }
     
     // MARK: - Bind
@@ -188,6 +195,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
                 self?.shopNameLabel.text = shopName
             case let .reviewWriteSuccess(isPost, reviewId, reviewItem):
                 self?.writeCompletePublisher.send((isPost, reviewId, reviewItem))
+                self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteDone, .click, "", .leaveVC, nil))
             }
         }.store(in: &subscriptions)
         
@@ -214,6 +223,13 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
 }
 
 extension ShopReviewViewController {
+    @objc private func appDidEnterBackground() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
+    }
+    
+    @objc private func appWillEnterForeground() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
+    }
     
     @objc private func addMenuButtonTapped() {
         addMenuCollectionView.addMenuItem()
