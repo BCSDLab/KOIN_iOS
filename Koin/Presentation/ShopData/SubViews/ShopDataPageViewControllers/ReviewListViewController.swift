@@ -32,6 +32,11 @@ final class ReviewListViewController: UIViewController {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
+    private let reviewLoginModalViewController = ReviewLoginModalViewController(message: "작성").then {
+           $0.modalPresentationStyle = .overFullScreen
+           $0.modalTransitionStyle = .crossDissolve
+       }
+    
     private let totalScoreLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 32)
         $0.textColor = UIColor.appColor(.neutral800)
@@ -194,11 +199,13 @@ final class ReviewListViewController: UIViewController {
             self.present(self.deleteReviewModalViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
         
-        reviewWriteLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteLogin, .click, self?.viewModel.shopName ?? ""))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
-        reviewReportLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        reviewLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, self?.viewModel.shopName ?? ""))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
