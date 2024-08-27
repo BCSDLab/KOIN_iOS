@@ -15,12 +15,17 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let postReviewUseCase: PostReviewUseCase
     private let modifyReviewUseCase: ModifyReviewUseCase
     private let fetchShopReviewUseCase: FetchShopReviewUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let uploadFileUseCase: UploadFileUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
+    private let shopName: String
     private let shopId: Int
     
     enum Input {
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case writeReview(WriteReviewRequest)
         case uploadFile([Data])
         case checkModify
@@ -35,14 +40,17 @@ final class ShopReviewViewModel: ViewModelProtocol {
         case reviewWriteSuccess(Bool, Int?, WriteReviewRequest)
     }
     
-    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, reviewId: Int? = nil, shopId: Int) {
+    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, reviewId: Int? = nil, shopId: Int, shopName: String) {
         self.postReviewUseCase = postReviewUseCase
         self.modifyReviewUseCase = modifyReviewUseCase
         self.fetchShopReviewUseCase = fetchShopReviewUseCase
         self.uploadFileUseCase = uploadFileUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.reviewId = reviewId
         self.shopId = shopId
+        self.shopName = shopName
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -58,6 +66,10 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 if let _ = reviewId { fetchShopReview() }
             case .updateShopName:
                 self.updateShopName()
+            case let .logEvent(label, category, value, durationType, eventLabelNeededDuration):
+                self.makeLogAnalyticsEvent(label: label, category: category, value: value, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
+                self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             }
             
         }.store(in: &subscriptions)
@@ -120,5 +132,19 @@ final class ShopReviewViewModel: ViewModelProtocol {
             self?.outputSubject.send(.reviewWriteSuccess(false, self?.reviewId, requestModel))
         }.store(in: &subscriptions)
         
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if durationType != nil {
+            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: self.shopName, previousPage: nil, currentPage: nil, durationTime: "\(durationTime)")
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
+    }
+    
+    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
     }
 }
