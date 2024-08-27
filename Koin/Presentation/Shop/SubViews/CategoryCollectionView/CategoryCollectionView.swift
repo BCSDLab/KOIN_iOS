@@ -11,8 +11,8 @@ import UIKit
 final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     private var shopCategories: [ShopCategory] = []
-    var cellTapPublisher = PassthroughSubject<Int, Never>()
-    var selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
+    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
     private var selectedId = 0
     private var layout = UICollectionViewFlowLayout()
     
