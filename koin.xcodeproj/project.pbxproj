@@ -375,7 +375,8 @@
 		283DD76D2537E16B73AC5434 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67580553C7374E18362DDF7C /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
-		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
+		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
+		833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
 		834E1CD92BBCDFBF003D4271 /* BusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimeTableDTO.swift; sourceTree = "<group>"; };
         833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
 		834E1CDB2BBCE3B0003D4271 /* BusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusViewModel.swift; sourceTree = "<group>"; };
@@ -744,15 +745,6 @@
 				148F3239B2693F99D65D8F3B /* Pods_koin.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		833D9C062C68F8BE00982145 /* ScreenTime */ = {
-			isa = PBXGroup;
-			children = (
-				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
-				831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */,
-			);
-			path = ScreenTime;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -1929,7 +1921,7 @@
 		D2FB236A2C0409590098BA2B /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C062C68F8BE00982145 /* ScreenTime */,
+				831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */,
 				D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */,
 			);
 			path = Analytics;
@@ -1938,6 +1930,7 @@
 		D2FB236F2C0412860098BA2B /* Log */ = {
 			isa = PBXGroup;
 			children = (
+				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
 				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
 			);
 			path = Log;
