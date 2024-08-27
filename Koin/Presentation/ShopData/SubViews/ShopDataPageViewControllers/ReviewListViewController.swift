@@ -170,7 +170,8 @@ final class ReviewListViewController: UIViewController {
                     }
                 } else {
                     if let parameter {
-                        self.navigateToReportReview(parameter: parameter)
+                        // ???: 이게 왜있는지 모르겠다.
+//                        self.navigateToReportReview(parameter: parameter)
                     } else {
                         self.navigateToWriteReview()
                     }
@@ -232,8 +233,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            self?.inputSubject.send(.checkLogin(parameter))
-            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
+            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), reviewId: parameter.0, shopId: parameter.1, shopName: self?.viewModel.shopName ?? ""))
             if let viewController = self?.shopReviewReportViewController {
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReport, .click, self?.viewModel.shopName ?? ""))
                 self?.navigationController?.pushViewController(viewController, animated: true)
@@ -259,14 +259,10 @@ extension ReviewListViewController {
         inputSubject.send(.checkLogin(nil))
     }
     
-    private func navigateToReportReview(parameter: (Int, Int)) {
-        let shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
-        
-        navigationController?.pushViewController(shopReviewReportViewController, animated: true)
-    }
-    
     private func navigateToLogin() {
         let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+                loginViewController.title = "로그인"
+                navigationController?.pushViewController(loginViewController, animated: true)
         loginViewController.title = "로그인"
         navigationController?.pushViewController(loginViewController, animated: true)
     }
