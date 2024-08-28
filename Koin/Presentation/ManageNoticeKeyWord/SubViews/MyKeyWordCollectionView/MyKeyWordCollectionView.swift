@@ -10,6 +10,9 @@ import UIKit
 
 final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
+    
+    let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    private var subscriptions = Set<AnyCancellable>()
     private var myKeyWordList: [NoticeKeyWordDTO] = [NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
                                                      NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
                                                      NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
@@ -49,6 +52,10 @@ extension MyKeyWordCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKeyWordCollectionViewCell.identifier, for: indexPath) as? MyKeyWordCollectionViewCell else {
             return UICollectionViewCell()
         }
+        cell.tapDeleteButtonPublisher.sink { [weak self] in
+            guard let self = self else {return }
+            self.tapDeleteButtonPublisher.send(self.myKeyWordList[indexPath.row])
+        }.store(in: &subscriptions)
         cell.configure(keyWord: myKeyWordList[indexPath.item].keyWord)
         return cell
     }

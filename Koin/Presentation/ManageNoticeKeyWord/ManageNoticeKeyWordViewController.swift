@@ -131,6 +131,10 @@ final class ManageNoticeKeyWordViewController: UIViewController {
                 self?.updateMyKeyWords(keyWords: keyWords)
             }
         }.store(in: &subscriptions)
+        
+        myKeyWordCollectionView.tapDeleteButtonPublisher.sink { [weak self] keyWord in
+            self?.inputSubject.send(.deleteKeyWord(keyWord: keyWord))
+        }.store(in: &subscriptions)
     }
 }
 
