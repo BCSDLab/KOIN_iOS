@@ -23,10 +23,12 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase
     private let deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase
+    private let fetchNotificationKeyWordUsecase: FetchNotificationKeyWordUseCase
     
-    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase) {
+    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase) {
         self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
         self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
+        self.fetchNotificationKeyWordUsecase = fetchNotificationKeyWordUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -57,7 +59,16 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func fetchMyKeyWord() {
-        
+        fetchNotificationKeyWordUsecase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                guard let self = self else { return }
+                Log.make().error("\(error)")
+                let result = self.fetchNotificationKeyWordUsecase.fetchNotificationKeyWordUseCaseWithoutLogin()
+                self.outputSubject.send(.updateKeyWord(result))
+            }
+        }, receiveValue: { [weak self] keyWords in
+            self?.outputSubject.send(.updateKeyWord(keyWords))
+        }).store(in: &subscriptions)
     }
     
     private func deleteMyKeyWord(keyWord: NoticeKeyWordDTO) {
