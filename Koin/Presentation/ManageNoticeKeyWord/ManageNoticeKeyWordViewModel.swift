@@ -61,35 +61,45 @@ extension ManageNoticeKeyWordViewModel {
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.addNotificationKeyWordUseCase.addNotificationKeyWordWithoutLogin(requestModel: keyWord)
+                self?.fetchMyKeyWord()
             }
-        }, receiveValue: { result in
+        }, receiveValue: { [weak self] result in
             print("\(result) keyword is Registered")
+            self?.fetchMyKeyWord()
         }).store(in: &subscriptions)
     }
     
     private func fetchMyKeyWord() {
-        fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                guard let self = self else { return }
-                Log.make().error("\(error)")
-                let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
-                self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
-            }
-        }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
-        }).store(in: &subscriptions)
+        /*fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
+         if case let .failure(error) = completion {
+             guard let self = self else { return }
+             Log.make().error("\(error)")
+             let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
+             self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
+         }
+     }, receiveValue: { [weak self] keyWords in
+         self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
+     }).store(in: &subscriptions)*/
+        let result = fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
+        outputSubject.send(.updateKeyWord(result, .myKeyWord))
     }
     
     private func deleteMyKeyWord(keyWord: NoticeKeyWordDTO) {
-        guard let id = keyWord.id else { return }
-        deleteNotificationKeyWordUseCase.deleteNotificationKeyWordWithLogin(id: id).sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.deleteNotificationKeyWordUseCase.deleteNotificationKeyWordWithoutLogin(keyWord: keyWord)
-            }
-        }, receiveValue: { result in
-            print("\(result) keyword is Deleted")
-        }).store(in: &subscriptions)
+        if let id = keyWord.id {
+            deleteNotificationKeyWordUseCase.deleteNotificationKeyWordWithLogin(id: id)
+                .sink(receiveCompletion: { completion in
+                    if case let .failure(error) = completion {
+                        Log.make().error("\(error)")
+                    }
+                }, receiveValue: { [weak self] result in
+                    print("\(result) keyword is Deleted")
+                    self?.fetchMyKeyWord()
+                })
+                .store(in: &subscriptions)
+        } else {
+            deleteNotificationKeyWordUseCase.deleteNotificationKeyWordWithoutLogin(keyWord: keyWord)
+            fetchMyKeyWord()
+        }
     }
     
     private func getRecommendedKeyWord() {
