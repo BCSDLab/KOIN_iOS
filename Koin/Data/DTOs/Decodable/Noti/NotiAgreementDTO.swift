@@ -43,6 +43,7 @@ enum SubscribeType: String, Codable {
     case shopEvent = "SHOP_EVENT"
     case diningSoldOut = "DINING_SOLD_OUT"
     case diningImageUpload = "DINING_IMAGE_UPLOAD"
+    case articleKeyWordDetect = "ARTICLE_KEYWORD_DETECT"
 }
 
 enum DetailSubscribeType: String, Codable, CaseIterable {

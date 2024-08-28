@@ -5,6 +5,7 @@
 //  Created by JOOMINKYUNG on 8/23/24.
 //
 
+import Alamofire
 import Combine
 import Foundation
 
@@ -19,9 +20,12 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
         case getRecommendedKeyWord
+        case changeNotification(isOn: Bool)
     }
     enum Output {
         case updateKeyWord([NoticeKeyWordDTO], keyWordType)
+        case showLoginModal
+        case updateSwitch(isOn: Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -30,12 +34,15 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     private let deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase
     private let fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase
     private let fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase
+    private let changeNotiUseCase: ChangeNotiUseCase
     
-    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase) {
+    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase,
+         changeNotiUseCase: ChangeNotiUseCase) {
         self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
         self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
         self.fetchNotificationKeyWordUseCase = fetchNotificationKeyWordUseCase
         self.fetchRecommendedKeyWordUseCase = fetchRecommendedKeyWordUseCase
+        self.changeNotiUseCase = changeNotiUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -49,6 +56,8 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
                 self?.deleteMyKeyWord(keyWord: keyWord)
             case .getRecommendedKeyWord:
                 self?.getRecommendedKeyWord()
+            case let .changeNotification(isOn):
+                self?.changeNotification(isOn: isOn)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -109,6 +118,18 @@ extension ManageNoticeKeyWordViewModel {
             }
         }, receiveValue: { [weak self] keyWords in
             self?.outputSubject.send(.updateKeyWord(keyWords, .recommendedKeyWord))
+        }).store(in: &subscriptions)
+    }
+    
+    private func changeNotification(isOn: Bool) {
+        let httpMethod: Alamofire.HTTPMethod = isOn ? .post : .delete
+        changeNotiUseCase.execute(method: httpMethod, type: .articleKeyWordDetect).sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showLoginModal)
+            }
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateSwitch(isOn: isOn))
         }).store(in: &subscriptions)
     }
 }
