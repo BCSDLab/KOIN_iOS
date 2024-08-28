@@ -64,6 +64,7 @@
 		835C991C2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */; };
 		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
+        835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
 		837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA512BB7E48A001FCBD4 /* BusInformaitionViewController.swift */; };
@@ -423,7 +424,6 @@
 		283DD76D2537E16B73AC5434 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67580553C7374E18362DDF7C /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
-		
 		833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
 		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
 		833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -478,6 +478,7 @@
 		835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+        835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
 		837BFA512BB7E48A001FCBD4 /* BusInformaitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformaitionViewController.swift; sourceTree = "<group>"; };
@@ -1020,6 +1021,7 @@
 			children = (
 				8354BE332C79C67E009D4D7A /* RecommendedKeyWordCollectionView */,
 				8354BE322C79C674009D4D7A /* MyKeyWordCollectionView */,
+				835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2659,6 +2661,7 @@
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
+				835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */,
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
