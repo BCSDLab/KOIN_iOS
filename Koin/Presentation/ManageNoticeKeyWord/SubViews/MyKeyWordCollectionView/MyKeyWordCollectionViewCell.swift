@@ -5,11 +5,16 @@
 //  Created by JOOMINKYUNG on 8/24/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
 
 final class MyKeyWordCollectionViewCell: UICollectionViewCell {
+    // MARK: - Properties
+    
+    let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
+    
     // MARK: - UI Components
  
     private let keyWordLabel = UILabel().then {
@@ -27,6 +32,7 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
+        deleteButton.addTarget(self, action: #selector(tapDeleteButton), for: .touchUpInside)
         configureView()
     }
     
@@ -36,6 +42,10 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keyWordLabel.text = keyWord
+    }
+    
+    @objc func tapDeleteButton(sender: UIButton) {
+        tapDeleteButtonPublisher.send()
     }
 }
 
