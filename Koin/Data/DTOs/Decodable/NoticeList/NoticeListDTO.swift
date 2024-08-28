@@ -36,9 +36,31 @@ struct NoticeArticleDTO: Decodable {
     }
 }
 
+extension NoticeListDTO {
+    func toDomain() -> NoticeListDTO {
+        var newArticles: [NoticeArticleDTO] = []
+        if let articles = articles {
+            for article in articles {
+                newArticles.append(article.toDomainWithChangedDate())
+            }
+        }
+        return NoticeListDTO(articles: newArticles, totalCount: totalCount, currentCount: currentCount, totalPage: totalPage, currentPage: currentPage)
+    }
+}
+
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
         let imageString = content?.extractImageStringFromHtmlTag()
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", nickName: nickname, hit: hit, createdAt: createdAt, updatedAt: updatedAt, imageString: imageString)
+        let date = DateFormatter().date(from: createdAt) ?? Date()
+        let newDate = date.formatDateToMMDDE()
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", nickName: nickname, hit: hit, createdAt: newDate, updatedAt: updatedAt, imageString: imageString)
+    }
+    
+    func toDomainWithChangedDate() -> NoticeArticleDTO {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from: createdAt) ?? Date()
+        let newDate = date.formatDateToMMDDE()
+        return NoticeArticleDTO(id: id, boardId: boardId, title: title, nickname: nickname, hit: hit, content: content, createdAt: newDate, updatedAt: updatedAt)
     }
 }

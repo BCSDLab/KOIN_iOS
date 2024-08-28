@@ -36,6 +36,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    func formatDateToMMDDE() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.dateFormat = "MM.dd E"
+        return dateFormatter.string(from: self)
+    }
+    
     func formatDateToMDE() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KR")
