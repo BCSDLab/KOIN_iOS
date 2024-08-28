@@ -12,12 +12,9 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
     //MARK: - Properties
     
     let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    let myKeyWordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    private var myKeyWordList: [NoticeKeyWordDTO] = [NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
-                                                     NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
-                                                     NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
-                                                     NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
-                                                     NoticeKeyWordDTO(id: 1, keyWord: "교환학생")]
+    private var myKeyWordList: [NoticeKeyWordDTO] = []
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -40,6 +37,10 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
     func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
         self.myKeyWordList = keyWords
         reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.myKeyWordsContentsSizePublisher.send(self.contentSize.height)
+        }
     }
 }
 
