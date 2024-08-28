@@ -11,6 +11,8 @@ import UIKit
 final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private var recommendedKeyWordList: [NoticeKeyWordDTO] = []
+    let recommendedKeyWordPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    private var subscriptions = Set<AnyCancellable>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -31,7 +33,6 @@ final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionView
     
     func updateRecommendedKeyWords(keyWords: [NoticeKeyWordDTO]) {
         self.recommendedKeyWordList = keyWords
-        print(keyWords)
         reloadData()
     }
 }
@@ -45,6 +46,11 @@ extension RecommendedKeyWordCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedKeyWordCollectionViewCell.identifier, for: indexPath) as? RecommendedKeyWordCollectionViewCell else {
             return UICollectionViewCell()
         }
+        cell.recommendedKeyWordPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            let keyWord = self.recommendedKeyWordList[indexPath.row]
+            self.recommendedKeyWordPublisher.send(keyWord)
+        }.store(in: &subscriptions)
         cell.configure(keyWord: recommendedKeyWordList[indexPath.item].keyWord)
         return cell
     }

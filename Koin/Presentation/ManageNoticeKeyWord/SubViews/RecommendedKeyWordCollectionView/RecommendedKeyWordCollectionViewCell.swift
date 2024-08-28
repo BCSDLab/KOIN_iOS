@@ -5,11 +5,15 @@
 //  Created by JOOMINKYUNG on 8/24/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
 
 final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
+    // MARK: - Properties
+    let recommendedKeyWordPublisher = PassthroughSubject<Void, Never>()
+    
     // MARK: - UI Components
  
     private let keyWordLabel = UILabel().then {
@@ -27,6 +31,7 @@ final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addButton.addTarget(self, action: #selector(tapAddButton), for: .touchUpInside)
         configureView()
     }
     
@@ -36,6 +41,10 @@ final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keyWordLabel.text = keyWord
+    }
+    
+    @objc private func tapAddButton(sender: UIButton) {
+        recommendedKeyWordPublisher.send()
     }
 }
 
