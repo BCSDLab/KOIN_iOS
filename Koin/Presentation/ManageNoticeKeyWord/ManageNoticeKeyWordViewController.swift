@@ -147,6 +147,10 @@ final class ManageNoticeKeyWordViewController: UIViewController {
                 $0.height.equalTo(height + 24)
             }
         }.store(in: &subscriptions)
+        
+        recommendedKeyWordCollectionView.recommendedKeyWordPublisher.sink { [weak self] keyWord in
+            self?.inputSubject.send(.addKeyWord(keyWord: keyWord))
+        }.store(in: &subscriptions)
     }
 }
 
