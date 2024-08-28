@@ -63,6 +63,7 @@
 		8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataManager.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */; };
+		835C991C2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */; };
@@ -474,9 +475,10 @@
 		8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8354BE512C7A0566009D4D7A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
+		835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
+		835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeyWordUseCase.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
-        835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
-        835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
 		837BFA512BB7E48A001FCBD4 /* BusInformaitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformaitionViewController.swift; sourceTree = "<group>"; };
@@ -932,6 +934,7 @@
 				8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */,
 				835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */,
 				835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */,
+				835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2768,6 +2771,7 @@
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
+				835C991C2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,

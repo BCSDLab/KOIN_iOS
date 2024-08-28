@@ -9,26 +9,33 @@ import Combine
 import Foundation
 
 final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
+    enum keyWordType {
+        case myKeyWord
+        case recommendedKeyWord
+    }
     
     enum Input {
         case addKeyWord(keyWord: NoticeKeyWordDTO)
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
+        case getRecommendedKeyWord
     }
     enum Output {
-        case updateKeyWord([NoticeKeyWordDTO])
+        case updateKeyWord([NoticeKeyWordDTO], keyWordType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase
     private let deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase
-    private let fetchNotificationKeyWordUsecase: FetchNotificationKeyWordUseCase
+    private let fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase
+    private let fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase
     
-    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase) {
+    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase) {
         self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
         self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
-        self.fetchNotificationKeyWordUsecase = fetchNotificationKeyWordUseCase
+        self.fetchNotificationKeyWordUseCase = fetchNotificationKeyWordUseCase
+        self.fetchRecommendedKeyWordUseCase = fetchRecommendedKeyWordUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -40,6 +47,8 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
                 self?.fetchMyKeyWord()
             case let .deleteKeyWord(keyWord):
                 self?.deleteMyKeyWord(keyWord: keyWord)
+            case .getRecommendedKeyWord:
+                self?.getRecommendedKeyWord()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -59,15 +68,15 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func fetchMyKeyWord() {
-        fetchNotificationKeyWordUsecase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
+        fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 guard let self = self else { return }
                 Log.make().error("\(error)")
-                let result = self.fetchNotificationKeyWordUsecase.fetchNotificationKeyWordUseCaseWithoutLogin()
-                self.outputSubject.send(.updateKeyWord(result))
+                let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
+                self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
             }
         }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateKeyWord(keyWords))
+            self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
         }).store(in: &subscriptions)
     }
     
@@ -80,6 +89,16 @@ extension ManageNoticeKeyWordViewModel {
             }
         }, receiveValue: { result in
             print("\(result) keyword is Deleted")
+        }).store(in: &subscriptions)
+    }
+    
+    private func getRecommendedKeyWord() {
+        fetchRecommendedKeyWordUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] keyWords in
+            self?.outputSubject.send(.updateKeyWord(keyWords, .recommendedKeyWord))
         }).store(in: &subscriptions)
     }
 }
