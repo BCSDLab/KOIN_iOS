@@ -34,24 +34,23 @@ final class NoticeDataViewController: UIViewController {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let nickName = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
-    }
+    private let nickName = UILabel()
     
-    private let createdDate = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
-    }
+    private let createdDate = UILabel()
     
     private let separatorDot = UILabel().then {
         $0.text = "·"
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
     }
+    private let separatorDot2 = UILabel().then {
+        $0.text = "·"
+    }
+    
+    private let eyeImage = UIImageView().then {
+        $0.tintColor = .appColor(.neutral500)
+        $0.image = UIImage.appImage(asset: .eye)
+    }
+    
+    private let hitLabel = UILabel()
     
     private let contentWrappedView = UIView().then {
         $0.backgroundColor = .white
@@ -176,7 +175,7 @@ extension NoticeDataViewController {
     
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
-        titleLabel.text = noticeData.title
+        titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
         nickName.text = noticeData.nickName
         createdDate.text = noticeData.createdAt
         contentLabel.attributedText = noticeData.content.extractFromHtmlTag(regularFont: UIFont.appFont(.pretendardRegular, size: 14), boldFont: .appFont(.pretendardBold, size: 14))
@@ -192,6 +191,17 @@ extension NoticeDataViewController {
                 $0.height.equalTo(31)
             }
         }
+        if noticeData.hit == 0 {
+            [separatorDot2, eyeImage, hitLabel].forEach {
+                $0.isHidden = true
+            }
+        }
+        else {
+            [separatorDot2, eyeImage, hitLabel].forEach {
+                $0.isHidden = false
+            }
+            hitLabel.text = "\(noticeData.hit.formattedWithComma)"
+        }
     }
     
     private func updatePopularArticle(notices: [NoticeArticleDTO]) {
@@ -200,6 +210,14 @@ extension NoticeDataViewController {
 }
 
 extension NoticeDataViewController {
+    private func setUpLabels() {
+        [nickName, separatorDot, createdDate, separatorDot2, hitLabel].forEach {
+            $0.font = .appFont(.pretendardRegular, size: 12)
+            $0.textAlignment = .left
+            $0.textColor = .appColor(.neutral500)
+        }
+    }
+    
     private func setUpButtons() {
         [inventoryButton, previousButton, nextButton].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
@@ -216,7 +234,7 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName].forEach {
+        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName, separatorDot2, eyeImage, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
         [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
@@ -267,17 +285,40 @@ extension NoticeDataViewController {
         createdDate.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
+            $0.height.equalTo(19)
         }
         
         separatorDot.snp.makeConstraints {
-            $0.leading.equalTo(createdDate.snp.trailing).offset(2)
+            $0.leading.equalTo(createdDate.snp.trailing).offset(3)
             $0.top.equalTo(createdDate)
+            $0.width.equalTo(7)
+            $0.height.equalTo(19)
         }
         
         nickName.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot.snp.trailing).offset(2)
+            $0.leading.equalTo(separatorDot.snp.trailing).offset(3)
             $0.top.equalTo(createdDate)
             $0.bottom.equalToSuperview().inset(12)
+            $0.height.equalTo(19)
+        }
+        
+        separatorDot2.snp.makeConstraints {
+            $0.leading.equalTo(nickName.snp.trailing).offset(3)
+            $0.top.equalTo(nickName)
+            $0.width.equalTo(7)
+        }
+        
+        eyeImage.snp.makeConstraints {
+            $0.leading.equalTo(separatorDot2.snp.trailing).offset(2)
+            $0.centerY.equalTo(nickName)
+            $0.width.equalTo(16)
+            $0.height.equalTo(13)
+        }
+        
+        hitLabel.snp.makeConstraints {
+            $0.leading.equalTo(eyeImage.snp.trailing)
+            $0.top.equalTo(nickName)
+            $0.height.equalTo(19)
         }
         
         contentWrappedView.snp.makeConstraints {
@@ -339,8 +380,8 @@ extension NoticeDataViewController {
         }
     }
 
-    
     private func configureView() {
+        setUpLabels()
         setUpButtons()
         setUpLayOuts()
         setUpConstraints()

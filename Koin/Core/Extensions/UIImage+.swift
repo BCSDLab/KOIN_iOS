@@ -64,6 +64,7 @@ enum ImageAsset: String {
     case share
     case diningTooltip
     case filter
+    case eye
 }
 
 enum SFSymbols: String {
