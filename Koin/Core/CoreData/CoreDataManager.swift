@@ -42,10 +42,13 @@ final class CoreDataManager {
         }
     }
     
-    func fetchEntities<T: NSManagedObject>(objectType: T.Type) -> [T]? {
+    func fetchEntities<T: NSManagedObject>(objectType: T.Type, predicate: NSPredicate? = nil) -> [T]? {
         let entityName = String(describing: objectType)
         let fetchRequest = NSFetchRequest<T>(entityName: entityName)
-        
+        if let predicate = predicate {
+            fetchRequest.predicate = predicate
+        }
+       
         do {
             return try context.fetch(fetchRequest)
         }
