@@ -86,13 +86,18 @@ final class ManageNoticeKeyWordViewController: UIViewController {
     }
     
     private let keyWordNotificationSwtich = UISwitch().then {
-        $0.preferredStyle = .sliding
+        $0.preferredStyle = .automatic
     }
     
     private let recommendedKeyWordGuideLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = .appColor(.neutral800)
         $0.text = "추천 키워드"
+    }
+    
+    private let keyWordLoginModalViewController = KeyWordLoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
     }
     
     private let myKeyWordCollectionView = MyKeyWordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
@@ -127,14 +132,20 @@ final class ManageNoticeKeyWordViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self = self else { return }
             switch output {
             case let .updateKeyWord(keyWords, keyWordsType):
                 if keyWordsType == .myKeyWord {
-                    self?.updateMyKeyWords(keyWords: keyWords)
+                    self.updateMyKeyWords(keyWords: keyWords)
                 }
                 else {
-                    self?.updateRecommendedKeyWords(keyWords: keyWords)
+                    self.updateRecommendedKeyWords(keyWords: keyWords)
                 }
+            case .showLoginModal:
+                self.present(self.keyWordLoginModalViewController.self, animated: true, completion: nil)
+                self.keyWordNotificationSwtich.isOn = false
+            case let .updateSwitch(isOn):
+                self.keyWordNotificationSwtich.isOn = isOn
             }
         }.store(in: &subscriptions)
         
@@ -181,7 +192,7 @@ extension ManageNoticeKeyWordViewController {
     }
     
     @objc private func changeNotificationKeyWordSwitch(sender: UISwitch) {
-       
+        inputSubject.send(.changeNotification(isOn: sender.isOn))
     }
     
     private func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {

@@ -43,12 +43,16 @@ enum SubscribeType: String, Codable {
     case shopEvent = "SHOP_EVENT"
     case diningSoldOut = "DINING_SOLD_OUT"
     case diningImageUpload = "DINING_IMAGE_UPLOAD"
+    case articleKeyWordDetect = "ARTICLE_KEYWORD_DETECT"
+    
+
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
         self = SubscribeType(rawValue: rawValue) ?? .shopEvent
     }
+
 }
 
 enum DetailSubscribeType: String, Codable, CaseIterable {
