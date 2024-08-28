@@ -110,6 +110,7 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.getMyKeyWord)
+        inputSubject.send(.getRecommendedKeyWord)
     }
     
     // MARK: - Initialization
@@ -127,8 +128,13 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateKeyWord(keyWords):
-                self?.updateMyKeyWords(keyWords: keyWords)
+            case let .updateKeyWord(keyWords, keyWordsType):
+                if keyWordsType == .myKeyWord {
+                    self?.updateMyKeyWords(keyWords: keyWords)
+                }
+                else {
+                    self?.updateRecommendedKeyWords(keyWords: keyWords)
+                }
             }
         }.store(in: &subscriptions)
         
@@ -137,7 +143,6 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         }.store(in: &subscriptions)
         
         myKeyWordCollectionView.myKeyWordsContentsSizePublisher.sink { [weak self] height in
-            print(height)
             self?.myKeyWordCollectionView.snp.updateConstraints {
                 $0.height.equalTo(height + 24)
             }
@@ -177,6 +182,10 @@ extension ManageNoticeKeyWordViewController {
     
     private func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
         myKeyWordCollectionView.updateMyKeyWords(keyWords: keyWords)
+    }
+    
+    private func updateRecommendedKeyWords(keyWords: [NoticeKeyWordDTO]) {
+        recommendedKeyWordCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
     }
 }
 
@@ -273,9 +282,10 @@ extension ManageNoticeKeyWordViewController {
         }
         
         recommendedKeyWordCollectionView.snp.makeConstraints {
-            $0.top.equalTo(recommendedKeyWordGuideLabel.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(110)
+            $0.top.equalTo(recommendedKeyWordGuideLabel.snp.bottom).offset(12)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.height.equalTo(86)
         }
     }
     
