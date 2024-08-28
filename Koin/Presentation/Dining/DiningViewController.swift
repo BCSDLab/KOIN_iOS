@@ -104,7 +104,7 @@ final class DiningViewController: UIViewController {
     
     private let diningNotiContentViewController = DiningNotiContentViewController()
     private let diningLikeLoginModalViewController: DiningLikeLoginModalViewController = {
-        let viewController = DiningLikeLoginModalViewController()
+        let viewController = DiningLikeLoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8)
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         return viewController
