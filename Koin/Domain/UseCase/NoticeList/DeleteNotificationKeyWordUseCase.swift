@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 protocol DeleteNotificationKeyWordUseCase {
     func deleteNotificationKeyWordWithLogin(id: Int) -> AnyPublisher<Void, ErrorResponse>
@@ -24,10 +25,10 @@ final class DefaultDeleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUs
     }
     
     func deleteNotificationKeyWordWithoutLogin(keyWord: NoticeKeyWordDTO) {
-        let keyWord = NoticeKeyWordInfo(context: CoreDataManager.shared.context)
-        keyWord.name = keyWord.name
-        
-        CoreDataManager.shared.delete(deletedObject: keyWord)
+        if let existingKeyWords = CoreDataManager.shared.fetchEntities(objectType: NoticeKeyWordInfo.self, predicate: NSPredicate(format: "name == %@", keyWord.keyWord)) {
+            for deletedKeyWord in existingKeyWords {
+                CoreDataManager.shared.delete(deletedObject: deletedKeyWord)
+            }
+        }
     }
-    
 }
