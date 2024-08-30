@@ -21,6 +21,7 @@ enum EventParameter {
             case shopCategories = "shop_categories"
             case shopClick = "shop_click"
             case shopCall = "shop_call"
+            case shopCan = "shop_can"
             case shopPicture = "shop_picture"
             case hamburger = "hamburger"
             case shopCategoriesEvent = "shop_categories_event"
