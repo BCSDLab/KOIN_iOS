@@ -59,8 +59,8 @@ final class NoticeListTableViewCell: UITableViewCell {
         noticeTitle.setLineHeight(lineHeight: 1.3, text: articleModel.title)
         
         noticeTitle.lineBreakMode = .byTruncatingTail
-        nickName.text = articleModel.nickname
-        createdDate.text = articleModel.createdAt
+        nickName.text = articleModel.author
+        createdDate.text = articleModel.registeredAt
         if articleModel.hit == 0 {
             [separatorDot2, eyeImage, hitLabel].forEach {
                 $0.isHidden = true

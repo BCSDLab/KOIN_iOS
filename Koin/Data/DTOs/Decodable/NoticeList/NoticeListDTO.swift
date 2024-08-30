@@ -22,17 +22,18 @@ struct NoticeListDTO: Decodable {
 
 struct NoticeArticleDTO: Decodable {
     let id, boardId: Int
-    let title, nickname: String
+    let title, author: String
     let hit: Int
     let content: String?
-    let createdAt, updatedAt: String
+    let updatedAt: String
+    let registeredAt: String
     
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
-        case title, nickname, hit, content
-        case createdAt = "created_at"
+        case title, author, hit, content
         case updatedAt = "updated_at"
+        case registeredAt = "registered_at"
     }
 }
 
@@ -50,17 +51,16 @@ extension NoticeListDTO {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        let imageString = content?.extractImageStringFromHtmlTag()
-        let date = DateFormatter().date(from: createdAt) ?? Date()
+        let date = DateFormatter().date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", nickName: nickname, hit: hit, createdAt: newDate, updatedAt: updatedAt, imageString: imageString)
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, registeredAt: newDate, imageString: "")
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let date = dateFormatter.date(from: createdAt) ?? Date()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        return NoticeArticleDTO(id: id, boardId: boardId, title: title, nickname: nickname, hit: hit, content: content, createdAt: newDate, updatedAt: updatedAt)
+        return NoticeArticleDTO(id: id, boardId: boardId, title: title, author: author, hit: hit, content: content, updatedAt: updatedAt, registeredAt: newDate)
     }
 }

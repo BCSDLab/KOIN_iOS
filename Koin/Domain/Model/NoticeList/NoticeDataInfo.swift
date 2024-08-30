@@ -11,9 +11,8 @@ struct NoticeDataInfo {
     let title: String
     let boardId: Int
     let content: String
-    let nickName: String
+    let author: String
     let hit: Int
-    let createdAt: String
-    let updatedAt: String
+    let registeredAt: String
     let imageString: String?
 }
