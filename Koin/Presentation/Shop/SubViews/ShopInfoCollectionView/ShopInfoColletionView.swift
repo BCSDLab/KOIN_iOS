@@ -17,6 +17,7 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     private var cancellables = Set<AnyCancellable>()
     let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
+    let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -73,7 +74,9 @@ extension ShopInfoCollectionView {
             headerView.shopSortStandardPublisher.sink { [weak self] standard in
                 self?.shopSortStandardPublisher.send(standard)
             }.store(in: &cancellables)
-            
+            headerView.shopFilterTogglePublisher.sink { [weak self] tag in
+                self?.shopFilterTogglePublisher.send(tag)
+            }.store(in: &cancellables)
             return headerView
         }
         return UICollectionReusableView()

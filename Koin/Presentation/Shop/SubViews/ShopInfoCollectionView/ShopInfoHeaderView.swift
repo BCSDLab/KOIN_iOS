@@ -12,6 +12,8 @@ final class ShopInfoHeaderView: UICollectionReusableView {
     
     static let identifier = "ShopInfoHeaderView"
     let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
+    let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
+    private var toggleClickList = [false, false, false, false]
     
     private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -82,11 +84,26 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         button.addTarget(self, action: #selector(sortTypeButtonTapped(_:)), for: .touchUpInside)
     }
     @objc private func sortTypeButtonTapped(_ sender: UIButton) {
+        let originalFilterList = toggleClickList
         switch sender.tag {
-        case 0: shopSortStandardPublisher.send(FetchShopSortType.count)
-        case 1: shopSortStandardPublisher.send(FetchShopSortType.rating)
-        case 2: shopSortStandardPublisher.send(FetchShopFilterType.open)
-        default: shopSortStandardPublisher.send(FetchShopFilterType.delivery)
+        case 0: 
+            shopSortStandardPublisher.send(FetchShopSortType.count)
+            toggleClickList[0].toggle()
+        case 1: 
+            shopSortStandardPublisher.send(FetchShopSortType.rating)
+            toggleClickList[1].toggle()
+        case 2: 
+            shopSortStandardPublisher.send(FetchShopFilterType.open)
+            toggleClickList[2].toggle()
+        default:
+            shopSortStandardPublisher.send(FetchShopFilterType.delivery)
+            toggleClickList[3].toggle()
+        }
+        
+        for (index, value) in toggleClickList.enumerated() {
+            if originalFilterList[index] != value && value == true {
+                shopFilterTogglePublisher.send(sender.tag)
+            }
         }
     }
 }

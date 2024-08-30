@@ -153,21 +153,28 @@ extension ShopViewModel {
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
         if let currentPage = currentPage {
-            let previousPage = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
             if eventLabelNeededDuration == .shopClick {
                 let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: categoryName, currentPage: currentPage, durationTime: "\(durationTime)")
             }
             
             else if eventLabelNeededDuration == .shopCategories {
                 let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-                let selectedNewShopName = previousPage == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: selectedNewShopName, previousPage: previousPage, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
+                let selectedNewShopName = categoryName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: selectedNewShopName, previousPage: categoryName, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
             }
         }
         else {
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            if label.rawValue == EventParameter.EventLabel.Business.shopCan.rawValue {
+                let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
+                let newValue = "\(value)_\(categoryName)"
+                logAnalyticsEventUseCase.execute(label: label, category: category, value: newValue)
+            }
+            else {
+                logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            }
         }
     }
     

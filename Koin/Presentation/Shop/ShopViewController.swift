@@ -185,10 +185,28 @@ final class ShopViewController: UIViewController {
         shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
             self?.inputSubject.send(.changeSortStandard(standard))
         }.store(in: &subscriptions)
+        
+        shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
+            self?.filterToggleLogEvent(toggleType: toggleType)
+        }.store(in: &subscriptions)
     }
 }
 
 extension ShopViewController {
+    private func filterToggleLogEvent(toggleType: Int) {
+        var value = ""
+        switch toggleType {
+        case 0:
+            value = "check_review"
+        case 1:
+            value = "check_star"
+        case 2:
+            value = "check_open"
+        default:
+            value = "check_delivery"
+        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCan, .click, value))
+    }
     
     private func updateEventShops(_ eventShops: [EventDTO]) {
 
