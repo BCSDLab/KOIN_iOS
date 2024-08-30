@@ -17,6 +17,7 @@ final class ShopDataViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var isSwipedToPopView: Bool = false
     private var scrollDirection: ScrollLog = .scrollToDown
+    private var isReviewTabClicked = false
     
     // MARK: - UI Components
     
@@ -520,13 +521,19 @@ extension ShopDataViewController {
         case 0: 
             inputSubject.send(.fetchShopMenuList)
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .click, shopTitle))
-            inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "메뉴", .shopDetailViewReviewBackByTab))
+            if isReviewTabClicked {
+                inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "메뉴", .shopDetailViewReviewBackByTab))
+            }
+            isReviewTabClicked = false
         case 1: inputSubject.send(.fetchShopEventList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
-            inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "이벤트/공지", .shopDetailViewReviewBackByTab))
+            if isReviewTabClicked {
+                inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "이벤트/공지", .shopDetailViewReviewBackByTab))
+            }
+            isReviewTabClicked = false
         default: inputSubject.send(.fetchShopReviewList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
@@ -534,6 +541,7 @@ extension ShopDataViewController {
             inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
             inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCall))
             inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCategory))
+            isReviewTabClicked = true
         }
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.underlineView.frame.origin.x = (sender.bounds.width / CGFloat(sender.numberOfSegments)) * CGFloat(sender.selectedSegmentIndex)
