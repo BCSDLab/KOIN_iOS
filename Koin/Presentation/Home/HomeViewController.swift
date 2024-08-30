@@ -563,7 +563,7 @@ extension HomeViewController {
             make.centerX.equalToSuperview()
         }
         goNoticePageButton.snp.makeConstraints { make in
-            make.top.equalTo(noticeLabel)
+            make.top.equalTo(noticeLabel).offset(3)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(22)
         }
