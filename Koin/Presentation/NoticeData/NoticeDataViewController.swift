@@ -176,21 +176,10 @@ extension NoticeDataViewController {
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
         titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
-        nickName.text = noticeData.nickName
-        createdDate.text = noticeData.createdAt
-        contentLabel.attributedText = noticeData.content.extractFromHtmlTag(regularFont: UIFont.appFont(.pretendardRegular, size: 14), boldFont: .appFont(.pretendardBold, size: 14))
-        if let imageString = noticeData.imageString {
-            contentImage.loadImage(from: imageString)
-        }
-        else {
-            contentImage.isHidden = true
-            inventoryButton.snp.remakeConstraints {
-                $0.top.equalTo(contentLabel.snp.bottom).offset(32)
-                $0.leading.equalToSuperview().offset(24)
-                $0.width.equalTo(45)
-                $0.height.equalTo(31)
-            }
-        }
+        nickName.text = noticeData.author
+        createdDate.text = noticeData.registeredAt
+      
+      
         if noticeData.hit == 0 {
             [separatorDot2, eyeImage, hitLabel].forEach {
                 $0.isHidden = true
