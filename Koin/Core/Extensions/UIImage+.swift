@@ -75,6 +75,7 @@ enum ImageAsset: String {
     case nonMenuWeekendImage
     case filter
     case eye
+    case fireImage
 }
 
 enum SFSymbols: String {
