@@ -132,8 +132,4 @@ extension NoticeListCollectionView {
         cell.configure(title: noticeArticleTitle.title)
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
 }

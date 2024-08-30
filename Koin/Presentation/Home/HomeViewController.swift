@@ -310,6 +310,14 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
 }
 
 extension HomeViewController {
+    @objc private func tapGoNoticePageButton() {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase)
+        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(noticeListViewController, animated: true)
+    }
     
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
@@ -644,6 +652,7 @@ extension HomeViewController {
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         noticePageControl.addTarget(self, action: #selector(pageControlDidChange), for: .valueChanged)
+        goNoticePageButton.addTarget(self, action: #selector(tapGoNoticePageButton), for: .touchUpInside)
         scrollView.refreshControl = refreshControl
         self.view.backgroundColor = .systemBackground
     }
