@@ -240,8 +240,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         
         logoView.lineButtonPublisher.sink { [weak self] in
             self?.navigateToServiceSelectViewController()
-            
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "햄버거"))
         }.store(in: &subscriptions)
         
         busCollectionView.scrollPublisheer.sink { [weak self] item in
