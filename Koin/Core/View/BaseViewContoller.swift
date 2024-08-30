@@ -23,21 +23,6 @@ class BaseViewController: UIViewController {
     
     @objc func commonButtonTapped() {
         let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), sendDeviceTokenUseCase: DefaultSendDeviceTokenUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))))
-        self.makeAnalyticsForClickHamburger()
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
-    }
-}
-
-extension BaseViewController {
-    func makeAnalyticsForClickHamburger() {
-        
-        let makeEvent = MakeParamsForLog()
-        let event = makeEvent.makeEventNameAction(name: .user)
-        let parameters = [
-            "event_label": makeEvent.makeEventTitle(title: .hamburger),
-            "event_category": makeEvent.makeEventCategory(category: .click),
-            "value": "햄버거"
-        ]
-        Analytics.logEvent(event, parameters: parameters)
     }
 }
