@@ -96,13 +96,15 @@ final class NoticeDataViewController: UIViewController {
         $0.backgroundColor = .appColor(.neutral100)
     }
     
-    private let contentLabel = UILabel().then {
-        $0.numberOfLines = 0
-    }
+    private let contentTextView = UITextView()
     
     private let contentImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+    }
+   
+    private let contentStackView = UIStackView().then {
+        $0.axis = .vertical
     }
     
     // MARK: - Initialization
@@ -123,6 +125,9 @@ final class NoticeDataViewController: UIViewController {
         super.viewDidLoad()
         backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
+        contentTextView.isUserInteractionEnabled = true
+        contentTextView.isEditable = false
+        contentTextView.delegate = self
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
@@ -178,8 +183,13 @@ extension NoticeDataViewController {
         titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
         nickName.text = noticeData.author
         createdDate.text = noticeData.registeredAt
-      
-      
+        
+        contentTextView.attributedText = noticeData.content.modifyFontInHtml()?.convertToAttributedFromHTML()
+        let contentTextViewHeight = contentTextView.sizeThatFits(CGSize(width: contentTextView.frame.width, height: .greatestFiniteMagnitude))
+        contentTextView.snp.updateConstraints {
+            $0.height.equalTo(contentTextViewHeight)
+        }
+        
         if noticeData.hit == 0 {
             [separatorDot2, eyeImage, hitLabel].forEach {
                 $0.isHidden = true
@@ -195,6 +205,21 @@ extension NoticeDataViewController {
     
     private func updatePopularArticle(notices: [NoticeArticleDTO]) {
         hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
+    }
+}
+
+extension NoticeDataViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange) -> Bool {
+        guard let image = textAttachment.image else { return false}
+        
+        let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
+        let smallProportion: CGFloat = image.size.width / imageWidth
+        let imageHeight: CGFloat = image.size.height / smallProportion
+        let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageHeight.isNaN ? 100 : imageHeight)
+        zoomedImageViewController.setImage(image)
+        self.present(zoomedImageViewController, animated: true)
+        
+        return true
     }
 }
 
@@ -226,7 +251,7 @@ extension NoticeDataViewController {
         [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName, separatorDot2, eyeImage, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
-        [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
+        [contentTextView, inventoryButton, previousButton, nextButton].forEach {
             contentWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -315,21 +340,16 @@ extension NoticeDataViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
-        contentLabel.snp.makeConstraints {
+        contentTextView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-        }
-        
-        contentImage.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(32)
-            $0.width.equalTo(327)
-            $0.height.equalTo(457)
-            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(79)
+            $0.height.equalTo(100)
         }
         
         inventoryButton.snp.makeConstraints {
-            $0.top.equalTo(contentImage.snp.bottom).offset(32)
+            $0.top.equalTo(contentTextView.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(45)
             $0.height.equalTo(31)
@@ -345,7 +365,6 @@ extension NoticeDataViewController {
         previousButton.snp.makeConstraints {
             $0.trailing.equalTo(nextButton.snp.leading).offset(-8)
             $0.top.equalTo(inventoryButton)
-            $0.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(31)
             $0.width.equalTo(59)
         }
