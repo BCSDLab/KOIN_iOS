@@ -26,12 +26,16 @@ struct NoticeArticleDTO: Decodable {
     let hit: Int
     let content: String?
     let updatedAt: String
+    let prevId: Int?
+    let nextId: Int?
     let registeredAt: String
     
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
         case title, author, hit, content
+        case prevId = "prev_id"
+        case nextId = "next_id"
         case updatedAt = "updated_at"
         case registeredAt = "registered_at"
     }
@@ -53,7 +57,7 @@ extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
         let date = DateFormatter().date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, registeredAt: newDate, imageString: "")
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, registeredAt: newDate)
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
@@ -61,6 +65,6 @@ extension NoticeArticleDTO {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        return NoticeArticleDTO(id: id, boardId: boardId, title: title, author: author, hit: hit, content: content, updatedAt: updatedAt, registeredAt: newDate)
+        return NoticeArticleDTO(id: id, boardId: boardId, title: title, author: author, hit: hit, content: content, updatedAt: updatedAt, prevId: prevId, nextId: nextId, registeredAt: newDate)
     }
 }

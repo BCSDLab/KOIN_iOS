@@ -128,6 +128,10 @@ final class NoticeDataViewController: UIViewController {
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        previousButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
@@ -158,13 +162,7 @@ final class NoticeDataViewController: UIViewController {
         }.store(in: &subscriptions)
         
         hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
-            let noticeListService = DefaultNoticeService()
-            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
-            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
-            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
+            self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
         }.store(in: &subscriptions)
     }
 }
@@ -178,6 +176,22 @@ extension NoticeDataViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func tapOtherNoticeBtn(sender: UIButton) {
+        if let noticeId = sender == previousButton ? viewModel.previousNoticeId : viewModel.nextNoticeId {
+            navigateToOtherNoticeDataPage(noticeId: noticeId)
+        }
+    }
+    
+    private func navigateToOtherNoticeDataPage(noticeId: Int) {
+        let noticeListService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+        let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+        let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(noticeDataVc, animated: true)
+    }
+    
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
         titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
@@ -188,6 +202,16 @@ extension NoticeDataViewController {
         let contentTextViewHeight = contentTextView.sizeThatFits(CGSize(width: contentTextView.frame.width, height: .greatestFiniteMagnitude))
         contentTextView.snp.updateConstraints {
             $0.height.equalTo(contentTextViewHeight)
+        }
+      
+        if let prevId = noticeData.prevId {
+            previousButton.isHidden = false
+            viewModel.previousNoticeId = prevId
+        }
+        
+        if let nextId = noticeData.nextId {
+            nextButton.isHidden = false
+            viewModel.nextNoticeId = nextId
         }
         
         if noticeData.hit == 0 {
