@@ -13,6 +13,7 @@ struct NoticeDataInfo {
     let content: String
     let author: String
     let hit: Int
+    let prevId: Int?
+    let nextId: Int?
     let registeredAt: String
-    let imageString: String?
 }

@@ -24,6 +24,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var noticeId: Int = 0
+    var previousNoticeId: Int?
+    var nextNoticeId: Int?
     
     init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, noticeId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
