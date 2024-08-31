@@ -83,26 +83,32 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         button.heightAnchor.constraint(equalToConstant: 25).isActive = true
         button.addTarget(self, action: #selector(sortTypeButtonTapped(_:)), for: .touchUpInside)
     }
+    
     @objc private func sortTypeButtonTapped(_ sender: UIButton) {
         let originalFilterList = toggleClickList
         switch sender.tag {
         case 0: 
             shopSortStandardPublisher.send(FetchShopSortType.count)
             toggleClickList[0].toggle()
-        case 1: 
+            if toggleClickList[0] == true && toggleClickList[1] == true {
+                toggleClickList[1] = false
+            }
+        case 1:
             shopSortStandardPublisher.send(FetchShopSortType.rating)
             toggleClickList[1].toggle()
-        case 2: 
+            if toggleClickList[0] == true && toggleClickList[1] == true {
+                toggleClickList[0] = false
+            }
+        case 2:
             shopSortStandardPublisher.send(FetchShopFilterType.open)
             toggleClickList[2].toggle()
         default:
             shopSortStandardPublisher.send(FetchShopFilterType.delivery)
             toggleClickList[3].toggle()
         }
-        
         for (index, value) in toggleClickList.enumerated() {
             if originalFilterList[index] != value && value == true {
-                shopFilterTogglePublisher.send(sender.tag)
+                shopFilterTogglePublisher.send(index)
             }
         }
     }
