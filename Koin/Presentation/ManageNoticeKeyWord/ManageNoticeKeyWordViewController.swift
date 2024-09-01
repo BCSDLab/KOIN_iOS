@@ -116,6 +116,7 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         bind()
         inputSubject.send(.getMyKeyWord)
         inputSubject.send(.getRecommendedKeyWord)
+        textField.delegate = self
     }
     
     // MARK: - Initialization
@@ -201,6 +202,14 @@ extension ManageNoticeKeyWordViewController {
     
     private func updateRecommendedKeyWords(keyWords: [NoticeKeyWordDTO]) {
         recommendedKeyWordCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
+    }
+    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            let keyWord = NoticeKeyWordDTO(id: nil, keyWord: text)
+            inputSubject.send(.addKeyWord(keyWord: keyWord))
+        }
+        return true
     }
 }
 
