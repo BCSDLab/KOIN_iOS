@@ -3,4 +3,8 @@
     <entity name="NoticeKeyWordInfo" representedClassName="NoticeKeyWordInfo" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String"/>
     </entity>
+    <entity name="RecentSearchedWordInfo" representedClassName="RecentSearchedWordInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String"/>
+        <attribute name="searchedDate" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
 </model>

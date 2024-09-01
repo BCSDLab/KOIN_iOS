@@ -11,6 +11,7 @@ import UIKit
 final class RecommendedSearchCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private var recommendedSearchingWord: [String] = []
+    let tapRecommendedWord = PassthroughSubject<String, Never>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -48,6 +49,12 @@ extension RecommendedSearchCollectionView {
         }
         cell.configure(keyWord: recommendedSearchingWord[indexPath.row])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let word = recommendedSearchingWord[indexPath.row]
+        let newWord = word.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "#", with: "")
+        tapRecommendedWord.send(newWord)
     }
 }
 
