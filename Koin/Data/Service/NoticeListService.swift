@@ -85,7 +85,8 @@ final class DefaultNoticeService: NoticeListService {
     
     func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
         if let count = count {
-            return request(.fetchRecommendedSearchWord(count)).eraseToAnyPublisher()
+            let requestModel = FetchRecommendedSearchWordRequest(count: count)
+            return request(.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()
         }
         else {
             return request(.fetchRecommendedKeyWord).eraseToAnyPublisher()

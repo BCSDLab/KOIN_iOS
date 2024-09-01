@@ -67,6 +67,7 @@
 		835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
 		835DC1F92C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */; };
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */; };
+		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
         835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
@@ -486,6 +487,7 @@
 		835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeyWordUseCase.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
         835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
+        835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA432BB70B0F001FCBD4 /* BusDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDetailViewController.swift; sourceTree = "<group>"; };
 		837BFA512BB7E48A001FCBD4 /* BusInformaitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformaitionViewController.swift; sourceTree = "<group>"; };
@@ -928,6 +930,7 @@
 				833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */,
 				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
 				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
+				835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2539,6 +2542,8 @@
 			files = (
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
+				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift in Sources */,
+				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeyWordViewModel.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
