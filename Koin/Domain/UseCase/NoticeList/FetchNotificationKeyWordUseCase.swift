@@ -20,7 +20,9 @@ final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseC
     }
     
     func fetchNotificationKeyWordUseCaseWithLogin() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
-        return makeTestData()
+        noticeListRepository.fetchNotificationKeyWord(isMyKeyWord: true).map {
+            return $0.keyWords
+        }.eraseToAnyPublisher()
     }
     
     func fetchNotificationKeyWordUseCaseWithoutLogin() -> [NoticeKeyWordDTO] {

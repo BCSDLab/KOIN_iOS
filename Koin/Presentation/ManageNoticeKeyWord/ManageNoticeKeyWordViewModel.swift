@@ -79,18 +79,16 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func fetchMyKeyWord() {
-        /*fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
-         if case let .failure(error) = completion {
-             guard let self = self else { return }
-             Log.make().error("\(error)")
-             let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
-             self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
-         }
-     }, receiveValue: { [weak self] keyWords in
-         self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
-     }).store(in: &subscriptions)*/
-        let result = fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
-        outputSubject.send(.updateKeyWord(result, .myKeyWord))
+        fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                guard let self = self else { return }
+                Log.make().error("\(error)")
+                let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
+                self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
+            }
+        }, receiveValue: { [weak self] keyWords in
+            self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
+        }).store(in: &subscriptions)
     }
     
     private func deleteMyKeyWord(keyWord: NoticeKeyWordDTO) {
