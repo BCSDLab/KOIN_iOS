@@ -65,6 +65,7 @@ extension NoticeArticleDTO {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        return NoticeArticleDTO(id: id, boardId: boardId, title: title, author: author, hit: hit, content: content, updatedAt: updatedAt, prevId: prevId, nextId: nextId, registeredAt: newDate)
+        let newTitle = title.replacingOccurrences(of: "\n", with: "")
+        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: content, updatedAt: updatedAt, prevId: prevId, nextId: nextId, registeredAt: newDate)
     }
 }
