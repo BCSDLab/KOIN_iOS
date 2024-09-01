@@ -10,7 +10,7 @@ import UIKit
 
 final class RecommendedSearchCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
-    private var recommendedSearchingWord: [String] = ["#교환학생", "#장학생", "#꿀강의", "#근로장학", "#한맥제"]
+    private var recommendedSearchingWord: [String] = []
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -30,7 +30,11 @@ final class RecommendedSearchCollectionView: UICollectionView, UICollectionViewD
         self.collectionViewLayout = LeftAlignedCollectionViewFlowLayout()
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }
- 
+    
+    func updateRecommendedKeyWords(keyWords: [String]) {
+        self.recommendedSearchingWord = keyWords
+        reloadData()
+    }
 }
 
 extension RecommendedSearchCollectionView {

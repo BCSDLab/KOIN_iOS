@@ -63,8 +63,10 @@
 		8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataManager.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */; };
-		835C991C2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */; };
 		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
+		835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
+		835DC1F92C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */; };
+		835DC1FB2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
         835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
@@ -478,8 +480,10 @@
 		8354BE512C7A0566009D4D7A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
-		835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
+		835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
+		835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeyWordUseCase.swift; sourceTree = "<group>"; };
+		835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeyWordUseCase.swift; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
         835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
@@ -937,7 +941,8 @@
 				8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */,
 				835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */,
 				835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */,
-				835C991B2C7EE788002E02D3 /* FetchRecommendedKeyWordUseCase.swift */,
+				835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */,
+				835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2539,6 +2544,7 @@
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
+				835DC1FB2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
 				833D9C572C735F6B00982145 /* HotNoticeArticlesTableView.swift in Sources */,
@@ -2635,6 +2641,7 @@
 				D22C54632C68F280000826DA /* ReviewListHeaderView.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
+				835DC1F92C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2908D2A2BB9B1F90008F908 /* SemesterSelectTableView.swift in Sources */,

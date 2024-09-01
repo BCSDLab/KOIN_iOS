@@ -78,6 +78,7 @@ final class NoticeSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        inputSubject.send(.getHotKeyWord(5))
     }
     
     // MARK: - Initialization
@@ -94,7 +95,10 @@ final class NoticeSearchViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-     
+            switch output {
+            case let .updateHotKeyWord(keyWords):
+                self?.updateRecommendedHotWord(keyWords: keyWords)
+            }
         }.store(in: &subscriptions)
     }
 }
@@ -102,6 +106,10 @@ final class NoticeSearchViewController: UIViewController {
 extension NoticeSearchViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func updateRecommendedHotWord(keyWords: [String]) {
+        recommendedSearchCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
     }
 }
 

@@ -1,26 +1,32 @@
 //
-//  FetchRecommendedKeyWordUseCase.swift
+//  FetchHotKeyWordUseCase.swift
 //  koin
 //
-//  Created by JOOMINKYUNG on 8/28/24.
+//  Created by JOOMINKYUNG on 9/1/24.
 //
 
 import Combine
 
 protocol FetchRecommendedKeyWordUseCase {
-    func execute() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse>
+    func execute(filters: [NoticeKeyWordDTO]) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
 }
 
 final class DefaultFetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase {
-    private let noticeListRepository: NoticeListRepository
+    let noticeListRepository: NoticeListRepository
     
     init(noticeListRepository: NoticeListRepository) {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
-        noticeListRepository.fetchNotificationKeyWord(isMyKeyWord: false).map {
-            return $0.keyWords
-        }.eraseToAnyPublisher()
+    func execute(filters: [NoticeKeyWordDTO]) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
+        return noticeListRepository.fetchRecommendedKeyWord(count: nil)
+            .map { recommendedKeyWordDTO in
+                let filteredKeywords = recommendedKeyWordDTO.keywords.filter { keyword in
+                    !filters.contains { $0.keyWord == keyword }
+                }
+                return NoticeRecommendedKeyWordDTO(keywords: filteredKeywords)
+            }
+            .eraseToAnyPublisher()
     }
 }
+

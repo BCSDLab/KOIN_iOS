@@ -24,3 +24,7 @@ struct NoticeKeyWordDTO: Codable {
         case keyWord = "keyword"
     }
 }
+
+struct NoticeRecommendedKeyWordDTO: Decodable {
+    let keywords: [String]
+}
