@@ -31,7 +31,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .fetchHotNoticeArticles: return "/articles/hot"
         case .createNotificationKeyWord: return "/articles/keyword"
         case .deleteNotificationKeyWord(let request): return "/articles/keyword/\(request)"
-        case .fetchNotificationKeyWord(let isMyKeyWord): return isMyKeyWord ? "/articles/keyword/me" : "/articles/keyWord/suggestions"
+        case .fetchNotificationKeyWord(let isMyKeyWord): return isMyKeyWord ? "/articles/keyword/me" : "/articles/keyword/suggestions"
         }
     }
     
