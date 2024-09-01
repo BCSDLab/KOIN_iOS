@@ -144,6 +144,14 @@ final class ManageNoticeKeyWordViewController: UIViewController {
                 self.keyWordNotificationSwtich.isOn = isOn
             case let .updateRecommendedKeyWord(keyWords):
                 self.updateRecommendedKeyWords(keyWords: keyWords)
+            case let .keyWordIsIllegal(illegalType):
+                var message = ""
+                switch illegalType {
+                case .exceedNumber: message = "키워드는 최대 10개까지 추가할 수 있습니다."
+                case .isDuplicated: message = "이미 같은 키워드가 존재합니다."
+                case .isNotCharPredicate: message = "키워드는 2글자에서 10글자 사이어야 합니다."
+                }
+                self.conductAddKeyWordIllegalType(illegalType: message)
             }
         }.store(in: &subscriptions)
         
@@ -200,6 +208,10 @@ extension ManageNoticeKeyWordViewController {
         recommendedKeyWordCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
     }
     
+    private func conductAddKeyWordIllegalType(illegalType: String) {
+        self.showToast(message: illegalType, success: false)
+    }
+ 
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
             inputSubject.send(.addKeyWord(keyWord: text))
