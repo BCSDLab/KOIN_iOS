@@ -127,7 +127,7 @@ extension HomeViewModel {
     }
     
     private func getHotNoticeArticles() {
-        fetchHotNoticeArticlesUseCase.execute().sink { completion in
+        fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

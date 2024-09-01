@@ -59,7 +59,7 @@ extension NoticeDataViewModel {
     }
     
     func getPopularArticle() {
-        fetchHotNoticeArticlesUseCase.execute().sink(receiveCompletion: { completion in
+        fetchHotNoticeArticlesUseCase.execute(noticeId: noticeId).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
