@@ -10,8 +10,9 @@ import UIKit
 
 final class RecentSearchTableView: UITableView {
     // MARK: - Properties
-    private var subscribtions = Set<AnyCancellable>()
-    private var recentSearchedDataList: [String] = ["근로장학", "학사공지", "ㅁㄴㅇㅁㄴㅁ"]
+    private var subscriptions = Set<AnyCancellable>()
+    private var recentSearchedDataList: [RecentSearchedWordInfo] = []
+    let tapDeleteButtonPublisher = PassthroughSubject<(String, Date), Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -30,20 +31,42 @@ final class RecentSearchTableView: UITableView {
         dataSource = self
         separatorStyle = .none
     }
+    
+    func updateRecentSearchedWords(words: [RecentSearchedWordInfo]) {
+        self.recentSearchedDataList = words
+        reloadData()
+    }
 }
 
 extension RecentSearchTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recentSearchedDataList.count
+        if recentSearchedDataList.count > 5 {
+            return 5
+        }
+        else {
+            return recentSearchedDataList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecentSearchTableViewCell.identifier, for: indexPath) as? RecentSearchTableViewCell
-        else {
-            return UITableViewCell()
-        }
-        cell.configure(searchedData: recentSearchedDataList[indexPath.row])
-        return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecentSearchTableViewCell.identifier, for: indexPath) as? RecentSearchTableViewCell else {
+               return UITableViewCell()
+           }
+           guard indexPath.row < recentSearchedDataList.count else {
+               return UITableViewCell()
+           }
+           
+           let searchedData = recentSearchedDataList[indexPath.row]
+           cell.configure(searchedData: searchedData.name ?? "")
+           
+           cell.tapDeleteButtonPublisher.sink { [weak self] in
+               if let name = searchedData.name,
+                  let date = searchedData.searchedDate {
+                   self?.tapDeleteButtonPublisher.send((name, date))
+               }
+           }.store(in: &subscriptions)
+           
+           return cell
     }
 }
 

@@ -65,6 +65,7 @@
 		835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
 		835DC1F92C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */; };
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */; };
+		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
 		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
 		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
         835C99202C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */; };
@@ -482,6 +483,10 @@
 		835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
 		835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeyWordUseCase.swift; sourceTree = "<group>"; };
+		835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
+		835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
+		835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
         835C991F2C7F27BC002E02D3 /* KeyWordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWordLoginModalViewController.swift; sourceTree = "<group>"; };
         835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
@@ -904,6 +909,7 @@
 		833D9C102C6B269000982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
+				835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */,
 				83417DAC2C7C80E500E7837C /* NoticeKeyordInfo */,
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
@@ -944,6 +950,7 @@
 				835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */,
 				835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */,
 				835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */,
+				835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -1059,6 +1066,16 @@
 				8354BE512C7A0566009D4D7A /* CoreDataManager.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */ = {
+			isa = PBXGroup;
+			children = (
+				835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */,
+				835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */,
+			);
+			name = RecentSearchedWordInfo;
+			path = ../../../..;
 			sourceTree = "<group>";
 		};
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
@@ -2726,6 +2743,7 @@
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
 				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
+				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,
 				D27DD0F22BA60D220081FD36 /* LandDetailViewController.swift in Sources */,

@@ -5,11 +5,16 @@
 //  Created by JOOMINKYUNG on 8/23/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
 
 final class RecentSearchTableViewCell: UITableViewCell {
+    //MARK: - Properties
+    
+    let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
+    
     //MARK: - UI Components
     
     private let searchedWordLabel = UILabel().then {
@@ -26,6 +31,7 @@ final class RecentSearchTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -35,6 +41,10 @@ final class RecentSearchTableViewCell: UITableViewCell {
     
     func configure(searchedData: String) {
         searchedWordLabel.text = searchedData
+    }
+    
+    @objc private func deleteButtonTapped() {
+        tapDeleteButtonPublisher.send()
     }
 }
 
