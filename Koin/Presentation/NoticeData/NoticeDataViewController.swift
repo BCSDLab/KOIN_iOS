@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class NoticeDataViewController: UIViewController {
+final class NoticeDataViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -136,6 +136,8 @@ final class NoticeDataViewController: UIViewController {
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
         configureView()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillAppear(_ animated: Bool) {

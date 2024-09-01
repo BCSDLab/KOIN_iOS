@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeListViewController: UIViewController {
+final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeListViewModel
@@ -60,6 +60,8 @@ final class NoticeListViewController: UIViewController {
         inputSubject.send(.changeBoard(.전체공지))
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
