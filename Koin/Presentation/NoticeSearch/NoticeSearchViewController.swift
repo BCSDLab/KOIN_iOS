@@ -78,6 +78,7 @@ final class NoticeSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        bind()
         inputSubject.send(.getHotKeyWord(5))
     }
     
