@@ -144,7 +144,7 @@ extension NoticeListViewController {
     @objc private func searchButtonTapped() {
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeyWordUseCase = DefaultFetchHotSearchingKeyWordUseCase(noticeListRepository: repository)
-        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase)
+        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: DefaultManageRecentSearchedWordUseCase())
         let vc = NoticeSearchViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }

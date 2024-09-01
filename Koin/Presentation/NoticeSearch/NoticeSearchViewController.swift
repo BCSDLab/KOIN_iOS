@@ -78,9 +78,12 @@ final class NoticeSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        textFieldButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        deleteRecentSearchDataButton.addTarget(self, action: #selector(deleteAllButtonTapped), for: .touchUpInside)
         configureView()
         bind()
         inputSubject.send(.getHotKeyWord(5))
+        inputSubject.send(.fetchRecentSearchedWord)
     }
     
     // MARK: - Initialization
@@ -100,7 +103,20 @@ final class NoticeSearchViewController: UIViewController {
             switch output {
             case let .updateHotKeyWord(keyWords):
                 self?.updateRecommendedHotWord(keyWords: keyWords)
+            case .updateRecentSearchedWord(words: let words):
+                self?.updateRecentSearchedWord(words: words)
             }
+        }.store(in: &subscriptions)
+        
+        recentSearchTableView.tapDeleteButtonPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] name, date in
+            print(name)
+            self?.inputSubject.send(.searchWord(name, date, 1))
+        }.store(in: &subscriptions)
+        
+        recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
+            self?.textField.text = word
         }.store(in: &subscriptions)
     }
 }
@@ -110,8 +126,24 @@ extension NoticeSearchViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func searchButtonTapped() {
+        if let text = textField.text {
+            print(text)
+            inputSubject.send(.searchWord(text, Date(), 0))
+        }
+        textField.text = ""
+    }
+    
+    @objc private func deleteAllButtonTapped() {
+        inputSubject.send(.deleteAllSearchedWords)
+    }
+    
     private func updateRecommendedHotWord(keyWords: [String]) {
         recommendedSearchCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
+    }
+    
+    private func updateRecentSearchedWord(words: [RecentSearchedWordInfo]) {
+        recentSearchTableView.updateRecentSearchedWords(words: words)
     }
 }
 
@@ -175,7 +207,7 @@ extension NoticeSearchViewController {
         recentSearchTableView.snp.makeConstraints {
             $0.top.equalTo(recentSearchDataGuideLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(126)
+            $0.bottom.equalToSuperview()
         }
     }
     
