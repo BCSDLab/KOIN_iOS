@@ -121,7 +121,7 @@ extension ManageNoticeKeyWordViewModel {
     
     private func changeNotification(isOn: Bool) {
         let httpMethod: Alamofire.HTTPMethod = isOn ? .post : .delete
-        changeNotiUseCase.execute(method: httpMethod, type: .articleKeyWordDetect).sink(receiveCompletion: { [weak self] completion in
+        changeNotiUseCase.execute(method: httpMethod, type: .articleKeyWord).sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.outputSubject.send(.showLoginModal)
