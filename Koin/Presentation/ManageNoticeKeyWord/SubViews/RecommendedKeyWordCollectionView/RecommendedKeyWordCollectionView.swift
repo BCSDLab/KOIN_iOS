@@ -10,8 +10,8 @@ import UIKit
 
 final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
-    private var recommendedKeyWordList: [NoticeKeyWordDTO] = []
-    let recommendedKeyWordPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    private var recommendedKeyWordList: [String] = []
+    let recommendedKeyWordPublisher = PassthroughSubject<String, Never>()
     private var subscriptions = Set<AnyCancellable>()
     
     //MARK: - Initialization
@@ -31,7 +31,7 @@ final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionView
         delegate = self
     }
     
-    func updateRecommendedKeyWords(keyWords: [NoticeKeyWordDTO]) {
+    func updateRecommendedKeyWords(keyWords: [String]) {
         self.recommendedKeyWordList = keyWords
         reloadData()
     }
@@ -39,7 +39,12 @@ final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionView
 
 extension RecommendedKeyWordCollectionView {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return recommendedKeyWordList.count
+        if recommendedKeyWordList.count > 5 {
+            return 5
+        }
+        else {
+            return recommendedKeyWordList.count
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -51,7 +56,7 @@ extension RecommendedKeyWordCollectionView {
             let keyWord = self.recommendedKeyWordList[indexPath.row]
             self.recommendedKeyWordPublisher.send(keyWord)
         }.store(in: &subscriptions)
-        cell.configure(keyWord: recommendedKeyWordList[indexPath.item].keyWord)
+        cell.configure(keyWord: recommendedKeyWordList[indexPath.item])
         return cell
     }
 }
@@ -59,7 +64,7 @@ extension RecommendedKeyWordCollectionView {
 extension RecommendedKeyWordCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.text = recommendedKeyWordList[indexPath.row].keyWord
+        label.text = recommendedKeyWordList[indexPath.row]
         label.font = .appFont(.pretendardMedium, size: 14)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
         return CGSize(width: size.width + 50, height: 34)
