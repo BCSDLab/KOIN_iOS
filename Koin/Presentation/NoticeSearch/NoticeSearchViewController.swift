@@ -77,6 +77,7 @@ final class NoticeSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         configureView()
         bind()
         inputSubject.send(.getHotKeyWord(5))
