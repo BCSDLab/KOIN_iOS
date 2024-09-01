@@ -27,6 +27,7 @@ final class MenuImageCollectionView: UICollectionView, UICollectionViewDataSourc
     private func commonInit() {
         register(MenuImageCollectionViewCell.self, forCellWithReuseIdentifier: MenuImageCollectionViewCell.identifier)
         dataSource = self
+        isScrollEnabled = true
     }
     
     func setImageList(_ list: [String]) {

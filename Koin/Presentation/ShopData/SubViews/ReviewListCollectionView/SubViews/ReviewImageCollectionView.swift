@@ -5,11 +5,13 @@
 //  Created by 김나훈 on 7/9/24.
 //
 
+import Combine
 import UIKit
 
 final class ReviewImageCollectionView: UICollectionView, UICollectionViewDataSource {
     
     private var reviewImageList: [String] = []
+    let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -45,6 +47,10 @@ extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
         }
         let reviewImage = reviewImageList[indexPath.row]
         cell.configure(imageURL: reviewImage)
+        
+        cell.imageTapPublisher.sink { [weak self] image in
+            self?.imageTapPublisher.send(image)
+        }.store(in: &cell.cancellables)
         
         return cell
     }

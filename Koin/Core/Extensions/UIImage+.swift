@@ -64,6 +64,14 @@ enum ImageAsset: String {
     case share
     case diningTooltip
     case filter
+    case myReview
+    case option
+    case optionFill
+    case circle
+    case circleFill
+    case cancelYellow
+    case trashcan
+    case nonReview
 }
 
 enum SFSymbols: String {
