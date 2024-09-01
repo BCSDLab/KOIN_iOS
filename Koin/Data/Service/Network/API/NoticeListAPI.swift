@@ -15,7 +15,7 @@ enum NoticeListAPI {
     case createNotificationKeyWord(NoticeKeyWordDTO)
     case deleteNotificationKeyWord(Int)
     case fetchNotificationKeyWord
-    case fetchRecommendedSearchWord(Int)
+    case fetchRecommendedSearchWord(FetchRecommendedSearchWordRequest)
     case fetchRecommendedKeyWord
 }
 
@@ -71,8 +71,8 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .searchNoticeArticle(let request):
             return try? request.toDictionary()
-        case .fetchRecommendedSearchWord(let count):
-            return try? count.toDictionary()
+        case .fetchRecommendedSearchWord(let requestModel):
+            return try? requestModel.toDictionary()
         case .fetchNoticeData, .fetchHotNoticeArticles, .fetchNotificationKeyWord , .fetchRecommendedKeyWord:
             return nil
         case .createNotificationKeyWord(let request):

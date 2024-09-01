@@ -43,7 +43,7 @@ extension NoticeSearchViewModel {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateHotKeyWord(keyWords: keyWords.keywords))
+            self?.outputSubject.send(.updateHotKeyWord(keyWords: keyWords))
         }).store(in: &subscriptions)
     }
 }
