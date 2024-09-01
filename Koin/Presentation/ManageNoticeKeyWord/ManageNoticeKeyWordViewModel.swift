@@ -22,6 +22,13 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case updateRecommendedKeyWord([String])
         case showLoginModal
         case updateSwitch(isOn: Bool)
+        case keyWordIsIllegal(addKeyWordIllegalType)
+    }
+    
+    enum addKeyWordIllegalType {
+        case isDuplicated
+        case isNotCharPredicate
+        case exceedNumber
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -63,16 +70,34 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
 extension ManageNoticeKeyWordViewModel {
     private func addKeyWord(keyWord: String) {
         let requestModel = NoticeKeyWordDTO(id: nil, keyWord: keyWord)
-        addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: requestModel).sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.addNotificationKeyWordUseCase.addNotificationKeyWordWithoutLogin(requestModel: keyWord)
-                self?.fetchMyKeyWord()
+        var isNotIllegal = true
+        getMyKeyWord { [weak self] myKeyWords in
+            guard let self = self else { return }
+            if myKeyWords.contains(where: { $0.keyWord == keyWord }) {
+                isNotIllegal = false
+                self.outputSubject.send(.keyWordIsIllegal(.isDuplicated))
             }
-        }, receiveValue: { [weak self] result in
-            print("\(result) keyword is Registered")
-            self?.fetchMyKeyWord()
-        }).store(in: &subscriptions)
+            else if keyWord.count < 2 || keyWord.count > 10 {
+                isNotIllegal = false
+                self.outputSubject.send(.keyWordIsIllegal(.isNotCharPredicate))
+            }
+            else if myKeyWords.count > 10 {
+                isNotIllegal = false
+                self.outputSubject.send(.keyWordIsIllegal(.exceedNumber))
+            }
+            if isNotIllegal {
+                self.addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: requestModel).sink(receiveCompletion: { [weak self] completion in
+                    if case let .failure(error) = completion {
+                        Log.make().error("\(error)")
+                        self?.addNotificationKeyWordUseCase.addNotificationKeyWordWithoutLogin(requestModel: keyWord)
+                        self?.fetchMyKeyWord()
+                    }
+                }, receiveValue: { [weak self] result in
+                    print("\(result) keyword is Registered")
+                    self?.fetchMyKeyWord()
+                }).store(in: &self.subscriptions)
+            }
+        }
     }
     
     private func fetchMyKeyWord() {
@@ -80,7 +105,7 @@ extension ManageNoticeKeyWordViewModel {
             self?.outputSubject.send(.updateKeyWord(myKeyWords))
         }
     }
-
+    
     private func getMyKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
         fetchNotificationKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] completionResult in
             if case let .failure(error) = completionResult {
