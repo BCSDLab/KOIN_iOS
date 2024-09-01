@@ -9,7 +9,7 @@ import Combine
 
 protocol AddNotificationKeyWordUseCase {
     func addNotificationKeyWordWithLogin(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
-    func addNotificationKeyWordWithoutLogin(requestModel: NoticeKeyWordDTO)
+    func addNotificationKeyWordWithoutLogin(requestModel: String)
 }
 
 final class DefaultAddNotificationKeyWordUseCase: AddNotificationKeyWordUseCase {
@@ -24,9 +24,9 @@ final class DefaultAddNotificationKeyWordUseCase: AddNotificationKeyWordUseCase 
             .eraseToAnyPublisher()
     }
     
-    func addNotificationKeyWordWithoutLogin(requestModel: NoticeKeyWordDTO) {
+    func addNotificationKeyWordWithoutLogin(requestModel: String) {
         let keyWord = NoticeKeyWordInfo(context: CoreDataManager.shared.context)
-        keyWord.name = requestModel.keyWord
+        keyWord.name = requestModel
         
         CoreDataManager.shared.insert(insertedObject: keyWord)
     }

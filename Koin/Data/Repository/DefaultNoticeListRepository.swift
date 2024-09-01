@@ -38,8 +38,12 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         return service.deleteNotificationKeyWord(requestModel: requestModel)
     }
     
-    func fetchNotificationKeyWord(isMyKeyWord: Bool) -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> {
-        return service.fetchMyNotificationKeyWord(isMyKeyWord: isMyKeyWord)
+    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> {
+        return service.fetchMyNotificationKeyWord()
+    }
+    
+    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
+        return service.fetchRecommendedKeyWord(count: count)
     }
 }
 

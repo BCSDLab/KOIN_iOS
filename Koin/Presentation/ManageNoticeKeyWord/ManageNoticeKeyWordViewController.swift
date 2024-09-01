@@ -135,18 +135,15 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self = self else { return }
             switch output {
-            case let .updateKeyWord(keyWords, keyWordsType):
-                if keyWordsType == .myKeyWord {
-                    self.updateMyKeyWords(keyWords: keyWords)
-                }
-                else {
-                    self.updateRecommendedKeyWords(keyWords: keyWords)
-                }
+            case let .updateKeyWord(keyWords):
+                self.updateMyKeyWords(keyWords: keyWords)
             case .showLoginModal:
                 self.present(self.keyWordLoginModalViewController.self, animated: true, completion: nil)
                 self.keyWordNotificationSwtich.isOn = false
             case let .updateSwitch(isOn):
                 self.keyWordNotificationSwtich.isOn = isOn
+            case let .updateRecommendedKeyWord(keyWords):
+                self.updateRecommendedKeyWords(keyWords: keyWords)
             }
         }.store(in: &subscriptions)
         
@@ -187,8 +184,7 @@ extension ManageNoticeKeyWordViewController {
     
     @objc private func tapAddKeyWordButton() {
         if let text = textField.text {
-            let keyWord = NoticeKeyWordDTO(id: nil, keyWord: text)
-            inputSubject.send(.addKeyWord(keyWord: keyWord))
+            inputSubject.send(.addKeyWord(keyWord: text))
         }
     }
     
@@ -200,14 +196,13 @@ extension ManageNoticeKeyWordViewController {
         myKeyWordCollectionView.updateMyKeyWords(keyWords: keyWords)
     }
     
-    private func updateRecommendedKeyWords(keyWords: [NoticeKeyWordDTO]) {
+    private func updateRecommendedKeyWords(keyWords: [String]) {
         recommendedKeyWordCollectionView.updateRecommendedKeyWords(keyWords: keyWords)
     }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
-            let keyWord = NoticeKeyWordDTO(id: nil, keyWord: text)
-            inputSubject.send(.addKeyWord(keyWord: keyWord))
+            inputSubject.send(.addKeyWord(keyWord: text))
         }
         return true
     }

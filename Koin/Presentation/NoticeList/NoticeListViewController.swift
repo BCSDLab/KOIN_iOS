@@ -121,8 +121,8 @@ final class NoticeListViewController: UIViewController {
                 let addNotificationKeyWordUseCase = DefaultAddNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
                 let deleteNotificationKeyWordUseCase = DefaultDeleteNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
                 let fetchNotificationKeyWordUseCase = DefaultFetchNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
-                let fetchRecommendedKeyWordUseCase = DefaultFetchRecommendedKeyWordUseCase(noticeListRepository: noticeListRepository)
                 let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchRecommendedKeyWordUseCase = DefaultFetchRecommendedKeyWordUseCase(noticeListRepository: noticeListRepository)
                 let viewModel = ManageNoticeKeyWordViewModel(addNotificationKeyWordUseCase: addNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: deleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: fetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: fetchRecommendedKeyWordUseCase, changeNotiUseCase: changeNotiUseCase)
             let viewController = ManageNoticeKeyWordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
@@ -142,7 +142,9 @@ extension NoticeListViewController {
     }
     
     @objc private func searchButtonTapped() {
-        let viewModel = NoticeSearchViewModel()
+        let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
+        let fetchHotKeyWordUseCase = DefaultFetchHotSearchingKeyWordUseCase(noticeListRepository: repository)
+        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase)
         let vc = NoticeSearchViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }

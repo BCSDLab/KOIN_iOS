@@ -15,7 +15,8 @@ protocol NoticeListService {
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
     func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
     func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchMyNotificationKeyWord(isMyKeyWord: Bool) -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
+    func fetchMyNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
+    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
 }
 
 final class DefaultNoticeService: NoticeListService {
@@ -67,13 +68,13 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchMyNotificationKeyWord(isMyKeyWord: Bool) -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> {
-        return networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord(isMyKeyWord))
+    func fetchMyNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord)
             .catch { [weak self] error -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord(isMyKeyWord)) }
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()
@@ -81,6 +82,16 @@ final class DefaultNoticeService: NoticeListService {
             }
             .eraseToAnyPublisher()
     }
+    
+    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
+        if let count = count {
+            return request(.fetchRecommendedSearchWord(count)).eraseToAnyPublisher()
+        }
+        else {
+            return request(.fetchRecommendedKeyWord).eraseToAnyPublisher()
+        }
+    }
+    
     
     private func request<T: Decodable>(_ api: NoticeListAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)

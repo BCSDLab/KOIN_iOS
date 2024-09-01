@@ -10,20 +10,16 @@ import Combine
 import Foundation
 
 final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
-    enum keyWordType {
-        case myKeyWord
-        case recommendedKeyWord
-    }
-    
     enum Input {
-        case addKeyWord(keyWord: NoticeKeyWordDTO)
+        case addKeyWord(keyWord: String)
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
         case getRecommendedKeyWord
         case changeNotification(isOn: Bool)
     }
     enum Output {
-        case updateKeyWord([NoticeKeyWordDTO], keyWordType)
+        case updateKeyWord([NoticeKeyWordDTO])
+        case updateRecommendedKeyWord([String])
         case showLoginModal
         case updateSwitch(isOn: Bool)
     }
@@ -65,8 +61,9 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
 }
 
 extension ManageNoticeKeyWordViewModel {
-    private func addKeyWord(keyWord: NoticeKeyWordDTO) {
-        addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: keyWord).sink(receiveCompletion: { [weak self] completion in
+    private func addKeyWord(keyWord: String) {
+        let requestModel = NoticeKeyWordDTO(id: nil, keyWord: keyWord)
+        addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: requestModel).sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.addNotificationKeyWordUseCase.addNotificationKeyWordWithoutLogin(requestModel: keyWord)
@@ -79,15 +76,21 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func fetchMyKeyWord() {
-        fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithLogin().sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
+        getMyKeyWord { [weak self] myKeyWords in
+            self?.outputSubject.send(.updateKeyWord(myKeyWords))
+        }
+    }
+
+    private func getMyKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
+        fetchNotificationKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] completionResult in
+            if case let .failure(error) = completionResult {
                 guard let self = self else { return }
                 Log.make().error("\(error)")
-                let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordUseCaseWithoutLogin()
-                self.outputSubject.send(.updateKeyWord(result, .myKeyWord))
+                let result = self.fetchNotificationKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
+                completion(result)
             }
-        }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateKeyWord(keyWords, .myKeyWord))
+        }, receiveValue: { keyWords in
+            completion(keyWords)
         }).store(in: &subscriptions)
     }
     
@@ -110,13 +113,16 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func getRecommendedKeyWord() {
-        fetchRecommendedKeyWordUseCase.execute().sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateKeyWord(keyWords, .recommendedKeyWord))
-        }).store(in: &subscriptions)
+        getMyKeyWord(completion: { [weak self] keyWords in
+            guard let self = self else { return }
+            fetchRecommendedKeyWordUseCase.execute(filters: keyWords).sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { keyWords in
+                self.outputSubject.send(.updateRecommendedKeyWord(keyWords.keywords))
+            }).store(in: &subscriptions)
+        })
     }
     
     private func changeNotification(isOn: Bool) {

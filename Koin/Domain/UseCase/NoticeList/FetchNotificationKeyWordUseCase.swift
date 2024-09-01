@@ -8,8 +8,8 @@
 import Combine
 
 protocol FetchNotificationKeyWordUseCase {
-    func fetchNotificationKeyWordUseCaseWithLogin() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse>
-    func fetchNotificationKeyWordUseCaseWithoutLogin() -> [NoticeKeyWordDTO]
+    func fetchNotificationKeyWordWithLogin(keyWordForFilter: [NoticeKeyWordDTO]?) -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse>
+    func fetchNotificationKeyWordWithoutLogin() -> [NoticeKeyWordDTO]
 }
 
 final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase {
@@ -19,13 +19,15 @@ final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseC
         self.noticeListRepository = noticeListRepository
     }
     
-    func fetchNotificationKeyWordUseCaseWithLogin() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
-        noticeListRepository.fetchNotificationKeyWord(isMyKeyWord: true).map {
+    func fetchNotificationKeyWordWithLogin(keyWordForFilter: [NoticeKeyWordDTO]?) ->
+    AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
+        noticeListRepository.fetchNotificationKeyWord().map {
             return $0.keyWords
         }.eraseToAnyPublisher()
+        
     }
     
-    func fetchNotificationKeyWordUseCaseWithoutLogin() -> [NoticeKeyWordDTO] {
+    func fetchNotificationKeyWordWithoutLogin() -> [NoticeKeyWordDTO] {
         let data = CoreDataManager.shared.fetchEntities(objectType: NoticeKeyWordInfo.self)
         var myKeyWords: [NoticeKeyWordDTO] = []
         if let data = data {
@@ -37,21 +39,5 @@ final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseC
         else {
             return []
         }
-    }
-    
-    private func makeTestData() -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
-        let data = [
-                NoticeKeyWordDTO(id: 1, keyWord: "교환학생"),
-                NoticeKeyWordDTO(id: 2, keyWord: "장학금"),
-                NoticeKeyWordDTO(id: 3, keyWord: "학사"),
-                NoticeKeyWordDTO(id: 4, keyWord: "근장"),
-                NoticeKeyWordDTO(id: 5, keyWord: "졸업"),
-                NoticeKeyWordDTO(id: 6, keyWord: "설명회"),
-                NoticeKeyWordDTO(id: 7, keyWord: "인공지능"),
-                NoticeKeyWordDTO(id: 8, keyWord: "방학")
-            ]
-        return Just(data)
-            .setFailureType(to: ErrorResponse.self)
-            .eraseToAnyPublisher()
     }
 }
