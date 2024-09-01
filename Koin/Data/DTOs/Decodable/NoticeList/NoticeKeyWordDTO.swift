@@ -8,11 +8,9 @@
 import Foundation
 
 struct NoticeKeyWordsDTO: Decodable {
-    let counts: Int
     let keyWords: [NoticeKeyWordDTO]
     
     enum CodingKeys: String, CodingKey {
-        case counts
         case keyWords = "keywords"
     }
 }

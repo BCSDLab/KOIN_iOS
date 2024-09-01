@@ -14,4 +14,5 @@ protocol NoticeListRepository {
     func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDTO], Error>
     func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
     func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchNotificationKeyWord(isMyKeyWord: Bool) -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
 }
