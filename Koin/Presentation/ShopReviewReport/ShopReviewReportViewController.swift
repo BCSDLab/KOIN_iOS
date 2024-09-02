@@ -173,7 +173,7 @@ extension ShopReviewReportViewController {
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
         
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .circleFill) : UIImage.appImage(asset: .circle), for: .normal)
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
         textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.sub500) : UIColor.appColor(.neutral800)
         etcReportTextView.layer.borderColor = checkButton.isSelected ? UIColor.appColor(.sub500).cgColor : UIColor.appColor(.neutral800).cgColor
         etcReportTextView.isEditable = checkButton.isSelected

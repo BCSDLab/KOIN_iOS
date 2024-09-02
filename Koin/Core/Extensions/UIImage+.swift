@@ -67,7 +67,7 @@ enum ImageAsset: String {
     case option
     case optionFill
     case circle
-    case circleFill
+    case filledCircle
     case cancelYellow
     case trashcan
     case nonReview

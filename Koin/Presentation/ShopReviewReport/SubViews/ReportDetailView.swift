@@ -54,7 +54,7 @@ final class ReportDetailView: UIView {
 extension ReportDetailView {
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .circleFill) : UIImage.appImage(asset: .circle), for: .normal)
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
         checkButtonPublisher.send(())
     }
     
