@@ -14,6 +14,12 @@ enum BusType: String, Decodable, CaseIterable {
     case cityBus = "CITY"
     case noValue
 
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try? container.decode(String.self)
+        self = BusType(rawValue: rawValue?.uppercased() ?? "") ?? .noValue
+    }
+    
     var koreanDescription: String {
         switch self {
         case .shuttleBus:
@@ -29,9 +35,4 @@ enum BusType: String, Decodable, CaseIterable {
         }
     }
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try? container.decode(String.self)
-        self = BusType(rawValue: rawValue?.uppercased() ?? "") ?? .noValue
-    }
 }

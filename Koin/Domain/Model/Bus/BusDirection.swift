@@ -10,6 +10,12 @@ import Foundation
 enum BusDirection: String, Decodable {
     case from = "from"
     case to = "to"
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = BusDirection(rawValue: rawValue) ?? .from
+    }
 }
 
 enum CityBusDirection: String, Decodable, CaseIterable {
