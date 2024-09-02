@@ -14,7 +14,6 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case addKeyWord(keyWord: String)
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
-        case getRecommendedKeyWord
         case changeNotification(isOn: Bool)
     }
     enum Output {
@@ -57,8 +56,6 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
                 self?.fetchMyKeyWord()
             case let .deleteKeyWord(keyWord):
                 self?.deleteMyKeyWord(keyWord: keyWord)
-            case .getRecommendedKeyWord:
-                self?.getRecommendedKeyWord()
             case let .changeNotification(isOn):
                 self?.changeNotification(isOn: isOn)
             }
@@ -103,6 +100,7 @@ extension ManageNoticeKeyWordViewModel {
     private func fetchMyKeyWord() {
         getMyKeyWord { [weak self] myKeyWords in
             self?.outputSubject.send(.updateKeyWord(myKeyWords))
+            self?.getRecommendedKeyWord(keyWords: myKeyWords)
         }
     }
     
@@ -137,17 +135,14 @@ extension ManageNoticeKeyWordViewModel {
         }
     }
     
-    private func getRecommendedKeyWord() {
-        getMyKeyWord(completion: { [weak self] keyWords in
-            guard let self = self else { return }
-            fetchRecommendedKeyWordUseCase.execute(filters: keyWords).sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            }, receiveValue: { keyWords in
-                self.outputSubject.send(.updateRecommendedKeyWord(keyWords.keywords))
-            }).store(in: &subscriptions)
-        })
+    private func getRecommendedKeyWord(keyWords: [NoticeKeyWordDTO]) {
+        fetchRecommendedKeyWordUseCase.execute(filters: keyWords).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { keyWords in
+            self.outputSubject.send(.updateRecommendedKeyWord(keyWords.keywords))
+        }).store(in: &subscriptions)
     }
     
     private func changeNotification(isOn: Bool) {
