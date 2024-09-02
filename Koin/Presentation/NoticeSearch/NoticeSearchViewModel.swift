@@ -15,20 +15,26 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case searchWord(String, Date, Int)
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
+        case fetchSearchedResult(String)
+        case changePage(Int)
     }
     enum Output {
-        case updateHotKeyWord(keyWords: [String])
-        case updateRecentSearchedWord(words: [RecentSearchedWordInfo])
+        case updateHotKeyWord([String])
+        case updateRecentSearchedWord([RecentSearchedWordInfo])
+        case updateSearchedrsult([NoticeArticleDTO], NoticeListPages)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase
     private let manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase
+    private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
+    private var keyWord: String = ""
     
-    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase) {
+    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase) {
         self.fetchHotKeyWordUseCase = fetchHotKeyWordUseCase
         self.manageRecentSearchedWordUseCase = manageRecentSearchedWordUseCase
+        self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -42,6 +48,10 @@ final class NoticeSearchViewModel: ViewModelProtocol {
                 self?.fetchRecentSearchedWord()
             case .deleteAllSearchedWords:
                 self?.deleteAllSearchedWords()
+            case let .fetchSearchedResult(keyWord):
+                self?.fetchSearchedResult(page: 0, keyWord: keyWord)
+            case let .changePage(page):
+                self?.fetchSearchedResult(page: page, keyWord: self?.keyWord ?? "")
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -55,7 +65,7 @@ extension NoticeSearchViewModel {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateHotKeyWord(keyWords: keyWords))
+            self?.outputSubject.send(.updateHotKeyWord(keyWords))
         }).store(in: &subscriptions)
     }
     
@@ -68,7 +78,7 @@ extension NoticeSearchViewModel {
     
     private func fetchRecentSearchedWord() {
         let searchedWords = manageRecentSearchedWordUseCase.fetch()
-        outputSubject.send(.updateRecentSearchedWord(words: searchedWords))
+        outputSubject.send(.updateRecentSearchedWord(searchedWords))
     }
     
     private func deleteAllSearchedWords() {
@@ -78,7 +88,19 @@ extension NoticeSearchViewModel {
                 manageRecentSearchedWordUseCase.changeWord(name: name, date: date, actionType: 1)
             }
         }
-        self.outputSubject.send(.updateRecentSearchedWord(words: []))
+        self.outputSubject.send(.updateRecentSearchedWord([]))
+    }
+    
+    private func fetchSearchedResult(page: Int, keyWord: String) {
+        self.keyWord = keyWord
+        fetchNoticeArticlesUseCase.fetchArticles(boardId: nil, keyWord: keyWord, page: page).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] articleInfo in
+            guard let self = self else { return }
+            self.outputSubject.send(.updateSearchedrsult(articleInfo.articles, articleInfo.pages))
+        }).store(in: &subscriptions)
     }
 }
 

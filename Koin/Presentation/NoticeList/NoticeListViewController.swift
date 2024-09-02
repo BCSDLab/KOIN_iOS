@@ -147,7 +147,8 @@ extension NoticeListViewController {
     @objc private func searchButtonTapped() {
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeyWordUseCase = DefaultFetchHotSearchingKeyWordUseCase(noticeListRepository: repository)
-        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: DefaultManageRecentSearchedWordUseCase())
+        let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: DefaultManageRecentSearchedWordUseCase(), fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase)
         let vc = NoticeSearchViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -168,7 +169,7 @@ extension NoticeListViewController {
     
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
-        noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
+        noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos, isForSearch: false)
         tabBarCollectionView.tag = noticeListType.rawValue - 4
     }
  
