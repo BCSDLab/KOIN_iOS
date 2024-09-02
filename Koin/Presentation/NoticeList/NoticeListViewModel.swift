@@ -80,9 +80,9 @@ extension NoticeListViewModel {
             guard let self = self else { return }
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
+                let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
+                outputSubject.send(.updateUserKeyWordList(result, noticeListType))
             }
-            let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
-            outputSubject.send(.updateUserKeyWordList(result, noticeListType))
         }, receiveValue: { [weak self] keyWords in
             guard let self = self else { return }
             self.outputSubject.send(.updateUserKeyWordList(keyWords, noticeListType))
