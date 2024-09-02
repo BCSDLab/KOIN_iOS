@@ -19,12 +19,13 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
         case updateUserKeyWordList([NoticeKeyWordDTO], NoticeListType)
-        case updateSelectedKeyWord(Int)
+        case updateSelectedKeyWord(String)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
+    private let fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase
     private var noticeListType: NoticeListType = .전체공지 {
         didSet {
             getNoticeInfo(page: 1)
@@ -36,8 +37,9 @@ final class NoticeListViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase) {
+    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase) {
         self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
+        self.fetchMyKeyWordUseCase = fetchMyKeyWordUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -74,20 +76,27 @@ extension NoticeListViewModel {
     }
     
     private func getUserKeyWordList() {
-        let testKeyWords = [NoticeKeyWordDTO(id: -1, keyWord: "모두보기"), NoticeKeyWordDTO(id: 0, keyWord: "교환학생"), NoticeKeyWordDTO(id: 1, keyWord: "학사")]
-        outputSubject.send(.updateUserKeyWordList(testKeyWords, noticeListType))
+        fetchMyKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] completion in
+            guard let self = self else { return }
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+            let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
+            outputSubject.send(.updateUserKeyWordList(result, noticeListType))
+        }, receiveValue: { [weak self] keyWords in
+            guard let self = self else { return }
+            self.outputSubject.send(.updateUserKeyWordList(keyWords, noticeListType))
+        }).store(in: &subscriptions)
     }
     
     private func changeKeyWord(keyWord: NoticeKeyWordDTO) {
-        if let id = keyWord.id {
-            if id != -1 {
-                self.keyWord = keyWord.keyWord
-            }
-            else {
-                self.keyWord = nil
-            }
-            outputSubject.send(.updateSelectedKeyWord(id))
+        if keyWord.id == -1 {
+            self.keyWord = nil
         }
+        else {
+            self.keyWord = keyWord.keyWord
+        }
+        outputSubject.send(.updateSelectedKeyWord(keyWord.keyWord))
     }
 }
 
