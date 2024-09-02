@@ -185,14 +185,15 @@ extension ManageNoticeKeyWordViewController {
         }
         else {
             textField.layer.borderWidth = 0
-            addKeyWordButton.backgroundColor = .appColor(.neutral600)
-            addKeyWordButton.setTitleColor(.appColor(.neutral300), for: .normal)
+            addKeyWordButton.backgroundColor = .appColor(.neutral300)
+            addKeyWordButton.setTitleColor(.appColor(.neutral600), for: .normal)
         }
     }
     
     @objc private func tapAddKeyWordButton() {
         if let text = textField.text {
             inputSubject.send(.addKeyWord(keyWord: text))
+            textField.text = ""
         }
     }
     
