@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeSearchViewController: UIViewController {
+final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeSearchViewModel
@@ -102,6 +102,18 @@ final class NoticeSearchViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     deinit {
@@ -146,6 +158,16 @@ final class NoticeSearchViewController: UIViewController {
         
         noticeListTableView.pageBtnPublisher.sink { [weak self] page in
             self?.inputSubject.send(.changePage(page))
+        }.store(in: &subscriptions)
+        
+        noticeListTableView.tapNoticePublisher.sink { [weak self] noticeId in
+            let noticeListService = DefaultNoticeService()
+            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
     }
 }
