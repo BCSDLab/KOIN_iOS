@@ -58,10 +58,10 @@ final class NoticeListTableView: UITableView {
         }
     }
     
-    func updateSelectedKeyWord(keyWordId: Int) {
+    func updateSelectedKeyWord(keyWord: String) {
         let index = IndexPath(row: 0, section: 0)
         if let cell = cellForRow(at: index) as? NoticeListTableViewKeyWordCell {
-            cell.updateSelectedKeyWord(keyWordId: keyWordId)
+            cell.updateSelectedKeyWord(keyWord: keyWord)
             reloadData()
         }
     }

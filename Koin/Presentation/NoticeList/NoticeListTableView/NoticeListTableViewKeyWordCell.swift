@@ -47,8 +47,8 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         noticeKeyWordCollectionView.updateUserKeyWordList(keyWordList: keyWordList)
     }
     
-    func updateSelectedKeyWord(keyWordId: Int) {
-        noticeKeyWordCollectionView.selectKeyWord(keyWordId: keyWordId)
+    func updateSelectedKeyWord(keyWord: String) {
+        noticeKeyWordCollectionView.selectKeyWord(keyWord: keyWord)
     }
 }
 

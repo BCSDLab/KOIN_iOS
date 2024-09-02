@@ -29,19 +29,28 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
         register(NoticeKeyWordCollectionViewCell.self, forCellWithReuseIdentifier: NoticeKeyWordCollectionViewCell.identifier)
         dataSource = self
         delegate = self
+        showsHorizontalScrollIndicator = false
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }
     
     func updateUserKeyWordList(keyWordList: [NoticeKeyWordDTO]) {
-        self.noticeKeyWordList = keyWordList
+        // 모두보기 키워드는 viewModel에서 넣어서 오기 때문에 배열의 개수가 하나일 때, 알림설정 키워드가 없음.
+        noticeKeyWordList.removeAll()
+        if keyWordList.count == 0 {
+            noticeKeyWordList.append(NoticeKeyWordDTO(id: nil, keyWord: "새 키워드 추가"))
+        }
+        else { // id가 -1일때 모두보기이다.
+            noticeKeyWordList.append(NoticeKeyWordDTO(id: -1, keyWord: "모두보기"))
+        }
+        noticeKeyWordList.append(contentsOf: keyWordList)
         reloadData()
     }
     
-    func selectKeyWord(keyWordId: Int) {
+    func selectKeyWord(keyWord: String) {
         for index in 0..<noticeKeyWordList.count {
             let indexPath = IndexPath(item: index+1, section: 0)
             if let cell = cellForItem(at: indexPath) as? NoticeKeyWordCollectionViewCell {
-                let isSelected = noticeKeyWordList[index].id == keyWordId
+                let isSelected = noticeKeyWordList[index].keyWord == keyWord
                 cell.configure(keyWordModel: noticeKeyWordList[index].keyWord, isSelected: isSelected)
             }
         }
@@ -61,15 +70,16 @@ extension NoticeKeyWordCollectionView {
         }
         if indexPath.item == 0 {
             cell.configureFilterImage()
+        } else if indexPath.item - 1 < noticeKeyWordList.count {
+            let keyWord = noticeKeyWordList[indexPath.item - 1].keyWord
+            cell.configure(keyWordModel: keyWord, isSelected: false)
         }
-        else {
-            cell.configure(keyWordModel: noticeKeyWordList[indexPath.item-1].keyWord, isSelected: false)
-        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item == 0 {
+        if indexPath.item == 0 || noticeKeyWordList[indexPath.row-1].keyWord == "새 키워드 추가"{
             keyWordAddBtnTapPublisher.send()
         }
         else {
@@ -84,7 +94,7 @@ extension NoticeKeyWordCollectionView: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 32, height: 32)
         } else {
             let label = UILabel()
-            label.text = noticeKeyWordList[indexPath.item - 1].keyWord
+            label.text = noticeKeyWordList[indexPath.item-1].keyWord
             label.font = .appFont(.pretendardBold, size: 14)
             let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
             return CGSize(width: size.width + 32, height: 34)
