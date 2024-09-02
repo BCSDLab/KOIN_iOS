@@ -46,7 +46,7 @@ final class HomeViewModel: ViewModelProtocol {
     private (set) var moved = false
     
     // MARK: - Initialization
-    
+
     init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
