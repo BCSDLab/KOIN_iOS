@@ -15,6 +15,7 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
         case changeNotification(isOn: Bool)
+        case fetchSubscription
     }
     enum Output {
         case updateKeyWord([NoticeKeyWordDTO])
@@ -37,14 +38,16 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     private let fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase
     private let fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
+    private let fetchNotiListUseCase: FetchNotiListUseCase
     
     init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase,
-         changeNotiUseCase: ChangeNotiUseCase) {
+         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
         self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
         self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
         self.fetchNotificationKeyWordUseCase = fetchNotificationKeyWordUseCase
         self.fetchRecommendedKeyWordUseCase = fetchRecommendedKeyWordUseCase
         self.changeNotiUseCase = changeNotiUseCase
+        self.fetchNotiListUseCase = fetchNotiListUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -58,6 +61,8 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
                 self?.deleteMyKeyWord(keyWord: keyWord)
             case let .changeNotification(isOn):
                 self?.changeNotification(isOn: isOn)
+            case .fetchSubscription:
+                self?.fetchSubscription()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -133,6 +138,20 @@ extension ManageNoticeKeyWordViewModel {
             deleteNotificationKeyWordUseCase.deleteNotificationKeyWordWithoutLogin(keyWord: keyWord)
             fetchMyKeyWord()
         }
+    }
+    
+    private func fetchSubscription() {
+        fetchNotiListUseCase.execute().sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            response.subscribes?.forEach {
+                if $0.type == .articleKeyWord {
+                    self?.outputSubject.send(.updateSwitch(isOn: $0.isPermit ?? false))
+                }
+            }
+        }.store(in: &subscriptions)
     }
     
     private func getRecommendedKeyWord(keyWords: [NoticeKeyWordDTO]) {
