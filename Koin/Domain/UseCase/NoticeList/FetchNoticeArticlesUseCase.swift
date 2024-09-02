@@ -6,9 +6,10 @@
 //
 
 import Combine
+import Foundation
 
 protocol FetchNoticeArticlesUseCase {
-    func fetchArticles(boardId: Int, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error>
+    func fetchArticles(boardId: Int?, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error>
 }
 
 final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
@@ -20,15 +21,18 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func fetchArticles(boardId: Int, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error> {
+    func fetchArticles(boardId: Int?, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error> {
         var result: AnyPublisher<NoticeListDTO, Error>
         if let keyWord = keyWord {
             let requestModel = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
             result = noticeListRepository.searchNoticeArticle(requestModel: requestModel)
         }
-        else {
+        else if let boardId = boardId {
            let requestModel = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
             result = noticeListRepository.fetchNoticeArticles(requestModel: requestModel)
+        }
+        else {
+            result = Just(NoticeListDTO(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0)).setFailureType(to: Error.self).eraseToAnyPublisher()
         }
         return result.map { [weak self] articles in
             let newArticles: NoticeListDTO = articles.toDomain()

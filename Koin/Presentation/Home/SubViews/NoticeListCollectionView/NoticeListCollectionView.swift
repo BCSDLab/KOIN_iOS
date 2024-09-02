@@ -49,7 +49,9 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     }
     
     private func startAutoScroll() {
-        timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
+        if popularNoticeList.count >= 4 {
+            timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
+        }
     }
     
     private func stopAutoScroll() {
