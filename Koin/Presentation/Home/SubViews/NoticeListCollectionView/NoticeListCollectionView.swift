@@ -19,7 +19,6 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
-        startAutoScroll()
     }
     
     required init?(coder: NSCoder) {
@@ -37,6 +36,7 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     
     func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO]) {
         self.popularNoticeList = popularNoticeList
+        startAutoScroll()
         reloadData()
     }
     
