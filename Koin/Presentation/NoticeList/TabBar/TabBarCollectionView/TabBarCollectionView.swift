@@ -27,8 +27,9 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     
     private func commonInit() {
         register(TabBarCollectionViewCell.self, forCellWithReuseIdentifier: TabBarCollectionViewCell.identifier)
-        self.decelerationRate = .normal
-        self.showsHorizontalScrollIndicator = false
+        decelerationRate = .normal
+        showsHorizontalScrollIndicator = false
+        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
         dataSource = self
         delegate = self
     }
