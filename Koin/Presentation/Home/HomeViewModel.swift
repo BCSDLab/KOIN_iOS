@@ -44,11 +44,12 @@ final class HomeViewModel: ViewModelProtocol {
     private (set) var moved = false
     
     // MARK: - Initialization
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
+        self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
         self.dateProvider = dateProvder
     }
     
