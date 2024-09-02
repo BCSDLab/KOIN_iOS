@@ -12,6 +12,12 @@ enum BusPlace: String, Decodable, CaseIterable {
     case station = "STATION"
     case terminal = "TERMINAL"
     
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = BusPlace(rawValue: rawValue) ?? .koreatech
+    }
+    
     var koreanDescription: String {
         switch self {
         case .koreatech:

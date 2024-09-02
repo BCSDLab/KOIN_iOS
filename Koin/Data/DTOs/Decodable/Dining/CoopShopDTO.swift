@@ -50,10 +50,22 @@ struct CoopOpenDTO: Decodable {
 enum DayOfWeek: String, Decodable {
     case weekday = "평일"
     case weekend = "주말"
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = DayOfWeek(rawValue: rawValue) ?? .weekday
+    }
 }
 
 enum MealType: String, Decodable {
     case breakfast = "아침"
     case lunch = "점심"
     case dinner = "저녁"
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = MealType(rawValue: rawValue) ?? .breakfast
+    }
 }

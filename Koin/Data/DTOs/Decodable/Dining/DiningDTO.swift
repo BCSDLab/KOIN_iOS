@@ -45,6 +45,12 @@ enum DiningType: String, Decodable {
     case lunch = "LUNCH"
     case dinner = "DINNER"
     
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = DiningType(rawValue: rawValue) ?? .breakfast
+    }
+    
     var name: String {
         switch self {
         case .breakfast : "아침"
@@ -60,4 +66,10 @@ enum DiningPlace: String, Decodable {
     case cornerC = "C코너"
     case special = "능수관"
     case secondCampus = "2캠퍼스"
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = DiningPlace(rawValue: rawValue) ?? .cornerA
+    }
 }
