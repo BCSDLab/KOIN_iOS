@@ -12,8 +12,8 @@ import UIKit
 
 final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    
-    let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
+    private var keyWord: String = ""
+    let tapDeleteButtonPublisher = PassthroughSubject<String, Never>()
     
     // MARK: - UI Components
  
@@ -42,10 +42,11 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keyWordLabel.text = keyWord
+        self.keyWord = keyWord
     }
     
     @objc func tapDeleteButton(sender: UIButton) {
-        tapDeleteButtonPublisher.send()
+        tapDeleteButtonPublisher.send(keyWord)
     }
 }
 

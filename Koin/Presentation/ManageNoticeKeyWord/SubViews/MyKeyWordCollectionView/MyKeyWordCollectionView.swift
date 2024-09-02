@@ -53,9 +53,15 @@ extension MyKeyWordCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKeyWordCollectionViewCell.identifier, for: indexPath) as? MyKeyWordCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.tapDeleteButtonPublisher.sink { [weak self] in
+        
+        cell.tapDeleteButtonPublisher.sink { [weak self] myKeyWord in
             guard let self = self else {return }
-            self.tapDeleteButtonPublisher.send(self.myKeyWordList[indexPath.row])
+            for keyWord in self.myKeyWordList {
+                if myKeyWord == keyWord.keyWord {
+                    self.tapDeleteButtonPublisher.send(keyWord)
+                    break
+                }
+            }
         }.store(in: &subscriptions)
         cell.configure(keyWord: myKeyWordList[indexPath.item].keyWord)
         return cell
