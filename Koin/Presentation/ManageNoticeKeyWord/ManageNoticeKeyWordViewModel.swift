@@ -141,7 +141,7 @@ extension ManageNoticeKeyWordViewModel {
     }
     
     private func fetchSubscription() {
-        fetchNotiListUseCase.execute().sink { [weak self] completion in
+        fetchNotiListUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
