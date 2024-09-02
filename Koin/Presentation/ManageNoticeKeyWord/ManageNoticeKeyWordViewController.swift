@@ -114,8 +114,13 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         keyWordNotificationSwtich.addTarget(self, action: #selector(changeNotificationKeyWordSwitch), for: .valueChanged)
         configureView()
         bind()
-        inputSubject.send(.getMyKeyWord)
         textField.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.getMyKeyWord)
+        inputSubject.send(.fetchSubscription)
     }
     
     // MARK: - Initialization
@@ -169,6 +174,12 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         
         recommendedKeyWordCollectionView.recommendedKeyWordPublisher.sink { [weak self] keyWord in
             self?.inputSubject.send(.addKeyWord(keyWord: keyWord))
+        }.store(in: &subscriptions)
+        
+        keyWordLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+            loginViewController.title = "로그인"
+            self?.navigationController?.pushViewController(loginViewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
