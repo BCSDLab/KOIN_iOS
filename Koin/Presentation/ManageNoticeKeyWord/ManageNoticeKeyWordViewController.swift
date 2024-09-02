@@ -155,7 +155,10 @@ final class ManageNoticeKeyWordViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        myKeyWordCollectionView.tapDeleteButtonPublisher.sink { [weak self] keyWord in
+        myKeyWordCollectionView.tapDeleteButtonPublisher
+            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] keyWord in
+                print(keyWord)
             self?.inputSubject.send(.deleteKeyWord(keyWord: keyWord))
         }.store(in: &subscriptions)
         
@@ -210,7 +213,7 @@ extension ManageNoticeKeyWordViewController {
     }
     
     private func conductAddKeyWordIllegalType(illegalType: String) {
-        self.showToast(message: illegalType, success: false)
+        showToast(message: illegalType, success: false)
     }
  
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
