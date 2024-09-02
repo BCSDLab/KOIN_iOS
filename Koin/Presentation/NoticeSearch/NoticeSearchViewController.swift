@@ -73,6 +73,19 @@ final class NoticeSearchViewController: UIViewController {
         $0.isScrollEnabled = false
     }
     
+    private let noticeListTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
+        $0.backgroundColor = .white
+        $0.separatorStyle = .singleLine
+    }
+    
+    private let emptyNoticeGuideLabel = UILabel().then {
+        $0.text = "일치하는 공지글이 없습니다.\n다른 키워드로 다시 시도해주세요"
+        $0.textAlignment = .center
+        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.textColor = .appColor(.neutral500)
+        $0.numberOfLines = 2
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -84,6 +97,16 @@ final class NoticeSearchViewController: UIViewController {
         bind()
         inputSubject.send(.getHotKeyWord(5))
         inputSubject.send(.fetchRecentSearchedWord)
+        noticeListTableView.isHidden = true
+        emptyNoticeGuideLabel.isHidden = true
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: - Initialization
@@ -105,6 +128,8 @@ final class NoticeSearchViewController: UIViewController {
                 self?.updateRecommendedHotWord(keyWords: keyWords)
             case .updateRecentSearchedWord(words: let words):
                 self?.updateRecentSearchedWord(words: words)
+            case let .updateSearchedrsult(searchedResult, pages):
+                self?.updateSearchedResult(searchedResult: searchedResult, pages: pages)
             }
         }.store(in: &subscriptions)
         
@@ -118,18 +143,45 @@ final class NoticeSearchViewController: UIViewController {
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
             self?.textField.text = word
         }.store(in: &subscriptions)
+        
+        noticeListTableView.pageBtnPublisher.sink { [weak self] page in
+            self?.inputSubject.send(.changePage(page))
+        }.store(in: &subscriptions)
     }
 }
 
 extension NoticeSearchViewController {
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let keyboardHeight = keyboardSize.height
+            emptyNoticeGuideLabel.snp.remakeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(249)
+                make.centerX.equalToSuperview()
+            }
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        emptyNoticeGuideLabel.snp.remakeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.view.layoutIfNeeded()
+        }
+    }
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func searchButtonTapped() {
         if let text = textField.text {
-            print(text)
             inputSubject.send(.searchWord(text, Date(), 0))
+            inputSubject.send(.fetchSearchedResult(text))
         }
         textField.text = ""
     }
@@ -145,11 +197,26 @@ extension NoticeSearchViewController {
     private func updateRecentSearchedWord(words: [RecentSearchedWordInfo]) {
         recentSearchTableView.updateRecentSearchedWords(words: words)
     }
+    
+    private func updateSearchedResult(searchedResult: [NoticeArticleDTO], pages: NoticeListPages) {
+        [popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView].forEach {
+            $0.isHidden = true
+        }
+        if searchedResult.isEmpty {
+            emptyNoticeGuideLabel.isHidden = false
+            noticeListTableView.isHidden = true
+        }
+        else {
+            emptyNoticeGuideLabel.isHidden = true
+            noticeListTableView.isHidden = false
+            noticeListTableView.updateNoticeList(noticeArticleList: searchedResult, pageInfos: pages, isForSearch: true)
+        }
+    }
 }
 
 extension NoticeSearchViewController {
     private func setUpLayouts() {
-        [backButton, navigationTitle, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView].forEach {
+        [backButton, navigationTitle, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -208,6 +275,16 @@ extension NoticeSearchViewController {
             $0.top.equalTo(recentSearchDataGuideLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+        
+        emptyNoticeGuideLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.equalTo(184)
+        }
+        
+        noticeListTableView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(textField.snp.bottom).offset(12)
         }
     }
     

@@ -17,6 +17,7 @@ final class NoticeListTableView: UITableView {
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     private var subscribtions = Set<AnyCancellable>()
+    private var isForSearch: Bool = false
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -41,9 +42,10 @@ final class NoticeListTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages) {
+    func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages, isForSearch: Bool) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
+        self.isForSearch = isForSearch
         let indexSet = IndexSet(integer: 1)
         reloadSections(indexSet, with: .automatic)
     }
@@ -80,7 +82,7 @@ extension NoticeListTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        if indexPath.section == 0 && !isForSearch {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NoticeListTableViewKeyWordCell.id, for: indexPath) as? NoticeListTableViewKeyWordCell
             else {
                 return UITableViewCell()
@@ -93,13 +95,16 @@ extension NoticeListTableView: UITableViewDataSource {
             }.store(in: &subscribtions)
             return cell
         }
-        else {
+        else if indexPath.section == 1 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NoticeListTableViewCell.identifier, for: indexPath) as? NoticeListTableViewCell
             else {
                 return UITableViewCell()
             }
             cell.configure(articleModel: noticeArticleList[indexPath.row])
             return cell
+        }
+        else {
+            return UITableViewCell()
         }
     }
    
@@ -125,8 +130,11 @@ extension NoticeListTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+        if indexPath.section == 0 && !isForSearch {
             return 66
+        }
+        else if indexPath.section == 0 && isForSearch {
+            return 0
         }
         else {
             return UITableView.automaticDimension

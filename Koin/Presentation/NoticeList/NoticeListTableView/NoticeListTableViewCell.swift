@@ -106,28 +106,24 @@ extension NoticeListTableViewCell {
         nickName.snp.makeConstraints {
             $0.top.equalTo(noticeTitle.snp.bottom).offset(4)
             $0.leading.equalTo(boardTitle)
-            $0.height.equalTo(19)
         }
         
         separatorDot.snp.makeConstraints {
             $0.leading.equalTo(nickName.snp.trailing).offset(3)
             $0.top.equalTo(nickName)
             $0.width.equalTo(7)
-            $0.height.equalTo(19)
         }
         
         createdDate.snp.makeConstraints {
             $0.leading.equalTo(separatorDot.snp.trailing).offset(3)
             $0.top.equalTo(nickName)
             $0.bottom.equalToSuperview().inset(12)
-            $0.height.equalTo(19)
         }
         
         separatorDot2.snp.makeConstraints {
             $0.leading.equalTo(createdDate.snp.trailing).offset(3)
             $0.top.equalTo(nickName)
             $0.width.equalTo(7)
-            $0.height.equalTo(19)
         }
         
         eyeImage.snp.makeConstraints {
@@ -140,7 +136,6 @@ extension NoticeListTableViewCell {
         hitLabel.snp.makeConstraints {
             $0.leading.equalTo(eyeImage.snp.trailing)
             $0.top.equalTo(nickName)
-            $0.height.equalTo(19)
         }
     }
     
