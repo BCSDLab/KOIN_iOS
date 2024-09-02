@@ -17,6 +17,7 @@ final class HomeViewModel: ViewModelProtocol {
         case categorySelected(DiningPlace)
         case getBusInfo(String, String, String)
         case getDiningInfo
+        case getNoticeInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -25,6 +26,7 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType)
         case updateBus(BusDTO)
+        case updateHotArticles([NoticeArticleDTO])
         case putImage(ShopCategoryDTO)
         case moveBusItem
     }
@@ -36,15 +38,17 @@ final class HomeViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let dateProvider: DateProvider
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
+    private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
     // MARK: - Initialization
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, dateProvder: DateProvider) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
+        self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.dateProvider = dateProvder
     }
     
@@ -62,6 +66,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getDiningInformation()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case .getNoticeInfo:
+                self?.getHotNoticeArticles()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -117,6 +123,16 @@ extension HomeViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.putImage(response))
+        }.store(in: &subscriptions)
+    }
+    
+    private func getHotNoticeArticles() {
+        fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] articles in
+            self?.outputSubject.send(.updateHotArticles(articles))
         }.store(in: &subscriptions)
     }
     

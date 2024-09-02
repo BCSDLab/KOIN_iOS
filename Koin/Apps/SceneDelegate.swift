@@ -19,12 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-         let shopRepository = DefaultShopRepository(service: DefaultShopService())
-         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-         let dateProvider = DefaultDateProvider()
-         let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, dateProvder: dateProvider))
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let dateProvider = DefaultDateProvider()
+        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, dateProvder: dateProvider))
         let navigationController = CustomNavigationController(rootViewController: mainViewController)
         window.rootViewController = navigationController
         self.window = window

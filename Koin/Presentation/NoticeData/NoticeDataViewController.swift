@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class NoticeDataViewController: UIViewController {
+final class NoticeDataViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -34,24 +34,23 @@ final class NoticeDataViewController: UIViewController {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let nickName = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
-    }
+    private let nickName = UILabel()
     
-    private let createdDate = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
-    }
+    private let createdDate = UILabel()
     
     private let separatorDot = UILabel().then {
         $0.text = "·"
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textAlignment = .left
-        $0.textColor = .appColor(.neutral500)
     }
+    private let separatorDot2 = UILabel().then {
+        $0.text = "·"
+    }
+    
+    private let eyeImage = UIImageView().then {
+        $0.tintColor = .appColor(.neutral500)
+        $0.image = UIImage.appImage(asset: .eye)
+    }
+    
+    private let hitLabel = UILabel()
     
     private let contentWrappedView = UIView().then {
         $0.backgroundColor = .white
@@ -97,13 +96,15 @@ final class NoticeDataViewController: UIViewController {
         $0.backgroundColor = .appColor(.neutral100)
     }
     
-    private let contentLabel = UILabel().then {
-        $0.numberOfLines = 0
-    }
+    private let contentTextView = UITextView()
     
     private let contentImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+    }
+   
+    private let contentStackView = UIStackView().then {
+        $0.axis = .vertical
     }
     
     // MARK: - Initialization
@@ -122,11 +123,21 @@ final class NoticeDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
+        inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
+        contentTextView.isUserInteractionEnabled = true
+        contentTextView.isEditable = false
+        contentTextView.delegate = self
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        previousButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
         configureView()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,31 +162,70 @@ final class NoticeDataViewController: UIViewController {
                 self?.updatePopularArticle(notices: notices)
             }
         }.store(in: &subscriptions)
+        
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
+            self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
+        }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
-    @objc private func backButtonTapped() {
+    @objc private func tapBackButton() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func tapInventoryButton() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func tapOtherNoticeBtn(sender: UIButton) {
+        if let noticeId = sender == previousButton ? viewModel.previousNoticeId : viewModel.nextNoticeId {
+            navigateToOtherNoticeDataPage(noticeId: noticeId)
+        }
+    }
+    
+    private func navigateToOtherNoticeDataPage(noticeId: Int) {
+        let noticeListService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+        let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+        let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(noticeDataVc, animated: true)
     }
     
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
-        titleLabel.text = noticeData.title
-        nickName.text = noticeData.nickName
-        createdDate.text = noticeData.createdAt
-        contentLabel.attributedText = noticeData.content.extractFromHtmlTag(regularFont: UIFont.appFont(.pretendardRegular, size: 14), boldFont: .appFont(.pretendardBold, size: 14))
-        if let imageString = noticeData.imageString {
-            contentImage.loadImage(from: imageString)
+        titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
+        nickName.text = noticeData.author
+        createdDate.text = noticeData.registeredAt
+        
+        contentTextView.attributedText = noticeData.content.modifyFontInHtml()?.convertToAttributedFromHTML()
+        let contentTextViewHeight = contentTextView.sizeThatFits(CGSize(width: contentTextView.frame.width, height: .greatestFiniteMagnitude))
+        contentTextView.snp.updateConstraints {
+            $0.height.equalTo(contentTextViewHeight)
+        }
+      
+        if let prevId = noticeData.prevId {
+            previousButton.isHidden = false
+            viewModel.previousNoticeId = prevId
+        }
+        
+        if let nextId = noticeData.nextId {
+            nextButton.isHidden = false
+            viewModel.nextNoticeId = nextId
+        }
+        
+        if noticeData.hit == 0 {
+            [separatorDot2, eyeImage, hitLabel].forEach {
+                $0.isHidden = true
+            }
         }
         else {
-            contentImage.isHidden = true
-            inventoryButton.snp.remakeConstraints {
-                $0.top.equalTo(contentLabel.snp.bottom).offset(32)
-                $0.leading.equalToSuperview().offset(24)
-                $0.width.equalTo(45)
-                $0.height.equalTo(31)
+            [separatorDot2, eyeImage, hitLabel].forEach {
+                $0.isHidden = false
             }
+            hitLabel.text = "\(noticeData.hit.formattedWithComma)"
         }
     }
     
@@ -184,7 +234,30 @@ extension NoticeDataViewController {
     }
 }
 
+extension NoticeDataViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange) -> Bool {
+        guard let image = textAttachment.image else { return false}
+        
+        let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
+        let smallProportion: CGFloat = image.size.width / imageWidth
+        let imageHeight: CGFloat = image.size.height / smallProportion
+        let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageHeight.isNaN ? 100 : imageHeight)
+        zoomedImageViewController.setImage(image)
+        self.present(zoomedImageViewController, animated: true)
+        
+        return true
+    }
+}
+
 extension NoticeDataViewController {
+    private func setUpLabels() {
+        [nickName, separatorDot, createdDate, separatorDot2, hitLabel].forEach {
+            $0.font = .appFont(.pretendardRegular, size: 12)
+            $0.textAlignment = .left
+            $0.textColor = .appColor(.neutral500)
+        }
+    }
+    
     private func setUpButtons() {
         [inventoryButton, previousButton, nextButton].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
@@ -201,10 +274,10 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName].forEach {
+        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName, separatorDot2, eyeImage, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
-        [contentLabel, contentImage, inventoryButton, previousButton, nextButton].forEach {
+        [contentTextView, inventoryButton, previousButton, nextButton].forEach {
             contentWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -252,17 +325,40 @@ extension NoticeDataViewController {
         createdDate.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
+            $0.height.equalTo(19)
         }
         
         separatorDot.snp.makeConstraints {
-            $0.leading.equalTo(createdDate.snp.trailing).offset(2)
+            $0.leading.equalTo(createdDate.snp.trailing).offset(3)
             $0.top.equalTo(createdDate)
+            $0.width.equalTo(7)
+            $0.height.equalTo(19)
         }
         
         nickName.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot.snp.trailing).offset(2)
+            $0.leading.equalTo(separatorDot.snp.trailing).offset(3)
             $0.top.equalTo(createdDate)
             $0.bottom.equalToSuperview().inset(12)
+            $0.height.equalTo(19)
+        }
+        
+        separatorDot2.snp.makeConstraints {
+            $0.leading.equalTo(nickName.snp.trailing).offset(3)
+            $0.top.equalTo(nickName)
+            $0.width.equalTo(7)
+        }
+        
+        eyeImage.snp.makeConstraints {
+            $0.leading.equalTo(separatorDot2.snp.trailing).offset(2)
+            $0.centerY.equalTo(nickName)
+            $0.width.equalTo(16)
+            $0.height.equalTo(13)
+        }
+        
+        hitLabel.snp.makeConstraints {
+            $0.leading.equalTo(eyeImage.snp.trailing)
+            $0.top.equalTo(nickName)
+            $0.height.equalTo(19)
         }
         
         contentWrappedView.snp.makeConstraints {
@@ -270,21 +366,16 @@ extension NoticeDataViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
-        contentLabel.snp.makeConstraints {
+        contentTextView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-        }
-        
-        contentImage.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(32)
-            $0.width.equalTo(327)
-            $0.height.equalTo(457)
-            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(79)
+            $0.height.equalTo(100)
         }
         
         inventoryButton.snp.makeConstraints {
-            $0.top.equalTo(contentImage.snp.bottom).offset(32)
+            $0.top.equalTo(contentTextView.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(45)
             $0.height.equalTo(31)
@@ -300,7 +391,6 @@ extension NoticeDataViewController {
         previousButton.snp.makeConstraints {
             $0.trailing.equalTo(nextButton.snp.leading).offset(-8)
             $0.top.equalTo(inventoryButton)
-            $0.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(31)
             $0.width.equalTo(59)
         }
@@ -324,8 +414,8 @@ extension NoticeDataViewController {
         }
     }
 
-    
     private func configureView() {
+        setUpLabels()
         setUpButtons()
         setUpLayOuts()
         setUpConstraints()

@@ -72,6 +72,8 @@ enum ImageAsset: String {
     case cancelYellow
     case trashcan
     case nonReview
+    case eye
+    case fireImage
 }
 
 enum SFSymbols: String {

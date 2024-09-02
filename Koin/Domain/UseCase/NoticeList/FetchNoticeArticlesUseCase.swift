@@ -21,20 +21,20 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     }
     
     func fetchArticles(boardId: Int, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error> {
+        var result: AnyPublisher<NoticeListDTO, Error>
         if let keyWord = keyWord {
             let requestModel = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
-            return noticeListRepository.searchNoticeArticle(requestModel: requestModel).map { [weak self] articles in
-                let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-                return NoticeArticlesInfo(articles: articles.articles ?? [], pages: pages)
-            }.eraseToAnyPublisher()
+            result = noticeListRepository.searchNoticeArticle(requestModel: requestModel)
         }
         else {
            let requestModel = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
-            return noticeListRepository.fetchNoticeArticles(requestModel: requestModel).map { [weak self] articles in
-                let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-                return NoticeArticlesInfo(articles: articles.articles ?? [], pages: pages)
-            }.eraseToAnyPublisher()
+            result = noticeListRepository.fetchNoticeArticles(requestModel: requestModel)
         }
+        return result.map { [weak self] articles in
+            let newArticles: NoticeListDTO = articles.toDomain()
+            let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
+            return NoticeArticlesInfo(articles: newArticles.articles ?? [], pages: pages)
+        }.eraseToAnyPublisher()
     }
     
     private func makePages(currentPage: Int, totalPage: Int) -> NoticeListPages {
