@@ -115,7 +115,6 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.getMyKeyWord)
-        inputSubject.send(.getRecommendedKeyWord)
         textField.delegate = self
     }
     
