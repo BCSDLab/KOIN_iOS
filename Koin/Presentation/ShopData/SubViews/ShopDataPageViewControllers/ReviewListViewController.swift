@@ -63,7 +63,12 @@ final class ReviewListViewController: UIViewController {
         $0.isHidden = true
     }
     
-    private let reviewLoginModalViewController = ReviewLoginModalViewController().then {
+    private let reviewWriteLoginModalViewController = ReviewLoginModalViewController(message: "작성").then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private let reviewReportLoginModalViewController = ReviewLoginModalViewController(message: "신고").then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
@@ -133,8 +138,8 @@ final class ReviewListViewController: UIViewController {
             make.height.equalTo(height)
         }
         nonReviewImageView.isHidden = reviewCount != 0
-     // ???: 이거 숨기는게 맞긴한데 이거 숨기면 플로우가 어색하다. 회의 때 말해보기
-      //  reviewListCollectionView.isHidden = review.isEmpty
+        // ???: 이거 숨기는게 맞긴한데 이거 숨기면 플로우가 어색하다. 회의 때 말해보기
+        //  reviewListCollectionView.isHidden = review.isEmpty
         if reviewCount == 0 {
             viewControllerHeightPublisher.send(nonReviewImageView.frame.height + 400)
         } else {
@@ -148,9 +153,20 @@ final class ReviewListViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self = self else { return }
             switch output {
-            case let .updateLoginStatus(isLogined):
-                if isLogined { self.navigateToWriteReview() }
-                else { self.present(self.reviewLoginModalViewController, animated: true, completion: nil) }
+            case let .updateLoginStatus(isLogined, parameter):
+                if !isLogined {
+                    if let parameter {
+                        self.present(self.reviewReportLoginModalViewController, animated: true, completion: nil)
+                    } else {
+                        self.present(self.reviewWriteLoginModalViewController, animated: true, completion: nil)
+                    }
+                } else {
+                    if let parameter {
+                        self.navigateToReportReview(parameter: parameter)
+                    } else {
+                        self.navigateToWriteReview()
+                    }
+                }
             }
         }.store(in: &cancellables)
         
@@ -168,7 +184,11 @@ final class ReviewListViewController: UIViewController {
             self.present(self.deleteReviewModalViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
         
-        reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        reviewWriteLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.navigateToLogin()
+        }.store(in: &cancellables)
+        
+        reviewReportLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
@@ -197,10 +217,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
-            if let viewController = self?.shopReviewReportViewController {
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
+            self?.inputSubject.send(.checkLogin(parameter))
         }.store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
@@ -219,7 +236,13 @@ final class ReviewListViewController: UIViewController {
 extension ReviewListViewController {
     
     @objc private func writeReviewButtonTapped() {
-        inputSubject.send(.checkLogin)
+        inputSubject.send(.checkLogin(nil))
+    }
+    
+    private func navigateToReportReview(parameter: (Int, Int)) {
+        let shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), reviewId: parameter.0, shopId: parameter.1))
+        
+        navigationController?.pushViewController(shopReviewReportViewController, animated: true)
     }
     
     private func navigateToLogin() {
@@ -240,7 +263,7 @@ extension ReviewListViewController {
         shopReviewViewController.title = "리뷰 작성하기"
         self.shopReviewViewController = shopReviewViewController
         if let viewController = self.shopReviewViewController {
-           navigationController?.pushViewController(viewController, animated: true)
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
 }

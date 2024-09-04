@@ -12,28 +12,29 @@ import UIKit
 final class ReviewLoginModalViewController: UIViewController {
     
     let loginButtonPublisher = PassthroughSubject<Void, Never>()
+    private let message: String
     
-    private let messageLabel = UILabel().then {
+    private lazy var messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
-        let text = "리뷰 작성시 로그인을 해주세요."
+        let text = "리뷰 \(message)시 로그인을 해주세요."
         let attributedString = NSMutableAttributedString(string: text)
-
+        
         let loginRange = (text as NSString).range(of: "로그인")
         attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.primary500), range: loginRange)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
         $0.attributedText = attributedString
         $0.textAlignment = .center
     }
-
     
-    private let subMessageLabel = UILabel().then {
+    
+    private lazy var subMessageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
-        let text = "리뷰 작성은 회원만 사용 가능합니다.\n회원가입 또는 로그인 후 이용해주세요 :-)"
+        let text = "리뷰 \(message)\(message.hasFinalConsonant() ? "은" : "는") 회원만 사용 가능합니다.\n회원가입 또는 로그인 후 이용해주세요 :-)"
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
         $0.attributedText = attributedString
@@ -68,6 +69,15 @@ final class ReviewLoginModalViewController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
+    
+    init(message: String) {
+        self.message = message
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

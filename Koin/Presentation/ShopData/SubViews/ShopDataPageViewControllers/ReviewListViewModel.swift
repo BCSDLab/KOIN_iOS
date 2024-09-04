@@ -17,18 +17,18 @@ final class ReviewListViewModel: ViewModelProtocol {
 
     
     enum Input {
-       case checkLogin
+       case checkLogin((Int, Int)?)
     }
     enum Output {
-        case updateLoginStatus(Bool)
+        case updateLoginStatus(Bool, (Int, Int)?)
     }
  
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .checkLogin:
-                self?.checkLogin()
+            case let .checkLogin(parameter):
+                self?.checkLogin(parameter: parameter)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -37,13 +37,13 @@ final class ReviewListViewModel: ViewModelProtocol {
 
 extension ReviewListViewModel {
     
-    private func checkLogin() {
+    private func checkLogin(parameter: (Int, Int)?) {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case .failure = completion {
-                self?.outputSubject.send(.updateLoginStatus(false))
+                self?.outputSubject.send(.updateLoginStatus(false, parameter))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateLoginStatus(true))
+            self?.outputSubject.send(.updateLoginStatus(true, parameter))
         }.store(in: &subscriptions)
     }
    
