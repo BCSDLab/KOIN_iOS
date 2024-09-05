@@ -19,7 +19,8 @@ final class MyProfileViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-      
+        case showToast(String, Bool)
+        case showProfile(UserDTO)
     }
     
     // MARK: - Properties
@@ -40,9 +41,9 @@ final class MyProfileViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .fetchUserData:
-                print(1)
+                self?.fetchUserData()
             case .revoke:
-                print(2)
+                self?.revoke()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -55,24 +56,20 @@ extension MyProfileViewModel {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-              //  self?.outputSubject.send(.loginAgain)
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
-          ///  self?.userNickname = response.nickname
-         //   self?.outputSubject.send(.showUserProfile(response))
+            self?.outputSubject.send(.showProfile(response))
         }.store(in: &subscriptions)
     }
     
     private func revoke() {
         revokeUseCase.execute().sink { [weak self] completion in
             if case let .failure(error) = completion {
-                switch error.code {
-                case "401" : self?.outputSubject.send(.loginAgain)
-                default: self?.outputSubject.send(.showHttpResult(error.message, .danger700))
-                }
+                self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.revokeSuccess)
+            self?.outputSubject.send(.showToast("회원탈퇴가 완료되었습니다.", true))
         }.store(in: &subscriptions)
     }
     
