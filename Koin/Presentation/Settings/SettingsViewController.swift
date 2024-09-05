@@ -102,9 +102,9 @@ final class SettingsViewController: UIViewController {
 
 extension SettingsViewController {
     @objc private func profileButtonTapped() {
-//        let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: <#any FetchUserDataUseCase#>, revokeUseCase: <#any RevokeUseCase#>))
-//        navigationController?.pushViewController(viewController, animated: true)
-//        
+        let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), revokeUseCase: DefaultRevokeUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        navigationController?.pushViewController(viewController, animated: true)
+        
     }
     
     @objc private func changePasswordButtonTapped() {

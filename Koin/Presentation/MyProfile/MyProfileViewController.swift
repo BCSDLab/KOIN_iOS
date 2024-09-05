@@ -84,14 +84,11 @@ final class MyProfileViewController: UIViewController {
         button.layer.masksToBounds = true
     }
     
-//    private let revokeButton: UIButton = {
-//        let button = UIButton()
-//        button.setTitle("회원탈퇴", for: .normal)
-//        button.backgroundColor = .systemRed
-//        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-//        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-//        return button
-//    }()
+    private let revokeModalViewController = RevokeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: MyProfileViewModel) {
@@ -111,6 +108,8 @@ final class MyProfileViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        revokeButton.addTarget(self, action: #selector(revokeButtonTapped), for: .touchUpInside)
+        inputSubject.send(.fetchUserData)
     }
     
     
@@ -121,7 +120,16 @@ final class MyProfileViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
+            case let .showToast(message, success):
+                self?.showToast(message: message, success: success)
+                self?.navigationController?.popViewController(animated: true)
+            case let .showProfile(profile):
+                self?.showProfile(profile)
             }
+        }.store(in: &subscriptions)
+        
+        revokeModalViewController.revokeButtonPublisher.sink { [weak self] _ in
+            self?.inputSubject.send(.revoke)
         }.store(in: &subscriptions)
     }
     
@@ -129,6 +137,18 @@ final class MyProfileViewController: UIViewController {
 
 extension MyProfileViewController {
     
+    @objc private func revokeButtonTapped() {
+        present(revokeModalViewController, animated: true, completion: nil)
+    }
+    
+    private func showProfile(_ profile: UserDTO) {
+        idValueLabel.text = profile.email
+        nameValueLabel.text = profile.name
+        nicknameValueLabel.text = profile.nickname
+        phoneValueLabel.text = profile.phoneNumber
+        studentNumberValueLabel.text = profile.studentNumber
+        majorValueLabel.text = profile.major
+    }
     
 }
 
@@ -222,6 +242,10 @@ extension MyProfileViewController {
     
     private func setUpLabels() {
         [idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, studentNumberTitleLabel, majorTitleLabel].forEach { label in
+            label.font = UIFont.appFont(.pretendardRegular, size: 16)
+            label.textColor = UIColor.appColor(.neutral800)
+        }
+        [idValueLabel, nameValueLabel, nicknameValueLabel, phoneValueLabel, studentNumberValueLabel, majorValueLabel].forEach { label in
             label.font = UIFont.appFont(.pretendardRegular, size: 16)
             label.textColor = UIColor.appColor(.neutral800)
         }

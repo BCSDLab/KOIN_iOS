@@ -108,6 +108,13 @@
 		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
 		D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */; };
 		D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421442C897ED300E8B480 /* PolicyViewController.swift */; };
+		D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */; };
+		D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */; };
+		D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */; };
+		D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */; };
+		D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */; };
+		D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216F2C8A3E5B00E8B480 /* UITableView+.swift */; };
+		D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421712C8A427800E8B480 /* RevokeModalViewController.swift */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
@@ -478,6 +485,13 @@
 		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		D22421442C897ED300E8B480 /* PolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewController.swift; sourceTree = "<group>"; };
+		D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyContentCollectionView.swift; sourceTree = "<group>"; };
+		D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyContentCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyListCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyListTableView.swift; sourceTree = "<group>"; };
+		D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyModel.swift; sourceTree = "<group>"; };
+		D224216F2C8A3E5B00E8B480 /* UITableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+.swift"; sourceTree = "<group>"; };
+		D22421712C8A427800E8B480 /* RevokeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeModalViewController.swift; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
@@ -951,6 +965,7 @@
 			children = (
 				D22421382C897D8300E8B480 /* MyProfileViewModel.swift */,
 				D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */,
+				D22421712C8A427800E8B480 /* RevokeModalViewController.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -967,9 +982,37 @@
 		D22421412C897EB700E8B480 /* Policy */ = {
 			isa = PBXGroup;
 			children = (
+				D22421682C8A3E0B00E8B480 /* SubViews */,
 				D22421442C897ED300E8B480 /* PolicyViewController.swift */,
 			);
 			path = Policy;
+			sourceTree = "<group>";
+		};
+		D22421642C8A3E0B00E8B480 /* PolicyContentCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */,
+				D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */,
+			);
+			path = PolicyContentCollectionView;
+			sourceTree = "<group>";
+		};
+		D22421672C8A3E0B00E8B480 /* PolicyListTableView */ = {
+			isa = PBXGroup;
+			children = (
+				D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */,
+				D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */,
+			);
+			path = PolicyListTableView;
+			sourceTree = "<group>";
+		};
+		D22421682C8A3E0B00E8B480 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D22421642C8A3E0B00E8B480 /* PolicyContentCollectionView */,
+				D22421672C8A3E0B00E8B480 /* PolicyListTableView */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
@@ -1439,6 +1482,7 @@
 		D27DD0712BA608310081FD36 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D224216F2C8A3E5B00E8B480 /* UITableView+.swift */,
 				D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */,
 				83DD0DD12C568F6100278ABD /* UITableViewHeaderFooterView.swift */,
 				83DD0DCD2C5687A900278ABD /* UITableViewCell+.swift */,
@@ -1643,6 +1687,7 @@
 		D29F21E32C4F4C2B00994554 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */,
 				D29F21E42C4F4C3700994554 /* AgreementText.swift */,
 			);
 			path = User;
@@ -2258,6 +2303,7 @@
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
+				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
@@ -2378,6 +2424,7 @@
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
+				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
@@ -2451,6 +2498,7 @@
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
+				D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				83DD0D8D2C51010900278ABD /* BusInformationCollectionView.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
@@ -2458,6 +2506,7 @@
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
+				D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
@@ -2470,6 +2519,8 @@
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
+				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
+				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */,
@@ -2501,6 +2552,7 @@
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
 				D27DD0902BA608310081FD36 /* HomeViewController.swift in Sources */,
+				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
