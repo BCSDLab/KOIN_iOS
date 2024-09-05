@@ -16,7 +16,7 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     static let id = "NoticeListTableViewKeyWordCellIdentifier"
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
-    private var subscriptions = Set<AnyCancellable>()
+    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UIComponents
     
@@ -24,7 +24,7 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
     }
-    
+   
     // MARK: - Initialization
  
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,10 +32,14 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         configureView()
         noticeKeyWordCollectionView.keyWordAddBtnTapPublisher.sink { [weak self] in
             self?.keyWordAddBtnTapPublisher.send()
-        }.store(in: &subscriptions)
+        }.store(in: &noticeKeyWordCollectionView.subscriptions)
         noticeKeyWordCollectionView.keyWordTapPublisher.sink { [weak self] keyword in
             self?.keyWordTapPublisher.send(keyword)
-        }.store(in: &subscriptions)
+        }.store(in: &noticeKeyWordCollectionView.subscriptions)
+    }
+    
+    override func prepareForReuse() {
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {

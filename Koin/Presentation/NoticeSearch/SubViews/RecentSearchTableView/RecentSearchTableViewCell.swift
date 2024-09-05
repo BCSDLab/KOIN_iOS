@@ -14,6 +14,7 @@ final class RecentSearchTableViewCell: UITableViewCell {
     //MARK: - Properties
     
     let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
+    var subscriptions = Set<AnyCancellable>()
     
     //MARK: - UI Components
     
@@ -31,6 +32,10 @@ final class RecentSearchTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+    }
+    
+    override func prepareForReuse() {
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {

@@ -13,6 +13,7 @@ import UIKit
 final class NoticeListTableViewFooter: UITableViewHeaderFooterView {
     // MARK: - Properties
     let tapBtnPublisher = PassthroughSubject<Int, Never>()
+    var subscriptions = Set<AnyCancellable>()
     private var row = 0
     // MARK: - UIComponents
     private let stackView = UIStackView().then {
@@ -40,6 +41,10 @@ final class NoticeListTableViewFooter: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureView()
+    }
+    
+    override func prepareForReuse() {
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {

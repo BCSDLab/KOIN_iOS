@@ -12,7 +12,6 @@ final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionView
     //MARK: - Properties
     private var recommendedKeyWordList: [String] = []
     let recommendedKeyWordPublisher = PassthroughSubject<String, Never>()
-    private var subscriptions = Set<AnyCancellable>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -55,7 +54,7 @@ extension RecommendedKeyWordCollectionView {
             guard let self = self else { return }
             let keyWord = self.recommendedKeyWordList[indexPath.row]
             self.recommendedKeyWordPublisher.send(keyWord)
-        }.store(in: &subscriptions)
+        }.store(in: &cell.subscriptions)
         cell.configure(keyWord: recommendedKeyWordList[indexPath.item])
         return cell
     }

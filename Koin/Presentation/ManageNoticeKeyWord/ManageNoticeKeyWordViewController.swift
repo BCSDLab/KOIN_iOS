@@ -167,7 +167,6 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         }.store(in: &subscriptions)
         
         myKeyWordCollectionView.tapDeleteButtonPublisher
-            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] keyWord in
                 print(keyWord)
             self?.inputSubject.send(.deleteKeyWord(keyWord: keyWord))

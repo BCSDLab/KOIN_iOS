@@ -13,6 +13,7 @@ import UIKit
 final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     let recommendedKeyWordPublisher = PassthroughSubject<Void, Never>()
+    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
  
@@ -31,6 +32,10 @@ final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         addButton.addTarget(self, action: #selector(tapAddButton), for: .touchUpInside)
         configureView()
+    }
+    
+    override func prepareForReuse() {
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {
