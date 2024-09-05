@@ -10,7 +10,7 @@ import UIKit
 
 final class RecentSearchTableView: UITableView {
     // MARK: - Properties
-    private var subscriptions = Set<AnyCancellable>()
+   
     private var recentSearchedDataList: [RecentSearchedWordInfo] = []
     let tapDeleteButtonPublisher = PassthroughSubject<(String, Date), Never>()
     
@@ -64,7 +64,7 @@ extension RecentSearchTableView: UITableViewDataSource {
                   let date = searchedData.searchedDate {
                    self?.tapDeleteButtonPublisher.send((name, date))
                }
-           }.store(in: &subscriptions)
+           }.store(in: &cell.subscriptions)
            
            return cell
     }

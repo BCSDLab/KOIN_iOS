@@ -147,7 +147,6 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         }.store(in: &subscriptions)
         
         recentSearchTableView.tapDeleteButtonPublisher
-            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] name, date in
             print(name)
             self?.inputSubject.send(.searchWord(name, date, 1))

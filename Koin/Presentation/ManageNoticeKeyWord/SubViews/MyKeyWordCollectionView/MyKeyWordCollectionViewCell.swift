@@ -14,6 +14,7 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     private var keyWord: String = ""
     let tapDeleteButtonPublisher = PassthroughSubject<String, Never>()
+    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
  
@@ -32,6 +33,10 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         deleteButton.addTarget(self, action: #selector(tapDeleteButton), for: .touchUpInside)
         configureView()
+    }
+    
+    override func prepareForReuse() {
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {

@@ -13,7 +13,6 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
     
     let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     let myKeyWordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
-    private var subscriptions = Set<AnyCancellable>()
     private var myKeyWordList: [NoticeKeyWordDTO] = []
     
     //MARK: - Initialization
@@ -62,7 +61,7 @@ extension MyKeyWordCollectionView {
                     break
                 }
             }
-        }.store(in: &subscriptions)
+        }.store(in: &cell.subscriptions)
         cell.configure(keyWord: myKeyWordList[indexPath.item].keyWord)
         return cell
     }

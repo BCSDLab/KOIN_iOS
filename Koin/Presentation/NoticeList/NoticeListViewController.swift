@@ -121,7 +121,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         }.store(in: &subscriptions)
         
         noticeTableView.keyWordAddBtnTapPublisher
-            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] in
                 let noticeListService = DefaultNoticeService()
                 let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
@@ -137,7 +136,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         }.store(in: &subscriptions)
         
         noticeTableView.keyWordTapPublisher
-            .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] keyWord in
                 self?.inputSubject.send(.getUserKeyWordList(keyWord))
         }.store(in: &subscriptions)
