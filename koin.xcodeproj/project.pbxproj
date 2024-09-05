@@ -128,6 +128,14 @@
 		D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */; };
 		D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */; };
 		D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */; };
+		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
+		D22421362C897C7900E8B480 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421352C897C7900E8B480 /* SettingsViewModel.swift */; };
+		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
+		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
+		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
+		D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */; };
+		D22421432C897ECA00E8B480 /* PolicyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421422C897ECA00E8B480 /* PolicyViewModel.swift */; };
+		D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421442C897ED300E8B480 /* PolicyViewController.swift */; };
 		D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */; };
 		D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
@@ -491,6 +499,14 @@
 		D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
 		D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLoginModalViewController.swift; sourceTree = "<group>"; };
 		D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
+		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D22421352C897C7900E8B480 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
+		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		D22421422C897ECA00E8B480 /* PolicyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewModel.swift; sourceTree = "<group>"; };
+		D22421442C897ED300E8B480 /* PolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewController.swift; sourceTree = "<group>"; };
 		D23582962BC0F1D800D615DD /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D23582982BC0F1E600D615DD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
@@ -921,62 +937,99 @@
 			);
 			name = Noti;
 			path = "ㅜㅐ샤";
-			sourceTree = "<group>";
-		};
-		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				D22C545E2C68C7EB000826DA /* ScoreChartCollectionView.swift */,
-				D22C54602C68C904000826DA /* ScoreChartCollectionViewCell.swift */,
-			);
-			path = ScoreChartCollectionView;
-			sourceTree = "<group>";
-		};
-		D22C54642C6924C5000826DA /* ShopReviewReport */ = {
-			isa = PBXGroup;
-			children = (
-				D22C54692C6925C6000826DA /* SubViews */,
-				D22C54652C69250F000826DA /* ShopReviewReportViewModel.swift */,
-				D22C54672C692518000826DA /* ShopReviewReportViewController.swift */,
-			);
-			path = ShopReviewReport;
-			sourceTree = "<group>";
-		};
-		D22C54692C6925C6000826DA /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				D22C546A2C6926DC000826DA /* ReportDetailView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		D22C54842C6AAE31000826DA /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */,
-				D22C548A2C6AC746000826DA /* AddMenuCollectionView */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */,
-				D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */,
-			);
-			path = ReviewImageUploadCollectionView;
-			sourceTree = "<group>";
-		};
-		D22C548A2C6AC746000826DA /* AddMenuCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */,
-				D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */,
-			);
-			path = AddMenuCollectionView;
-			sourceTree = "<group>";
-		};
+sourceTree = "<group>";
+};
+D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
+    isa = PBXGroup;
+    children = (
+        D22C545E2C68C7EB000826DA /* ScoreChartCollectionView.swift */,
+        D22C54602C68C904000826DA /* ScoreChartCollectionViewCell.swift */,
+    );
+    path = ScoreChartCollectionView;
+    sourceTree = "<group>";
+};
+D22C54642C6924C5000826DA /* ShopReviewReport */ = {
+    isa = PBXGroup;
+    children = (
+        D22C54692C6925C6000826DA /* SubViews */,
+        D22C54652C69250F000826DA /* ShopReviewReportViewModel.swift */,
+        D22C54672C692518000826DA /* ShopReviewReportViewController.swift */,
+    );
+    path = ShopReviewReport;
+    sourceTree = "<group>";
+};
+D22C54692C6925C6000826DA /* SubViews */ = {
+    isa = PBXGroup;
+    children = (
+        D22C546A2C6926DC000826DA /* ReportDetailView.swift */,
+    );
+    path = SubViews;
+    sourceTree = "<group>";
+};
+D22C54842C6AAE31000826DA /* SubViews */ = {
+    isa = PBXGroup;
+    children = (
+        D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */,
+        D22C548A2C6AC746000826DA /* AddMenuCollectionView */,
+    );
+    path = SubViews;
+    sourceTree = "<group>";
+};
+D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */ = {
+    isa = PBXGroup;
+    children = (
+        D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */,
+        D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */,
+    );
+    path = ReviewImageUploadCollectionView;
+    sourceTree = "<group>";
+};
+D22C548A2C6AC746000826DA /* AddMenuCollectionView */ = {
+    isa = PBXGroup;
+    children = (
+        D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */,
+        D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */,
+    );
+    path = AddMenuCollectionView;
+    sourceTree = "<group>";
+};
+D22421322C897C5E00E8B480 /* Settings */ = {
+    isa = PBXGroup;
+    children = (
+        D22421352C897C7900E8B480 /* SettingsViewModel.swift */,
+        D22421332C897C7100E8B480 /* SettingsViewController.swift */,
+    );
+    path = Settings;
+    sourceTree = "<group>";
+};
+D22421372C897D7300E8B480 /* MyProfile */ = {
+    isa = PBXGroup;
+    children = (
+        D22421382C897D8300E8B480 /* MyProfileViewModel.swift */,
+        D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */,
+    );
+    path = MyProfile;
+    sourceTree = "<group>";
+};
+D224213C2C897DE300E8B480 /* ChangePassword */ = {
+    isa = PBXGroup;
+    children = (
+        D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */,
+        D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */,
+    );
+    path = ChangePassword;
+    sourceTree = "<group>";
+};
+D22421412C897EB700E8B480 /* Policy */ = {
+    isa = PBXGroup;
+    children = (
+        D22421422C897ECA00E8B480 /* PolicyViewModel.swift */,
+        D22421442C897ED300E8B480 /* PolicyViewController.swift */,
+    );
+    path = Policy;
+    sourceTree = "<group>";
+};
+
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
 			isa = PBXGroup;
 			children = (
@@ -1164,6 +1217,10 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D22421412C897EB700E8B480 /* Policy */,
+				D224213C2C897DE300E8B480 /* ChangePassword */,
+				D22421372C897D7300E8B480 /* MyProfile */,
+				D22421322C897C5E00E8B480 /* Settings */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D2BD36862BA9D58A00FAE609 /* MyPage */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
@@ -2227,6 +2284,7 @@
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
+				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
@@ -2254,12 +2312,14 @@
 				D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */,
 				D27DD0F02BA60D000081FD36 /* LandViewController.swift in Sources */,
 				D22C546D2C699780000826DA /* ImageDropDownCell.swift in Sources */,
+				D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
 				D2BD368A2BA9D5B700FAE609 /* MyPageViewModel.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
+				D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
@@ -2272,6 +2332,7 @@
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
+				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
@@ -2285,6 +2346,7 @@
 				D27DD0912BA608310081FD36 /* ShopCollectionViewCell.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
+				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
@@ -2347,6 +2409,7 @@
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
+				D22421362C897C7900E8B480 /* SettingsViewModel.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
@@ -2453,6 +2516,7 @@
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
+				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
@@ -2502,6 +2566,7 @@
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
+				D22421432C897ECA00E8B480 /* PolicyViewModel.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
 				D27DD0DE2BA6092B0081FD36 /* MenuListCollectionView.swift in Sources */,
