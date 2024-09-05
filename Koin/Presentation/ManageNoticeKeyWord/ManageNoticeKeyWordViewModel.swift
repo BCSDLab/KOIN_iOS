@@ -83,7 +83,7 @@ extension ManageNoticeKeyWordViewModel {
                 isNotIllegal = false
                 self.outputSubject.send(.keyWordIsIllegal(.isNotCharPredicate))
             }
-            else if myKeyWords.count > 10 {
+            else if myKeyWords.count > 9 {
                 isNotIllegal = false
                 self.outputSubject.send(.keyWordIsIllegal(.exceedNumber))
             }
