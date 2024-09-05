@@ -113,6 +113,7 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         addKeyWordButton.addTarget(self, action: #selector(tapAddKeyWordButton), for: .touchUpInside)
         keyWordNotificationSwtich.addTarget(self, action: #selector(changeNotificationKeyWordSwitch), for: .valueChanged)
         configureView()
+        hideKeyboardWhenTappedAround()
         bind()
         textField.delegate = self
     }
@@ -213,6 +214,7 @@ extension ManageNoticeKeyWordViewController {
         if let text = textField.text {
             inputSubject.send(.addKeyWord(keyWord: text))
             textField.text = ""
+            textField.resignFirstResponder()
         }
     }
     
