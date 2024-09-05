@@ -87,6 +87,7 @@ extension NoticeListTableView: UITableViewDataSource {
             else {
                 return UITableViewCell()
             }
+            cell.selectionStyle = .none
             cell.keyWordAddBtnTapPublisher.sink { [weak self] in
                 self?.keyWordAddBtnTapPublisher.send()
             }.store(in: &subscribtions)
@@ -100,6 +101,7 @@ extension NoticeListTableView: UITableViewDataSource {
             else {
                 return UITableViewCell()
             }
+            cell.selectionStyle = .none
             cell.configure(articleModel: noticeArticleList[indexPath.row])
             return cell
         }
