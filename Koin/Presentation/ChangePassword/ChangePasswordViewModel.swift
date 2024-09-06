@@ -20,7 +20,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-        case showToast(String, Bool)
+        case showToast(String, Bool, Bool)
         case showErrorMessage(String)
         case showEmail(String)
         case passNextStep
@@ -73,10 +73,10 @@ extension ChangePasswordViewModel {
         modifyUseCase.execute(requestModel: UserPutRequest(gender: userDTO?.gender, identity: nil, isGraduated: false, major: userDTO?.major, name: userDTO?.name, nickname: userDTO?.nickname, password: password, phoneNumber: userDTO?.phoneNumber, studentNumber: userDTO?.studentNumber)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-                self?.outputSubject.send(.showToast(error.message, false))
+                self?.outputSubject.send(.showToast(error.message, false, false))
             }
         } receiveValue: { [weak self] _ in
-            self?.outputSubject.send(.showToast("비밀번호 변경이 완료되었습니다.", true))
+            self?.outputSubject.send(.showToast("비밀번호 변경이 완료되었습니다.", true, true))
         }.store(in: &subscriptions)
     }
     
@@ -84,7 +84,7 @@ extension ChangePasswordViewModel {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-                self?.outputSubject.send(.showToast(error.message, false))
+                self?.outputSubject.send(.showToast(error.message, false, true))
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showEmail(response.email ?? ""))
