@@ -22,7 +22,7 @@ final class PolicyContentCollectionView: UICollectionView, UICollectionViewDataS
     }
     
     private func commonInit() {
-        isScrollEnabled = true
+        isScrollEnabled = false
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
