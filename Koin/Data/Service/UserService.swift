@@ -16,6 +16,7 @@ protocol UserService {
     func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse>
     func revoke() -> AnyPublisher<Void, ErrorResponse>
     func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
+    func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
@@ -74,6 +75,21 @@ final class DefaultUserService: UserService {
                 if error.code == "401" {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.modify(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.checkPassword(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.checkPassword(requestModel)) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()

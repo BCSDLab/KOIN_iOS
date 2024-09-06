@@ -73,6 +73,7 @@ enum ImageAsset: String {
     case nonReview
     case chevronRight
     case chevronUp
+    case visibility
 }
 
 enum SFSymbols: String {

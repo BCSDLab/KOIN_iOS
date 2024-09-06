@@ -108,11 +108,21 @@ extension SettingsViewController {
     }
     
     @objc private func changePasswordButtonTapped() {
-        
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+        let checkPasswordUseCase = DefaultCheckPasswordUseCase(userRepository: userRepository)
+        let modifyUseCase = DefaultModifyUseCase(userRepository: userRepository)
+        let viewController = ChangePasswordViewController(viewModel: ChangePasswordViewModel(fetchUserDataUseCase: fetchUserDataUseCase, checkPasswordUseCase: checkPasswordUseCase, modifyUseCase: modifyUseCase))
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func notiButtonTapped() {
-        
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase))
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func personalPolicyButtonTapped() {
