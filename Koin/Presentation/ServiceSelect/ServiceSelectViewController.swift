@@ -25,9 +25,9 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
-    private let notiButton: UIButton = {
+    private let settingButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "bell"), for: .normal)
+        button.setImage(UIImage.appImage(asset: .gear), for: .normal)
         button.tintColor = UIColor.appColor(.neutral800)
         return button
     }()
@@ -91,6 +91,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         let label = UILabel()
         label.text = "서비스"
         label.backgroundColor = UIColor.appColor(.neutral50)
+        label.textColor = UIColor.appColor(.neutral600)
         label.font = UIFont.appFont(.pretendardMedium, size: 14)
         return label
     }()
@@ -221,17 +222,12 @@ extension ServiceSelectViewController {
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
         myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
-        notiButton.addTarget(self, action: #selector(notiButtonTapped), for: .touchUpInside)
+        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
     }
     
-    @objc private func notiButtonTapped() {
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let notiViewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase))
-            notiViewController.title = "알림설정"
-        navigationController?.pushViewController(notiViewController, animated: true)
+    @objc private func settingButtonTapped() {
+        let viewController = SettingsViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
   
     @objc func backButtonTapped() {
@@ -397,7 +393,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton].forEach {
             view.addSubview($0)
         }
     }
@@ -435,11 +431,11 @@ extension ServiceSelectViewController {
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
-        notiButton.snp.makeConstraints { make in
+        settingButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             make.trailing.equalTo(view.snp.trailing).offset(-10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
         }
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom).offset(30)
@@ -453,12 +449,12 @@ extension ServiceSelectViewController {
             make.bottom.equalTo(nicknameLabel.snp.bottom)
             make.leading.equalTo(nicknameLabel.snp.trailing)
         }
-        myInfoButton.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.height.equalTo(24)
-            make.width.equalTo(68)
-        }
+//        myInfoButton.snp.makeConstraints { make in
+//            make.top.equalTo(nicknameLabel.snp.bottom).offset(30)
+//            make.leading.equalTo(view.snp.leading).offset(24)
+//            make.height.equalTo(24)
+//            make.width.equalTo(68)
+//        }
         logOutButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameLabel.snp.bottom).offset(33.5)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
@@ -466,13 +462,13 @@ extension ServiceSelectViewController {
             make.width.equalTo(60)
         }
         servicePaddingLabel.snp.makeConstraints { make in
-            make.top.equalTo(myInfoButton.snp.bottom).offset(15.5)
+            make.top.equalTo(settingButton.snp.bottom).offset(128)
             make.leading.equalTo(view.snp.leading)
             make.width.equalTo(24)
             make.height.equalTo(33)
         }
         serviceGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(myInfoButton.snp.bottom).offset(15)
+            make.top.equalTo(settingButton.snp.bottom).offset(128)
             make.leading.equalTo(servicePaddingLabel.snp.trailing)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)

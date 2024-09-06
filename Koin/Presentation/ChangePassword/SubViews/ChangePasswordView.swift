@@ -19,7 +19,7 @@ final class ChangePasswordView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    private let passwordTextField = UITextField().then { textField in
+    let passwordTextField = UITextField().then { textField in
         textField.placeholder = "새 비밀번호를 입력해주세요."
         textField.isSecureTextEntry = true
     }
@@ -42,7 +42,7 @@ final class ChangePasswordView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    private let passwordCheckTextField = UITextField().then { textField in
+    let passwordCheckTextField = UITextField().then { textField in
         textField.placeholder = "새 비밀번호를 다시 입력해주세요."
         textField.layer.borderColor = UIColor.appColor(.sub500).cgColor
         textField.isSecureTextEntry = true

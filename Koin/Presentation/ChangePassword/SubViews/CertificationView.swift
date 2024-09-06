@@ -28,7 +28,7 @@ final class CertificationView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    private let passwordTextField = UITextField().then { textField in
+    let passwordTextField = UITextField().then { textField in
         textField.placeholder = "현재 비밀번호를 입력해주세요."
         textField.isSecureTextEntry = true
     }

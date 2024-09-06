@@ -76,7 +76,11 @@ final class ChangePasswordViewController: UIViewController {
         bind()
         configureView()
         inputSubject.send(.fetchUserData)
+        hideKeyboardWhenTappedAround()
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+        certificationView.passwordTextField.delegate = self
+        changePasswordView.passwordCheckTextField.delegate = self
+        changePasswordView.passwordTextField.delegate = self
     }
     
     

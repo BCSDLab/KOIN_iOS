@@ -11,9 +11,6 @@ import UIKit
 final class SettingsViewController: UIViewController {
     
     // MARK: - Properties
-    
-    private let viewModel: SettingsViewModel
-    private let inputSubject: PassthroughSubject<SettingsViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -63,9 +60,9 @@ final class SettingsViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init(viewModel: SettingsViewModel) {
-        self.viewModel = viewModel
+    init() {
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "설정"
     }
     
     @available(*, unavailable)
@@ -92,12 +89,7 @@ final class SettingsViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        
-        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            switch output {
-            }
-        }.store(in: &subscriptions)
+      
     }
     
 }

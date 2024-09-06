@@ -105,6 +105,7 @@ final class ChangeMyProfileViewController: UIViewController {
     init(viewModel: ChangeMyProfileViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "내 프로필"
     }
     
     @available(*, unavailable)
@@ -123,6 +124,9 @@ final class ChangeMyProfileViewController: UIViewController {
         deptButton.addTarget(self, action: #selector(deptButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         hideKeyboardWhenTappedAround()
+        [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
+            $0.delegate = self
+        }
     }
     
     

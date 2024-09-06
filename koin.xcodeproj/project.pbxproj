@@ -102,7 +102,6 @@
 		D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */; };
 		D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D21460362BD09ACF006F579A /* GoogleService-Info.plist */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
-		D22421362C897C7900E8B480 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421352C897C7900E8B480 /* SettingsViewModel.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
 		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
@@ -485,7 +484,6 @@
 		D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeLoginModalViewController.swift; sourceTree = "<group>"; };
 		D21460362BD09ACF006F579A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		D22421352C897C7900E8B480 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
@@ -966,7 +964,6 @@
 		D22421322C897C5E00E8B480 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				D22421352C897C7900E8B480 /* SettingsViewModel.swift */,
 				D22421332C897C7100E8B480 /* SettingsViewController.swift */,
 			);
 			path = Settings;
@@ -2488,7 +2485,6 @@
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
-				D22421362C897C7900E8B480 /* SettingsViewModel.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
