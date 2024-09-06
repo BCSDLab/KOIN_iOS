@@ -74,6 +74,7 @@ enum ImageAsset: String {
     case reportedImageView
     case nonMenuWeekendImage
     case chevronRight
+    case chevronUp
 }
 
 enum SFSymbols: String {
