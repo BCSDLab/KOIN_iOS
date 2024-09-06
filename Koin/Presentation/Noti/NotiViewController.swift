@@ -153,6 +153,7 @@ final class NotiViewController: UIViewController {
     init(viewModel: NotiViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "알림설정"
     }
     
     @available(*, unavailable)

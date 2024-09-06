@@ -119,6 +119,9 @@
 		D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421712C8A427800E8B480 /* RevokeModalViewController.swift */; };
 		D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */; };
 		D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */; };
+		D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421792C8A90C800E8B480 /* CertificationView.swift */; };
+		D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */; };
+		D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
@@ -499,6 +502,9 @@
 		D22421712C8A427800E8B480 /* RevokeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeModalViewController.swift; sourceTree = "<group>"; };
 		D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewController.swift; sourceTree = "<group>"; };
 		D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewModel.swift; sourceTree = "<group>"; };
+		D22421792C8A90C800E8B480 /* CertificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationView.swift; sourceTree = "<group>"; };
+		D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordUseCase.swift; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
@@ -979,6 +985,7 @@
 		D224213C2C897DE300E8B480 /* ChangePassword */ = {
 			isa = PBXGroup;
 			children = (
+				D22421782C8A90B600E8B480 /* SubViews */,
 				D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */,
 				D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */,
 			);
@@ -1028,6 +1035,15 @@
 				D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */,
 			);
 			path = ChangeMyProfile;
+			sourceTree = "<group>";
+		};
+		D22421782C8A90B600E8B480 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D22421792C8A90C800E8B480 /* CertificationView.swift */,
+				D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
@@ -1778,6 +1794,7 @@
 				D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */,
 				D20AB9402C550746006BC684 /* RevokeUseCase.swift */,
 				D20AB9422C550751006BC684 /* ModifyUseCase.swift */,
+				D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2449,6 +2466,7 @@
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
+				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
@@ -2485,6 +2503,7 @@
 				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
+				D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,
 				D27DD0F22BA60D220081FD36 /* LandDetailViewController.swift in Sources */,
 				D20AB9522C5534F7006BC684 /* FetchNotiListUseCase.swift in Sources */,
@@ -2564,6 +2583,7 @@
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */,
+				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
