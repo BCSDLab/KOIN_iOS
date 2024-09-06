@@ -109,6 +109,13 @@ final class MyProfileViewController: UIViewController {
         bind()
         configureView()
         revokeButton.addTarget(self, action: #selector(revokeButtonTapped), for: .touchUpInside)
+        
+        let editButton = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editButtonTapped))
+            navigationItem.rightBarButtonItem = editButton
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         inputSubject.send(.fetchUserData)
     }
     
@@ -139,6 +146,14 @@ extension MyProfileViewController {
     
     @objc private func revokeButtonTapped() {
         present(revokeModalViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func editButtonTapped() {
+        let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let viewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase))
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func showProfile(_ profile: UserDTO) {

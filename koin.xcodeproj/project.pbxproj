@@ -115,6 +115,8 @@
 		D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */; };
 		D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216F2C8A3E5B00E8B480 /* UITableView+.swift */; };
 		D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421712C8A427800E8B480 /* RevokeModalViewController.swift */; };
+		D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */; };
+		D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
@@ -492,6 +494,8 @@
 		D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyModel.swift; sourceTree = "<group>"; };
 		D224216F2C8A3E5B00E8B480 /* UITableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+.swift"; sourceTree = "<group>"; };
 		D22421712C8A427800E8B480 /* RevokeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeModalViewController.swift; sourceTree = "<group>"; };
+		D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewController.swift; sourceTree = "<group>"; };
+		D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewModel.swift; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
@@ -1015,6 +1019,15 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		D22421732C8A45F400E8B480 /* ChangeMyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */,
+				D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */,
+			);
+			path = ChangeMyProfile;
+			sourceTree = "<group>";
+		};
 		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1262,6 +1275,7 @@
 				D22421322C897C5E00E8B480 /* Settings */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D2BD36862BA9D58A00FAE609 /* MyPage */,
+				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
 				D2908CA42BB5EB5F0008F908 /* Timetable */,
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
@@ -2414,6 +2428,7 @@
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
 				D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */,
+				D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */,
 				D2908CB12BB7A5940008F908 /* TimetableCollectionViewCell.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
@@ -2551,6 +2566,7 @@
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D27DD0902BA608310081FD36 /* HomeViewController.swift in Sources */,
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,

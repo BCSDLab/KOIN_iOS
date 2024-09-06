@@ -90,7 +90,7 @@ extension MyPageViewModel {
     
     // TODO: 이거 비밀번호 확인에만 문구가 있을 경우에 대한 예외 처리 추가 필요
     private func tryModifyProfile(_ profile: UserPutRequest, _ passwordMatch: String) {
-        modifyUseCase.execute(requestModel: profile, passwordMatch: passwordMatch).sink { [weak self] completion in
+        modifyUseCase.execute(requestModel: profile).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 switch error.code {
                 case "401" : self?.outputSubject.send(.loginAgain)

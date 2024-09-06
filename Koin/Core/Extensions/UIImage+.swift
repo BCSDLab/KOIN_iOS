@@ -72,6 +72,7 @@ enum ImageAsset: String {
     case trashcan
     case nonReview
     case chevronRight
+    case chevronUp
 }
 
 enum SFSymbols: String {
