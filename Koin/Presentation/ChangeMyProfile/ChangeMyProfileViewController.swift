@@ -221,7 +221,7 @@ extension ChangeMyProfileViewController {
             make.edges.equalToSuperview()
         }
         primaryInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(scrollView.snp.top)
             make.leading.trailing.equalToSuperview()
             make.width.equalTo(view.snp.width)
             make.height.equalTo(38)
@@ -288,6 +288,7 @@ extension ChangeMyProfileViewController {
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(46)
             make.width.equalTo(200)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
         }
         saveButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
