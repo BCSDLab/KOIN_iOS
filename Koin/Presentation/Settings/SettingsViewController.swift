@@ -83,7 +83,9 @@ final class SettingsViewController: UIViewController {
         changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         notiButton.addTarget(self, action: #selector(notiButtonTapped), for: .touchUpInside)
         personalPolicyButton.addTarget(self, action: #selector(personalPolicyButtonTapped), for: .touchUpInside)
-        koinPolicyButton.addTarget(self, action: #selector(licenseButtonTapped), for: .touchUpInside)
+        koinPolicyButton.addTarget(self, action: #selector(koinPolicyButtonTapped), for: .touchUpInside)
+        licenceButton.addTarget(self, action: #selector(licenseButtonTapped), for: .touchUpInside)
+        inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
     }
     
     
@@ -126,17 +128,21 @@ extension SettingsViewController {
     }
     
     @objc private func personalPolicyButtonTapped() {
-        
+        let viewController = PolicyViewController(policyType: .personalInformation)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func koinPolicyButtonTapped() {
-        
+        let viewController = PolicyViewController(policyType: .koin)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func licenseButtonTapped() {
-        
+        showToast(message: "아직 디자인이 안나온것 같아요~", success: true)
     }
-    
+    @objc private func inquryButtonTapped() {
+        showToast(message: "아직 구글폼 완성이 안된것같아요~", success: true)
+    }
 }
 
 extension SettingsViewController {

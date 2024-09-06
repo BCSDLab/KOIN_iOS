@@ -27,7 +27,6 @@ final class PolicyListTableViewCell: UITableViewCell {
 
     func configure(titleText: String) {
         titleLabel.text = titleText
-        print(titleText)
     }
 }
 

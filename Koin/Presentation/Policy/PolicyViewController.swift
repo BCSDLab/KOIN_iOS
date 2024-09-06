@@ -43,7 +43,6 @@ final class PolicyViewController: UIViewController {
         policyContentCollectionView.setUpPolicyList(type: policyType)
         navigationItem.title = policyType.navigationTitle
         policyTypeLabel.text = policyType.displayName
-        print(policyContentCollectionView.calculateDynamicHeight())
     }
     
     @available(*, unavailable)
@@ -73,9 +72,7 @@ extension PolicyViewController {
    
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        view.addSubview(policyListTableView)
-      ///  view.addSubview(policyContentCollectionView)
-        [policyTypeLabel, separateView, policyContentCollectionView].forEach {
+        [policyTypeLabel, separateView, policyContentCollectionView, policyListTableView, policyContentCollectionView].forEach {
             scrollView.addSubview($0)
         }
        
@@ -83,19 +80,17 @@ extension PolicyViewController {
     
     private func setUpConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(3000)
+            make.edges.equalToSuperview()
         }
         policyTypeLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(scrollView.snp.top).offset(20)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         policyListTableView.snp.makeConstraints { make in
             make.top.equalTo(policyTypeLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(policyListTableView.calculateDynamicHeight())
+            make.width.equalTo(view.snp.width)
         }
         separateView.snp.makeConstraints { make in
             make.top.equalTo(policyListTableView.snp.bottom).offset(28)
@@ -106,8 +101,11 @@ extension PolicyViewController {
         policyContentCollectionView.snp.makeConstraints { make in
             make.top.equalTo(separateView.snp.bottom).offset(28)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(444)
-   //         make.bottom.equalTo(scrollView.snp.bottom)
+            make.height.equalTo(1)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-20)
+        }
+        policyContentCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(policyContentCollectionView.calculateDynamicHeight())
         }
     }
     

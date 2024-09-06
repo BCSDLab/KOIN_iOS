@@ -42,8 +42,6 @@ final class PolicyListTableView: UITableView, UITableViewDataSource, UITableView
 
 extension PolicyListTableView {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        print("Number of rows: \(policyList.count)")
         return policyList.count
     }
     

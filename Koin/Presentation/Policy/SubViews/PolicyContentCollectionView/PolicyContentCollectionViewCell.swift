@@ -34,7 +34,6 @@ final class PolicyContentCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(policyText: PolicyText) {
-        print(141411)
         titleLabel.text = policyText.title
         contentLabel.text = policyText.content
     }
