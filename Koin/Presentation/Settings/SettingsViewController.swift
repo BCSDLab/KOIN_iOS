@@ -52,6 +52,15 @@ final class SettingsViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardRegular, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
     }
+    
+    private let nowVersionLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let recentVersionLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
     private let inquryButton = UIButton().then {
         $0.setTitle("문의하기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
@@ -83,6 +92,26 @@ final class SettingsViewController: UIViewController {
         koinPolicyButton.addTarget(self, action: #selector(koinPolicyButtonTapped), for: .touchUpInside)
         licenceButton.addTarget(self, action: #selector(licenseButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
+        nowVersionLabel.text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        
+        // 이것들 시점 usecase나 뷰모델이나 그런데로 다 뺴기
+        fetchAppStoreVersion(bundleID: Bundle.main.bundleIdentifier ?? "") { [weak self] appStoreVersion in
+            guard let self = self else { return }
+            if let version = appStoreVersion {
+                // UI 업데이트는 메인 스레드에서 수행
+                DispatchQueue.main.async {
+                    if version == self.nowVersionLabel.text {
+                        self.recentVersionLabel.text = "현재 최신 버전 입니다."
+                        self.recentVersionLabel.textColor = UIColor.appColor(.neutral300)
+                    } else {
+                        self.recentVersionLabel.text = "최신 버전 \(version)"
+                        self.recentVersionLabel.textColor = UIColor.appColor(.primary500)
+                    }
+                }
+            }
+        }
+
+        
     }
     
     
@@ -95,6 +124,35 @@ final class SettingsViewController: UIViewController {
 }
 
 extension SettingsViewController {
+    
+    func fetchAppStoreVersion(bundleID: String, completion: @escaping (String?) -> Void) {
+        let urlString = "https://itunes.apple.com/lookup?bundleId=\(bundleID)"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let results = json["results"] as? [[String: Any]],
+                   let appStoreVersion = results.first?["version"] as? String {
+                    completion(appStoreVersion)
+                } else {
+                    completion(nil)
+                }
+            } catch {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
+    
+
     @objc private func profileButtonTapped() {
         let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), revokeUseCase: DefaultRevokeUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
         navigationController?.pushViewController(viewController, animated: true)
@@ -141,7 +199,7 @@ extension SettingsViewController {
     
    
     private func setUpLayOuts() {
-        [generalLabel, profileButton, changePasswordButton, notiButton, serviceLabel, personalPolicyButton, koinPolicyButton, licenceButton, versionLabel, inquryButton].forEach {
+        [generalLabel, profileButton, changePasswordButton, notiButton, serviceLabel, personalPolicyButton, koinPolicyButton, licenceButton, versionLabel, nowVersionLabel, recentVersionLabel, inquryButton].forEach {
             view.addSubview($0)
         }
     }
@@ -191,6 +249,14 @@ extension SettingsViewController {
             make.top.equalTo(licenceButton.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(58)
+        }
+        nowVersionLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(versionLabel.snp.centerY).offset(-2)
+            make.trailing.equalTo(view.snp.trailing).offset(-27.5)
+        }
+        recentVersionLabel.snp.makeConstraints { make in
+            make.top.equalTo(versionLabel.snp.centerY).offset(2)
+            make.trailing.equalTo(view.snp.trailing).offset(-27.5)
         }
         inquryButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
