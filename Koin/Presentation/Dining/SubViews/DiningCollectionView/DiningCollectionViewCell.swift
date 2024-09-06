@@ -234,7 +234,15 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
         if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
-            menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
+            var image = UIImage()
+            if let date = info.date.toDateFromYYYYMMDD() {
+                if isWeekend(date: date) {
+                    menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
+                }
+                else {
+                    menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
+                }
+            }
             menuImageView.contentMode = .scaleToFill
         }
         
@@ -258,6 +266,15 @@ final class DiningCollectionViewCell: UICollectionViewCell {
             menuImageView.isHidden = true
             menuImageBackground.isUserInteractionEnabled = false
         }
+    }
+    
+    private func isWeekend(date: Date) -> Bool {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.weekday], from: date)
+        if let weekday = components.weekday {
+            return weekday == 1 || weekday == 7
+        }
+        return false
     }
     
     private func hideImageView() {
