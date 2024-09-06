@@ -91,9 +91,9 @@ final class ChangePasswordViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .showToast(message, success):
+            case let .showToast(message, success, dismiss):
                 self?.showToast(message: message, success: success)
-                if success {
+                if dismiss {
                     self?.navigationController?.popViewController(animated: true)
                 }
             case let .showEmail(email):
