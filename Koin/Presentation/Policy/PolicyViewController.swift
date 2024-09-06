@@ -34,7 +34,9 @@ final class PolicyViewController: UIViewController {
     private let policyContentCollectionView = PolicyContentCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then { collectionView in
     }
     
-    
+    private let scrollTopButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .topCircle), for: .normal)
+    }
     // MARK: - Initialization
     
     init(policyType: PolicyType) {
@@ -56,6 +58,7 @@ final class PolicyViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        scrollTopButton.addTarget(self, action: #selector(scrollTopButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
@@ -74,6 +77,10 @@ extension PolicyViewController {
             scrollView.setContentOffset(CGPoint(x: 0, y: policyTypeLabel.frame.size.height + policyListTableView.calculateDynamicHeight() + 28 + separateView.frame.size.height + cellYPosition), animated: true)
         }
     }
+    
+    @objc private func scrollTopButtonTapped() {
+        scrollView.setContentOffset(CGPoint(x: 0, y: -100), animated: true)
+    }
 }
 
 extension PolicyViewController {
@@ -81,10 +88,10 @@ extension PolicyViewController {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
+        view.addSubview(scrollTopButton)
         [policyTypeLabel, separateView, policyContentCollectionView, policyListTableView, policyContentCollectionView].forEach {
             scrollView.addSubview($0)
         }
-        
     }
     
     private func setUpConstraints() {
@@ -115,6 +122,12 @@ extension PolicyViewController {
         }
         policyContentCollectionView.snp.updateConstraints { make in
             make.height.equalTo(policyContentCollectionView.calculateDynamicHeight())
+        }
+        scrollTopButton.snp.makeConstraints { make in
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.bottom.equalTo(view.snp.bottom).offset(-37)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
         }
     }
     
