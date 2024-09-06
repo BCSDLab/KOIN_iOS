@@ -78,6 +78,7 @@ enum ImageAsset: String {
     case visibility
     case check
     case checkGreen
+    case topCircle
 }
 
 enum SFSymbols: String {
