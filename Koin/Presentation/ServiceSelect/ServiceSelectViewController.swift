@@ -135,6 +135,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
+    private let inquryButton = UIButton().then {
+        $0.setTitle("문의하기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 16)
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: ServiceSelectViewModel) {
@@ -223,6 +229,11 @@ extension ServiceSelectViewController {
         myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
         settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
+        inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func inquryButtonTapped() {
+        showToast(message: "아직 구글폼 완성이 안된것같아요~", success: true)
     }
     
     @objc private func settingButtonTapped() {
@@ -393,14 +404,14 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["주변 상점", "버스/교통", "식단", "복덕방", "코인 사장님"]
+        let kindOfButton = [busSelectButton, diningSelectButton, landSelectButton, shopSelectButton, businessSelectButton]
+        let buttonName = ["버스 / 교통", "식단", "복덕방", "주변상점", "코인 사장님"]
         for idx in 0...4 {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
@@ -503,7 +514,12 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        
+        inquryButton.snp.makeConstraints { make in
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.bottom.equalTo(view.snp.bottom).offset(-30)
+            make.width.equalTo(56)
+            make.height.equalTo(26)
+        }
     }
     
     private func configureView() {
