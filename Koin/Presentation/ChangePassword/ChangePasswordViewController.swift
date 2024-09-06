@@ -52,6 +52,10 @@ final class ChangePasswordViewController: UIViewController {
     private let certificationView = CertificationView(frame: .zero).then { view in
     }
     
+    private lazy var changePasswordView = ChangePasswordView(frame: .zero, viewModel: viewModel).then { view in
+        view.isHidden = true
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: ChangePasswordViewModel) {
@@ -85,35 +89,57 @@ final class ChangePasswordViewController: UIViewController {
             switch output {
             case let .showToast(message, success):
                 self?.showToast(message: message, success: success)
+                if success {
+                    self?.navigationController?.popViewController(animated: true)
+                }
             case let .showEmail(email):
                 self?.certificationView.fillEmailText(text: email)
             case .passNextStep:
                 self?.passNextStep()
+            case let .showErrorMessage(message):
+                self?.showErrorMessage(message: message)
+            case let .updateButtonEnable(isEnable):
+                self?.changeButtonEnable(isEnable: isEnable)
             }
         }.store(in: &subscriptions)
         
         certificationView.passwordEmptyCheckPublisher.sink { [weak self] isEmpty in
-            if isEmpty {
-                self?.completeButton.backgroundColor = UIColor.appColor(.neutral300)
-                self?.completeButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-            } else {
-                self?.completeButton.backgroundColor = UIColor.appColor(.primary500)
-                self?.completeButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-            }
+            self?.changeButtonEnable(isEnable: !isEmpty)
         }.store(in: &subscriptions)
     }
     
 }
 
 extension ChangePasswordViewController {
+    
+    private func changeButtonEnable(isEnable: Bool) {
+        completeButton.backgroundColor = isEnable ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
+        completeButton.setTitleColor(isEnable ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral600), for: .normal)
+        completeButton.isEnabled = isEnable ? true : false
+    }
+    
+    private func showErrorMessage(message: String) {
+        if !certificationView.isHidden {
+            certificationView.showErrorMessage(message: message)
+        }
+    }
+    
     private func passNextStep() {
-        print(1414)
+        progressTitleLabel.text = "2. 비밀번호 변경"
+        progressStepLabel.text = "2 / 2"
+        progressView.progress = 1.0
+        completeButton.setTitle("완료", for: .normal)
+        certificationView.isHidden = true
+        changePasswordView.isHidden = false
+        completeButton.backgroundColor = UIColor.appColor(.neutral300)
+        completeButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+        completeButton.isEnabled = false
     }
     
     @objc private func completeButtonTapped() {
         switch viewModel.currentStep {
         case 1: inputSubject.send(.checkPassword(certificationView.getPasswordText()))
-        default: print(141)
+        default: inputSubject.send(.changePassword(changePasswordView.getPasswordText()))
         }
     }
     
@@ -121,9 +147,8 @@ extension ChangePasswordViewController {
 
 extension ChangePasswordViewController {
     
-   
     private func setUpLayOuts() {
-        [progressTitleLabel, progressStepLabel, progressView, certificationView, completeButton].forEach {
+        [progressTitleLabel, progressStepLabel, progressView, certificationView, changePasswordView, completeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -148,6 +173,12 @@ extension ChangePasswordViewController {
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(200)
+        }
+        changePasswordView.snp.makeConstraints { make in
+            make.top.equalTo(progressView.snp.bottom).offset(28)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(300)
         }
         completeButton.snp.makeConstraints { make in
             make.bottom.equalTo(view.snp.bottom).offset(-24)

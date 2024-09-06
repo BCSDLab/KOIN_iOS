@@ -76,6 +76,8 @@ enum ImageAsset: String {
     case chevronRight
     case chevronUp
     case visibility
+    case check
+    case checkGreen
 }
 
 enum SFSymbols: String {

@@ -122,6 +122,7 @@
 		D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421792C8A90C800E8B480 /* CertificationView.swift */; };
 		D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */; };
 		D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */; };
+		D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
@@ -505,6 +506,7 @@
 		D22421792C8A90C800E8B480 /* CertificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationView.swift; sourceTree = "<group>"; };
 		D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordUseCase.swift; sourceTree = "<group>"; };
+		D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidator.swift; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
@@ -1600,6 +1602,7 @@
 				D27DD0852BA608310081FD36 /* ImageCacher.swift */,
 				0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */,
 				D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */,
+				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -2608,6 +2611,7 @@
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
+				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,

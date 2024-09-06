@@ -62,6 +62,12 @@ final class CertificationView: UIView {
     func getPasswordText() -> String {
         passwordTextField.text ?? ""
     }
+    
+    func showErrorMessage(message: String) {
+        passwordTextField.layer.borderColor = UIColor.appColor(.sub500).cgColor
+        passwordTextField.layer.borderWidth = 1.0
+        errorResponseLabel.text = "⚠ \(message)"
+    }
 }
 
 extension CertificationView {
@@ -70,6 +76,8 @@ extension CertificationView {
     }
     @objc private func passwordDidChanged(_ textField: UITextField) {
         passwordEmptyCheckPublisher.send(textField.text?.isEmpty ?? true)
+        passwordTextField.layer.borderWidth = 0
+        errorResponseLabel.text = ""
     }
 }
 
