@@ -11,7 +11,7 @@ final class PolicyListTableViewCell: UITableViewCell {
     
     // MARK: - UI Components
     
-    private let titleLabel = UILabel().then {
+    private let titleLabel = InsetLabel(top: 0, left: 48, bottom: 0, right: 0).then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = UIColor.appColor(.neutral800)
     }
@@ -38,13 +38,10 @@ extension PolicyListTableViewCell {
     }
     
     private func setUpConstraints() {
-          titleLabel.translatesAutoresizingMaskIntoConstraints = false
-          NSLayoutConstraint.activate([
-              titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-              titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-              titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
-              titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8)
-          ])
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(self.snp.centerY)
+            make.leading.equalTo(self.snp.leading)
+        }
       }
     
     private func configureView() {

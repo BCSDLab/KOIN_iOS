@@ -5,12 +5,13 @@
 //  Created by 김나훈 on 9/5/24.
 //
 
+import Combine
 import UIKit
-
 
 final class PolicyListTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     
     private var policyList: [String] = []
+    let selectedCellPublisher = PassthroughSubject<Int, Never>()
     
     override init(frame: CGRect, style: UITableView.Style = .plain) {
         super.init(frame: frame, style: style)
@@ -30,6 +31,7 @@ final class PolicyListTableView: UITableView, UITableViewDataSource, UITableView
         register(PolicyListTableViewCell.self, forCellReuseIdentifier: PolicyListTableViewCell.identifier)
         dataSource = self
         delegate = self
+        separatorInset = .zero
     }
     
     func setUpPolicyList(type: PolicyType) {
@@ -41,6 +43,10 @@ final class PolicyListTableView: UITableView, UITableViewDataSource, UITableView
 }
 
 extension PolicyListTableView {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return policyList.count
     }
@@ -53,5 +59,8 @@ extension PolicyListTableView {
         cell.configure(titleText: policyList[indexPath.row])
         return cell
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        selectedCellPublisher.send(indexPath.row)
+    }
 }

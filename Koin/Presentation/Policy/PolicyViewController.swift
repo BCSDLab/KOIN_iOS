@@ -33,7 +33,7 @@ final class PolicyViewController: UIViewController {
     
     private let policyContentCollectionView = PolicyContentCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then { collectionView in
     }
-
+    
     
     // MARK: - Initialization
     
@@ -59,23 +59,32 @@ final class PolicyViewController: UIViewController {
     }
     
     private func bind() {
-        
+        policyListTableView.selectedCellPublisher.sink { [weak self] cellIndex in
+            self?.scrollToCell(at: cellIndex)
+        }.store(in: &subscriptions)
+    }
+}
+
+extension PolicyViewController {
+    private func scrollToCell(at index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        if let cellAttributes = policyContentCollectionView.layoutAttributesForItem(at: indexPath) {
+            let cellFrame = cellAttributes.frame
+            let cellYPosition = cellFrame.origin.y
+            scrollView.setContentOffset(CGPoint(x: 0, y: policyTypeLabel.frame.size.height + policyListTableView.calculateDynamicHeight() + 28 + separateView.frame.size.height + cellYPosition), animated: true)
+        }
     }
 }
 
 extension PolicyViewController {
     
-}
-
-extension PolicyViewController {
     
-   
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         [policyTypeLabel, separateView, policyContentCollectionView, policyListTableView, policyContentCollectionView].forEach {
             scrollView.addSubview($0)
         }
-       
+        
     }
     
     private func setUpConstraints() {
