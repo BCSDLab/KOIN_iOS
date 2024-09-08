@@ -301,6 +301,16 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         noticeListCollectionView.pageDidChangedPublisher.sink { [weak self] page in
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
+        
+        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId in
+            let service = DefaultNoticeService()
+            let repository = DefaultNoticeListRepository(service: service)
+            let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository)
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticedataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+            let viewController = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
