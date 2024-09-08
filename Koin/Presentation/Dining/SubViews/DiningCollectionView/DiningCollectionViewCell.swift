@@ -236,7 +236,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         else {
             var image = UIImage()
             if let date = info.date.toDateFromYYYYMMDD() {
-                if isWeekend(date: date) {
+                if date.isWeekend() {
                     menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
                 }
                 else {
@@ -266,15 +266,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
             menuImageView.isHidden = true
             menuImageBackground.isUserInteractionEnabled = false
         }
-    }
-    
-    private func isWeekend(date: Date) -> Bool {
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.weekday], from: date)
-        if let weekday = components.weekday {
-            return weekday == 1 || weekday == 7
-        }
-        return false
     }
     
     private func hideImageView() {
