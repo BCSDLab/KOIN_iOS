@@ -12,6 +12,7 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     
     private var popularNoticeList: [NoticeArticleDTO] = []
     let pageDidChangedPublisher = PassthroughSubject<Int, Never>()
+    let tapNoticeListPublisher = PassthroughSubject<Int, Never>()
     private var timer: Timer?
     private var currentIdx = 0
     private var isLastIdx: Bool = false
@@ -133,5 +134,9 @@ extension NoticeListCollectionView {
         let noticeArticleTitle = popularNoticeList[indexPath.row]
         cell.configure(title: noticeArticleTitle.title)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        tapNoticeListPublisher.send(popularNoticeList[indexPath.row].id)
     }
 }
