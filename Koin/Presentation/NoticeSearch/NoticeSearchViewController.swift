@@ -95,6 +95,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         deleteRecentSearchDataButton.addTarget(self, action: #selector(deleteAllButtonTapped), for: .touchUpInside)
         configureView()
         bind()
+        hideKeyboardWhenTappedAround()
         inputSubject.send(.getHotKeyWord(5))
         inputSubject.send(.fetchRecentSearchedWord)
         noticeListTableView.isHidden = true
