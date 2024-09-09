@@ -24,6 +24,10 @@ struct UserPutRequest: Encodable {
     }
     
     mutating func sha256() {
-        password = EncodingWorker().sha256(text: password ?? "")
+        if let nonHashedPassword = password {
+            password = EncodingWorker().sha256(text: nonHashedPassword)
+        } else {
+            password = nil
+        }
     }
 }
