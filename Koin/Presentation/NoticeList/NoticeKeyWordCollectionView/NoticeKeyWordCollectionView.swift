@@ -48,7 +48,6 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
         selectedKeyWordIdx = keyWordIdx
         reloadData()
     }
-<<<<<<< HEAD
     
     func selectKeyWord(keyWord: String) {
         for index in 0..<noticeKeyWordList.count {
@@ -60,8 +59,6 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
         }
     }
 
-=======
->>>>>>> a8c0b4b (chore: 키워드가 적절하게 초기화될 수 있도록 변경)
 }
 
 extension NoticeKeyWordCollectionView {
