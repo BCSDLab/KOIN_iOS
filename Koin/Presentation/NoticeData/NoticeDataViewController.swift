@@ -96,7 +96,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.backgroundColor = .appColor(.neutral100)
     }
     
-    private let contentTextView = UITextView()
+    private let contentTextView = UITextView().then {
+        $0.isScrollEnabled = false
+    }
     
     private let contentImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
