@@ -53,7 +53,7 @@ extension String {
                     try paragraph.remove()
                 }
                 
-                if let img = try paragraph.select("img").first() {
+                if (try paragraph.select("img").first()) != nil {
                     try paragraph.append("<p></p>")
                 }
             }
@@ -61,12 +61,18 @@ extension String {
             let allTags: [Elements] = [paragraphs, bTags, iTags, hTags, spans, ulTags, olTags, liTags]
             for elements in allTags {
                 for element in elements {
-                    try element.attr("style", "font-family: 'Pretandard-Medium', sans-serif; font-size: 16px;")
+                    let existingStyle = try element.attr("style")
+                    let newStyle = "font-family: 'Pretandard-Medium', sans-serif; font-size: 16px;"
+                    let updatedStyle = existingStyle.isEmpty ? newStyle : "\(existingStyle); \(newStyle)"
+                    try element.attr("style", updatedStyle)
                 }
             }
-            
+           
             for element in bTags {
-                try element.attr("style", "font-family: 'Pretandard-Bold', sans-serif; font-size: 16px;")
+                let existingStyle = try element.attr("style")
+                let newBoldStyle = "font-family: 'Pretandard-Bold', sans-serif; font-size: 16px;"
+                let updatedBoldStyle = existingStyle.isEmpty ? newBoldStyle : "\(existingStyle); \(newBoldStyle)"
+                try element.attr("style", updatedBoldStyle)
             }
             
             let setHeightUsingCSS = """
