@@ -50,19 +50,10 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
     }
     
-    func updateKeyWordList(keyWordList: [NoticeKeyWordDTO]) {
+    func updateKeyWordList(keyWordList: [NoticeKeyWordDTO], keyWordIdx: Int) {
         let index = IndexPath(row: 0, section: 0)
         if let cell = cellForRow(at: index) as? NoticeListTableViewKeyWordCell {
-            cell.updateKeyWordsList(keyWordList: keyWordList)
-            reloadData()
-        }
-    }
-    
-    func updateSelectedKeyWord(keyWord: String) {
-        let index = IndexPath(row: 0, section: 0)
-        if let cell = cellForRow(at: index) as? NoticeListTableViewKeyWordCell {
-            cell.updateSelectedKeyWord(keyWord: keyWord)
-            reloadData()
+            cell.updateKeyWordsList(keyWordList: keyWordList, keyWordIdx: keyWordIdx)
         }
     }
 }

@@ -13,13 +13,11 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Input {
         case changeBoard(NoticeListType)
         case changePage(Int)
-        case getUserKeyWordList
-        case changeKeyWord(NoticeKeyWordDTO)
+        case getUserKeyWordList(NoticeKeyWordDTO? = nil)
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
-        case updateUserKeyWordList([NoticeKeyWordDTO], NoticeListType)
-        case updateSelectedKeyWord(String)
+        case updateUserKeyWordList([NoticeKeyWordDTO], Int)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -49,10 +47,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.changeBoard(noticeListType: noticeListType)
             case let .changePage(page):
                 self?.getNoticeInfo(page: page)
-            case .getUserKeyWordList:
-                self?.getUserKeyWordList()
-            case let .changeKeyWord(keyWord):
-                self?.changeKeyWord(keyWord: keyWord)
+            case let .getUserKeyWordList(keyWord):
+                self?.getUserKeyWordList(keyWord: keyWord)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -75,28 +71,46 @@ extension NoticeListViewModel {
         }).store(in: &subscriptions)
     }
     
-    private func getUserKeyWordList() {
-        fetchMyKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] completion in
-            guard let self = self else { return }
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
-                outputSubject.send(.updateUserKeyWordList(result, noticeListType))
-            }
-        }, receiveValue: { [weak self] keyWords in
-            guard let self = self else { return }
-            self.outputSubject.send(.updateUserKeyWordList(keyWords, noticeListType))
-        }).store(in: &subscriptions)
-    }
-    
-    private func changeKeyWord(keyWord: NoticeKeyWordDTO) {
-        if keyWord.id == -1 {
-            self.keyWord = nil
-        }
-        else {
+    private func getUserKeyWordList(keyWord: NoticeKeyWordDTO? = nil) {
+        var keyWordIndex = 0
+        var keyWordValue: NoticeKeyWordDTO = NoticeKeyWordDTO(id: 0, keyWord: "")
+        var count = 0
+        if let keyWord = keyWord {
+            keyWordValue = keyWord
             self.keyWord = keyWord.keyWord
         }
-        outputSubject.send(.updateSelectedKeyWord(keyWord.keyWord))
+        else if self.keyWord != nil {
+            keyWordValue = NoticeKeyWordDTO(id: nil, keyWord: self.keyWord ?? "")
+        }
+        
+        fetchUserKeyWord(completion: { [weak self] keyWords in
+            for (index, value) in keyWords.enumerated() {
+                if value.keyWord == keyWordValue.keyWord {
+                    keyWordIndex = index + 1
+                    count += 1
+                    break
+                }
+            }
+            if count == 0 {
+                keyWordIndex = 0
+                keyWordValue = NoticeKeyWordDTO(id: nil, keyWord: "모두보기")
+                self?.keyWord = nil
+            }
+            self?.outputSubject.send(.updateUserKeyWordList(keyWords, keyWordIndex))
+        })
+    }
+    
+    private func fetchUserKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
+        fetchMyKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] response in
+            guard let self = self else { return }
+            if case let .failure(error) = response {
+                Log.make().error("\(error)")
+                let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
+                completion(result)
+            }
+        }, receiveValue: { keyWords in
+            completion(keyWords)
+        }).store(in: &subscriptions)
     }
 }
 
