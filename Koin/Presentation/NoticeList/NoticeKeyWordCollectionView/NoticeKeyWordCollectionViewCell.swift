@@ -32,9 +32,6 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
     func configure(keyWordModel: String, isSelected: Bool) {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 17
-        
-        keyWord.font = .appFont(.pretendardMedium, size: 14)
-        keyWord.textColor = .appColor(.neutral500)
         keyWord.text = keyWordModel
         
         keyWord.isHidden = false
