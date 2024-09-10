@@ -234,7 +234,15 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
         if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
-            menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
+            var image = UIImage()
+            if let date = info.date.toDateFromYYYYMMDD() {
+                if date.isWeekend() {
+                    menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
+                }
+                else {
+                    menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
+                }
+            }
             menuImageView.contentMode = .scaleToFill
         }
         

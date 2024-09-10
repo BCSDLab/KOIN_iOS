@@ -8,6 +8,15 @@
 import Foundation
 
 extension Date {
+    func isWeekend() -> Bool {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.weekday], from: self)
+        if let weekday = components.weekday {
+            return weekday == 1 || weekday == 7
+        }
+        return false
+    }
+    
     func formatDateToYYMMDD() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyMMdd"
