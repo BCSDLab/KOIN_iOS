@@ -96,6 +96,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         reviewListViewController.disappearReview(reviewId, shopId)
     }
     
+    func scrollViewHeightChanged(point: CGPoint) {
+        reviewListViewController.scrollViewHeightChanged(point: point)
+    }
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
         let previousIndex = viewControllerIndex - 1
@@ -109,4 +113,8 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         guard nextIndex < pages.count else { return nil }
         return pages[nextIndex]
     }
+}
+
+extension ShopDataPageViewController: UIScrollViewDelegate {
+
 }

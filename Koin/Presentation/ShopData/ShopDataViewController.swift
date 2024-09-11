@@ -281,7 +281,18 @@ extension ShopDataViewController: UIScrollViewDelegate {
             stickyButtonStackView.isHidden = !(scrollViewContentOffsetY > 600)
             emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
         }
-
+        
+        let visibleRect = CGRect(x: 0, y: scrollView.contentOffset.y, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height)
+        print("|-----|")
+        print(scrollView.contentOffset.y)
+        let height = stickySelectSegmentControl.isHidden ? categorySelectSegmentControl.frame.origin.y : stickySelectSegmentControl.frame.origin.y
+//        print(scrollView.bounds.size.height - height)
+//        print(stickySelectSegmentControl.frame.origin.y)
+//        print(categorySelectSegmentControl.frame.origin.y)
+//        print(height)
+//        print("-----")
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.maxY - 1 - height)
+        pageViewController.scrollViewHeightChanged(point: visiblePoint)
     }
     
     private func addButtonItems() {

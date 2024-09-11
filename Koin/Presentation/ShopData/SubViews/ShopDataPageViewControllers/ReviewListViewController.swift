@@ -131,6 +131,13 @@ final class ReviewListViewController: UIViewController {
     func disappearReview(_ reviewId: Int, _ shopId: Int) {
         reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
     }
+    var count = 0
+    func scrollViewHeightChanged(point: CGPoint) {
+        if let visibleIndexPath = reviewListCollectionView.indexPathForItem(at: point) {
+            print("\(count) \(visibleIndexPath.row)")
+        }
+        count += 1
+    }
     
     private func changeCollectionViewHeight(reviewCount: Int) {
         let height = reviewListCollectionView.calculateDynamicHeight()
