@@ -62,19 +62,6 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return label
     }()
     
-    private let myInfoButton: UIButton = {
-        let button = UIButton()
-        let originalImage = UIImage.appImage(symbol: .person)?.withRenderingMode(.alwaysTemplate)
-        button.setImage(originalImage, for: .normal)
-        button.tintColor = UIColor.appColor(.neutral600)
-        button.setTitle(" 내 정보", for: .normal)
-        button.semanticContentAttribute = .forceLeftToRight
-        button.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
     private let logOutButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
@@ -170,10 +157,6 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         navigationController?.setNavigationBarHidden(true, animated: animated)
         inputSubject.send(.fetchUserData)
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
       
     // MARK: - Bind
     
@@ -225,7 +208,7 @@ extension ServiceSelectViewController {
         //timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
-        myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
+   //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
         settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
@@ -338,29 +321,6 @@ extension ServiceSelectViewController {
         }
     }
     
-    @objc func myInfoButtonTapped() {
-        
-        if viewModel.isLogined {
-            let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
-            let modifyUseCase = DefaultModifyUseCase(userRepository: userRepository)
-            let revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
-            let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository)
-            let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let myPageViewController = MyPageViewController(viewModel: MyPageViewModel(fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, modifyUseCase: modifyUseCase, revokeUseCase: revokeUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase))
-            myPageViewController.title = "내 정보"
-            navigationController?.pushViewController(myPageViewController, animated: true)
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerMyInfoWithLogin, .click, "내 정보"))
-        } else {
-            showLoginAlert()
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerMyInfoWithoutLogin, .click, "내 정보"))
-        }
-        
-    }
-    
     private func showLoginAlert() {
         let alertTitle = "로그인"
         let alertMessage = "로그인 하시겠습니까?"
@@ -405,7 +365,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton].forEach {
             view.addSubview($0)
         }
     }
@@ -461,12 +421,6 @@ extension ServiceSelectViewController {
             make.bottom.equalTo(nicknameLabel.snp.bottom)
             make.leading.equalTo(nicknameLabel.snp.trailing)
         }
-//        myInfoButton.snp.makeConstraints { make in
-//            make.top.equalTo(nicknameLabel.snp.bottom).offset(30)
-//            make.leading.equalTo(view.snp.leading).offset(24)
-//            make.height.equalTo(24)
-//            make.width.equalTo(68)
-//        }
         logOutButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameLabel.snp.bottom).offset(33.5)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
