@@ -32,11 +32,6 @@ final class ReviewListViewController: UIViewController {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
-    private let reviewLoginModalViewController = ReviewLoginModalViewController(message: "작성").then {
-           $0.modalPresentationStyle = .overFullScreen
-           $0.modalTransitionStyle = .crossDissolve
-       }
-    
     private let totalScoreLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 32)
         $0.textColor = UIColor.appColor(.neutral800)
@@ -175,8 +170,7 @@ final class ReviewListViewController: UIViewController {
                     }
                 } else {
                     if let parameter {
-                        // ???: 이게 왜있는지 모르겠다.
-//                        self.navigateToReportReview(parameter: parameter)
+                        self.navigateToReportReview(parameter: parameter)
                     } else {
                         self.navigateToWriteReview()
                     }
@@ -199,14 +193,13 @@ final class ReviewListViewController: UIViewController {
             self.present(self.deleteReviewModalViewController, animated: true, completion: nil)
         }.store(in: &cancellables)
         
-        reviewLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        reviewWriteLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteLogin, .click, self?.viewModel.shopName ?? ""))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
-        reviewLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+        reviewWriteLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, self?.viewModel.shopName ?? ""))
-            self?.navigateToLogin()
         }.store(in: &cancellables)
         
         deleteReviewModalViewController.deleteButtonPublisher.sink { [weak self] in
@@ -218,6 +211,16 @@ final class ReviewListViewController: UIViewController {
         deleteReviewModalViewController.cancelButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteCancel, .click, self.viewModel.shopName))
+        }.store(in: &cancellables)
+        
+        reviewReportLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.navigateToLogin()
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReportLogin, .click, self?.viewModel.shopName ?? ""))
+        }.store(in: &cancellables)
+        
+        reviewReportLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+         //   print(self?.viewModel.shopName)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReportCancel, .click, self?.viewModel.shopName ?? ""))
         }.store(in: &cancellables)
         
         reviewListCollectionView.modifyButtonPublisher.sink { [weak self] parameter in
@@ -242,11 +245,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            self?.shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), reviewId: parameter.0, shopId: parameter.1, shopName: self?.viewModel.shopName ?? ""))
-            if let viewController = self?.shopReviewReportViewController {
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReport, .click, self?.viewModel.shopName ?? ""))
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
+            self?.inputSubject.send(.checkLogin(parameter))
         }.store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
@@ -268,12 +267,15 @@ extension ReviewListViewController {
         inputSubject.send(.checkLogin(nil))
     }
     
+    private func navigateToReportReview(parameter: (Int, Int)) {
+        let shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), reviewId: parameter.0, shopId: parameter.1, shopName: viewModel.shopName))
+            navigationController?.pushViewController(shopReviewReportViewController, animated: true)
+        }
+    
     private func navigateToLogin() {
         let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
                 loginViewController.title = "로그인"
                 navigationController?.pushViewController(loginViewController, animated: true)
-        loginViewController.title = "로그인"
-        navigationController?.pushViewController(loginViewController, animated: true)
     }
     
     private func navigateToWriteReview() {
