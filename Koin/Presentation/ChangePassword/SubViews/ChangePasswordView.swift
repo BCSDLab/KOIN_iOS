@@ -87,8 +87,11 @@ extension ChangePasswordView {
     
     @objc private func changeSecureButtonTapped(_ button: UIButton) {
         switch button {
-        case changeSecureButton1: passwordTextField.isSecureTextEntry.toggle()
+        case changeSecureButton1: 
+            passwordTextField.isSecureTextEntry.toggle()
+            changeSecureButton1.setImage(passwordTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
         default: passwordCheckTextField.isSecureTextEntry.toggle()
+            changeSecureButton2.setImage(passwordCheckTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
         }
         
     }

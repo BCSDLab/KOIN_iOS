@@ -76,6 +76,7 @@ enum ImageAsset: String {
     case chevronRight
     case chevronUp
     case visibility
+    case visibilityNon
     case check
     case checkGreen
     case topCircle

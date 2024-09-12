@@ -73,6 +73,7 @@ final class CertificationView: UIView {
 extension CertificationView {
     @objc private func changeSecureButtonTapped() {
         passwordTextField.isSecureTextEntry.toggle()
+        changeSecureButton.setImage(passwordTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
     }
     @objc private func passwordDidChanged(_ textField: UITextField) {
         passwordEmptyCheckPublisher.send(textField.text?.isEmpty ?? true)
