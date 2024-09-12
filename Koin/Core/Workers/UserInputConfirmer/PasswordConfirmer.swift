@@ -31,7 +31,7 @@ struct PasswordConfirmer: Confirmable {
     }
     
     private func checkPasswordInput(password: String) -> Bool {
-        let specialCharacterPattern = ".*[!@#$%^&*]+.*"
+        let specialCharacterPattern = ".*[!@#$%^&*(0_-+=]+.*"
         let digitPattern = ".*[0-9]+.*"
                
         let specialCharacterResult = password.range(of: specialCharacterPattern, options: .regularExpression) == nil
