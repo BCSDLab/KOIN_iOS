@@ -74,6 +74,13 @@ final class MyProfileViewController: UIViewController {
     private let majorValueLabel = UILabel().then { label in
     }
     
+    private let genderTitleLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then { label in
+        label.text = "성별"
+    }
+    
+    private let genderValueLabel = UILabel().then { label in
+    }
+    
     private let revokeButton = UIButton().then { button in
         button.setTitle("회원탈퇴", for: .normal)
         button.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
@@ -163,6 +170,13 @@ extension MyProfileViewController {
         phoneValueLabel.text = profile.phoneNumber
         studentNumberValueLabel.text = profile.studentNumber
         majorValueLabel.text = profile.major
+        if let genderIntValue = profile.gender {
+            if genderIntValue == 0 {
+                genderValueLabel.text = "남성"
+            } else {
+                genderValueLabel.text = "여성"
+            }
+        }
     }
     
 }
@@ -171,7 +185,7 @@ extension MyProfileViewController {
     
    
     private func setUpLayOuts() {
-        [infoLabel, idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, stuentInfoLabel, studentNumberTitleLabel, majorTitleLabel, idValueLabel, nameValueLabel, nicknameValueLabel, phoneValueLabel, studentNumberValueLabel, majorValueLabel, revokeButton].forEach {
+        [infoLabel, idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, stuentInfoLabel, studentNumberTitleLabel, majorTitleLabel, idValueLabel, nameValueLabel, nicknameValueLabel, phoneValueLabel, studentNumberValueLabel, majorValueLabel, genderTitleLabel, genderValueLabel, revokeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -247,6 +261,16 @@ extension MyProfileViewController {
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(58)
         }
+        genderTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(majorTitleLabel.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.height.equalTo(58)
+        }
+        genderValueLabel.snp.makeConstraints { make in
+            make.top.equalTo(genderTitleLabel)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(58)
+        }
         revokeButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
@@ -256,11 +280,11 @@ extension MyProfileViewController {
     }
     
     private func setUpLabels() {
-        [idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, studentNumberTitleLabel, majorTitleLabel].forEach { label in
+        [idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, studentNumberTitleLabel, majorTitleLabel, genderTitleLabel].forEach { label in
             label.font = UIFont.appFont(.pretendardRegular, size: 16)
             label.textColor = UIColor.appColor(.neutral800)
         }
-        [idValueLabel, nameValueLabel, nicknameValueLabel, phoneValueLabel, studentNumberValueLabel, majorValueLabel].forEach { label in
+        [idValueLabel, nameValueLabel, nicknameValueLabel, phoneValueLabel, studentNumberValueLabel, majorValueLabel, genderValueLabel].forEach { label in
             label.font = UIFont.appFont(.pretendardRegular, size: 16)
             label.textColor = UIColor.appColor(.neutral800)
         }

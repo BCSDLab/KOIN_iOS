@@ -91,6 +91,16 @@ final class ChangeMyProfileViewController: UIViewController {
         button.layer.masksToBounds = true
     }
     
+    private let genderTitleLabel = UILabel().then {
+        $0.text = "성별"
+    }
+    
+    private let maleButton = UIButton().then { _ in
+    }
+    
+    private let femaleButton = UIButton().then { _ in
+    }
+    
     private let saveButton = UIButton().then {
         $0.setTitle("저장", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
@@ -119,10 +129,14 @@ final class ChangeMyProfileViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        setUpButtonText(button: maleButton, text: "남성")
+        setUpButtonText(button: femaleButton, text: "여성")
         inputSubject.send(.fetchUserData)
         inputSubject.send(.fetchDeptList)
         deptButton.addTarget(self, action: #selector(deptButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        maleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
+        femaleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         hideKeyboardWhenTappedAround()
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
             $0.delegate = self
@@ -151,6 +165,42 @@ final class ChangeMyProfileViewController: UIViewController {
 
 extension ChangeMyProfileViewController {
     
+    @objc private func genderButtonTapped(sender: UIButton) {
+        switch sender {
+        case maleButton: 
+            maleButton.isSelected = true
+            femaleButton.isSelected = false
+        default:
+            femaleButton.isSelected = true
+            maleButton.isSelected = false
+        }
+        setUpButtonText(button: maleButton, text: "남성")
+        setUpButtonText(button: femaleButton, text: "여성")
+    }
+    
+    private func setUpButtonText(button: UIButton, text: String) {
+        var configuration = UIButton.Configuration.plain()
+        let imageSize = CGSize(width: 16, height: 16)
+        let image = button.isSelected
+        ? UIImage.appImage(asset: .filledCircle)
+        : UIImage.appImage(asset: .circle)
+        
+        let resizedImage = image?.withConfiguration(
+            UIImage.SymbolConfiguration(pointSize: imageSize.width, weight: .regular)
+        )
+        
+        configuration.image = resizedImage
+        var text = AttributedString(text)
+        text.font = UIFont.appFont(.pretendardRegular, size: 16)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 16
+        configuration.baseBackgroundColor = .systemBackground
+        configuration.baseForegroundColor = UIColor.appColor(.neutral800)
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        button.contentHorizontalAlignment = .leading
+        button.configuration = configuration
+    }
+    
     @objc private func deptButtonTapped() {
         deptDropDown.show()
     }
@@ -165,7 +215,11 @@ extension ChangeMyProfileViewController {
             if label.text == "학부" { deptText = nil }
             else { deptText = label.text }
         }
-        let userInfo = UserPutRequest(gender: nil, identity: 0, isGraduated: false, major: deptText, name: nameText, nickname: nicknameText, password: nil, phoneNumber: phonetext, studentNumber: studentNumberText)
+        let gender: Int?
+        if maleButton.isSelected { gender = 0 }
+        else if femaleButton.isSelected { gender = 1 }
+        else { gender = nil }
+        let userInfo = UserPutRequest(gender: gender, identity: 0, isGraduated: false, major: deptText, name: nameText, nickname: nicknameText, password: nil, phoneNumber: phonetext, studentNumber: studentNumberText)
         inputSubject.send(.modifyProfile(userInfo))
     }
     
@@ -183,6 +237,15 @@ extension ChangeMyProfileViewController {
             attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
             buttonConfiguration.attributedTitle = attributedTitle
             deptButton.configuration = buttonConfiguration
+        }
+        if let genderIntValue = profile.gender {
+            if genderIntValue == 0 {
+                maleButton.isSelected = true
+                setUpButtonText(button: maleButton, text: "남성")
+            } else {
+                femaleButton.isSelected = true
+                setUpButtonText(button: femaleButton, text: "여성")
+            }
         }
     }
     
@@ -212,7 +275,7 @@ extension ChangeMyProfileViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(saveButton)
-        [primaryInfoLabel, idTitleLabel, idValueLabel, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton].forEach {
+        [primaryInfoLabel, idTitleLabel, idValueLabel, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -289,6 +352,22 @@ extension ChangeMyProfileViewController {
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(46)
             make.width.equalTo(200)
+        }
+        genderTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(deptButton.snp.bottom).offset(30)
+            make.leading.equalTo(nameTitleLabel.snp.leading)
+        }
+        maleButton.snp.makeConstraints { make in
+            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
+            make.leading.equalTo(view.snp.leading).offset(40)
+            make.width.equalTo(70)
+            make.height.equalTo(26)
+        }
+        femaleButton.snp.makeConstraints { make in
+            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
+            make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.width.equalTo(70)
+            make.height.equalTo(26)
             make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
         }
         saveButton.snp.makeConstraints { make in
