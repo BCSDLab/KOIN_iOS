@@ -162,20 +162,19 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         bind()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillAppear(true)
         navigationController?.setNavigationBarHidden(true, animated: animated)
         inputSubject.send(.fetchUserData)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    
+      
     // MARK: - Bind
     
     private func bind() {
