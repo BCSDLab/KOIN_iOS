@@ -191,6 +191,7 @@ extension ChangeMyProfileViewController {
         dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
         dropDown.dataSource = dataSource
         dropDown.direction = .bottom
+        dropDown.selectionBackgroundColor = .clear
         dropDown.selectionAction = { (index: Int, item: String) in
             var buttonConfiguration = UIButton.Configuration.plain()
             buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
