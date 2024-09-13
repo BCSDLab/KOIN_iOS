@@ -296,7 +296,7 @@ extension ChangeMyProfileViewController {
         }
         idValueLabel.snp.makeConstraints { make in
             make.top.equalTo(idTitleLabel.snp.bottom).offset(18)
-            make.leading.equalTo(40)
+            make.leading.equalTo(24)
         }
         nameTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(idValueLabel.snp.bottom).offset(20)
@@ -304,7 +304,7 @@ extension ChangeMyProfileViewController {
         }
         nameTextField.snp.makeConstraints { make in
             make.top.equalTo(nameTitleLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-40)
             make.height.equalTo(46)
         }
@@ -314,7 +314,7 @@ extension ChangeMyProfileViewController {
         }
         nicknameTextField.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-40)
             make.height.equalTo(46)
         }
@@ -324,7 +324,7 @@ extension ChangeMyProfileViewController {
         }
         phoneTextField.snp.makeConstraints { make in
             make.top.equalTo(phoneTitleLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-40)
             make.height.equalTo(46)
         }
@@ -339,7 +339,7 @@ extension ChangeMyProfileViewController {
         }
         studentNumberTextField.snp.makeConstraints { make in
             make.top.equalTo(studentNumberTitleLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-40)
             make.height.equalTo(46)
         }
@@ -359,7 +359,7 @@ extension ChangeMyProfileViewController {
         }
         maleButton.snp.makeConstraints { make in
             make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.leading).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(24)
             make.width.equalTo(70)
             make.height.equalTo(26)
         }
