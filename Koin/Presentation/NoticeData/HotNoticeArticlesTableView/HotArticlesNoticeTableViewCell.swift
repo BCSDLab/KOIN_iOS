@@ -53,6 +53,7 @@ extension HotNoticeArticlesTableViewCell {
         boardTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(13.5)
             $0.leading.equalToSuperview().offset(24)
+            $0.width.equalTo(25)
         }
         noticeTitle.snp.makeConstraints {
             $0.top.equalTo(boardTitle)

@@ -23,10 +23,12 @@ final class DefaultFetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase 
         return noticeListRepository.fetchHotNoticeArticle()
             .map { noticeArticles in
                 if let noticeId = noticeId {
-                    return noticeArticles.filter { $0.id != noticeId }.map { $0.toDomainWithChangedDate()
+                    return noticeArticles.filter { $0.id != noticeId }.map {
+                        return $0.toDomainWithChangedDate()
                     }
                 }
-                return noticeArticles.map { $0.toDomainWithChangedDate() }
+                return noticeArticles.map {
+                    return $0.toDomainWithChangedDate() }
             }
             .eraseToAnyPublisher()
     }
