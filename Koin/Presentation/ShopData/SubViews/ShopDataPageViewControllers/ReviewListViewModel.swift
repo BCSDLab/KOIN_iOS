@@ -16,6 +16,9 @@ final class ReviewListViewModel: ViewModelProtocol {
     var shopId: Int = 0
     var shopName: String = ""
     var deleteParameter: (Int, Int) = (0, 0)
+    var currentPage: Int = 0
+    var totalPage: Int = 0
+    var fetchLock: Bool = false
 
     
     enum Input {

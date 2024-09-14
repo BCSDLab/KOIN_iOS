@@ -16,6 +16,7 @@ final class ReviewListViewController: UIViewController {
     let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
     let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
     let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
+    let scrollFetchPublisher = PassthroughSubject<Int, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     private let viewModel = ReviewListViewModel()
@@ -112,15 +113,21 @@ final class ReviewListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        reviewCountFetchRequestPublisher.send(())
     }
     
-    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
-        reviewListCollectionView.setReviewList(review)
+    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool, _ currentPage: Int, _ totalPage: Int, _ disappear: Bool) {
+        if disappear {
+            reviewListCollectionView.resetReviewList()
+        }
+        reviewListCollectionView.addReviewList(review)
         viewModel.shopId = shopId
         viewModel.shopName = shopName
         changeCollectionViewHeight(reviewCount: review.count)
         reviewListCollectionView.setHeader(fetchStandard, isMine)
+        viewModel.fetchLock = false
+        viewModel.currentPage = currentPage
+        viewModel.totalPage = totalPage
+        print("\(currentPage) \(totalPage)")
     }
     
     func setReviewStatistics(statistics: StatisticsDTO) {
@@ -132,12 +139,14 @@ final class ReviewListViewController: UIViewController {
     func disappearReview(_ reviewId: Int, _ shopId: Int) {
         reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
     }
-    var count = 0
+    
     func scrollViewHeightChanged(point: CGPoint) {
         if let visibleIndexPath = reviewListCollectionView.indexPathForItem(at: point) {
-            print("\(count) \(visibleIndexPath.row)")
+            if viewModel.currentPage < viewModel.totalPage && !viewModel.fetchLock && reviewListCollectionView.reviewList.count - 6 < visibleIndexPath.row {
+                viewModel.fetchLock = true
+                scrollFetchPublisher.send(viewModel.currentPage + 1)
+            }
         }
-        count += 1
     }
     
     private func changeCollectionViewHeight(reviewCount: Int) {
@@ -219,7 +228,6 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewReportLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
-         //   print(self?.viewModel.shopName)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReportCancel, .click, self?.viewModel.shopName ?? ""))
         }.store(in: &cancellables)
         

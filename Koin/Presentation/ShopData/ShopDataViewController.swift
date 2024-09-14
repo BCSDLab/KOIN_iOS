@@ -245,14 +245,15 @@ final class ShopDataViewController: UIViewController {
                 self?.updateButtons(for: strongSelf.stickyButtonStackView, with: shopMenuList)
             case let .showShopEventList(eventList):
                 self?.pageViewController.setEventList(eventList)
-            case let .showShopReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine):
-                self?.pageViewController.setReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine)
+            case let .showShopReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear):
+                self?.pageViewController.setReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear)
             case let .showShopReviewStatistics(statistics):
                 self?.pageViewController.setReviewStatistic(statistics)
             case let .showToast(message, success):
                 self?.showToast(message: message, success: success)
             case let .updateReviewCount(count):
                 self?.categorySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
+                self?.stickySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
             case let .disappearReview(reviewId, shopId):
                 self?.pageViewController.disappearReview(reviewId, shopId: shopId)
             }
@@ -274,6 +275,10 @@ final class ShopDataViewController: UIViewController {
         
         pageViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
             self?.inputSubject.send(.updateReviewCount)
+        }.store(in: &subscriptions)
+        
+        pageViewController.scrollFetchPublisher.sink { [weak self] page in
+            self?.inputSubject.send(.fetchShopReviewList(page))
         }.store(in: &subscriptions)
         
         menuImageCollectionView.didSelectImage.sink { [weak self] image in
@@ -301,17 +306,12 @@ extension ShopDataViewController: UIScrollViewDelegate {
             emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
         }
         
-        let visibleRect = CGRect(x: 0, y: scrollView.contentOffset.y, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height)
-        print("|-----|")
-        print(scrollView.contentOffset.y)
-        let height = stickySelectSegmentControl.isHidden ? categorySelectSegmentControl.frame.origin.y : stickySelectSegmentControl.frame.origin.y
-//        print(scrollView.bounds.size.height - height)
-//        print(stickySelectSegmentControl.frame.origin.y)
-//        print(categorySelectSegmentControl.frame.origin.y)
-//        print(height)
-//        print("-----")
-        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.maxY - 1 - height)
-        pageViewController.scrollViewHeightChanged(point: visiblePoint)
+        if categorySelectSegmentControl.selectedSegmentIndex == 2 {
+            let visibleRect = CGRect(x: 0, y: scrollView.contentOffset.y, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height)
+            let height = stickySelectSegmentControl.isHidden ? categorySelectSegmentControl.frame.origin.y : stickySelectSegmentControl.frame.origin.y
+            let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.maxY - 1 - height)
+            pageViewController.scrollViewHeightChanged(point: visiblePoint)
+        }
     }
     
     private func addButtonItems() {
@@ -509,16 +509,14 @@ extension ShopDataViewController {
     }
     
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
-        
         pageViewController.switchToPage(index: sender.selectedSegmentIndex)
-        
         switch sender {
         case categorySelectSegmentControl: stickySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         default: categorySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         }
         let shopTitle = shopTitleLabel.text ?? ""
         switch sender.selectedSegmentIndex {
-        case 0: 
+        case 0:
             inputSubject.send(.fetchShopMenuList)
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .click, shopTitle))
             if isReviewTabClicked {
@@ -534,7 +532,8 @@ extension ShopDataViewController {
                 inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "이벤트/공지", .shopDetailViewReviewBackByTab))
             }
             isReviewTabClicked = false
-        default: inputSubject.send(.fetchShopReviewList)
+        default: 
+            inputSubject.send(.fetchShopReviewList(1))
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopTitle))

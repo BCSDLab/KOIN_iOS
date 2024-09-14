@@ -10,7 +10,7 @@ import Foundation
 struct FetchShopReviewRequest: Encodable {
     let shopId: Int
     let page: Int
-    let limit: Int = 50
+    let limit: Int = 10
     let sorter: ReviewSortType
 }
 

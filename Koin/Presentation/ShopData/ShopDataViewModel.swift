@@ -27,15 +27,15 @@ final class ShopDataViewModel: ViewModelProtocol {
     private(set) var menuItem: [MenuCategory] = []
     private var fetchStandard: (ReviewSortType, Bool) = (.latest, false) {
         didSet {
-            if fetchStandard.1 { fetchMyReviewList() }
-            else { fetchShopReviewList() }
+            if fetchStandard.1 { fetchMyReviewList(disappear: true) }
+            else { fetchShopReviewList(page: 1, disappear: true) }
         }
     }
     enum Input {
         case viewDidLoad
         case fetchShopEventList
         case fetchShopMenuList
-        case fetchShopReviewList
+        case fetchShopReviewList(Int)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case deleteReview(Int, Int)
         case changeFetchStandard(ReviewSortType?, Bool?)
@@ -46,7 +46,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopData(ShopData)
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
-        case showShopReviewList([Review], Int, String, ReviewSortType, Bool)
+        case showShopReviewList([Review], Int, String, ReviewSortType, Bool, Int, Int, Bool)
         case showShopReviewStatistics(StatisticsDTO)
         case showToast(String, Bool)
         case updateReviewCount(Int)
@@ -81,11 +81,11 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopEventList()
             case .fetchShopMenuList:
                 self?.fetchShopMenuList()
-            case .fetchShopReviewList:
+            case let .fetchShopReviewList(page):
                 if strongSelf.fetchStandard.1 {
-                    self?.fetchMyReviewList()
+                    self?.fetchMyReviewList(disappear: false)
                 } else {
-                    self?.fetchShopReviewList()
+                    self?.fetchShopReviewList(page: page, disappear: false)
                 }
             case let .changeFetchStandard(type, isMine):
                 self?.changeFetchStandard(type, isMine)
@@ -93,7 +93,7 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.deleteReview(reviewId, shopId)
             case .updateReviewCount:
                 self?.updateReviewCount()
-                self?.fetchShopReviewList()
+                self?.fetchShopReviewList(page: 1, disappear: false)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             }
@@ -109,7 +109,7 @@ extension ShopDataViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateReviewCount(response.review.count))
+            self?.outputSubject.send(.updateReviewCount(response.totalCount))
             self?.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
         }.store(in: &subscriptions)
     }
@@ -128,15 +128,18 @@ extension ShopDataViewModel {
     }
     
     private func changeFetchStandard(_ type: ReviewSortType?, _ isMine: Bool?) {
-        if let type = type {
+        if let type = type, let isMine = isMine {
+            fetchStandard = (type, isMine)
+        }
+        else if let type = type {
             fetchStandard.0 = type
         }
-        if let isMine = isMine {
+        else if let isMine = isMine {
             fetchStandard.1 = isMine
         }
     }
     
-    private func fetchMyReviewList() {
+    private func fetchMyReviewList(disappear: Bool) {
         fetchMyReviewUseCase.execute(requestModel: FetchMyReviewRequest(sorter: fetchStandard.0), shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message, false))
@@ -144,19 +147,19 @@ extension ShopDataViewModel {
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
-            self.outputSubject.send(.showShopReviewList(response, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1))
+            self.outputSubject.send(.showShopReviewList(response, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1, response.count % 5, response.count % 5, disappear))
             self.updateReviewCount()
         }.store(in: &subscriptions)
     }
     
-    private func fetchShopReviewList() {
-        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: fetchStandard.0)).sink { completion in
+    private func fetchShopReviewList(page: Int, disappear: Bool) {
+        fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: page, sorter: fetchStandard.0)).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
-            self.outputSubject.send(.showShopReviewList(response.review, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1))
+            self.outputSubject.send(.showShopReviewList(response.review, self.shopId, self.shopName, self.fetchStandard.0, self.fetchStandard.1, response.currentPage, response.totalPage, disappear))
             self.outputSubject.send(.showShopReviewStatistics(response.reviewStatistics))
             self.updateReviewCount()
         }.store(in: &subscriptions)

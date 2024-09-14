@@ -10,7 +10,7 @@ import UIKit
 
 final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSource {
     
-    private var reviewList: [Review] = []
+    private (set)var reviewList: [Review] = []
     private var headerCancellables = Set<AnyCancellable>()
     private var cellCancellables = Set<AnyCancellable>()
     let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
@@ -39,8 +39,13 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         delegate = self
     }
     
-    func setReviewList(_ list: [Review]) {
-        reviewList = list
+    func addReviewList(_ list: [Review]) {
+        reviewList.append(contentsOf: list)
+        reloadData()
+    }
+    
+    func resetReviewList() {
+        reviewList = []
         reloadData()
     }
     

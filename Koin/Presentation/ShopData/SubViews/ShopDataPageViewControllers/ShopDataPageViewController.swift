@@ -16,6 +16,7 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
     let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
     let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
+    let scrollFetchPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -64,6 +65,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         reviewListViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
             self?.reviewCountFetchRequestPublisher.send(())
         }.store(in: &subscriptions)
+        
+        reviewListViewController.scrollFetchPublisher.sink { [weak self] page in
+            self?.scrollFetchPublisher.send(page)
+        }.store(in: &subscriptions)
     }
     
     func switchToPage(index: Int) {
@@ -84,8 +89,8 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         eventListViewController.setEventList(events)
     }
     
-    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool) {
-        reviewListViewController.setReviewList(review, shopId, shopName, fetchStandard, isMine)
+    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool, _ currentPage: Int, _ totalPage: Int, _ disappear: Bool) {
+        reviewListViewController.setReviewList(review, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear)
     }
     
     func setReviewStatistic(_ statistic: StatisticsDTO) {
