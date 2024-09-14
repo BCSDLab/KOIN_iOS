@@ -74,6 +74,8 @@ enum ImageAsset: String {
     case filter
     case eye
     case fireImage
+    case delete
+    case plus
 }
 
 enum SFSymbols: String {
