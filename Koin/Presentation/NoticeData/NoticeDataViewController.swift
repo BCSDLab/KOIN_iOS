@@ -60,13 +60,14 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.setTitle("목록", for: .normal)
     }
     
+    /* 변경된 명세로 이번 배포에서 숨김처리
     private let previousButton = UIButton().then {
         $0.setTitle("이전 글", for: .normal)
     }
     
     private let nextButton = UIButton().then {
         $0.setTitle("다음 글", for: .normal)
-    }
+    } */
     
     private let popularNoticeWrappedView = UIView().then {
         $0.backgroundColor = .white
@@ -130,10 +131,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
+        /*
         nextButton.isHidden = true
         previousButton.isHidden = true
         previousButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside) */
         bind()
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
@@ -180,11 +182,12 @@ extension NoticeDataViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    /*
     @objc private func tapOtherNoticeBtn(sender: UIButton) {
         if let noticeId = sender == previousButton ? viewModel.previousNoticeId : viewModel.nextNoticeId {
             navigateToOtherNoticeDataPage(noticeId: noticeId)
         }
-    }
+    }*/
     
     private func navigateToOtherNoticeDataPage(noticeId: Int) {
         let noticeListService = DefaultNoticeService()
@@ -207,7 +210,7 @@ extension NoticeDataViewController {
         contentTextView.snp.updateConstraints {
             $0.height.equalTo(contentTextViewHeight)
         }
-      
+        /*
         if let prevId = noticeData.prevId {
             previousButton.isHidden = false
             viewModel.previousNoticeId = prevId
@@ -216,7 +219,7 @@ extension NoticeDataViewController {
         if let nextId = noticeData.nextId {
             nextButton.isHidden = false
             viewModel.nextNoticeId = nextId
-        }
+        }*/
         
         if noticeData.hit == 0 {
             [separatorDot2, eyeImage, hitLabel].forEach {
@@ -261,13 +264,14 @@ extension NoticeDataViewController {
     }
     
     private func setUpButtons() {
-        [inventoryButton, previousButton, nextButton].forEach {
+        //[inventoryButton, previousButton, nextButton]
+        [inventoryButton].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
             $0.backgroundColor = .appColor(.neutral300)
             $0.setTitleColor(.appColor(.neutral600), for: .normal)
             $0.layer.cornerRadius = 4
         }
-        previousButton.backgroundColor = .appColor(.neutral400)
+        //previousButton.backgroundColor = .appColor(.neutral400)
     }
     
     private func setUpLayOuts() {
@@ -279,7 +283,8 @@ extension NoticeDataViewController {
         [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName, separatorDot2, eyeImage, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
-        [contentTextView, inventoryButton, previousButton, nextButton].forEach {
+        //[contentTextView, inventoryButton, previousButton, nextButton].forEach {
+        [contentTextView, inventoryButton].forEach {
             contentWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -383,6 +388,7 @@ extension NoticeDataViewController {
             $0.height.equalTo(31)
         }
         
+        /*
         nextButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(inventoryButton)
@@ -395,7 +401,7 @@ extension NoticeDataViewController {
             $0.top.equalTo(inventoryButton)
             $0.height.equalTo(31)
             $0.width.equalTo(59)
-        }
+        }*/
         
         popularNoticeWrappedView.snp.makeConstraints {
             $0.top.equalTo(contentWrappedView.snp.bottom).offset(6)
