@@ -23,9 +23,7 @@ final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
     }
     
     private let addButton = UIButton().then {
-        $0.setTitle("+", for: .normal)
-        $0.setTitleColor(.appColor(.neutral500), for: .normal)
-        $0.backgroundColor = .clear
+        $0.setImage(.appImage(asset: .plus), for: .normal)
     }
     
     // MARK: - Initialization

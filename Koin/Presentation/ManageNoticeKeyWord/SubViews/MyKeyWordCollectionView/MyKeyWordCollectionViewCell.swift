@@ -24,9 +24,7 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     }
     
     private let deleteButton = UIButton().then {
-        $0.setTitle("x", for: .normal)
-        $0.setTitleColor(.appColor(.neutral500), for: .normal)
-        $0.backgroundColor = .clear
+        $0.setImage(.appImage(asset: .delete), for: .normal)
     }
     
     // MARK: - Initialization

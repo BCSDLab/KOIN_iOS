@@ -23,8 +23,7 @@ final class RecentSearchTableViewCell: UITableViewCell {
     }
     
     private let deleteButton = UIButton().then {
-        $0.setTitle("x", for: .normal)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.setImage(.appImage(asset: .delete), for: .normal)
     }
     
     //MARK: -Initialization
