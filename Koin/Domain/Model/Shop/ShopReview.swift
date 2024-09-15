@@ -24,6 +24,7 @@ struct Review {
     let createdAt: String
     let isMine: Bool
     var isModified: Bool
+    var isReported: Bool
     let shopId: Int
     let reviewId: Int
 }
