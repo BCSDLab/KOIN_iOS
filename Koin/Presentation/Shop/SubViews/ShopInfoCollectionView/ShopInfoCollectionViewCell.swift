@@ -33,7 +33,6 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    
     private let borderView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1.0
@@ -52,26 +51,18 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let deliveryLabel: UILabel = {
-        let label = UILabel()
-        label.text = "배달"
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let starImageView = UIImageView().then { _ in
+    }
     
-    private let cardLabel: UILabel = {
-        let label = UILabel()
-        label.text = "카드결제"
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let ratingLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
     
-    private let accountLabel: UILabel = {
-        let label = UILabel()
-        label.text = "계좌이체"
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let reviewCountLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
     private let shopReadyView: ShopReadyView = {
         let view = ShopReadyView(frame: .zero)
@@ -89,20 +80,25 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(info: ShopDTO) {
+    func configure(info: Shop) {
         shopTitleLabel.text = info.name
-        deliveryLabel.textColor = info.delivery ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
-        cardLabel.textColor = info.payCard ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
-        accountLabel.textColor = info.payBank ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
         shopReadyView.setShopTitle(text: info.name)
         shopReadyView.isHidden = info.isOpen ? true : false
         eventLabel.isHidden = info.isEvent ? false : true
+        starImageView.image = info.reviewCount > 0 ? UIImage.appImage(asset: .star) : UIImage.appImage(asset: .emptyStar)
+        ratingLabel.text = "\(info.averageRate)"
+        switch info.reviewCount {
+        case 0: reviewCountLabel.text = "첫 번째 리뷰를 작성해보세요 :)"
+        case 1...9: reviewCountLabel.text = "( 리뷰 \(info.reviewCount)개 )"
+        default: reviewCountLabel.text = "( 리뷰 10+ 개 )"
+        }
+        
     }
 }
 
 extension ShopInfoCollectionViewCell {
     private func setUpLayouts() {
-        [borderView, shopTitleLabel, deliveryLabel, cardLabel, accountLabel, shopReadyView, eventLabel].forEach {
+        [borderView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView, eventLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -124,21 +120,23 @@ extension ShopInfoCollectionViewCell {
         }
         
         shopTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(borderView.snp.top).offset(12)
             make.leading.equalTo(self.snp.leading).offset(16)
-            make.top.equalTo(eventLabel.snp.bottom).offset(5)
         }
         
-        accountLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(shopTitleLabel.snp.centerY)
-            make.trailing.equalTo(self.snp.trailing).offset(-16)
+        starImageView.snp.makeConstraints { make in
+            make.top.equalTo(shopTitleLabel.snp.bottom).offset(6)
+            make.leading.equalTo(shopTitleLabel.snp.leading)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
         }
-        cardLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(shopTitleLabel.snp.centerY)
-            make.trailing.equalTo(accountLabel.snp.leading).offset(-8)
+        ratingLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(starImageView.snp.centerY)
+            make.leading.equalTo(starImageView.snp.trailing).offset(3)
         }
-        deliveryLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(shopTitleLabel.snp.centerY)
-            make.trailing.equalTo(cardLabel.snp.leading).offset(-8)
+        reviewCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(starImageView.snp.centerY)
+            make.leading.equalTo(ratingLabel.snp.trailing).offset(3)
         }
         
         shopReadyView.snp.makeConstraints { make in

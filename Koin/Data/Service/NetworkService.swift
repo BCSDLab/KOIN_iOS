@@ -87,8 +87,35 @@ class NetworkService {
             .catch { error -> AnyPublisher<Void, ErrorResponse> in
                 KeyChainWorker.shared.delete(key: .access)
                 KeyChainWorker.shared.delete(key: .refresh)
-                return Fail(error: ErrorResponse(code: "401", message: "리프레시토큰 만료")).eraseToAnyPublisher()
+                return Fail(error: ErrorResponse(code: "401", message: "인증정보가 만료되었습니다. 다시 로그인해주세요.")).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
+    
+    func uploadFiles(api: ShopAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        guard case ShopAPI.uploadFiles(let files) = api else {
+            return Fail(error: ErrorResponse(code: "invalid_api", message: "Invalid API case for file upload"))
+                .eraseToAnyPublisher()
+        }
+        
+        return Future<FileUploadResponse, ErrorResponse> { promise in
+            api.asMultipartRequest(data: files, withName: "files", fileName: "file", mimeType: "image/png")
+                .responseDecodable(of: FileUploadResponse.self) { response in
+                    switch response.result {
+                    case .success(let fileUploadResponse):
+                        promise(.success(fileUploadResponse))
+                    case .failure:
+                        if let data = response.data {
+                            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+                            promise(.failure(errorResponse ?? ErrorResponse(code: "unknown", message: "An unknown error occurred")))
+                        } else {
+                            promise(.failure(ErrorResponse(code: "unknown", message: "An unknown error occurred")))
+                        }
+                    }
+                }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    
 }

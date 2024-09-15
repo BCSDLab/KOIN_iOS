@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct FetchShopInfoRequest: Encodable {
+struct FetchShopDataRequest: Encodable {
     let shopId: Int
 }

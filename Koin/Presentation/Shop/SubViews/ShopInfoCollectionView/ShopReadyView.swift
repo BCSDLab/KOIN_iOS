@@ -14,19 +14,20 @@ final class ShopReadyView: UIView {
     private let shopTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.appFont(.pretendardBold, size: 14)
-        label.textColor = UIColor.appColor(.yellow)
+        label.textColor = UIColor.appColor(.sub300)
         return label
     }()
     
     private let shopReadyLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.appFont(.pretendardMedium, size: 14)
+        label.textColor = UIColor.appColor(.neutral0)
         return label
     }()
     
     private let visualEffectView: UIVisualEffectView = {
         let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-        effectView.backgroundColor = UIColor.appColor(.primary900)
+        effectView.backgroundColor = UIColor.appColor(.neutral800)
         effectView.alpha = 0.6
         return effectView
     }()

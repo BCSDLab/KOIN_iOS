@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-final class BusDetailViewController: BaseViewController {
+final class BusDetailViewController: UIViewController {
     // MARK: - Properties
     private var viewControllersForPaging = [UIViewController]()
     private var selectedTimetableIdx: BusType = .shuttleBus
