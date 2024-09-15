@@ -53,6 +53,11 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.numberOfLines = 0
     }
     
+    private let reportedReviewImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .reportedImageView)
+        $0.isHidden = true
+    }
+    
     private let reviewImageCollectionView: ReviewImageCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 8
@@ -77,6 +82,10 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
                 orderedMenuNameStackView.removeArrangedSubview(view)
                 view.removeFromSuperview()
             }
+        reportedReviewImageView.isHidden = true
+        reviewTextLabel.isHidden = false
+        orderedMenuNameStackView.isHidden = false
+        reviewImageCollectionView.isHidden = false
         orderedMenuNameStackView.snp.removeConstraints()
     }
     
@@ -112,14 +121,19 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         reviewImageCollectionView.setReviewImageList(review.imageUrls)
         setUpOrderedMenuNames(list: review.menuNames)
         myReviewImageView.isHidden = !review.isMine
-        reviewImageCollectionView.isHidden = review.imageUrls.isEmpty
+        reviewImageCollectionView.isHidden = review.imageUrls.isEmpty || review.isReported
         reviewImageCollectionView.backgroundColor = backgroundColor
         self.contentView.backgroundColor = backgroundColor
         self.backgroundColor = backgroundColor
         optionButton.isSelected = review.isMine
         self.backgroundColor = backgroundColor
         showMyReviewImageView(review.isMine)
-        disappearImageCollectionView(review.imageUrls.isEmpty)
+        disappearImageCollectionView(review.imageUrls.isEmpty || review.isReported)
+        if review.isReported {
+            reportedReviewImageView.isHidden = false
+            reviewTextLabel.isHidden = true
+            orderedMenuNameStackView.isHidden = true
+        }
     }
     
     private func showMyReviewImageView(_ isMine: Bool) {
@@ -217,7 +231,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
 
 extension ReviewListCollectionViewCell {
     private func setUpLayouts() {
-        [myReviewImageView, writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reviewImageCollectionView, orderedMenuNameStackView].forEach {
+        [myReviewImageView, writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -246,6 +260,12 @@ extension ReviewListCollectionViewCell {
         writtenDayLabel.snp.makeConstraints {
             $0.top.equalTo(scoreView.snp.top)
             $0.leading.equalTo(scoreView.snp.trailing).offset(12)
+        }
+        reportedReviewImageView.snp.makeConstraints {
+            $0.top.equalTo(scoreView.snp.bottom).offset(5)
+            $0.leading.equalTo(scoreView.snp.leading)
+            $0.width.equalTo(228)
+            $0.height.equalTo(24)
         }
         reviewTextLabel.snp.makeConstraints {
             $0.top.equalTo(scoreView.snp.bottom).offset(10)

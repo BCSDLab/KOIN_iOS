@@ -60,17 +60,17 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
             return
         }
-        reviewList.remove(at: index)
-        
+        reviewList[index].isReported = true
         let indexPath = IndexPath(item: index, section: 0)
+        
         performBatchUpdates({
-            deleteItems(at: [indexPath])
-        },  completion: { [weak self] _ in
+            reloadItems(at: [indexPath])
+        }, completion: { [weak self] _ in
             guard let self = self else { return }
-            self.reloadData()
             self.heightChangePublisher.send(self.reviewList.count)
         })
     }
+
     
     func modifySuccess(_ reviewId: Int, _ reviewItem: WriteReviewRequest) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId }) else { return }

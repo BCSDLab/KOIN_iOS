@@ -277,6 +277,7 @@ extension ReviewListViewController {
     
     private func navigateToReportReview(parameter: (Int, Int)) {
         let shopReviewReportViewController = ShopReviewReportViewController(viewModel: ShopReviewReportViewModel(reportReviewReviewUseCase: DefaultReportReviewUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), reviewId: parameter.0, shopId: parameter.1, shopName: viewModel.shopName))
+        self.shopReviewReportViewController = shopReviewReportViewController
             navigationController?.pushViewController(shopReviewReportViewController, animated: true)
         }
     
