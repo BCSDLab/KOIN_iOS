@@ -71,7 +71,6 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         }
     }
     private func configureButton(button: UIButton, title: String, width: CGFloat, tag: Int) {
-        button.setTitle(title, for: .normal)
         button.layer.borderWidth = 1.0
         button.clipsToBounds = true
         button.layer.cornerRadius = 5
@@ -82,6 +81,10 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         button.widthAnchor.constraint(equalToConstant: width).isActive = true
         button.heightAnchor.constraint(equalToConstant: 25).isActive = true
         button.addTarget(self, action: #selector(sortTypeButtonTapped(_:)), for: .touchUpInside)
+        button.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        button.layer.borderWidth = 1.0
+        button.setTitleColor(UIColor.appColor(.neutral300), for: .normal) 
+        button.setTitle(title, for: .normal)
     }
     
     @objc private func sortTypeButtonTapped(_ sender: UIButton) {

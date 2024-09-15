@@ -94,7 +94,6 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         configureView()
         configureDropDown()
         optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +109,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     
     
     func configure(review: Review, backgroundColor: UIColor) {
+        bind()
         writerLabel.text = review.nickName
         if review.isModified {
             writtenDayLabel.text = "\(review.createdAt) (수정됨)"

@@ -30,7 +30,8 @@ struct ReviewDTO: Decodable {
     let nickName, content: String
     let imageUrls: [String]
     let menuNames: [String]
-    let isMine, isModified, isReported: Bool
+    let isMine, isModified: Bool
+    let isReported: Bool?
     let createdAt: String
 
     enum CodingKeys: String, CodingKey {
@@ -94,7 +95,7 @@ extension ReviewDTO {
             createdAt: createdAt,
             isMine: isMine,
             isModified: isModified,
-            isReported: isReported,
+            isReported: isReported ?? false,
             shopId: shopId,
             reviewId: reviewId
         )
