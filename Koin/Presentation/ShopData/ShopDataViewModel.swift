@@ -35,7 +35,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case viewDidLoad
         case fetchShopEventList
         case fetchShopMenuList
-        case fetchShopReviewList(Int)
+        case fetchShopReviewList(Int, Bool)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case deleteReview(Int, Int)
         case changeFetchStandard(ReviewSortType?, Bool?)
@@ -81,11 +81,11 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopEventList()
             case .fetchShopMenuList:
                 self?.fetchShopMenuList()
-            case let .fetchShopReviewList(page):
+            case let .fetchShopReviewList(page, disappear):
                 if strongSelf.fetchStandard.1 {
-                    self?.fetchMyReviewList(disappear: false)
+                    self?.fetchMyReviewList(disappear: disappear)
                 } else {
-                    self?.fetchShopReviewList(page: page, disappear: false)
+                    self?.fetchShopReviewList(page: page, disappear: disappear)
                 }
             case let .changeFetchStandard(type, isMine):
                 self?.changeFetchStandard(type, isMine)
