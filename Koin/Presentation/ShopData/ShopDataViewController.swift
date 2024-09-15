@@ -278,7 +278,7 @@ final class ShopDataViewController: UIViewController {
         }.store(in: &subscriptions)
         
         pageViewController.scrollFetchPublisher.sink { [weak self] page in
-            self?.inputSubject.send(.fetchShopReviewList(page))
+            self?.inputSubject.send(.fetchShopReviewList(page, false))
         }.store(in: &subscriptions)
         
         menuImageCollectionView.didSelectImage.sink { [weak self] image in
@@ -533,7 +533,7 @@ extension ShopDataViewController {
             }
             isReviewTabClicked = false
         default: 
-            inputSubject.send(.fetchShopReviewList(1))
+            inputSubject.send(.fetchShopReviewList(1, true))
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopTitle))
