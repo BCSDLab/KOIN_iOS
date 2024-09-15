@@ -17,6 +17,7 @@ final class ShopDataViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var isSwipedToPopView: Bool = false
     private var scrollDirection: ScrollLog = .scrollToDown
+    private var isReviewTabClicked = false
     
     // MARK: - UI Components
     
@@ -184,25 +185,43 @@ final class ShopDataViewController: UIViewController {
         scrollView.delegate = self
         categorySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         stickySelectSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         menuTitleImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .call), style: .plain, target: self, action: #selector(callButtonTapped))
+    }
+    
+    @objc private func appWillResignActive() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
+    }
+    
+    @objc private func appDidBecomeActive() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         enablePopGestureRecognizer()
+        self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         disablePopGestureRecognizer()
+        inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
         if self.isMovingFromParent {
             if isSwipedToPopView == false {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBackButton, .click, shopTitleLabel.text ?? ""))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .click, shopTitleLabel.text ?? "", nil, .shopDetailViewBack))
             }
             else {
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopSwipeBack, .swipe, shopTitleLabel.text ?? ""))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, .swipe, shopTitleLabel.text ?? "", nil, .shopDetailViewBack))
             }
+            inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBackByCategory))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", nil, .shopDetailViewReviewBackByCategory))
         }
     }
     
@@ -226,8 +245,17 @@ final class ShopDataViewController: UIViewController {
                 self?.updateButtons(for: strongSelf.stickyButtonStackView, with: shopMenuList)
             case let .showShopEventList(eventList):
                 self?.pageViewController.setEventList(eventList)
-            case let .showShopReviewList(shopReviewList):
-                self?.pageViewController.setReviewList(shopReviewList)
+            case let .showShopReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear):
+                self?.pageViewController.setReviewList(shopReviewList, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear)
+            case let .showShopReviewStatistics(statistics):
+                self?.pageViewController.setReviewStatistic(statistics)
+            case let .showToast(message, success):
+                self?.showToast(message: message, success: success)
+            case let .updateReviewCount(count):
+                self?.categorySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
+                self?.stickySelectSegmentControl.setTitle("리뷰 (\(count))", forSegmentAt: 2)
+            case let .disappearReview(reviewId, shopId):
+                self?.pageViewController.disappearReview(reviewId, shopId: shopId)
             }
         }.store(in: &subscriptions)
         
@@ -235,6 +263,22 @@ final class ShopDataViewController: UIViewController {
             self?.pageViewController.view.snp.updateConstraints { make in
                 make.height.equalTo(height)
             }
+        }.store(in: &subscriptions)
+        
+        pageViewController.fetchStandardPublisher.sink { [weak self] tuple in
+            self?.inputSubject.send(.changeFetchStandard(tuple.0, tuple.1))
+        }.store(in: &subscriptions)
+        
+        pageViewController.deleteReviewPublisher.sink { [weak self] tuple in
+            self?.inputSubject.send(.deleteReview(tuple.0, tuple.1))
+        }.store(in: &subscriptions)
+        
+        pageViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
+            self?.inputSubject.send(.updateReviewCount)
+        }.store(in: &subscriptions)
+        
+        pageViewController.scrollFetchPublisher.sink { [weak self] page in
+            self?.inputSubject.send(.fetchShopReviewList(page))
         }.store(in: &subscriptions)
         
         menuImageCollectionView.didSelectImage.sink { [weak self] image in
@@ -261,7 +305,13 @@ extension ShopDataViewController: UIScrollViewDelegate {
             stickyButtonStackView.isHidden = !(scrollViewContentOffsetY > 600)
             emptyWhiteView.isHidden = !(scrollViewContentOffsetY > 600)
         }
-
+        
+        if categorySelectSegmentControl.selectedSegmentIndex == 2 {
+            let visibleRect = CGRect(x: 0, y: scrollView.contentOffset.y, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height)
+            let height = stickySelectSegmentControl.isHidden ? categorySelectSegmentControl.frame.origin.y : stickySelectSegmentControl.frame.origin.y
+            let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.maxY - 1 - height)
+            pageViewController.scrollViewHeightChanged(point: visiblePoint)
+        }
     }
     
     private func addButtonItems() {
@@ -342,7 +392,14 @@ extension ShopDataViewController: UIScrollViewDelegate {
         let screenHeight = self.scrollView.frame.height
         if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
             scrollDirection = .scrollChecked
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopTitleLabel.text ?? ""))
+            switch categorySelectSegmentControl.selectedSegmentIndex {
+            case 0:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopTitleLabel.text ?? ""))
+            case 1:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewEvent, .scroll, shopTitleLabel.text ?? ""))
+            default:
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, shopTitleLabel.text ?? ""))
+            }
         }
     }
 }
@@ -404,8 +461,13 @@ extension ShopDataViewController {
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitleLabel.text ?? ""))
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
+        let shopTitle = shopTitleLabel.text ?? ""
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, .shopCall))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBackByCall))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBackByCall))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitle, "전화", .shopDetailViewReviewBackByCall))
     }
     
     private func showShopData(data: ShopData) {
@@ -447,21 +509,38 @@ extension ShopDataViewController {
     }
     
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
-        
         pageViewController.switchToPage(index: sender.selectedSegmentIndex)
-        
         switch sender {
         case categorySelectSegmentControl: stickySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         default: categorySelectSegmentControl.selectedSegmentIndex = sender.selectedSegmentIndex
         }
+        let shopTitle = shopTitleLabel.text ?? ""
         switch sender.selectedSegmentIndex {
-        case 0: inputSubject.send(.fetchShopMenuList)
+        case 0:
+            inputSubject.send(.fetchShopMenuList)
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailView, .click, shopTitle))
+            if isReviewTabClicked {
+                inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "메뉴", .shopDetailViewReviewBackByTab))
+            }
+            isReviewTabClicked = false
         case 1: inputSubject.send(.fetchShopEventList)
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
-        default: inputSubject.send(.fetchShopReviewList)
+            if isReviewTabClicked {
+                inputSubject.send(.getUserScreenAction(Date(), .endEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewBack, .click, shopTitleLabel.text ?? "", "이벤트/공지", .shopDetailViewReviewBackByTab))
+            }
+            isReviewTabClicked = false
+        default: 
+            inputSubject.send(.fetchShopReviewList(1))
             stickyButtonStackView.isHidden = true
             emptyWhiteView.isHidden = true
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopTitle))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByTab))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCall))
+            inputSubject.send(.getUserScreenAction(Date(), .beginEvent, EventParameter.EventLabelNeededDuration.shopDetailViewReviewBackByCategory))
+            isReviewTabClicked = true
         }
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.underlineView.frame.origin.x = (sender.bounds.width / CGFloat(sender.numberOfSegments)) * CGFloat(sender.selectedSegmentIndex)
@@ -710,7 +789,7 @@ extension ShopDataViewController {
             segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
             segment.insertSegment(withTitle: "메뉴", at: 0, animated: true)
             segment.insertSegment(withTitle: "이벤트/공지", at: 1, animated: true)
-  //          segment.insertSegment(withTitle: "리뷰", at: 2, animated: true)
+            segment.insertSegment(withTitle: "리뷰", at: 2, animated: true)
             segment.selectedSegmentIndex = 0
             segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500).withAlphaComponent(0.2), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .normal)
             segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .selected)

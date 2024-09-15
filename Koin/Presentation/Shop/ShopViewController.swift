@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class ShopViewController: UIViewController, CollectionViewDelegate {
+final class ShopViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -37,7 +37,7 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
     
     private let eventShopCollectionView: EventShopCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 72)
+        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 80)
         flowLayout.scrollDirection = .horizontal
         let collectionView = EventShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.isHidden = true
@@ -79,10 +79,10 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         let screenWidth = UIScreen.main.bounds.width
-        let cellWidth = screenWidth - 32
+        let cellWidth = screenWidth - 40
         let collectionView = ShopInfoCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: 51)
-        flowLayout.minimumLineSpacing = 4
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 72)
+        flowLayout.minimumLineSpacing = 8
         collectionView.isScrollEnabled = false
         return collectionView
     }()
@@ -106,11 +106,12 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
-        categoryCollectionView.categoryDelegate = self
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         hideKeyboardWhenTappedAround()
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
     }
     
@@ -122,6 +123,20 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         eventShopCollectionView.startAutoScroll()
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+    }
+    
+    @objc private func appDidEnterBackground() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
+    }
+    
+    @objc private func appWillEnterForeground() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Bind
@@ -137,31 +152,64 @@ final class ShopViewController: UIViewController, CollectionViewDelegate {
                 self?.putImage(data: response)
             case let .updateEventShops(eventShops):
                 self?.updateEventShops(eventShops)
+            case let .updateSeletecButtonColor(standard):
+                self?.shopCollectionView.updateSeletecButtonColor(standard)
             }
         }.store(in: &subscriptions)
         
-        shopCollectionView.cellTapPublisher.sink { [weak self] shopId in
-                self?.navigateToShopDataViewController(id: shopId)
-            }.store(in: &subscriptions)
-        
-        eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId in
-            self?.navigateToShopDataViewController(id: shopId)
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
+            let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
+            self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
         }.store(in: &subscriptions)
         
-        eventShopCollectionView.cellTapTitlePublisher.sink { [weak self] shopName in
+        categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
+            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, .endEvent, .shopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+            self?.searchTextField.text = ""
+            self?.inputSubject.send(.changeCategory(categoryId))
+        }.store(in: &subscriptions)
+        
+        eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesEvent, EventParameter.EventCategory.click, shopName))
         }.store(in: &subscriptions)
         
         eventShopCollectionView.scrollPublisher.sink { [weak self] index in
             self?.eventIndexLabel.text = index
         }.store(in: &subscriptions)
+        
+        shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
+            self?.inputSubject.send(.changeSortStandard(standard))
+        }.store(in: &subscriptions)
+        
+        shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
+            self?.filterToggleLogEvent(toggleType: toggleType)
+        }.store(in: &subscriptions)
     }
 }
 
 extension ShopViewController {
+    private func filterToggleLogEvent(toggleType: Int) {
+        var value = ""
+        switch toggleType {
+        case 0:
+            value = "check_review"
+        case 1:
+            value = "check_star"
+        case 2:
+            value = "check_open"
+        default:
+            value = "check_delivery"
+        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCan, .click, value))
+    }
     
     private func updateEventShops(_ eventShops: [EventDTO]) {
-
+        
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
@@ -204,39 +252,37 @@ extension ShopViewController: UIScrollViewDelegate {
 
 extension ShopViewController {
     
-    private func navigateToShopDataViewController(id: Int) {
+    private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
         let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: shopRepository)
         let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
-        let fetchShopReviewListUsecase = MockFetchShopReviewListUseCase(shopRepository: shopRepository)
+        let fetchShopReviewListUsecase = DefaultFetchShopReviewListUseCase(shopRepository: shopRepository)
+        let fetchMyReviewUseCase = DefaultFetchMyReviewUseCase(shopRepository: shopRepository)
+        let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, shopId: id)
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
     }
     
-    private func updateFilteredShops(_ shops: [ShopDTO]) {
+    private func updateFilteredShops(_ shops: [Shop]) {
         shopCollectionView.updateShop(shops)
-
+        
         shopCollectionView.snp.updateConstraints { make in
             make.height.equalTo(shopCollectionView.calculateDynamicHeight())
         }
     }
-
+    
     private func updateFilteredCategory(_ id: Int) {
         categoryCollectionView.updateCategory(id)
     }
     
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
-    }
-    
-    func didTapCell(at id: Int) {
-        inputSubject.send(.changeCategory(id))
-        searchTextField.text = ""
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
@@ -288,8 +334,8 @@ extension ShopViewController {
         
         eventShopCollectionView.snp.makeConstraints { make in
             make.top.equalTo(shopGuideView.snp.bottom).offset(12)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(63)
         }
         
@@ -302,8 +348,8 @@ extension ShopViewController {
         
         shopCollectionView.snp.makeConstraints { make in
             make.top.equalTo(shopGuideView.snp.bottom).offset(14)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)
             make.bottom.equalTo(scrollView.snp.bottom)
         }

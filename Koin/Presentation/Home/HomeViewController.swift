@@ -153,6 +153,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         configureTapGesture()
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         print(KeyChainWorker.shared.read(key: .access) ?? "")
@@ -167,9 +168,15 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         }
         
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.getUserScreenAction(Date(), .enterForeground))
     }
+    
+    @objc private func appDidEnterBackground() {
+        inputSubject.send(.getUserScreenAction(Date(), .enterBackground))
+    }
+    
     deinit {
-        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -181,7 +188,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         } else {
             inputSubject.send(.getBusInfo(.koreatech, .koreatech, .shuttleBus))
         }
-        
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -233,8 +240,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         
         logoView.lineButtonPublisher.sink { [weak self] in
             self?.navigateToServiceSelectViewController()
-            
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "햄버거"))
         }.store(in: &subscriptions)
         
         busCollectionView.scrollPublisheer.sink { [weak self] item in
@@ -397,20 +402,23 @@ extension HomeViewController {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: id
         )
         let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, MakeParamsForLog().makeValueForLogAboutStoreId(id: id)))
+        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
+        inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
     }
     
     @objc private func refresh() {

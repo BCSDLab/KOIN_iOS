@@ -13,6 +13,10 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
     // MARK: - Properties
     
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    let fetchStandardPublisher = PassthroughSubject<(ReviewSortType?, Bool?), Never>()
+    let deleteReviewPublisher = PassthroughSubject<(Int, Int), Never>()
+    let reviewCountFetchRequestPublisher = PassthroughSubject<Void, Never>()
+    let scrollFetchPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -50,6 +54,21 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
             self?.viewControllerHeightPublisher.send(height)
         }.store(in: &subscriptions)
         
+        reviewListViewController.fetchStandardPublisher.sink { [weak self] tuple in
+            self?.fetchStandardPublisher.send(tuple)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.deleteReviewPublisher.sink { [weak self] tuple in
+            self?.deleteReviewPublisher.send(tuple)
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.reviewCountFetchRequestPublisher.sink { [weak self] in
+            self?.reviewCountFetchRequestPublisher.send(())
+        }.store(in: &subscriptions)
+        
+        reviewListViewController.scrollFetchPublisher.sink { [weak self] page in
+            self?.scrollFetchPublisher.send(page)
+        }.store(in: &subscriptions)
     }
     
     func switchToPage(index: Int) {
@@ -70,8 +89,20 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         eventListViewController.setEventList(events)
     }
     
-    func setReviewList(_ review: ShopReview) {
-        reviewListViewController.setReviewList(review)
+    func setReviewList(_ review: [Review], _ shopId: Int, _ shopName: String, _ fetchStandard: ReviewSortType, _ isMine: Bool, _ currentPage: Int, _ totalPage: Int, _ disappear: Bool) {
+        reviewListViewController.setReviewList(review, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear)
+    }
+    
+    func setReviewStatistic(_ statistic: StatisticsDTO) {
+        reviewListViewController.setReviewStatistics(statistics: statistic)
+    }
+    
+    func disappearReview(_ reviewId: Int, shopId: Int) {
+        reviewListViewController.disappearReview(reviewId, shopId)
+    }
+    
+    func scrollViewHeightChanged(point: CGPoint) {
+        reviewListViewController.scrollViewHeightChanged(point: point)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -87,4 +118,8 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         guard nextIndex < pages.count else { return nil }
         return pages[nextIndex]
     }
+}
+
+extension ShopDataPageViewController: UIScrollViewDelegate {
+
 }

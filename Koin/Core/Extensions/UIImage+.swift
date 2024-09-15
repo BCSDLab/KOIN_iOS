@@ -63,6 +63,15 @@ enum ImageAsset: String {
     case heartFill
     case share
     case diningTooltip
+    case myReview
+    case option
+    case optionFill
+    case circle
+    case filledCircle
+    case cancelYellow
+    case trashcan
+    case nonReview
+    case reportedImageView
     case nonMenuWeekendImage
 }
 

@@ -19,20 +19,31 @@ enum EventParameter {
             // Shop
             case mainShopCategories = "main_shop_categories"
             case shopCategories = "shop_categories"
-            case shopCanDelivery = "shop_can_delivery"
-            case shopCanCard = "shop_can_card"
-            case shopCanBank = "shop_can_bank"
             case shopClick = "shop_click"
             case shopCall = "shop_call"
+            case shopCan = "shop_can"
             case shopPicture = "shop_picture"
-            case hamburgerShop = "hamburger_shop"
+            case hamburger = "hamburger"
             case shopCategoriesEvent = "shop_categories_event"
-            case shopDetailViewEvent = "shop_detailView_event"
+            case shopDetailViewEvent = "shop_detail_view_event"
             case shopCategoriesSearch = "shop_categories_search"
-            case shopDetailView = "shop_detailView"
-            case shopBackButton = "shop_backButton"
-            case shopSwipeBack = "shop_swipe_back"
+            case shopDetailView = "shop_detail_view"
+            case shopDetailViewReview = "shop_detail_view_review"
+            case shopDetailViewBack = "shop_detail_view_back"
             
+            case shopDetailViewReviewWrite = "shop_detail_view_review_write"
+            case shopDetailViewReviewWriteDone = "shop_detail_view_review_write_done"
+            case shopDetailViewReviewReport = "shop_detail_view_review_report"
+            case shopDetailViewReviewReportDone = "shop_detail_view_review_report_done"
+            case shopDetailViewReviewBack = "shop_detail_view_review_back"
+
+            case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
+            case shopDetailViewReviewDeleteDone = "shop_detail_view_review_delete_done"
+            case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
+            case shopDetailViewReviewWriteLogin = "shop_detail_view_review_write_login"
+            case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
+            case shopDetailViewReviewReportLogin = "shop_detail_view_review_report_login"
+            case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
             var team: String {
                 return "BUSINESS"
             }
@@ -93,5 +104,14 @@ enum EventParameter {
         case swipe
     }
     
-    
+    enum EventLabelNeededDuration: String {
+        case shopCategories
+        case shopClick
+        case mainShopCategories
+        case shopCall
+        case shopDetailViewBack
+        case shopDetailViewReviewBackByTab = "shopDetailViewReviewBackByTab"
+        case shopDetailViewReviewBackByCall = "shopDetailViewReviewBackByCall"
+        case shopDetailViewReviewBackByCategory = "shopDetailViewReviewBackByCategory"
+    }
 }

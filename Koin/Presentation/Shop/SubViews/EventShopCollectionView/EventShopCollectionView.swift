@@ -11,8 +11,7 @@ import UIKit
 final class EventShopCollectionView: UICollectionView, UICollectionViewDataSource, UIScrollViewDelegate, UICollectionViewDelegate  {
     
     private var eventShops: [EventDTO] = []
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
-    let cellTapTitlePublisher = PassthroughSubject<String, Never>()
+    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     let scrollPublisher = PassthroughSubject<String, Never>()
     private var timer: Timer?
     private var currentIndex = 0
@@ -133,8 +132,7 @@ extension EventShopCollectionView {
         let shop = eventShops[indexPath.row]
         cell.configure(shop)
         cell.onTap = { [weak self] shopId in
-            self?.cellTapPublisher.send(shopId)
-            self?.cellTapTitlePublisher.send(shop.shopName)
+            self?.cellTapPublisher.send((shopId, shop.shopName))
         }
         return cell
     }
