@@ -56,7 +56,7 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
         headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
     }
     
-    func disappearReview(_ reviewId: Int, shopId: Int) {
+    func reportReview(_ reviewId: Int, shopId: Int) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
             return
         }
@@ -70,7 +70,23 @@ final class ReviewListCollectionView: UICollectionView, UICollectionViewDataSour
             self.heightChangePublisher.send(self.reviewList.count)
         })
     }
-
+    
+    func disappearReview(_ reviewId: Int, shopId: Int) {
+        guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId && $0.shopId == shopId }) else {
+            return
+        }
+        reviewList.remove(at: index)
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        performBatchUpdates({
+            deleteItems(at: [indexPath])
+        },  completion: { [weak self] _ in
+            guard let self = self else { return }
+            self.reloadData()
+            self.heightChangePublisher.send(self.reviewList.count)
+        })
+    }
+    
     
     func modifySuccess(_ reviewId: Int, _ reviewItem: WriteReviewRequest) {
         guard let index = reviewList.firstIndex(where: { $0.reviewId == reviewId }) else { return }

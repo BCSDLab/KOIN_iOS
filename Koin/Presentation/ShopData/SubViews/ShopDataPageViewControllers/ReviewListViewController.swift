@@ -82,7 +82,7 @@ final class ReviewListViewController: UIViewController {
     private var shopReviewReportViewController: ShopReviewReportViewController? {
         didSet {
             shopReviewReportViewController?.reviewInfoPublisher.sink { [weak self] tuple in
-                self?.reviewListCollectionView.disappearReview(tuple.0, shopId: tuple.1)
+                self?.reviewListCollectionView.reportReview(tuple.0, shopId: tuple.1)
             }.store(in: &cancellables)
         }
     }
