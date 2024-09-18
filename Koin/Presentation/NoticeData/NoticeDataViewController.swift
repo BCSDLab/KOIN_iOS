@@ -168,6 +168,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateNoticeData(noticeData: noticeData)
             case let .updatePopularArticles(notices):
                 self?.updatePopularArticle(notices: notices)
+            case let .updateActivityIndictor(isStarted, fileName):
+                self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName)
             }
         }.store(in: &subscriptions)
         
@@ -259,6 +261,18 @@ extension NoticeDataViewController {
     
     private func updatePopularArticle(notices: [NoticeArticleDTO]) {
         hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
+    }
+    
+    private func updateActivityIndicator(isStarted: Bool, fileName: String?) {
+        if isStarted {
+            showIndicator()
+        }
+        else {
+            dismissIndicator()
+            if let fileName = fileName {
+                presentAlert(title: "\(fileName) 다운로드 완료", preferredStyle: .alert, with: [])
+            }
+        }
     }
 }
 

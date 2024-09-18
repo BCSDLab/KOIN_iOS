@@ -18,6 +18,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
     enum Output {
         case updateNoticeData(NoticeDataInfo)
         case updatePopularArticles([NoticeArticleDTO])
+        case updateActivityIndictor(Bool, String?)
     }
     
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
@@ -53,13 +54,16 @@ final class NoticeDataViewModel: ViewModelProtocol {
 
 extension NoticeDataViewModel {
     private func getNoticeData() {
+        outputSubject.send(.updateActivityIndictor(true, nil))
         let request = FetchNoticeDataRequest(noticeId: noticeId)
-        fetchNoticeDataUseCase.fetchNoticeData(request: request).sink(receiveCompletion: { completion in
+        fetchNoticeDataUseCase.fetchNoticeData(request: request).sink(receiveCompletion: { [weak self] completion in
+            self?.outputSubject.send(.updateActivityIndictor(false, nil))
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] noticeData in
             self?.outputSubject.send(.updateNoticeData(noticeData))
+            self?.outputSubject.send(.updateActivityIndictor(false, nil))
         }).store(in: &subscriptions)
     }
     
@@ -74,13 +78,14 @@ extension NoticeDataViewModel {
     }
     
     private func downloadFile(downloadUrl: String, fileName: String) {
-        downloadNoticeAttachmentUseCase.execute(downloadUrl: downloadUrl, fileName: fileName).sink(receiveCompletion: {
-            completion in
+        outputSubject.send(.updateActivityIndictor(true, nil))
+        downloadNoticeAttachmentUseCase.execute(downloadUrl: downloadUrl, fileName: fileName).sink(receiveCompletion: { [weak self] completion in
+            self?.outputSubject.send(.updateActivityIndictor(false, fileName))
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
-        }, receiveValue: { 
-            print("file downloaded successfully")
+        }, receiveValue: { [weak self] in
+            self?.outputSubject.send(.updateActivityIndictor(false, fileName))
         }).store(in: &subscriptions)
     }
 }
