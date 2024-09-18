@@ -18,6 +18,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
         case updateUserKeyWordList([NoticeKeyWordDTO], Int)
+        case isLogined(Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -106,9 +107,11 @@ extension NoticeListViewModel {
             if case let .failure(error) = response {
                 Log.make().error("\(error)")
                 let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
+                if result.isEmpty { self.outputSubject.send(.isLogined(false)) }
                 completion(result)
             }
-        }, receiveValue: { keyWords in
+        }, receiveValue: { [weak self] keyWords in
+            if keyWords.isEmpty { self?.outputSubject.send(.isLogined(true)) }
             completion(keyWords)
         }).store(in: &subscriptions)
     }

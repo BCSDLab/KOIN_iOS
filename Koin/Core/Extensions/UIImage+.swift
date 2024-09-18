@@ -79,6 +79,8 @@ enum ImageAsset: String {
     case delete
     case plus
     case download
+    case noticeLoginToolTip
+    case noticeNotLoginToolTip
 }
 
 enum SFSymbols: String {
