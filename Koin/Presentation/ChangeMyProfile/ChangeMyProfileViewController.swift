@@ -95,10 +95,26 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "성별"
     }
     
-    private let maleButton = UIButton().then { _ in
+    private let maleButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 1.0
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.setTitle("남성", for: .normal)
     }
     
-    private let femaleButton = UIButton().then { _ in
+    private let femaleButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 1.0
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.setTitle("여성", for: .normal)
     }
     
     private let saveButton = UIButton().then {
@@ -129,8 +145,6 @@ final class ChangeMyProfileViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
-        setUpButtonText(button: maleButton, text: "남성")
-        setUpButtonText(button: femaleButton, text: "여성")
         inputSubject.send(.fetchUserData)
         inputSubject.send(.fetchDeptList)
         deptButton.addTarget(self, action: #selector(deptButtonTapped), for: .touchUpInside)
@@ -166,39 +180,23 @@ final class ChangeMyProfileViewController: UIViewController {
 extension ChangeMyProfileViewController {
     
     @objc private func genderButtonTapped(sender: UIButton) {
+        let selectedButton: UIButton
+        let unselectedButton: UIButton
         switch sender {
-        case maleButton: 
-            maleButton.isSelected = true
-            femaleButton.isSelected = false
+        case maleButton:
+            selectedButton = maleButton
+            unselectedButton = femaleButton
         default:
-            femaleButton.isSelected = true
-            maleButton.isSelected = false
+            selectedButton = femaleButton
+            unselectedButton = maleButton
         }
-        setUpButtonText(button: maleButton, text: "남성")
-        setUpButtonText(button: femaleButton, text: "여성")
-    }
-    
-    private func setUpButtonText(button: UIButton, text: String) {
-        var configuration = UIButton.Configuration.plain()
-        let imageSize = CGSize(width: 16, height: 16)
-        let image = button.isSelected
-        ? UIImage.appImage(asset: .filledCircle)
-        : UIImage.appImage(asset: .circle)
-        
-        let resizedImage = image?.withConfiguration(
-            UIImage.SymbolConfiguration(pointSize: imageSize.width, weight: .regular)
-        )
-        
-        configuration.image = resizedImage
-        var text = AttributedString(text)
-        text.font = UIFont.appFont(.pretendardRegular, size: 16)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 16
-        configuration.baseBackgroundColor = .systemBackground
-        configuration.baseForegroundColor = UIColor.appColor(.neutral800)
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        button.contentHorizontalAlignment = .leading
-        button.configuration = configuration
+        selectedButton.isSelected = true
+        selectedButton.backgroundColor = UIColor.appColor(.primary500)
+        selectedButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+      
+        unselectedButton.isSelected = false
+        unselectedButton.backgroundColor = UIColor.appColor(.neutral300)
+        unselectedButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
     }
     
     @objc private func deptButtonTapped() {
@@ -241,10 +239,12 @@ extension ChangeMyProfileViewController {
         if let genderIntValue = profile.gender {
             if genderIntValue == 0 {
                 maleButton.isSelected = true
-                setUpButtonText(button: maleButton, text: "남성")
+                maleButton.backgroundColor = UIColor.appColor(.primary500)
+                maleButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             } else {
                 femaleButton.isSelected = true
-                setUpButtonText(button: femaleButton, text: "여성")
+                femaleButton.backgroundColor = UIColor.appColor(.primary500)
+                femaleButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             }
         }
     }
@@ -282,7 +282,8 @@ extension ChangeMyProfileViewController {
     
     private func setUpConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-80)
         }
         primaryInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.top)
@@ -360,14 +361,14 @@ extension ChangeMyProfileViewController {
         maleButton.snp.makeConstraints { make in
             make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.width.equalTo(70)
-            make.height.equalTo(26)
+            make.trailing.equalTo(view.snp.centerX).offset(-18.5)
+            make.height.equalTo(46)
         }
         femaleButton.snp.makeConstraints { make in
             make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
-            make.trailing.equalTo(view.snp.trailing).offset(-40)
-            make.width.equalTo(70)
-            make.height.equalTo(26)
+            make.leading.equalTo(view.snp.centerX).offset(18.5)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(46)
             make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
         }
         saveButton.snp.makeConstraints { make in
