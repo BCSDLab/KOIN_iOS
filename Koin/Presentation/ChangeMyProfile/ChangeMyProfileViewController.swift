@@ -50,6 +50,7 @@ final class ChangeMyProfileViewController: UIViewController {
     }
     
     private let nameTextField = UITextField().then { textField in
+        textField.placeholder = "홍길동(선택)"
     }
     
     private let nicknameTitleLabel = UILabel().then {
@@ -57,6 +58,17 @@ final class ChangeMyProfileViewController: UIViewController {
     }
     
     private let nicknameTextField = UITextField().then { textField in
+        textField.placeholder = "닉네임을 입력해주세요.(선택)"
+    }
+    
+    private let nicknameCheckButton = UIButton().then {
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.setTitle("중복확인", for: .normal)
     }
     
     private let phoneTitleLabel = UILabel().then {
@@ -64,6 +76,7 @@ final class ChangeMyProfileViewController: UIViewController {
     }
     
     private let phoneTextField = UITextField().then { textField in
+        textField.placeholder = "010-0000-0000(선택)"
     }
     
     private let studentInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
@@ -78,6 +91,7 @@ final class ChangeMyProfileViewController: UIViewController {
     }
     
     private let studentNumberTextField = UITextField().then { textField in
+        textField.placeholder = "학번을 입력해주세요.(선택)"
     }
     
     private let majorTitleLabel = UILabel().then {
@@ -275,7 +289,7 @@ extension ChangeMyProfileViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(saveButton)
-        [primaryInfoLabel, idTitleLabel, idValueLabel, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton].forEach {
+        [primaryInfoLabel, idTitleLabel, idValueLabel, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -316,7 +330,13 @@ extension ChangeMyProfileViewController {
         nicknameTextField.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(nicknameCheckButton.snp.leading).offset(-12)
+            make.height.equalTo(46)
+        }
+        nicknameCheckButton.snp.makeConstraints { make in
+            make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
             make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.width.equalTo(85)
             make.height.equalTo(46)
         }
         phoneTitleLabel.snp.makeConstraints { make in
