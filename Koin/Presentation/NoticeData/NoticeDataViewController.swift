@@ -174,6 +174,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
             self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
         }.store(in: &subscriptions)
+        
+        noticeAttachmentsTableView.tapDownloadButtonPublisher
+            .sink { [weak self] url, title in
+            self?.inputSubject.send(.downloadFile(url, title))
+        }.store(in: &subscriptions)
     }
 }
 
@@ -197,8 +202,9 @@ extension NoticeDataViewController {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
         let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+        let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, noticeId: noticeId)
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, noticeId: noticeId)
         let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(noticeDataVc, animated: true)
     }
