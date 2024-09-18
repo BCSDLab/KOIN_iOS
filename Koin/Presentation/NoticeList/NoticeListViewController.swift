@@ -48,6 +48,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.backgroundColor = .white
     }
     
+    private let noticeToolTipImageView = CancelableImageView(frame: .zero)
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -94,6 +96,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
             case let .updateUserKeyWordList(noticeKeyWordList, keyWordIdx):
                 self?.updateUserKeyWordList(keyWords: noticeKeyWordList, keyWordIdx: keyWordIdx)
+            case let .isLogined(isLogined):
+                self?.checkAndShowToolTip(isLogined: isLogined)
             }
         }.store(in: &subscriptions)
         
@@ -137,6 +141,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             .sink { [weak self] keyWord in
                 self?.inputSubject.send(.getUserKeyWordList(keyWord))
         }.store(in: &subscriptions)
+        
+        noticeToolTipImageView.onXButtonTapped = { [weak self] in
+            self?.noticeToolTipImageView.isHidden = true
+        }
     }
 }
 
@@ -168,6 +176,20 @@ extension NoticeListViewController {
         
     }
     
+    private func checkAndShowToolTip(isLogined: Bool) {
+        let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownNoticeTooltip")
+        if !hasShownImage {
+            noticeToolTipImageView.isHidden = false
+            if isLogined {
+                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeLoginToolTip) ?? UIImage())
+            }
+            else {
+                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeNotLoginToolTip) ?? UIImage())
+            }
+            UserDefaults.standard.set(true, forKey: "hasShownNoticeTooltip")
+        }
+    }
+    
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos, isForSearch: false)
@@ -190,7 +212,7 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, tabBarCollectionView, noticeTableView].forEach {
+        [navigationBarWrappedView, tabBarCollectionView, noticeTableView, noticeToolTipImageView].forEach {
             view.addSubview($0)
         }
         [backButton, navigationTitle, searchButton].forEach {
@@ -233,6 +255,13 @@ extension NoticeListViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
+        }
+        
+        noticeToolTipImageView.snp.makeConstraints {
+            $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(56)
+            $0.height.equalTo(44)
+            $0.width.equalTo(248)
+            $0.trailing.equalToSuperview().inset(46)
         }
     }
     

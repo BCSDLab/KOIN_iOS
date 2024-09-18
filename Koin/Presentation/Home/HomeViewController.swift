@@ -144,7 +144,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }()
     
     private let diningTooltipImageView: CancelableImageView = {
-        let imageView = CancelableImageView()
+        let imageView = CancelableImageView(frame: .zero)
         imageView.isHidden = true
         return imageView
     }()
@@ -330,6 +330,7 @@ extension HomeViewController {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
         
         if !hasShownImage {
+            diningTooltipImageView.setUpImage(image: .appImage(asset: .diningTooltip) ?? UIImage())
             diningTooltipImageView.isHidden = false
             UserDefaults.standard.set(true, forKey: "hasShownTooltip")
         }
