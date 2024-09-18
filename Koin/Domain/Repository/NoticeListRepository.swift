@@ -16,4 +16,5 @@ protocol NoticeListRepository {
     func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
     func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
+    func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse>
 }

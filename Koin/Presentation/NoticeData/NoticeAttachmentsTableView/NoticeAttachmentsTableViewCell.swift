@@ -5,11 +5,16 @@
 //  Created by JOOMINKYUNG on 9/15/24.
 //
 
+import Combine
 import SnapKit
 import Then
 import UIKit
 
 final class NoticeAttachmentsTableViewCell: UITableViewCell {
+    //MARK: - Properties
+    
+    let tapDownloadButtonPublisher = PassthroughSubject<Void, Never>()
+    
     //MARK: - UI Components
     private var attachmentTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
@@ -37,6 +42,7 @@ final class NoticeAttachmentsTableViewCell: UITableViewCell {
     //MARK: -Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        downloadButton.addTarget(self, action: #selector(downloadFile), for: .touchUpInside)
         configureView()
     }
     
@@ -48,6 +54,10 @@ final class NoticeAttachmentsTableViewCell: UITableViewCell {
     func configure(attachmentTitle: String, fileSize: String) {
         attachmentTitleLabel.text = attachmentTitle
         attachmentSizeLabel.text = fileSize
+    }
+    
+    @objc private func downloadFile() {
+        tapDownloadButtonPublisher.send()
     }
 }
 

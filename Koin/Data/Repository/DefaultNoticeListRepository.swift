@@ -45,5 +45,9 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
         return service.fetchRecommendedKeyWord(count: count)
     }
+    
+    func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse> {
+        return service.downloadNoticeAttachment(downloadUrl: downloadUrl, fileName: fileName)
+    }
 }
 

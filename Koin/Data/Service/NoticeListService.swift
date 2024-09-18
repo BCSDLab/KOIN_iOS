@@ -17,6 +17,7 @@ protocol NoticeListService {
     func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchMyNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
     func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
+    func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultNoticeService: NoticeListService {
@@ -93,7 +94,18 @@ final class DefaultNoticeService: NoticeListService {
         }
     }
     
-    
+    func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse> {
+        guard let url = URL(string: downloadUrl) else {
+            return Fail(error: ErrorResponse(code: "", message: "URL이 유효하지 않습니다."))
+                .eraseToAnyPublisher()
+        }
+        var api = URLRequest(url: url)
+        api.method = .get
+        api.headers = ["Content-Type":"multipart/form-data"]
+        
+        return networkService.downloadFiles(api: api, fileName: fileName)
+    }
+   
     private func request<T: Decodable>(_ api: NoticeListAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)

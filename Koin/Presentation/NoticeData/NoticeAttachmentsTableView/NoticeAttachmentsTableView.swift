@@ -12,6 +12,7 @@ final class NoticeAttachmentsTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var noticeAttachments: [NoticeAttachmentDTO] = []
+    let tapDownloadButtonPublisher = PassthroughSubject<(String, String), Never>()
     let noticeAttachmentTableViewSize = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
@@ -53,8 +54,21 @@ extension NoticeAttachmentsTableView: UITableViewDataSource {
         let file = noticeAttachments[indexPath.row].name.extractStringFromParentheses()
         let fileTitle = file.1
         let fileSize = file.0
+        cell.tapDownloadButtonPublisher.sink { [weak self] in
+            if let self = self {
+                let attachment = self.noticeAttachments[indexPath.row]
+                self.tapDownloadButtonPublisher.send((attachment.url, fileTitle))
+            }
+        }.store(in: &subscribtions)
         cell.configure(attachmentTitle: fileTitle, fileSize: fileSize)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let file = noticeAttachments[indexPath.row].name.extractStringFromParentheses()
+        let fileTitle = file.1
+        let attachment = self.noticeAttachments[indexPath.row]
+        self.tapDownloadButtonPublisher.send((attachment.url, fileTitle))
     }
     
 }
