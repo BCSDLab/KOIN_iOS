@@ -86,6 +86,7 @@
 		83A261802C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2617F2C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift */; };
 		83B7457B2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */; };
 		83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457C2C9B2EBB005868BD /* IndicatorView.swift */; };
+		83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
@@ -515,6 +516,7 @@
 		83A2617F2C77358300383BC9 /* NoticeKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadNoticeAttachmentsUseCase.swift; sourceTree = "<group>"; };
 		83B7457C2C9B2EBB005868BD /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
+		83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListSearchTableViewFooter.swift; sourceTree = "<group>"; };
 		83C509612BFA0CBB007379A0 /* ScrollLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLog.swift; sourceTree = "<group>"; };
 		83DD0D732C4F6FD000278ABD /* BusType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusType.swift; sourceTree = "<group>"; };
 		83DD0D752C4F6FDE00278ABD /* BusPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlace.swift; sourceTree = "<group>"; };
@@ -898,6 +900,7 @@
 				833D9C1C2C6B3F9200982145 /* NoticeListTableViewCell.swift */,
 				833D9C4C2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift */,
 				833D9C4E2C72249600982145 /* NoticeListTableViewFooter.swift */,
+				83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */,
 			);
 			path = NoticeListTableView;
 			sourceTree = "<group>";
@@ -2821,6 +2824,7 @@
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
+				83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */,
 				D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */,
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */,
