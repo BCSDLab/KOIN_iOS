@@ -81,6 +81,7 @@ enum ImageAsset: String {
     case download
     case noticeLoginToolTip
     case noticeNotLoginToolTip
+    case popularStar
 }
 
 enum SFSymbols: String {

@@ -9,16 +9,10 @@ import UIKit
 
 final class NoticeListCollectionViewCell: UICollectionViewCell {
     
-    private let fireImageView = UIImageView().then {
-        $0.image = .appImage(asset: .fireImage)
-        $0.backgroundColor = .white
+    private let starImageView = UIImageView().then {
+        $0.image = .appImage(asset: .popularStar)
     }
-    
-    private let imageBackgroundView = UIView().then {
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 20
-    }
-    
+
     private let noticeGuideLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 12)
         $0.textColor = .appColor(.bus1)
@@ -48,29 +42,24 @@ final class NoticeListCollectionViewCell: UICollectionViewCell {
 
 extension NoticeListCollectionViewCell {
     private func setUpLayouts() {
-        [imageBackgroundView, noticeGuideLabel, titleLabel].forEach {
+        [noticeGuideLabel, titleLabel].forEach {
             contentView.addSubview($0)
         }
         
-        imageBackgroundView.addSubview(fireImageView)
+        addSubview(starImageView)
     }
     
     private func setUpConstraints() {
-        imageBackgroundView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(22)
-            $0.width.equalTo(45)
-            $0.height.equalTo(45)
+        starImageView.snp.makeConstraints {
+            $0.width.equalTo(40)
+            $0.height.equalTo(40)
+            $0.leading.equalToSuperview().offset(16)
             $0.centerY.equalToSuperview()
-        }
-        fireImageView.snp.makeConstraints {
-            $0.width.equalTo(33)
-            $0.height.equalTo(33)
-            $0.centerX.centerY.equalToSuperview()
         }
         
         noticeGuideLabel.snp.makeConstraints {
-            $0.leading.equalTo(fireImageView.snp.trailing).offset(22)
-            $0.top.equalTo(fireImageView).offset(-15)
+            $0.leading.equalTo(starImageView.snp.trailing).offset(22)
+            $0.top.equalTo(starImageView).offset(-15)
             $0.height.equalTo(19)
         }
         
