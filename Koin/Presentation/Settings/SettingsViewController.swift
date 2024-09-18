@@ -11,6 +11,8 @@ import UIKit
 final class SettingsViewController: UIViewController {
     
     // MARK: - Properties
+    private let viewModel: SettingsViewModel
+    private let inputSubject: PassthroughSubject<SettingsViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -69,7 +71,8 @@ final class SettingsViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init() {
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "설정"
     }
@@ -118,7 +121,23 @@ final class SettingsViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-      
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            switch output {
+            case let .showToast(message, success, scene):
+                if success {
+                    switch scene {
+                    case .profile: self?.navigateToProfile()
+                    case .changePassword: self?.navigateToChangePassword()
+                    case .noti: self?.navigateToNoti()
+                    }
+                } else {
+                    self?.showToast(message: message, success: true, button: false)
+                }
+            }
+        }.store(in: &subscriptions)
+        
     }
     
 }
@@ -154,12 +173,23 @@ extension SettingsViewController {
     
 
     @objc private func profileButtonTapped() {
-        let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), revokeUseCase: DefaultRevokeUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
-        navigationController?.pushViewController(viewController, animated: true)
-        
+        inputSubject.send(.checkLogin(.profile))
     }
     
     @objc private func changePasswordButtonTapped() {
+        inputSubject.send(.checkLogin(.changePassword))
+    }
+    
+    @objc private func notiButtonTapped() {
+        inputSubject.send(.checkLogin(.noti))
+    }
+    
+    private func navigateToProfile() {
+        let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), revokeUseCase: DefaultRevokeUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToChangePassword() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
         let checkPasswordUseCase = DefaultCheckPasswordUseCase(userRepository: userRepository)
@@ -168,7 +198,7 @@ extension SettingsViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    @objc private func notiButtonTapped() {
+    private func navigateToNoti() {
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
