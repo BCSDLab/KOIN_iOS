@@ -26,6 +26,7 @@ struct NoticeArticleDTO: Decodable {
     let hit: Int
     let content: String?
     let updatedAt: String
+    let attachments: [NoticeAttachmentDTO]?
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String
@@ -33,11 +34,22 @@ struct NoticeArticleDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
-        case title, author, hit, content
+        case title, author, hit, content, attachments
         case prevId = "prev_id"
         case nextId = "next_id"
         case updatedAt = "updated_at"
         case registeredAt = "registered_at"
+    }
+}
+
+struct NoticeAttachmentDTO: Decodable {
+    let id: Int
+    let name, url, createdAt, updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, url
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
     }
 }
 
@@ -55,9 +67,7 @@ extension NoticeListDTO {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        let date = DateFormatter().date(from: registeredAt) ?? Date()
-        let newDate = date.formatDateToMMDDE()
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, registeredAt: newDate)
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], registeredAt: registeredAt)
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
@@ -66,6 +76,6 @@ extension NoticeArticleDTO {
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
         let newTitle = title.replacingOccurrences(of: "\n", with: "")
-        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: content, updatedAt: updatedAt, prevId: prevId, nextId: nextId, registeredAt: newDate)
+        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: content, updatedAt: updatedAt, attachments: attachments ?? [], prevId: prevId, nextId: nextId, registeredAt: newDate)
     }
 }

@@ -120,6 +120,38 @@ extension String {
         }
     }
     
+    func extractStringFromParentheses() -> (String, String) {
+        var result = ""
+        var isInsideParentheses = false
+        var startParenthesesIdx = 0
+        
+        for (index, char) in self.reversed().enumerated() {
+            if char == ")" {
+                isInsideParentheses = true
+                continue
+            }
+            
+            if char == "(" {
+                isInsideParentheses = false
+                startParenthesesIdx = self.count - index - 1
+                break
+            }
+            
+            if isInsideParentheses {
+                result += String(char)
+            }
+        }
+        let fileSize = String(result.reversed())
+        if startParenthesesIdx > 0 {
+            let resultString = self.prefix(startParenthesesIdx)
+            print(resultString)
+            return (fileSize, String(resultString))
+        }
+        else {
+            return ("", self)
+        }
+    }
+    
     func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(nil)

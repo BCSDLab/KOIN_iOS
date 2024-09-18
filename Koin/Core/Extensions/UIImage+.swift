@@ -78,6 +78,7 @@ enum ImageAsset: String {
     case fireImage
     case delete
     case plus
+    case download
 }
 
 enum SFSymbols: String {

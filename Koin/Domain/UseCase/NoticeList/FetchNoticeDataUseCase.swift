@@ -21,7 +21,7 @@ final class DefaultFetchNoticeDataUseCase: FetchNoticeDataUseCase {
     
     func fetchNoticeData(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, Error> {
         return noticeListRepository.fetchNoticeData(requestModel: request).map { data in
-            data.toDomain()
+            data.toDomainWithChangedDate().toDomain()
         }.eraseToAnyPublisher()
     }
 }
