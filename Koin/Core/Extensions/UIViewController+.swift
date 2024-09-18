@@ -17,6 +17,14 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func showIndicator() {
+        IndicatorView.shared.show()
+    }
+    
+    func dismissIndicator() {
+        IndicatorView.shared.dismiss()
+    }
 }
 
 extension UIViewController: UITextFieldDelegate {

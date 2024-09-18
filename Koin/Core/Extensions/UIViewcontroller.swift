@@ -14,7 +14,7 @@ extension UIViewController {
         self.dismiss(animated: true)
     }
     //UIAction
-    func presentActionSheet(title: String, message: String? = nil,
+    func presentAlert(title: String, message: String? = nil,
                       isCancelActionIncluded: Bool = false,
                       preferredStyle style: UIAlertController.Style = .actionSheet,
                       with actions: [UIAlertAction]) {
@@ -23,8 +23,10 @@ extension UIViewController {
         actions.forEach { actionSheet.addAction($0) }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapBackgroundBtn))
-        actionSheet.view.superview?.subviews[0].addGestureRecognizer(tap)  // FIXME-UIAlertController 계층구조
-
+        actionSheet.view.superview?.subviews.first?.isUserInteractionEnabled = true
+        actionSheet.view.superview?.subviews.first?.addGestureRecognizer(tap)  // FIXME-UIAlertController 계층구조
+        let actionDone = UIAlertAction(title: "확인", style: .default)
+        actionSheet.addAction(actionDone)
         if isCancelActionIncluded {
             let actionCancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             actionSheet.addAction(actionCancel)
@@ -34,6 +36,7 @@ extension UIViewController {
     }
     
     @objc func tapBackgroundBtn() {
+        print("asd")
         self.dismiss(animated: true)
     }
     
