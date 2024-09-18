@@ -16,6 +16,7 @@ final class NoticeListTableView: UITableView {
     let tapNoticePublisher = PassthroughSubject<Int, Never>()
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    let tapListLoadButtnPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
     
@@ -34,6 +35,7 @@ final class NoticeListTableView: UITableView {
         register(NoticeListTableViewKeyWordCell.self, forCellReuseIdentifier: NoticeListTableViewKeyWordCell.id)
         register(NoticeListTableViewCell.self, forCellReuseIdentifier: NoticeListTableViewCell.identifier)
         register(NoticeListTableViewFooter.self, forHeaderFooterViewReuseIdentifier: NoticeListTableViewFooter.identifier)
+        register(NoticeSearchTableViewFooter.self, forHeaderFooterViewReuseIdentifier: NoticeSearchTableViewFooter.id)
         dataSource = self
         delegate = self
         estimatedRowHeight = 110
@@ -111,7 +113,7 @@ extension NoticeListTableView: UITableViewDataSource {
 
 extension NoticeListTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 1 {
+        if section == 1 && !isForSearch {
             guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoticeListTableViewFooter.identifier) as? NoticeListTableViewFooter
             else {
                 return UITableViewHeaderFooterView()
@@ -120,6 +122,18 @@ extension NoticeListTableView: UITableViewDelegate {
             view.tapBtnPublisher.sink { [weak self] page in
                 self?.pageBtnPublisher.send(page)
             }.store(in: &view.subscriptions)
+            return view
+        }
+        else if section == 1 && isForSearch {
+            guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: NoticeSearchTableViewFooter.id) as? NoticeSearchTableViewFooter
+            else {
+                return UITableViewHeaderFooterView()
+            }
+           
+            view.tapBtnPublisher.sink { [weak self] in
+                self?.tapListLoadButtnPublisher.send()
+            }.store(in: &view.subscriptions)
+            
             return view
         }
         return nil
@@ -145,8 +159,12 @@ extension NoticeListTableView: UITableViewDelegate {
         if section == 0 {
             return 0
         }
-        else {
+        if !isForSearch && section == 1 {
             return 95
+        }
+        else {
+            print("Asda")
+            return 58
         }
     }
 }
