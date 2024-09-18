@@ -157,7 +157,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         navigationController?.setNavigationBarHidden(true, animated: animated)
         inputSubject.send(.fetchUserData)
     }
-      
+    
     // MARK: - Bind
     
     private func bind() {
@@ -208,25 +208,28 @@ extension ServiceSelectViewController {
         //timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
-   //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
+        //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
         settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
     }
     
     @objc private func inquryButtonTapped() {
-        showToast(message: "아직 구글폼 완성이 안된것같아요~", success: true)
+        if let url = URL(string:
+                            "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     @objc private func settingButtonTapped() {
         let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
         navigationController?.pushViewController(viewController, animated: true)
     }
-  
+    
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-   
+    
     @objc func logOutButtonTapped() {
         if viewModel.isLogined {
             showLogOutAlert()
@@ -242,7 +245,7 @@ extension ServiceSelectViewController {
     @objc func shopSelectButtonTapped() {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
-
+        
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
@@ -294,13 +297,13 @@ extension ServiceSelectViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburgerDining, .click, "식단"))
     }
     /*
-    @objc func timetableSelectButtonTapped() {
-        /*
-        let timetableViewController = TimetableViewController(viewModel: TimetableViewModel(service: TimetableService(provider: APIProvider(session: URLSession.shared))))
-        timetableViewController.title = "시간표"
-        navigationController?.pushViewController(timetableViewController, animated: true)*/
-    }
-    */
+     @objc func timetableSelectButtonTapped() {
+     /*
+      let timetableViewController = TimetableViewController(viewModel: TimetableViewModel(service: TimetableService(provider: APIProvider(session: URLSession.shared))))
+      timetableViewController.title = "시간표"
+      navigationController?.pushViewController(timetableViewController, animated: true)*/
+     }
+     */
     
     @objc func landSelectButtonTapped() {
         let landService = DefaultLandService()

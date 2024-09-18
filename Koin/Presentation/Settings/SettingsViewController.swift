@@ -113,7 +113,7 @@ final class SettingsViewController: UIViewController {
                 }
             }
         }
-
+        
         
     }
     
@@ -171,7 +171,7 @@ extension SettingsViewController {
     }
     
     
-
+    
     @objc private func profileButtonTapped() {
         inputSubject.send(.checkLogin(.profile))
     }
@@ -218,16 +218,22 @@ extension SettingsViewController {
     }
     
     @objc private func licenseButtonTapped() {
-        showToast(message: "아직 디자인이 안나온것 같아요~", success: true)
+        if let url = URL(string: "https://sponge-nigella-024.notion.site/8d03a9331dde4c1884ec2749053478bf?pvs=4") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     @objc private func inquryButtonTapped() {
-        showToast(message: "아직 구글폼 완성이 안된것같아요~", success: true)
+        if let url = URL(string:
+                            "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+        
     }
 }
 
 extension SettingsViewController {
     
-   
+    
     private func setUpLayOuts() {
         [generalLabel, profileButton, changePasswordButton, notiButton, serviceLabel, personalPolicyButton, koinPolicyButton, licenceButton, versionLabel, nowVersionLabel, recentVersionLabel, inquryButton].forEach {
             view.addSubview($0)
@@ -318,7 +324,7 @@ extension SettingsViewController {
             button.tintColor = UIColor.appColor(.neutral800)
             button.configuration = configuration
         }
-    
+        
     }
     
     private func configureView() {
