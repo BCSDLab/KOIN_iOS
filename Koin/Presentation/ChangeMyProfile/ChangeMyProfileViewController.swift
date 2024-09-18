@@ -165,6 +165,7 @@ final class ChangeMyProfileViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         maleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         femaleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
+        nicknameCheckButton.addTarget(self, action: #selector(nicknameCheckButtonTapped), for: .touchUpInside)
         hideKeyboardWhenTappedAround()
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
             $0.delegate = self
@@ -179,19 +180,62 @@ final class ChangeMyProfileViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-            case let .showToast(message, success):
-                self?.showToast(message: message, success: success)
-                if success { self?.navigationController?.popViewController(animated: true) }
+            case let .showToast(message, success, request):
+                switch request {
+                case .nickname:
+                     self?.nicknameCheckButton.isEnabled = !success
+                case .save:
+                    if success { self?.navigationController?.popViewController(animated: true) }
+                }
+                self?.showToast(message: message, success: true)
             case let .showProfile(profile):
                 self?.showProfile(profile)
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.deptButton, dataSource: deptList)
             }
         }.store(in: &subscriptions)
+        
+        let isNicknameButtonEnabled = nicknameCheckButton
+            .publisher(for: \.isEnabled)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                if isEnabled {
+                    self?.saveButton.setTitle("닉네임 중복확인을 해주세요.", for: .normal)
+                    self?.saveButton.backgroundColor = UIColor.appColor(.neutral300)
+                    self?.saveButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+                    self?.saveButton.isEnabled = false
+                    self?.nicknameCheckButton.backgroundColor = UIColor.appColor(.primary500)
+                    self?.nicknameCheckButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+                } else {
+                    self?.saveButton.setTitle("저장", for: .normal)
+                    self?.saveButton.backgroundColor = UIColor.appColor(.primary500)
+                    self?.saveButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+                    self?.saveButton.isEnabled = true
+                    self?.nicknameCheckButton.backgroundColor = UIColor.appColor(.neutral300)
+                    self?.nicknameCheckButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+                }
+            }
+        isNicknameButtonEnabled.store(in: &subscriptions)
     }
 }
 
 extension ChangeMyProfileViewController {
+    
+    @objc private func nicknameCheckButtonTapped(_ sender: UIButton) {
+        inputSubject.send(.checkNickname(nicknameTextField.text ?? ""))
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if textField == nicknameTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            
+            nicknameCheckButton.isEnabled = true
+        }
+        
+        return true
+    }
     
     @objc private func genderButtonTapped(sender: UIButton) {
         let selectedButton: UIButton
@@ -207,7 +251,7 @@ extension ChangeMyProfileViewController {
         selectedButton.isSelected = true
         selectedButton.backgroundColor = UIColor.appColor(.primary500)
         selectedButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-      
+        
         unselectedButton.isSelected = false
         unselectedButton.backgroundColor = UIColor.appColor(.neutral300)
         unselectedButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
@@ -320,7 +364,7 @@ extension ChangeMyProfileViewController {
         nameTextField.snp.makeConstraints { make in
             make.top.equalTo(nameTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(46)
         }
         nicknameTitleLabel.snp.makeConstraints { make in
@@ -335,7 +379,7 @@ extension ChangeMyProfileViewController {
         }
         nicknameCheckButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
-            make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.width.equalTo(85)
             make.height.equalTo(46)
         }
@@ -346,7 +390,7 @@ extension ChangeMyProfileViewController {
         phoneTextField.snp.makeConstraints { make in
             make.top.equalTo(phoneTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(46)
         }
         studentInfoLabel.snp.makeConstraints { make in
@@ -361,7 +405,7 @@ extension ChangeMyProfileViewController {
         studentNumberTextField.snp.makeConstraints { make in
             make.top.equalTo(studentNumberTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-40)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(46)
         }
         majorTitleLabel.snp.makeConstraints { make in
