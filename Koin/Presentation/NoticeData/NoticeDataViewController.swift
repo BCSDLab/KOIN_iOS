@@ -105,10 +105,14 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
-   
-    private let contentStackView = UIStackView().then {
-        $0.axis = .vertical
+    
+    private let attachmentGuideLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.textColor = .appColor(.neutral800)
+        $0.text = "첨부파일"
     }
+
+    private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
     
     // MARK: - Initialization
     
@@ -232,6 +236,19 @@ extension NoticeDataViewController {
             }
             hitLabel.text = "\(noticeData.hit.formattedWithComma)"
         }
+        if !noticeData.attachments.isEmpty {
+            noticeAttachmentsTableView.updateNoticeAttachments(attachments: noticeData.attachments)
+            attachmentGuideLabel.isHidden = false
+            noticeAttachmentsTableView.isHidden = false
+            let height = noticeData.attachments.count * 65
+            noticeAttachmentsTableView.snp.updateConstraints {
+                $0.height.equalTo(height)
+            }
+        }
+        else {
+            attachmentGuideLabel.isHidden = true
+            noticeAttachmentsTableView.isHidden = true
+        }
     }
     
     private func updatePopularArticle(notices: [NoticeArticleDTO]) {
@@ -284,7 +301,7 @@ extension NoticeDataViewController {
             titleWrappedView.addSubview($0)
         }
         //[contentTextView, inventoryButton, previousButton, nextButton].forEach {
-        [contentTextView, inventoryButton].forEach {
+        [contentTextView, inventoryButton, attachmentGuideLabel, noticeAttachmentsTableView].forEach {
             contentWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -377,15 +394,38 @@ extension NoticeDataViewController {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.bottom.equalToSuperview().inset(79)
             $0.height.equalTo(100)
         }
         
-        inventoryButton.snp.makeConstraints {
-            $0.top.equalTo(contentTextView.snp.bottom).offset(32)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(45)
-            $0.height.equalTo(31)
+        attachmentGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(contentTextView.snp.bottom).offset(14)
+            $0.leading.equalTo(contentTextView)
+            $0.height.equalTo(26)
+        }
+        
+        noticeAttachmentsTableView.snp.makeConstraints {
+            $0.top.equalTo(attachmentGuideLabel.snp.bottom).offset(14)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(100)
+        }
+        
+        if attachmentGuideLabel.isHidden {
+            inventoryButton.snp.makeConstraints {
+                $0.top.equalTo(contentTextView.snp.bottom).offset(22)
+                $0.leading.equalToSuperview().offset(24)
+                $0.width.equalTo(45)
+                $0.height.equalTo(31)
+                $0.bottom.equalToSuperview().inset(16)
+            }
+        }
+        else {
+            inventoryButton.snp.makeConstraints {
+                $0.top.equalTo(noticeAttachmentsTableView.snp.bottom).offset(8)
+                $0.leading.equalToSuperview().offset(24)
+                $0.width.equalTo(45)
+                $0.height.equalTo(31)
+                $0.bottom.equalToSuperview().inset(16)
+            }
         }
         
         /*
