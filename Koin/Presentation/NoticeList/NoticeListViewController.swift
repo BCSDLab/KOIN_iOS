@@ -169,7 +169,7 @@ extension NoticeListViewController {
                 inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag - 1]))
             }
         } else if gesture.direction == .left {
-            if tabBarCollectionView.tag < noticeListType.count {
+            if tabBarCollectionView.tag < noticeListType.count - 1 {
                 inputSubject.send(.changeBoard(noticeListType[tabBarCollectionView.tag + 1]))
             }
         }
