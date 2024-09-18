@@ -39,6 +39,7 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
         // 모두보기 키워드는 viewModel에서 넣어서 오기 때문에 배열의 개수가 하나일 때, 알림설정 키워드가 없음.
         noticeKeyWordList.removeAll()
         if keyWordList.count == 0 {
+            noticeKeyWordList.append(NoticeKeyWordDTO(id: -1, keyWord: "모두보기"))
             noticeKeyWordList.append(NoticeKeyWordDTO(id: nil, keyWord: "새 키워드 추가"))
         }
         else { // id가 -1일때 모두보기이다.

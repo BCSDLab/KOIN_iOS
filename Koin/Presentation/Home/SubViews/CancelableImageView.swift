@@ -10,7 +10,6 @@ import UIKit
 final class CancelableImageView: UIView {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .diningTooltip)
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
