@@ -174,6 +174,7 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         
         myKeyWordCollectionView.myKeyWordsContentsSizePublisher.sink { [weak self] height in
             self?.myKeyWordCollectionView.snp.updateConstraints {
+                print("height: \(height + 24)")
                 $0.height.equalTo(height + 24)
             }
         }.store(in: &subscriptions)
@@ -235,6 +236,7 @@ extension ManageNoticeKeyWordViewController {
  
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
+            textField.text = ""
             inputSubject.send(.addKeyWord(keyWord: text))
         }
         return true
