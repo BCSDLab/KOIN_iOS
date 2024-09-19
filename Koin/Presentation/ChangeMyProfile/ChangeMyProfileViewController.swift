@@ -268,7 +268,7 @@ extension ChangeMyProfileViewController {
         let studentNumberText: String? = studentNumberTextField.text?.count ?? 0 >= 1 ? studentNumberTextField.text : nil
         var deptText: String?
         if let label = deptButton.subviews.compactMap({ $0 as? UILabel }).first {
-            if label.text == "학부" { deptText = nil }
+            if label.text == "선택된 전공이 없습니다." { deptText = nil }
             else { deptText = label.text }
         }
         let gender: Int?
@@ -468,7 +468,7 @@ extension ChangeMyProfileViewController {
         [deptButton].forEach { button in
             var buttonConfiguration = UIButton.Configuration.plain()
             buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
-            var attributedTitle: AttributedString = "학부"
+            var attributedTitle: AttributedString = "선택된 전공이 없습니다."
             attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
             attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
             buttonConfiguration.attributedTitle = attributedTitle
