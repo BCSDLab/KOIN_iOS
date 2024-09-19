@@ -50,23 +50,23 @@ extension RecentSearchTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecentSearchTableViewCell.identifier, for: indexPath) as? RecentSearchTableViewCell else {
-               return UITableViewCell()
-           }
-           guard indexPath.row < recentSearchedDataList.count else {
-               return UITableViewCell()
-           }
-           
-           let searchedData = recentSearchedDataList[indexPath.row]
-           cell.configure(searchedData: searchedData.name ?? "")
-           
-           cell.tapDeleteButtonPublisher.sink { [weak self] in
-               if let name = searchedData.name,
-                  let date = searchedData.searchedDate {
-                   self?.tapDeleteButtonPublisher.send((name, date))
-               }
-           }.store(in: &cell.subscriptions)
-           
-           return cell
+            return UITableViewCell()
+        }
+        guard indexPath.row < recentSearchedDataList.count else {
+            return UITableViewCell()
+        }
+        cell.selectionStyle = .none
+        let searchedData = recentSearchedDataList[indexPath.row]
+        cell.configure(searchedData: searchedData.name ?? "")
+        
+        cell.tapDeleteButtonPublisher.sink { [weak self] in
+            if let name = searchedData.name,
+               let date = searchedData.searchedDate {
+                self?.tapDeleteButtonPublisher.send((name, date))
+            }
+        }.store(in: &cell.subscriptions)
+        
+        return cell
     }
 }
 

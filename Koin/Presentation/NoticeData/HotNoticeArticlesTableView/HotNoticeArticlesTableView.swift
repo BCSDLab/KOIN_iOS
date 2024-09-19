@@ -53,6 +53,7 @@ extension HotNoticeArticlesTableView: UITableViewDataSource {
         else {
             return UITableViewCell()
         }
+        cell.selectionStyle = .none
         cell.configure(articleModel: popularNoticeArticles[indexPath.row])
         return cell
     }
