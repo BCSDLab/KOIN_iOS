@@ -98,6 +98,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         hideKeyboardWhenTappedAround()
         inputSubject.send(.getHotKeyWord(5))
         inputSubject.send(.fetchRecentSearchedWord)
+        textField.delegate = self
         noticeListTableView.isHidden = true
         emptyNoticeGuideLabel.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -212,6 +213,18 @@ extension NoticeSearchViewController {
     
     @objc private func deleteAllButtonTapped() {
         inputSubject.send(.deleteAllSearchedWords)
+    }
+    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+            showIndicator()
+            inputSubject.send(.searchWord(text, Date(), 0))
+            inputSubject.send(.fetchSearchedResult(1, text))
+            dismissIndicator()
+        }
+        textField.text = ""
+        print("asdafsda")
+        return true
     }
     
     private func updateRecommendedHotWord(keyWords: [String]) {
