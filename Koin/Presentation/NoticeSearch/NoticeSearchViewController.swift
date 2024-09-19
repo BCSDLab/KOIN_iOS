@@ -201,9 +201,11 @@ extension NoticeSearchViewController {
     }
     
     @objc private func searchButtonTapped() {
-        if let text = textField.text {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+            showIndicator()
             inputSubject.send(.searchWord(text, Date(), 0))
-            inputSubject.send(.fetchSearchedResult(text))
+            inputSubject.send(.fetchSearchedResult(1, text))
+            dismissIndicator()
         }
         textField.text = ""
     }
