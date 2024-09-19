@@ -65,7 +65,6 @@ final class SettingsViewController: UIViewController {
     }
     private let inquryButton = UIButton().then {
         $0.setTitle("문의하기", for: .normal)
-        $0.alpha = 0.5
         $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 16)
     }
