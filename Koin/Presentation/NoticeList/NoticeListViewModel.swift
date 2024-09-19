@@ -76,9 +76,18 @@ extension NoticeListViewModel {
         var keyWordIndex = 0
         var keyWordValue: NoticeKeyWordDTO = NoticeKeyWordDTO(id: 0, keyWord: "")
         var count = 0
-        if let keyWord = keyWord {
-            keyWordValue = keyWord
-            self.keyWord = keyWord.keyWord
+        var overallCount = 0
+        if let keyWord = keyWord, self.keyWord != keyWord.keyWord {
+            if keyWord.keyWord == "모두보기" {
+                overallCount += 1
+            }
+            else {
+                overallCount = 0
+            }
+            if overallCount == 0 {
+                keyWordValue = keyWord
+                self.keyWord = keyWord.keyWord
+            }
         }
         else if self.keyWord != nil {
             keyWordValue = NoticeKeyWordDTO(id: nil, keyWord: self.keyWord ?? "")
