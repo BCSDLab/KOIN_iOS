@@ -16,9 +16,11 @@ final class NoticeListTableView: UITableView {
     let tapNoticePublisher = PassthroughSubject<Int, Never>()
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
-    let tapListLoadButtnPublisher = PassthroughSubject<Void, Never>()
+    let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
+    private var isLastPage: Bool = false
+    private var isTappedListLoadButton: Bool = false
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -44,12 +46,28 @@ final class NoticeListTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages, isForSearch: Bool) {
+    func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
-        self.isForSearch = isForSearch
+        isForSearch = false
         let indexSet = IndexSet(integer: 1)
         reloadSections(indexSet, with: .automatic)
+    }
+    
+    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isLastPage: Bool) {
+        self.isLastPage = isLastPage
+        if !isTappedListLoadButton {
+            self.noticeArticleList = noticeArticleList
+        }
+        else {
+            self.noticeArticleList.append(contentsOf: noticeArticleList)
+        }
+        
+        isForSearch = true
+        let indexSet = IndexSet(integer: 1)
+        reloadSections(indexSet, with: .automatic)
+        let IndexPath = IndexPath(row: self.noticeArticleList.count-1, section: 1)
+        scrollToRow(at: IndexPath, at: .bottom, animated: true)
     }
     
     func updateKeyWordList(keyWordList: [NoticeKeyWordDTO], keyWordIdx: Int) {
@@ -131,7 +149,10 @@ extension NoticeListTableView: UITableViewDelegate {
             }
            
             view.tapBtnPublisher.sink { [weak self] in
-                self?.tapListLoadButtnPublisher.send()
+                guard let self = self else { return }
+                self.isTappedListLoadButton = true
+                let page = Int(self.noticeArticleList.count / 5)
+                self.tapListLoadButtnPublisher.send(page)
             }.store(in: &view.subscriptions)
             
             return view
@@ -156,15 +177,14 @@ extension NoticeListTableView: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 0
-        }
         if !isForSearch && section == 1 {
             return 95
         }
-        else {
-            print("Asda")
+        else if isForSearch && section == 1 && !isLastPage {
             return 58
+        }
+        else {
+            return 0
         }
     }
 }
