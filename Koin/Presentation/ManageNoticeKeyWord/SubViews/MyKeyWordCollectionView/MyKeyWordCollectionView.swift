@@ -36,10 +36,11 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
     func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
         self.myKeyWordList = keyWords
         reloadData()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.myKeyWordsContentsSizePublisher.send(self.contentSize.height)
-        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        myKeyWordsContentsSizePublisher.send(self.contentSize.height)
     }
 }
 
