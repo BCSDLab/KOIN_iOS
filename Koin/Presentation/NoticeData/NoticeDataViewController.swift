@@ -190,7 +190,13 @@ extension NoticeDataViewController {
     }
     
     @objc private func tapInventoryButton() {
-        navigationController?.popViewController(animated: true)
+        guard let navigationController = navigationController else { return }
+        while let topVc = navigationController.topViewController {
+            if topVc is NoticeListViewController || navigationController.viewControllers.count > 1 {
+                break
+            }
+            navigationController.popViewController(animated: false)
+        }
     }
     
     /*
