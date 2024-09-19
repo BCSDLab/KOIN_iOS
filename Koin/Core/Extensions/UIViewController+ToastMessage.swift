@@ -8,18 +8,17 @@
 import UIKit
 
 extension UIViewController {
-    func showToast(message: String, success: Bool, button: Bool = false) {
+    func showToast(message: String, success: Bool, showLoginButton: Bool = false) {
         guard let windowScene = UIApplication.shared.connectedScenes
             .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-
-        let backgroundColor = success
-            ? UIColor.appColor(.primary900).withAlphaComponent(0.8)
-            : UIColor.appColor(.danger700).withAlphaComponent(0.8)
         
-        // 기본 토스트 메시지 Label
+        let backgroundColor = success
+        ? UIColor.appColor(.primary900).withAlphaComponent(0.8)
+        : UIColor.appColor(.danger700).withAlphaComponent(0.8)
+        
         let toastLabel = PaddingLabel(frame: CGRect(x: 16, y: window.frame.height - 81, width: window.frame.width - 32, height: 54))
         toastLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         toastLabel.textAlignment = .left
@@ -29,37 +28,37 @@ extension UIViewController {
         toastLabel.clipsToBounds = true
         toastLabel.backgroundColor = backgroundColor
         toastLabel.textColor = UIColor.appColor(.neutral0)
-
-            let loginButton = UIButton(type: .system)
-            loginButton.setTitle("로그인 하기", for: .normal)
-            loginButton.setTitleColor(UIColor.appColor(.sub500), for: .normal)
-            loginButton.backgroundColor = .clear
-            loginButton.frame = CGRect(x: toastLabel.frame.width - 75, y: window.frame.height - 81, width: 65, height: 30) // toastLabel 내에서 위치 조정
-            loginButton.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-
-            loginButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
-            
-        if button {
+        
+        let loginButton = UIButton(type: .system)
+        loginButton.setTitle("로그인 하기", for: .normal)
+        loginButton.setTitleColor(UIColor.appColor(.sub500), for: .normal)
+        loginButton.backgroundColor = .clear
+        loginButton.frame = CGRect(x: toastLabel.frame.width - 65, y: window.frame.height - 81, width: 65, height: 54)
+        loginButton.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+        
+        loginButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        
+        
+        window.addSubview(toastLabel)
+        if showLoginButton {
             window.addSubview(loginButton)
         }
-
-        // 토스트 메시지 추가
-        window.addSubview(toastLabel)
-
-        // 애니메이션 설정
-        UIView.animate(withDuration: 5.0, delay: 0.1, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-            loginButton.isUserInteractionEnabled = true
-            loginButton.alpha = 0.5
-            loginButton.isUserInteractionEnabled = true
-        }, completion: { _ in
+        
+        let animator = UIViewPropertyAnimator(duration: 5.0, curve: .easeOut) {
+            toastLabel.alpha = 0.1
+            loginButton.alpha = 0.1
+        }
+        
+        animator.addCompletion { _ in
             toastLabel.removeFromSuperview()
             loginButton.removeFromSuperview()
-        })
+        }
+        animator.startAnimation()
+        
     }
     
-    @objc private func didTapLoginButton() {
-        print("로그인 버튼 클릭됨")
+    @objc private func didTapLoginButton(_ sender: UIButton) {
+        sender.removeFromSuperview()
         let loginViewController = LoginViewController(viewModel: LoginViewModel(
             loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
