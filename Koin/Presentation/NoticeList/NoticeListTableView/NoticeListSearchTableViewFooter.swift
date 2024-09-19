@@ -66,6 +66,7 @@ extension NoticeSearchTableViewFooter {
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
+        listLoadButton.addTarget(self, action: #selector(tapListLoadButton), for: .touchUpInside)
         contentView.backgroundColor = .appColor(.neutral50)
     }
 }
