@@ -84,6 +84,7 @@ extension NoticeListViewModel {
         var overallCount = 0
         if let keyWord = keyWord, self.keyWord != keyWord.keyWord {
             if keyWord.keyWord == "모두보기" {
+                makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.noticeFilterAll, category: .click, value: "모두보기")
                 overallCount += 1
             }
             else {
