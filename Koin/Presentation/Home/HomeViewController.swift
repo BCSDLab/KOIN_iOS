@@ -445,8 +445,8 @@ extension HomeViewController {
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "식단"))
+        let menuTitle = menuLabel.text ?? ""
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, menuTitle))
     }
     
     @objc private func busViewTapped() {
