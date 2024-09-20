@@ -68,6 +68,19 @@ enum EventParameter {
             case busTimetableTime = "bus_timetable_time"
             case busTimetableExpress = "bus_timetable_express"
             
+            case noticeTab = "notice_tab"
+            case noticePage = "notice_page"
+            case inventory = "inventory"
+            case popularNotice = "popular_notice"
+            case noticeSearch = "notice_search"
+            case popularSearchingWord = "popular_searching_word"
+            case manageKeyword = "manage_keyword"
+            case fiterAll = "filter_all"
+            case noticeFilterAll = "notice_filter_all"
+            case addKeyword = "add_keyword"
+            case recommendedKeyword = "recommended_keyword"
+            case keywordNotification = "keyword_notification"
+            
             var team: String {
                 return "CAMPUS"
             }
