@@ -102,7 +102,12 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         }.store(in: &subscriptions)
         
         tabBarCollectionView.selectTabPublisher.sink { [weak self] boardType in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeTab, .click, "\(boardType.displayName)"))
             self?.inputSubject.send(.changeBoard(boardType))
+        }.store(in: &subscriptions)
+        
+        noticeTableView.isScrolledPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticePage, .scroll, "공지사항"))
         }.store(in: &subscriptions)
     
         noticeTableView.pageBtnPublisher.sink { [weak self] page in

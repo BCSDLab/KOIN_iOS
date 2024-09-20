@@ -14,6 +14,7 @@ final class NoticeListViewModel: ViewModelProtocol {
         case changeBoard(NoticeListType)
         case changePage(Int)
         case getUserKeyWordList(NoticeKeyWordDTO? = nil)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
@@ -25,6 +26,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
     private let fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var noticeListType: NoticeListType = .전체공지 {
         didSet {
             getNoticeInfo(page: 1)
@@ -36,9 +38,10 @@ final class NoticeListViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase) {
+    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
         self.fetchMyKeyWordUseCase = fetchMyKeyWordUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -50,6 +53,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.getNoticeInfo(page: page)
             case let .getUserKeyWordList(keyWord):
                 self?.getUserKeyWordList(keyWord: keyWord)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -123,6 +128,10 @@ extension NoticeListViewModel {
             if keyWords.isEmpty { self?.outputSubject.send(.isLogined(true)) }
             completion(keyWords)
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 

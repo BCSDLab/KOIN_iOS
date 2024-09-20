@@ -326,7 +326,8 @@ extension HomeViewController {
         let repository = DefaultNoticeListRepository(service: service)
         let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
         let fetchMyKeyWordUseCase = DefaultFetchNotificationKeyWordUseCase(noticeListRepository: repository)
-        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeyWordUseCase: fetchMyKeyWordUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeyWordUseCase: fetchMyKeyWordUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }

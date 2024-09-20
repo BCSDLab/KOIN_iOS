@@ -17,6 +17,8 @@ final class NoticeListTableView: UITableView {
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
+    let isScrolledPublisher = PassthroughSubject<Void, Never>()
+    private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
     private var isLastPage: Bool = false
@@ -185,6 +187,29 @@ extension NoticeListTableView: UITableViewDelegate {
         }
         else {
             return 0
+        }
+    }
+}
+
+extension NoticeListTableView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let contentOffsetY = self.contentOffset.y
+        let screenHeight = self.frame.height
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
+            scrollDirection = .scrollChecked
+            isScrolledPublisher.send()
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
+        if velocity.y > 0 {
+            scrollDirection = .scrollToTop
+        }
+        else {
+            if scrollDirection != .scrollChecked {
+                scrollDirection = .scrollToDown
+            }
         }
     }
 }
