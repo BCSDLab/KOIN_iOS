@@ -16,6 +16,7 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case getMyKeyWord
         case changeNotification(isOn: Bool)
         case fetchSubscription
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateKeyWord([NoticeKeyWordDTO])
@@ -31,6 +32,7 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
         case exceedNumber
     }
     
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase
@@ -41,12 +43,13 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     private let fetchNotiListUseCase: FetchNotiListUseCase
     
     init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase,
-         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
+         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
         self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
         self.fetchNotificationKeyWordUseCase = fetchNotificationKeyWordUseCase
         self.fetchRecommendedKeyWordUseCase = fetchRecommendedKeyWordUseCase
         self.changeNotiUseCase = changeNotiUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
     }
   
@@ -63,6 +66,8 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
                 self?.changeNotification(isOn: isOn)
             case .fetchSubscription:
                 self?.fetchSubscription()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -88,6 +93,7 @@ extension ManageNoticeKeyWordViewModel {
                 self.outputSubject.send(.keyWordIsIllegal(.exceedNumber))
             }
             if isNotIllegal {
+                makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.addKeyword, category: .click, value: keyWord)
                 self.addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: requestModel).sink(receiveCompletion: { [weak self] completion in
                     if case let .failure(error) = completion {
                         Log.make().error("\(error)")
@@ -174,6 +180,10 @@ extension ManageNoticeKeyWordViewModel {
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateSwitch(isOn: isOn))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 
