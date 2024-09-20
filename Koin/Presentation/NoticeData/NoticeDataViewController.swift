@@ -173,8 +173,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             }
         }.store(in: &subscriptions)
         
-        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle in
             self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNotice, .click, "\(noticeTitle)"))
         }.store(in: &subscriptions)
         
         noticeAttachmentsTableView.tapDownloadButtonPublisher
@@ -190,6 +191,7 @@ extension NoticeDataViewController {
     }
     
     @objc private func tapInventoryButton() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.inventory, .click, "목록"))
         guard let navigationController = navigationController else { return }
         while let topVc = navigationController.topViewController {
             if topVc is NoticeListViewController || navigationController.viewControllers.count > 1 {
@@ -212,7 +214,8 @@ extension NoticeDataViewController {
         let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
         let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, noticeId: noticeId)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
         let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(noticeDataVc, animated: true)
     }
