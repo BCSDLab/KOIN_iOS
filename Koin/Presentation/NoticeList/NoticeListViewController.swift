@@ -162,7 +162,8 @@ extension NoticeListViewController {
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeyWordUseCase = DefaultFetchHotSearchingKeyWordUseCase(noticeListRepository: repository)
         let searchNoticeArticlesUseCase = DefaultSearchNoticeArticlesUseCase(noticeRepository: repository)
-        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: DefaultManageRecentSearchedWordUseCase(), searchNoticeArticlesUseCase: searchNoticeArticlesUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: DefaultManageRecentSearchedWordUseCase(), logAnalyticsEventUseCase: logAnalyticsEventUseCase, searchNoticeArticlesUseCase: searchNoticeArticlesUseCase)
         let vc = NoticeSearchViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }

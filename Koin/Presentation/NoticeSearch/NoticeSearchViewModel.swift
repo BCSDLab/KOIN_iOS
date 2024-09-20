@@ -16,6 +16,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
         case fetchSearchedResult(Int, String?)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateHotKeyWord([String])
@@ -23,6 +24,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case updateSearchedrsult([NoticeArticleDTO], Bool)
     }
     
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase
@@ -30,9 +32,10 @@ final class NoticeSearchViewModel: ViewModelProtocol {
     private let searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase
     private var keyWord = ""
     
-    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase) {
+    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase) {
         self.fetchHotKeyWordUseCase = fetchHotKeyWordUseCase
         self.manageRecentSearchedWordUseCase = manageRecentSearchedWordUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.searchNoticeArticlesUseCase = searchNoticeArticlesUseCase
     }
     
@@ -49,6 +52,8 @@ final class NoticeSearchViewModel: ViewModelProtocol {
                 self?.deleteAllSearchedWords()
             case let .fetchSearchedResult(page, keyWord):
                 self?.fetchSearchedResult(page: page, keyWord: keyWord)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -105,6 +110,10 @@ extension NoticeSearchViewModel {
                 self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false))
             }
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 
