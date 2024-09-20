@@ -128,6 +128,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         
         noticeTableView.keyWordAddBtnTapPublisher
             .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.manageKeyword, .click, "키워드관리"))
                 let noticeListService = DefaultNoticeService()
                 let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
                 let addNotificationKeyWordUseCase = DefaultAddNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
