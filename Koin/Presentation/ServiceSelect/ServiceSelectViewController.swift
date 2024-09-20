@@ -282,7 +282,7 @@ extension ServiceSelectViewController {
         busDetailViewController.title = "버스/교통"
         navigationController?.pushViewController(busDetailViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburgerBus, .click, "버스"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스"))
     }
     
     @objc func diningSelectButtonTapped() {
@@ -303,7 +303,7 @@ extension ServiceSelectViewController {
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburgerDining, .click, "식단"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "식단"))
     }
     /*
     @objc func timetableSelectButtonTapped() {

@@ -53,7 +53,7 @@ enum EventParameter {
             // Dining
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
-            case hamburgerDining = "hamburger_dining"
+            case hamburger = "hamburger"
             case menuTime = "menu_time"
             case menuImage = "menu_image"
             
@@ -61,7 +61,6 @@ enum EventParameter {
             case mainBus = "main_bus"
             case mainBusChangeToFrom = "main_bus_changeToFrom"
             case mainBusScroll = "main_bus_scroll"
-            case hamburgerBus = "hamburger_bus"
             case busDeparture = "bus_departure"
             case busArrival = "bus_arrival"
             case busTimetable = "bus_timetable"
