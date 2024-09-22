@@ -174,6 +174,7 @@ extension ManageNoticeKeyWordViewModel {
     
     private func changeNotification(isOn: Bool) {
         let httpMethod: Alamofire.HTTPMethod = isOn ? .post : .delete
+        let logValueName = isOn ? "on" : "off"
         changeNotiUseCase.execute(method: httpMethod, type: .articleKeyWord).sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -181,6 +182,7 @@ extension ManageNoticeKeyWordViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateSwitch(isOn: isOn))
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: logValueName)
         }).store(in: &subscriptions)
     }
     
