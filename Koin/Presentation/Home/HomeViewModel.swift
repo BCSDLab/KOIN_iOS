@@ -26,7 +26,6 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusCardInformation)
-        case putImage(ShopCategoryDTO)
         case moveBusItem
     }
     
@@ -36,7 +35,6 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchDiningListUseCase: FetchDiningListUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let dateProvider: DateProvider
-    private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchBusInformationListUseCase: FetchBusInformationListUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private var subscriptions: Set<AnyCancellable> = []
@@ -44,10 +42,9 @@ final class HomeViewModel: ViewModelProtocol {
     
     // MARK: - Initialization
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, dateProvder: DateProvider) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
         self.dateProvider = dateProvder
@@ -58,7 +55,6 @@ final class HomeViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 self?.getBusInformation(.koreatech, .terminal, .shuttleBus)
-                self?.getShopCategory()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
             case let .getBusInfo(from, to, type):
@@ -108,16 +104,6 @@ extension HomeViewModel {
         } receiveValue: { [weak self] response in
             let result = response.filter { $0.place == diningPlace }.first
             self?.outputSubject.send(.updateDining(result, dateInfo.diningType, dateInfo.date.formatDateToYYMMDD() == Date().formatDateToYYMMDD()))
-        }.store(in: &subscriptions)
-    }
-    
-    private func getShopCategory() {
-        fetchShopCategoryListUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.putImage(response))
         }.store(in: &subscriptions)
     }
     

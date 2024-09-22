@@ -21,12 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
 
-        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider))
+        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider))
 
         let navigationController = CustomNavigationController(rootViewController: mainViewController)
         window.rootViewController = navigationController

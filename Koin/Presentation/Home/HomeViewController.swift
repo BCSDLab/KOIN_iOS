@@ -81,14 +81,11 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         return label
     }()
     
-    private let shopCollectionView: ShopCollectionView = {
-        let shopCollectionViewFlowLayout = UICollectionViewFlowLayout()
-        shopCollectionViewFlowLayout.itemSize = CGSize(width: 45, height: 90)
-        shopCollectionViewFlowLayout.scrollDirection = .horizontal
-        shopCollectionViewFlowLayout.minimumLineSpacing = 8
-        let shopCollectionView = ShopCollectionView(frame: .zero, collectionViewLayout: shopCollectionViewFlowLayout)
-        return shopCollectionView
-    }()
+    private let shopListButton = UIButton().then { button in
+    }
+    
+    private let callBenefitButton = UIButton().then { button in
+    }
     
     private let menuLabel: UILabel = {
         let label = UILabel()
@@ -149,7 +146,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
-        shopCollectionView.storeDelegate = self
         configureTapGesture()
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -215,8 +211,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
             switch output {
             case let .updateDining(diningItem, diningType, isToday):
                 self?.updateDining(item: diningItem, type: diningType, isToday: isToday)
-            case let .putImage(response):
-                self?.putImage(data: response)
             case let .updateBus(response):
                 self?.updateBusTime(response)
             case .moveBusItem:
@@ -389,10 +383,6 @@ extension HomeViewController {
         }
     }
     
-    private func putImage(data: ShopCategoryDTO) {
-        shopCollectionView.updateCategories(data.shopCategories)
-    }
-    
     func didTapCell(at id: Int) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -460,7 +450,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
+        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -505,15 +495,9 @@ extension HomeViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        shopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(11)
-            make.leading.equalTo(scrollView.snp.leading).offset(20)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-            make.height.equalTo(70)
-        }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
-            make.top.equalTo(shopCollectionView.snp.bottom).offset(40)
+            make.top.equalTo(shopLabel.snp.bottom).offset(40)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
         diningTooltipImageView.snp.makeConstraints { make in
@@ -554,11 +538,16 @@ extension HomeViewController {
         logoView.layer.shadowRadius = 4
     }
     
+    private func setUpButtons() {
+        
+    }
+    
     private func configureView() {
         setUpNavigationBar()
         setUpLayOuts()
         setUpConstraints()
         setUpShadow()
+        setUpButtons()
         setUpRoundedCorners()
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
