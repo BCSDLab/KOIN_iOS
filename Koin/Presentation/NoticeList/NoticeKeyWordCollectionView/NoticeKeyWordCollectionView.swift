@@ -13,6 +13,7 @@ final class NoticeKeyWordCollectionView: UICollectionView, UICollectionViewDataS
     private var noticeKeyWordList: [NoticeKeyWordDTO] = []
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     var subscriptions = Set<AnyCancellable>()
     var selectedKeyWordIdx = 0
     
@@ -84,7 +85,10 @@ extension NoticeKeyWordCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item == 0 || noticeKeyWordList[indexPath.row-1].keyWord == "새 키워드 추가"{
+        if indexPath.row == 0 {
+            manageKeyWordBtnTapPublisher.send()
+        }
+        else if noticeKeyWordList[indexPath.row-1].keyWord == "새 키워드 추가"{
             keyWordAddBtnTapPublisher.send()
         }
         else {

@@ -17,6 +17,7 @@ final class NoticeListTableView: UITableView {
     let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
+    let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let isScrolledPublisher = PassthroughSubject<Void, Never>()
     private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
@@ -107,6 +108,9 @@ extension NoticeListTableView: UITableViewDataSource {
             cell.keyWordTapPublisher.sink { [weak self] keyWord in
                 print(keyWord)
                 self?.keyWordTapPublisher.send(keyWord)
+            }.store(in: &cell.subscriptions)
+            cell.manageKeyWordBtnTapPublisher.sink { [weak self] in
+                self?.manageKeyWordBtnTapPublisher.send()
             }.store(in: &cell.subscriptions)
             return cell
         }
