@@ -168,19 +168,17 @@ final class ManageNoticeKeyWordViewController: UIViewController {
         
         myKeyWordCollectionView.tapDeleteButtonPublisher
             .sink { [weak self] keyWord in
-                print(keyWord)
             self?.inputSubject.send(.deleteKeyWord(keyWord: keyWord))
         }.store(in: &subscriptions)
         
         myKeyWordCollectionView.myKeyWordsContentsSizePublisher.sink { [weak self] height in
             self?.myKeyWordCollectionView.snp.updateConstraints {
-                print("height: \(height + 24)")
                 $0.height.equalTo(height + 24)
             }
         }.store(in: &subscriptions)
         
         recommendedKeyWordCollectionView.recommendedKeyWordPublisher.sink { [weak self] keyWord in
-            self?.inputSubject.send(.addKeyWord(keyWord: keyWord))
+            self?.inputSubject.send(.addKeyWord(keyWord: keyWord, .recommended))
         }.store(in: &subscriptions)
         
         keyWordLoginModalViewController.loginButtonPublisher.sink { [weak self] in
@@ -212,7 +210,7 @@ extension ManageNoticeKeyWordViewController {
     
     @objc private func tapAddKeyWordButton() {
         if let text = textField.text {
-            inputSubject.send(.addKeyWord(keyWord: text))
+            inputSubject.send(.addKeyWord(keyWord: text, .addByUser))
             textField.text = ""
             textField.resignFirstResponder()
         }
@@ -237,7 +235,7 @@ extension ManageNoticeKeyWordViewController {
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
             textField.text = ""
-            inputSubject.send(.addKeyWord(keyWord: text))
+            inputSubject.send(.addKeyWord(keyWord: text, .addByUser))
         }
         return true
     }

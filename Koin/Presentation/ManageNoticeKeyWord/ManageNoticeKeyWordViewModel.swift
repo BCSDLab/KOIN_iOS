@@ -11,7 +11,7 @@ import Foundation
 
 final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     enum Input {
-        case addKeyWord(keyWord: String)
+        case addKeyWord(keyWord: String, AddKeyWordType)
         case deleteKeyWord(keyWord: NoticeKeyWordDTO)
         case getMyKeyWord
         case changeNotification(isOn: Bool)
@@ -56,8 +56,8 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .addKeyWord(keyWord):
-                self?.addKeyWord(keyWord: keyWord)
+            case let .addKeyWord(keyWord, addType):
+                self?.addKeyWord(keyWord: keyWord, addType: addType)
             case .getMyKeyWord:
                 self?.fetchMyKeyWord()
             case let .deleteKeyWord(keyWord):
@@ -75,7 +75,7 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
 }
 
 extension ManageNoticeKeyWordViewModel {
-    private func addKeyWord(keyWord: String) {
+    private func addKeyWord(keyWord: String, addType: AddKeyWordType) {
         let requestModel = NoticeKeyWordDTO(id: nil, keyWord: keyWord)
         var isNotIllegal = true
         getMyKeyWord { [weak self] myKeyWords in
@@ -93,7 +93,9 @@ extension ManageNoticeKeyWordViewModel {
                 self.outputSubject.send(.keyWordIsIllegal(.exceedNumber))
             }
             if isNotIllegal {
-                makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.addKeyword, category: .click, value: keyWord)
+                if addType == .recommended {
+                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyWord)
+                }
                 self.addNotificationKeyWordUseCase.addNotificationKeyWordWithLogin(requestModel: requestModel).sink(receiveCompletion: { [weak self] completion in
                     if case let .failure(error) = completion {
                         Log.make().error("\(error)")
