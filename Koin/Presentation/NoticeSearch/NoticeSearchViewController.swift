@@ -154,7 +154,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         }.store(in: &subscriptions)
         
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.recommendedKeyword, .click, "인기검색어"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularSearchingWord, .click, "\(word)"))
             self?.textField.text = word
         }.store(in: &subscriptions)
         
