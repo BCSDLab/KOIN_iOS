@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class HomeViewController: UIViewController, CollectionViewDelegate {
+final class HomeViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -82,9 +82,11 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }()
     
     private let shopListButton = UIButton().then { button in
+        button.setImage(UIImage.appImage(asset: .shopButton), for: .normal)
     }
     
     private let callBenefitButton = UIButton().then { button in
+        button.setImage(UIImage.appImage(asset: .callBenefitButton), for: .normal)
     }
     
     private let menuLabel: UILabel = {
@@ -152,6 +154,8 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
+        shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
+        callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
@@ -383,7 +387,7 @@ extension HomeViewController {
         }
     }
     
-    func didTapCell(at id: Int) {
+    @objc private func shopSelectButtonTapped() {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         
@@ -400,15 +404,19 @@ extension HomeViewController {
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             searchShopUseCase: searchShopUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            selectedId: id
+            selectedId: 0
         )
         let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         
-        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
+        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: 0)
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+    }
+    
+    @objc private func callBenefitButtonTapped() {
+        Log.make().debug("button Tapped")
     }
     
     @objc private func refresh() {
@@ -450,7 +458,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
+        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, menuLabel, menuBackgroundView, tabBarView, grayColorView, shopListButton, callBenefitButton].forEach {
             scrollView.addSubview($0)
         }
         
@@ -495,9 +503,21 @@ extension HomeViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
+        shopListButton.snp.makeConstraints { make in
+            make.top.equalTo(shopLabel.snp.bottom).offset(16)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(view.snp.centerX).offset(-5)
+            make.height.equalTo(64)
+        }
+        callBenefitButton.snp.makeConstraints { make in
+            make.top.equalTo(shopLabel.snp.bottom).offset(16)
+            make.leading.equalTo(view.snp.centerX).offset(5)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(64)
+        }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
-            make.top.equalTo(shopLabel.snp.bottom).offset(40)
+            make.top.equalTo(callBenefitButton.snp.bottom).offset(30)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
         diningTooltipImageView.snp.makeConstraints { make in
@@ -539,7 +559,9 @@ extension HomeViewController {
     }
     
     private func setUpButtons() {
-        
+        [shopListButton, callBenefitButton].forEach {
+            $0.layer.borderWidth = 1.0
+        }
     }
     
     private func configureView() {
