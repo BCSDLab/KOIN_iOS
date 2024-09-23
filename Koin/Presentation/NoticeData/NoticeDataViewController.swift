@@ -223,7 +223,7 @@ extension NoticeDataViewController {
         nickName.text = noticeData.author
         createdDate.text = noticeData.registeredAt
         
-        contentTextView.attributedText = noticeData.content.modifyFontInHtml()?.convertToAttributedFromHTML()
+        contentTextView.attributedText = noticeData.content.convertToAttributedFromHTML()
         let contentTextViewHeight = contentTextView.sizeThatFits(CGSize(width: contentTextView.frame.width, height: .greatestFiniteMagnitude))
         contentTextView.snp.updateConstraints {
             $0.height.equalTo(contentTextViewHeight)
