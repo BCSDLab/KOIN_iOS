@@ -89,6 +89,9 @@
 		D208A7AA2CA1123B007040E7 /* AssignAbTestUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */; };
 		D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */; };
 		D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */; };
+		D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */; };
+		D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */; };
+		D208A7B52CA12D7E007040E7 /* CallBenefitFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -454,6 +457,9 @@
 		D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestUseCase.swift; sourceTree = "<group>"; };
 		D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestResponse.swift; sourceTree = "<group>"; };
 		D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestAPI.swift; sourceTree = "<group>"; };
+		D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitCollectionView.swift; sourceTree = "<group>"; };
+		D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitCollectionViewCell.swift; sourceTree = "<group>"; };
+		D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitFooterView.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -936,6 +942,16 @@
 			path = AbTest;
 			sourceTree = "<group>";
 		};
+		D208A7AF2CA12D43007040E7 /* CallBenefitCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */,
+				D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */,
+				D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */,
+			);
+			path = CallBenefitCollectionView;
+			sourceTree = "<group>";
+		};
 		D20AB9502C5534DD006BC684 /* Noti */ = {
 			isa = PBXGroup;
 			children = (
@@ -1360,6 +1376,7 @@
 		D27DD04F2BA608310081FD36 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D208A7AF2CA12D43007040E7 /* CallBenefitCollectionView */,
 				D27DD0542BA608310081FD36 /* CategoryCollectionView */,
 				D27DD0512BA608310081FD36 /* ShopInfoCollectionView */,
 				D2078BFF2BC5DCF500A39861 /* EventShopCollectionView */,
@@ -2235,6 +2252,7 @@
 			files = (
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
+				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
@@ -2299,6 +2317,7 @@
 				D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */,
+				D208A7B52CA12D7E007040E7 /* CallBenefitFooterView.swift in Sources */,
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
@@ -2527,6 +2546,7 @@
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
+				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */,
 				D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */,
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
