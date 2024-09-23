@@ -5,8 +5,8 @@
 //  Created by 김나훈 on 3/10/24.
 //
 
-import Alamofire
 import Combine
+import Foundation
 
 final class HomeViewModel: ViewModelProtocol {
     
@@ -73,7 +73,7 @@ final class HomeViewModel: ViewModelProtocol {
 }
 
 extension HomeViewModel {
-    // TODO: 아직 버스 리팩토링이 완료되지 않았으므로 여기서 Alamofire 호출.
+    
     private func getBusInformation(_ from: BusPlace, _ to: BusPlace, _ type: BusType) {
         
         fetchBusInformationListUseCase.execute(departedPlace: from, arrivedPlace: to).sink { completion in
