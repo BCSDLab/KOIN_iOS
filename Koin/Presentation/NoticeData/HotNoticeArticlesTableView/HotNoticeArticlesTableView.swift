@@ -40,12 +40,7 @@ final class HotNoticeArticlesTableView: UITableView {
 
 extension HotNoticeArticlesTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if popularNoticeArticles.count >= 4 {
-            return 4
-        }
-        else {
-            return popularNoticeArticles.count
-        }
+        return popularNoticeArticles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

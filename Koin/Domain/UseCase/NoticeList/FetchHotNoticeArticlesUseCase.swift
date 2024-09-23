@@ -22,15 +22,19 @@ final class DefaultFetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase 
     func execute(noticeId: Int? = nil) -> AnyPublisher<[NoticeArticleDTO], Error> {
         return noticeListRepository.fetchHotNoticeArticle()
             .map { noticeArticles in
+                var filteredArticles: [NoticeArticleDTO]
+                
                 if let noticeId = noticeId {
-                    return noticeArticles.filter { $0.id != noticeId }.map {
-                        return $0.toDomainWithChangedDate()
+                    filteredArticles = noticeArticles.filter { $0.id != noticeId }.map {
+                        $0.toDomainWithChangedDate()
+                    }
+                } else {
+                    filteredArticles = noticeArticles.map {
+                        $0.toDomainWithChangedDate()
                     }
                 }
-                return noticeArticles.map {
-                    return $0.toDomainWithChangedDate() }
+                return Array(filteredArticles.prefix(4))
             }
             .eraseToAnyPublisher()
     }
-    
 }
