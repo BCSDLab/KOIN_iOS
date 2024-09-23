@@ -92,6 +92,9 @@
 		D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */; };
 		D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */; };
 		D208A7B52CA12D7E007040E7 /* CallBenefitFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */; };
+		D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */; };
+		D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */; };
+		D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -460,6 +463,9 @@
 		D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitCollectionView.swift; sourceTree = "<group>"; };
 		D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitCollectionViewCell.swift; sourceTree = "<group>"; };
 		D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBenefitFooterView.swift; sourceTree = "<group>"; };
+		D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitsDTO.swift; sourceTree = "<group>"; };
+		D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopBenefitUseCase.swift; sourceTree = "<group>"; };
+		D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBeneficialShopUseCase.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -1055,6 +1061,7 @@
 				D27DD07B2BA608310081FD36 /* ShopCategoryDTO.swift */,
 				D23944812C3C24A200048F45 /* ReviewsDTO.swift */,
 				D22C54802C6A5957000826DA /* FileUploadResponse.swift */,
+				D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -1930,6 +1937,8 @@
 				D22C54782C6A2A95000826DA /* DeleteReviewUseCase.swift */,
 				D22C547A2C6A2A9D000826DA /* ReportReviewUseCase.swift */,
 				D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */,
+				D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */,
+				D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2374,6 +2383,7 @@
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
+				D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
@@ -2428,6 +2438,7 @@
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
+				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
 				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,
 				D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */,
@@ -2451,6 +2462,7 @@
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
+				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,

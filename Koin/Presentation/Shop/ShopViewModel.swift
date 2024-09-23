@@ -16,6 +16,8 @@ final class ShopViewModel: ViewModelProtocol {
         case searchTextChanged(String)
         case changeSortStandard(Any)
         case getShopInfo
+        case getShopBenefits
+        case getBeneficialShops(Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
@@ -34,6 +36,8 @@ final class ShopViewModel: ViewModelProtocol {
     private let searchShopUseCase: SearchShopUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
+    private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
@@ -46,14 +50,16 @@ final class ShopViewModel: ViewModelProtocol {
             getShopInfo(id: selectedId)
         }
     }
-
-    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, selectedId: Int) {
+    
+    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchShopBenefitUseCase: FetchShopBenefitUseCase, fetchBeneficialShopUseCase: FetchBeneficialShopUseCase, selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.searchShopUseCase = searchShopUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
+        self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
+        self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
     }
     
@@ -71,6 +77,10 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeSortStandard(standard)
             case .getShopInfo:
                 self?.getShopInfo(id: self?.selectedId ?? 0)
+            case .getShopBenefits:
+                self?.fetchShopBenefits()
+            case let .getBeneficialShops(id):
+                self?.fetchBeneficialShops(id: id)
             case let .logEvent(label, category, value, currentPage, durationType, eventLabelNeededDuration):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
@@ -83,6 +93,26 @@ final class ShopViewModel: ViewModelProtocol {
 }
 
 extension ShopViewModel {
+    
+    private func fetchShopBenefits() {
+        fetchShopBenefitUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            print(response)
+        }.store(in: &subscriptions)
+    }
+    
+    private func fetchBeneficialShops(id: Int) {
+        fetchBeneficialShopUseCase.execute(id: id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            print(response)
+        }.store(in: &subscriptions)
+    }
     
     private func changeSortStandard(_ standard: Any) {
         if let sortType = standard as? FetchShopSortType {
