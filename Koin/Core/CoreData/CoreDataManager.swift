@@ -11,6 +11,8 @@ import Foundation
 final class CoreDataManager {
     static let shared: CoreDataManager = CoreDataManager()
     
+    private init() { }
+    
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores(completionHandler: { (_, error) in
