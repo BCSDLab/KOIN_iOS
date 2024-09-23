@@ -269,7 +269,7 @@ extension ServiceSelectViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewController(viewModel: viewModel)
+        let shopViewController = ShopViewController(viewModel: viewModel, section: .shopList)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         

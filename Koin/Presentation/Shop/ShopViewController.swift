@@ -12,8 +12,14 @@ final class ShopViewController: UIViewController {
     
     // MARK: - Properties
     
+    enum Section: String {
+        case shopList = "주변 상점"
+        case callBenefit = "전화 주문 혜택"
+    }
+    
     private let viewModel: ShopViewModel
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
+    private let section: Section
     private var subscriptions: Set<AnyCancellable> = []
     private var scrollDirection: ScrollLog = .scrollToDown
     
@@ -89,8 +95,9 @@ final class ShopViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init(viewModel: ShopViewModel) {
+    init(viewModel: ShopViewModel, section: Section) {
         self.viewModel = viewModel
+        self.section = section
         super.init(nibName: nil, bundle: nil)
     }
     

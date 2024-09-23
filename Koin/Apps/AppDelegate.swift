@@ -158,7 +158,7 @@ extension AppDelegate {
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                 selectedId: 0
             )
-            let movingVc = ShopViewController(viewModel: viewModel)
+            let movingVc = ShopViewController(viewModel: viewModel, section: .shopList)
             movingVc.title = "주변상점"
             currentVc?.navigationController?.pushViewController(movingVc, animated: true)
         }

@@ -388,6 +388,14 @@ extension HomeViewController {
     }
     
     @objc private func shopSelectButtonTapped() {
+        navigateToShop(section: .shopList)
+    }
+    
+    @objc private func callBenefitButtonTapped() {
+        navigateToShop(section: .callBenefit)
+    }
+    
+    private func navigateToShop(section: ShopViewController.Section) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         
@@ -406,17 +414,18 @@ extension HomeViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewController(viewModel: viewModel)
-        shopViewController.title = "주변상점"
+        let shopViewController = ShopViewController(viewModel: viewModel, section: section)
+        shopViewController.title = section.rawValue
         navigationController?.pushViewController(shopViewController, animated: true)
         
         let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: 0)
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
-    }
-    
-    @objc private func callBenefitButtonTapped() {
-        Log.make().debug("button Tapped")
+        switch section {
+        case .shopList:
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+        case .callBenefit: break
+            // TODO: 로깅
+        }
     }
     
     @objc private func refresh() {
