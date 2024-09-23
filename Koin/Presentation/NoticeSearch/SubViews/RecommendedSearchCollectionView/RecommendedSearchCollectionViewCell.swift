@@ -12,7 +12,7 @@ import UIKit
 final class RecommendedSearchCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
  
-    let keyWordLabel = UILabel().then {
+    private let keyWordLabel = UILabel().then {
         $0.textColor = .appColor(.neutral500)
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .center
