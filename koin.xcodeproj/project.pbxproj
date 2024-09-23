@@ -83,6 +83,12 @@
 		D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078C0D2BC7A89F00A39861 /* MenuSectionHeaderView.swift */; };
 		D2078C102BC7B56D00A39861 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078C0F2BC7B56D00A39861 /* Int+.swift */; };
 		D2078C122BC7BE8100A39861 /* MenuSectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078C112BC7BE8100A39861 /* MenuSectionFooterView.swift */; };
+		D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */; };
+		D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A52CA111EB007040E7 /* AssignAbTestRequest.swift */; };
+		D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A72CA11221007040E7 /* AbTestService.swift */; };
+		D208A7AA2CA1123B007040E7 /* AssignAbTestUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */; };
+		D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */; };
+		D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -442,6 +448,12 @@
 		D2078C0D2BC7A89F00A39861 /* MenuSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSectionHeaderView.swift; sourceTree = "<group>"; };
 		D2078C0F2BC7B56D00A39861 /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		D2078C112BC7BE8100A39861 /* MenuSectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSectionFooterView.swift; sourceTree = "<group>"; };
+		D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestRepository.swift; sourceTree = "<group>"; };
+		D208A7A52CA111EB007040E7 /* AssignAbTestRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestRequest.swift; sourceTree = "<group>"; };
+		D208A7A72CA11221007040E7 /* AbTestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestService.swift; sourceTree = "<group>"; };
+		D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestUseCase.swift; sourceTree = "<group>"; };
+		D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestResponse.swift; sourceTree = "<group>"; };
+		D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestAPI.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -898,6 +910,30 @@
 				D2078C0B2BC736B300A39861 /* EventListCollectionViewCell.swift */,
 			);
 			path = EventListCollectionView;
+			sourceTree = "<group>";
+		};
+		D208A7A12CA11102007040E7 /* AbTest */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */,
+			);
+			path = AbTest;
+			sourceTree = "<group>";
+		};
+		D208A7A32CA1118D007040E7 /* AbTest */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */,
+			);
+			path = AbTest;
+			sourceTree = "<group>";
+		};
+		D208A7A42CA111D5007040E7 /* AbTest */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7A52CA111EB007040E7 /* AssignAbTestRequest.swift */,
+			);
+			path = AbTest;
 			sourceTree = "<group>";
 		};
 		D20AB9502C5534DD006BC684 /* Noti */ = {
@@ -1416,6 +1452,7 @@
 				D23479DC2BDB713E00FA91BD /* Bus */,
 				D23479DD2BDB715700FA91BD /* Timetable */,
 				D23479D82BDB5EEF00FA91BD /* Land */,
+				D208A7A32CA1118D007040E7 /* AbTest */,
 				D2D380FC2BA7415C009AD5A9 /* ErrorResponse.swift */,
 			);
 			path = Decodable;
@@ -1736,6 +1773,7 @@
 				D29F21DD2C4F2E2400994554 /* Shop */,
 				D29F21E62C4F5E1F00994554 /* Timetable */,
 				D29F21DC2C4F2DFF00994554 /* User */,
+				D208A7A42CA111D5007040E7 /* AbTest */,
 			);
 			path = Encodable;
 			sourceTree = "<group>";
@@ -1808,6 +1846,7 @@
 				D2FB236A2C0409590098BA2B /* Analytics */,
 				D2FB234D2BFD45930098BA2B /* Shop */,
 				D249CD242C12DC16000813F9 /* Dining */,
+				D208A7A12CA11102007040E7 /* AbTest */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -1836,6 +1875,7 @@
 				D2D7C0CF2C28285600C85A85 /* LandRepository.swift */,
 				D20AB94D2C553427006BC684 /* NotiRepository.swift */,
 				83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */,
+				D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1896,6 +1936,7 @@
 				D2D7C0DA2C282B5600C85A85 /* LandAPI.swift */,
 				D20AB9592C55369F006BC684 /* NotiAPI.swift */,
 				83DD0D812C4FA6F300278ABD /* BusAPI.swift */,
+				D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1931,6 +1972,7 @@
 				D29F21CD2C4E162600994554 /* TimetableService.swift */,
 				D2D7C0D82C282A7400C85A85 /* LandService.swift */,
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
+				D208A7A72CA11221007040E7 /* AbTestService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
 			);
 			path = Service;
@@ -2205,6 +2247,7 @@
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
+				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
 				D27DD0B12BA608310081FD36 /* ShopViewController.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
@@ -2230,6 +2273,7 @@
 				83DD0DE82C57478200278ABD /* FetchCityBusTimetableRequest.swift in Sources */,
 				D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */,
 				D22C54862C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift in Sources */,
+				D208A7AA2CA1123B007040E7 /* AssignAbTestUseCase.swift in Sources */,
 				D2078C012BC5DD0D00A39861 /* EventShopCollectionView.swift in Sources */,
 				D22C54772C6A2A8A000826DA /* ModifyReviewUseCase.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
@@ -2272,6 +2316,7 @@
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
+				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
@@ -2420,6 +2465,7 @@
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
+				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */,
@@ -2463,9 +2509,11 @@
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
 				D27DD0AD2BA608310081FD36 /* CategoryCollectionView.swift in Sources */,
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
+				D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
+				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
 				83DD0DD02C568E7100278ABD /* BusTimetableTableViewHeaderView.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
