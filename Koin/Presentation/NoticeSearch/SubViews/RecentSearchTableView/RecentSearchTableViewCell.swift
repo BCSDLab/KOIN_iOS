@@ -35,6 +35,7 @@ final class RecentSearchTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         subscriptions.removeAll()
     }
     

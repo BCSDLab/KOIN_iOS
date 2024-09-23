@@ -39,6 +39,7 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         subscriptions.removeAll()
     }
     

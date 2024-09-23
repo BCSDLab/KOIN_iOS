@@ -35,6 +35,7 @@ final class RecommendedKeyWordCollectionViewCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         subscriptions.removeAll()
     }
     

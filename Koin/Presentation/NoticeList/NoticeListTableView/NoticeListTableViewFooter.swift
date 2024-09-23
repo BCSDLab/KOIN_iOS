@@ -44,6 +44,7 @@ final class NoticeListTableViewFooter: UITableViewHeaderFooterView {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         subscriptions.removeAll()
     }
     

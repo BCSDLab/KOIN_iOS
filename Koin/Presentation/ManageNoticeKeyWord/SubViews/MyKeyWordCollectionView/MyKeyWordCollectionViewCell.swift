@@ -36,6 +36,7 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         subscriptions.removeAll()
     }
     
