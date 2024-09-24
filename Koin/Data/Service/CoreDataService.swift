@@ -1,5 +1,5 @@
 //
-//  CoreDataManager.swift
+//  CoreDataService.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/24/24.
@@ -8,11 +8,7 @@
 import CoreData
 import Foundation
 
-final class CoreDataManager {
-    static let shared: CoreDataManager = CoreDataManager()
-    
-    private init() { }
-    
+class CoreDataService {
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores(completionHandler: { (_, error) in

@@ -28,12 +28,14 @@ final class NoticeSearchViewModel: ViewModelProtocol {
     private let fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase
     private let manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase
     private let searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase
+    private let fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase
     private var keyWord = ""
     
-    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase) {
+    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase) {
         self.fetchHotKeyWordUseCase = fetchHotKeyWordUseCase
         self.manageRecentSearchedWordUseCase = manageRecentSearchedWordUseCase
         self.searchNoticeArticlesUseCase = searchNoticeArticlesUseCase
+        self.fetchRecentSearchedWordUseCase = fetchRecentSearchedWordUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -67,22 +69,22 @@ extension NoticeSearchViewModel {
     }
     
     private func searchWord(word: String, searchedDate: Date, actionType: Int) {
-        manageRecentSearchedWordUseCase.changeWord(name: word, date: searchedDate, actionType: actionType)
+        manageRecentSearchedWordUseCase.execute(name: word, date: searchedDate, actionType: actionType)
         if actionType == 1 {
             fetchRecentSearchedWord()
         }
     }
     
     private func fetchRecentSearchedWord() {
-        let searchedWords = manageRecentSearchedWordUseCase.fetch()
+        let searchedWords = fetchRecentSearchedWordUseCase.execute()
         outputSubject.send(.updateRecentSearchedWord(searchedWords))
     }
     
     private func deleteAllSearchedWords() {
-        let words = manageRecentSearchedWordUseCase.fetch()
+        let words = fetchRecentSearchedWordUseCase.execute()
         for word in words {
             if let name = word.name, let date = word.searchedDate {
-                manageRecentSearchedWordUseCase.changeWord(name: name, date: date, actionType: 1)
+                manageRecentSearchedWordUseCase.execute(name: name, date: date, actionType: 1)
             }
         }
         self.outputSubject.send(.updateRecentSearchedWord([]))

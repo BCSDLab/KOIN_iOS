@@ -8,8 +8,7 @@
 import Combine
 
 protocol AddNotificationKeyWordUseCase {
-    func addNotificationKeyWordWithLogin(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
-    func addNotificationKeyWordWithoutLogin(requestModel: String)
+    func execute(keyword: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
 }
 
 final class DefaultAddNotificationKeyWordUseCase: AddNotificationKeyWordUseCase {
@@ -19,15 +18,7 @@ final class DefaultAddNotificationKeyWordUseCase: AddNotificationKeyWordUseCase 
         self.noticeListRepository = noticeListRepository
     }
     
-    func addNotificationKeyWordWithLogin(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> {
-        return noticeListRepository.createNotificationKeyWord(requestModel: requestModel)
-            .eraseToAnyPublisher()
-    }
-    
-    func addNotificationKeyWordWithoutLogin(requestModel: String) {
-        let keyWord = NoticeKeyWordInfo(context: CoreDataManager.shared.context)
-        keyWord.name = requestModel
-        
-        CoreDataManager.shared.insert(insertedObject: keyWord)
+    func execute(keyword: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> {
+        noticeListRepository.createNotificationKeyWord(requestModel: keyword)
     }
 }

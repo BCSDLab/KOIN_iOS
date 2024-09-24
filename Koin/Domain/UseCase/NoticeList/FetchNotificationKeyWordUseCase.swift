@@ -8,8 +8,7 @@
 import Combine
 
 protocol FetchNotificationKeyWordUseCase {
-    func fetchNotificationKeyWordWithLogin(keyWordForFilter: [NoticeKeyWordDTO]?) -> AnyPublisher<[NoticeKeyWordDTO], ErrorResponse>
-    func fetchNotificationKeyWordWithoutLogin() -> [NoticeKeyWordDTO]
+    func execute() -> AnyPublisher<([NoticeKeyWordDTO], Bool), ErrorResponse>
 }
 
 final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase {
@@ -19,25 +18,14 @@ final class DefaultFetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseC
         self.noticeListRepository = noticeListRepository
     }
     
-    func fetchNotificationKeyWordWithLogin(keyWordForFilter: [NoticeKeyWordDTO]?) ->
-    AnyPublisher<[NoticeKeyWordDTO], ErrorResponse> {
-        noticeListRepository.fetchNotificationKeyWord().map {
-            return $0.keyWords
-        }.eraseToAnyPublisher()
-        
-    }
-    
-    func fetchNotificationKeyWordWithoutLogin() -> [NoticeKeyWordDTO] {
-        let data = CoreDataManager.shared.fetchEntities(objectType: NoticeKeyWordInfo.self)
-        var myKeyWords: [NoticeKeyWordDTO] = []
-        if let data = data {
-            for keyWord in data {
-                myKeyWords.append(NoticeKeyWordDTO(id: nil, keyWord: keyWord.name ?? ""))
+    func execute() -> AnyPublisher<([NoticeKeyWordDTO], Bool), ErrorResponse> {
+        noticeListRepository.fetchNotificationKeyWord().map { fetchResult in
+            switch fetchResult {
+            case let .success(keywords):
+                return (keywords.keyWords, true)
+            case let .successWithCoreData(keywords):
+                return (keywords.keyWords, false)
             }
-            return myKeyWords
-        }
-        else {
-            return []
-        }
+        }.eraseToAnyPublisher()
     }
 }

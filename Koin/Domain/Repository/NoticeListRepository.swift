@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 protocol NoticeListRepository {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
@@ -13,8 +14,10 @@ protocol NoticeListRepository {
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
     func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDTO], Error>
     func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
-    func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse>
+    func deleteNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse>
+    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse>
     func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse>
+    func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
+    func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
 }

@@ -9,8 +9,7 @@ import Combine
 import Foundation
 
 protocol DeleteNotificationKeyWordUseCase {
-    func deleteNotificationKeyWordWithLogin(id: Int) -> AnyPublisher<Void, ErrorResponse>
-    func deleteNotificationKeyWordWithoutLogin(keyWord: NoticeKeyWordDTO)
+    func execute(keyword: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultDeleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase {
@@ -20,15 +19,7 @@ final class DefaultDeleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUs
         self.noticeListRepository = noticeListRepository
     }
     
-    func deleteNotificationKeyWordWithLogin(id: Int) -> AnyPublisher<Void, ErrorResponse> {
-        return noticeListRepository.deleteNotificationKeyWord(requestModel: id).eraseToAnyPublisher()
-    }
-    
-    func deleteNotificationKeyWordWithoutLogin(keyWord: NoticeKeyWordDTO) {
-        if let existingKeyWords = CoreDataManager.shared.fetchEntities(objectType: NoticeKeyWordInfo.self, predicate: NSPredicate(format: "name == %@", keyWord.keyWord)) {
-            for deletedKeyWord in existingKeyWords {
-                CoreDataManager.shared.delete(deletedObject: deletedKeyWord)
-            }
-        }
+    func execute(keyword: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse> {
+        noticeListRepository.deleteNotificationKeyWord(requestModel: keyword)
     }
 }

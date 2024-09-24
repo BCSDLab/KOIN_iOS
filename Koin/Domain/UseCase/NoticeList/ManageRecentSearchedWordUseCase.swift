@@ -9,37 +9,17 @@ import Combine
 import Foundation
 
 protocol ManageRecentSearchedWordUseCase {
-    func changeWord(name: String, date: Date, actionType: Int)
-    func fetch() -> [RecentSearchedWordInfo]
+    func execute(name: String, date: Date, actionType: Int)
 }
 
 final class DefaultManageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase {
-    func changeWord(name: String, date: Date, actionType: Int) {
-        if actionType == 0 {
-            let word = RecentSearchedWordInfo(context: CoreDataManager.shared.context)
-            word.name = name
-            word.searchedDate = date
-            
-            CoreDataManager.shared.insert(insertedObject: word)
-        }
-        else {
-            let predicate = NSPredicate(format: "name == %@ AND searchedDate == %@", name, date as NSDate)
-            
-            if let existingKeyWords = CoreDataManager.shared.fetchEntities(objectType: RecentSearchedWordInfo.self, predicate: predicate) {
-                for deletedKeyWord in existingKeyWords {
-                    CoreDataManager.shared.delete(deletedObject: deletedKeyWord)
-                }
-            }
-        }
+    let noticeListRepository: NoticeListRepository
+    
+    init(noticeListRepository: NoticeListRepository) {
+        self.noticeListRepository = noticeListRepository
     }
     
-    func fetch() -> [RecentSearchedWordInfo] {
-        let data = CoreDataManager.shared.fetchEntities(objectType: RecentSearchedWordInfo.self)
-        if let data = data {
-            return data.sorted(by: { $0.searchedDate ?? Date() > $1.searchedDate ?? Date()})
-        }
-        else {
-            return []
-        }
+    func execute(name: String, date: Date, actionType: Int) {
+        noticeListRepository.manageRecentSearchedWord(name: name, date: date, actionType: actionType)
     }
 }

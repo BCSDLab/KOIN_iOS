@@ -56,7 +56,7 @@ extension NoticeDataViewModel {
     private func getNoticeData() {
         outputSubject.send(.updateActivityIndictor(true, nil))
         let request = FetchNoticeDataRequest(noticeId: noticeId)
-        fetchNoticeDataUseCase.fetchNoticeData(request: request).sink(receiveCompletion: { [weak self] completion in
+        fetchNoticeDataUseCase.execute(request: request).sink(receiveCompletion: { [weak self] completion in
             self?.outputSubject.send(.updateActivityIndictor(false, nil))
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")

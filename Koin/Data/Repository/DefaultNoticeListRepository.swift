@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class DefaultNoticeListRepository: NoticeListRepository {
     private let service: NoticeListService
@@ -34,11 +35,11 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         return service.createNotificationKeyWord(requestModel: requestModel)
     }
     
-    func deleteNotificationKeyWord(requestModel: Int) -> AnyPublisher<Void, ErrorResponse> {
+    func deleteNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse> {
         return service.deleteNotificationKeyWord(requestModel: requestModel)
     }
     
-    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeyWordsDTO, ErrorResponse> {
+    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
         return service.fetchMyNotificationKeyWord()
     }
     
@@ -48,6 +49,14 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse> {
         return service.downloadNoticeAttachment(downloadUrl: downloadUrl, fileName: fileName)
+    }
+    
+    func manageRecentSearchedWord(name: String, date: Date, actionType: Int) {
+        return service.manageRecentSearchedWord(name: name, date: date, actionType: actionType)
+    }
+    
+    func fetchRecentSearchedWord() -> [RecentSearchedWordInfo] {
+        return service.fetchRecentSearchedWord()
     }
 }
 

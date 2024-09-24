@@ -13,6 +13,8 @@
 		0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */; };
 		5FC6F038443573F334361D2B /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
+        831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
+        831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C042C68F8BA00982145 /* ScreenActionType.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */; };
@@ -64,7 +66,7 @@
 		8354BE372C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */; };
 		8354BE3D2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */; };
 		8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */; };
-		8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataManager.swift */; };
+		8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataService.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */; };
 		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
@@ -439,6 +441,8 @@
 		4F8CF510A9DE43219B913FBE /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67580553C7374E18362DDF7C /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
+        831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
+        831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
@@ -492,7 +496,7 @@
 		8354BE362C79C6AF009D4D7A /* RecommendedKeyWordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedKeyWordCollectionViewCell.swift; sourceTree = "<group>"; };
 		8354BE3C2C79D709009D4D7A /* AddNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		8354BE512C7A0566009D4D7A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8354BE512C7A0566009D4D7A /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeyWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeyWordUseCase.swift; sourceTree = "<group>"; };
 		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
@@ -936,6 +940,7 @@
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
 				833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */,
+				831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -972,6 +977,7 @@
 				835DC1F82C849ECD00488506 /* FetchRecommendedKeyWordUseCase.swift */,
 				835DC1FA2C84B96500488506 /* FetchHotSearchingKeyWordUseCase.swift */,
 				835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */,
+				831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */,
 				83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */,
 				8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */,
 			);
@@ -1096,7 +1102,6 @@
 			isa = PBXGroup;
 			children = (
 				8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */,
-				8354BE512C7A0566009D4D7A /* CoreDataManager.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2340,6 +2345,7 @@
 				D2D7C0D82C282A7400C85A85 /* LandService.swift */,
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
 				833D9C442C70672C00982145 /* NoticeListService.swift */,
+				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
 			);
 			path = Service;
@@ -2751,6 +2757,7 @@
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
+				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
@@ -2919,7 +2926,7 @@
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
-				8354BE522C7A0566009D4D7A /* CoreDataManager.swift in Sources */,
+				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
@@ -2968,6 +2975,7 @@
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
+				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
 				D27DD0DE2BA6092B0081FD36 /* MenuListCollectionView.swift in Sources */,
 			);

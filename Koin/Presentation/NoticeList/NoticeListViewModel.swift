@@ -111,17 +111,15 @@ extension NoticeListViewModel {
     }
     
     private func fetchUserKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
-        fetchMyKeyWordUseCase.fetchNotificationKeyWordWithLogin(keyWordForFilter: nil).sink(receiveCompletion: { [weak self] response in
-            guard let self = self else { return }
+        fetchMyKeyWordUseCase.execute().sink(receiveCompletion: { response in
             if case let .failure(error) = response {
                 Log.make().error("\(error)")
-                let result = self.fetchMyKeyWordUseCase.fetchNotificationKeyWordWithoutLogin()
-                if result.isEmpty { self.outputSubject.send(.isLogined(false)) }
-                completion(result)
             }
-        }, receiveValue: { [weak self] keyWords in
-            if keyWords.isEmpty { self?.outputSubject.send(.isLogined(true)) }
-            completion(keyWords)
+        }, receiveValue: { [weak self] fetchResult in
+            if fetchResult.0.isEmpty {
+                self?.outputSubject.send(.isLogined(fetchResult.1))
+            }
+            completion(fetchResult.0)
         }).store(in: &subscriptions)
     }
 }
