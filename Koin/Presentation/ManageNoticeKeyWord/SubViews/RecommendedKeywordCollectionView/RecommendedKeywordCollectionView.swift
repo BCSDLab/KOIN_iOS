@@ -8,10 +8,10 @@
 import Combine
 import UIKit
 
-final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
+final class RecommendedKeywordCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     //MARK: - Properties
-    private var recommendedKeyWordList: [String] = []
-    let recommendedKeyWordPublisher = PassthroughSubject<String, Never>()
+    private var recommendedKeywordList: [String] = []
+    let recommendedKeywordPublisher = PassthroughSubject<String, Never>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -25,45 +25,45 @@ final class RecommendedKeyWordCollectionView: UICollectionView, UICollectionView
     }
     
     private func commonInit() {
-        register(RecommendedKeyWordCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedKeyWordCollectionViewCell.identifier)
+        register(RecommendedKeywordCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedKeywordCollectionViewCell.identifier)
         dataSource = self
         delegate = self
     }
     
-    func updateRecommendedKeyWords(keyWords: [String]) {
-        self.recommendedKeyWordList = keyWords
+    func updateRecommendedKeywords(keywords: [String]) {
+        self.recommendedKeywordList = keywords
         reloadData()
     }
 }
 
-extension RecommendedKeyWordCollectionView {
+extension RecommendedKeywordCollectionView {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if recommendedKeyWordList.count > 5 {
+        if recommendedKeywordList.count > 5 {
             return 5
         }
         else {
-            return recommendedKeyWordList.count
+            return recommendedKeywordList.count
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedKeyWordCollectionViewCell.identifier, for: indexPath) as? RecommendedKeyWordCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedKeywordCollectionViewCell.identifier, for: indexPath) as? RecommendedKeywordCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.recommendedKeyWordPublisher.sink { [weak self] in
+        cell.recommendedKeywordPublisher.sink { [weak self] in
             guard let self = self else { return }
-            let keyWord = self.recommendedKeyWordList[indexPath.row]
-            self.recommendedKeyWordPublisher.send(keyWord)
+            let keyWord = self.recommendedKeywordList[indexPath.row]
+            self.recommendedKeywordPublisher.send(keyWord)
         }.store(in: &cell.subscriptions)
-        cell.configure(keyWord: recommendedKeyWordList[indexPath.item])
+        cell.configure(keyWord: recommendedKeywordList[indexPath.item])
         return cell
     }
 }
 
-extension RecommendedKeyWordCollectionView: UICollectionViewDelegateFlowLayout {
+extension RecommendedKeywordCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.text = recommendedKeyWordList[indexPath.row]
+        label.text = recommendedKeywordList[indexPath.row]
         label.font = .appFont(.pretendardMedium, size: 14)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
         return CGSize(width: size.width + 50, height: 34)

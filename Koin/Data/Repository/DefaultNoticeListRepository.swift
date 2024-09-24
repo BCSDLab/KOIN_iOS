@@ -31,20 +31,20 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         return service.fetchHotNoticeArticles()
     }
     
-    func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> {
-        return service.createNotificationKeyWord(requestModel: requestModel)
+    func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
+        return service.createNotificationKeyword(requestModel: requestModel)
     }
     
-    func deleteNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse> {
-        return service.deleteNotificationKeyWord(requestModel: requestModel)
+    func deleteNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse> {
+        return service.deleteNotificationKeyword(requestModel: requestModel)
     }
     
-    func fetchNotificationKeyWord() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
-        return service.fetchMyNotificationKeyWord()
+    func fetchNotificationKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
+        return service.fetchMyNotificationKeyword()
     }
     
-    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
-        return service.fetchRecommendedKeyWord(count: count)
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error> {
+        return service.fetchRecommendedKeyword(count: count)
     }
     
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse> {

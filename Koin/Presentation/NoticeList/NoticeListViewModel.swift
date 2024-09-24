@@ -13,32 +13,32 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Input {
         case changeBoard(NoticeListType)
         case changePage(Int)
-        case getUserKeyWordList(NoticeKeyWordDTO? = nil)
+        case getUserKeywordList(NoticeKeywordDTO? = nil)
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
-        case updateUserKeyWordList([NoticeKeyWordDTO], Int)
+        case updateUserKeywordList([NoticeKeywordDTO], Int)
         case isLogined(Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
-    private let fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase
+    private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private var noticeListType: NoticeListType = .전체공지 {
         didSet {
             getNoticeInfo(page: 1)
         }
     }
-    private var keyWord: String? = nil {
+    private var keyword: String? = nil {
         didSet {
             getNoticeInfo(page: 0)
         }
     }
     
-    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeyWordUseCase: FetchNotificationKeyWordUseCase) {
+    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeywordUseCase: FetchNotificationKeywordUseCase) {
         self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
-        self.fetchMyKeyWordUseCase = fetchMyKeyWordUseCase
+        self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -48,8 +48,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.changeBoard(noticeListType: noticeListType)
             case let .changePage(page):
                 self?.getNoticeInfo(page: page)
-            case let .getUserKeyWordList(keyWord):
-                self?.getUserKeyWordList(keyWord: keyWord)
+            case let .getUserKeywordList(keyword):
+                self?.getUserKeywordList(keyword: keyword)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -62,7 +62,7 @@ extension NoticeListViewModel {
     }
     
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.fetchArticles(boardId: noticeListType.rawValue, keyWord: keyWord, page: page).sink(receiveCompletion: { completion in
+        fetchNoticeArticlesUseCase.fetchArticles(boardId: noticeListType.rawValue, keyWord: keyword, page: page).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
@@ -72,46 +72,46 @@ extension NoticeListViewModel {
         }).store(in: &subscriptions)
     }
     
-    private func getUserKeyWordList(keyWord: NoticeKeyWordDTO? = nil) {
-        var keyWordIndex = 0
-        var keyWordValue: NoticeKeyWordDTO = NoticeKeyWordDTO(id: 0, keyWord: "")
+    private func getUserKeywordList(keyword: NoticeKeywordDTO? = nil) {
+        var keywordIndex = 0
+        var keywordValue: NoticeKeywordDTO = NoticeKeywordDTO(id: 0, keyword: "")
         var count = 0
         var overallCount = 0
-        if let keyWord = keyWord, self.keyWord != keyWord.keyWord {
-            if keyWord.keyWord == "모두보기" {
+        if let keyword = keyword, self.keyword != keyword.keyword {
+            if keyword.keyword == "모두보기" {
                 overallCount += 1
             }
             else {
                 overallCount = 0
             }
             if overallCount == 0 {
-                keyWordValue = keyWord
-                self.keyWord = keyWord.keyWord
+                keywordValue = keyword
+                self.keyword = keyword.keyword
             }
         }
-        else if self.keyWord != nil {
-            keyWordValue = NoticeKeyWordDTO(id: nil, keyWord: self.keyWord ?? "")
+        else if self.keyword != nil {
+            keywordValue = NoticeKeywordDTO(id: nil, keyword: self.keyword ?? "")
         }
         
-        fetchUserKeyWord(completion: { [weak self] keyWords in
-            for (index, value) in keyWords.enumerated() {
-                if value.keyWord == keyWordValue.keyWord {
-                    keyWordIndex = index + 1
+        fetchUserKeyword(completion: { [weak self] keywords in
+            for (index, value) in keywords.enumerated() {
+                if value.keyword == keywordValue.keyword {
+                    keywordIndex = index + 1
                     count += 1
                     break
                 }
             }
             if count == 0 {
-                keyWordIndex = 0
-                keyWordValue = NoticeKeyWordDTO(id: nil, keyWord: "모두보기")
-                self?.keyWord = nil
+                keywordIndex = 0
+                keywordValue = NoticeKeywordDTO(id: nil, keyword: "모두보기")
+                self?.keyword = nil
             }
-            self?.outputSubject.send(.updateUserKeyWordList(keyWords, keyWordIndex))
+            self?.outputSubject.send(.updateUserKeywordList(keywords, keywordIndex))
         })
     }
     
-    private func fetchUserKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
-        fetchMyKeyWordUseCase.execute().sink(receiveCompletion: { response in
+    private func fetchUserKeyword(completion: @escaping ([NoticeKeywordDTO]) -> Void) {
+        fetchMyKeywordUseCase.execute().sink(receiveCompletion: { response in
             if case let .failure(error) = response {
                 Log.make().error("\(error)")
             }

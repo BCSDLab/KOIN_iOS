@@ -8,6 +8,6 @@
 import Foundation
 
 enum NoticeKeywordsFetchResult {
-    case success(NoticeKeyWordsDTO)
-    case successWithCoreData(NoticeKeyWordsDTO)
+    case success(NoticeKeywordsDTO)
+    case successWithCoreData(NoticeKeywordsDTO)
 }

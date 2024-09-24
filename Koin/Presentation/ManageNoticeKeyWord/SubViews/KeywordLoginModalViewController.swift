@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class KeyWordLoginModalViewController: LoginModalViewController {
+final class KeywordLoginModalViewController: LoginModalViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateMessageLabel(text: "카워드 알림을 받으려면\n로그인이 필요해요.", textColor: .appColor(.neutral700))

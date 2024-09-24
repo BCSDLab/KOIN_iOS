@@ -1,5 +1,5 @@
 //
-//  FetchHotSearchingKeyWordUseCase.swift
+//  FetchHotSearchingKeywordUseCase.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 9/2/24.
@@ -7,11 +7,11 @@
 
 import Combine
 
-protocol FetchHotSearchingKeyWordUseCase {
+protocol FetchHotSearchingKeywordUseCase {
     func execute(count: Int) -> AnyPublisher<[String], Error>
 }
 
-final class DefaultFetchHotSearchingKeyWordUseCase: FetchHotSearchingKeyWordUseCase {
+final class DefaultFetchHotSearchingKeywordUseCase: FetchHotSearchingKeywordUseCase {
     let noticeListRepository: NoticeListRepository
     
     init(noticeListRepository: NoticeListRepository) {
@@ -19,9 +19,9 @@ final class DefaultFetchHotSearchingKeyWordUseCase: FetchHotSearchingKeyWordUseC
     }
     
     func execute(count: Int) -> AnyPublisher<[String], Error> {
-        return noticeListRepository.fetchRecommendedKeyWord(count: count).map { keyWords in
-            return keyWords.keywords.map { keyWord in
-                "#\(keyWord)"
+        return noticeListRepository.fetchRecommendedKeyword(count: count).map { keywords in
+            return keywords.keywords.map { keyword in
+                "#\(keyword)"
             }
         }.eraseToAnyPublisher()
     }

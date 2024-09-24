@@ -1,5 +1,5 @@
 //
-//  MyKeyWordCollectionViewCell.swift
+//  RecommendedKeyWordCollectionViewCell.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/24/24.
@@ -10,28 +10,27 @@ import SnapKit
 import Then
 import UIKit
 
-final class MyKeyWordCollectionViewCell: UICollectionViewCell {
+final class RecommendedKeywordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    private var keyWord: String = ""
-    let tapDeleteButtonPublisher = PassthroughSubject<String, Never>()
+    let recommendedKeywordPublisher = PassthroughSubject<Void, Never>()
     var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
  
-    private let keyWordLabel = UILabel().then {
+    private let keywordLabel = UILabel().then {
         $0.textColor = .appColor(.neutral500)
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .center
     }
     
-    private let deleteButton = UIButton().then {
-        $0.setImage(.appImage(asset: .delete), for: .normal)
+    private let addButton = UIButton().then {
+        $0.setImage(.appImage(asset: .plus), for: .normal)
     }
     
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        deleteButton.addTarget(self, action: #selector(tapDeleteButton), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(tapAddButton), for: .touchUpInside)
         configureView()
     }
     
@@ -45,33 +44,32 @@ final class MyKeyWordCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(keyWord: String) {
-        keyWordLabel.text = keyWord
-        self.keyWord = keyWord
+        keywordLabel.text = keyWord
     }
     
-    @objc func tapDeleteButton(sender: UIButton) {
-        tapDeleteButtonPublisher.send(keyWord)
+    @objc private func tapAddButton(sender: UIButton) {
+        recommendedKeywordPublisher.send()
     }
 }
 
-extension MyKeyWordCollectionViewCell {
+extension RecommendedKeywordCollectionViewCell {
     private func setUpLayouts() {
-        [keyWordLabel, deleteButton].forEach {
+        [keywordLabel, addButton].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        keyWordLabel.snp.makeConstraints {
+        keywordLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.height.equalTo(34)
         }
         
-        deleteButton.snp.makeConstraints {
-            $0.centerY.equalTo(keyWordLabel)
+        addButton.snp.makeConstraints {
+            $0.centerY.equalTo(keywordLabel)
             $0.width.height.equalTo(16)
-            $0.leading.equalTo(keyWordLabel.snp.trailing).offset(2)
+            $0.leading.equalTo(keywordLabel.snp.trailing).offset(2)
         }
     }
     

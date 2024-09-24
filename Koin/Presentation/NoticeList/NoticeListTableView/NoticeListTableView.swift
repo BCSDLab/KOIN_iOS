@@ -14,8 +14,8 @@ final class NoticeListTableView: UITableView {
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<Int, Never>()
-    let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
@@ -70,10 +70,10 @@ final class NoticeListTableView: UITableView {
         scrollToRow(at: IndexPath, at: .bottom, animated: true)
     }
     
-    func updateKeyWordList(keyWordList: [NoticeKeyWordDTO], keyWordIdx: Int) {
+    func updateKeywordList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
         let index = IndexPath(row: 0, section: 0)
         if let cell = cellForRow(at: index) as? NoticeListTableViewKeyWordCell {
-            cell.updateKeyWordsList(keyWordList: keyWordList, keyWordIdx: keyWordIdx)
+            cell.updateKeyWordsList(keywordList: keywordList, keywordIdx: keywordIdx)
         }
     }
 }
@@ -99,12 +99,12 @@ extension NoticeListTableView: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
-            cell.keyWordAddBtnTapPublisher.sink { [weak self] in
-                self?.keyWordAddBtnTapPublisher.send()
+            cell.keywordAddBtnTapPublisher.sink { [weak self] in
+                self?.keywordAddBtnTapPublisher.send()
             }.store(in: &cell.subscriptions)
-            cell.keyWordTapPublisher.sink { [weak self] keyWord in
-                print(keyWord)
-                self?.keyWordTapPublisher.send(keyWord)
+            cell.keywordTapPublisher.sink { [weak self] keyword in
+                print(keyword)
+                self?.keywordTapPublisher.send(keyword)
             }.store(in: &cell.subscriptions)
             return cell
         }

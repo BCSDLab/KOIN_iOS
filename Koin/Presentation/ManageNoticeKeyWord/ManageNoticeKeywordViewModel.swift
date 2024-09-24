@@ -9,20 +9,20 @@ import Alamofire
 import Combine
 import Foundation
 
-final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
+final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     enum Input {
-        case addKeyWord(keyWord: String)
-        case deleteKeyWord(keyWord: NoticeKeyWordDTO)
-        case getMyKeyWord
+        case addKeyword(keyword: String)
+        case deleteKeyword(keyword: NoticeKeywordDTO)
+        case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
     }
     enum Output {
-        case updateKeyWord([NoticeKeyWordDTO])
-        case updateRecommendedKeyWord([String])
+        case updateKeyword([NoticeKeywordDTO])
+        case updateRecommendedKeyword([String])
         case showLoginModal
         case updateSwitch(isOn: Bool)
-        case keyWordIsIllegal(addKeyWordIllegalType)
+        case keywordIsIllegal(addKeyWordIllegalType)
     }
     
     enum addKeyWordIllegalType {
@@ -33,19 +33,19 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase
-    private let deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase
-    private let fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase
-    private let fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase
+    private let addNotificationKeywordUseCase: AddNotificationKeywordUseCase
+    private let deleteNotificationKeywordUseCase: DeleteNotificationKeywordUseCase
+    private let fetchNotificationKeywordUseCase: FetchNotificationKeywordUseCase
+    private let fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
     
-    init(addNotificationKeyWordUseCase: AddNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: DeleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: FetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: FetchRecommendedKeyWordUseCase,
+    init(addNotificationKeywordUseCase: AddNotificationKeywordUseCase, deleteNotificationKeywordUseCase: DeleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: FetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase,
          changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
-        self.addNotificationKeyWordUseCase = addNotificationKeyWordUseCase
-        self.deleteNotificationKeyWordUseCase = deleteNotificationKeyWordUseCase
-        self.fetchNotificationKeyWordUseCase = fetchNotificationKeyWordUseCase
-        self.fetchRecommendedKeyWordUseCase = fetchRecommendedKeyWordUseCase
+        self.addNotificationKeywordUseCase = addNotificationKeywordUseCase
+        self.deleteNotificationKeywordUseCase = deleteNotificationKeywordUseCase
+        self.fetchNotificationKeywordUseCase = fetchNotificationKeywordUseCase
+        self.fetchRecommendedKeywordUseCase = fetchRecommendedKeywordUseCase
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
     }
@@ -53,12 +53,12 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .addKeyWord(keyWord):
-                self?.addKeyWord(keyWord: keyWord)
-            case .getMyKeyWord:
-                self?.fetchMyKeyWord()
-            case let .deleteKeyWord(keyWord):
-                self?.deleteMyKeyWord(keyWord: keyWord)
+            case let .addKeyword(keyword):
+                self?.addKeyword(keyword: keyword)
+            case .getMyKeyword:
+                self?.fetchMyKeyword()
+            case let .deleteKeyword(keyWord):
+                self?.deleteMyKeyword(keyWord: keyWord)
             case let .changeNotification(isOn):
                 self?.changeNotification(isOn: isOn)
             case .fetchSubscription:
@@ -69,47 +69,47 @@ final class ManageNoticeKeyWordViewModel: ViewModelProtocol {
     }
 }
 
-extension ManageNoticeKeyWordViewModel {
-    private func addKeyWord(keyWord: String) {
-        let requestModel = NoticeKeyWordDTO(id: nil, keyWord: keyWord)
+extension ManageNoticeKeywordViewModel {
+    private func addKeyword(keyword: String) {
+        let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
         var isNotIllegal = true
-        getMyKeyWord { [weak self] myKeyWords in
+        getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
-            if myKeyWords.contains(where: { $0.keyWord == keyWord }) {
+            if myKeywords.contains(where: { $0.keyword == keyword }) {
                 isNotIllegal = false
-                self.outputSubject.send(.keyWordIsIllegal(.isDuplicated))
+                self.outputSubject.send(.keywordIsIllegal(.isDuplicated))
             }
-            else if keyWord.count < 2 || keyWord.count > 10 {
+            else if keyword.count < 2 || keyword.count > 10 {
                 isNotIllegal = false
-                self.outputSubject.send(.keyWordIsIllegal(.isNotCharPredicate))
+                self.outputSubject.send(.keywordIsIllegal(.isNotCharPredicate))
             }
-            else if myKeyWords.count > 9 {
+            else if myKeywords.count > 9 {
                 isNotIllegal = false
-                self.outputSubject.send(.keyWordIsIllegal(.exceedNumber))
+                self.outputSubject.send(.keywordIsIllegal(.exceedNumber))
             }
             if isNotIllegal {
-                self.addNotificationKeyWordUseCase.execute(keyword: requestModel).sink(receiveCompletion: { [weak self] completion in
+                self.addNotificationKeywordUseCase.execute(keyword: requestModel).sink(receiveCompletion: { [weak self] completion in
                     if case let .failure(error) = completion {
                         Log.make().error("\(error)")
-                        self?.fetchMyKeyWord()
+                        self?.fetchMyKeyword()
                     }
                 }, receiveValue: { [weak self] result in
                     print("\(result) keyword is Registered")
-                    self?.fetchMyKeyWord()
+                    self?.fetchMyKeyword()
                 }).store(in: &self.subscriptions)
             }
         }
     }
     
-    private func fetchMyKeyWord() {
-        getMyKeyWord { [weak self] myKeyWords in
-            self?.outputSubject.send(.updateKeyWord(myKeyWords))
-            self?.getRecommendedKeyWord(keyWords: myKeyWords)
+    private func fetchMyKeyword() {
+        getMyKeyword { [weak self] myKeywords in
+            self?.outputSubject.send(.updateKeyword(myKeywords))
+            self?.getRecommendedKeyword(keywords: myKeywords)
         }
     }
     
-    private func getMyKeyWord(completion: @escaping ([NoticeKeyWordDTO]) -> Void) {
-        fetchNotificationKeyWordUseCase.execute().sink(receiveCompletion: { completionResult in
+    private func getMyKeyword(completion: @escaping ([NoticeKeywordDTO]) -> Void) {
+        fetchNotificationKeywordUseCase.execute().sink(receiveCompletion: { completionResult in
             if case let .failure(error) = completionResult {
                 Log.make().error("\(error)")
             }
@@ -118,16 +118,16 @@ extension ManageNoticeKeyWordViewModel {
         }).store(in: &subscriptions)
     }
     
-    private func deleteMyKeyWord(keyWord: NoticeKeyWordDTO) {
-        deleteNotificationKeyWordUseCase.execute(keyword: keyWord)
+    private func deleteMyKeyword(keyWord: NoticeKeywordDTO) {
+        deleteNotificationKeywordUseCase.execute(keyword: keyWord)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
-                    self?.fetchMyKeyWord()
+                    self?.fetchMyKeyword()
                 }
             }, receiveValue: { [weak self] result in
                 print("\(result) keyword is Deleted")
-                self?.fetchMyKeyWord()
+                self?.fetchMyKeyword()
             })
             .store(in: &subscriptions)
     }
@@ -146,13 +146,13 @@ extension ManageNoticeKeyWordViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func getRecommendedKeyWord(keyWords: [NoticeKeyWordDTO]) {
-        fetchRecommendedKeyWordUseCase.execute(filters: keyWords).sink(receiveCompletion: { completion in
+    private func getRecommendedKeyword(keywords: [NoticeKeywordDTO]) {
+        fetchRecommendedKeywordUseCase.execute(filters: keywords).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
-        }, receiveValue: { keyWords in
-            self.outputSubject.send(.updateRecommendedKeyWord(keyWords.keywords))
+        }, receiveValue: { keywords in
+            self.outputSubject.send(.updateRecommendedKeyword(keywords.keywords))
         }).store(in: &subscriptions)
     }
     

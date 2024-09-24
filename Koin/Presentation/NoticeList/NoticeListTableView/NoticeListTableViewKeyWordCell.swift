@@ -14,13 +14,13 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     // MARK: - Properties
     
     static let id = "NoticeListTableViewKeyWordCellIdentifier"
-    let keyWordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keyWordTapPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
+    let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
     var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UIComponents
     
-    private let noticeKeyWordCollectionView = NoticeKeyWordCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+    private let noticeKeywordCollectionView = NoticeKeywordCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
     }
@@ -30,12 +30,12 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
-        noticeKeyWordCollectionView.keyWordAddBtnTapPublisher.sink { [weak self] in
-            self?.keyWordAddBtnTapPublisher.send()
-        }.store(in: &noticeKeyWordCollectionView.subscriptions)
-        noticeKeyWordCollectionView.keyWordTapPublisher.sink { [weak self] keyword in
-            self?.keyWordTapPublisher.send(keyword)
-        }.store(in: &noticeKeyWordCollectionView.subscriptions)
+        noticeKeywordCollectionView.keywordAddBtnTapPublisher.sink { [weak self] in
+            self?.keywordAddBtnTapPublisher.send()
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
+        noticeKeywordCollectionView.keywordTapPublisher.sink { [weak self] keyword in
+            self?.keywordTapPublisher.send(keyword)
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
     }
     
     override func prepareForReuse() {
@@ -48,18 +48,18 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         configureView()
     }
     
-    func updateKeyWordsList(keyWordList: [NoticeKeyWordDTO], keyWordIdx: Int) {
-        noticeKeyWordCollectionView.updateUserKeyWordList(keyWordList: keyWordList, keyWordIdx: keyWordIdx)
+    func updateKeyWordsList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
+        noticeKeywordCollectionView.updateUserKeywordList(keywordList: keywordList, keywordIdx: keywordIdx)
     }
 }
 
 extension NoticeListTableViewKeyWordCell {
     private func setUpLayouts() {
-        contentView.addSubview(noticeKeyWordCollectionView)
+        contentView.addSubview(noticeKeywordCollectionView)
     }
     
     private func setUpConstraints() {
-        noticeKeyWordCollectionView.snp.makeConstraints {
+        noticeKeywordCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

@@ -8,12 +8,12 @@
 import Combine
 import UIKit
 
-final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSource {
+final class MyKeywordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     
-    let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeyWordDTO, Never>()
-    let myKeyWordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
-    private var myKeyWordList: [NoticeKeyWordDTO] = []
+    let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    let myKeywordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
+    private var myKeywordList: [NoticeKeywordDTO] = []
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -27,51 +27,51 @@ final class MyKeyWordCollectionView: UICollectionView, UICollectionViewDataSourc
     }
     
     private func commonInit() {
-        register(MyKeyWordCollectionViewCell.self, forCellWithReuseIdentifier: MyKeyWordCollectionViewCell.identifier)
+        register(MyKeywordCollectionViewCell.self, forCellWithReuseIdentifier: MyKeywordCollectionViewCell.identifier)
         dataSource = self
         delegate = self
         contentInset = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
     }
     
-    func updateMyKeyWords(keyWords: [NoticeKeyWordDTO]) {
-        self.myKeyWordList = keyWords
+    func updateMyKeywords(keywords: [NoticeKeywordDTO]) {
+        self.myKeywordList = keywords
         reloadData()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        myKeyWordsContentsSizePublisher.send(self.contentSize.height)
+        myKeywordsContentsSizePublisher.send(self.contentSize.height)
     }
 }
 
-extension MyKeyWordCollectionView {
+extension MyKeywordCollectionView {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return myKeyWordList.count
+        return myKeywordList.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKeyWordCollectionViewCell.identifier, for: indexPath) as? MyKeyWordCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKeywordCollectionViewCell.identifier, for: indexPath) as? MyKeywordCollectionViewCell else {
             return UICollectionViewCell()
         }
         
-        cell.tapDeleteButtonPublisher.sink { [weak self] myKeyWord in
+        cell.tapDeleteButtonPublisher.sink { [weak self] myKeyword in
             guard let self = self else {return }
-            for keyWord in self.myKeyWordList {
-                if myKeyWord == keyWord.keyWord {
-                    self.tapDeleteButtonPublisher.send(keyWord)
+            for keyword in self.myKeywordList {
+                if myKeyword == keyword.keyword {
+                    self.tapDeleteButtonPublisher.send(keyword)
                     break
                 }
             }
         }.store(in: &cell.subscriptions)
-        cell.configure(keyWord: myKeyWordList[indexPath.item].keyWord)
+        cell.configure(keyWord: myKeywordList[indexPath.item].keyword)
         return cell
     }
 }
 
-extension MyKeyWordCollectionView: UICollectionViewDelegateFlowLayout {
+extension MyKeywordCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.text = myKeyWordList[indexPath.row].keyWord
+        label.text = myKeywordList[indexPath.row].keyword
         label.font = .appFont(.pretendardMedium, size: 14)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
         return CGSize(width: size.width + 50, height: 34)

@@ -1,5 +1,5 @@
 //
-//  NoticeKeyWordCollectionViewCell.swift
+//  NoticeKeywordCollectionViewCell.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.
@@ -9,9 +9,9 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
+final class NoticeKeywordCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
-    private let keyWordLabel = UILabel().then {
+    private let keywordLabel = UILabel().then {
         $0.textAlignment = .center
     }
     
@@ -29,22 +29,22 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(keyWordModel: String, isSelected: Bool) {
+    func configure(keywordModel: String, isSelected: Bool) {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 17
-        keyWordLabel.text = keyWordModel
+        keywordLabel.text = keywordModel
         
-        keyWordLabel.isHidden = false
+        keywordLabel.isHidden = false
         filterImageView.isHidden = true
         
         if isSelected {
-            keyWordLabel.font = .appFont(.pretendardBold, size: 14)
-            keyWordLabel.textColor = .appColor(.neutral0)
+            keywordLabel.font = .appFont(.pretendardBold, size: 14)
+            keywordLabel.textColor = .appColor(.neutral0)
             contentView.backgroundColor = .appColor(.primary500)
         }
         else {
-            keyWordLabel.font = .appFont(.pretendardMedium, size: 14)
-            keyWordLabel.textColor = .appColor(.neutral500)
+            keywordLabel.font = .appFont(.pretendardMedium, size: 14)
+            keywordLabel.textColor = .appColor(.neutral500)
             contentView.backgroundColor = .appColor(.neutral100)
         }
     }
@@ -52,20 +52,20 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
     func configureFilterImage() {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 16
-        keyWordLabel.isHidden = true
+        keywordLabel.isHidden = true
         filterImageView.isHidden = false
     }
 }
 
-extension NoticeKeyWordCollectionViewCell {
+extension NoticeKeywordCollectionViewCell {
     private func setUpLayouts() {
-        [keyWordLabel, filterImageView].forEach {
+        [keywordLabel, filterImageView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        keyWordLabel.snp.makeConstraints {
+        keywordLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.height.equalTo(34)
             $0.centerX.equalToSuperview()

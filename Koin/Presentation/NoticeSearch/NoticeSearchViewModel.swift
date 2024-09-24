@@ -25,14 +25,14 @@ final class NoticeSearchViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase
+    private let fetchHotKeywordUseCase: FetchHotSearchingKeywordUseCase
     private let manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase
     private let searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase
     private let fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase
     private var keyWord = ""
     
-    init(fetchHotKeyWordUseCase: FetchHotSearchingKeyWordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase) {
-        self.fetchHotKeyWordUseCase = fetchHotKeyWordUseCase
+    init(fetchHotKeywordUseCase: FetchHotSearchingKeywordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase) {
+        self.fetchHotKeywordUseCase = fetchHotKeywordUseCase
         self.manageRecentSearchedWordUseCase = manageRecentSearchedWordUseCase
         self.searchNoticeArticlesUseCase = searchNoticeArticlesUseCase
         self.fetchRecentSearchedWordUseCase = fetchRecentSearchedWordUseCase
@@ -59,7 +59,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
 
 extension NoticeSearchViewModel {
     private func getHotKeyWord(count: Int) {
-        fetchHotKeyWordUseCase.execute(count: count).sink(receiveCompletion: { completion in
+        fetchHotKeywordUseCase.execute(count: count).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

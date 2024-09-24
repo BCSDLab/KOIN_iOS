@@ -59,7 +59,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         configureView()
         bind()
         inputSubject.send(.changeBoard(.전체공지))
-        inputSubject.send(.getUserKeyWordList())
+        inputSubject.send(.getUserKeywordList())
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -68,7 +68,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        inputSubject.send(.getUserKeyWordList())
+        inputSubject.send(.getUserKeywordList())
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
@@ -94,8 +94,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-            case let .updateUserKeyWordList(noticeKeyWordList, keyWordIdx):
-                self?.updateUserKeyWordList(keyWords: noticeKeyWordList, keyWordIdx: keyWordIdx)
+            case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
+                self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
             case let .isLogined(isLogined):
                 self?.checkAndShowToolTip(isLogined: isLogined)
             }
@@ -120,24 +120,24 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
         
-        noticeTableView.keyWordAddBtnTapPublisher
+        noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
                 let noticeListService = DefaultNoticeService()
                 let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-                let addNotificationKeyWordUseCase = DefaultAddNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
-                let deleteNotificationKeyWordUseCase = DefaultDeleteNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
-                let fetchNotificationKeyWordUseCase = DefaultFetchNotificationKeyWordUseCase(noticeListRepository: noticeListRepository)
+                let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
                 let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
                 let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
-                let fetchRecommendedKeyWordUseCase = DefaultFetchRecommendedKeyWordUseCase(noticeListRepository: noticeListRepository)
-                let viewModel = ManageNoticeKeyWordViewModel(addNotificationKeyWordUseCase: addNotificationKeyWordUseCase, deleteNotificationKeyWordUseCase: deleteNotificationKeyWordUseCase, fetchNotificationKeyWordUseCase: fetchNotificationKeyWordUseCase, fetchRecommendedKeyWordUseCase: fetchRecommendedKeyWordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase)
-            let viewController = ManageNoticeKeyWordViewController(viewModel: viewModel)
+                let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+                let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase)
+            let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        noticeTableView.keyWordTapPublisher
-            .sink { [weak self] keyWord in
-                self?.inputSubject.send(.getUserKeyWordList(keyWord))
+        noticeTableView.keywordTapPublisher
+            .sink { [weak self] keyword in
+                self?.inputSubject.send(.getUserKeywordList(keyword))
         }.store(in: &subscriptions)
         
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
@@ -153,11 +153,11 @@ extension NoticeListViewController {
     
     @objc private func searchButtonTapped() {
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
-        let fetchHotKeyWordUseCase = DefaultFetchHotSearchingKeyWordUseCase(noticeListRepository: repository)
+        let fetchHotKeywordUseCase = DefaultFetchHotSearchingKeywordUseCase(noticeListRepository: repository)
         let searchNoticeArticlesUseCase = DefaultSearchNoticeArticlesUseCase(noticeRepository: repository)
         let manageRecentSearchedWordUseCase = DefaultManageRecentSearchedWordUseCase(noticeListRepository: repository)
         let fetchRecentSearchedWordUseCase = DefaultFetchRecentSearchedWordUseCase(noticeListRepository: repository)
-        let viewModel = NoticeSearchViewModel(fetchHotKeyWordUseCase: fetchHotKeyWordUseCase, manageRecentSearchedWordUseCase: manageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: searchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: fetchRecentSearchedWordUseCase)
+        let viewModel = NoticeSearchViewModel(fetchHotKeywordUseCase: fetchHotKeywordUseCase, manageRecentSearchedWordUseCase: manageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: searchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: fetchRecentSearchedWordUseCase)
         let vc = NoticeSearchViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -196,8 +196,8 @@ extension NoticeListViewController {
         tabBarCollectionView.tag = noticeListType.rawValue - 4
     }
  
-    private func updateUserKeyWordList(keyWords: [NoticeKeyWordDTO], keyWordIdx: Int) {
-        noticeTableView.updateKeyWordList(keyWordList: keyWords, keyWordIdx: keyWordIdx)
+    private func updateUserKeywordList(keywords: [NoticeKeywordDTO], keywordIdx: Int) {
+        noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
     }
     
     private func configureSwipeGestures() {

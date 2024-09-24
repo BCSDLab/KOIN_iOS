@@ -325,8 +325,8 @@ extension HomeViewController {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
         let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
-        let fetchMyKeyWordUseCase = DefaultFetchNotificationKeyWordUseCase(noticeListRepository: repository)
-        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeyWordUseCase: fetchMyKeyWordUseCase)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase)
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }

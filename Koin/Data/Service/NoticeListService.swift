@@ -13,10 +13,10 @@ protocol NoticeListService {
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
-    func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse>
-    func deleteNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse>
-    func fetchMyNotificationKeyWord() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse>
-    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error>
+    func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse>
+    func deleteNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse>
+    func fetchMyNotificationKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse>
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error>
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
@@ -42,17 +42,17 @@ final class DefaultNoticeService: NoticeListService {
         return request(.fetchHotNoticeArticles)
     }
     
-    func createNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> {
-        let keyword = NoticeKeyWordInfo(context: coreDataService.context)
-        keyword.name = requestModel.keyWord
-        return networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyWord(requestModel))
-            .catch { [weak self] error -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> in
+    func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
+        let keyword = NoticeKeyword(context: coreDataService.context)
+        keyword.name = requestModel.keyword
+        return networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
+            .catch { [weak self] error -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyWord(requestModel))
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
                         }
-                        .catch { [weak self] _ -> AnyPublisher<NoticeKeyWordDTO, ErrorResponse> in
+                        .catch { [weak self] _ -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
                             self?.coreDataService.insert(insertedObject: keyword)
                             return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에 키워드 저장")).eraseToAnyPublisher()
                         }
@@ -64,14 +64,14 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func deleteNotificationKeyWord(requestModel: NoticeKeyWordDTO) -> AnyPublisher<Void, ErrorResponse> {
+    func deleteNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse> {
         if let id = requestModel.id {
-            return networkService.request(api: NoticeListAPI.deleteNotificationKeyWord(id))
+            return networkService.request(api: NoticeListAPI.deleteNotificationKeyword(id))
                 .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
                     guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                     if error.code == "401" {
                         return self.networkService.refreshToken()
-                            .flatMap { _ in self.networkService.request(api: NoticeListAPI.deleteNotificationKeyWord(id))
+                            .flatMap { _ in self.networkService.request(api: NoticeListAPI.deleteNotificationKeyword(id))
                             }
                             .eraseToAnyPublisher()
                     } else {
@@ -81,33 +81,33 @@ final class DefaultNoticeService: NoticeListService {
                 .eraseToAnyPublisher()
         }
         else {
-            if let existingKeyWords = coreDataService.fetchEntities(objectType: NoticeKeyWordInfo.self, predicate: NSPredicate(format: "name == %@", requestModel.keyWord)) {
-                for deletedKeyWord in existingKeyWords {
-                    coreDataService.delete(deletedObject: deletedKeyWord)
+            if let existingKeywords = coreDataService.fetchEntities(objectType: NoticeKeyword.self, predicate: NSPredicate(format: "name == %@", requestModel.keyword)) {
+                for deletedKeyword in existingKeywords {
+                    coreDataService.delete(deletedObject: deletedKeyword)
                 }
             }
             return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")).eraseToAnyPublisher()
         }
     }
     
-    func fetchMyNotificationKeyWord() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
-        return networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord)
+    func fetchMyNotificationKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyword)
             .map { NoticeKeywordsFetchResult.success($0) }
             .catch { [weak self] error -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyWord).map { NoticeKeywordsFetchResult.success($0) }
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyword).map { NoticeKeywordsFetchResult.success($0) }
                         }
                         .catch { [weak self] _ -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> in
-                            let data = self?.coreDataService.fetchEntities(objectType: NoticeKeyWordInfo.self)
-                            var myKeywords: [NoticeKeyWordDTO] = []
+                            let data = self?.coreDataService.fetchEntities(objectType: NoticeKeyword.self)
+                            var myKeywords: [NoticeKeywordDTO] = []
                             if let data = data {
                                 for keyword in data {
-                                    myKeywords.append(NoticeKeyWordDTO(id: nil, keyWord: keyword.name ?? ""))
+                                    myKeywords.append(NoticeKeywordDTO(id: nil, keyword: keyword.name ?? ""))
                                 }
                             }
-                            let result = NoticeKeyWordsDTO(keyWords: myKeywords)
+                            let result = NoticeKeywordsDTO(keywords: myKeywords)
                             return Just(NoticeKeywordsFetchResult.successWithCoreData(result)).setFailureType(to: ErrorResponse.self)
                                 .eraseToAnyPublisher()
                         }.eraseToAnyPublisher()
@@ -118,13 +118,13 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchRecommendedKeyWord(count: Int?) -> AnyPublisher<NoticeRecommendedKeyWordDTO, Error> {
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error> {
         if let count = count {
             let requestModel = FetchRecommendedSearchWordRequest(count: count)
             return request(.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()
         }
         else {
-            return request(.fetchRecommendedKeyWord).eraseToAnyPublisher()
+            return request(.fetchRecommendedKeyword).eraseToAnyPublisher()
         }
     }
     
