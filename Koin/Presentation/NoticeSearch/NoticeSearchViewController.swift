@@ -328,6 +328,6 @@ extension NoticeSearchViewController {
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
     }
 }
