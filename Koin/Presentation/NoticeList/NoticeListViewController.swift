@@ -58,7 +58,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.changeBoard(.전체공지))
+        inputSubject.send(.changeBoard(.all))
         inputSubject.send(.getUserKeywordList())
         configureSwipeGestures()
         tabBarCollectionView.tag = 0

@@ -8,23 +8,23 @@
 import Foundation
 
 enum NoticeListType: Int, Decodable, CaseIterable {
-    case 전체공지 = 4
-    case 일반 = 5
-    case 장학 = 6
-    case 학사 = 7
-    case 취업 = 8
+    case all = 4
+    case general = 5
+    case scholarship = 6
+    case university = 7
+    case job = 8
     
     var displayName: String {
         switch self {
-        case .전체공지:
+        case .all:
             return "전체공지"
-        case .일반:
+        case .general:
             return "일반"
-        case .장학:
+        case .scholarship:
             return "장학"
-        case .학사:
+        case .university:
             return "학사"
-        case .취업:
+        case .job:
             return "취업"
         }
     }
@@ -32,6 +32,6 @@ enum NoticeListType: Int, Decodable, CaseIterable {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try? container.decode(Int.self)
-        self = NoticeListType(rawValue: rawValue ?? 1) ?? .전체공지
+        self = NoticeListType(rawValue: rawValue ?? 1) ?? .all
     }
 }

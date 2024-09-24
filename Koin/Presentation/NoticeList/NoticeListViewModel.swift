@@ -25,7 +25,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
-    private var noticeListType: NoticeListType = .전체공지 {
+    private var noticeListType: NoticeListType = .all {
         didSet {
             getNoticeInfo(page: 1)
         }
