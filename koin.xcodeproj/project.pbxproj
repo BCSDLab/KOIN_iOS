@@ -517,6 +517,8 @@
 		837BFA5C2BB9830C001FCBD4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDTO.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+        839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataClass.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+        839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataProperties.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		839D711A2BEB1570001BC7F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83A2617F2C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeKeywordCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -931,6 +933,7 @@
 		833D9C102C6B269000982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
+				839423DA2CA302FA001E690F /* NoticeKeywordInformation */,
 				835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */,
 				83417DAC2C7C80E500E7837C /* NoticeKeywordInfo */,
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
@@ -1004,8 +1007,6 @@
 		83417DAC2C7C80E500E7837C /* NoticeKeywordInfo */ = {
 			isa = PBXGroup;
 			children = (
-				83417DAA2C7C80E500E7837C /* NoticeKeywordInfo+CoreDataClass.swift */,
-				83417DAB2C7C80E500E7837C /* NoticeKeywordInfo+CoreDataProperties.swift */,
 			);
 			name = NoticeKeywordInfo;
 			path = ../../../..;
@@ -1157,6 +1158,15 @@
 				837BFA552BB7E4B6001FCBD4 /* BusTimetableViewController.swift */,
 			);
 			path = BusTimetable;
+			sourceTree = "<group>";
+		};
+		839423DA2CA302FA001E690F /* NoticeKeywordInformation */ = {
+			isa = PBXGroup;
+			children = (
+				839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */,
+				839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */,
+			);
+			path = NoticeKeywordInformation;
 			sourceTree = "<group>";
 		};
 		839D71172BEB1570001BC7F7 /* NotificationService */ = {
@@ -2692,6 +2702,7 @@
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
+				839423D82CA302E5001E690F /* NoticeKeywordInformation+CoreDataClass.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
@@ -2841,6 +2852,7 @@
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */,
+				839423D92CA302E5001E690F /* NoticeKeywordInformation+CoreDataProperties.swift in Sources */,
 				83DD0D8D2C51010900278ABD /* BusInformationCollectionView.swift in Sources */,
 				83455FC42C96E17D00CEB7A4 /* NoticeAttachmentsTableViewCell.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,

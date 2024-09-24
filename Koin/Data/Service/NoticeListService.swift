@@ -24,7 +24,7 @@ protocol NoticeListService {
 
 final class DefaultNoticeService: NoticeListService {
     let networkService = NetworkService()
-    let coreDataService = CoreDataService()
+    let coreDataService = CoreDataService.shared
     
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return request(.fetchNoticeArticles(requestModel))
@@ -43,7 +43,7 @@ final class DefaultNoticeService: NoticeListService {
     }
     
     func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
-        let keyword = NoticeKeyword(context: coreDataService.context)
+        let keyword = NoticeKeywordInformation(context: coreDataService.context)
         keyword.name = requestModel.keyword
         return networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
             .catch { [weak self] error -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
@@ -81,7 +81,7 @@ final class DefaultNoticeService: NoticeListService {
                 .eraseToAnyPublisher()
         }
         else {
-            if let existingKeywords = coreDataService.fetchEntities(objectType: NoticeKeyword.self, predicate: NSPredicate(format: "name == %@", requestModel.keyword)) {
+            if let existingKeywords = coreDataService.fetchEntities(objectType: NoticeKeywordInformation.self, predicate: NSPredicate(format: "name == %@", requestModel.keyword)) {
                 for deletedKeyword in existingKeywords {
                     coreDataService.delete(deletedObject: deletedKeyword)
                 }
@@ -100,7 +100,7 @@ final class DefaultNoticeService: NoticeListService {
                         .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchNotificationKeyword).map { NoticeKeywordsFetchResult.success($0) }
                         }
                         .catch { [weak self] _ -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> in
-                            let data = self?.coreDataService.fetchEntities(objectType: NoticeKeyword.self)
+                            let data = self?.coreDataService.fetchEntities(objectType: NoticeKeywordInformation.self)
                             var myKeywords: [NoticeKeywordDTO] = []
                             if let data = data {
                                 for keyword in data {
