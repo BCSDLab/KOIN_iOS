@@ -40,12 +40,7 @@ final class RecentSearchTableView: UITableView {
 
 extension RecentSearchTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if recentSearchedDataList.count > 5 {
-            return 5
-        }
-        else {
-            return recentSearchedDataList.count
-        }
+        return recentSearchedDataList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

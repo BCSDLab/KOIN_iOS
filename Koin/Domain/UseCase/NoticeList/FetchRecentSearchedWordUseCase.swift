@@ -20,6 +20,7 @@ final class DefaultFetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCas
     }
     
     func execute() -> [RecentSearchedWordInfo] {
-        return noticeListRepository.fetchRecentSearchedWord()
+        let recentWords = noticeListRepository.fetchRecentSearchedWord()
+        return Array(recentWords.prefix(5))
     }
 }
