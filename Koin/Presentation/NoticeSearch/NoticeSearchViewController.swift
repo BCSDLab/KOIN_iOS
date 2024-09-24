@@ -19,7 +19,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
     
     // MARK: - UI Components
    
-    private let navigationTitle = UILabel().then {
+    private let navigationTitleLabel = UILabel().then {
         $0.text = "공지글 검색"
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
     }
@@ -253,13 +253,13 @@ extension NoticeSearchViewController {
 
 extension NoticeSearchViewController {
     private func setUpLayouts() {
-        [backButton, navigationTitle, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
+        [backButton, navigationTitleLabel, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationTitle.snp.makeConstraints {
+        navigationTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backButton.snp.centerY)
             $0.centerX.equalTo(view.snp.centerX)
         }
@@ -274,7 +274,7 @@ extension NoticeSearchViewController {
         textField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(navigationTitle.snp.bottom).offset(16)
+            $0.top.equalTo(navigationTitleLabel.snp.bottom).offset(16)
             $0.height.equalTo(40)
         }
         

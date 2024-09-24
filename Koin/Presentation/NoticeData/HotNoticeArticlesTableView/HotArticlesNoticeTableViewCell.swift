@@ -11,13 +11,13 @@ import UIKit
 
 final class HotNoticeArticlesTableViewCell: UITableViewCell {
     //MARK: - UI Components
-    private var boardTitle = UILabel().then {
+    private let boardTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 12)
         $0.textAlignment = .left
         $0.textColor = .appColor(.primary600)
     }
     
-    private let noticeTitle = UILabel().then {
+    private let noticeTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
         $0.numberOfLines = 1
@@ -37,27 +37,27 @@ final class HotNoticeArticlesTableViewCell: UITableViewCell {
     }
     
     func configure(articleModel: NoticeArticleDTO) {
-        boardTitle.text = NoticeListType(rawValue: articleModel.boardId)?.displayName
-        noticeTitle.text = articleModel.title
+        boardTitleLabel.text = NoticeListType(rawValue: articleModel.boardId)?.displayName
+        noticeTitleLabel.text = articleModel.title
     }
 }
 
 extension HotNoticeArticlesTableViewCell {
     private func setUpLayouts() {
-        [boardTitle, noticeTitle].forEach {
+        [boardTitleLabel, noticeTitleLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        boardTitle.snp.makeConstraints {
+        boardTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(13.5)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(25)
         }
-        noticeTitle.snp.makeConstraints {
-            $0.top.equalTo(boardTitle)
-            $0.leading.equalTo(boardTitle.snp.trailing).offset(8)
+        noticeTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(boardTitleLabel)
+            $0.leading.equalTo(boardTitleLabel.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(24)
         }
     }

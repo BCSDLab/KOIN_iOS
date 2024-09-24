@@ -24,7 +24,7 @@ final class NoticeSearchTableViewFooter: UITableViewHeaderFooterView {
         $0.setTitleColor(.appColor(.neutral500), for: .normal)
     }
     
-    private let border = UIView().then {
+    private let borderView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
     
@@ -47,7 +47,7 @@ final class NoticeSearchTableViewFooter: UITableViewHeaderFooterView {
 
 extension NoticeSearchTableViewFooter {
     private func setUpLayouts() {
-        [listLoadButton, border].forEach {
+        [listLoadButton, borderView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -57,7 +57,7 @@ extension NoticeSearchTableViewFooter {
             $0.leading.trailing.top.equalToSuperview()
             $0.bottom.equalToSuperview().inset(1)
         }
-        border.snp.makeConstraints {
+        borderView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.bottom.leading.trailing.equalToSuperview()
         }

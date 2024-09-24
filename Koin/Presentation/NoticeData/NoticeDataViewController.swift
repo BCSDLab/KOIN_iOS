@@ -34,18 +34,18 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let nickName = UILabel()
+    private let nickNameLabel = UILabel()
     
-    private let createdDate = UILabel()
+    private let createdDateLabel = UILabel()
     
-    private let separatorDot = UILabel().then {
+    private let separatorDotLabel = UILabel().then {
         $0.text = "·"
     }
-    private let separatorDot2 = UILabel().then {
+    private let separatorDot2Label = UILabel().then {
         $0.text = "·"
     }
     
-    private let eyeImage = UIImageView().then {
+    private let eyeImageView = UIImageView().then {
         $0.tintColor = .appColor(.neutral500)
         $0.image = UIImage.appImage(asset: .eye)
     }
@@ -79,7 +79,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.text = "인기있는 공지"
     }
     
-    private let navigationTitle = UILabel().then {
+    private let navigationTitleLabel = UILabel().then {
         $0.text = "공지사항"
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
     }
@@ -101,7 +101,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.isScrollEnabled = false
     }
     
-    private let contentImage = UIImageView().then {
+    private let contentImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
@@ -220,8 +220,8 @@ extension NoticeDataViewController {
     private func updateNoticeData(noticeData: NoticeDataInfo) {
         titleGuideLabel.text = NoticeListType(rawValue: noticeData.boardId)?.displayName
         titleLabel.setLineHeight(lineHeight: 1.3, text: noticeData.title)
-        nickName.text = noticeData.author
-        createdDate.text = noticeData.registeredAt
+        nickNameLabel.text = noticeData.author
+        createdDateLabel.text = noticeData.registeredAt
         
         contentTextView.attributedText = noticeData.content.convertToAttributedFromHTML()
         let contentTextViewHeight = contentTextView.sizeThatFits(CGSize(width: contentTextView.frame.width, height: .greatestFiniteMagnitude))
@@ -240,12 +240,12 @@ extension NoticeDataViewController {
         }*/
         
         if noticeData.hit == 0 {
-            [separatorDot2, eyeImage, hitLabel].forEach {
+            [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = true
             }
         }
         else {
-            [separatorDot2, eyeImage, hitLabel].forEach {
+            [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = false
             }
             hitLabel.text = "\(noticeData.hit.formattedWithComma)"
@@ -299,7 +299,7 @@ extension NoticeDataViewController: UITextViewDelegate {
 
 extension NoticeDataViewController {
     private func setUpLabels() {
-        [nickName, separatorDot, createdDate, separatorDot2, hitLabel].forEach {
+        [nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, hitLabel].forEach {
             $0.font = .appFont(.pretendardRegular, size: 12)
             $0.textAlignment = .left
             $0.textColor = .appColor(.neutral500)
@@ -323,7 +323,7 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [navigationTitle, backButton, titleGuideLabel, titleLabel, createdDate, separatorDot, nickName, separatorDot2, eyeImage, hitLabel].forEach {
+        [navigationTitleLabel, backButton, titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
         //[contentTextView, inventoryButton, previousButton, nextButton].forEach {
@@ -356,7 +356,7 @@ extension NoticeDataViewController {
             $0.height.equalTo(24)
         }
         
-        navigationTitle.snp.makeConstraints {
+        navigationTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backButton.snp.centerY)
             $0.centerX.equalTo(view.snp.centerX)
         }
@@ -372,42 +372,42 @@ extension NoticeDataViewController {
             $0.trailing.equalToSuperview().inset(24)
         }
         
-        createdDate.snp.makeConstraints {
+        createdDateLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
             $0.height.equalTo(19)
         }
         
-        separatorDot.snp.makeConstraints {
-            $0.leading.equalTo(createdDate.snp.trailing).offset(3)
-            $0.top.equalTo(createdDate)
+        separatorDotLabel.snp.makeConstraints {
+            $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
+            $0.top.equalTo(createdDateLabel)
             $0.width.equalTo(7)
             $0.height.equalTo(19)
         }
         
-        nickName.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot.snp.trailing).offset(3)
-            $0.top.equalTo(createdDate)
+        nickNameLabel.snp.makeConstraints {
+            $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
+            $0.top.equalTo(createdDateLabel)
             $0.bottom.equalToSuperview().inset(12)
             $0.height.equalTo(19)
         }
         
-        separatorDot2.snp.makeConstraints {
-            $0.leading.equalTo(nickName.snp.trailing).offset(3)
-            $0.top.equalTo(nickName)
+        separatorDot2Label.snp.makeConstraints {
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(3)
+            $0.top.equalTo(nickNameLabel)
             $0.width.equalTo(7)
         }
         
-        eyeImage.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot2.snp.trailing).offset(2)
-            $0.centerY.equalTo(nickName)
+        eyeImageView.snp.makeConstraints {
+            $0.leading.equalTo(separatorDot2Label.snp.trailing).offset(2)
+            $0.centerY.equalTo(nickNameLabel)
             $0.width.equalTo(16)
             $0.height.equalTo(13)
         }
         
         hitLabel.snp.makeConstraints {
-            $0.leading.equalTo(eyeImage.snp.trailing)
-            $0.top.equalTo(nickName)
+            $0.leading.equalTo(eyeImageView.snp.trailing)
+            $0.top.equalTo(nickNameLabel)
             $0.height.equalTo(19)
         }
         

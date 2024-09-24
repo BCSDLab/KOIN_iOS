@@ -11,7 +11,7 @@ import UIKit
 
 final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
-    private let keyWord = UILabel().then {
+    private let keyWordLabel = UILabel().then {
         $0.textAlignment = .center
     }
     
@@ -32,19 +32,19 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
     func configure(keyWordModel: String, isSelected: Bool) {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 17
-        keyWord.text = keyWordModel
+        keyWordLabel.text = keyWordModel
         
-        keyWord.isHidden = false
+        keyWordLabel.isHidden = false
         filterImageView.isHidden = true
         
         if isSelected {
-            keyWord.font = .appFont(.pretendardBold, size: 14)
-            keyWord.textColor = .appColor(.neutral0)
+            keyWordLabel.font = .appFont(.pretendardBold, size: 14)
+            keyWordLabel.textColor = .appColor(.neutral0)
             contentView.backgroundColor = .appColor(.primary500)
         }
         else {
-            keyWord.font = .appFont(.pretendardMedium, size: 14)
-            keyWord.textColor = .appColor(.neutral500)
+            keyWordLabel.font = .appFont(.pretendardMedium, size: 14)
+            keyWordLabel.textColor = .appColor(.neutral500)
             contentView.backgroundColor = .appColor(.neutral100)
         }
     }
@@ -52,20 +52,20 @@ final class NoticeKeyWordCollectionViewCell: UICollectionViewCell {
     func configureFilterImage() {
         contentView.backgroundColor = .appColor(.neutral100)
         contentView.layer.cornerRadius = 16
-        keyWord.isHidden = true
+        keyWordLabel.isHidden = true
         filterImageView.isHidden = false
     }
 }
 
 extension NoticeKeyWordCollectionViewCell {
     private func setUpLayouts() {
-        [keyWord, filterImageView].forEach {
+        [keyWordLabel, filterImageView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        keyWord.snp.makeConstraints {
+        keyWordLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.height.equalTo(34)
             $0.centerX.equalToSuperview()

@@ -16,7 +16,7 @@ final class NoticeAttachmentsTableViewCell: UITableViewCell {
     let tapDownloadButtonPublisher = PassthroughSubject<Void, Never>()
     
     //MARK: - UI Components
-    private var attachmentTitleLabel = UILabel().then {
+    private let attachmentTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
         $0.numberOfLines = 1

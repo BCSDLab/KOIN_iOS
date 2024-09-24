@@ -11,32 +11,32 @@ import UIKit
 
 final class NoticeListTableViewCell: UITableViewCell {
     //MARK: - UI Components
-    private var boardTitle = UILabel().then {
+    private let boardTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 12)
         $0.textAlignment = .left
         $0.textColor = .appColor(.primary600)
     }
     
-    private let noticeTitle = UILabel().then {
+    private let noticeTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
         $0.textColor = .appColor(.neutral800)
         $0.numberOfLines = 2
     }
     
-    private let nickName = UILabel()
+    private let nickNameLabel = UILabel()
     
-    private let createdDate = UILabel()
+    private let createdDateLabel = UILabel()
     
-    private let separatorDot = UILabel().then {
+    private let separatorDotLabel = UILabel().then {
         $0.text = "·"
     }
     
-    private let separatorDot2 = UILabel().then {
+    private let separatorDot2Label = UILabel().then {
         $0.text = "·"
     }
     
-    private let eyeImage = UIImageView().then {
+    private let eyeImageView = UIImageView().then {
         $0.image = .appImage(asset: .eye)
         $0.tintColor = .appColor(.neutral500)
     }
@@ -55,19 +55,19 @@ final class NoticeListTableViewCell: UITableViewCell {
     }
     
     func configure(articleModel: NoticeArticleDTO) {
-        boardTitle.text = "\(NoticeListType(rawValue: articleModel.boardId)?.displayName ?? "")공지"
-        noticeTitle.setLineHeight(lineHeight: 1.3, text: articleModel.title)
+        boardTitleLabel.text = "\(NoticeListType(rawValue: articleModel.boardId)?.displayName ?? "")공지"
+        noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title)
         
-        noticeTitle.lineBreakMode = .byTruncatingTail
-        nickName.text = articleModel.author
-        createdDate.text = articleModel.registeredAt
+        noticeTitleLabel.lineBreakMode = .byTruncatingTail
+        nickNameLabel.text = articleModel.author
+        createdDateLabel.text = articleModel.registeredAt
         if articleModel.hit == 0 {
-            [separatorDot2, eyeImage, hitLabel].forEach {
+            [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = true
             }
         }
         else {
-            [separatorDot2, eyeImage, hitLabel].forEach {
+            [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = false
             }
             hitLabel.text = "\(articleModel.hit.formattedWithComma)"
@@ -78,7 +78,7 @@ final class NoticeListTableViewCell: UITableViewCell {
 
 extension NoticeListTableViewCell {
     private func setUpLabels() {
-        [nickName, separatorDot, createdDate, separatorDot2, hitLabel].forEach {
+        [nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, hitLabel].forEach {
             $0.font = .appFont(.pretendardRegular, size: 12)
             $0.textAlignment = .left
             $0.textColor = .appColor(.neutral500)
@@ -86,56 +86,56 @@ extension NoticeListTableViewCell {
     }
     
     private func setUpLayouts() {
-        [boardTitle, noticeTitle, nickName, separatorDot, createdDate, separatorDot2, eyeImage, hitLabel].forEach {
+        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        boardTitle.snp.makeConstraints {
+        boardTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(24)
         }
         
-        noticeTitle.snp.makeConstraints {
-            $0.top.equalTo(boardTitle.snp.bottom)
-            $0.leading.equalTo(boardTitle)
+        noticeTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(boardTitleLabel.snp.bottom)
+            $0.leading.equalTo(boardTitleLabel)
             $0.trailing.equalToSuperview().inset(24)
         }
         
-        nickName.snp.makeConstraints {
-            $0.top.equalTo(noticeTitle.snp.bottom).offset(4)
-            $0.leading.equalTo(boardTitle)
+        nickNameLabel.snp.makeConstraints {
+            $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(boardTitleLabel)
         }
         
-        separatorDot.snp.makeConstraints {
-            $0.leading.equalTo(nickName.snp.trailing).offset(3)
-            $0.top.equalTo(nickName)
+        separatorDotLabel.snp.makeConstraints {
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(3)
+            $0.top.equalTo(nickNameLabel)
             $0.width.equalTo(7)
         }
         
-        createdDate.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot.snp.trailing).offset(3)
-            $0.top.equalTo(nickName)
+    createdDateLabel.snp.makeConstraints {
+            $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
+            $0.top.equalTo(nickNameLabel)
             $0.bottom.equalToSuperview().inset(12)
         }
         
-        separatorDot2.snp.makeConstraints {
-            $0.leading.equalTo(createdDate.snp.trailing).offset(3)
-            $0.top.equalTo(nickName)
+        separatorDot2Label.snp.makeConstraints {
+            $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
+            $0.top.equalTo(nickNameLabel)
             $0.width.equalTo(7)
         }
         
-        eyeImage.snp.makeConstraints {
-            $0.leading.equalTo(separatorDot2.snp.trailing)
-            $0.centerY.equalTo(nickName)
+        eyeImageView.snp.makeConstraints {
+            $0.leading.equalTo(separatorDot2Label.snp.trailing)
+            $0.centerY.equalTo(nickNameLabel)
             $0.width.equalTo(16)
             $0.height.equalTo(13)
         }
         
         hitLabel.snp.makeConstraints {
-            $0.leading.equalTo(eyeImage.snp.trailing)
-            $0.top.equalTo(nickName)
+            $0.leading.equalTo(eyeImageView.snp.trailing)
+            $0.top.equalTo(nickNameLabel)
         }
     }
     

@@ -29,7 +29,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         flowLayout?.scrollDirection = .horizontal
     }
     
-    private let navigationTitle = UILabel().then {
+    private let navigationTitleLabel = UILabel().then {
         $0.text = "공지사항"
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
     }
@@ -213,7 +213,7 @@ extension NoticeListViewController {
         [navigationBarWrappedView, tabBarCollectionView, noticeTableView, noticeToolTipImageView].forEach {
             view.addSubview($0)
         }
-        [backButton, navigationTitle, searchButton].forEach {
+        [backButton, navigationTitleLabel, searchButton].forEach {
             navigationBarWrappedView.addSubview($0)
         }
     }
@@ -238,7 +238,7 @@ extension NoticeListViewController {
             $0.height.equalTo(24)
         }
         
-        navigationTitle.snp.makeConstraints {
+        navigationTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backButton.snp.centerY)
             $0.centerX.equalTo(view.snp.centerX)
         }
