@@ -8,7 +8,7 @@
 import Combine
 
 protocol AddNotificationKeywordUseCase {
-    func execute(keyword: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse>
+    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordResult), ErrorResponse>
 }
 
 final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase {
@@ -18,7 +18,27 @@ final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase 
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(keyword: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
-        noticeListRepository.createNotificationKeyword(requestModel: keyword)
+    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordResult), ErrorResponse> {
+        var addKeywordResult: AddNoticeKeywordResult = .success
+
+        if myKeywords.contains(where: { $0.keyword == keyword.keyword }) {
+            addKeywordResult = .sameKeyword
+        }
+        else if myKeywords.count < 2 || myKeywords.count > 10 {
+            addKeywordResult = .notInRange
+        }
+        else if myKeywords.count > 9 {
+            addKeywordResult = .exceedNumber
+        }
+        
+        if addKeywordResult != .success {
+            return Just((nil, addKeywordResult))
+                .setFailureType(to: ErrorResponse.self)
+                .eraseToAnyPublisher()
+        }
+        
+        return noticeListRepository.createNotificationKeyword(requestModel: keyword).map {
+            ($0, addKeywordResult)
+        }.eraseToAnyPublisher()
     }
 }

@@ -140,13 +140,7 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             case let .updateRecommendedKeyword(keywords):
                 self.updateRecommendedKeywords(keywords: keywords)
             case let .keywordIsIllegal(illegalType):
-                var message = ""
-                switch illegalType {
-                case .exceedNumber: message = "키워드는 최대 10개까지 추가할 수 있습니다."
-                case .isDuplicated: message = "이미 같은 키워드가 존재합니다."
-                case .isNotCharPredicate: message = "키워드는 2글자에서 10글자 사이어야 합니다."
-                }
-                self.conductAddKeywordIllegalType(illegalType: message)
+                self.conductAddKeywordIllegalType(illegalType: illegalType)
             }
         }.store(in: &subscriptions)
         

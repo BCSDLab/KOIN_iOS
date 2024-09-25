@@ -22,13 +22,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
         case updateRecommendedKeyword([String])
         case showLoginModal
         case updateSwitch(isOn: Bool)
-        case keywordIsIllegal(addKeyWordIllegalType)
-    }
-    
-    enum addKeyWordIllegalType {
-        case isDuplicated
-        case isNotCharPredicate
-        case exceedNumber
+        case keywordIsIllegal(String)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -72,39 +66,33 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
 extension ManageNoticeKeywordViewModel {
     private func addKeyword(keyword: String) {
         let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
-        var isNotIllegal = true
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
-            if myKeywords.contains(where: { $0.keyword == keyword }) {
-                isNotIllegal = false
-                self.outputSubject.send(.keywordIsIllegal(.isDuplicated))
-            }
-            else if keyword.count < 2 || keyword.count > 10 {
-                isNotIllegal = false
-                self.outputSubject.send(.keywordIsIllegal(.isNotCharPredicate))
-            }
-            else if myKeywords.count > 9 {
-                isNotIllegal = false
-                self.outputSubject.send(.keywordIsIllegal(.exceedNumber))
-            }
-            if isNotIllegal {
-                self.addNotificationKeywordUseCase.execute(keyword: requestModel).sink(receiveCompletion: { [weak self] completion in
-                    if case let .failure(error) = completion {
-                        Log.make().error("\(error)")
-                        self?.fetchMyKeyword()
-                    }
-                }, receiveValue: { [weak self] result in
-                    print("\(result) keyword is Registered")
+            self.addNotificationKeywordUseCase.execute(keyword: requestModel, myKeywords: myKeywords).sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { [weak self] _, addKeywordResult in
+                switch addKeywordResult {
+                case .exceedNumber:
+                    self?.outputSubject.send(.keywordIsIllegal("키워드는 최대 10개까지 추가할 수 있습니다."))
+                case .notInRange:
+                    self?.outputSubject.send(.keywordIsIllegal("키워드는 2글자에서 10글자 사이어야 합니다."))
+                case .sameKeyword:
+                    self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
+                case .success:
                     self?.fetchMyKeyword()
-                }).store(in: &self.subscriptions)
-            }
-        }
+                }
+            }).store(in: &self.subscriptions)
+        
     }
-    
-    private func fetchMyKeyword() {
-        getMyKeyword { [weak self] myKeywords in
-            self?.outputSubject.send(.updateKeyword(myKeywords))
-            self?.getRecommendedKeyword(keywords: myKeywords)
+}
+
+private func fetchMyKeyword() {
+    getMyKeyword { [weak self] myKeywords in
+        print(myKeywords)
+        self?.outputSubject.send(.updateKeyword(myKeywords))
+        self?.getRecommendedKeyword(keywords: myKeywords)
         }
     }
     
