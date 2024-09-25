@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class NoticeDataViewController: UIViewController, UIGestureRecognizerDelegate {
+final class NoticeDataViewController: CustomViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -79,16 +79,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.text = "인기있는 공지"
     }
     
-    private let navigationTitleLabel = UILabel().then {
-        $0.text = "공지사항"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let backButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
-        $0.tintColor = UIColor.appColor(.neutral800)
-    }
-    
     private let hotNoticeArticlesTableView = HotNoticeArticlesTableView(frame: .zero, style: .plain)
     
     private let scrollView = UIScrollView()
@@ -130,7 +120,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
@@ -141,21 +130,13 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         previousButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside) */
         bind()
+        setNavigationTitle(title: "공지사항")
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
         configureView()
+        setUpNavigationBar()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Bind
@@ -185,10 +166,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
 }
 
 extension NoticeDataViewController {
-    @objc private func tapBackButton() {
-        navigationController?.popViewController(animated: true)
-    }
-    
     @objc private func tapInventoryButton() {
         guard let navigationController = navigationController else { return }
         while let topVc = navigationController.topViewController {
@@ -323,7 +300,8 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-        [navigationTitleLabel, backButton, titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
+    
+        [navigationBarWrappedView, titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
         //[contentTextView, inventoryButton, previousButton, nextButton].forEach {
@@ -349,21 +327,14 @@ extension NoticeDataViewController {
             $0.leading.top.trailing.equalToSuperview()
         }
         
-        backButton.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalTo(view.snp.leading).offset(24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
-        }
-        
-        navigationTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(backButton.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.height.equalTo(48)
         }
         
         titleGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(backButton.snp.bottom).offset(28)
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(9)
         }
         
         titleLabel.snp.makeConstraints {

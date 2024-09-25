@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
+final class NoticeListViewController: CustomViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeListViewModel
@@ -29,23 +29,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         flowLayout?.scrollDirection = .horizontal
     }
     
-    private let navigationTitleLabel = UILabel().then {
-        $0.text = "공지사항"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let backButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
-        $0.tintColor = .appColor(.neutral800)
-    }
-    
     private let searchButton = UIButton().then {
         $0.setImage(.appImage(symbol: .magnifyingGlass), for: .normal)
         $0.tintColor = .appColor(.neutral800)
-    }
-    
-    private let navigationBarWrappedView = UIView().then {
-        $0.backgroundColor = .white
     }
     
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
@@ -53,15 +39,16 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         super.viewDidLoad()
+        setNavigationTitle(title: "공지사항")
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         configureView()
         bind()
         inputSubject.send(.changeBoard(.all))
         inputSubject.send(.getUserKeywordList())
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
+        setUpNavigationBar()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
@@ -69,12 +56,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
-        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     // MARK: - Initialization
@@ -147,10 +132,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
 }
 
 extension NoticeListViewController {
-    @objc private func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-    
     @objc private func searchButtonTapped() {
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeywordUseCase = DefaultFetchHotSearchingKeywordUseCase(noticeListRepository: repository)
@@ -212,37 +193,22 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, tabBarCollectionView, noticeTableView, noticeToolTipImageView].forEach {
+        [navigationBarWrappedView, tabBarCollectionView, noticeTableView, noticeToolTipImageView, searchButton].forEach {
             view.addSubview($0)
-        }
-        [backButton, navigationTitleLabel, searchButton].forEach {
-            navigationBarWrappedView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.bottom.equalTo(backButton).offset(13)
-        }
-        
-        backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
-        }
-        
         searchButton.snp.makeConstraints {
-            $0.top.equalTo(backButton)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.trailing.equalToSuperview().inset(24)
             $0.width.equalTo(24)
             $0.height.equalTo(24)
         }
         
-        navigationTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(backButton.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.height.equalTo(95)
         }
         
         tabBarCollectionView.snp.makeConstraints {

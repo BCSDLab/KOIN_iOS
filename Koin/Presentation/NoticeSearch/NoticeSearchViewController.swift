@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDelegate {
+final class NoticeSearchViewController: CustomViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeSearchViewModel
@@ -18,17 +18,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-   
-    private let navigationTitleLabel = UILabel().then {
-        $0.text = "공지글 검색"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let backButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
-        $0.tintColor = .appColor(.neutral800)
-    }
-    
+
     private let textField = UITextField().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.placeholder = "검색어를 입력해주세요."
@@ -90,7 +80,6 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         textFieldButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         deleteRecentSearchDataButton.addTarget(self, action: #selector(deleteAllButtonTapped), for: .touchUpInside)
         configureView()
@@ -101,23 +90,15 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         textField.delegate = self
         noticeListTableView.isHidden = true
         emptyNoticeGuideLabel.isHidden = true
+        setUpNavigationBar()
+        setNavigationTitle(title: "공지글 검색")
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    
+   
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -196,10 +177,7 @@ extension NoticeSearchViewController {
             self?.view.layoutIfNeeded()
         }
     }
-    
-    @objc private func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
+   
     
     @objc private func searchButtonTapped() {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
@@ -253,28 +231,21 @@ extension NoticeSearchViewController {
 
 extension NoticeSearchViewController {
     private func setUpLayouts() {
-        [backButton, navigationTitleLabel, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
+        [navigationBarWrappedView, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(backButton.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
-        }
-        
-        backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.leading.top.trailing.equalToSuperview()
+            $0.height.equalTo(100)
         }
         
         textField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(navigationTitleLabel.snp.bottom).offset(16)
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
             $0.height.equalTo(40)
         }
         

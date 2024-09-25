@@ -85,6 +85,7 @@
 		837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5A2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
+		839423DE2CA31471001E690F /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839423DD2CA31471001E690F /* CustomViewController.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2617F2C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift */; };
@@ -473,8 +474,6 @@
 		833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeDataUseCase.swift; sourceTree = "<group>"; };
 		833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataInfo.swift; sourceTree = "<group>"; };
 		833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
-		83417DAA2C7C80E500E7837C /* NoticeKeywordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoticeKeywordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		83417DAB2C7C80E500E7837C /* NoticeKeywordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoticeKeywordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
 		83455FC12C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAttachmentsTableView.swift; sourceTree = "<group>"; };
 		83455FC32C96E17D00CEB7A4 /* NoticeAttachmentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAttachmentsTableViewCell.swift; sourceTree = "<group>"; };
@@ -514,6 +513,7 @@
 		837BFA552BB7E4B6001FCBD4 /* BusTimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableViewController.swift; sourceTree = "<group>"; };
 		837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewcontroller.swift; sourceTree = "<group>"; };
 		837BFA5A2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BusInformationCollectionViewCell.swift; path = ../BusInformationCollectionViewCell.swift; sourceTree = "<group>"; };
+        839423DD2CA31471001E690F /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		837BFA5C2BB9830C001FCBD4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDTO.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2117,6 +2117,7 @@
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
+				839423DD2CA31471001E690F /* CustomViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2710,6 +2711,7 @@
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D27DD0912BA608310081FD36 /* ShopCollectionViewCell.swift in Sources */,
+				839423DE2CA31471001E690F /* CustomViewController.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,

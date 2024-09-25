@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class ManageNoticeKeywordViewController: UIViewController {
+final class ManageNoticeKeywordViewController: CustomViewController {
     // MARK: - Properties
     
     private let viewModel: ManageNoticeKeywordViewModel
@@ -18,17 +18,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-   
-    private let navigationTitle = UILabel().then {
-        $0.text = "키워드 관리"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let backButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
-        $0.tintColor = .appColor(.neutral800)
-    }
-    
+
     private let myKeywordGuideLabel = UILabel().then {
         $0.text = "내 키워드"
         $0.font = UIFont.appFont(.pretendardBold, size: 18)
@@ -108,7 +98,6 @@ final class ManageNoticeKeywordViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         textField.addTarget(self, action: #selector(textFieldValueChanged), for: .allEditingEvents)
         addKeywordButton.addTarget(self, action: #selector(tapAddKeywordButton), for: .touchUpInside)
         keywordNotificationSwtich.addTarget(self, action: #selector(changeNotificationKeywordSwitch), for: .valueChanged)
@@ -116,20 +105,15 @@ final class ManageNoticeKeywordViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         bind()
         textField.delegate = self
+        setNavigationTitle(title: "키워드 관리")
+        setUpNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
         inputSubject.send(.getMyKeyword)
-        inputSubject.send(.fetchSubscription)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    
+
     // MARK: - Initialization
     
     init(viewModel: ManageNoticeKeywordViewModel) {
@@ -191,10 +175,6 @@ final class ManageNoticeKeywordViewController: UIViewController {
 }
 
 extension ManageNoticeKeywordViewController {
-    @objc private func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-    
     @objc private func textFieldValueChanged(sender: UITextField) {
         if sender.isEditing {
             textField.layer.borderColor = UIColor.appColor(.primary400).cgColor
@@ -244,26 +224,19 @@ extension ManageNoticeKeywordViewController {
 
 extension ManageNoticeKeywordViewController {
     private func setUpLayouts() {
-        [backButton, navigationTitle, myKeywordGuideLabel, numberOfKeywordLabel, addKeywordDescriptionLabel, addKeywordButton, textField, myKeywordCollectionView ,separatorView, recommendedKeywordCollectionView, keywordNotificationGuideLabel, keywordNotificationLabel, keywordNotificationDescriptionLabel, keywordNotificationSwtich, recommendedKeywordGuideLabel].forEach {
+        [navigationBarWrappedView, myKeywordGuideLabel, numberOfKeywordLabel, addKeywordDescriptionLabel, addKeywordButton, textField, myKeywordCollectionView ,separatorView, recommendedKeywordCollectionView, keywordNotificationGuideLabel, keywordNotificationLabel, keywordNotificationDescriptionLabel, keywordNotificationSwtich, recommendedKeywordGuideLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationTitle.snp.makeConstraints {
-            $0.centerY.equalTo(backButton.snp.centerY)
-            $0.centerX.equalTo(view.snp.centerX)
-        }
-        
-        backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(100)
         }
         
         myKeywordGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom).offset(26.5)
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(29)
         }
