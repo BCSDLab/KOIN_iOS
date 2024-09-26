@@ -8,7 +8,7 @@
 import Combine
 
 protocol AddNotificationKeywordUseCase {
-    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordResult), ErrorResponse>
+    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordType), ErrorResponse>
 }
 
 final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase {
@@ -18,8 +18,8 @@ final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase 
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordResult), ErrorResponse> {
-        var addKeywordResult: AddNoticeKeywordResult = .success
+    func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordType), ErrorResponse> {
+        var addKeywordResult: AddNoticeKeywordType = .success
 
         if myKeywords.contains(where: { $0.keyword == keyword.keyword }) {
             addKeywordResult = .sameKeyword
