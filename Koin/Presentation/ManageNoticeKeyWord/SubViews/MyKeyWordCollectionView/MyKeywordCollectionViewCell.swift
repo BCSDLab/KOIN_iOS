@@ -12,8 +12,7 @@ import UIKit
 
 final class MyKeywordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    private var keyword: String = ""
-    let tapDeleteButtonPublisher = PassthroughSubject<String, Never>()
+    let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
     var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -46,11 +45,10 @@ final class MyKeywordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keywordLabel.text = keyWord
-        self.keyword = keyWord
     }
     
     @objc func tapDeleteButton(sender: UIButton) {
-        tapDeleteButtonPublisher.send(keyword)
+        tapDeleteButtonPublisher.send()
     }
 }
 
