@@ -14,6 +14,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case getNoticeData
         case getPopularNotices
         case downloadFile(String, String)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
@@ -24,16 +25,18 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var noticeId: Int = 0
     var previousNoticeId: Int?
     var nextNoticeId: Int?
     
-    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, noticeId: Int) {
+    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.downloadNoticeAttachmentUseCase = downloadNoticeAttachmentUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.noticeId = noticeId
     }
 
@@ -46,6 +49,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.getPopularArticle()
             case let .downloadFile(downloadUrl, fileName):
                 self?.downloadFile(downloadUrl: downloadUrl, fileName: fileName)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -87,6 +92,10 @@ extension NoticeDataViewModel {
         }, receiveValue: { [weak self] in
             self?.outputSubject.send(.updateActivityIndictor(false, fileName))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 

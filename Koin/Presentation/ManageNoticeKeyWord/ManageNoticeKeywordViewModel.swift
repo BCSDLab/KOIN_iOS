@@ -15,6 +15,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
         case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateKeyword([NoticeKeywordDTO])
@@ -32,15 +33,17 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     private let fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     init(addNotificationKeywordUseCase: AddNotificationKeywordUseCase, deleteNotificationKeywordUseCase: DeleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: FetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase,
-         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
+         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.addNotificationKeywordUseCase = addNotificationKeywordUseCase
         self.deleteNotificationKeywordUseCase = deleteNotificationKeywordUseCase
         self.fetchNotificationKeywordUseCase = fetchNotificationKeywordUseCase
         self.fetchRecommendedKeywordUseCase = fetchRecommendedKeywordUseCase
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -56,6 +59,8 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
                 self?.changeNotification(isOn: isOn)
             case .fetchSubscription:
                 self?.fetchSubscription()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -155,6 +160,10 @@ extension ManageNoticeKeywordViewModel {
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateSwitch(isOn: isOn))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 

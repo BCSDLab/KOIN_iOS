@@ -16,6 +16,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
         case fetchSearchedResult(Int, String?)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateHotKeyWord([String])
@@ -29,13 +30,15 @@ final class NoticeSearchViewModel: ViewModelProtocol {
     private let manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase
     private let searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase
     private let fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var keyWord = ""
     
-    init(fetchHotKeywordUseCase: FetchHotSearchingKeywordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase) {
+    init(fetchHotKeywordUseCase: FetchHotSearchingKeywordUseCase, manageRecentSearchedWordUseCase: ManageRecentSearchedWordUseCase, searchNoticeArticlesUseCase: SearchNoticeArticlesUseCase, fetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchHotKeywordUseCase = fetchHotKeywordUseCase
         self.manageRecentSearchedWordUseCase = manageRecentSearchedWordUseCase
         self.searchNoticeArticlesUseCase = searchNoticeArticlesUseCase
         self.fetchRecentSearchedWordUseCase = fetchRecentSearchedWordUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -51,6 +54,8 @@ final class NoticeSearchViewModel: ViewModelProtocol {
                 self?.deleteAllSearchedWords()
             case let .fetchSearchedResult(page, keyWord):
                 self?.fetchSearchedResult(page: page, keyWord: keyWord)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -107,6 +112,10 @@ extension NoticeSearchViewModel {
                 self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false))
             }
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 
