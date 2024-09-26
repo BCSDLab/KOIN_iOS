@@ -84,6 +84,7 @@
 		837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5A2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
+		838F114E2CA51C6C00BF3B25 /* AddNoticeKeywordResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114D2CA51C6C00BF3B25 /* AddNoticeKeywordResult.swift */; };
 		839423DE2CA31471001E690F /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839423DD2CA31471001E690F /* CustomViewController.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -937,6 +938,7 @@
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
 				833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */,
 				831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */,
+				838F114D2CA51C6C00BF3B25 /* AddNoticeKeywordResult.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2644,6 +2646,7 @@
 				D2908D3A2BBCA35C0008F908 /* AddClassCollectionViewCell.swift in Sources */,
 				D22C54662C69250F000826DA /* ShopReviewReportViewModel.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
+				838F114E2CA51C6C00BF3B25 /* AddNoticeKeywordResult.swift in Sources */,
 				D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */,
 				833D9C592C735F7700982145 /* HotArticlesNoticeTableViewCell.swift in Sources */,
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
