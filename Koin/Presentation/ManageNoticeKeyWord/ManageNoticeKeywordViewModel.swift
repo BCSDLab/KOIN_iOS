@@ -160,6 +160,8 @@ extension ManageNoticeKeywordViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateSwitch(isOn: isOn))
+            let value = isOn ? "on" : "off"
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: value)
         }).store(in: &subscriptions)
     }
     
