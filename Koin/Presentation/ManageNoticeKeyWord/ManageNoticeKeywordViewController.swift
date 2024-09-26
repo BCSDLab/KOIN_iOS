@@ -167,6 +167,11 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
             self?.navigationController?.pushViewController(loginViewController, animated: true)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "로그인하기"))
+        }.store(in: &subscriptions)
+        
+        keywordLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
         }.store(in: &subscriptions)
     }
 }
