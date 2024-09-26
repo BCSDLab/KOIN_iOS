@@ -224,7 +224,7 @@ extension NoticeSearchViewController {
         else {
             emptyNoticeGuideLabel.isHidden = true
             noticeListTableView.isHidden = false
-            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult, isLastPage: isLastPage)
+            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult)
         }
     }
 }

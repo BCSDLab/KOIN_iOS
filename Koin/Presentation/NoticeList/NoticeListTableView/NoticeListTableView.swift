@@ -19,8 +19,6 @@ final class NoticeListTableView: UITableView {
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
-    private var isLastPage: Bool = false
-    private var isTappedListLoadButton: Bool = false
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -54,14 +52,9 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isLastPage: Bool) {
-        self.isLastPage = isLastPage
-        if !isTappedListLoadButton {
-            self.noticeArticleList = noticeArticleList
-        }
-        else {
-            self.noticeArticleList.append(contentsOf: noticeArticleList)
-        }
+    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO]) {
+        
+        self.noticeArticleList.append(contentsOf: noticeArticleList)
         
         isForSearch = true
         let indexSet = IndexSet(integer: 1)
@@ -150,7 +143,6 @@ extension NoticeListTableView: UITableViewDelegate {
            
             view.tapBtnPublisher.sink { [weak self] in
                 guard let self = self else { return }
-                self.isTappedListLoadButton = true
                 let page = Int(self.noticeArticleList.count / 5)
                 self.tapListLoadButtnPublisher.send(page)
             }.store(in: &view.subscriptions)
@@ -180,7 +172,7 @@ extension NoticeListTableView: UITableViewDelegate {
         if !isForSearch && section == 1 {
             return 95
         }
-        else if isForSearch && section == 1 && !isLastPage {
+        else if isForSearch && section == 1 && noticeArticleList.count / 5 < 5 {
             return 58
         }
         else {
