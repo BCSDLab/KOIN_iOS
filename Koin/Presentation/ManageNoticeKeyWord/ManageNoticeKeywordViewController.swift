@@ -159,9 +159,8 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             }
         }.store(in: &subscriptions)
         
-        recommendedKeywordCollectionView.recommendedKeywordPublisher
-            .sink { [weak self] keyword in
-                self?.inputSubject.send(.addKeyword(keyword: keyword))
+        recommendedKeywordCollectionView.recommendedKeywordPublisher.sink { [weak self] keyword in
+            self?.inputSubject.send(.addKeyword(keyword: keyword, isRecommended: true))
         }.store(in: &subscriptions)
         
         keywordLoginModalViewController.loginButtonPublisher.sink { [weak self] in
@@ -189,7 +188,7 @@ extension ManageNoticeKeywordViewController {
     
     @objc private func tapAddKeywordButton() {
         if let text = textField.text {
-            inputSubject.send(.addKeyword(keyword: text))
+            inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
             textField.text = ""
             textField.resignFirstResponder()
         }
@@ -215,7 +214,7 @@ extension ManageNoticeKeywordViewController {
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
             textField.text = ""
-            inputSubject.send(.addKeyword(keyword: text))
+            inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
         }
         return true
     }

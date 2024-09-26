@@ -10,7 +10,7 @@ import Foundation
 
 final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     enum Input {
-        case addKeyword(keyword: String)
+        case addKeyword(keyword: String, isRecommended: Bool)
         case deleteKeyword(keyword: NoticeKeywordDTO)
         case getMyKeyword
         case changeNotification(isOn: Bool)
@@ -49,8 +49,8 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .addKeyword(keyword):
-                self?.addKeyword(keyword: keyword)
+            case let .addKeyword(keyword, isRecommended):
+                self?.addKeyword(keyword: keyword, isRecommended: isRecommended)
             case .getMyKeyword:
                 self?.fetchMyKeyword()
             case let .deleteKeyword(keyWord):
@@ -68,7 +68,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
 }
 
 extension ManageNoticeKeywordViewModel {
-    private func addKeyword(keyword: String) {
+    private func addKeyword(keyword: String, isRecommended: Bool) {
         let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
@@ -90,6 +90,7 @@ extension ManageNoticeKeywordViewModel {
                 case .sameKeyword:
                     self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                 case .success:
+                    if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyword) }
                     self?.fetchMyKeyword()
                 }
             }).store(in: &self.subscriptions)

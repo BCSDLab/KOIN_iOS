@@ -45,7 +45,6 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
         configureView()
         bind()
         inputSubject.send(.changeBoard(.all))
-        inputSubject.send(.getUserKeywordList())
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
         setUpNavigationBar()
@@ -119,6 +118,9 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
         
         noticeTableView.keywordTapPublisher
             .sink { [weak self] keyword in
+                if keyword.id == -1 {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
+                }
                 self?.inputSubject.send(.getUserKeywordList(keyword))
         }.store(in: &subscriptions)
         
