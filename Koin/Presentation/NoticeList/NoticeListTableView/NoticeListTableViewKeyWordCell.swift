@@ -16,6 +16,7 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
     static let id = "NoticeListTableViewKeyWordCellIdentifier"
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UIComponents
@@ -35,6 +36,9 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         }.store(in: &noticeKeywordCollectionView.subscriptions)
         noticeKeywordCollectionView.keywordTapPublisher.sink { [weak self] keyword in
             self?.keywordTapPublisher.send(keyword)
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
+        noticeKeywordCollectionView.manageKeyWordBtnTapPublisher.sink { [weak self] in
+            self?.manageKeyWordBtnTapPublisher.send()
         }.store(in: &noticeKeywordCollectionView.subscriptions)
     }
     

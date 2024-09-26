@@ -113,23 +113,18 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
         
         noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
-                let noticeListService = DefaultNoticeService()
-                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-                let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
-                let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
-                let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
-                let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
-                let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
-                let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-            let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(viewController, animated: true)
-        }.store(in: &subscriptions)
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.addKeyword, .click, "키워드추가"))
+                self?.navigateToManageKeywordVC()
+            }.store(in: &subscriptions)
         
         noticeTableView.keywordTapPublisher
             .sink { [weak self] keyword in
                 self?.inputSubject.send(.getUserKeywordList(keyword))
+        }.store(in: &subscriptions)
+        
+        noticeTableView.manageKeyWordBtnTapPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.manageKeyword, .click, "키워드관리"))
+            self?.navigateToManageKeywordVC()
         }.store(in: &subscriptions)
         
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
@@ -164,6 +159,21 @@ extension NoticeListViewController {
             }
         }
         
+    }
+    
+    private func navigateToManageKeywordVC() {
+        let noticeListService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+        let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+        let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+    let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+    navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func checkAndShowToolTip(isLogined: Bool) {
