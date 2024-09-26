@@ -5,7 +5,6 @@
 //  Created by JOOMINKYUNG on 8/23/24.
 //
 
-import Alamofire
 import Combine
 import Foundation
 
@@ -145,8 +144,7 @@ private func fetchMyKeyword() {
     }
     
     private func changeNotification(isOn: Bool) {
-        let httpMethod: Alamofire.HTTPMethod = isOn ? .post : .delete
-        changeNotiUseCase.execute(method: httpMethod, type: .articleKeyWord).sink(receiveCompletion: { [weak self] completion in
+        changeNotiUseCase.execute(method: isOn ? .post : .delete, type: .articleKeyWord).sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.outputSubject.send(.showLoginModal)
