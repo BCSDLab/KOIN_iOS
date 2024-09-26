@@ -140,6 +140,7 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
 
 extension NoticeListViewController {
     @objc private func searchButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearch, .click, "검색"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeywordUseCase = DefaultFetchHotSearchingKeywordUseCase(noticeListRepository: repository)
         let searchNoticeArticlesUseCase = DefaultSearchNoticeArticlesUseCase(noticeRepository: repository)
