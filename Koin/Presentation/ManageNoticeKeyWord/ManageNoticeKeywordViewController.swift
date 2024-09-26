@@ -85,7 +85,7 @@ final class ManageNoticeKeywordViewController: CustomViewController {
         $0.text = "추천 키워드"
     }
     
-    private let keywordLoginModalViewController = KeywordLoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8).then {
+    private let keywordLoginModalViewController = LoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "카워드 알림을 받으려면\n로그인이 필요해요.", subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }

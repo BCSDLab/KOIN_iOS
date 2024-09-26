@@ -70,7 +70,6 @@
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */; };
 		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
-		835C99202C7F27BC002E02D3 /* KeywordLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991F2C7F27BC002E02D3 /* KeywordLoginModalViewController.swift */; };
 		835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */; };
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
@@ -167,7 +166,6 @@
 		D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
-		D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */; };
 		D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D21460362BD09ACF006F579A /* GoogleService-Info.plist */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
@@ -498,7 +496,6 @@
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
-		835C991F2C7F27BC002E02D3 /* KeywordLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordLoginModalViewController.swift; sourceTree = "<group>"; };
 		835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
@@ -601,7 +598,6 @@
 		D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiContentViewController.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
-		D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeLoginModalViewController.swift; sourceTree = "<group>"; };
 		D21460362BD09ACF006F579A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
@@ -1073,7 +1069,6 @@
 			children = (
 				8354BE332C79C67E009D4D7A /* RecommendedKeywordCollectionView */,
 				8354BE322C79C674009D4D7A /* MyKeyWordCollectionView */,
-				835C991F2C7F27BC002E02D3 /* KeywordLoginModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -1426,7 +1421,6 @@
 			isa = PBXGroup;
 			children = (
 				D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */,
-				D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */,
 				D23582952BC0F19200D615DD /* CalendarCollectionView */,
 				D27DD03F2BA608310081FD36 /* DiningCollectionView */,
 			);
@@ -2756,7 +2750,6 @@
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
-				835C99202C7F27BC002E02D3 /* KeywordLoginModalViewController.swift in Sources */,
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
@@ -2932,7 +2925,6 @@
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
-				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,

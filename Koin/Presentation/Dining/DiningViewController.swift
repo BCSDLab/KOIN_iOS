@@ -103,8 +103,8 @@ final class DiningViewController: UIViewController {
     }()
     
     private let diningNotiContentViewController = DiningNotiContentViewController()
-    private let diningLikeLoginModalViewController: DiningLikeLoginModalViewController = {
-        let viewController = DiningLikeLoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8)
+    private let diningLikeLoginModalViewController: LoginModalViewController = {
+        let viewController = LoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         return viewController

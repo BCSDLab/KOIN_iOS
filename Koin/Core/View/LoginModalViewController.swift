@@ -13,6 +13,10 @@ class LoginModalViewController: UIViewController {
     var containerWidth: CGFloat = 0
     var containerHeight: CGFloat = 0
     var paddingBetweenLabels: CGFloat = 0
+    var titleText: String = ""
+    var subTitleText: String = ""
+    var titleColor: UIColor = .black
+    var subTitleColor: UIColor = .black
     
     private let messageLabel = UILabel().then {
         $0.numberOfLines = 0
@@ -50,11 +54,15 @@ class LoginModalViewController: UIViewController {
         return view
     }()
     
-    init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat) {
+    init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor) {
         super.init(nibName: nil, bundle: nil)
         self.containerWidth = width
         self.containerHeight = height
         self.paddingBetweenLabels = paddingBetweenLabels
+        self.titleText = title
+        self.subTitleText = subTitle
+        self.titleColor = titleColor
+        self.subTitleColor = subTitleColor
     }
     
     required init?(coder: NSCoder) {
@@ -85,26 +93,26 @@ class LoginModalViewController: UIViewController {
         closeButton.backgroundColor = buttonColor
     }
     
-    func updateMessageLabel(text: String, textColor: UIColor, font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center) {
+    func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
         paragraphStyle.alignment = alignment
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: text.count))
-        attributedString.addAttribute(.foregroundColor, value: textColor, range: NSRange(location: 0, length: text.count))
+        let attributedString = NSMutableAttributedString(string: titleText)
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: titleText.count))
+        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: titleText.count))
+        attributedString.addAttribute(.foregroundColor, value: titleColor, range: NSRange(location: 0, length: titleText.count))
         
         messageLabel.attributedText = attributedString
     }
     
-    func updateSubMessageLabel(text: String, textColor: UIColor, font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center) {
+    func updateSubMessageLabel(font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         paragraphStyle.alignment = alignment
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: text.count))
-        attributedString.addAttribute(.foregroundColor, value: textColor, range: NSRange(location: 0, length: text.count))
+        let attributedString = NSMutableAttributedString(string: subTitleText)
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
+        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
+        attributedString.addAttribute(.foregroundColor, value: subTitleColor, range: NSRange(location: 0, length: subTitleText.count))
         
         subMessageLabel.attributedText = attributedString
     }
@@ -154,5 +162,7 @@ extension LoginModalViewController {
         setUpLayOuts()
         setUpConstraints()
         view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        updateMessageLabel()
+        updateSubMessageLabel()
     }
 }
