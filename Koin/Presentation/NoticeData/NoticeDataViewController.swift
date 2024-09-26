@@ -154,8 +154,9 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
             }
         }.store(in: &subscriptions)
         
-        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId in
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle in
             self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNotice, .click, "\(noticeTitle)"))
         }.store(in: &subscriptions)
         
         noticeAttachmentsTableView.tapDownloadButtonPublisher
@@ -167,6 +168,7 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
 
 extension NoticeDataViewController {
     @objc private func tapInventoryButton() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.inventory, .click, "목록"))
         guard let navigationController = navigationController else { return }
         if let index = navigationController.viewControllers.lastIndex(where: { $0 is NoticeListViewController }) {
             let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
