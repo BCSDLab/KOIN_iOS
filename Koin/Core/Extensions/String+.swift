@@ -62,7 +62,6 @@ extension String {
         let fileSize = String(result.reversed())
         if startParenthesesIdx > 0 {
             let resultString = self.prefix(startParenthesesIdx)
-            print(resultString)
             return (fileSize, String(resultString))
         }
         else {

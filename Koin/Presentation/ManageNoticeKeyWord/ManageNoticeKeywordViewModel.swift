@@ -89,7 +89,6 @@ extension ManageNoticeKeywordViewModel {
 
 private func fetchMyKeyword() {
     getMyKeyword { [weak self] myKeywords in
-        print(myKeywords)
         self?.outputSubject.send(.updateKeyword(myKeywords))
         self?.getRecommendedKeyword(keywords: myKeywords)
         }
@@ -113,7 +112,6 @@ private func fetchMyKeyword() {
                     self?.fetchMyKeyword()
                 }
             }, receiveValue: { [weak self] result in
-                print("\(result) keyword is Deleted")
                 self?.fetchMyKeyword()
             })
             .store(in: &subscriptions)

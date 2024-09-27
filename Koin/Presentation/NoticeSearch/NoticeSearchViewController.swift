@@ -201,7 +201,6 @@ extension NoticeSearchViewController {
             dismissIndicator()
         }
         textField.text = ""
-        print("asdafsda")
         return true
     }
     

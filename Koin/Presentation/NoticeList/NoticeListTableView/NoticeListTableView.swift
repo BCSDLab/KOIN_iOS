@@ -95,9 +95,7 @@ extension NoticeListTableView: UITableViewDataSource {
             cell.keywordAddBtnTapPublisher.sink { [weak self] in
                 self?.keywordAddBtnTapPublisher.send()
             }.store(in: &cell.subscriptions)
-            cell.keywordTapPublisher.sink { [weak self] keyword in
-                print(keyword)
-                self?.keywordTapPublisher.send(keyword)
+            cell.keywordTapPublisher.sink { [weak self] keyword in                self?.keywordTapPublisher.send(keyword)
             }.store(in: &cell.subscriptions)
             return cell
         }
