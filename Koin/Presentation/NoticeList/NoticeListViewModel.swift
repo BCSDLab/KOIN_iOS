@@ -74,17 +74,18 @@ extension NoticeListViewModel {
     
     private func getUserKeywordList(keyword: NoticeKeywordDTO? = nil) {
         var keywordIndex = 0
-        
-        if let keyword = keyword, keyword.id != -1 {
-            self.keyword = keyword.keyword
-        }
-        else {
-            self.keyword = nil
+        if let keyword = keyword {
+            if keyword.id != -1 {
+                self.keyword = keyword.keyword
+            }
+            else {
+                self.keyword = nil
+            }
         }
         
         fetchUserKeyword(completion: { [weak self] keywords in
             for (index, value) in keywords.enumerated() {
-                if value.keyword == keyword?.keyword {
+                if value.keyword == self?.keyword {
                     keywordIndex = index + 1
                     break
                 }
