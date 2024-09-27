@@ -42,7 +42,7 @@ final class NoticeAttachmentsTableViewCell: UITableViewCell {
     //MARK: -Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        downloadButton.addTarget(self, action: #selector(downloadFile), for: .touchUpInside)
+        downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
         configureView()
     }
     
@@ -56,7 +56,7 @@ final class NoticeAttachmentsTableViewCell: UITableViewCell {
         attachmentSizeLabel.text = fileSize
     }
     
-    @objc private func downloadFile() {
+    @objc private func downloadButtonTapped() {
         tapDownloadButtonPublisher.send()
     }
 }
