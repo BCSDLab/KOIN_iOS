@@ -934,7 +934,6 @@
 			children = (
 				839423DA2CA302FA001E690F /* NoticeKeywordInformation */,
 				835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */,
-				83417DAC2C7C80E500E7837C /* NoticeKeywordInfo */,
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
@@ -1002,14 +1001,6 @@
 				833D9C582C735F7700982145 /* HotArticlesNoticeTableViewCell.swift */,
 			);
 			path = HotNoticeArticlesTableView;
-			sourceTree = "<group>";
-		};
-		83417DAC2C7C80E500E7837C /* NoticeKeywordInfo */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = NoticeKeywordInfo;
-			path = ../../../..;
 			sourceTree = "<group>";
 		};
 		83455FC02C96E14700CEB7A4 /* NoticeAttachmentsTableView */ = {
