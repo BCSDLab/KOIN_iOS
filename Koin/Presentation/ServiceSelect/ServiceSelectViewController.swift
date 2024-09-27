@@ -259,11 +259,13 @@ extension ServiceSelectViewController {
     }
     
     @objc func noticeListButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "공지사항"))
         let noticeService = DefaultNoticeService()
         let noticeRepository = DefaultNoticeListRepository(service: noticeService)
         let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository)
         let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository)
-        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }
