@@ -32,7 +32,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     }
     private var keyword: String? = nil {
         didSet {
-            getNoticeInfo(page: 0)
+            getNoticeInfo(page: 1)
         }
     }
     
