@@ -168,11 +168,13 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
 extension NoticeDataViewController {
     @objc private func tapInventoryButton() {
         guard let navigationController = navigationController else { return }
-        while let topVc = navigationController.topViewController {
-            if topVc is NoticeListViewController || navigationController.viewControllers.count > 1 {
-                break
+        if let index = navigationController.viewControllers.lastIndex(where: { $0 is NoticeListViewController }) {
+            let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
+            navigationController.setViewControllers(viewControllersToKeep, animated: false)
+        } else {
+            if navigationController.viewControllers.count > 1 {
+                navigationController.popViewController(animated: true)
             }
-            navigationController.popViewController(animated: false)
         }
     }
     
