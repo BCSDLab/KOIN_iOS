@@ -122,6 +122,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
+    private let noticeListButton: UIButton = {
+        let button = UIButton()
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
     private let landSelectButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
@@ -223,6 +229,7 @@ extension ServiceSelectViewController {
         myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
         notiButton.addTarget(self, action: #selector(notiButtonTapped), for: .touchUpInside)
+        noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
     }
     
     @objc private func notiButtonTapped() {
@@ -249,6 +256,16 @@ extension ServiceSelectViewController {
             
             inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerLogin, .click, "햄버거 로그인"))
         }
+    }
+    
+    @objc func noticeListButtonTapped() {
+        let noticeService = DefaultNoticeService()
+        let noticeRepository = DefaultNoticeListRepository(service: noticeService)
+        let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository)
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase)
+        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(noticeListViewController, animated: true)
     }
     
     @objc func shopSelectButtonTapped() {
@@ -400,14 +417,14 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton, noticeListButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["주변 상점", "버스/교통", "식단", "복덕방", "코인 for Business"]
+        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
+        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "복덕방", "코인 for Business"]
         for idx in 0...4 {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
@@ -480,8 +497,14 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)
         }
-        shopSelectButton.snp.makeConstraints { make in
+        noticeListButton.snp.makeConstraints { make in
             make.top.equalTo(serviceGuideLabel.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(58)
+        }
+        shopSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(noticeListButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
