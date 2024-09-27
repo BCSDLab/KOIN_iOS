@@ -24,7 +24,7 @@ final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase 
         if myKeywords.contains(where: { $0.keyword == keyword.keyword }) {
             addKeywordResult = .sameKeyword
         }
-        else if myKeywords.count < 2 || myKeywords.count > 10 {
+        else if keyword.keyword.count < 2 || keyword.keyword.count > 10 {
             addKeywordResult = .notInRange
         }
         else if myKeywords.count > 9 {

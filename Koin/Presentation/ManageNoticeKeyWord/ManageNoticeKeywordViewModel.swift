@@ -67,9 +67,10 @@ extension ManageNoticeKeywordViewModel {
         let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
-            self.addNotificationKeywordUseCase.execute(keyword: requestModel, myKeywords: myKeywords).sink(receiveCompletion: { completion in
+            self.addNotificationKeywordUseCase.execute(keyword: requestModel, myKeywords: myKeywords).sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
+                    self?.fetchMyKeyword()
                 }
             }, receiveValue: { [weak self] _, addKeywordResult in
                 switch addKeywordResult {
