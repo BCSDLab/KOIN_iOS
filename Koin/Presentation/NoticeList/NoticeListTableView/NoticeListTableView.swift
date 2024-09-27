@@ -59,7 +59,7 @@ final class NoticeListTableView: UITableView {
         isForSearch = true
         let indexSet = IndexSet(integer: 1)
         reloadSections(indexSet, with: .automatic)
-        let IndexPath = IndexPath(row: self.noticeArticleList.count-1, section: 1)
+        let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 1)
         scrollToRow(at: IndexPath, at: .bottom, animated: true)
     }
     

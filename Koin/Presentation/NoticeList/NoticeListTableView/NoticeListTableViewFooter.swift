@@ -74,7 +74,7 @@ extension NoticeListTableViewFooter {
             row = (pageInfo.pages[0] - 1) / 5
         }
         if let selectedIndex = pageInfo.selectedIndex as Int?, selectedIndex > 0 {
-            let selectedButton = buttons[(selectedIndex-1) % 5]
+            let selectedButton = buttons[(selectedIndex - 1) % 5]
             selectedButton.setTitleColor(.appColor(.neutral0), for: .normal)
             selectedButton.backgroundColor = .appColor(.primary500)
         }

@@ -37,7 +37,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
 
 extension TabBarCollectionView {
     func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
-        let indexPath = IndexPath(item: noticeListType.rawValue-4, section: 0)
+        let indexPath = IndexPath(item: noticeListType.rawValue - 4, section: 0)
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath
         reloadData()
@@ -75,7 +75,7 @@ extension TabBarCollectionView: UICollectionViewDelegateFlowLayout {
         label.text = noticeTabList[indexPath.row].displayName
         label.font = .appFont(.pretendardMedium, size: 14)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
-        return CGSize(width: size.width+24, height: 50)
+        return CGSize(width: size.width + 24, height: 50)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

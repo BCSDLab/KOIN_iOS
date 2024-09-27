@@ -52,7 +52,7 @@ final class NoticeKeywordCollectionView: UICollectionView, UICollectionViewDataS
     
     func selectKeyword(keyword: String) {
         for index in 0..<noticeKeywordList.count {
-            let indexPath = IndexPath(item: index+1, section: 0)
+            let indexPath = IndexPath(item: index + 1, section: 0)
             if let cell = cellForItem(at: indexPath) as? NoticeKeywordCollectionViewCell {
                 let isSelected = noticeKeywordList[index].keyword == keyword
                 cell.configure(keywordModel: noticeKeywordList[index].keyword, isSelected: isSelected)
@@ -84,11 +84,11 @@ extension NoticeKeywordCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item == 0 || noticeKeywordList[indexPath.row-1].keyword == "새 키워드 추가"{
+        if indexPath.item == 0 || noticeKeywordList[indexPath.row - 1].keyword == "새 키워드 추가"{
             keywordAddBtnTapPublisher.send()
         }
         else {
-            keywordTapPublisher.send(noticeKeywordList[indexPath.row-1])
+            keywordTapPublisher.send(noticeKeywordList[indexPath.row - 1])
         }
     }
 }
