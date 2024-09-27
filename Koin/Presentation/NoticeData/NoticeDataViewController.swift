@@ -250,10 +250,10 @@ extension NoticeDataViewController {
     
     private func updateActivityIndicator(isStarted: Bool, fileName: String?) {
         if isStarted {
-            showIndicator()
+            IndicatorView.show()
         }
         else {
-            dismissIndicator()
+            IndicatorView.dismiss()
             if let fileName = fileName {
                 presentAlert(title: "\(fileName) 다운로드 완료", preferredStyle: .alert, with: [])
             }

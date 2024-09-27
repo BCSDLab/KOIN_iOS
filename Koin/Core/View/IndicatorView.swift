@@ -7,49 +7,32 @@
 
 import UIKit
 
-class IndicatorView: UIView {
-    static let shared = IndicatorView()
-    
-    private let containerView = UIView()
-    private let activityIndicator = UIActivityIndicatorView()
-    
-    private init() {
-        super.init(frame: .zero)
-        setupIndicator()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupIndicator() {
-        containerView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.style = .large
-        activityIndicator.color = UIColor.gray
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(activityIndicator)
-    }
-    
-    func show() {
-        guard let windowScene = UIApplication.shared.connectedScenes
-            .first as? UIWindowScene,
-              let window = windowScene.windows.first else { return }
-        
-        window.addSubview(containerView)
-        containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+class IndicatorView {
+    static func show() {
+        DispatchQueue.main.async {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
+            
+            let loadingIndicatorView: UIActivityIndicatorView
+            if let existingView = window.subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
+                loadingIndicatorView = existingView
+            } else {
+                loadingIndicatorView = UIActivityIndicatorView(style: .large)
+                loadingIndicatorView.frame = window.bounds
+                loadingIndicatorView.backgroundColor = UIColor.black.withAlphaComponent(0.5) 
+                window.addSubview(loadingIndicatorView)
+            }
+            
+            loadingIndicatorView.startAnimating()
         }
-        
-        activityIndicator.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        activityIndicator.startAnimating()
     }
-   
-    func dismiss() {
-        activityIndicator.stopAnimating()
-        containerView.removeFromSuperview()
+    
+    static func dismiss() {
+        DispatchQueue.main.async {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
+            
+            window.subviews.filter({ $0 is UIActivityIndicatorView }).forEach { $0.removeFromSuperview() }
+        }
     }
 }
