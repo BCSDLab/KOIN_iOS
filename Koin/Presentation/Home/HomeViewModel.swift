@@ -100,7 +100,7 @@ extension HomeViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            if !response {
+            if response {
                 self?.outputSubject.send(.showForceUpdate)
             }
         }.store(in: &subscriptions)
