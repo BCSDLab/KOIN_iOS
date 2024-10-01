@@ -165,6 +165,14 @@
 		D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */; };
 		D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */; };
 		D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */; };
+		D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */; };
+		D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */; };
+		D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7C52CABB426007040E7 /* CoreRepository.swift */; };
+		D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */; };
+		D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7CA2CABB755007040E7 /* CoreService.swift */; };
+		D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */; };
+		D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */; };
+		D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -633,6 +641,14 @@
 		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewControllerA.swift; sourceTree = "<group>"; };
+		D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateResponse.swift; sourceTree = "<group>"; };
+		D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewController.swift; sourceTree = "<group>"; };
+		D208A7C52CABB426007040E7 /* CoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreRepository.swift; sourceTree = "<group>"; };
+		D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVersionUseCase.swift; sourceTree = "<group>"; };
+		D208A7CA2CABB755007040E7 /* CoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreService.swift; sourceTree = "<group>"; };
+		D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAPI.swift; sourceTree = "<group>"; };
+		D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCoreRepository.swift; sourceTree = "<group>"; };
+		D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModelViewController.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -1393,6 +1409,21 @@
 				D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */,
 			);
 			path = CallBenefitCollectionView;
+		D208A7C02CAB9A38007040E7 /* ForceUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */,
+				D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */,
+			);
+			path = ForceUpdate;
+			sourceTree = "<group>";
+		};
+		D208A7C72CABB467007040E7 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		D20AB9502C5534DD006BC684 /* Noti */ = {
@@ -1749,6 +1780,7 @@
 				8354BE132C789096009D4D7A /* NoticeSearch */,
 				833D9C502C7344F400982145 /* NoticeData */,
 				833D9C072C6B243400982145 /* NoticeList */,
+				D208A7C02CAB9A38007040E7 /* ForceUpdate */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
@@ -2014,6 +2046,7 @@
 				D23479D82BDB5EEF00FA91BD /* Land */,
 				D208A7A32CA1118D007040E7 /* AbTest */,
 				D2D380FC2BA7415C009AD5A9 /* ErrorResponse.swift */,
+				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
 			path = Decodable;
 			sourceTree = "<group>";
@@ -2416,6 +2449,7 @@
 			isa = PBXGroup;
 			children = (
 				833D9C3F2C705F0E00982145 /* NoticeList */,
+				D208A7C72CABB467007040E7 /* Core */,
 				D20AB9502C5534DD006BC684 /* Noti */,
 				83DD0D7E2C4F921600278ABD /* Bus */,
 				D29F21C82C4E14F300994554 /* Timetable */,
@@ -2456,6 +2490,7 @@
 				83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */,
 				833D9C382C7058C200982145 /* NoticeListRepository.swift */,
 				D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */,
+				D208A7C52CABB426007040E7 /* CoreRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2473,6 +2508,7 @@
 				83DD0D832C4FA7FF00278ABD /* DefaultBusRepository.swift */,
 				833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */,
 				D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */,
+				D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2522,6 +2558,7 @@
 				83DD0D812C4FA6F300278ABD /* BusAPI.swift */,
 				833D9C462C7067AE00982145 /* NoticeListAPI.swift */,
 				D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */,
+				D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -2560,6 +2597,7 @@
 				833D9C442C70672C00982145 /* NoticeListService.swift */,
 				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 				D208A7A72CA11221007040E7 /* AbTestService.swift */,
+				D208A7CA2CABB755007040E7 /* CoreService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
 			);
 			path = Service;
@@ -2820,6 +2858,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
@@ -2912,9 +2951,11 @@
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */,
+				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
+				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
@@ -3010,6 +3051,7 @@
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
 				833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */,
+				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
@@ -3024,6 +3066,7 @@
 				D249CD382C1473C1000813F9 /* DiningOperatingTimeFooterView.swift in Sources */,
 				D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
+				D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
@@ -3104,6 +3147,7 @@
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
+				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
 				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
@@ -3118,6 +3162,7 @@
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */,
+				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
@@ -3190,6 +3235,7 @@
 				D27DD0AD2BA608310081FD36 /* CategoryCollectionView.swift in Sources */,
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
 				D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */,
+				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
