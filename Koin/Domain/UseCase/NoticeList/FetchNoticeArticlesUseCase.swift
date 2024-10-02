@@ -50,7 +50,7 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
             return NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
         }
         
-        var isPreviousPage: PageReloadDirection? = currentPage > 1 ? .previousPage : nil
+        let isPreviousPage: PageReloadDirection? = currentPage > 5 ? .previousPage : nil
         var isNextPage: PageReloadDirection? = nil
         var pages: [Int]
         
