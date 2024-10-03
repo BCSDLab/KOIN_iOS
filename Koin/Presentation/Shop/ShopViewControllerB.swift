@@ -36,8 +36,9 @@ final class ShopViewControllerB: UIViewController {
         return collectionView
     }()
     
-    private let shopGuideView: ShopGuideView = {
-        let view = ShopGuideView(frame: .zero)
+    private let grayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.appColor(.neutral100)
         return view
     }()
     
@@ -91,8 +92,10 @@ final class ShopViewControllerB: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "전화 주문 혜택"
         bind()
         configureView()
+        shopCollectionView.setHeaderVisibility(isHidden: true)
         inputSubject.send(.viewDidLoadB)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -273,7 +276,7 @@ extension ShopViewControllerB {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [callBenefitCollectionView, shopGuideView, eventShopCollectionView, shopCollectionView, eventIndexLabel, callBenefitCollectionView].forEach {
+        [callBenefitCollectionView, grayView, eventShopCollectionView, shopCollectionView, eventIndexLabel, callBenefitCollectionView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -287,21 +290,21 @@ extension ShopViewControllerB {
         
         callBenefitCollectionView.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.top).offset(19)
-            make.leading.equalTo(scrollView.snp.leading).offset(20)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            make.leading.equalTo(scrollView.snp.leading).offset(5)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-5)
             make.height.equalTo(150)
         }
         
-        shopGuideView.snp.makeConstraints { make in
+        grayView.snp.makeConstraints { make in
             make.top.equalTo(callBenefitCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(scrollView.snp.leading)
             make.width.equalTo(view.snp.width)
-            make.height.equalTo(32)
+            make.height.equalTo(12)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
         
         eventShopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(20)
+            make.top.equalTo(grayView.snp.bottom).offset(20)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(63)
@@ -315,7 +318,7 @@ extension ShopViewControllerB {
         }
         
         shopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(14)
+            make.top.equalTo(grayView.snp.bottom).offset(14)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)

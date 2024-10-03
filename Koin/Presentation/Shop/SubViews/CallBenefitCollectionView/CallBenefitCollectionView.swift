@@ -37,14 +37,19 @@ final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSou
     func updateBenefits(benefits: ShopBenefitsDTO) {
         self.benefits = benefits.benefits ?? []
         if let firstBenefit = benefits.benefits?.first {
-            // Footer View 업데이트
             if let footerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {
                 footerView.updateLabel(with: firstBenefit.detail)
             }
         }
-        self.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if let firstCell = self.cellForItem(at: IndexPath(item: 0, section: 0)) as? CallBenefitCollectionViewCell,
+               let firstBenefit = self.benefits.first {
+                firstCell.updateCell(selected: true, benefit: firstBenefit)
+            }
+        }
+        self.reloadData() 
     }
-    
 }
 
 extension CallBenefitCollectionView {
@@ -82,7 +87,7 @@ extension CallBenefitCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 50)
+        return CGSize(width: collectionView.bounds.width, height: 56)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -94,12 +99,25 @@ extension CallBenefitCollectionView {
             return UICollectionViewCell()
         }
         let cellItem = benefits[indexPath.row]
-        cell.configure(benefit: cellItem)
+        cell.updateCell(selected: false, benefit: cellItem)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedBenefit = benefits[indexPath.row]
+        
+        // 모든 셀을 순회하며 이미지 업데이트
+        for (index, _) in benefits.enumerated() {
+            if let cell = collectionView.cellForItem(at: IndexPath(row: index, section: 0)) as? CallBenefitCollectionViewCell {
+                if index == indexPath.row {
+                    cell.updateCell(selected: true, benefit: benefits[index])
+                } else {
+                    cell.updateCell(selected: false, benefit: benefits[index])
+                }
+            }
+        }
+        
+        // Footer 업데이트
         filterPublisher.send(selectedBenefit.id)
         if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {
             footerView.updateLabel(with: selectedBenefit.detail)

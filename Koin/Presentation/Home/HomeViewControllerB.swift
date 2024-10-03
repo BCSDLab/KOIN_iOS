@@ -87,6 +87,7 @@ final class HomeViewControllerB: UIViewController {
     
     private let callBenefitButton = UIButton().then { button in
         button.setImage(UIImage.appImage(asset: .callBenefitButton), for: .normal)
+        button.imageView?.contentMode = .scaleToFill
     }
     
     private let menuLabel: UILabel = {

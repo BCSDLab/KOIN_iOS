@@ -102,6 +102,7 @@ final class ShopViewControllerA: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "주변상점"
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)

@@ -90,6 +90,7 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case .viewDidLoadB:
                 self?.fetchShopBenefits()
+                self?.getEventShopList()
                 self?.fetchBeneficialShops(id: 1)
             }
         }.store(in: &subscriptions)
