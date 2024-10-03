@@ -19,15 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        
-        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        
-        
+    
         let abTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
         abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "benefitPage")).sink { completion in
             if case let .failure(error) = completion {
@@ -64,8 +56,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
         
+        let homeViewModel = HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider, fetchShopCategoryListUseCase: fetchShopCategoryUseCase)
+
+        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "a"
+        let variableName = UserAssignType(rawValue: userType) ?? .a
+        let mainViewController: UIViewController
+        switch variableName {
+        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
+        default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
+        }
         
-        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider))
         return mainViewController
     }
     

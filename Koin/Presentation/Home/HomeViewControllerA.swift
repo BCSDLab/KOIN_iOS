@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class HomeViewController: UIViewController {
+final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
     
     // MARK: - Properties
     
@@ -81,13 +81,14 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
-    private let shopListButton = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .shopButton), for: .normal)
-    }
-    
-    private let callBenefitButton = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .callBenefitButton), for: .normal)
-    }
+    private let shopCollectionView: ShopCollectionView = {
+        let shopCollectionViewFlowLayout = UICollectionViewFlowLayout()
+        shopCollectionViewFlowLayout.itemSize = CGSize(width: 45, height: 90)
+        shopCollectionViewFlowLayout.scrollDirection = .horizontal
+        shopCollectionViewFlowLayout.minimumLineSpacing = 8
+        let shopCollectionView = ShopCollectionView(frame: .zero, collectionViewLayout: shopCollectionViewFlowLayout)
+        return shopCollectionView
+    }()
     
     private let menuLabel: UILabel = {
         let label = UILabel()
@@ -148,14 +149,13 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
+        shopCollectionView.storeDelegate = self
         configureTapGesture()
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-        shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
-        callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
@@ -215,6 +215,8 @@ final class HomeViewController: UIViewController {
             switch output {
             case let .updateDining(diningItem, diningType, isToday):
                 self?.updateDining(item: diningItem, type: diningType, isToday: isToday)
+            case let .putImage(response):
+                self?.putImage(data: response)
             case let .updateBus(response):
                 self?.updateBusTime(response)
             case .moveBusItem:
@@ -254,7 +256,7 @@ final class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController {
+extension HomeViewControllerA {
     
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
@@ -387,15 +389,11 @@ extension HomeViewController {
         }
     }
     
-    @objc private func shopSelectButtonTapped() {
-        navigateToShop(section: .shopList)
+    private func putImage(data: ShopCategoryDTO) {
+        shopCollectionView.updateCategories(data.shopCategories)
     }
     
-    @objc private func callBenefitButtonTapped() {
-        navigateToShop(section: .callBenefit)
-    }
-    
-    private func navigateToShop(section: ShopViewController.Section) {
+    func didTapCell(at id: Int) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         
@@ -415,20 +413,15 @@ extension HomeViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: 0
+            selectedId: id
         )
-        let shopViewController = ShopViewController(viewModel: viewModel, section: section)
-        shopViewController.title = section.rawValue
+        let shopViewController = ShopViewController(viewModel: viewModel, section: .shopList)
+        shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         
-        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: 0)
+        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-        switch section {
-        case .shopList:
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
-        case .callBenefit: break
-            // TODO: 로깅
-        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
     }
     
     @objc private func refresh() {
@@ -445,7 +438,7 @@ extension HomeViewController {
     
 }
 
-extension HomeViewController {
+extension HomeViewControllerA {
     
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
@@ -458,7 +451,7 @@ extension HomeViewController {
 }
 
 
-extension HomeViewController {
+extension HomeViewControllerA {
     
     private func setUpNavigationBar() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
@@ -470,7 +463,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, menuLabel, menuBackgroundView, tabBarView, grayColorView, shopListButton, callBenefitButton].forEach {
+        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -515,21 +508,15 @@ extension HomeViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        shopListButton.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.centerX).offset(-5)
-            make.height.equalTo(64)
-        }
-        callBenefitButton.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.centerX).offset(5)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(64)
+        shopCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(shopLabel.snp.bottom).offset(11)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            make.height.equalTo(70)
         }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
-            make.top.equalTo(callBenefitButton.snp.bottom).offset(30)
+            make.top.equalTo(shopCollectionView.snp.bottom).offset(40)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
         diningTooltipImageView.snp.makeConstraints { make in
@@ -570,18 +557,11 @@ extension HomeViewController {
         logoView.layer.shadowRadius = 4
     }
     
-    private func setUpButtons() {
-        [shopListButton, callBenefitButton].forEach {
-            $0.layer.borderWidth = 1.0
-        }
-    }
-    
     private func configureView() {
         setUpNavigationBar()
         setUpLayOuts()
         setUpConstraints()
         setUpShadow()
-        setUpButtons()
         setUpRoundedCorners()
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -603,5 +583,3 @@ extension HomeViewController {
         tabBarView.addSubview(underlineView)
     }
 }
-
-
