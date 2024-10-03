@@ -17,8 +17,14 @@ final class DefaultAbTestService: AbTestService {
     private let networkService = NetworkService()
     
     func assignAbTest(requestModel: AssignAbTestRequest) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
-        return networkService.requestWithResponse(api: AbTestAPI.assignAbTest(requestModel))
-    }
+            return networkService.requestWithResponse(api: AbTestAPI.assignAbTest(requestModel))
+                .handleEvents(receiveOutput: { response in
+                    KeyChainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
+                    KeyChainWorker.shared.create(key: .variableName, token: response.variableName.rawValue)
+                    
+                })
+                .eraseToAnyPublisher()
+        }
 
     private func request<T: Decodable>(_ api: AbTestAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)

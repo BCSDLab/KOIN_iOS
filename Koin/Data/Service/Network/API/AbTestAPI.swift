@@ -30,13 +30,13 @@ extension AbTestAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
-        switch self {
-        case .assignAbTest: return ["Content-Type": "application/json"]
+        var defaultHeaders = ["Content-Type": "application/json"]
+        if let accessHistoryId = KeyChainWorker.shared.read(key: .accessHistoryId) {
+            defaultHeaders["access_history_id"] = accessHistoryId
         }
-//        let headers = ["Authorization": "Bearer \(token)",
-//                       "Content-Type": "application/json" ]
+        
+        return defaultHeaders
     }
-    
     
     public var parameters: Any? {
         switch self {
@@ -44,11 +44,10 @@ extension AbTestAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         }
     }
-    
     public var encoding: ParameterEncoding? {
         switch self {
         case .assignAbTest: return JSONEncoding.default
         }
     }
- 
+    
 }
