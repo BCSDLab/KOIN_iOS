@@ -34,7 +34,9 @@ extension AbTestAPI: Router, URLRequestConvertible {
         if let accessHistoryId = KeyChainWorker.shared.read(key: .accessHistoryId) {
             defaultHeaders["access_history_id"] = accessHistoryId
         }
-        
+        if let token = KeyChainWorker.shared.read(key: .access) {
+            defaultHeaders ["Authorization"] = "Bearer \(token)"
+        }
         return defaultHeaders
     }
     

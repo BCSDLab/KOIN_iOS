@@ -18,7 +18,7 @@ struct AssignAbTestResponse: Decodable {
 }
 
 enum UserAssignType: String, Decodable {
-    case a, b, c, d, e
+    case a = "A", b = "B", c = "C", d = "D", e = "E"
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

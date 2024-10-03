@@ -57,12 +57,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let dateProvider = DefaultDateProvider()
         
         let homeViewModel = HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider, fetchShopCategoryListUseCase: fetchShopCategoryUseCase)
-
-        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "a"
+       
+        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "A"
         let variableName = UserAssignType(rawValue: userType) ?? .a
         let mainViewController: UIViewController
         switch variableName {
-  //      case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
+        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
         default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
         }
         
