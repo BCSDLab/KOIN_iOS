@@ -94,7 +94,14 @@ extension HomeViewModel {
     }
     
     private func getDiningInformation(diningPlace: DiningPlace = .cornerA) {
-        
+        let a = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
+        a.execute(requestModel: AssignAbTestRequest(title: "benefitPage")).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { response in
+            print(response)
+        }.store(in: &subscriptions)
         let dateInfo = dateProvider.execute(date: Date())
         
         fetchDiningListUseCase.execute(diningInfo: dateInfo).sink { completion in

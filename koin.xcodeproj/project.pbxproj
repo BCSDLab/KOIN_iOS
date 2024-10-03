@@ -95,6 +95,7 @@
 		D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */; };
 		D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */; };
 		D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */; };
+		D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -466,6 +467,7 @@
 		D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitsDTO.swift; sourceTree = "<group>"; };
 		D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopBenefitUseCase.swift; sourceTree = "<group>"; };
 		D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBeneficialShopUseCase.swift; sourceTree = "<group>"; };
+		D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAbTestRepository.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -1915,6 +1917,7 @@
 				D29F21D02C4E164C00994554 /* DefaultTimetableRepository.swift */,
 				D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */,
 				83DD0D832C4FA7FF00278ABD /* DefaultBusRepository.swift */,
+				D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2477,6 +2480,7 @@
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
+				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,

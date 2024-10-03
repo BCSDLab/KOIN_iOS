@@ -31,8 +31,10 @@ extension AbTestAPI: Router, URLRequestConvertible {
     
     public var headers: [String: String] {
         switch self {
-        case .assignAbTest: return [:]
+        case .assignAbTest: return ["Content-Type": "application/json"]
         }
+//        let headers = ["Authorization": "Bearer \(token)",
+//                       "Content-Type": "application/json" ]
     }
     
     
@@ -45,7 +47,7 @@ extension AbTestAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .assignAbTest: return URLEncoding.default
+        case .assignAbTest: return JSONEncoding.default
         }
     }
  
