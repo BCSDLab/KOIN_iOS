@@ -62,7 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let variableName = UserAssignType(rawValue: userType) ?? .a
         let mainViewController: UIViewController
         switch variableName {
-      //  case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
+  //      case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
         default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
         }
         

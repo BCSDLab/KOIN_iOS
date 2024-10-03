@@ -82,12 +82,27 @@ final class HomeViewControllerB: UIViewController {
     }()
     
     private let shopListButton = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .shopButton), for: .normal)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .smallShop)
+        var text = AttributedString("상점 목록")
+        text.font = UIFont.appFont(.pretendardMedium, size: 16)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 8
+        configuration.baseBackgroundColor = .systemBackground
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        button.configuration = configuration
     }
     
     private let callBenefitButton = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .callBenefitButton), for: .normal)
-        button.imageView?.contentMode = .scaleToFill
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .smallBenefit)
+        var text = AttributedString("전화 주문 혜택")
+        text.font = UIFont.appFont(.pretendardMedium, size: 16)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 8
+        configuration.baseBackgroundColor = .systemBackground
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        button.configuration = configuration
     }
     
     private let menuLabel: UILabel = {
@@ -577,8 +592,13 @@ extension HomeViewControllerB {
     
     private func setUpButtons() {
         [shopListButton, callBenefitButton].forEach {
-            $0.layer.borderWidth = 1.0
-        }
+            $0.layer.cornerRadius = 8
+            $0.layer.shadowColor = UIColor.gray.cgColor
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowOffset = CGSize.zero
+            $0.layer.shadowRadius = 6
+            $0.backgroundColor = .systemBackground
+           }
     }
     
     private func configureView() {

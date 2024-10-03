@@ -75,6 +75,8 @@ enum ImageAsset: String {
     case nonMenuWeekendImage
     case shopButton
     case callBenefitButton
+    case smallShop
+    case smallBenefit
 }
 
 enum SFSymbols: String {
