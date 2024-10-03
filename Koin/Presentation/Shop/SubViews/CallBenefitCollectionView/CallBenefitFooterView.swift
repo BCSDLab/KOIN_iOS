@@ -9,12 +9,12 @@ import UIKit
 
 final class CallBenefitFooterView: UICollectionReusableView {
     static let identifier = "CallBenefitFooterView"
-
+    
     private let benefitDetailLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(benefitDetailLabel)
@@ -24,6 +24,9 @@ final class CallBenefitFooterView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    func updateLabel(with text: String) {
+        benefitDetailLabel.text = text
+    }
     
     private func setupViews() {
         self.backgroundColor = .systemBackground
@@ -32,5 +35,5 @@ final class CallBenefitFooterView: UICollectionReusableView {
             make.centerX.equalTo(self.snp.centerX)
         }
     }
-
+    
 }

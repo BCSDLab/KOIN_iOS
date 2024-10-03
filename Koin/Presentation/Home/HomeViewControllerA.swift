@@ -415,7 +415,7 @@ extension HomeViewControllerA {
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: id
         )
-        let shopViewController = ShopViewController(viewModel: viewModel, section: .shopList)
+        let shopViewController = ShopViewControllerA(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         

@@ -11,6 +11,8 @@ import UIKit
 final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     private var cancellables = Set<AnyCancellable>()
+    let filterPublisher = PassthroughSubject<Int, Never>()
+    private var benefits: [Benefit] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -26,19 +28,47 @@ final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSou
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
-        register(ShopInfoCollectionViewCell.self, forCellWithReuseIdentifier: ShopInfoCollectionViewCell.identifier)
-        register(CallBenefitFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CallBenefitFooterView.identifier)
+        register(CallBenefitCollectionViewCell.self, forCellWithReuseIdentifier: ShopInfoCollectionViewCell.identifier)
+        register(CallBenefitFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CallBenefitFooterView.identifier)
         dataSource = self
         delegate = self
     }
     
-    func updateBenefits() {
+    func updateBenefits(benefits: ShopBenefitsDTO) {
+        self.benefits = benefits.benefits ?? []
+        if let firstBenefit = benefits.benefits?.first {
+            // Footer View 업데이트
+            if let footerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {
+                footerView.updateLabel(with: firstBenefit.detail)
+            }
+        }
         self.reloadData()
     }
     
 }
 
 extension CallBenefitCollectionView {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // 셀의 너비는 컬렉션 뷰의 절반, 간격을 고려하여 정확하게 맞춥니다
+        let totalWidth = collectionView.bounds.width
+        let numberOfItemsPerRow: CGFloat = 2
+        let spacingBetweenCells: CGFloat = 15
+        
+        let width = (totalWidth - (spacingBetweenCells * (numberOfItemsPerRow + 1))) / numberOfItemsPerRow
+        return CGSize(width: width, height: 50) // 높이는 50 고정
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 15 // 세로 간격 15 설정
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 15 // 좌우 간격 15 설정
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15) // 좌우 여백을 15로 설정
+    }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
@@ -56,14 +86,23 @@ extension CallBenefitCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return benefits.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CallBenefitCollectionViewCell.identifier, for: indexPath) as? CallBenefitCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure()
+        let cellItem = benefits[indexPath.row]
+        cell.configure(benefit: cellItem)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedBenefit = benefits[indexPath.row]
+        filterPublisher.send(selectedBenefit.id)
+        if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {
+            footerView.updateLabel(with: selectedBenefit.detail)
+        }
     }
 }

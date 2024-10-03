@@ -99,6 +99,7 @@
 		D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */; };
 		D208A7D82CAE7811007040E7 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */; };
 		D208A7DA2CAE781D007040E7 /* ShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */; };
+		D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -208,7 +209,7 @@
 		D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0552BA608310081FD36 /* CategoryCollectionViewCell.swift */; };
 		D27DD0AD2BA608310081FD36 /* CategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0562BA608310081FD36 /* CategoryCollectionView.swift */; };
 		D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0582BA608310081FD36 /* ShopViewModel.swift */; };
-		D27DD0B12BA608310081FD36 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD05A2BA608310081FD36 /* ShopViewController.swift */; };
+		D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD05A2BA608310081FD36 /* ShopViewControllerB.swift */; };
 		D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D27DD05C2BA608310081FD36 /* Assets.xcassets */; };
 		D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */; };
 		D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0732BA608310081FD36 /* UIFont+.swift */; };
@@ -474,6 +475,7 @@
 		D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerA.swift; sourceTree = "<group>"; };
 		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
+		D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewControllerA.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -584,7 +586,7 @@
 		D27DD0552BA608310081FD36 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0562BA608310081FD36 /* CategoryCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCollectionView.swift; sourceTree = "<group>"; };
 		D27DD0582BA608310081FD36 /* ShopViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
-		D27DD05A2BA608310081FD36 /* ShopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
+		D27DD05A2BA608310081FD36 /* ShopViewControllerB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopViewControllerB.swift; sourceTree = "<group>"; };
 		D27DD05C2BA608310081FD36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+.swift"; sourceTree = "<group>"; };
 		D27DD0732BA608310081FD36 /* UIFont+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -1394,7 +1396,8 @@
 			children = (
 				D27DD04F2BA608310081FD36 /* SubViews */,
 				D27DD0582BA608310081FD36 /* ShopViewModel.swift */,
-				D27DD05A2BA608310081FD36 /* ShopViewController.swift */,
+				D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */,
+				D27DD05A2BA608310081FD36 /* ShopViewControllerB.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2296,7 +2299,7 @@
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
-				D27DD0B12BA608310081FD36 /* ShopViewController.swift in Sources */,
+				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
 				D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */,
@@ -2383,6 +2386,7 @@
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				83DD0DCC2C56850A00278ABD /* BusTimetableTableViewCell.swift in Sources */,
+				D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */,
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,

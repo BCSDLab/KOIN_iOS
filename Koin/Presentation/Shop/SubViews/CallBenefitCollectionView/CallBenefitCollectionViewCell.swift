@@ -9,6 +9,10 @@ import UIKit
 
 final class CallBenefitCollectionViewCell: UICollectionViewCell {
     
+    private let titleLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -18,19 +22,23 @@ final class CallBenefitCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure() {
-       
+    func configure(benefit: Benefit) {
+        titleLabel.text = benefit.title
     }
 }
 
 extension CallBenefitCollectionViewCell {
     private func setUpLayouts() {
-        [].forEach {
+        [titleLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(self.snp.centerX)
+            make.centerY.equalTo(self.snp.centerY)
+        }
     }
     
     private func configureView() {

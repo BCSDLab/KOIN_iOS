@@ -12,6 +12,7 @@ final class ShopViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
+        case viewDidLoadB
         case changeCategory(Int)
         case searchTextChanged(String)
         case changeSortStandard(Any)
@@ -27,6 +28,8 @@ final class ShopViewModel: ViewModelProtocol {
         case changeFilteredShops([Shop], Int)
         case updateSeletecButtonColor(FetchShopListRequest)
         case updateEventShops([EventDTO])
+        case updateShopBenefits(ShopBenefitsDTO)
+        case updateBeneficialShops([Shop])
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -85,6 +88,9 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case .viewDidLoadB:
+                self?.fetchShopBenefits()
+                self?.fetchBeneficialShops(id: 1)
             }
         }.store(in: &subscriptions)
         
@@ -100,7 +106,7 @@ extension ShopViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            print(response)
+            self?.outputSubject.send(.updateShopBenefits(response))
         }.store(in: &subscriptions)
     }
     
@@ -110,7 +116,7 @@ extension ShopViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            print(response)
+            self?.outputSubject.send(.updateBeneficialShops(response))
         }.store(in: &subscriptions)
     }
     

@@ -396,7 +396,7 @@ extension HomeViewControllerB {
         navigateToShop(section: .callBenefit)
     }
     
-    private func navigateToShop(section: ShopViewController.Section) {
+    private func navigateToShop(section: ShopViewControllerB.Section) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         
@@ -418,9 +418,12 @@ extension HomeViewControllerB {
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewController(viewModel: viewModel, section: section)
-        shopViewController.title = section.rawValue
-        navigationController?.pushViewController(shopViewController, animated: true)
+        let viewController: UIViewController
+        switch section {
+        case .shopList: viewController = ShopViewControllerA(viewModel: viewModel)
+        case .callBenefit: viewController = ShopViewControllerB(viewModel: viewModel, section: section)
+        }
+        navigationController?.pushViewController(viewController, animated: true)
         
         let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: 0)
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))

@@ -1,25 +1,18 @@
 //
-//  ShopViewController.swift
-//  Koin
+//  ShopViewControllerA.swift
+//  koin
 //
-//  Created by 김나훈 on 3/12/24.
+//  Created by 김나훈 on 10/3/24.
 //
+
 
 import Combine
 import UIKit
 
-final class ShopViewController: UIViewController {
-    
-    // MARK: - Properties
-    
-    enum Section: String {
-        case shopList = "주변 상점"
-        case callBenefit = "전화 주문 혜택"
-    }
+final class ShopViewControllerA: UIViewController {
     
     private let viewModel: ShopViewModel
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
-    private let section: Section
     private var subscriptions: Set<AnyCancellable> = []
     private var scrollDirection: ScrollLog = .scrollToDown
     
@@ -95,9 +88,8 @@ final class ShopViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init(viewModel: ShopViewModel, section: Section) {
+    init(viewModel: ShopViewModel) {
         self.viewModel = viewModel
-        self.section = section
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -161,6 +153,10 @@ final class ShopViewController: UIViewController {
                 self?.updateEventShops(eventShops)
             case let .updateSeletecButtonColor(standard):
                 self?.shopCollectionView.updateSeletecButtonColor(standard)
+            case .updateShopBenefits:
+                break
+            case .updateBeneficialShops(_):
+                break
             }
         }.store(in: &subscriptions)
         
@@ -199,7 +195,7 @@ final class ShopViewController: UIViewController {
     }
 }
 
-extension ShopViewController {
+extension ShopViewControllerA {
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -233,7 +229,7 @@ extension ShopViewController {
     }
 }
 
-extension ShopViewController: UIScrollViewDelegate {
+extension ShopViewControllerA: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
@@ -257,7 +253,7 @@ extension ShopViewController: UIScrollViewDelegate {
     }
 }
 
-extension ShopViewController {
+extension ShopViewControllerA {
     
     private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
@@ -301,7 +297,7 @@ extension ShopViewController {
         self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
     }
 }
-extension ShopViewController {
+extension ShopViewControllerA {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
