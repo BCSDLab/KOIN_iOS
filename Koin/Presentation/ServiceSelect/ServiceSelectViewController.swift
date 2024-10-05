@@ -425,7 +425,7 @@ extension ServiceSelectViewController {
     private func setUpDetailLayout() {
         let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
         let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "복덕방", "코인 for Business"]
-        for idx in 0...4 {
+        for idx in 0...5 {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
             var attributedString = AttributedString.init(stringLiteral: buttonName[idx])
