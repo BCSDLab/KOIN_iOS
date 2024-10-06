@@ -97,21 +97,24 @@ extension String {
         do {
             let attributedString = try NSAttributedString(data: data, options: options, documentAttributes: nil)
             let text = NSMutableAttributedString(attributedString: attributedString)
-           
+            
             let docs: Document = try SwiftSoup.parse(self)
             let imgElements: Elements = try docs.select("img")
-            
+            var imgSrcLists: [String] = []
+            var check = 0
             imgElements.forEach { element in
                 let imageSrc = (try? element.attr("src")) ?? ""
-                
-                let range = NSMakeRange(0, text.length)
-                
-                text.enumerateAttribute(NSAttributedString.Key.attachment, in: range, options: []) { (value, _, _) in
-                    if let attachment = value as? NSTextAttachment {
-                        imageSrc.loadImage(from: imageSrc, completion: { image in
-                            attachment.image = image
-                        })
-                    }
+                imgSrcLists.append(imageSrc)
+            }
+            let range = NSMakeRange(0, text.length)
+            
+            text.enumerateAttribute(NSAttributedString.Key.attachment, in: range, options: []) { (value, _, _) in
+                if let attachment = value as? NSTextAttachment {
+                    let imageSrc = imgSrcLists[check]
+                    imageSrc.loadImage(from: imageSrc, completion: { image in
+                        attachment.image = image
+                    })
+                    check += 1
                 }
             }
             
