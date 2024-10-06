@@ -90,10 +90,10 @@ extension ManageNoticeKeywordViewModel {
     }
 }
 
-private func fetchMyKeyword() {
-    getMyKeyword { [weak self] myKeywords in
-        self?.outputSubject.send(.updateKeyword(myKeywords))
-        self?.getRecommendedKeyword(keywords: myKeywords)
+    private func fetchMyKeyword() {
+        getMyKeyword { [weak self] myKeywords in
+            self?.outputSubject.send(.updateKeyword(myKeywords))
+            self?.getRecommendedKeyword(keywords: myKeywords)
         }
     }
     

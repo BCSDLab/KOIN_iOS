@@ -43,8 +43,6 @@ final class DefaultNoticeService: NoticeListService {
     }
     
     func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
-        let keyword = NoticeKeywordInformation(context: coreDataService.context)
-        keyword.name = requestModel.keyword
         return networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
             .catch { [weak self] error -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
@@ -53,7 +51,10 @@ final class DefaultNoticeService: NoticeListService {
                         .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
                         }
                         .catch { [weak self] _ -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
-                            self?.coreDataService.insert(insertedObject: keyword)
+                            guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                            let keyword = NoticeKeywordInformation(context: self.coreDataService.context)
+                            keyword.name = requestModel.keyword
+                            self.coreDataService.insert(insertedObject: keyword)
                             return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에 키워드 저장")).eraseToAnyPublisher()
                         }
                         .eraseToAnyPublisher()
