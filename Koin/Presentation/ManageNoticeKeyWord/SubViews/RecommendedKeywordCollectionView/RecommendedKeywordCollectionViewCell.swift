@@ -13,7 +13,6 @@ import UIKit
 final class RecommendedKeywordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     let recommendedKeywordPublisher = PassthroughSubject<Void, Never>()
-    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
  
@@ -23,20 +22,14 @@ final class RecommendedKeywordCollectionViewCell: UICollectionViewCell {
         $0.textAlignment = .center
     }
     
-    private let addButton = UIButton().then {
-        $0.setImage(.appImage(asset: .plus), for: .normal)
+    private let addButton = UIImageView().then {
+        $0.image = .appImage(asset: .plus)
     }
     
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addButton.addTarget(self, action: #selector(tapAddButton), for: .touchUpInside)
         configureView()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {
@@ -45,10 +38,6 @@ final class RecommendedKeywordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keywordLabel.text = keyWord
-    }
-    
-    @objc private func tapAddButton(sender: UIButton) {
-        recommendedKeywordPublisher.send()
     }
 }
 

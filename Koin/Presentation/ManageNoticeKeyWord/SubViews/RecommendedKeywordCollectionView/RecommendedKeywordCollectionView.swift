@@ -50,13 +50,12 @@ extension RecommendedKeywordCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedKeywordCollectionViewCell.identifier, for: indexPath) as? RecommendedKeywordCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.recommendedKeywordPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            let keyWord = self.recommendedKeywordList[indexPath.row]
-            self.recommendedKeywordPublisher.send(keyWord)
-        }.store(in: &cell.subscriptions)
         cell.configure(keyWord: recommendedKeywordList[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        recommendedKeywordPublisher.send(recommendedKeywordList[indexPath.item])
     }
 }
 

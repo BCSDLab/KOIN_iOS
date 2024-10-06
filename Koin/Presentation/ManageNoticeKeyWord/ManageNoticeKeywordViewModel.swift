@@ -70,7 +70,9 @@ extension ManageNoticeKeywordViewModel {
             self.addNotificationKeywordUseCase.execute(keyword: requestModel, myKeywords: myKeywords).sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
-                    self?.fetchMyKeyword()
+                    DispatchQueue.global().async {
+                        self?.fetchMyKeyword()
+                    }
                 }
             }, receiveValue: { [weak self] _, addKeywordResult in
                 switch addKeywordResult {
@@ -110,7 +112,9 @@ private func fetchMyKeyword() {
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
-                    self?.fetchMyKeyword()
+                    DispatchQueue.global().async {
+                        self?.fetchMyKeyword()
+                    }
                 }
             }, receiveValue: { [weak self] result in
                 self?.fetchMyKeyword()

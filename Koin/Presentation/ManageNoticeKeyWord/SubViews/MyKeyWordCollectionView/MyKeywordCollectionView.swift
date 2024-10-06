@@ -53,13 +53,12 @@ extension MyKeywordCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKeywordCollectionViewCell.identifier, for: indexPath) as? MyKeywordCollectionViewCell else {
             return UICollectionViewCell()
         }
-    
-        cell.tapDeleteButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.tapDeleteButtonPublisher.send(self.myKeywordList[indexPath.row])
-        }.store(in: &cell.subscriptions)
         cell.configure(keyWord: myKeywordList[indexPath.item].keyword)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        tapDeleteButtonPublisher.send(myKeywordList[indexPath.item])
     }
 }
 

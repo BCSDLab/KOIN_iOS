@@ -13,8 +13,7 @@ import UIKit
 final class MyKeywordCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     let tapDeleteButtonPublisher = PassthroughSubject<Void, Never>()
-    var subscriptions = Set<AnyCancellable>()
-    
+
     // MARK: - UI Components
  
     private let keywordLabel = UILabel().then {
@@ -23,20 +22,14 @@ final class MyKeywordCollectionViewCell: UICollectionViewCell {
         $0.textAlignment = .center
     }
     
-    private let deleteButton = UIButton().then {
-        $0.setImage(.appImage(asset: .delete), for: .normal)
+    private let deleteButton = UIImageView().then {
+        $0.image = .appImage(asset: .delete)
     }
     
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        deleteButton.addTarget(self, action: #selector(tapDeleteButton), for: .touchUpInside)
         configureView()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {
@@ -45,10 +38,6 @@ final class MyKeywordCollectionViewCell: UICollectionViewCell {
     
     func configure(keyWord: String) {
         keywordLabel.text = keyWord
-    }
-    
-    @objc func tapDeleteButton(sender: UIButton) {
-        tapDeleteButtonPublisher.send()
     }
 }
 
