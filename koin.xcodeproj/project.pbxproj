@@ -103,6 +103,25 @@
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
 		D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */; };
 		D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D21460362BD09ACF006F579A /* GoogleService-Info.plist */; };
+		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
+		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
+		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
+		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
+		D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */; };
+		D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421442C897ED300E8B480 /* PolicyViewController.swift */; };
+		D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */; };
+		D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */; };
+		D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */; };
+		D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */; };
+		D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */; };
+		D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216F2C8A3E5B00E8B480 /* UITableView+.swift */; };
+		D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421712C8A427800E8B480 /* RevokeModalViewController.swift */; };
+		D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */; };
+		D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */; };
+		D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421792C8A90C800E8B480 /* CertificationView.swift */; };
+		D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */; };
+		D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */; };
+		D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */; };
 		D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54552C68B033000826DA /* WriteReviewRequest.swift */; };
 		D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54572C68B033000826DA /* ReportReviewRequest.swift */; };
 		D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */; };
@@ -163,6 +182,7 @@
 		D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3C2C159350000813F9 /* DateProvider.swift */; };
 		D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */; };
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
+		D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */; };
 		D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */; };
 		D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D992C6B97D200C4275F /* InsetLabel.swift */; };
 		D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */; };
@@ -273,8 +293,6 @@
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
-		D2BD36882BA9D5AB00FAE609 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36872BA9D5AB00FAE609 /* MyPageViewController.swift */; };
-		D2BD368A2BA9D5B700FAE609 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36892BA9D5B700FAE609 /* MyPageViewModel.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -467,6 +485,25 @@
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		D20AB9742C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeLoginModalViewController.swift; sourceTree = "<group>"; };
 		D21460362BD09ACF006F579A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
+		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		D22421442C897ED300E8B480 /* PolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewController.swift; sourceTree = "<group>"; };
+		D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyContentCollectionView.swift; sourceTree = "<group>"; };
+		D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyContentCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyListCollectionViewCell.swift; sourceTree = "<group>"; };
+		D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyListTableView.swift; sourceTree = "<group>"; };
+		D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyModel.swift; sourceTree = "<group>"; };
+		D224216F2C8A3E5B00E8B480 /* UITableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+.swift"; sourceTree = "<group>"; };
+		D22421712C8A427800E8B480 /* RevokeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeModalViewController.swift; sourceTree = "<group>"; };
+		D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewController.swift; sourceTree = "<group>"; };
+		D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMyProfileViewModel.swift; sourceTree = "<group>"; };
+		D22421792C8A90C800E8B480 /* CertificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationView.swift; sourceTree = "<group>"; };
+		D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordUseCase.swift; sourceTree = "<group>"; };
+		D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidator.swift; sourceTree = "<group>"; };
 		D22C54552C68B033000826DA /* WriteReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54572C68B033000826DA /* ReportReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReviewRequest.swift; sourceTree = "<group>"; };
 		D22C54592C68B033000826DA /* FetchShopReviewRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewRequest.swift; sourceTree = "<group>"; };
@@ -527,6 +564,7 @@
 		D249CD3C2C159350000813F9 /* DateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
 		D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDiningTime.swift; sourceTree = "<group>"; };
 		D249CD402C15CBAA000813F9 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		D27A5D992C6B97D200C4275F /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListRequest.swift; sourceTree = "<group>"; };
@@ -638,8 +676,6 @@
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
-		D2BD36872BA9D5AB00FAE609 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
-		D2BD36892BA9D5B700FAE609 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -925,6 +961,89 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
+		D22421322C897C5E00E8B480 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */,
+				D22421332C897C7100E8B480 /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D22421372C897D7300E8B480 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				D22421382C897D8300E8B480 /* MyProfileViewModel.swift */,
+				D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */,
+				D22421712C8A427800E8B480 /* RevokeModalViewController.swift */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		D224213C2C897DE300E8B480 /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				D22421782C8A90B600E8B480 /* SubViews */,
+				D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */,
+				D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */,
+			);
+			path = ChangePassword;
+			sourceTree = "<group>";
+		};
+		D22421412C897EB700E8B480 /* Policy */ = {
+			isa = PBXGroup;
+			children = (
+				D22421682C8A3E0B00E8B480 /* SubViews */,
+				D22421442C897ED300E8B480 /* PolicyViewController.swift */,
+			);
+			path = Policy;
+			sourceTree = "<group>";
+		};
+		D22421642C8A3E0B00E8B480 /* PolicyContentCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D22421622C8A3E0B00E8B480 /* PolicyContentCollectionView.swift */,
+				D22421632C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift */,
+			);
+			path = PolicyContentCollectionView;
+			sourceTree = "<group>";
+		};
+		D22421672C8A3E0B00E8B480 /* PolicyListTableView */ = {
+			isa = PBXGroup;
+			children = (
+				D22421652C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift */,
+				D22421662C8A3E0B00E8B480 /* PolicyListTableView.swift */,
+			);
+			path = PolicyListTableView;
+			sourceTree = "<group>";
+		};
+		D22421682C8A3E0B00E8B480 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D22421642C8A3E0B00E8B480 /* PolicyContentCollectionView */,
+				D22421672C8A3E0B00E8B480 /* PolicyListTableView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		D22421732C8A45F400E8B480 /* ChangeMyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */,
+				D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */,
+			);
+			path = ChangeMyProfile;
+			sourceTree = "<group>";
+		};
+		D22421782C8A90B600E8B480 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D22421792C8A90C800E8B480 /* CertificationView.swift */,
+				D224217B2C8A90D200E8B480 /* ChangePasswordView.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1166,8 +1285,12 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D22421412C897EB700E8B480 /* Policy */,
+				D224213C2C897DE300E8B480 /* ChangePassword */,
+				D22421372C897D7300E8B480 /* MyProfile */,
+				D22421322C897C5E00E8B480 /* Settings */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
-				D2BD36862BA9D58A00FAE609 /* MyPage */,
+				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
 				D2908CA42BB5EB5F0008F908 /* Timetable */,
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
@@ -1388,6 +1511,7 @@
 		D27DD0712BA608310081FD36 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D224216F2C8A3E5B00E8B480 /* UITableView+.swift */,
 				D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */,
 				83DD0DD12C568F6100278ABD /* UITableViewHeaderFooterView.swift */,
 				83DD0DCD2C5687A900278ABD /* UITableViewCell+.swift */,
@@ -1473,6 +1597,7 @@
 				D27DD0852BA608310081FD36 /* ImageCacher.swift */,
 				0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */,
 				D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */,
+				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -1592,6 +1717,7 @@
 		D29F21E32C4F4C2B00994554 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */,
 				D29F21E42C4F4C3700994554 /* AgreementText.swift */,
 			);
 			path = User;
@@ -1666,17 +1792,9 @@
 				D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */,
 				D20AB9402C550746006BC684 /* RevokeUseCase.swift */,
 				D20AB9422C550751006BC684 /* ModifyUseCase.swift */,
+				D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */,
 			);
 			path = User;
-			sourceTree = "<group>";
-		};
-		D2BD36862BA9D58A00FAE609 /* MyPage */ = {
-			isa = PBXGroup;
-			children = (
-				D2BD36892BA9D5B700FAE609 /* MyPageViewModel.swift */,
-				D2BD36872BA9D5AB00FAE609 /* MyPageViewController.swift */,
-			);
-			path = MyPage;
 			sourceTree = "<group>";
 		};
 		D2CA2DCE2C1CAC4B0036F02C /* Shop */ = {
@@ -2209,6 +2327,7 @@
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
+				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
@@ -2220,6 +2339,7 @@
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
+				D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */,
 				D27DD0B12BA608310081FD36 /* ShopViewController.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
@@ -2231,6 +2351,7 @@
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
+				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
@@ -2257,12 +2378,13 @@
 				D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */,
 				D27DD0F02BA60D000081FD36 /* LandViewController.swift in Sources */,
 				D22C546D2C699780000826DA /* ImageDropDownCell.swift in Sources */,
+				D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
-				D2BD368A2BA9D5B700FAE609 /* MyPageViewModel.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
+				D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
@@ -2275,6 +2397,7 @@
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
+				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
@@ -2288,6 +2411,7 @@
 				D27DD0912BA608310081FD36 /* ShopCollectionViewCell.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
+				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
@@ -2314,6 +2438,7 @@
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
 				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
 				D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */,
+				D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */,
 				D2908CB12BB7A5940008F908 /* TimetableCollectionViewCell.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
@@ -2324,11 +2449,13 @@
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
+				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
 				D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
+				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
@@ -2364,6 +2491,7 @@
 				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
+				D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,
 				D27DD0F22BA60D220081FD36 /* LandDetailViewController.swift in Sources */,
 				D20AB9522C5534F7006BC684 /* FetchNotiListUseCase.swift in Sources */,
@@ -2373,7 +2501,6 @@
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
-				D2BD36882BA9D5AB00FAE609 /* MyPageViewController.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
 				837BFA542BB7E4A3001FCBD4 /* SearchBusViewController.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
@@ -2396,6 +2523,7 @@
 				D27DD0922BA608310081FD36 /* ShopCollectionView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
+				D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				83DD0D8D2C51010900278ABD /* BusInformationCollectionView.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
@@ -2403,6 +2531,7 @@
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
+				D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				837BFA442BB70B0F001FCBD4 /* BusDetailViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
@@ -2415,6 +2544,8 @@
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
+				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
+				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */,
@@ -2439,13 +2570,16 @@
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */,
+				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D27DD0902BA608310081FD36 /* HomeViewController.swift in Sources */,
+				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
@@ -2456,10 +2590,12 @@
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
+				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
+				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				D20AB9752C58FCA3006BC684 /* DiningLikeLoginModalViewController.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,

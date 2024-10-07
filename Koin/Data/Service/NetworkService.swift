@@ -87,7 +87,7 @@ class NetworkService {
             .catch { error -> AnyPublisher<Void, ErrorResponse> in
                 KeyChainWorker.shared.delete(key: .access)
                 KeyChainWorker.shared.delete(key: .refresh)
-                return Fail(error: ErrorResponse(code: "401", message: "인증정보가 만료되었습니다. 다시 로그인해주세요.")).eraseToAnyPublisher()
+                return Fail(error: ErrorResponse(code: "401", message: "로그인이 필요한 기능이에요.")).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }

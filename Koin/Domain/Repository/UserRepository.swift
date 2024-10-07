@@ -17,4 +17,5 @@ protocol UserRepository {
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedEmail(email: String) -> AnyPublisher<String, Error>
     func revoke() -> AnyPublisher<Void, ErrorResponse>
+    func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
 }

@@ -53,4 +53,8 @@ final class DefaultUserRepository: UserRepository {
         service.revoke()
     }
     
+    func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkPassword(requestModel: requestModel)
+    }
+    
 }
