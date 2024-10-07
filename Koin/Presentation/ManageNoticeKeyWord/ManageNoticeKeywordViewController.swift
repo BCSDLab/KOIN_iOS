@@ -133,10 +133,12 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             case let .updateKeyword(keywords):
                 self.updateMyKeywords(keywords: keywords)
             case .showLoginModal:
-                self.present(self.keywordLoginModalViewController.self, animated: true, completion: nil)
                 self.keywordNotificationSwtich.isOn = false
+                self.keywordNotificationSwtich.isEnabled = true
+                self.present(self.keywordLoginModalViewController.self, animated: true, completion: nil)
             case let .updateSwitch(isOn):
                 self.keywordNotificationSwtich.isOn = isOn
+                self.keywordNotificationSwtich.isEnabled = true
             case let .updateRecommendedKeyword(keywords):
                 self.updateRecommendedKeywords(keywords: keywords)
             case let .keywordIsIllegal(illegalType):
@@ -192,6 +194,7 @@ extension ManageNoticeKeywordViewController {
     
     @objc private func changeNotificationKeywordSwitch(sender: UISwitch) {
         inputSubject.send(.changeNotification(isOn: sender.isOn))
+        sender.isEnabled = false
     }
     
     private func updateMyKeywords(keywords: [NoticeKeywordDTO]) {
