@@ -83,7 +83,9 @@ extension ManageNoticeKeywordViewModel {
                 case .sameKeyword:
                     self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                 case .success:
-                    self?.fetchMyKeyword()
+                    DispatchQueue.global().async {
+                        self?.fetchMyKeyword()
+                    }
                 }
             }).store(in: &self.subscriptions)
         
@@ -117,7 +119,9 @@ extension ManageNoticeKeywordViewModel {
                     }
                 }
             }, receiveValue: { [weak self] result in
-                self?.fetchMyKeyword()
+                DispatchQueue.global().async {
+                    self?.fetchMyKeyword()
+                }
             })
             .store(in: &subscriptions)
     }

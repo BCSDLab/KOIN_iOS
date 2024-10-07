@@ -152,8 +152,10 @@ final class ManageNoticeKeywordViewController: CustomViewController {
         }.store(in: &subscriptions)
         
         myKeywordCollectionView.myKeywordsContentsSizePublisher.sink { [weak self] height in
-            self?.myKeywordCollectionView.snp.updateConstraints {
-                $0.height.equalTo(height + 24)
+            DispatchQueue.main.async {
+                self?.myKeywordCollectionView.snp.updateConstraints {
+                    $0.height.equalTo(height + 24)
+                }
             }
         }.store(in: &subscriptions)
         
