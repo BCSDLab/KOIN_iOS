@@ -67,12 +67,14 @@ extension ManageNoticeKeywordViewModel {
         let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
-            self.addNotificationKeywordUseCase.execute(keyword: requestModel, myKeywords: myKeywords).sink(receiveCompletion: { [weak self] completion in
+            self.addNotificationKeywordUseCase
+                .execute(keyword: requestModel, myKeywords: myKeywords)
+                .receive(on: DispatchQueue.main)
+                .throttle(for: .milliseconds(400), scheduler: RunLoop.main, latest: true)
+                .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
-                    DispatchQueue.global().async {
-                        self?.fetchMyKeyword()
-                    }
+                    self?.fetchMyKeyword()
                 }
             }, receiveValue: { [weak self] _, addKeywordResult in
                 switch addKeywordResult {
@@ -83,9 +85,7 @@ extension ManageNoticeKeywordViewModel {
                 case .sameKeyword:
                     self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                 case .success:
-                    DispatchQueue.global().async {
-                        self?.fetchMyKeyword()
-                    }
+                    self?.fetchMyKeyword()
                 }
             }).store(in: &self.subscriptions)
         
@@ -114,14 +114,10 @@ extension ManageNoticeKeywordViewModel {
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
-                    DispatchQueue.global().async {
-                        self?.fetchMyKeyword()
-                    }
-                }
-            }, receiveValue: { [weak self] result in
-                DispatchQueue.global().async {
                     self?.fetchMyKeyword()
                 }
+            }, receiveValue: { [weak self] result in
+                self?.fetchMyKeyword()
             })
             .store(in: &subscriptions)
     }

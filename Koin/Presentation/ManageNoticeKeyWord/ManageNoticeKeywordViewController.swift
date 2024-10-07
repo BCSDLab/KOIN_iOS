@@ -159,8 +159,9 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             }
         }.store(in: &subscriptions)
         
-        recommendedKeywordCollectionView.recommendedKeywordPublisher.sink { [weak self] keyword in
-            self?.inputSubject.send(.addKeyword(keyword: keyword))
+        recommendedKeywordCollectionView.recommendedKeywordPublisher
+            .sink { [weak self] keyword in
+                self?.inputSubject.send(.addKeyword(keyword: keyword))
         }.store(in: &subscriptions)
         
         keywordLoginModalViewController.loginButtonPublisher.sink { [weak self] in
