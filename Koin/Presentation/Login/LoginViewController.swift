@@ -126,6 +126,7 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.setNavigationBarHidden(false, animated: true)
         configureView()
         bind()
         hideKeyboardWhenTappedAround()

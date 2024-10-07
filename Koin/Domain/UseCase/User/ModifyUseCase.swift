@@ -8,7 +8,7 @@
 import Combine
 
 protocol ModifyUseCase {
-    func execute(requestModel: UserPutRequest, passwordMatch: String) -> AnyPublisher<UserDTO, ErrorResponse>
+    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
 }
 
 final class DefaultModifyUseCase: ModifyUseCase {
@@ -19,25 +19,11 @@ final class DefaultModifyUseCase: ModifyUseCase {
         self.userRepository = userRepository
     }
     
-    func execute(requestModel: UserPutRequest, passwordMatch: String) -> AnyPublisher<UserDTO, ErrorResponse> {
-        if let password = requestModel.password, password != "" {
-            let passwordCheckResult = checkValidPasswordInput(password: password, passwordMatch: passwordMatch)
-            switch passwordCheckResult {
-            case .success:
-                var mutableRequestModel = requestModel
-                mutableRequestModel.sha256()
-                return userRepository.modify(requestModel: mutableRequestModel)
-            case .failure(let error):
-                return Fail(error: ErrorResponse(code: "", message: error.localizedDescription))
-                    .eraseToAnyPublisher()
-            }
-        } else {
-            return userRepository.modify(requestModel: requestModel)
-        }
+    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse> {
+        var mutableRequestModel = requestModel
+        mutableRequestModel.sha256()
+        return userRepository.modify(requestModel: mutableRequestModel)
     }
     
-    private func checkValidPasswordInput(password: String, passwordMatch: String) -> Result<Void, UserInputError> {
-        return PasswordConfirmer(passwordMatchText: passwordMatch).confirm(text: password)
-    }
     
 }

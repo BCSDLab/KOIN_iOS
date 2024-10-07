@@ -25,9 +25,9 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
-    private let notiButton: UIButton = {
+    private let settingButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "bell"), for: .normal)
+        button.setImage(UIImage.appImage(asset: .gear), for: .normal)
         button.tintColor = UIColor.appColor(.neutral800)
         return button
     }()
@@ -62,19 +62,6 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return label
     }()
     
-    private let myInfoButton: UIButton = {
-        let button = UIButton()
-        let originalImage = UIImage.appImage(symbol: .person)?.withRenderingMode(.alwaysTemplate)
-        button.setImage(originalImage, for: .normal)
-        button.tintColor = UIColor.appColor(.neutral600)
-        button.setTitle(" 내 정보", for: .normal)
-        button.semanticContentAttribute = .forceLeftToRight
-        button.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
     private let logOutButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
@@ -91,6 +78,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         let label = UILabel()
         label.text = "서비스"
         label.backgroundColor = UIColor.appColor(.neutral50)
+        label.textColor = UIColor.appColor(.neutral600)
         label.font = UIFont.appFont(.pretendardMedium, size: 14)
         return label
     }()
@@ -134,6 +122,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
+    private let inquryButton = UIButton().then {
+        $0.setTitle("문의하기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 16)
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: ServiceSelectViewModel) {
@@ -155,18 +149,13 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         bind()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillAppear(true)
         navigationController?.setNavigationBarHidden(true, animated: animated)
         inputSubject.send(.fetchUserData)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     // MARK: - Bind
@@ -219,25 +208,28 @@ extension ServiceSelectViewController {
         //timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
-        myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
+        //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
-        notiButton.addTarget(self, action: #selector(notiButtonTapped), for: .touchUpInside)
+        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
+        inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
     }
     
-    @objc private func notiButtonTapped() {
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let notiViewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase))
-            notiViewController.title = "알림설정"
-        navigationController?.pushViewController(notiViewController, animated: true)
+    @objc private func inquryButtonTapped() {
+        if let url = URL(string:
+                            "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
-  
+    
+    @objc private func settingButtonTapped() {
+        let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-   
+    
     @objc func logOutButtonTapped() {
         if viewModel.isLogined {
             showLogOutAlert()
@@ -253,7 +245,7 @@ extension ServiceSelectViewController {
     @objc func shopSelectButtonTapped() {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
-
+        
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
@@ -305,13 +297,13 @@ extension ServiceSelectViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburgerDining, .click, "식단"))
     }
     /*
-    @objc func timetableSelectButtonTapped() {
-        /*
-        let timetableViewController = TimetableViewController(viewModel: TimetableViewModel(service: TimetableService(provider: APIProvider(session: URLSession.shared))))
-        timetableViewController.title = "시간표"
-        navigationController?.pushViewController(timetableViewController, animated: true)*/
-    }
-    */
+     @objc func timetableSelectButtonTapped() {
+     /*
+      let timetableViewController = TimetableViewController(viewModel: TimetableViewModel(service: TimetableService(provider: APIProvider(session: URLSession.shared))))
+      timetableViewController.title = "시간표"
+      navigationController?.pushViewController(timetableViewController, animated: true)*/
+     }
+     */
     
     @objc func landSelectButtonTapped() {
         let landService = DefaultLandService()
@@ -330,29 +322,6 @@ extension ServiceSelectViewController {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true)
         }
-    }
-    
-    @objc func myInfoButtonTapped() {
-        
-        if viewModel.isLogined {
-            let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
-            let modifyUseCase = DefaultModifyUseCase(userRepository: userRepository)
-            let revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
-            let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository)
-            let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let myPageViewController = MyPageViewController(viewModel: MyPageViewModel(fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, modifyUseCase: modifyUseCase, revokeUseCase: revokeUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase))
-            myPageViewController.title = "내 정보"
-            navigationController?.pushViewController(myPageViewController, animated: true)
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerMyInfoWithLogin, .click, "내 정보"))
-        } else {
-            showLoginAlert()
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerMyInfoWithoutLogin, .click, "내 정보"))
-        }
-        
     }
     
     private func showLoginAlert() {
@@ -399,14 +368,14 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["주변 상점", "버스/교통", "식단", "복덕방", "코인 for Business"]
+        let kindOfButton = [busSelectButton, diningSelectButton, landSelectButton, shopSelectButton, businessSelectButton]
+        let buttonName = ["버스 / 교통", "식단", "복덕방", "주변상점", "코인 사장님"]
         for idx in 0...4 {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
@@ -437,11 +406,11 @@ extension ServiceSelectViewController {
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
-        notiButton.snp.makeConstraints { make in
+        settingButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             make.trailing.equalTo(view.snp.trailing).offset(-10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
         }
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom).offset(30)
@@ -455,12 +424,6 @@ extension ServiceSelectViewController {
             make.bottom.equalTo(nicknameLabel.snp.bottom)
             make.leading.equalTo(nicknameLabel.snp.trailing)
         }
-        myInfoButton.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.height.equalTo(24)
-            make.width.equalTo(68)
-        }
         logOutButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameLabel.snp.bottom).offset(33.5)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
@@ -468,13 +431,13 @@ extension ServiceSelectViewController {
             make.width.equalTo(60)
         }
         servicePaddingLabel.snp.makeConstraints { make in
-            make.top.equalTo(myInfoButton.snp.bottom).offset(15.5)
+            make.top.equalTo(settingButton.snp.bottom).offset(128)
             make.leading.equalTo(view.snp.leading)
             make.width.equalTo(24)
             make.height.equalTo(33)
         }
         serviceGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(myInfoButton.snp.bottom).offset(15)
+            make.top.equalTo(settingButton.snp.bottom).offset(128)
             make.leading.equalTo(servicePaddingLabel.snp.trailing)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)
@@ -509,7 +472,12 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        
+        inquryButton.snp.makeConstraints { make in
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.bottom.equalTo(view.snp.bottom).offset(-30)
+            make.width.equalTo(56)
+            make.height.equalTo(26)
+        }
     }
     
     private func configureView() {

@@ -56,7 +56,7 @@ extension UserAPI: Router, URLRequestConvertible {
             break
         }
         switch self {
-        case .fetchUserData, .revoke, .modify :
+        case .fetchUserData, .revoke, .modify, .checkPassword :
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }

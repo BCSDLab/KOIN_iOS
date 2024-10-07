@@ -72,6 +72,7 @@ final class BusDetailViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.setNavigationBarHidden(false, animated: true)
         view.backgroundColor = .systemBackground
         configure()
         setUpLayout()
