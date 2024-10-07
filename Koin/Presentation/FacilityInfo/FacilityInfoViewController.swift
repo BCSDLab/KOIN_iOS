@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 import SnapKit
 
-final class FacilityInfoViewController: CustomViewController, WKNavigationDelegate, WKUIDelegate {
+final class FacilityInfoViewController: CustomViewController, WKNavigationDelegate, WKUIDelegate, UIScrollViewDelegate {
     // MARK: UI Components
     
     private var webView = WKWebView()
@@ -17,6 +17,7 @@ final class FacilityInfoViewController: CustomViewController, WKNavigationDelega
         loadWebView()
         webView.navigationDelegate = self
         webView.uiDelegate = self
+        webView.scrollView.delegate = self
     }
     
     private func loadWebView() {
@@ -24,6 +25,15 @@ final class FacilityInfoViewController: CustomViewController, WKNavigationDelega
             let request = URLRequest(url: url)
             webView.load(request)
         }
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        scrollView.pinchGestureRecognizer?.isEnabled = false
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let disableZoomCode = "document.querySelector('meta[name=viewport]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');"
+                webView.evaluateJavaScript(disableZoomCode, completionHandler: nil)
     }
 }
 
