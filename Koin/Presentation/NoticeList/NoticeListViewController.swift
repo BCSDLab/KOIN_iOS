@@ -174,7 +174,12 @@ extension NoticeListViewController {
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
-        tabBarCollectionView.tag = noticeListType.rawValue - 4
+        if noticeListType.rawValue < 9 {
+            tabBarCollectionView.tag = noticeListType.rawValue - 4
+        }
+        else if noticeListType.rawValue > 11 {
+            tabBarCollectionView.tag = noticeListType.rawValue - 7
+        }
     }
  
     private func updateUserKeywordList(keywords: [NoticeKeywordDTO], keywordIdx: Int) {

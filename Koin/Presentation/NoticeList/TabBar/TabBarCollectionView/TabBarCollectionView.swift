@@ -37,7 +37,13 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
 
 extension TabBarCollectionView {
     func updateBoard(noticeList: [NoticeArticleDTO], noticeListType: NoticeListType) {
-        let indexPath = IndexPath(item: noticeListType.rawValue - 4, section: 0)
+        var indexPath = IndexPath(item: 0, section: 0)
+        if noticeListType.rawValue < 9 {
+            indexPath = IndexPath(item: noticeListType.rawValue - 4, section: 0)
+        }
+        else if noticeListType.rawValue > 11 {
+            indexPath = IndexPath(item: noticeListType.rawValue - 7, section: 0)
+        }
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath
         reloadData()

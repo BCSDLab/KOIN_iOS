@@ -13,6 +13,8 @@ enum NoticeListType: Int, Decodable, CaseIterable {
     case scholarship = 6
     case university = 7
     case job = 8
+    case ipp = 12
+    case student = 13
     
     var displayName: String {
         switch self {
@@ -26,6 +28,10 @@ enum NoticeListType: Int, Decodable, CaseIterable {
             return "학사"
         case .job:
             return "취업"
+        case .ipp:
+            return "현장실습"
+        case .student:
+            return "학생생활"
         }
     }
     
