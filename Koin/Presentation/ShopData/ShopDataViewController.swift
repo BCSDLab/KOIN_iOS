@@ -295,6 +295,9 @@ final class ShopDataViewController: UIViewController {
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
         
+        accountGuideLabel.copyButtonPublisher.sink { [weak self] _ in
+            self?.showToast(message: "계좌번호가 복사되었습니다.", success: true)
+        }.store(in: &subscriptions)
     }
 }
 

@@ -81,6 +81,7 @@ enum ImageAsset: String {
     case checkGreen
     case topCircle
     case gear
+    case copy
 }
 
 enum SFSymbols: String {

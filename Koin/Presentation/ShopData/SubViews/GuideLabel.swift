@@ -5,9 +5,12 @@
 //  Created by 김나훈 on 3/14/24.
 //
 
+import Combine
 import UIKit
 
 final class GuideLabel: UIView {
+    
+    let copyButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     
@@ -28,8 +31,7 @@ final class GuideLabel: UIView {
     private let copyButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .default)
-        button.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral0)
+        button.setImage(UIImage.appImage(asset: .copy), for: .normal)
         button.isHidden = true
         return button
     }()
@@ -39,6 +41,7 @@ final class GuideLabel: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        copyButton.addTarget(self, action: #selector(copyText), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -48,6 +51,11 @@ final class GuideLabel: UIView {
     convenience init(frame: CGRect, text: String) {
         self.init(frame: frame)
         leftLabel.text = text
+    }
+    
+    @objc private func copyText() {
+        UIPasteboard.general.string = rightLabel.text
+        copyButtonPublisher.send(())
     }
     
     func configure(text: String) {
