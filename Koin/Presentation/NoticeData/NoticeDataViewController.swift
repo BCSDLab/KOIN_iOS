@@ -178,7 +178,7 @@ extension NoticeDataViewController {
                 let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
                 navigationController.setViewControllers(viewControllersToKeep, animated: false)
                 let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-                let viewController = NoticeListViewController(viewModel: NoticeListViewModel(fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository), fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository)))
+                let viewController = NoticeListViewController(viewModel: NoticeListViewModel(fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository), fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
                 navigationController.pushViewController(viewController, animated: false)
             }
         }
