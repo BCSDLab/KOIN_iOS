@@ -5,9 +5,12 @@
 //  Created by 김나훈 on 3/14/24.
 //
 
+import Combine
 import UIKit
 
 final class GuideLabel: UIView {
+    
+    let copyButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     
@@ -25,11 +28,20 @@ final class GuideLabel: UIView {
         return label
     }()
     
+    private let copyButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .default)
+        button.setImage(UIImage.appImage(asset: .copy), for: .normal)
+        button.isHidden = true
+        return button
+    }()
+    
     // MARK: Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        copyButton.addTarget(self, action: #selector(copyText), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -41,6 +53,11 @@ final class GuideLabel: UIView {
         leftLabel.text = text
     }
     
+    @objc private func copyText() {
+        UIPasteboard.general.string = rightLabel.text
+        copyButtonPublisher.send(())
+    }
+    
     func configure(text: String) {
         rightLabel.text = text
     }
@@ -50,28 +67,38 @@ final class GuideLabel: UIView {
 
 extension GuideLabel {
     private func setUpLayOuts() {
-        [leftLabel, rightLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
+        [leftLabel, rightLabel, copyButton].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        
         leftLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
             make.leading.equalTo(self.snp.leading)
+            make.top.equalTo(self.snp.top)
         }
         rightLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
             make.leading.equalTo(leftLabel.snp.trailing).offset(8.19)
+            make.top.equalTo(self.snp.top)
             make.trailing.lessThanOrEqualTo(self.snp.trailing).offset(-8.19)
             make.bottom.equalTo(self.snp.bottom)
         }
+        
+        copyButton.snp.makeConstraints { make in
+            make.leading.equalTo(rightLabel.snp.trailing).offset(5)
+            make.top.equalTo(self.snp.top)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
+        }
     }
-    
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+    }
+    
+    func showCopyButton() {
+        copyButton.isHidden = false
     }
 }
 

@@ -18,4 +18,6 @@ struct ShopData {
     let payBank, payCard: Bool
     let phone: String
     let updatedAt: String
+    let bank: String?
+    let accountNumber: String?
 }

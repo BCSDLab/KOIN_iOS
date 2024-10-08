@@ -70,6 +70,12 @@ final class ShopDataViewController: UIViewController {
         return label
     }()
     
+    private let accountGuideLabel: GuideLabel = {
+        let label = GuideLabel(frame: .zero, text: "계좌번호")
+        label.isHidden = true
+        return label
+    }()
+    
     private let etcGuideLabel: GuideLabel = {
         let label = GuideLabel(frame: .zero, text: "기타정보")
         return label
@@ -289,6 +295,9 @@ final class ShopDataViewController: UIViewController {
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
         
+        accountGuideLabel.copyButtonPublisher.sink { [weak self] _ in
+            self?.showToast(message: "계좌번호가 복사되었습니다.", success: true)
+        }.store(in: &subscriptions)
     }
 }
 
@@ -488,6 +497,14 @@ extension ShopDataViewController {
         deliveryGuideLabel.configure(text: "\(data.deliveryPrice)원")
         etcGuideLabel.configure(text: data.description)
         
+        if let accountNumber = data.accountNumber, let bank = data.bank {
+            accountGuideLabel.configure(text: "\(bank) \(accountNumber)")
+            accountGuideLabel.isHidden = false
+            accountGuideLabel.showCopyButton()
+        }
+        
+        updateAccountLabelConstraints()
+        
         for (condition, label) in [(data.delivery, deliveryPossibilityLabel),
                                    (data.payCard, cardPossibilityLabel),
                                    (data.payBank, bankPossibilityLabel)] {
@@ -548,25 +565,35 @@ extension ShopDataViewController {
         })
     }
     
-    
-        private func scrollToMenuSection(at section: Int) {
-            let indexPath = IndexPath(row: 0, section: section)
-            let collectionView = pageViewController.menuListViewController.menuListCollectionView
-            
-            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return }
-    
-            let scrollViewSpacing: CGFloat = stickyButtonStackView.isHidden ? 150 : 140
-    
-            let itemOffset = attributes.frame.origin.y + collectionView.frame.origin.y - scrollView.contentInset.top - pageViewController.menuListViewController.buttonStackView.frame.height - scrollViewSpacing + 650
-            if #available(iOS 17.0, *) {
-                UIView.animate {
-                    scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
-                }
+    private func updateAccountLabelConstraints() {
+        etcGuideLabel.snp.remakeConstraints { make in
+            if accountGuideLabel.isHidden {
+                make.top.equalTo(deliveryGuideLabel.snp.bottom).offset(12)
             } else {
+                make.top.equalTo(accountGuideLabel.snp.bottom).offset(12)
+            }
+            make.leading.equalTo(shopTitleLabel.snp.leading)
+            make.trailing.equalTo(scrollView.snp.trailing)
+        }
+    }
+    private func scrollToMenuSection(at section: Int) {
+        let indexPath = IndexPath(row: 0, section: section)
+        let collectionView = pageViewController.menuListViewController.menuListCollectionView
+        
+        guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return }
+        
+        let scrollViewSpacing: CGFloat = stickyButtonStackView.isHidden ? 150 : 140
+        
+        let itemOffset = attributes.frame.origin.y + collectionView.frame.origin.y - scrollView.contentInset.top - pageViewController.menuListViewController.buttonStackView.frame.height - scrollViewSpacing + 650
+        if #available(iOS 17.0, *) {
+            UIView.animate {
                 scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
             }
-    
+        } else {
+            scrollView.setContentOffset(CGPoint(x: 0, y: itemOffset), animated: false)
         }
+        
+    }
     //
     
 }
@@ -579,7 +606,7 @@ extension ShopDataViewController {
         addChild(pageViewController)
         
         pageViewController.didMove(toParent: self)
-        [menuTitleImageView, shopTitleLabel, phoneGuideLabel, timeGuideLabel, addressGuideLabel, etcGuideLabel, deliveryGuideLabel, deliveryPossibilityLabel, cardPossibilityLabel, bankPossibilityLabel, lastUpdateDayLabel, grayView, menuImageCollectionView, categorySelectSegmentControl, pageViewController.view].forEach {
+        [menuTitleImageView, shopTitleLabel, phoneGuideLabel, timeGuideLabel, addressGuideLabel, etcGuideLabel, deliveryGuideLabel, deliveryPossibilityLabel, cardPossibilityLabel, bankPossibilityLabel, lastUpdateDayLabel, grayView, menuImageCollectionView, categorySelectSegmentControl, pageViewController.view, accountGuideLabel].forEach {
             scrollView.addSubview($0)
         }
         [emptyWhiteView, stickyShopTitleLabel, stickySelectSegmentControl, stickyButtonStackView].forEach { component in
@@ -657,7 +684,11 @@ extension ShopDataViewController {
             make.leading.equalTo(shopTitleLabel.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        
+        accountGuideLabel.snp.makeConstraints { make in
+            make.top.equalTo(deliveryGuideLabel.snp.bottom).offset(12)
+            make.leading.equalTo(shopTitleLabel.snp.leading)
+            make.trailing.equalTo(scrollView.snp.trailing)
+        }
         etcGuideLabel.snp.makeConstraints { make in
             make.top.equalTo(deliveryGuideLabel.snp.bottom).offset(12)
             make.leading.equalTo(shopTitleLabel.snp.leading)

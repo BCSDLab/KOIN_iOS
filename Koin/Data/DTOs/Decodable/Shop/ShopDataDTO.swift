@@ -21,6 +21,8 @@ struct ShopDataDTO: Decodable {
     let phone: String?
     let shopCategories: [Category]?
     let updatedAt: String
+    let bank: String?
+    let accountNumber: String?
 
     enum CodingKeys: String, CodingKey {
         case address, delivery
@@ -35,10 +37,12 @@ struct ShopDataDTO: Decodable {
         case phone
         case shopCategories = "shop_categories"
         case updatedAt = "updated_at"
+        case bank
+        case accountNumber = "account_number"
     }
     
     func toDomain() -> ShopData {
-        return .init(address: address ?? "-", name: name ?? "", delivery: delivery ?? false, deliveryPrice: deliveryPrice, description: description ?? "-", imageUrls: imageUrls ?? [], open: open ?? [], payBank: payBank, payCard: payCard, phone: phone ?? "-", updatedAt: updatedAt)
+        return .init(address: address ?? "-", name: name ?? "", delivery: delivery ?? false, deliveryPrice: deliveryPrice, description: description ?? "-", imageUrls: imageUrls ?? [], open: open ?? [], payBank: payBank, payCard: payCard, phone: phone ?? "-", updatedAt: updatedAt, bank: bank, accountNumber: accountNumber)
     }
 }
 
