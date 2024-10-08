@@ -25,6 +25,15 @@ final class GuideLabel: UIView {
         return label
     }()
     
+    private let copyButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .default)
+        button.setImage(UIImage(systemName: "doc.on.doc", withConfiguration: config), for: .normal)
+        button.tintColor = UIColor.appColor(.neutral0)
+        button.isHidden = true
+        return button
+    }()
+    
     // MARK: Init
     
     override init(frame: CGRect) {
@@ -50,28 +59,38 @@ final class GuideLabel: UIView {
 
 extension GuideLabel {
     private func setUpLayOuts() {
-        [leftLabel, rightLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
+        [leftLabel, rightLabel, copyButton].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        
         leftLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
             make.leading.equalTo(self.snp.leading)
+            make.top.equalTo(self.snp.top)
         }
         rightLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
             make.leading.equalTo(leftLabel.snp.trailing).offset(8.19)
+            make.top.equalTo(self.snp.top)
             make.trailing.lessThanOrEqualTo(self.snp.trailing).offset(-8.19)
             make.bottom.equalTo(self.snp.bottom)
         }
+        
+        copyButton.snp.makeConstraints { make in
+            make.leading.equalTo(rightLabel.snp.trailing).offset(5)
+            make.top.equalTo(self.snp.top)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
+        }
     }
-    
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+    }
+    
+    func showCopyButton() {
+        copyButton.isHidden = false
     }
 }
 

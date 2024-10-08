@@ -497,6 +497,7 @@ extension ShopDataViewController {
         if let accountNumber = data.accountNumber, let bank = data.bank {
             accountGuideLabel.configure(text: "\(bank) \(accountNumber)")
             accountGuideLabel.isHidden = false
+            accountGuideLabel.showCopyButton()
         }
         
         updateAccountLabelConstraints()
