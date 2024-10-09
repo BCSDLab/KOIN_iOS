@@ -44,6 +44,9 @@ extension TabBarCollectionView {
         else if noticeListType.rawValue > 11 {
             indexPath = IndexPath(item: noticeListType.rawValue - 7, section: 0)
         }
+        else {
+            indexPath = IndexPath(item: 7, section: 0)
+        }
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath
         reloadData()
