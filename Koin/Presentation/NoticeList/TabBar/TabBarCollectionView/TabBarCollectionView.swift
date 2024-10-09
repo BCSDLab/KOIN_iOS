@@ -29,7 +29,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
         register(TabBarCollectionViewCell.self, forCellWithReuseIdentifier: TabBarCollectionViewCell.identifier)
         decelerationRate = .normal
         showsHorizontalScrollIndicator = false
-        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
+        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         dataSource = self
         delegate = self
     }
