@@ -162,7 +162,7 @@ extension AppDelegate {
                 fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                 selectedId: 0
             )
-            let movingVc = ShopViewControllerB(viewModel: viewModel, section: .shopList)
+            let movingVc = ShopViewControllerA(viewModel: viewModel)
             movingVc.title = "주변상점"
             currentVc?.navigationController?.pushViewController(movingVc, animated: true)
         }
