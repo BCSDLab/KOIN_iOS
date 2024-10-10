@@ -23,9 +23,7 @@ final class DefaultAbTestService: AbTestService {
                 KeyChainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
                 KeyChainWorker.shared.create(key: .variableName, token: response.variableName.rawValue)
             })
-            .catch { [weak self] error -> AnyPublisher<AssignAbTestResponse, ErrorResponse> in
-                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
-                
+            .catch { error -> AnyPublisher<AssignAbTestResponse, ErrorResponse> in
                 // 401 에러가 발생한 경우, 토큰 갱신 후 재시도
                 if error.code == "401" && !retry {
                     return self.networkService.refreshToken()

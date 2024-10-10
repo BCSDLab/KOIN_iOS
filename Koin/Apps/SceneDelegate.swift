@@ -19,11 +19,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-    
+        
         let abTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
-        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "benefitPage")).sink { completion in
+        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "benefitPage")).sink { [weak self] completion in
+            guard let self = self else { return }
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                let viewController = self.selectViewController()
+                let navigationController = CustomNavigationController(rootViewController: viewController)
+                window.rootViewController = navigationController
+                self.window = window
+                window.makeKeyAndVisible()
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
