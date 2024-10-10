@@ -131,6 +131,7 @@ final class ShopViewControllerB: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case let .changeFilteredShops(shops, id):
                 break
@@ -142,6 +143,9 @@ final class ShopViewControllerB: UIViewController {
                 self?.shopCollectionView.updateSeletecButtonColor(standard)
             case let .updateShopBenefits(response):
                 self?.callBenefitCollectionView.updateBenefits(benefits: response)
+                self?.callBenefitCollectionView.snp.updateConstraints({ make in
+                    make.height.equalTo(strongSelf.callBenefitCollectionView.calculateDynamicHeight())
+                })
             case let .updateBeneficialShops(response):
                 self?.updateFilteredShops(response)
             }

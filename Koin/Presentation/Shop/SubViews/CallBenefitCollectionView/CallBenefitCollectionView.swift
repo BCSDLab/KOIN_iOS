@@ -43,6 +43,7 @@ final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSou
         }
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.layoutIfNeeded()
             if let firstCell = self.cellForItem(at: IndexPath(item: 0, section: 0)) as? CallBenefitCollectionViewCell,
                let firstBenefit = self.benefits.first {
                 firstCell.updateCell(selected: true, benefit: firstBenefit)
