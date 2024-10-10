@@ -206,6 +206,7 @@ final class HomeViewControllerB: UIViewController {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopBenefit))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -409,6 +410,8 @@ extension HomeViewControllerB {
     }
     
     @objc private func callBenefitButtonTapped() {
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .mainShopBenefit))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .endEvent, .mainShopBenefit))
         navigateToShop(section: .callBenefit)
     }
     
