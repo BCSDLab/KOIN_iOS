@@ -44,6 +44,11 @@ enum EventParameter {
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
             case shopDetailViewReviewReportLogin = "shop_detail_view_review_report_login"
             case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
+            case mainShopBenefit = "main_shop_benefit"
+            case benefitShopCategories = "benefit_shop_categories"
+            case benefitShopCategoriesEvent = "benefit_shop_categories_event"
+            case benefitShopClick = "benefit_shop_click"
+            case benefitShopCall = "benefit_shop_call"
             var team: String {
                 return "BUSINESS"
             }
@@ -113,5 +118,9 @@ enum EventParameter {
         case shopDetailViewReviewBackByTab = "shopDetailViewReviewBackByTab"
         case shopDetailViewReviewBackByCall = "shopDetailViewReviewBackByCall"
         case shopDetailViewReviewBackByCategory = "shopDetailViewReviewBackByCategory"
+        case mainShopBenefit
+        case benefitShopCategories
+        case benefitShopClick
+        case benefitShopCall
     }
 }
