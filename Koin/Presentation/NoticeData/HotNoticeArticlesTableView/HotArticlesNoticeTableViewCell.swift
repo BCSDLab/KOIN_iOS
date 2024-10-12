@@ -15,6 +15,7 @@ final class HotNoticeArticlesTableViewCell: UITableViewCell {
         $0.font = .appFont(.pretendardBold, size: 12)
         $0.textAlignment = .left
         $0.textColor = .appColor(.primary600)
+        $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
     
     private let noticeTitleLabel = UILabel().then {
@@ -53,7 +54,6 @@ extension HotNoticeArticlesTableViewCell {
         boardTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(13.5)
             $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(25)
         }
         noticeTitleLabel.snp.makeConstraints {
             $0.top.equalTo(boardTitleLabel)
