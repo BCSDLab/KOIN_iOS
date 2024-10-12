@@ -76,7 +76,7 @@ extension NoticeKeywordCollectionView {
             cell.configureFilterImage()
         } else if indexPath.item - 1 < noticeKeywordList.count {
             var keyword = "#\(noticeKeywordList[indexPath.item - 1].keyword)"
-            if noticeKeywordList[indexPath.item - 1].id == -1 {
+            if noticeKeywordList[indexPath.item - 1].id == -1 || noticeKeywordList[indexPath.item - 1].keyword == "새 키워드 추가" {
                 keyword = noticeKeywordList[indexPath.item - 1].keyword
             }
             let isSelected = selectedKeywordIdx + 1 == indexPath.item
