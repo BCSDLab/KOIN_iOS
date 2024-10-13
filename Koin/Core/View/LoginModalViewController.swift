@@ -10,6 +10,7 @@ import UIKit
 
 class LoginModalViewController: UIViewController {
     let loginButtonPublisher = PassthroughSubject<Void, Never>()
+    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     var containerWidth: CGFloat = 0
     var containerHeight: CGFloat = 0
     var paddingBetweenLabels: CGFloat = 0
@@ -77,6 +78,7 @@ class LoginModalViewController: UIViewController {
     }
     
     @objc func closeButtonTapped() {
+        cancelButtonPublisher.send()
         dismiss(animated: true, completion: nil)
     }
     

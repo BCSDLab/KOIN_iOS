@@ -17,6 +17,9 @@ final class NoticeListTableView: UITableView {
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
+    let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
+    let isScrolledPublisher = PassthroughSubject<Void, Never>()
+    private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
     
@@ -71,6 +74,29 @@ final class NoticeListTableView: UITableView {
     }
 }
 
+extension NoticeListTableView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let contentOffsetY = self.contentOffset.y
+        let screenHeight = self.frame.height
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
+            scrollDirection = .scrollChecked
+            isScrolledPublisher.send()
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
+        if velocity.y > 0 {
+            scrollDirection = .scrollToTop
+        }
+        else {
+            if scrollDirection != .scrollChecked {
+                scrollDirection = .scrollToDown
+            }
+        }
+    }
+}
+
 extension NoticeListTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -96,6 +122,9 @@ extension NoticeListTableView: UITableViewDataSource {
                 self?.keywordAddBtnTapPublisher.send()
             }.store(in: &cell.subscriptions)
             cell.keywordTapPublisher.sink { [weak self] keyword in                self?.keywordTapPublisher.send(keyword)
+            }.store(in: &cell.subscriptions)
+            cell.manageKeyWordBtnTapPublisher.sink { [weak self] in
+                self?.manageKeyWordBtnTapPublisher.send()
             }.store(in: &cell.subscriptions)
             return cell
         }

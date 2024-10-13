@@ -53,21 +53,35 @@ enum EventParameter {
             // Dining
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
-            case hamburgerDining = "hamburger_dining"
+            case hamburger = "hamburger"
             case menuTime = "menu_time"
             case menuImage = "menu_image"
+            case cafeteriaInfo = "cafeteria_info"
             
             // Bus
             case mainBus = "main_bus"
             case mainBusChangeToFrom = "main_bus_changeToFrom"
             case mainBusScroll = "main_bus_scroll"
-            case hamburgerBus = "hamburger_bus"
             case busDeparture = "bus_departure"
             case busArrival = "bus_arrival"
             case busTimetable = "bus_timetable"
             case busTimetableArea = "bus_timetable_area"
             case busTimetableTime = "bus_timetable_time"
             case busTimetableExpress = "bus_timetable_express"
+            
+            case noticeTab = "notice_tab"
+            case noticePage = "notice_page"
+            case inventory = "inventory"
+            case popularNotice = "popular_notice"
+            case noticeSearch = "notice_search"
+            case popularSearchingWord = "popular_searching_word"
+            case manageKeyword = "manage_keyword"
+            case fiterAll = "filter_all"
+            case noticeFilterAll = "notice_filter_all"
+            case addKeyword = "add_keyword"
+            case recommendedKeyword = "recommended_keyword"
+            case keywordNotification = "keyword_notification"
+            case loginPopupKeyword = "login_popup_keyword"
             
             var team: String {
                 return "CAMPUS"

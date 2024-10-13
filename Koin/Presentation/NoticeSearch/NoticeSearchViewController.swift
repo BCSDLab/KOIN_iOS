@@ -135,6 +135,7 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
         }.store(in: &subscriptions)
         
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularSearchingWord, .click, "\(word)"))
             self?.textField.text = word
         }.store(in: &subscriptions)
         
@@ -148,7 +149,8 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
             let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
             let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
             let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, noticeId: noticeId)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
             let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)

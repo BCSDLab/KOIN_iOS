@@ -10,11 +10,12 @@ import Foundation
 
 final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     enum Input {
-        case addKeyword(keyword: String)
+        case addKeyword(keyword: String, isRecommended: Bool)
         case deleteKeyword(keyword: NoticeKeywordDTO)
         case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateKeyword([NoticeKeywordDTO])
@@ -32,22 +33,24 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     private let fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     init(addNotificationKeywordUseCase: AddNotificationKeywordUseCase, deleteNotificationKeywordUseCase: DeleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: FetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase,
-         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
+         changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUseCase: FetchNotiListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.addNotificationKeywordUseCase = addNotificationKeywordUseCase
         self.deleteNotificationKeywordUseCase = deleteNotificationKeywordUseCase
         self.fetchNotificationKeywordUseCase = fetchNotificationKeywordUseCase
         self.fetchRecommendedKeywordUseCase = fetchRecommendedKeywordUseCase
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
   
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .addKeyword(keyword):
-                self?.addKeyword(keyword: keyword)
+            case let .addKeyword(keyword, isRecommended):
+                self?.addKeyword(keyword: keyword, isRecommended: isRecommended)
             case .getMyKeyword:
                 self?.fetchMyKeyword()
             case let .deleteKeyword(keyWord):
@@ -56,6 +59,8 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
                 self?.changeNotification(isOn: isOn)
             case .fetchSubscription:
                 self?.fetchSubscription()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -63,7 +68,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
 }
 
 extension ManageNoticeKeywordViewModel {
-    private func addKeyword(keyword: String) {
+    private func addKeyword(keyword: String, isRecommended: Bool) {
         let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
@@ -85,6 +90,7 @@ extension ManageNoticeKeywordViewModel {
                 case .sameKeyword:
                     self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                 case .success:
+                    if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyword) }
                     self?.fetchMyKeyword()
                 }
             }).store(in: &self.subscriptions)
@@ -154,7 +160,13 @@ extension ManageNoticeKeywordViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateSwitch(isOn: isOn))
+            let value = isOn ? "on" : "off"
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: value)
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
 

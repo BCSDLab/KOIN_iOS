@@ -20,7 +20,7 @@ final class DefaultAddNotificationKeywordUseCase: AddNotificationKeywordUseCase 
     
     func execute(keyword: NoticeKeywordDTO, myKeywords: [NoticeKeywordDTO]) -> AnyPublisher<(NoticeKeywordDTO?, AddNoticeKeywordType), ErrorResponse> {
         var addKeywordResult: AddNoticeKeywordType = .success
-
+        
         if myKeywords.contains(where: { $0.keyword == keyword.keyword }) {
             addKeywordResult = .sameKeyword
         }
