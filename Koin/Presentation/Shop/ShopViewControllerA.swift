@@ -165,13 +165,13 @@ final class ShopViewControllerA: UIViewController {
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
             self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .leaveVC, .shopClick))
         }.store(in: &subscriptions)
         
         categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
             let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, .endEvent, .shopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, nil, category, .endEvent, .shopCategories))
             self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self?.searchTextField.text = ""
             self?.inputSubject.send(.changeCategory(categoryId))

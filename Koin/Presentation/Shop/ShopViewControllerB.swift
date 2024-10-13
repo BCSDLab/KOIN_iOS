@@ -112,6 +112,7 @@ final class ShopViewControllerB: UIViewController {
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
     }
     
     @objc private func appDidEnterBackground() {
@@ -155,7 +156,7 @@ final class ShopViewControllerB: UIViewController {
           
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: 0)
             self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .leaveVC, .shopClick))
         }.store(in: &subscriptions)
         
         
@@ -176,8 +177,11 @@ final class ShopViewControllerB: UIViewController {
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
         
-        callBenefitCollectionView.filterPublisher.sink { [weak self] id in
-            self?.inputSubject.send(.getBeneficialShops(id))
+        callBenefitCollectionView.filterPublisher.sink { [weak self] selectedId, previousTitle, currentTitle in
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopCategories, .click, currentTitle, previousTitle, currentTitle, .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getBeneficialShops(selectedId))
         }.store(in: &subscriptions)
     }
 }
