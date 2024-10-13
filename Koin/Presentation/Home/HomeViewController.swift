@@ -54,6 +54,52 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         return imageView
     }()
     
+    private let noticeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "공지사항"
+        label.textColor = UIColor.appColor(.primary500)
+        label.font = UIFont.appFont(.pretendardBold, size: 15)
+        return label
+    }()
+    
+    private let noticeListCollectionView: NoticeListCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        let width = UIScreen.main.bounds.width - 48
+        flowLayout.itemSize = CGSize(width: width, height: 175)
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 0
+        let collectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.decelerationRate = .fast
+        return collectionView
+    }()
+    
+    private let noticePageControl: UIPageControl = {
+        let pageControl = UIPageControl(frame: .zero)
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = 4
+        pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
+        pageControl.pageIndicatorTintColor = .appColor(.neutral300)
+        return pageControl
+    }()
+    
+    private let goNoticePageButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .medium, scale: .medium)
+        let imageView = UIImage(systemName: SFSymbols.chevronRight.rawValue , withConfiguration: imageConfig)
+        var attributedTitle = AttributedString.init("더보기")
+        attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+        config.attributedTitle = attributedTitle
+        config.image = imageView
+        config.imagePadding = 2
+        config.imagePlacement = .trailing
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        button.configuration = config
+        button.tintColor = .appColor(.neutral500)
+        return button
+    }()
+    
     private let busLabel: UILabel = {
         let label = UILabel()
         label.text = "버스/교통"
@@ -98,7 +144,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }()
     
     private let diningTooltipImageView: CancelableImageView = {
-        let imageView = CancelableImageView()
+        let imageView = CancelableImageView(frame: .zero)
         imageView.isHidden = true
         return imageView
     }()
@@ -148,6 +194,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         bind()
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
+        inputSubject.send(.getNoticeInfo)
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -221,6 +268,8 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
                 self?.updateBusTime(response)
             case .moveBusItem:
                 self?.scrollToBusItem()
+            case let .updateHotArticles(articles):
+                self?.updateHotArticles(articles: articles)
             }
         }.store(in: &subscriptions)
         
@@ -253,20 +302,51 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         diningTooltipImageView.onXButtonTapped = { [weak self] in
             self?.diningTooltipImageView.isHidden = true
         }
+        
+        noticeListCollectionView.pageDidChangedPublisher.sink { [weak self] page in
+            self?.noticePageControl.currentPage = page
+        }.store(in: &subscriptions)
+        
+        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId in
+            let service = DefaultNoticeService()
+            let repository = DefaultNoticeListRepository(service: service)
+            let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
+            let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository)
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticedataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
+            let viewController = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    @objc private func tapGoNoticePageButton() {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(noticeListViewController, animated: true)
+    }
     
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
         
         if !hasShownImage {
+            diningTooltipImageView.setUpImage(image: .appImage(asset: .diningTooltip) ?? UIImage())
             diningTooltipImageView.isHidden = false
             UserDefaults.standard.set(true, forKey: "hasShownTooltip")
         }
     }
     
+    @objc private func pageControlDidChange(_ sender: UIPageControl) {
+        noticeListCollectionView.pageControlChanged(sender.currentPage)
+    }
+ 
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
         inputSubject.send(.categorySelected(getDiningPlace()))
         
@@ -367,8 +447,7 @@ extension HomeViewController {
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "식단"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "\(menuLabel.text ?? "")", nil, nil, nil, nil))
     }
     
     @objc private func busViewTapped() {
@@ -387,6 +466,10 @@ extension HomeViewController {
         else {
             self.menuLabel.text = "내일 식단"
         }
+    }
+    
+    private func updateHotArticles(articles: [NoticeArticleDTO]) {
+        noticeListCollectionView.updateNoticeList(articles)
     }
     
     private func putImage(data: ShopCategoryDTO) {
@@ -460,7 +543,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -486,8 +569,28 @@ extension HomeViewController {
             make.trailing.equalTo(wrapperView.snp.trailing)
             make.bottom.equalTo(wrapperView.snp.bottom)
         }
+        noticeLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(24)
+            make.leading.equalToSuperview().offset(24)
+            make.height.equalTo(29)
+        }
+        noticeListCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(noticeLabel.snp.bottom).offset(8)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(95)
+        }
+        noticePageControl.snp.makeConstraints { make in
+            make.top.equalTo(noticeListCollectionView.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+        }
+        goNoticePageButton.snp.makeConstraints { make in
+            make.top.equalTo(noticeLabel).offset(3)
+            make.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(22)
+        }
         busLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(40)
+            make.top.equalTo(noticePageControl.snp.bottom).offset(12)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
@@ -562,6 +665,8 @@ extension HomeViewController {
         setUpRoundedCorners()
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        noticePageControl.addTarget(self, action: #selector(pageControlDidChange), for: .valueChanged)
+        goNoticePageButton.addTarget(self, action: #selector(tapGoNoticePageButton), for: .touchUpInside)
         scrollView.refreshControl = refreshControl
         self.view.backgroundColor = .systemBackground
     }

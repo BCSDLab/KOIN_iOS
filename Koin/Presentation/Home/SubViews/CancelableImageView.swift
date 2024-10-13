@@ -10,7 +10,6 @@ import UIKit
 final class CancelableImageView: UIView {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .diningTooltip)
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
@@ -32,6 +31,10 @@ final class CancelableImageView: UIView {
         addSubview(imageView)
         imageView.frame = self.bounds
         imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+    
+    func setUpImage(image: UIImage) {
+        imageView.image = image
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

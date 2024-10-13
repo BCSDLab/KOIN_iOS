@@ -13,6 +13,20 @@ import UserNotifications
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true), let path = components.path, let params = components.queryItems else { return false }
+        if path == "KEYWORD" {
+            if let noticeId = params.first?.value {
+                navigateToNoticeData(noticeId: Int(noticeId) ?? 0)
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        return false
+    }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         let application = UIApplication.shared
@@ -39,8 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         ]
         appearance.titleTextAttributes = titleAttribute
         appearance.largeTitleTextAttributes = titleAttribute
-        appearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
-        
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
@@ -119,6 +131,15 @@ extension AppDelegate: MessagingDelegate {
 }
 
 extension AppDelegate {
+    func navigateToNoticeData(noticeId: Int) {
+        let currentVc = UIApplication.topViewController()
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
+        let vc = NoticeDataViewController(viewModel: viewModel)
+        currentVc?.navigationController?.pushViewController(vc, animated: true)
+    }
     func navigateToScene(category: String) {
         if category == "dining" {
             let currentVc = UIApplication.topViewController()

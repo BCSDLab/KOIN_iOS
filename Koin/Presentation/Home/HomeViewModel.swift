@@ -19,6 +19,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
+        case getNoticeInfo
     }
     
     // MARK: - Output
@@ -26,6 +27,7 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusCardInformation)
+        case updateHotArticles([NoticeArticleDTO])
         case putImage(ShopCategoryDTO)
         case moveBusItem
     }
@@ -39,17 +41,19 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchBusInformationListUseCase: FetchBusInformationListUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
     // MARK: - Initialization
-    
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, dateProvder: DateProvider) {
+
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
+        self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.dateProvider = dateProvder
     }
     
@@ -69,6 +73,9 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case .getNoticeInfo:
+                self?.getHotNoticeArticles()
+
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -134,6 +141,16 @@ extension HomeViewModel {
     
     private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+    
+    private func getHotNoticeArticles() {
+        fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] articles in
+            self?.outputSubject.send(.updateHotArticles(articles))
+        }.store(in: &subscriptions)
     }
 }
 
