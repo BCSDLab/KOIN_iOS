@@ -21,7 +21,7 @@ final class FacilityInfoViewController: CustomViewController, WKNavigationDelega
     }
     
     private func loadWebView() {
-        if let url = URL(string: "http://koreatech.in/campusinfo") {
+        if let url = URL(string: "https://koreatech.in/webview/campusinfo") {
             let request = URLRequest(url: url)
             webView.load(request)
         }
