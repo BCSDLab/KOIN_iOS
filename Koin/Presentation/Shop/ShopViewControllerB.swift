@@ -156,7 +156,7 @@ final class ShopViewControllerB: UIViewController {
           
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: 0)
             self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopClick, .click, shopName, nil, shopName, .leaveVC, .shopClick))
         }.store(in: &subscriptions)
         
         
