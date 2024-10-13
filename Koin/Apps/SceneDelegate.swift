@@ -22,12 +22,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchBusInformationListUseCase = DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService()))
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
-
-        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), dateProvder: dateProvider))
-
+        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, dateProvder: dateProvider))
+        
         let navigationController = CustomNavigationController(rootViewController: mainViewController)
         window.rootViewController = navigationController
         self.window = window

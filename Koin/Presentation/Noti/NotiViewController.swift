@@ -262,7 +262,7 @@ extension NotiViewController {
                 eventSwitch.isOn = subscribe.isPermit ?? false
             case .diningImageUpload:
                 diningImageUploadSwitch.isOn = subscribe.isPermit ?? false
-            case .none:
+            default:
                 print("none")
             }
             
