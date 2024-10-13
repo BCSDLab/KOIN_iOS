@@ -181,6 +181,7 @@ final class ShopViewControllerB: UIViewController {
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopCategories))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopCategories, .click, currentTitle, previousTitle, currentTitle, .endEvent, .benefitShopCategories))
             self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+            self?.viewModel.shopCallBenefitFilterName = currentTitle
             self?.inputSubject.send(.getBeneficialShops(selectedId))
         }.store(in: &subscriptions)
     }
