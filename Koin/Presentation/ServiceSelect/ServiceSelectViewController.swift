@@ -113,6 +113,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
+    private let facilityInfoSelectButton: UIButton = {
+        let button = UIButton()
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
     private let timetableSelectButton: UIButton = {
         let button = UIButton()
         button.setTitle("시간표", for: .normal)
@@ -230,6 +236,7 @@ extension ServiceSelectViewController {
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
         notiButton.addTarget(self, action: #selector(notiButtonTapped), for: .touchUpInside)
         noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
+        facilityInfoSelectButton.addTarget(self, action: #selector(facilityInfoSelectButtonTapped), for: .touchUpInside)
     }
     
     @objc private func notiButtonTapped() {
@@ -331,6 +338,11 @@ extension ServiceSelectViewController {
     }
     */
     
+    @objc func facilityInfoSelectButtonTapped() {
+        let viewController = FacilityInfoViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc func landSelectButtonTapped() {
         let landService = DefaultLandService()
         let landRepository = DefaultLandRepository(service: landService)
@@ -417,15 +429,15 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton, noticeListButton].forEach {
+        [backButton,nicknameLabel, greetingLabel, myInfoButton, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, notiButton, noticeListButton, facilityInfoSelectButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "복덕방", "코인 for Business"]
-        for idx in 0...5 {
+        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
+        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        for idx in 0...6 {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
             var attributedString = AttributedString.init(stringLiteral: buttonName[idx])
@@ -521,8 +533,13 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        landSelectButton.snp.makeConstraints { make in
+        facilityInfoSelectButton.snp.makeConstraints { make in
             make.top.equalTo(diningSelectButton.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(58)
+        }
+        landSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(facilityInfoSelectButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)

@@ -67,6 +67,7 @@
 		8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE3C2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift */; };
 		8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */; };
 		8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataService.swift */; };
+		835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B4BE12CB0237900937B66 /* FacilityInfoViewController.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */; };
 		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
@@ -495,6 +496,7 @@
 		8354BE3C2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8354BE512C7A0566009D4D7A /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		835B4BE12CB0237900937B66 /* FacilityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityInfoViewController.swift; sourceTree = "<group>"; };
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
@@ -1094,6 +1096,14 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		835B4BE02CB0236400937B66 /* FacilityInfo */ = {
+			isa = PBXGroup;
+			children = (
+				835B4BE12CB0237900937B66 /* FacilityInfoViewController.swift */,
+			);
+			path = FacilityInfo;
+			sourceTree = "<group>";
+		};
 		835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1543,6 +1553,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				835B4BE02CB0236400937B66 /* FacilityInfo */,
 				8354BE272C78CEE7009D4D7A /* ManageNoticeKeyWord */,
 				8354BE132C789096009D4D7A /* NoticeSearch */,
 				833D9C502C7344F400982145 /* NoticeData */,
@@ -2731,6 +2742,7 @@
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
+				835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
 				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
 				D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */,

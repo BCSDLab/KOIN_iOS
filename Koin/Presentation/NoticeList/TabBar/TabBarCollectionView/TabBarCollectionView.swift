@@ -29,7 +29,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
         register(TabBarCollectionViewCell.self, forCellWithReuseIdentifier: TabBarCollectionViewCell.identifier)
         decelerationRate = .normal
         showsHorizontalScrollIndicator = false
-        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
+        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         dataSource = self
         delegate = self
     }
@@ -43,6 +43,9 @@ extension TabBarCollectionView {
         }
         else if noticeListType.rawValue > 11 {
             indexPath = IndexPath(item: noticeListType.rawValue - 7, section: 0)
+        }
+        else {
+            indexPath = IndexPath(item: 7, section: 0)
         }
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath

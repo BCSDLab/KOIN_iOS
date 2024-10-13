@@ -180,6 +180,9 @@ extension NoticeListViewController {
         else if noticeListType.rawValue > 11 {
             tabBarCollectionView.tag = noticeListType.rawValue - 7
         }
+        else {
+            tabBarCollectionView.tag = 7
+        }
     }
  
     private func updateUserKeywordList(keywords: [NoticeKeywordDTO], keywordIdx: Int) {

@@ -112,6 +112,7 @@ final class ManageNoticeKeywordViewController: CustomViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getMyKeyword)
+        inputSubject.send(.fetchSubscription)
     }
 
     // MARK: - Initialization
