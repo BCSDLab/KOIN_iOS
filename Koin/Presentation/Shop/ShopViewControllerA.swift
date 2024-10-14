@@ -125,6 +125,7 @@ final class ShopViewControllerA: UIViewController {
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
     }
     
     @objc private func appDidEnterBackground() {
@@ -164,8 +165,8 @@ final class ShopViewControllerA: UIViewController {
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
-            self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .endEvent, .shopClick))
         }.store(in: &subscriptions)
         
         categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
@@ -173,6 +174,7 @@ final class ShopViewControllerA: UIViewController {
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, nil, category, .endEvent, .shopCategories))
             self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
             self?.searchTextField.text = ""
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)

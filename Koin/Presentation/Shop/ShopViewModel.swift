@@ -193,11 +193,7 @@ extension ShopViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
         if let currentPage = currentPage {
-            if eventLabelNeededDuration == .shopClick || eventLabelNeededDuration == .benefitShopClick{
-                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: shopCallBenefitFilterName, currentPage: currentPage, durationTime: "\(durationTime)")
-            }
-            else if eventLabelNeededDuration == .shopCategories {
+            if eventLabelNeededDuration == .shopCategories {
                 let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
                 let selectedNewShopName = categoryName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
                 logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: selectedNewShopName, previousPage: categoryName, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
