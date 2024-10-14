@@ -172,6 +172,7 @@ final class HomeViewControllerB: UIViewController {
         checkAndShowTooltip()
         shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
         callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
@@ -206,6 +207,7 @@ final class HomeViewControllerB: UIViewController {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopBenefit))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -409,6 +411,8 @@ extension HomeViewControllerB {
     }
     
     @objc private func callBenefitButtonTapped() {
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .mainShopBenefit))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .endEvent, .mainShopBenefit))
         navigateToShop(section: .callBenefit)
     }
     

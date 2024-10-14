@@ -11,8 +11,9 @@ import UIKit
 final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     private var cancellables = Set<AnyCancellable>()
-    let filterPublisher = PassthroughSubject<Int, Never>()
+    let filterPublisher = PassthroughSubject<(Int, String, String), Never>()
     private var benefits: [Benefit] = []
+    private var previousId: Int = 1
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -117,9 +118,10 @@ extension CallBenefitCollectionView {
                 }
             }
         }
-        
+
         // Footer 업데이트
-        filterPublisher.send(selectedBenefit.id)
+        filterPublisher.send((selectedBenefit.id, benefits[previousId - 1].title, benefits[selectedBenefit.id - 1].title))
+        previousId = selectedBenefit.id
         if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {
             footerView.updateLabel(with: selectedBenefit.detail)
         }

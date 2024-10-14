@@ -125,6 +125,7 @@ final class ShopViewControllerA: UIViewController {
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
     }
     
     @objc private func appDidEnterBackground() {
@@ -164,15 +165,16 @@ final class ShopViewControllerA: UIViewController {
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
-            self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .endEvent, .shopClick))
         }.store(in: &subscriptions)
         
         categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
             let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, .endEvent, .shopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, nil, category, .endEvent, .shopCategories))
             self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
             self?.searchTextField.text = ""
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
@@ -267,7 +269,7 @@ extension ShopViewControllerA {
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)

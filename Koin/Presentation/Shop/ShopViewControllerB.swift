@@ -112,6 +112,8 @@ final class ShopViewControllerB: UIViewController {
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopClick))
     }
     
     @objc private func appDidEnterBackground() {
@@ -154,8 +156,8 @@ final class ShopViewControllerB: UIViewController {
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
           
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: 0)
-            self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopClick, .click, shopName, nil, shopName, .endEvent, .benefitShopClick))
         }.store(in: &subscriptions)
         
         
@@ -176,8 +178,13 @@ final class ShopViewControllerB: UIViewController {
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
         
-        callBenefitCollectionView.filterPublisher.sink { [weak self] id in
-            self?.inputSubject.send(.getBeneficialShops(id))
+        callBenefitCollectionView.filterPublisher.sink { [weak self] selectedId, previousTitle, currentTitle in
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopCategories, .click, currentTitle, previousTitle, currentTitle, .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopClick))
+            self?.viewModel.shopCallBenefitFilterName = currentTitle
+            self?.inputSubject.send(.getBeneficialShops(selectedId))
         }.store(in: &subscriptions)
     }
 }
@@ -253,7 +260,7 @@ extension ShopViewControllerB {
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: true)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)

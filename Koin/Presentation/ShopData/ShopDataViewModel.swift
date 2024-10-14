@@ -15,6 +15,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let shopId: Int
     private let shopName: String
     private let categoryId: Int?
+    private let enterByShopCallBenefit: Bool
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let fetchShopMenuListUseCase: FetchShopMenuListUseCase
     private let fetchShopEventListUseCase: FetchShopEventListUseCase
@@ -53,7 +54,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case disappearReview(Int, Int)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, shopId: Int, shopName: String, categoryId: Int?) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, shopId: Int, shopName: String, categoryId: Int?, enterByShopCallBenefit: Bool) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
@@ -65,6 +66,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         self.shopId = shopId
         self.shopName = shopName
         self.categoryId = categoryId
+        self.enterByShopCallBenefit = enterByShopCallBenefit
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -200,8 +202,8 @@ extension ShopDataViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration == .shopCall {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-            
-            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+            let eventLabel = enterByShopCallBenefit ? EventParameter.EventLabel.Business.benefitShopCall : EventParameter.EventLabel.Business.shopCall
+            logAnalyticsEventUseCase.executeWithDuration(label: eventLabel, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
         }
         else if eventLabelNeededDuration == .shopDetailViewBack {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)

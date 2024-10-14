@@ -121,8 +121,11 @@ extension HomeViewModel {
        }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if let eventLabelNeededDuration = eventLabelNeededDuration {
-            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+        if eventLabelNeededDuration != nil {
+            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            if eventLabelNeededDuration == .mainShopBenefit {
+                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            }
             
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
         }
