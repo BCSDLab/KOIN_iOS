@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let abTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
-        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "benefitPage")).sink { [weak self] completion in
+        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "Benefit")).sink { [weak self] completion in
             guard let self = self else { return }
             if case let .failure(error) = completion {
                 let viewController = self.selectViewController()
