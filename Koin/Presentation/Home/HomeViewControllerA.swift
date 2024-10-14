@@ -190,6 +190,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     

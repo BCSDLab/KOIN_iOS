@@ -172,6 +172,7 @@ final class HomeViewControllerB: UIViewController {
         checkAndShowTooltip()
         shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
         callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")

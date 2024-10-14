@@ -15,6 +15,13 @@ protocol EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
+        enum ABTest: String, EventLabelType {
+            case businessBenefit = "BUSINESS_benefit_1"
+            var team: String {
+                return "A/B_TEST"
+            }
+        }
+        
         enum Business: String, EventLabelType {
             // Shop
             case mainShopCategories = "main_shop_categories"
@@ -107,6 +114,7 @@ enum EventParameter {
         case click
         case scroll
         case swipe
+        case abTest = "a/b test 로깅(3차 스프린트, 혜택페이지)"
     }
     
     enum EventLabelNeededDuration: String {
