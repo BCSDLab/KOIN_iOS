@@ -15,13 +15,13 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case searchWord(String, Date, Int)
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
-        case fetchSearchedResult(Int, String?)
+        case fetchSearchedResult(Int, String?, Bool)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateHotKeyWord([String])
         case updateRecentSearchedWord([RecentSearchedWordInfo])
-        case updateSearchedrsult([NoticeArticleDTO], Bool)
+        case updateSearchedrsult([NoticeArticleDTO], Bool, Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -52,8 +52,8 @@ final class NoticeSearchViewModel: ViewModelProtocol {
                 self?.fetchRecentSearchedWord()
             case .deleteAllSearchedWords:
                 self?.deleteAllSearchedWords()
-            case let .fetchSearchedResult(page, keyWord):
-                self?.fetchSearchedResult(page: page, keyWord: keyWord)
+            case let .fetchSearchedResult(page, keyWord, isNewPage):
+                self?.fetchSearchedResult(page: page, keyWord: keyWord, isNewPage: isNewPage)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -95,7 +95,7 @@ extension NoticeSearchViewModel {
         self.outputSubject.send(.updateRecentSearchedWord([]))
     }
     
-    private func fetchSearchedResult(page: Int, keyWord: String?) {
+    private func fetchSearchedResult(page: Int, keyWord: String?, isNewPage: Bool) {
         let requestModel = SearchNoticeArticleRequest(query: keyWord ?? self.keyWord, boardId: nil, page: page, limit: 5)
         if let keyWord = keyWord {
             self.keyWord = keyWord
@@ -106,10 +106,10 @@ extension NoticeSearchViewModel {
             }
         }, receiveValue: { [weak self] articles in
             if articles.currentPage == articles.totalPage {
-                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], true))
+                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], true, isNewPage))
             }
             else {
-                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false))
+                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false, isNewPage))
             }
         }).store(in: &subscriptions)
     }

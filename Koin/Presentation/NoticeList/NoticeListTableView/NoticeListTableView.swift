@@ -55,10 +55,11 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO]) {
-        
+    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isNewKeyword: Bool) {
+        if isNewKeyword {
+            self.noticeArticleList = []
+        }
         self.noticeArticleList.append(contentsOf: noticeArticleList)
-        
         isForSearch = true
         let indexSet = IndexSet(integer: 1)
         reloadSections(indexSet, with: .automatic)
