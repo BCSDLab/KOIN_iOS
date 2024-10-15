@@ -287,6 +287,8 @@ final class HomeViewControllerB: UIViewController {
             case .putImage: break
             case let .updateHotArticles(articles):
                 self?.updateHotArticles(articles: articles)
+            case .showForceUpdate:
+                self?.navigateToForceUpdate()
             }
         }.store(in: &subscriptions)
         
@@ -350,6 +352,12 @@ extension HomeViewControllerB {
             let noticeListViewController = NoticeListViewController(viewModel: viewModel)
             navigationController?.pushViewController(noticeListViewController, animated: true)
         }
+    
+    private func navigateToForceUpdate() {
+            let viewController = ForceUpdateViewController()
+            navigationController?.pushViewController(viewController, animated: false)
+        }
+    
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
         
