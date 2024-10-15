@@ -325,7 +325,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
 }
 
 extension HomeViewControllerA {
-
+    
     @objc private func tapGoNoticePageButton() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -339,7 +339,8 @@ extension HomeViewControllerA {
     
     private func navigateToForceUpdate() {
         let viewController = ForceUpdateViewController()
-        navigationController?.pushViewController(viewController, animated: false)
+        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true, completion: nil)
     }
     
     private func checkAndShowTooltip() {
@@ -354,7 +355,7 @@ extension HomeViewControllerA {
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
         noticeListCollectionView.pageControlChanged(sender.currentPage)
     }
- 
+    
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
         inputSubject.send(.categorySelected(getDiningPlace()))
         

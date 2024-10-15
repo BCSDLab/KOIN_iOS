@@ -354,9 +354,10 @@ extension HomeViewControllerB {
         }
     
     private func navigateToForceUpdate() {
-            let viewController = ForceUpdateViewController()
-            navigationController?.pushViewController(viewController, animated: false)
-        }
+        let viewController = ForceUpdateViewController()
+        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true, completion: nil)
+    }
     
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")

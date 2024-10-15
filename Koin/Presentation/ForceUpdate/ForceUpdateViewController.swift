@@ -18,10 +18,6 @@ final class ForceUpdateViewController: UIViewController {
     private let scrollView = UIScrollView().then { scrollView in
     }
     
-    private let closeButton = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .power), for: .normal)
-    }
-    
     private let logoImageView = UIImageView().then { imageView in
         imageView.image = UIImage.appImage(asset: .koinBigLogo)
     }
@@ -100,7 +96,6 @@ final class ForceUpdateViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
         errorCheckButton.addTarget(self, action: #selector(errorCheckButtonTapped), for: .touchUpInside)
     }
@@ -150,7 +145,7 @@ extension ForceUpdateViewController {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [closeButton, logoImageView, titleLabel, descriptionLabel, updateButton, errorCheckButton, companyLabel].forEach {
+        [logoImageView, titleLabel, descriptionLabel, updateButton, errorCheckButton, companyLabel].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -159,14 +154,8 @@ extension ForceUpdateViewController {
         scrollView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        closeButton.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(18)
-            make.trailing.equalTo(view.snp.trailing).offset(-29)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        }
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(closeButton.snp.bottom).offset(7)
+            make.top.equalTo(scrollView.snp.top).offset(71.73)
             make.centerX.equalTo(view.snp.centerX)
             make.width.equalTo(150)
             make.height.equalTo(200)
