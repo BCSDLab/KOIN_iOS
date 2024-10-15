@@ -34,11 +34,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //앱이 켜져있는 상태에서 푸쉬 알림을 눌렀을 때
         if application.applicationState == .active || application.applicationState == .inactive || application.applicationState == .background {
             if let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String {
+                if category == "keyword" {
+                    // schemeUri에서 ID 추출
+                    if let schemeUri = userInfo["schemeUri"] as? String {
+                        
+                        guard let id = extractID(from: schemeUri) else { return }// schemeUri에서 ID 추출하는 함수 호출
+                        guard let intId = Int(id) else { return }
+                        let currentVc = UIApplication.topViewController()
+                             let service = DefaultNoticeService()
+                             let repository = DefaultNoticeListRepository(service: service)
+                        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: intId)
+                             let vc = NoticeDataViewController(viewModel: viewModel)
+                             currentVc?.navigationController?.pushViewController(vc, animated: true)
+
+                        
+                    } else {
+                        print("No schemeUri found")
+                        
+                    }
+                }
+                
+                // 원하는 화면으로 이동
                 navigateToScene(category: category)
             }
             completionHandler()
         }
     }
+    
+    private func extractID(from urlString: String) -> String? {
+         // URLComponents로 URL을 파싱
+         var components = URLComponents(string: urlString)
+         
+         // URL 쿼리 아이템에서 "id" 추출
+         return components?.queryItems?.first(where: { $0.name == "id" })?.value
+     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         KakaoSDK.initSDK(appKey: Bundle.main.kakaoApiKey)
