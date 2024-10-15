@@ -24,6 +24,8 @@ protocol ShopRepository {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }

@@ -5,34 +5,40 @@
 //  Created by 김나훈 on 1/14/24.
 //
 
+import Combine
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     var urlParameters: [String: String]?
+    private var subscriptions: Set<AnyCancellable> = []
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
+
+        let abTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
+        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "Benefit")).sink { [weak self] completion in
+            guard let self = self else { return }
+            if case let .failure(error) = completion {
+                let viewController = self.selectViewController()
+                let navigationController = CustomNavigationController(rootViewController: viewController)
+                window.rootViewController = navigationController
+                self.window = window
+                window.makeKeyAndVisible()
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            let viewController = self.selectViewController()
+            let navigationController = CustomNavigationController(rootViewController: viewController)
+            window.rootViewController = navigationController
+            self.window = window
+            window.makeKeyAndVisible()
+        }.store(in: &subscriptions)
         
-        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchBusInformationListUseCase = DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let mainViewController = HomeViewController(viewModel: HomeViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, fetchShopCategoryUseCase: fetchShopCategoryUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())), fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, dateProvder: dateProvider))
-        
-        let navigationController = CustomNavigationController(rootViewController: mainViewController)
-        window.rootViewController = navigationController
-        self.window = window
-        window.makeKeyAndVisible()
         
         // URL 처리
         if let urlContext = connectionOptions.urlContexts.first {
@@ -44,7 +50,39 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let urlContext = URLContexts.first else { return }
         handleIncomingURL(urlContext.url)
     }
+    
+    private func selectViewController() -> UIViewController {
+        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let dateProvider = DefaultDateProvider()
+        
+        let homeViewModel = HomeViewModel(
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())),
+            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
+            dateProvider: dateProvider
+        )
 
+       
+        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "A"
+        let variableName = UserAssignType(rawValue: userType) ?? .a
+        let mainViewController: UIViewController
+        switch variableName {
+        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
+        default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
+        }
+        
+        return mainViewController
+    }
+    
     private func handleIncomingURL(_ url: URL) {
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             var parameters: [String: String] = [:]
@@ -66,7 +104,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             navigateToDiningViewController(date: date, type: type, place: place, from: rootViewController)
         }
     }
-
+    
     private func navigateToDiningViewController(date: String, type: String, place: String, from rootViewController: UIViewController) {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()

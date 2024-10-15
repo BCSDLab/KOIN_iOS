@@ -14,6 +14,8 @@ enum ShopAPI {
     case fetchShopData(FetchShopDataRequest)
     case fetchShopMenuList(FetchShopDataRequest)
     case fetchShopEventList(FetchShopDataRequest)
+    case fetchShopBenefits
+    case fetchBeneficialShops(Int)
     
     case fetchReviewList(FetchShopReviewRequest)
     case fetchReview(Int, Int)
@@ -34,6 +36,8 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var path: String {
         switch self {
+        case .fetchShopBenefits: return "/benefit/categories"
+        case .fetchBeneficialShops(let id): return "/benefit/\(id)/shops"
         case .fetchShopList: return "/v2/shops"
         case .fetchEventList: return "/shops/events"
         case .fetchShopCategoryList: return "/shops/categories"
@@ -63,7 +67,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList: break
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits: break
         default:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
@@ -81,7 +85,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()

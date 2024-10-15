@@ -35,7 +35,7 @@ final class ShopCollectionView: UICollectionView, UICollectionViewDataSource, UI
     
     func updateCategories(_ categories: [ShopCategory]) {
          self.storeCategories = categories
-         self.reloadData() 
+         self.reloadData()
      }
 }
 

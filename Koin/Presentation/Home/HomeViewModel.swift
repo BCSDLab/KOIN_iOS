@@ -5,8 +5,8 @@
 //  Created by 김나훈 on 3/10/24.
 //
 
-import Alamofire
 import Combine
+import Foundation
 
 final class HomeViewModel: ViewModelProtocol {
     
@@ -37,8 +37,8 @@ final class HomeViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private let fetchDiningListUseCase: FetchDiningListUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let dateProvider: DateProvider
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
+    private let dateProvider: DateProvider
     private let fetchBusInformationListUseCase: FetchBusInformationListUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
@@ -46,15 +46,20 @@ final class HomeViewModel: ViewModelProtocol {
     private (set) var moved = false
     
     // MARK: - Initialization
-
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, fetchShopCategoryUseCase: FetchShopCategoryListUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchBusInformationListUseCase: FetchBusInformationListUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, dateProvder: DateProvider) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
+         fetchBusInformationListUseCase: FetchBusInformationListUseCase,
+         fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
+         fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
+         dateProvider: DateProvider) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.fetchShopCategoryListUseCase = fetchShopCategoryUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
-        self.dateProvider = dateProvder
+        self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
+        self.dateProvider = dateProvider
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -84,7 +89,7 @@ final class HomeViewModel: ViewModelProtocol {
 }
 
 extension HomeViewModel {
-    // TODO: 아직 버스 리팩토링이 완료되지 않았으므로 여기서 Alamofire 호출.
+    
     private func getBusInformation(_ from: BusPlace, _ to: BusPlace, _ type: BusType) {
         
         fetchBusInformationListUseCase.execute(departedPlace: from, arrivedPlace: to).sink { completion in
@@ -105,7 +110,6 @@ extension HomeViewModel {
     }
     
     private func getDiningInformation(diningPlace: DiningPlace = .cornerA) {
-        
         let dateInfo = dateProvider.execute(date: Date())
         
         fetchDiningListUseCase.execute(diningInfo: dateInfo).sink { completion in
@@ -119,18 +123,21 @@ extension HomeViewModel {
     }
     
     private func getShopCategory() {
-        fetchShopCategoryListUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.putImage(response))
-        }.store(in: &subscriptions)
-    }
+           fetchShopCategoryListUseCase.execute().sink { completion in
+               if case let .failure(error) = completion {
+                   Log.make().error("\(error)")
+               }
+           } receiveValue: { [weak self] response in
+               self?.outputSubject.send(.putImage(response))
+           }.store(in: &subscriptions)
+       }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if let eventLabelNeededDuration = eventLabelNeededDuration {
-            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+        if eventLabelNeededDuration != nil {
+            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            if eventLabelNeededDuration == .mainShopBenefit {
+                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            }
             
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
         }
