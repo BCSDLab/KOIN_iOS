@@ -22,7 +22,7 @@ extension DiningAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchDiningList: return "/dinings"
-        case .fetchCoopShopList: return "/coopshop"
+        case .fetchCoopShopList: return "/coopshop/1"
         case let .diningLike(_, isLiked): return isLiked ? "/dining/like/cancel" : "/dining/like"
         }
     }

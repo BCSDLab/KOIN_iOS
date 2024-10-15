@@ -20,7 +20,7 @@ final class DefaultDiningRepository: DiningRepository {
         return diningService.fetchDiningList(requestModel: requestModel, retry: false)
     }
     
-    func fetchCoopShopList() -> AnyPublisher<[CoopShopDTO], Error> {
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDTO, Error> {
         return diningService.fetchCoopShopList()
     }
     
