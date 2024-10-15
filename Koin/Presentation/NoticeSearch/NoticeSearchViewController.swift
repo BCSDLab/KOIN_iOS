@@ -123,8 +123,8 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
                 self?.updateRecommendedHotWord(keyWords: keyWords)
             case .updateRecentSearchedWord(words: let words):
                 self?.updateRecentSearchedWord(words: words)
-            case let .updateSearchedrsult(searchedResult, isLastPage):
-                self?.updateSearchedResult(searchedResult: searchedResult, isLastPage: isLastPage)
+            case let .updateSearchedrsult(searchedResult, isLastPage, isNewPage):
+                self?.updateSearchedResult(searchedResult: searchedResult, isLastPage: isLastPage, isNewPage: isNewPage)
             }
         }.store(in: &subscriptions)
         
@@ -140,7 +140,7 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
         }.store(in: &subscriptions)
         
         noticeListTableView.tapListLoadButtnPublisher.sink { [weak self] page in
-            self?.inputSubject.send(.fetchSearchedResult(page, nil))
+            self?.inputSubject.send(.fetchSearchedResult(page, nil, false))
         }.store(in: &subscriptions)
        
         noticeListTableView.tapNoticePublisher.sink { [weak self] noticeId in
@@ -185,7 +185,7 @@ extension NoticeSearchViewController {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
             inputSubject.send(.searchWord(text, Date(), 0))
-            inputSubject.send(.fetchSearchedResult(1, text))
+            inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
         }
         textField.text = ""
@@ -199,7 +199,7 @@ extension NoticeSearchViewController {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
             inputSubject.send(.searchWord(text, Date(), 0))
-            inputSubject.send(.fetchSearchedResult(1, text))
+            inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
         }
         textField.text = ""
@@ -214,7 +214,7 @@ extension NoticeSearchViewController {
         recentSearchTableView.updateRecentSearchedWords(words: words)
     }
     
-    private func updateSearchedResult(searchedResult: [NoticeArticleDTO], isLastPage: Bool) {
+    private func updateSearchedResult(searchedResult: [NoticeArticleDTO], isLastPage: Bool, isNewPage: Bool) {
         [popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView].forEach {
             $0.isHidden = true
         }
@@ -225,7 +225,7 @@ extension NoticeSearchViewController {
         else {
             emptyNoticeGuideLabel.isHidden = true
             noticeListTableView.isHidden = false
-            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult)
+            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult, isNewKeyword: isNewPage)
         }
     }
 }
