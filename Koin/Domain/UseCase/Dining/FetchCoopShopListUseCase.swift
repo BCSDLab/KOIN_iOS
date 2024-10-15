@@ -23,10 +23,7 @@ final class DefaultFetchCoopShopListUseCase: FetchCoopShopListUseCase {
     func execute() -> AnyPublisher<CoopShopData, Error> {
         return diningRepository.fetchCoopShopList()
             .tryMap { coopShopDTOs -> CoopShopData in
-                guard let firstCoopShopDTO = coopShopDTOs.first else {
-                    throw URLError(.badServerResponse)
-                }
-                return firstCoopShopDTO.toDomain()
+                return coopShopDTOs.toDomain()
             }
             .eraseToAnyPublisher()
     }
