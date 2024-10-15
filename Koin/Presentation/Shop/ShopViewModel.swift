@@ -12,11 +12,14 @@ final class ShopViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
+        case viewDidLoadB
         case changeCategory(Int)
         case searchTextChanged(String)
         case changeSortStandard(Any)
         case getShopInfo
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case getShopBenefits
+        case getBeneficialShops(Int)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
     
@@ -25,6 +28,8 @@ final class ShopViewModel: ViewModelProtocol {
         case changeFilteredShops([Shop], Int)
         case updateSeletecButtonColor(FetchShopListRequest)
         case updateEventShops([EventDTO])
+        case updateShopBenefits(ShopBenefitsDTO)
+        case updateBeneficialShops([Shop])
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -34,8 +39,11 @@ final class ShopViewModel: ViewModelProtocol {
     private let searchShopUseCase: SearchShopUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
+    private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
+    var shopCallBenefitFilterName: String = "배달비 깎아드려유"
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
         didSet {
             getShopInfo(id: selectedId)
@@ -46,14 +54,16 @@ final class ShopViewModel: ViewModelProtocol {
             getShopInfo(id: selectedId)
         }
     }
-
-    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, selectedId: Int) {
+    
+    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchShopBenefitUseCase: FetchShopBenefitUseCase, fetchBeneficialShopUseCase: FetchBeneficialShopUseCase, selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.searchShopUseCase = searchShopUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
+        self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
+        self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
     }
     
@@ -71,10 +81,18 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeSortStandard(standard)
             case .getShopInfo:
                 self?.getShopInfo(id: self?.selectedId ?? 0)
-            case let .logEvent(label, category, value, currentPage, durationType, eventLabelNeededDuration):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value,currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case .getShopBenefits:
+                self?.fetchShopBenefits()
+            case let .getBeneficialShops(id):
+                self?.fetchBeneficialShops(id: id)
+            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case .viewDidLoadB:
+                self?.fetchShopBenefits()
+                self?.getEventShopList()
+                self?.fetchBeneficialShops(id: 1)
             }
         }.store(in: &subscriptions)
         
@@ -83,6 +101,26 @@ final class ShopViewModel: ViewModelProtocol {
 }
 
 extension ShopViewModel {
+    
+    private func fetchShopBenefits() {
+        fetchShopBenefitUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateShopBenefits(response))
+        }.store(in: &subscriptions)
+    }
+    
+    private func fetchBeneficialShops(id: Int) {
+        fetchBeneficialShopUseCase.execute(id: id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateBeneficialShops(response))
+        }.store(in: &subscriptions)
+    }
     
     private func changeSortStandard(_ standard: Any) {
         if let sortType = standard as? FetchShopSortType {
@@ -152,18 +190,17 @@ extension ShopViewModel {
         else { selectedId = id }
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
         if let currentPage = currentPage {
-            if eventLabelNeededDuration == .shopClick {
-                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: categoryName, currentPage: currentPage, durationTime: "\(durationTime)")
-            }
-            
-            else if eventLabelNeededDuration == .shopCategories {
+            if eventLabelNeededDuration == .shopCategories {
                 let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
                 let selectedNewShopName = categoryName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
                 logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: selectedNewShopName, previousPage: categoryName, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
+            }
+            else {
+                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
             }
         }
         else {

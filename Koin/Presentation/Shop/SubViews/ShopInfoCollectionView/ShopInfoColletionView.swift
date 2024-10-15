@@ -14,6 +14,7 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     private var shops: [Shop] = []
     weak var shopDelegate: CollectionViewDelegate?
     private var cancellables = Set<AnyCancellable>()
+    private var isHeaderHidden: Bool = false
     let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
@@ -43,6 +44,11 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         self.reloadData()
     }
     
+    func setHeaderVisibility(isHidden: Bool) {
+        isHeaderHidden = isHidden
+        self.reloadData()
+    }
+    
     func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
         guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ShopInfoHeaderView else {
             return
@@ -64,6 +70,10 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
 
 extension ShopInfoCollectionView {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+            return isHeaderHidden ? CGSize.zero : CGSize(width: collectionView.bounds.width, height: 25)
+        }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
@@ -80,11 +90,7 @@ extension ShopInfoCollectionView {
         }
         return UICollectionReusableView()
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 25)
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shops.count
     }

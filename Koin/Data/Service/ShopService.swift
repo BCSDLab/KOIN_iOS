@@ -23,6 +23,8 @@ protocol ShopService {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     
@@ -31,6 +33,14 @@ protocol ShopService {
 final class DefaultShopService: ShopService {
     
     private let networkService = NetworkService()
+    
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error> {
+        request(.fetchShopBenefits)
+    }
+    
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error> {
+        request(.fetchBeneficialShops(id))
+    }
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
         return networkService.uploadFiles(api: ShopAPI.uploadFiles(files))
@@ -182,8 +192,6 @@ final class DefaultShopService: ShopService {
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
         return request(.fetchReviewList(requestModel))
     }
-    
-    
     
     private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)

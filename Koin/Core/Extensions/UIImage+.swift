@@ -91,6 +91,10 @@ enum ImageAsset: String {
     case noticeLoginToolTip
     case noticeNotLoginToolTip
     case popularStar
+    case shopButton
+    case callBenefitButton
+    case smallShop
+    case smallBenefit
 }
 
 enum SFSymbols: String {

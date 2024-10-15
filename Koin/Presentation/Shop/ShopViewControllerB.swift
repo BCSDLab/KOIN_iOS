@@ -8,12 +8,18 @@
 import Combine
 import UIKit
 
-final class ShopViewController: UIViewController {
+final class ShopViewControllerB: UIViewController {
     
     // MARK: - Properties
     
+    enum Section: String {
+        case shopList = "주변 상점"
+        case callBenefit = "전화 주문 혜택"
+    }
+    
     private let viewModel: ShopViewModel
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
+    private let section: Section
     private var subscriptions: Set<AnyCancellable> = []
     private var scrollDirection: ScrollLog = .scrollToDown
     
@@ -24,14 +30,15 @@ final class ShopViewController: UIViewController {
         return scrollView
     }()
     
-    private let categoryCollectionView: CategoryCollectionView = {
+    private let callBenefitCollectionView: CallBenefitCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        let collectionView = CallBenefitCollectionView(frame: .zero, collectionViewLayout: flowLayout)
         return collectionView
     }()
     
-    private let shopGuideView: ShopGuideView = {
-        let view = ShopGuideView(frame: .zero)
+    private let grayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.appColor(.neutral100)
         return view
     }()
     
@@ -56,25 +63,6 @@ final class ShopViewController: UIViewController {
         return label
     }()
     
-    private let searchTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "검색어를 입력해주세요."
-        textField.font = UIFont.appFont(.pretendardRegular, size: 14)
-        textField.tintColor = UIColor.appColor(.neutral500)
-        textField.backgroundColor = UIColor.appColor(.neutral100)
-        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 20))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        let imageView = UIImageView(image: UIImage.appImage(asset: .search))
-        imageView.contentMode = .scaleAspectFit
-        let iconContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 12, height: 24))
-        imageView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        iconContainerView.addSubview(imageView)
-        textField.rightView = iconContainerView
-        textField.rightViewMode = .always
-        return textField
-    }()
-    
     private lazy var shopCollectionView: ShopInfoCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -89,8 +77,9 @@ final class ShopViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init(viewModel: ShopViewModel) {
+    init(viewModel: ShopViewModel, section: Section) {
         self.viewModel = viewModel
+        self.section = section
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -103,14 +92,11 @@ final class ShopViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = "전화 주문 혜택"
         bind()
         configureView()
-        inputSubject.send(.viewDidLoad)
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        hideKeyboardWhenTappedAround()
-        searchTextField.delegate = self
-        searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
+        shopCollectionView.setHeaderVisibility(isHidden: true)
+        inputSubject.send(.viewDidLoadB)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
@@ -126,6 +112,8 @@ final class ShopViewController: UIViewController {
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopClick))
     }
     
     @objc private func appDidEnterBackground() {
@@ -145,34 +133,33 @@ final class ShopViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case let .changeFilteredShops(shops, id):
-                self?.updateFilteredShops(shops)
-                self?.updateFilteredCategory(id)
+                break
             case let .putImage(response):
-                self?.putImage(data: response)
+                break
             case let .updateEventShops(eventShops):
                 self?.updateEventShops(eventShops)
             case let .updateSeletecButtonColor(standard):
                 self?.shopCollectionView.updateSeletecButtonColor(standard)
+            case let .updateShopBenefits(response):
+                self?.callBenefitCollectionView.updateBenefits(benefits: response)
+                self?.callBenefitCollectionView.snp.updateConstraints({ make in
+                    make.height.equalTo(strongSelf.callBenefitCollectionView.calculateDynamicHeight())
+                })
+            case let .updateBeneficialShops(response):
+                self?.updateFilteredShops(response)
             }
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
-            let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
-            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
-            self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, shopName, .leaveVC, .shopClick))
+          
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: 0)
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopClick, .click, shopName, nil, shopName, .endEvent, .benefitShopClick))
         }.store(in: &subscriptions)
         
-        categoryCollectionView.cellTapPublisher.sink { [weak self] categoryId in
-            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: categoryId)
-            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, category, category, .endEvent, .shopCategories))
-            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
-            self?.searchTextField.text = ""
-            self?.inputSubject.send(.changeCategory(categoryId))
-        }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName)
@@ -190,10 +177,19 @@ final class ShopViewController: UIViewController {
         shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
+        
+        callBenefitCollectionView.filterPublisher.sink { [weak self] selectedId, previousTitle, currentTitle in
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.benefitShopCategories, .click, currentTitle, previousTitle, currentTitle, .endEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopCategories))
+            self?.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .benefitShopClick))
+            self?.viewModel.shopCallBenefitFilterName = currentTitle
+            self?.inputSubject.send(.getBeneficialShops(selectedId))
+        }.store(in: &subscriptions)
     }
 }
 
-extension ShopViewController {
+extension ShopViewControllerB {
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -227,7 +223,7 @@ extension ShopViewController {
     }
 }
 
-extension ShopViewController: UIScrollViewDelegate {
+extension ShopViewControllerB: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
@@ -251,7 +247,7 @@ extension ShopViewController: UIScrollViewDelegate {
     }
 }
 
-extension ShopViewController {
+extension ShopViewControllerB {
     
     private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
@@ -264,7 +260,7 @@ extension ShopViewController {
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: true)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
@@ -278,14 +274,6 @@ extension ShopViewController {
         }
     }
     
-    private func updateFilteredCategory(_ id: Int) {
-        categoryCollectionView.updateCategory(id)
-    }
-    
-    private func putImage(data: ShopCategoryDTO) {
-        categoryCollectionView.updateCategories(data.shopCategories)
-    }
-    
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         inputSubject.send(.searchTextChanged(text))
@@ -295,11 +283,11 @@ extension ShopViewController {
         self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
     }
 }
-extension ShopViewController {
+extension ShopViewControllerB {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel].forEach {
+        [callBenefitCollectionView, grayView, eventShopCollectionView, shopCollectionView, eventIndexLabel, callBenefitCollectionView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -311,30 +299,23 @@ extension ShopViewController {
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
         }
         
-        searchTextField.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(16)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
-            make.height.equalTo(44)
+        callBenefitCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.snp.top).offset(19)
+            make.leading.equalTo(scrollView.snp.leading).offset(5)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-5)
+            make.height.equalTo(150)
         }
         
-        categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(19)
-            make.leading.equalTo(scrollView.snp.leading).offset(23)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-23)
-            make.height.equalTo(180)
-        }
-        
-        shopGuideView.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+        grayView.snp.makeConstraints { make in
+            make.top.equalTo(callBenefitCollectionView.snp.bottom).offset(20)
             make.leading.equalTo(scrollView.snp.leading)
             make.width.equalTo(view.snp.width)
-            make.height.equalTo(32)
+            make.height.equalTo(12)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
         
         eventShopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(12)
+            make.top.equalTo(grayView.snp.bottom).offset(20)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(63)
@@ -348,7 +329,7 @@ extension ShopViewController {
         }
         
         shopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(14)
+            make.top.equalTo(grayView.snp.bottom).offset(14)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)

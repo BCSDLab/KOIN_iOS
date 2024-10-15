@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class HomeViewController: UIViewController, CollectionViewDelegate {
+final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
     
     // MARK: - Properties
     
@@ -237,6 +237,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -321,7 +322,8 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     }
 }
 
-extension HomeViewController {
+extension HomeViewControllerA {
+
     @objc private func tapGoNoticePageButton() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -332,10 +334,8 @@ extension HomeViewController {
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }
-    
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
-        
         if !hasShownImage {
             diningTooltipImageView.setUpImage(image: .appImage(asset: .diningTooltip) ?? UIImage())
             diningTooltipImageView.isHidden = false
@@ -483,6 +483,8 @@ extension HomeViewController {
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
@@ -490,12 +492,13 @@ extension HomeViewController {
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            searchShopUseCase: searchShopUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: id
         )
-        let shopViewController = ShopViewController(viewModel: viewModel)
+        let shopViewController = ShopViewControllerA(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         
@@ -518,7 +521,7 @@ extension HomeViewController {
     
 }
 
-extension HomeViewController {
+extension HomeViewControllerA {
     
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
@@ -531,7 +534,7 @@ extension HomeViewController {
 }
 
 
-extension HomeViewController {
+extension HomeViewControllerA {
     
     private func setUpNavigationBar() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
@@ -685,5 +688,3 @@ extension HomeViewController {
         tabBarView.addSubview(underlineView)
     }
 }
-
-

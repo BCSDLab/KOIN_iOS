@@ -16,6 +16,14 @@ final class DefaultShopRepository: ShopRepository {
         self.service = service
     }
     
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error> {
+        service.fetchBeneficialShops(id: id)
+    }
+    
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error> {
+        service.fetchShopBenefits()
+    }
+    
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
         service.uploadFiles(files: files)
     }
