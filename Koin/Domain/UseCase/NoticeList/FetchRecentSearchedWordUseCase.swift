@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchRecentSearchedWordUseCase {
-    func execute() -> [RecentSearchedWordInfo]
+    func execute(limit: Int?) -> [RecentSearchedWordInfo]
 }
 
 final class DefaultFetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCase {
@@ -19,8 +19,12 @@ final class DefaultFetchRecentSearchedWordUseCase: FetchRecentSearchedWordUseCas
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute() -> [RecentSearchedWordInfo] {
+    func execute(limit: Int?) -> [RecentSearchedWordInfo] {
         let recentWords = noticeListRepository.fetchRecentSearchedWord()
-        return Array(recentWords.prefix(5))
+        if let limit = limit {
+            return Array(recentWords.prefix(limit))
+        }
+        
+        return Array(recentWords)
     }
 }
