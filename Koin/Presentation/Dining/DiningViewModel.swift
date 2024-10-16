@@ -22,7 +22,7 @@ final class DiningViewModel: ViewModelProtocol {
     enum Output {
         case updateDiningList([DiningItem], DiningType)
         case updateDiningLike(Int, Bool)
-        case initCalendar(String)
+        case initCalendar(Date)
         case showBottomSheet((Bool, Bool))
         case showLoginModal
     }
@@ -63,12 +63,12 @@ final class DiningViewModel: ViewModelProtocol {
             case let .updateDisplayDateTime(date, diningType):
                 self.updateDisplayDateTime(date: date, type: diningType)
             case .determineInitDate:
-                if let sharedDiningItem {
-                    outputSubject.send(.initCalendar(sharedDiningItem.date.dayOfMonth()))
-                } else {
-                    outputSubject.send(.initCalendar(self.currentDate.date.dayOfMonth()))
-                }
                 self.currentDate = self.dateProvider.execute(date: Date())
+                if let sharedDiningItem {
+                    outputSubject.send(.initCalendar(sharedDiningItem.date))
+                } else {
+                    outputSubject.send(.initCalendar(self.currentDate.date))
+                }
             case let .logEvent(label, category, value):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case let .shareMenuList(shareModel):
