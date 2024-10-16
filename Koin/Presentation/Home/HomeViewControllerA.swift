@@ -271,8 +271,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
                 self?.scrollToBusItem()
             case let .updateHotArticles(articles):
                 self?.updateHotArticles(articles: articles)
-            case .showForceUpdate:
-                self?.navigateToForceUpdate()
+            case let .showForceUpdate(version):
+                self?.navigateToForceUpdate(version: version)
             }
         }.store(in: &subscriptions)
         
@@ -337,9 +337,10 @@ extension HomeViewControllerA {
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }
     
-    private func navigateToForceUpdate() {
-        let viewController = ForceUpdateViewController()
+    private func navigateToForceUpdate(version: String) {
+        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         viewController.modalPresentationStyle = .fullScreen
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
         self.present(viewController, animated: true, completion: nil)
     }
     

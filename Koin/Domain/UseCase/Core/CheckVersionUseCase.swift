@@ -10,7 +10,7 @@ import Foundation
 
 
 protocol CheckVersionUseCase {
-    func execute() -> AnyPublisher<Bool, Error>
+    func execute() -> AnyPublisher<(Bool, String), Error>
 }
 
 final class DefaultCheckVersionUseCase: CheckVersionUseCase {
@@ -21,7 +21,7 @@ final class DefaultCheckVersionUseCase: CheckVersionUseCase {
         self.coreRepository = coreRepository
     }
     
-    func execute() -> AnyPublisher<Bool, Error> {
+    func execute() -> AnyPublisher<(Bool, String), Error> {
         return coreRepository.fetchVersion()
             .map { response in
                 let currentVersion = self.checkNowVersion()  // 현재 버전 확인
@@ -34,7 +34,7 @@ final class DefaultCheckVersionUseCase: CheckVersionUseCase {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
     
-    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> Bool {
+    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> (Bool, String) {
         let currentComponents = currentVersion.split(separator: ".").compactMap { Int($0) }
         let requiredComponents = requiredVersion.split(separator: ".").compactMap { Int($0) }
         
@@ -42,11 +42,11 @@ final class DefaultCheckVersionUseCase: CheckVersionUseCase {
             let current = i < currentComponents.count ? currentComponents[i] : 0
             let required = i < requiredComponents.count ? requiredComponents[i] : 0
             if current < required {
-                return true  // 현재 버전이 낮음
+                return (true, requiredVersion)  // 현재 버전이 낮음
             } else if current > required {
-                return false  // 현재 버전이 높음
+                return (false, requiredVersion)  // 현재 버전이 높음
             }
         }
-        return false  // 두 버전이 동일한 경우
+        return (false, requiredVersion)  // 두 버전이 동일한 경우
     }
 }

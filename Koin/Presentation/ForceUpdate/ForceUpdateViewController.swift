@@ -11,6 +11,8 @@ import UIKit
 final class ForceUpdateViewController: UIViewController {
     // MARK: - Properties
     
+    private let viewModel: ForceUpdateViewModel
+    private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -90,6 +92,21 @@ final class ForceUpdateViewController: UIViewController {
         return viewController
     }()
     
+    // MARK: - Initialization
+    
+    init(viewModel: ForceUpdateViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -115,6 +132,25 @@ final class ForceUpdateViewController: UIViewController {
             self?.openStore()
         }.store(in: &subscriptions)
         
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
+            }.store(in: &subscriptions)
+        
+        // 포그라운드로 돌아올 시 알림
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { _ in
+                print(2) // 앱이 포그라운드로 돌아올 때
+            }.store(in: &subscriptions)
+        
+        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+        }.store(in: &subscriptions)
+        
+        updateModalViewController.cancelButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+        }.store(in: &subscriptions)
+        
     }
     
 }
@@ -126,6 +162,8 @@ extension ForceUpdateViewController {
     
     @objc private func updateButtonTapped() {
         openStore()
+        
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
     }
     
     private func openStore() {
@@ -137,6 +175,8 @@ extension ForceUpdateViewController {
     
     @objc private func errorCheckButtonTapped() {
         present(updateModalViewController, animated: true, completion: nil)
+        
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
     
 }

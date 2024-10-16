@@ -162,9 +162,6 @@
 		D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */; };
 		D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */; };
 		D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */; };
-		D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */; };
-		D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */; };
-		D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */; };
 		D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */; };
 		D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */; };
 		D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7C52CABB426007040E7 /* CoreRepository.swift */; };
@@ -173,6 +170,9 @@
 		D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */; };
 		D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */; };
 		D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */; };
+		D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */; };
+		D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */; };
+		D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -417,6 +417,7 @@
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
 		D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4FD552CBE089C008C91D8 /* ShopCollectionView.swift */; };
 		D2F4FD592CBE089D008C91D8 /* ShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4FD562CBE089C008C91D8 /* ShopCollectionViewCell.swift */; };
+		D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4FD692CBF3EB1008C91D8 /* ForceUpdateViewModel.swift */; };
 		D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */; };
 		D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB234E2BFD46DE0098BA2B /* FetchShopListUseCase.swift */; };
 		D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23502BFD47A40098BA2B /* FetchEventListUseCase.swift */; };
@@ -636,11 +637,6 @@
 		D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitsDTO.swift; sourceTree = "<group>"; };
 		D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopBenefitUseCase.swift; sourceTree = "<group>"; };
 		D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBeneficialShopUseCase.swift; sourceTree = "<group>"; };
-		D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAbTestRepository.swift; sourceTree = "<group>"; };
-		D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerA.swift; sourceTree = "<group>"; };
-		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
-		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
-		D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewControllerA.swift; sourceTree = "<group>"; };
 		D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateResponse.swift; sourceTree = "<group>"; };
 		D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewController.swift; sourceTree = "<group>"; };
 		D208A7C52CABB426007040E7 /* CoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreRepository.swift; sourceTree = "<group>"; };
@@ -649,6 +645,11 @@
 		D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAPI.swift; sourceTree = "<group>"; };
 		D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCoreRepository.swift; sourceTree = "<group>"; };
 		D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModelViewController.swift; sourceTree = "<group>"; };
+		D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAbTestRepository.swift; sourceTree = "<group>"; };
+		D208A7D42CAE7754007040E7 /* HomeViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerA.swift; sourceTree = "<group>"; };
+		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
+		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
+		D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewControllerA.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -895,6 +896,7 @@
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
 		D2F4FD552CBE089C008C91D8 /* ShopCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		D2F4FD562CBE089C008C91D8 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2F4FD692CBF3EB1008C91D8 /* ForceUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewModel.swift; sourceTree = "<group>"; };
 		D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		D2FB234E2BFD46DE0098BA2B /* FetchShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListUseCase.swift; sourceTree = "<group>"; };
 		D2FB23502BFD47A40098BA2B /* FetchEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchEventListUseCase.swift; sourceTree = "<group>"; };
@@ -1402,18 +1404,19 @@
 			sourceTree = "<group>";
 		};
 		D208A7AF2CA12D43007040E7 /* CallBenefitCollectionView */ = {
-        isa = PBXGroup;
-        children = (
-            D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */,
-            D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */,
-            D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */,
-        );
-        path = CallBenefitCollectionView;
-        sourceTree = "<group>";
-    };
+			isa = PBXGroup;
+			children = (
+				D208A7B02CA12D5F007040E7 /* CallBenefitCollectionView.swift */,
+				D208A7B22CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift */,
+				D208A7B42CA12D7E007040E7 /* CallBenefitFooterView.swift */,
+			);
+			path = CallBenefitCollectionView;
+			sourceTree = "<group>";
+		};
 		D208A7C02CAB9A38007040E7 /* ForceUpdate */ = {
 			isa = PBXGroup;
 			children = (
+				D2F4FD692CBF3EB1008C91D8 /* ForceUpdateViewModel.swift */,
 				D208A7C32CAB9A5E007040E7 /* ForceUpdateViewController.swift */,
 				D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */,
 			);
@@ -2971,6 +2974,7 @@
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
+				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
 				839423DE2CA31471001E690F /* CustomViewController.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,

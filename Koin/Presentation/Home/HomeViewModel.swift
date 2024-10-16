@@ -29,7 +29,7 @@ final class HomeViewModel: ViewModelProtocol {
         case updateBus(BusCardInformation)
         case updateHotArticles([NoticeArticleDTO])
         case putImage(ShopCategoryDTO)
-        case showForceUpdate
+        case showForceUpdate(String)
         case moveBusItem
     }
     
@@ -100,8 +100,8 @@ extension HomeViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            if response {
-                self?.outputSubject.send(.showForceUpdate)
+            if response.0 {
+                self?.outputSubject.send(.showForceUpdate(response.1))
             }
         }.store(in: &subscriptions)
 
