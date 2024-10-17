@@ -12,7 +12,7 @@ final class ForceUpdateViewController: UIViewController {
     // MARK: - Properties
     
     private let viewModel: ForceUpdateViewModel
-    private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
+    private let inputSubject: PassthroughSubject<ForceUpdateViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -128,6 +128,17 @@ final class ForceUpdateViewController: UIViewController {
     }
     
     private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            switch output {
+            case let.isLowVersion(isLow):
+                
+                if !isLow {
+                    self?.dismiss()
+                }
+            }
+        }.store(in: &subscriptions)
+        
         updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
             self?.openStore()
         }.store(in: &subscriptions)
@@ -139,8 +150,8 @@ final class ForceUpdateViewController: UIViewController {
         
         // 포그라운드로 돌아올 시 알림
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { _ in
-                print(2) // 앱이 포그라운드로 돌아올 때
+            .sink { [weak self] _ in
+                self?.inputSubject.send(.checkVersion)
             }.store(in: &subscriptions)
         
         updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
@@ -156,6 +167,10 @@ final class ForceUpdateViewController: UIViewController {
 }
 
 extension ForceUpdateViewController {
+    
+    private func dismiss() {
+        dismiss(animated: true, completion: nil)
+    }
     @objc private func closeButtonTapped() {
         navigationController?.popViewController(animated: false)
     }
