@@ -20,7 +20,7 @@ final class DefaultLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
         self.repository = repository
     }
     func execute(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        repository.logEvent(label: label, category: category, value: value, previousPage: nil, currentPage: nil, durationTime: nil)
+        repository.logEvent(label: label, category: category, value: value)
     }
     func executeWithDuration(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationTime: String? = nil) {
         repository.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)

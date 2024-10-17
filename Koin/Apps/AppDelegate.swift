@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true), let path = components.path, let params = components.queryItems else { return false }
-        if path == "KEYWORD" {
+        if path == "keyword" {
             if let noticeId = params.first?.value {
                 navigateToNoticeData(noticeId: Int(noticeId) ?? 0)
                 return true

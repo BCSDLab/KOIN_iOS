@@ -29,12 +29,11 @@ final class CalendarCollectionView: UICollectionView, UICollectionViewDataSource
         delegate = self
     }
     
-    func generateDateList(showingDate: String) {
-        let currentDate = Date()
+    func generateDateList(showingDate: Date) {
         var dateList: [CalendarDate] = []
         for dayOffset in -3...3 {
-            if let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: currentDate) {
-                dateList.append(CalendarDate(date: date, isInitDate: date.dayOfMonth() == showingDate))
+            if let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: showingDate) {
+                dateList.append(CalendarDate(date: date, isInitDate: date.dayOfMonth() == showingDate.dayOfMonth()))
             }
         }
         self.dateList = dateList

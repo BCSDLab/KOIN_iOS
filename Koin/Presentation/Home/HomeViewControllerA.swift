@@ -206,6 +206,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
     }
     
     @objc private func appWillEnterForeground() {
@@ -237,7 +238,6 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
