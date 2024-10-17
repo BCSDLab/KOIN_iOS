@@ -32,7 +32,7 @@ final class CalendarCollectionView: UICollectionView, UICollectionViewDataSource
     func generateDateList(showingDate: Date) {
         var dateList: [CalendarDate] = []
         for dayOffset in -3...3 {
-            if let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: showingDate) {
+            if let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: Date()) {
                 dateList.append(CalendarDate(date: date, isInitDate: date.dayOfMonth() == showingDate.dayOfMonth()))
             }
         }
