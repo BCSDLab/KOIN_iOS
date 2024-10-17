@@ -81,12 +81,12 @@ extension NoticeSearchViewModel {
     }
     
     private func fetchRecentSearchedWord() {
-        let searchedWords = fetchRecentSearchedWordUseCase.execute()
+        let searchedWords = fetchRecentSearchedWordUseCase.execute(limit: 5)
         outputSubject.send(.updateRecentSearchedWord(searchedWords))
     }
     
     private func deleteAllSearchedWords() {
-        let words = fetchRecentSearchedWordUseCase.execute()
+        let words = fetchRecentSearchedWordUseCase.execute(limit: nil)
         for word in words {
             if let name = word.name, let date = word.searchedDate {
                 manageRecentSearchedWordUseCase.execute(name: name, date: date, actionType: 1)

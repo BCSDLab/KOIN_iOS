@@ -287,6 +287,8 @@ final class HomeViewControllerB: UIViewController {
             case .putImage: break
             case let .updateHotArticles(articles):
                 self?.updateHotArticles(articles: articles)
+            case let .showForceUpdate(version):
+                self?.navigateToForceUpdate(version: version)
             }
         }.store(in: &subscriptions)
         
@@ -350,6 +352,14 @@ extension HomeViewControllerB {
             let noticeListViewController = NoticeListViewController(viewModel: viewModel)
             navigationController?.pushViewController(noticeListViewController, animated: true)
         }
+    
+    private func navigateToForceUpdate(version: String) {
+        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))))
+        viewController.modalPresentationStyle = .fullScreen
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
         

@@ -15,10 +15,22 @@ protocol EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
+        
+        enum ForceUpdate: String, EventLabelType {
+            case forcedUpdatePageView = "forced_update_page_view"
+            case forceUpdateExit = "forced_update_exit"
+            case forceUpdateConfirm = "forced_update_confirm"
+            case forceUpdateAlreadyDone = "forced_update_already_done"
+            case alreadyUpdatePopup = "already_update_popup"
+            var team: String {
+                return "FORCE_UPDATE"
+            }
+        }
+        
         enum ABTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
             var team: String {
-                return "A/B_TEST"
+                return "AB_TEST"
             }
         }
         
@@ -43,7 +55,7 @@ enum EventParameter {
             case shopDetailViewReviewReport = "shop_detail_view_review_report"
             case shopDetailViewReviewReportDone = "shop_detail_view_review_report_done"
             case shopDetailViewReviewBack = "shop_detail_view_review_back"
-
+            
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
             case shopDetailViewReviewDeleteDone = "shop_detail_view_review_delete_done"
             case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
@@ -129,6 +141,9 @@ enum EventParameter {
         case scroll
         case swipe
         case abTest = "a/b test 로깅(3차 스프린트, 혜택페이지)"
+        case pageView = "page_view"
+        case pageExit = "page_exit"
+        case update = "update"
     }
     
     enum EventLabelNeededDuration: String {

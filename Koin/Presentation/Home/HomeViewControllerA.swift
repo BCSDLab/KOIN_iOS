@@ -206,6 +206,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
     }
     
     @objc private func appWillEnterForeground() {
@@ -237,7 +238,6 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -271,6 +271,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
                 self?.scrollToBusItem()
             case let .updateHotArticles(articles):
                 self?.updateHotArticles(articles: articles)
+            case let .showForceUpdate(version):
+                self?.navigateToForceUpdate(version: version)
             }
         }.store(in: &subscriptions)
         
@@ -323,7 +325,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
 }
 
 extension HomeViewControllerA {
-
+    
     @objc private func tapGoNoticePageButton() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -334,6 +336,14 @@ extension HomeViewControllerA {
         let noticeListViewController = NoticeListViewController(viewModel: viewModel)
         navigationController?.pushViewController(noticeListViewController, animated: true)
     }
+    
+    private func navigateToForceUpdate(version: String) {
+        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))))
+        viewController.modalPresentationStyle = .fullScreen
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
         if !hasShownImage {
@@ -346,7 +356,7 @@ extension HomeViewControllerA {
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
         noticeListCollectionView.pageControlChanged(sender.currentPage)
     }
- 
+    
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
         inputSubject.send(.categorySelected(getDiningPlace()))
         
