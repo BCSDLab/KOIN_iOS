@@ -27,7 +27,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let diningInfoLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
+        label.font = UIFont.appFont(.pretendardRegular, size: 12)
         label.textColor = UIColor.appColor(.neutral500)
         return label
     }()
@@ -108,6 +108,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    /*
     private let likeButton: UIButton = {
         let button = UIButton()
         return button
@@ -117,11 +118,20 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = UIColor.appColor(.neutral400)
         return view
-    }()
+    }() */
     
     private let shareButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .share), for: .normal)
+        
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .share)
+        var attributedTitle = AttributedString(stringLiteral: "카카오톡으로 식단 공유하기")
+        attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+        configuration.attributedTitle = attributedTitle
+        configuration.imagePadding = 4
+        configuration.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        button.configuration = configuration
+        button.tintColor = UIColor.appColor(.neutral600)
         return button
     }()
     
@@ -130,7 +140,8 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         configureView()
         menuImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         menuImageBackground.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
-        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        /*
+         likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside) */
         shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
     }
     
@@ -169,9 +180,9 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         configuration.imagePadding = 4
         configuration.baseBackgroundColor = .systemBackground
         configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        likeButton.contentHorizontalAlignment = .leading
+        //likeButton.contentHorizontalAlignment = .leading
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0)
-        likeButton.configuration = configuration
+        //likeButton.configuration = configuration
     }
     
     func configure(info: DiningItem) {
@@ -292,7 +303,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
 
 extension DiningCollectionViewCell {
     private func setUpLayouts() {
-        [diningPlaceLabel, diningInfoLabel, leftMenuListLabel, rightMenuListLabel, menuImageView, menuImageBackground, soldOutLabel, substitutionLabel, cellSpacingView, nonMealImageView, nonMealText, separateView, likeButton, buttonSpacingView, shareButton].forEach {
+        [diningPlaceLabel, diningInfoLabel, leftMenuListLabel, rightMenuListLabel, menuImageView, menuImageBackground, soldOutLabel, substitutionLabel, cellSpacingView, nonMealImageView, nonMealText, separateView, shareButton].forEach {
             contentView.addSubview($0)
         }
     }
@@ -308,7 +319,7 @@ extension DiningCollectionViewCell {
         }
         diningInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(diningPlaceLabel.snp.top).offset(5)
-            make.leading.equalTo(diningPlaceLabel.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(20)
         }
         menuImageView.snp.makeConstraints { make in
             make.top.equalTo(diningPlaceLabel.snp.bottom).offset(16)
@@ -332,6 +343,7 @@ extension DiningCollectionViewCell {
             make.trailing.equalTo(self.snp.trailing)
             make.height.equalTo(1)
         }
+        /*
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(separateView.snp.bottom).offset(8)
             make.trailing.equalTo(buttonSpacingView.snp.leading).offset(-6)
@@ -343,18 +355,18 @@ extension DiningCollectionViewCell {
             make.trailing.equalTo(shareButton.snp.leading).offset(-6)
             make.width.equalTo(0.5)
             make.height.equalTo(10)
-        }
-        shareButton.snp.makeConstraints { make in
-            make.top.equalTo(separateView.snp.bottom).offset(8)
-            make.trailing.equalTo(self.snp.trailing).offset(-16)
-            make.width.equalTo(74)
-            make.height.equalTo(28)
-        }
+        }*/
         soldOutLabel.snp.makeConstraints { make in
-            make.width.equalTo(37)
+             make.width.equalTo(37)
+             make.height.equalTo(22)
+             make.top.equalTo(self.snp.top).offset(15)
+             make.trailing.equalTo(self.snp.trailing).offset(-24)
+         }
+        shareButton.snp.makeConstraints { make in
+            make.top.equalTo(separateView.snp.bottom).offset(14)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(178)
             make.height.equalTo(22)
-            make.top.equalTo(self.snp.top).offset(15)
-            make.trailing.equalTo(self.snp.trailing).offset(-24)
         }
         substitutionLabel.snp.makeConstraints { make in
             make.width.equalTo(48)
@@ -366,11 +378,11 @@ extension DiningCollectionViewCell {
             make.leading.trailing.top.bottom.equalTo(menuImageView)
         }
         cellSpacingView.snp.makeConstraints { make in
-            make.top.equalTo(likeButton.snp.bottom).offset(10)
+            make.top.equalTo(shareButton.snp.bottom).offset(0)
             make.leading.equalTo(self.snp.leading)
             make.trailing.equalTo(self.snp.trailing)
             make.height.equalTo(0)
-            make.bottom.equalTo(self.snp.bottom)
+            make.bottom.equalTo(self.snp.bottom).inset(14)
         }
         nonMealImageView.snp.makeConstraints { make in
             make.centerX.equalTo(menuImageView.snp.centerX)
