@@ -21,7 +21,8 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let diningPlaceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 18)
+        label.textColor = UIColor.appColor(.neutral800)
+        label.font = UIFont.appFont(.pretendardBold, size: 18)
         return label
     }()
     
@@ -70,6 +71,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let leftMenuListLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .appColor(.neutral800)
         label.font = UIFont.appFont(.pretendardRegular, size: 14)
         label.numberOfLines = 0
         return label
@@ -77,6 +79,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let rightMenuListLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .appColor(.neutral800)
         label.font = UIFont.appFont(.pretendardRegular, size: 14)
         label.numberOfLines = 0
         return label
@@ -211,7 +214,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
 
         
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 2
+        paragraphStyle.lineSpacing = 3.4
 
         let menu = info.menu
 
@@ -226,7 +229,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
                 rightAttributedString.append(attributedItem)
             }
         }
-
+    
         leftMenuListLabel.attributedText = leftAttributedString
         rightMenuListLabel.attributedText = rightAttributedString
 
