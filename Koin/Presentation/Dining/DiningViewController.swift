@@ -49,12 +49,6 @@ final class DiningViewController: UIViewController {
         return view
     }()
     
-    private let separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .appColor(.neutral100)
-        return view
-    }()
-    
     private let separateViewArray: [UIView] = {
         var viewArray: [UIView] = []
         for _ in 0..<3 {
@@ -361,7 +355,7 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, separatorView].forEach {
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
             self.view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -378,7 +372,7 @@ extension DiningViewController {
     private func setUpConstraints() {
         tabBarView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(separatorView.snp.bottom)
+            $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
             $0.height.equalTo(45)
         }
         warningImageView.snp.makeConstraints {
@@ -395,11 +389,6 @@ extension DiningViewController {
             $0.leading.equalTo(24)
             $0.trailing.equalTo(24)
             $0.height.equalTo(99)
-        }
-        separatorView.snp.makeConstraints{
-            $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(8)
         }
         diningTypeSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview()
