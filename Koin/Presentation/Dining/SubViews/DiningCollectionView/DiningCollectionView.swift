@@ -34,6 +34,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         register(DiningCollectionFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: DiningCollectionFooterView.identifier)
         dataSource = self
         delegate = self
+        contentInset = .init(top: 16, left: 24, bottom: 0, right: 24)
     }
     
     func setDiningList(_ list: [DiningItem]) {
@@ -99,7 +100,7 @@ extension DiningCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width
+        let width = collectionView.frame.width - 48
         let estimatedHeight: CGFloat = 1000
         let dummyCell = DiningCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
         dummyCell.configure(info: diningList[indexPath.row])

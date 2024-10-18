@@ -369,7 +369,7 @@ extension DiningCollectionViewCell {
             make.top.equalTo(likeButton.snp.bottom).offset(10)
             make.leading.equalTo(self.snp.leading)
             make.trailing.equalTo(self.snp.trailing)
-            make.height.equalTo(8)
+            make.height.equalTo(0)
             make.bottom.equalTo(self.snp.bottom)
         }
         nonMealImageView.snp.makeConstraints { make in
@@ -387,6 +387,7 @@ extension DiningCollectionViewCell {
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
+        layer.cornerRadius = 16
         self.backgroundColor = .systemBackground
     }
 }
