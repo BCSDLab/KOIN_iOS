@@ -41,6 +41,11 @@ final class NotiViewController: UIViewController {
         return view
     }()
     
+    private let noticeKeywordWrappedView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let eventWrapView: UIView = {
         let view = UIView()
         return view
@@ -86,6 +91,24 @@ final class NotiViewController: UIViewController {
         let attributedString = NSAttributedString(string: "주변상점", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
         label.attributedText = attributedString
         return label
+    }()
+    
+    private let keywordNotiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "공지사항 키워드 알림"
+        return label
+    }()
+    
+    private let keywordNotiDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "키워드가 포함된 글이 게시될 경우 알림을 받습니다."
+        return label
+    }()
+    
+    private let keywordNotiChevronImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.appImage(asset: .chevronRight)
+        return imageView
     }()
     
     private let eventNotiLabel: UILabel = {
@@ -175,7 +198,9 @@ final class NotiViewController: UIViewController {
         mealSwitches.forEach { switchControl in
             switchControl.addTarget(self, action: #selector(switchDetailValueChanged), for: .valueChanged)
         }
-        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(moveManageKeywordVC))
+        noticeKeywordWrappedView.isUserInteractionEnabled = true
+        noticeKeywordWrappedView.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -203,6 +228,15 @@ final class NotiViewController: UIViewController {
 }
 
 extension NotiViewController {
+    
+    @objc private func moveManageKeywordVC() {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+        
+        let vc = ManageNoticeKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     private func changeMealSwitchEnableStatus(_ isEnable: Bool) {
         mealSwitches.forEach { uiSwitch in
@@ -291,7 +325,7 @@ extension NotiViewController {
     
     private func setUpLayOuts() {
         
-        [diningGuideLabel, soldOutWrapView].forEach {
+        [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView].forEach {
             self.view.addSubview($0)
         }
         
@@ -309,6 +343,10 @@ extension NotiViewController {
         
         [soldOutNotiLabel, soldOutSwitch, soldOutDescriptionLabel].forEach {
             soldOutWrapView.addSubview($0)
+        }
+        
+        [keywordNotiLabel, keywordNotiDescriptionLabel, keywordNotiChevronImage].forEach {
+            noticeKeywordWrappedView.addSubview($0)
         }
         
         [diningImageUploadNotiLabel, diningImageUploadSwitch, diningImageUploadDescriptionLabel].forEach {
@@ -385,10 +423,35 @@ extension NotiViewController {
             make.top.equalTo(diningImageUploadNotiLabel.snp.bottom).offset(8)
             make.height.equalTo(17)
         }
+        
+        noticeKeywordWrappedView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(diningImageUploadWrapView.snp.bottom)
+            make.height.equalTo(83)
+        }
+        
+        keywordNotiLabel.snp.makeConstraints { make in
+            make.leading.equalTo(24)
+            make.height.equalTo(26)
+            make.top.equalTo(16)
+        }
+        
+        keywordNotiDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(24)
+            make.top.equalTo(keywordNotiLabel.snp.bottom).offset(8)
+            make.height.equalTo(17)
+        }
+        
+        keywordNotiChevronImage.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(21)
+            make.top.equalToSuperview().inset(15)
+            make.width.equalTo(16)
+            make.height.equalTo(20)
+        }
     
         shopGuideLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(diningImageUploadWrapView.snp.bottom)
+            make.top.equalTo(noticeKeywordWrappedView.snp.bottom)
             make.height.equalTo(33)
         }
         
@@ -424,19 +487,19 @@ extension NotiViewController {
             label.contentMode = .center
         }
         
-        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel].forEach { label in
+        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral800)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardMedium, size: 16)
         }
         
-        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel].forEach { label in
+        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral500)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardRegular, size: 13)
         }
         
-        [soldOutWrapView, diningImageUploadWrapView, eventWrapView].forEach { view in
+        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView].forEach { view in
             view.backgroundColor = .systemBackground
             view.layer.borderWidth = 0.5
             view.layer.borderColor = UIColor.appColor(.neutral100).cgColor
