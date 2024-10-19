@@ -53,7 +53,7 @@ final class DiningViewController: UIViewController {
         var viewArray: [UIView] = []
         for _ in 0..<3 {
             let view = UIView()
-            view.backgroundColor = UIColor.appColor(.neutral500)
+            view.backgroundColor = UIColor.appColor(.neutral400)
             viewArray.append(view)
         }
         return viewArray
@@ -62,6 +62,7 @@ final class DiningViewController: UIViewController {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
+        stackView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
         return stackView
     }()
     
@@ -374,6 +375,11 @@ extension DiningViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
             $0.height.equalTo(45)
+        }
+        stackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(tabBarView.snp.bottom)
+            $0.height.equalTo(1)
         }
         warningImageView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()

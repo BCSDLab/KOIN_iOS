@@ -18,6 +18,11 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
+    private let wrappedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.clear
+        return view
+    }()
     
     private let diningPlaceLabel: UILabel = {
         let label = UILabel()
@@ -306,19 +311,21 @@ final class DiningCollectionViewCell: UICollectionViewCell {
 
 extension DiningCollectionViewCell {
     private func setUpLayouts() {
+        contentView.addSubview(wrappedView)
         [diningPlaceLabel, diningInfoLabel, leftMenuListLabel, rightMenuListLabel, menuImageView, menuImageBackground, soldOutLabel, substitutionLabel, cellSpacingView, nonMealImageView, nonMealText, separateView, shareButton].forEach {
-            contentView.addSubview($0)
+            wrappedView.addSubview($0)
         }
+        
     }
     
     private func setUpConstraints() {
-        contentView.snp.makeConstraints { make in
+        wrappedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
         }
         diningPlaceLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(16)
-            make.leading.equalTo(self.snp.leading).offset(24)
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(24)
         }
         diningInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(diningPlaceLabel.snp.top).offset(5)
@@ -395,8 +402,9 @@ extension DiningCollectionViewCell {
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        layer.cornerRadius = 16
-        self.backgroundColor = .systemBackground
-        self.clipsToBounds = true
+        wrappedView.layer.cornerRadius = 16
+        wrappedView.backgroundColor = .systemBackground
+        wrappedView.clipsToBounds = true
+        contentView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 1, spread: 0)
     }
 }
