@@ -30,7 +30,7 @@ final class DiningCollectionFooterView: UICollectionReusableView {
     }
     
     private func setupViews() {
-        self.backgroundColor = UIColor.appColor(.neutral100)
+        self.backgroundColor = UIColor.clear
         noticeLabel.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(16)
             make.leading.equalTo(self.snp.leading).offset(24)

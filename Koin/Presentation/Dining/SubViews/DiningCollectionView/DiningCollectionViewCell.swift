@@ -125,7 +125,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let shareButton: UIButton = {
         let button = UIButton()
-        
+        button.backgroundColor = .appColor(.neutral50)
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .share)
         var attributedTitle = AttributedString(stringLiteral: "카카오톡으로 식단 공유하기")
@@ -366,10 +366,10 @@ extension DiningCollectionViewCell {
              make.trailing.equalTo(self.snp.trailing).offset(-24)
          }
         shareButton.snp.makeConstraints { make in
-            make.top.equalTo(separateView.snp.bottom).offset(14)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(178)
-            make.height.equalTo(22)
+            make.top.equalTo(separateView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(50)
         }
         substitutionLabel.snp.makeConstraints { make in
             make.width.equalTo(48)
@@ -379,13 +379,6 @@ extension DiningCollectionViewCell {
         }
         menuImageBackground.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(menuImageView)
-        }
-        cellSpacingView.snp.makeConstraints { make in
-            make.top.equalTo(shareButton.snp.bottom).offset(0)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.height.equalTo(0)
-            make.bottom.equalTo(self.snp.bottom).inset(14)
         }
         nonMealImageView.snp.makeConstraints { make in
             make.centerX.equalTo(menuImageView.snp.centerX)
@@ -404,5 +397,6 @@ extension DiningCollectionViewCell {
         setUpConstraints()
         layer.cornerRadius = 16
         self.backgroundColor = .systemBackground
+        self.clipsToBounds = true
     }
 }

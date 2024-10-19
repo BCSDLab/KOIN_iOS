@@ -70,7 +70,7 @@ final class DiningViewController: UIViewController {
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 16
         let collectionView = DiningCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .appColor(.neutral100)
+        collectionView.backgroundColor = .appColor(.neutral200)
         return collectionView
     }()
     
