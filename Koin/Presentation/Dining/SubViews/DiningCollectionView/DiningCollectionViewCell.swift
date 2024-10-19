@@ -44,7 +44,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         label.layer.cornerRadius = 4
         label.clipsToBounds = true
         label.text = "품절"
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
+        label.font = UIFont.appFont(.pretendardMedium, size: 14)
         label.backgroundColor = UIColor.appColor(.warning200)
         label.textColor = UIColor.appColor(.warning600)
         return label
