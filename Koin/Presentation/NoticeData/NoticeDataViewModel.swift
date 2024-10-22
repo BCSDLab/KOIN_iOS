@@ -19,7 +19,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
     enum Output {
         case updateNoticeData(NoticeDataInfo)
         case updatePopularArticles([NoticeArticleDTO])
-        case updateActivityIndictor(Bool, String?)
+        case updateActivityIndictor(Bool, String?, URL?)
     }
     
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
@@ -59,16 +59,16 @@ final class NoticeDataViewModel: ViewModelProtocol {
 
 extension NoticeDataViewModel {
     private func getNoticeData() {
-        outputSubject.send(.updateActivityIndictor(true, nil))
+        outputSubject.send(.updateActivityIndictor(true, nil, nil))
         let request = FetchNoticeDataRequest(noticeId: noticeId)
         fetchNoticeDataUseCase.execute(request: request).sink(receiveCompletion: { [weak self] completion in
-            self?.outputSubject.send(.updateActivityIndictor(false, nil))
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] noticeData in
             self?.outputSubject.send(.updateNoticeData(noticeData))
-            self?.outputSubject.send(.updateActivityIndictor(false, nil))
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
         }).store(in: &subscriptions)
     }
     
@@ -83,14 +83,14 @@ extension NoticeDataViewModel {
     }
     
     private func downloadFile(downloadUrl: String, fileName: String) {
-        outputSubject.send(.updateActivityIndictor(true, nil))
+        outputSubject.send(.updateActivityIndictor(true, nil, nil))
         downloadNoticeAttachmentUseCase.execute(downloadUrl: downloadUrl, fileName: fileName).sink(receiveCompletion: { [weak self] completion in
-            self?.outputSubject.send(.updateActivityIndictor(false, fileName))
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
-        }, receiveValue: { [weak self] in
-            self?.outputSubject.send(.updateActivityIndictor(false, fileName))
+        }, receiveValue: { [weak self] downloadedPath in
+            self?.outputSubject.send(.updateActivityIndictor(false, fileName, downloadedPath))
         }).store(in: &subscriptions)
     }
     

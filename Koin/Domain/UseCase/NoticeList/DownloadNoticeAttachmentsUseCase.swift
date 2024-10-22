@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol DownloadNoticeAttachmentsUseCase {
-    func execute(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse>
+    func execute(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
 }
 
 final class DefaultDownloadNoticeAttachmentsUseCase: DownloadNoticeAttachmentsUseCase {
@@ -19,7 +19,7 @@ final class DefaultDownloadNoticeAttachmentsUseCase: DownloadNoticeAttachmentsUs
         self.noticeRepository = noticeRepository
     }
     
-    func execute(downloadUrl: String, fileName: String) -> AnyPublisher<Void, ErrorResponse> {
+    func execute(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse> {
         return noticeRepository.downloadNoticeAttachment(downloadUrl: downloadUrl, fileName: fileName).eraseToAnyPublisher()
     }
 }

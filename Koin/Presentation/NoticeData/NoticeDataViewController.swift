@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class NoticeDataViewController: CustomViewController, UIGestureRecognizerDelegate {
+final class NoticeDataViewController: CustomViewController, UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate {
     
     // MARK: - Properties
     
@@ -149,8 +149,8 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
                 self?.updateNoticeData(noticeData: noticeData)
             case let .updatePopularArticles(notices):
                 self?.updatePopularArticle(notices: notices)
-            case let .updateActivityIndictor(isStarted, fileName):
-                self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName)
+            case let .updateActivityIndictor(isStarted, fileName, downloadedPath):
+                self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName, downloadedPath: downloadedPath)
             }
         }.store(in: &subscriptions)
         
@@ -255,16 +255,39 @@ extension NoticeDataViewController {
         hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
     }
     
-    private func updateActivityIndicator(isStarted: Bool, fileName: String?) {
+    private func updateActivityIndicator(isStarted: Bool, fileName: String?, downloadedPath: URL?) {
         if isStarted {
             IndicatorView.show()
         }
         else {
             IndicatorView.dismiss()
             if let fileName = fileName {
-                presentAlert(title: "\(fileName) 다운로드 완료", preferredStyle: .alert, with: [])
+                if let url = downloadedPath {
+                    let alertAction = UIAlertAction(title: "파일 열기", style: .default, handler: { _ in
+                            let view = UIDocumentInteractionController(url: url)
+                            view.delegate = self
+                            view.presentPreview(animated: true)
+                        
+                    })
+                    presentAlert(title: "\(fileName) 다운로드 완료", preferredStyle: .alert, with: [alertAction])
+                }
+                else {
+                    presentAlert(title: "\(fileName) 다운로드 실패", preferredStyle: .alert, with: [])
+                }
             }
         }
+    }
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    
+    private func documentInteractionControllerViewForPreview(controller: UIDocumentInteractionController!) -> UIView! {
+        return self.view
+    }
+    
+    func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
+        return self.view.frame
     }
 }
 
