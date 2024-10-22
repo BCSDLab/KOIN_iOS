@@ -160,7 +160,9 @@ final class ManageNoticeKeywordViewController: CustomViewController {
             }
         }.store(in: &subscriptions)
         
-        recommendedKeywordCollectionView.recommendedKeywordPublisher.sink { [weak self] keyword in
+        recommendedKeywordCollectionView.recommendedKeywordPublisher
+            .debounce(for: .milliseconds(250), scheduler: RunLoop.main)
+            .sink { [weak self] keyword in
             self?.inputSubject.send(.addKeyword(keyword: keyword, isRecommended: true))
         }.store(in: &subscriptions)
         
