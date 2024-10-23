@@ -234,8 +234,8 @@ extension NotiViewController {
         let repository = DefaultNoticeListRepository(service: service)
         let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
         
-        let vc = ManageNoticeKeywordViewController(viewModel: viewModel)
-        navigationController?.pushViewController(vc, animated: true)
+        let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func changeMealSwitchEnableStatus(_ isEnable: Bool) {
