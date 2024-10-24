@@ -339,11 +339,11 @@ extension DiningCollectionViewCell {
         }
         
         soldOutLabel.snp.makeConstraints { make in
-             make.width.equalTo(37)
-             make.height.equalTo(22)
-             make.top.equalTo(self.snp.top).offset(15)
-             make.trailing.equalTo(self.snp.trailing).offset(-24)
-         }
+            make.width.equalTo(37)
+            make.height.equalTo(22)
+            make.top.equalTo(self.snp.top).offset(15)
+            make.leading.equalTo(diningPlaceLabel.snp.trailing).offset(8)
+        }
         shareButton.snp.makeConstraints { make in
             make.top.equalTo(separateView.snp.bottom)
             make.leading.trailing.equalToSuperview()
