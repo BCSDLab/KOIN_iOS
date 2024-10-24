@@ -116,18 +116,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    /*
-    private let likeButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
-    
-    private let buttonSpacingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral400)
-        return view
-    }() */
-    
     private let shareButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .appColor(.neutral50)
@@ -148,8 +136,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         configureView()
         menuImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         menuImageBackground.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
-        /*
-         likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside) */
         shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
     }
     
@@ -188,9 +174,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         configuration.imagePadding = 4
         configuration.baseBackgroundColor = .systemBackground
         configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        //likeButton.contentHorizontalAlignment = .leading
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0)
-        //likeButton.configuration = configuration
     }
     
     func configure(info: DiningItem) {
@@ -353,19 +337,7 @@ extension DiningCollectionViewCell {
             make.trailing.equalTo(self.snp.trailing)
             make.height.equalTo(1)
         }
-        /*
-        likeButton.snp.makeConstraints { make in
-            make.top.equalTo(separateView.snp.bottom).offset(8)
-            make.trailing.equalTo(buttonSpacingView.snp.leading).offset(-6)
-            make.width.equalTo(74)
-            make.height.equalTo(28)
-        }
-        buttonSpacingView.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton.snp.centerY)
-            make.trailing.equalTo(shareButton.snp.leading).offset(-6)
-            make.width.equalTo(0.5)
-            make.height.equalTo(10)
-        }*/
+        
         soldOutLabel.snp.makeConstraints { make in
              make.width.equalTo(37)
              make.height.equalTo(22)
