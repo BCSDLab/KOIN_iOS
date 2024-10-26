@@ -354,7 +354,7 @@ extension DiningCollectionViewCell {
             make.width.equalTo(48)
             make.height.equalTo(soldOutLabel.snp.height)
             make.top.equalTo(soldOutLabel.snp.top)
-            make.trailing.equalTo(soldOutLabel.snp.trailing)
+            make.leading.equalTo(soldOutLabel)
         }
         menuImageBackground.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(menuImageView)
