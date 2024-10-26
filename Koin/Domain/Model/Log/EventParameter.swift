@@ -96,6 +96,8 @@ enum EventParameter {
             case busTimetableArea = "bus_timetable_area"
             case busTimetableTime = "bus_timetable_time"
             case busTimetableExpress = "bus_timetable_express"
+            case busTimetableCitybus = "bus_timetable_citybus"
+            case busTimetableCitybusRoute = "bus_timetable_citybus_route"
             case busTabMenu = "bus_tab_menu"
             
             case noticeTab = "notice_tab"
