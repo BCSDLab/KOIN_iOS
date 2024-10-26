@@ -80,6 +80,7 @@ enum EventParameter {
             case hamburger = "hamburger"
             case menuTime = "menu_time"
             case menuImage = "menu_image"
+            case menuShare = "menu_share"
             case cafeteriaInfo = "cafeteria_info"
             
             // Bus

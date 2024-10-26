@@ -217,6 +217,7 @@ final class DiningViewController: UIViewController {
         
         diningListCollectionView.shareButtonPublisher.sink { [weak self] item in
             self?.inputSubject.send(.shareMenuList(item))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuShare, .click, "공유하기"))
         }.store(in: &subscriptions)
         
         diningListCollectionView.likeButtonPublisher.sink { [weak self] tuple in
