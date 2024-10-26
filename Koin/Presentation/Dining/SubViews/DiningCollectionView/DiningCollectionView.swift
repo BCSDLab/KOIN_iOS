@@ -14,11 +14,16 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     let imageTapPublisher = PassthroughSubject<(UIImage, String), Never>()
     let shareButtonPublisher = PassthroughSubject<ShareDiningMenu, Never>()
     let likeButtonPublisher = PassthroughSubject<(Int, Bool), Never>()
+    let firstCardHeightPublisher = PassthroughSubject<CGFloat, Never>()
     
     let logScrollPublisher = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     private var scrollDirection: ScrollLog = .scrollToDown
     
+    //MARK: - UI Components
+    private let diningShareToolTipImageView = CancelableImageView(frame: .zero)
+    
+    //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
@@ -35,6 +40,8 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         dataSource = self
         delegate = self
         contentInset = .init(top: 16, left: 24, bottom: 0, right: 24)
+        diningShareToolTipImageView.isHidden = true
+        self.addSubview(diningShareToolTipImageView)
     }
     
     func setDiningList(_ list: [DiningItem]) {
@@ -53,6 +60,27 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
             
             if let cell = self.cellForItem(at: indexPath) as? DiningCollectionViewCell {
                 cell.updateLikeButtonText(isLiked: isLiked, likeCount: diningList[indexPath.row].likes)
+            }
+        }
+    }
+    
+    private func checkAndShowToolTip(heightOfDiningCard: CGFloat) {
+        let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
+        let leading = (UIScreen.main.bounds.width - 270) / 2 - 10
+        diningShareToolTipImageView.snp.makeConstraints {
+            $0.top.equalTo(self).offset(heightOfDiningCard - 38)
+            $0.height.equalTo(100)
+            $0.leading.equalTo(leading)
+            $0.width.equalTo(252)
+        }
+
+        if !hasShownImage {
+            diningShareToolTipImageView.isHidden = false
+            diningShareToolTipImageView.setUpGif(fileName: "diningShare")
+            diningShareToolTipImageView.changeXButtonSize(width: 50, height: 50)
+            diningShareToolTipImageView.onXButtonTapped = { [weak self] in
+                self?.diningShareToolTipImageView.isHidden = true
+                UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
             }
         }
     }
@@ -108,6 +136,9 @@ extension DiningCollectionView {
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
         let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        if indexPath.row == 1 {
+            checkAndShowToolTip(heightOfDiningCard: estimatedSize.height)
+        }
         return CGSize(width: width, height: estimatedSize.height)
     }
     

@@ -95,6 +95,7 @@
 		83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457C2C9B2EBB005868BD /* IndicatorView.swift */; };
 		83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
+		83D5E9C82CCB844D00C6D4CD /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 83D5E9C72CCB844D00C6D4CD /* diningShare.gif */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
 		83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D772C4F6FF000278ABD /* BusDirection.swift */; };
@@ -1255,6 +1256,14 @@
 			path = NotificationService;
 			sourceTree = "<group>";
 		};
+		83D5E9BB2CCB6A2A00C6D4CD /* Gif */ = {
+			isa = PBXGroup;
+			children = (
+				83D5E9C72CCB844D00C6D4CD /* diningShare.gif */,
+			);
+			path = Gif;
+			sourceTree = "<group>";
+		};
 		83DD0D792C4F8E4300278ABD /* Bus */ = {
 			isa = PBXGroup;
 			children = (
@@ -1984,6 +1993,7 @@
 		D27DD05B2BA608310081FD36 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83D5E9BB2CCB6A2A00C6D4CD /* Gif */,
 				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
 				D27DD05D2BA608310081FD36 /* Fonts */,
 			);
@@ -2759,6 +2769,7 @@
 				D2078BFA2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* diningShare.gif in Resources */,
 				D2078BEF2BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
 				D2078BF22BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 			);
