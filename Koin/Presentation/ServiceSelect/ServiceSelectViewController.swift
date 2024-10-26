@@ -338,6 +338,7 @@ extension ServiceSelectViewController {
     @objc func facilityInfoSelectButtonTapped() {
         let viewController = FacilityInfoViewController()
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "교내 시설물 정보"))
     }
     
     @objc func landSelectButtonTapped() {
