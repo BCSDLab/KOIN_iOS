@@ -56,11 +56,13 @@ final class CancelableImageView: UIView {
         (0..<frameCount)
             .compactMap { CGImageSourceCreateImageAtIndex(source, $0, nil) }
             .forEach { images.append(UIImage(cgImage: $0)) }
-
-        imageView.animationImages = images
-        imageView.animationDuration = TimeInterval(frameCount) * 0.05 
-        imageView.animationRepeatCount = 0
-        imageView.startAnimating()
+        
+        DispatchQueue.main.async {
+            self.imageView.animationImages = images
+            self.imageView.animationDuration = TimeInterval(frameCount) * 0.05
+            self.imageView.animationRepeatCount = 0
+            self.imageView.startAnimating()
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
