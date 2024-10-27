@@ -16,7 +16,8 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
     private let viewModel: NoticeDataViewModel
     private let inputSubject: PassthroughSubject<NoticeDataViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    
+    private var noticeUrl = ""
+ 
     // MARK: - UI Components
     
     private let titleWrappedView = UIView().then {
@@ -157,16 +158,7 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
 
 extension NoticeDataViewController {
     @objc private func tapUrlRedirectButton(sender: UIButton) {
-        var redirectUrl = ""
-        switch sender.tag {
-        case 1:
-            print("원본글")
-        case 2:
-            redirectUrl = "https://portal.koreatech.ac.kr"
-        default:
-            redirectUrl = "https://job.koreatech.ac.kr"
-        }
-        if let url = URL(string: redirectUrl), UIApplication.shared.canOpenURL(url) {
+        if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
      }
@@ -250,15 +242,17 @@ extension NoticeDataViewController {
         
         if noticeData.boardId == 12 || noticeData.boardId == 13 {
             urlRedirectButton.setTitle("아우누리 바로가기", for: .normal)
-            urlRedirectButton.tag = 2
+            noticeUrl = "https://portal.koreatech.ac.kr"
         }
         else if noticeData.boardId == 8 {
             urlRedirectButton.setTitle("학생종합경력개발 바로가기", for: .normal)
-            urlRedirectButton.tag = 3
+            noticeUrl = "https://job.koreatech.ac.kr"
         }
         else if noticeData.boardId != 13 {
             urlRedirectButton.setTitle("원본 글 바로가기", for: .normal)
-            urlRedirectButton.tag = 1
+            if let url = noticeData.url {
+                noticeUrl = url
+            }
         }
         else {
             urlRedirectButton.isHidden = true
