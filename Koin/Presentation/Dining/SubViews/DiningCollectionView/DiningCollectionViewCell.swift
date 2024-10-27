@@ -118,7 +118,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     
     private let shareButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .appColor(.neutral50)
+        button.backgroundColor = .systemBackground
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .share)
         var attributedTitle = AttributedString(stringLiteral: "카카오톡으로 식단 공유하기")
@@ -137,6 +137,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         menuImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         menuImageBackground.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
         shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(shareButtonPressed), for: .touchDown)
     }
     
     required init?(coder: NSCoder) {
@@ -161,8 +162,13 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         likeButtonPublisher.send(())
     }
     
-    @objc private func shareButtonTapped() {
+    @objc private func shareButtonTapped(sender: UIButton) {
+        sender.backgroundColor = .systemBackground
         shareButtonPublisher.send(())
+    }
+    
+    @objc private func shareButtonPressed(sender: UIButton) {
+        sender.backgroundColor = .appColor(.neutral50)
     }
     
     func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
