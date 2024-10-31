@@ -151,6 +151,7 @@ extension DiningCollectionView {
             dummyCell.layoutIfNeeded()
             let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
             let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            diningShareToolTipImageView.isHidden = true
             return CGSize(width: width, height: estimatedSize.height)
         }
         else {
