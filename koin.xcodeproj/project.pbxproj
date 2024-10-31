@@ -97,6 +97,7 @@
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
 		83D5E9C82CCB844D00C6D4CD /* (null) in Resources */ = {isa = PBXBuildFile; };
 		83D5E9DA2CCE872000C6D4CD /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 83D5E9D92CCE86E700C6D4CD /* diningShare.gif */; };
+		83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
 		83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D772C4F6FF000278ABD /* BusDirection.swift */; };
@@ -291,7 +292,7 @@
 		D27DD0982BA608310081FD36 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0372BA608310081FD36 /* MenuView.swift */; };
 		D27DD09C2BA608310081FD36 /* DiningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD03E2BA608310081FD36 /* DiningViewController.swift */; };
 		D27DD09D2BA608310081FD36 /* DiningCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0402BA608310081FD36 /* DiningCollectionView.swift */; };
-		D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0412BA608310081FD36 /* DiningCollectionViewCell.swift */; };
+		D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0412BA608310081FD36 /* DiningCollectionViewCellB.swift */; };
 		D27DD0A02BA608310081FD36 /* DiningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0432BA608310081FD36 /* DiningViewModel.swift */; };
 		D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0462BA608310081FD36 /* ShopDataViewModel.swift */; };
 		D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0482BA608310081FD36 /* GuideLabel.swift */; };
@@ -573,6 +574,7 @@
 		83DD0D732C4F6FD000278ABD /* BusType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusType.swift; sourceTree = "<group>"; };
         83D5E9D92CCE86E700C6D4CD /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = diningShare.gif; path = ../../../../diningShare.gif; sourceTree = "<group>"; };
 		83DD0D752C4F6FDE00278ABD /* BusPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlace.swift; sourceTree = "<group>"; };
+        83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollectionViewCellA.swift; sourceTree = "<group>"; };
 		83DD0D772C4F6FF000278ABD /* BusDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDirection.swift; sourceTree = "<group>"; };
 		83DD0D7A2C4F8E6100278ABD /* FetchBusInformationListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBusInformationListRequest.swift; sourceTree = "<group>"; };
 		83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRepository.swift; sourceTree = "<group>"; };
@@ -770,7 +772,7 @@
 		D27DD0372BA608310081FD36 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		D27DD03E2BA608310081FD36 /* DiningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningViewController.swift; sourceTree = "<group>"; };
 		D27DD0402BA608310081FD36 /* DiningCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningCollectionView.swift; sourceTree = "<group>"; };
-		D27DD0412BA608310081FD36 /* DiningCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningCollectionViewCell.swift; sourceTree = "<group>"; };
+		D27DD0412BA608310081FD36 /* DiningCollectionViewCellB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningCollectionViewCellB.swift; sourceTree = "<group>"; };
 		D27DD0432BA608310081FD36 /* DiningViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningViewModel.swift; sourceTree = "<group>"; };
 		D27DD0462BA608310081FD36 /* ShopDataViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopDataViewModel.swift; sourceTree = "<group>"; };
 		D27DD0482BA608310081FD36 /* GuideLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideLabel.swift; sourceTree = "<group>"; };
@@ -1915,7 +1917,8 @@
 			isa = PBXGroup;
 			children = (
 				D27DD0402BA608310081FD36 /* DiningCollectionView.swift */,
-				D27DD0412BA608310081FD36 /* DiningCollectionViewCell.swift */,
+				D27DD0412BA608310081FD36 /* DiningCollectionViewCellB.swift */,
+				83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */,
 				D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */,
 			);
 			path = DiningCollectionView;
@@ -3224,9 +3227,10 @@
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
-				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
+				D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
 				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
+				83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,

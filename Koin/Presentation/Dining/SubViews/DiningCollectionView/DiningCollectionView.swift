@@ -19,6 +19,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     let logScrollPublisher = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     private var scrollDirection: ScrollLog = .scrollToDown
+    private var aBTestResult: UserAssignType = .shareNew
     
     //MARK: - UI Components
     private let diningShareToolTipImageView = CancelableImageView(frame: .zero)
@@ -35,33 +36,34 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     }
     
     private func commonInit() {
-        register(DiningCollectionViewCell.self, forCellWithReuseIdentifier: DiningCollectionViewCell.identifier)
+        register(DiningCollectionViewCellA.self, forCellWithReuseIdentifier: DiningCollectionViewCellA.reuseIdentifier)
+        register(DiningCollectionViewCellB.self, forCellWithReuseIdentifier: DiningCollectionViewCellB.reuseIdentifier)
         register(DiningCollectionFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: DiningCollectionFooterView.identifier)
         dataSource = self
         delegate = self
-        contentInset = .init(top: 16, left: 24, bottom: 0, right: 24)
         diningShareToolTipImageView.isHidden = true
         self.addSubview(diningShareToolTipImageView)
+    }
+    
+    func setAbTestResult(result: AssignAbTestResponse) {
+        if result.variableName == .shareNew {
+            aBTestResult = .shareNew
+        }
+        else if result.variableName == .shareOriginal {
+            aBTestResult = .shareOriginal
+        }
+        if aBTestResult == .shareNew {
+            contentInset = .init(top: 16, left: 24, bottom: 0, right: 24)
+        }
+        else {
+            contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        }
+        self.reloadData()
     }
     
     func setDiningList(_ list: [DiningItem]) {
         diningList = list
         self.reloadData()
-    }
-    
-    func updateDiningItem(id: Int, isLiked: Bool) {
-        if let index = diningList.firstIndex(where: { $0.id == id }) {
-            if isLiked {
-                diningList[index].increaseLike()
-            } else {
-                diningList[index].decreaseLike()
-            }
-            let indexPath = IndexPath(item: index, section: 0)
-            
-            if let cell = self.cellForItem(at: indexPath) as? DiningCollectionViewCell {
-                cell.updateLikeButtonText(isLiked: isLiked, likeCount: diningList[indexPath.row].likes)
-            }
-        }
     }
     
     private func checkAndShowToolTip(heightOfDiningCard: CGFloat) {
@@ -107,41 +109,73 @@ extension DiningCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiningCollectionViewCell.identifier, for: indexPath) as? DiningCollectionViewCell else {
-            return UICollectionViewCell()
-        }
         let diningItem = diningList[indexPath.row]
-        cell.configure(info: diningItem)
-        cell.imageTapPublisher
-            .sink { [weak self] tuple in
-                self?.imageTapPublisher.send(tuple)
+        if aBTestResult == .shareNew {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiningCollectionViewCellB.reuseIdentifier, for: indexPath) as? DiningCollectionViewCellB else {
+                return UICollectionViewCell()
+            }
+            cell.configure(info: diningItem)
+            cell.imageTapPublisher
+                .sink { [weak self] tuple in
+                    self?.imageTapPublisher.send(tuple)
+                }.store(in: &cell.cancellables)
+            cell.shareButtonPublisher.sink { [weak self] in
+                guard let self = self else { return }
+                self.shareButtonPublisher.send((self.diningList[indexPath.row].toShareDiningItem()))
             }.store(in: &cell.cancellables)
-        cell.shareButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.shareButtonPublisher.send((self.diningList[indexPath.row].toShareDiningItem()))
-        }.store(in: &cell.cancellables)
-        cell.likeButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.likeButtonPublisher.send((self.diningList[indexPath.row].id, self.diningList[indexPath.row].isLiked))
-        }.store(in: &cell.cancellables)
-        return cell
+            return cell
+        }
+        else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiningCollectionViewCellA.reuseIdentifier, for: indexPath) as? DiningCollectionViewCellA else {
+                return UICollectionViewCell()
+            }
+            cell.configure(info: diningItem)
+            cell.imageTapPublisher
+                .sink { [weak self] tuple in
+                    self?.imageTapPublisher.send(tuple)
+                }.store(in: &cell.cancellables)
+            cell.shareButtonPublisher.sink { [weak self] in
+                guard let self = self else { return }
+                self.shareButtonPublisher.send((self.diningList[indexPath.row].toShareDiningItem()))
+            }.store(in: &cell.cancellables)
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width - 48
-        let estimatedHeight: CGFloat = 1000
-        let dummyCell = DiningCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(info: diningList[indexPath.row])
-        dummyCell.setNeedsLayout()
-        dummyCell.layoutIfNeeded()
-        let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        if indexPath.row == 1 {
-            checkAndShowToolTip(heightOfDiningCard: estimatedSize.height)
+        if aBTestResult == .shareOriginal {
+            let width = collectionView.frame.width, estimatedHeight: CGFloat = 1000
+            let dummyCell = DiningCollectionViewCellA(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
+            dummyCell.configure(info: diningList[indexPath.row])
+            dummyCell.setNeedsLayout()
+            dummyCell.layoutIfNeeded()
+            let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+            let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            return CGSize(width: width, height: estimatedSize.height)
         }
-        return CGSize(width: width, height: estimatedSize.height)
+        else {
+            let width = collectionView.frame.width - 48, estimatedHeight: CGFloat = 1000
+            let dummyCell = DiningCollectionViewCellB(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
+            dummyCell.configure(info: diningList[indexPath.row])
+            dummyCell.setNeedsLayout()
+            dummyCell.layoutIfNeeded()
+            let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+            let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            if indexPath.row == 1 {
+                checkAndShowToolTip(heightOfDiningCard: estimatedSize.height)
+            }
+            return CGSize(width: width, height: estimatedSize.height)
+        }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if aBTestResult == .shareOriginal {
+            return 8
+        }
+        else {
+            return 16
+        }
+    }
 }
 
 extension DiningCollectionView: UIScrollViewDelegate {

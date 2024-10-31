@@ -69,9 +69,8 @@ final class DiningViewController: UIViewController {
     private let diningListCollectionView: DiningCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 16
         let collectionView = DiningCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .appColor(.neutral200)
+        collectionView.backgroundColor = .appColor(.neutral100)
         return collectionView
     }()
     
@@ -148,6 +147,7 @@ final class DiningViewController: UIViewController {
         bind()
         configureSwipeGestures()
         configureView()
+        inputSubject.send(.getABTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -180,13 +180,13 @@ final class DiningViewController: UIViewController {
                 self?.moveUnderLineView(diningType: diningType)
             case let .initCalendar(showingDate):
                 self?.dateCalendarCollectionView.generateDateList(showingDate: showingDate)
-            case let .updateDiningLike(id, isLiked):
-                self?.diningListCollectionView.updateDiningItem(id: id, isLiked: isLiked)
             case let .showBottomSheet((soldOutIsOn, imageUplloadisOn)):
                 self?.showBottomSheet((soldOutIsOn, imageUplloadisOn))
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
+            case let .setABTestResult(abTestResult):
+                self?.diningListCollectionView.setAbTestResult(result: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -212,10 +212,6 @@ final class DiningViewController: UIViewController {
         
         diningListCollectionView.shareButtonPublisher.sink { [weak self] item in
             self?.inputSubject.send(.shareMenuList(item))
-        }.store(in: &subscriptions)
-        
-        diningListCollectionView.likeButtonPublisher.sink { [weak self] tuple in
-            self?.inputSubject.send(.diningLike(tuple.0, tuple.1))
         }.store(in: &subscriptions)
         
         diningListCollectionView.logScrollPublisher.sink { [weak self] _ in

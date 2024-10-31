@@ -1,5 +1,5 @@
 //
-//  DiningCollectionViewCell.swift
+//  DiningCollectionViewCellB.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/15/24.
@@ -9,13 +9,15 @@ import Combine
 import SnapKit
 import UIKit
 
-final class DiningCollectionViewCell: UICollectionViewCell {
+final class DiningCollectionViewCellB: UICollectionViewCell {
     
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<(UIImage, String), Never>()
     let shareButtonPublisher = PassthroughSubject<Void, Never>()
     let likeButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
+    
+    static let reuseIdentifier = "diningCollectionViewCellB"
     
     // MARK: - UI Components
     private let wrappedView: UIView = {
@@ -158,10 +160,6 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    @objc private func likeButtonTapped() {
-        likeButtonPublisher.send(())
-    }
-    
     @objc private func shareButtonTapped(sender: UIButton) {
         sender.backgroundColor = .systemBackground
         shareButtonPublisher.send(())
@@ -171,22 +169,9 @@ final class DiningCollectionViewCell: UICollectionViewCell {
         sender.backgroundColor = .appColor(.neutral50)
     }
     
-    func updateLikeButtonText(isLiked: Bool, likeCount: Int) {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = isLiked ? UIImage.appImage(asset: .heartFill) : UIImage.appImage(asset: .heart)
-        var text = AttributedString(likeCount == 0 ? "좋아요" : "\(likeCount)")
-        text.font = UIFont.appFont(.pretendardRegular, size: 12)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 4
-        configuration.baseBackgroundColor = .systemBackground
-        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0)
-    }
-    
     func configure(info: DiningItem) {
         diningPlaceLabel.text = info.place.rawValue
-        updateLikeButtonText(isLiked: info.isLiked, likeCount: info.likes)
-        
+
         let kcalText = info.kcal != 0 ? "\(info.kcal)kcal" : ""
         let priceCashText = (info.priceCash != nil && info.priceCash != 0) ? "\(info.priceCash!)원" : ""
         let priceCardText = (info.priceCard != nil && info.priceCard != 0) ? "\(info.priceCard!)원" : ""
@@ -299,7 +284,7 @@ final class DiningCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension DiningCollectionViewCell {
+extension DiningCollectionViewCellB {
     private func setUpLayouts() {
         contentView.addSubview(wrappedView)
         [diningPlaceLabel, diningInfoLabel, leftMenuListLabel, rightMenuListLabel, menuImageView, menuImageBackground, soldOutLabel, substitutionLabel, cellSpacingView, nonMealImageView, nonMealText, separateView, shareButton].forEach {
