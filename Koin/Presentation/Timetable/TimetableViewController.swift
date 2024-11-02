@@ -58,7 +58,9 @@ final class TimetableViewController: UIViewController {
 }
 
 extension TimetableViewController {
-    
+    @objc private func modifyTimetableButtonTapped() {
+        
+    }
     
 }
 
@@ -73,10 +75,15 @@ extension TimetableViewController {
     private func setUpConstraints() {
       
     }
+    private func setUpNavigationBar() {
+           let modifyTimetableButton = UIBarButtonItem(image: UIImage.appImage(asset: .write), style: .plain, target: self, action: #selector(modifyTimetableButtonTapped))
+           navigationItem.rightBarButtonItem = modifyTimetableButton
+    }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+        setUpNavigationBar()
         self.view.backgroundColor = .systemBackground
     }
 }
