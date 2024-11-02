@@ -16,8 +16,7 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
     private let viewModel: NoticeDataViewModel
     private let inputSubject: PassthroughSubject<NoticeDataViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    private var noticeUrl = ""
- 
+    
     // MARK: - UI Components
     
     private let titleWrappedView = UIView().then {
@@ -61,12 +60,19 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
         $0.setTitle("목록", for: .normal)
     }
     
+    /* 변경된 명세로 이번 배포에서 숨김처리
+    private let previousButton = UIButton().then {
+        $0.setTitle("이전 글", for: .normal)
+    }
+    
+    private let nextButton = UIButton().then {
+        $0.setTitle("다음 글", for: .normal)
+    } */
+    
     private let popularNoticeWrappedView = UIView().then {
         $0.backgroundColor = .white
     }
     
-    private let urlRedirectButton = UIButton()
-        
     private let popularNoticeGuideLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = .appColor(.neutral800)
@@ -115,10 +121,14 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
     override func viewDidLoad() {
         super.viewDidLoad()
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
-        urlRedirectButton.addTarget(self, action: #selector(tapUrlRedirectButton), for: .touchUpInside)
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
+        /*
+        nextButton.isHidden = true
+        previousButton.isHidden = true
+        previousButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(tapOtherNoticeBtn), for: .touchUpInside) */
         bind()
         setNavigationTitle(title: "공지사항")
         inputSubject.send(.getNoticeData)
@@ -157,12 +167,6 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
 }
 
 extension NoticeDataViewController {
-    @objc private func tapUrlRedirectButton(sender: UIButton) {
-        if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-     }
-    
     @objc private func tapInventoryButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.inventory, .click, "목록"))
         guard let navigationController = navigationController else { return }
@@ -180,6 +184,12 @@ extension NoticeDataViewController {
         }
     }
     
+    /*
+    @objc private func tapOtherNoticeBtn(sender: UIButton) {
+        if let noticeId = sender == previousButton ? viewModel.previousNoticeId : viewModel.nextNoticeId {
+            navigateToOtherNoticeDataPage(noticeId: noticeId)
+        }
+    }*/
     
     private func navigateToOtherNoticeDataPage(noticeId: Int) {
         let noticeListService = DefaultNoticeService()
@@ -239,24 +249,6 @@ extension NoticeDataViewController {
             attachmentGuideLabel.isHidden = true
             noticeAttachmentsTableView.isHidden = true
         }
-        
-        if noticeData.boardId == 12 || noticeData.boardId == 13 {
-            urlRedirectButton.setTitle("아우누리 바로가기", for: .normal)
-            noticeUrl = "https://portal.koreatech.ac.kr"
-        }
-        else if noticeData.boardId == 8 {
-            urlRedirectButton.setTitle("학생종합경력개발 바로가기", for: .normal)
-            noticeUrl = "https://job.koreatech.ac.kr"
-        }
-        else if noticeData.boardId != 13 {
-            urlRedirectButton.setTitle("원본 글 바로가기", for: .normal)
-            if let url = noticeData.url {
-                noticeUrl = url
-            }
-        }
-        else {
-            urlRedirectButton.isHidden = true
-        }
     }
     
     private func updatePopularArticle(notices: [NoticeArticleDTO]) {
@@ -301,13 +293,14 @@ extension NoticeDataViewController {
     }
     
     private func setUpButtons() {
-        [inventoryButton, urlRedirectButton].forEach {
+        //[inventoryButton, previousButton, nextButton]
+        [inventoryButton].forEach {
             $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
             $0.backgroundColor = .appColor(.neutral300)
             $0.setTitleColor(.appColor(.neutral600), for: .normal)
             $0.layer.cornerRadius = 4
-            $0.contentEdgeInsets = .init(top: 6, left: 12, bottom: 6, right: 12)
         }
+        //previousButton.backgroundColor = .appColor(.neutral400)
     }
     
     private func setUpLayOuts() {
@@ -320,7 +313,8 @@ extension NoticeDataViewController {
         [navigationBarWrappedView, titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
-        [contentTextView, inventoryButton, attachmentGuideLabel, noticeAttachmentsTableView, urlRedirectButton].forEach {
+        //[contentTextView, inventoryButton, previousButton, nextButton].forEach {
+        [contentTextView, inventoryButton, attachmentGuideLabel, noticeAttachmentsTableView].forEach {
             contentWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -434,16 +428,26 @@ extension NoticeDataViewController {
             inventoryButton.snp.makeConstraints {
                 $0.top.equalTo(noticeAttachmentsTableView.snp.bottom).offset(8)
                 $0.leading.equalToSuperview().offset(24)
+                $0.width.equalTo(45)
                 $0.height.equalTo(31)
                 $0.bottom.equalToSuperview().inset(16)
             }
         }
         
-        urlRedirectButton.snp.makeConstraints {
+        /*
+        nextButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(inventoryButton)
             $0.height.equalTo(31)
-            $0.trailing.equalToSuperview().inset(24)
+            $0.width.equalTo(59)
         }
+        
+        previousButton.snp.makeConstraints {
+            $0.trailing.equalTo(nextButton.snp.leading).offset(-8)
+            $0.top.equalTo(inventoryButton)
+            $0.height.equalTo(31)
+            $0.width.equalTo(59)
+        }*/
         
         popularNoticeWrappedView.snp.makeConstraints {
             $0.top.equalTo(contentWrappedView.snp.bottom).offset(6)
