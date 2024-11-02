@@ -248,11 +248,10 @@ extension NoticeDataViewController {
             urlRedirectButton.setTitle("학생종합경력개발 바로가기", for: .normal)
             noticeUrl = "https://job.koreatech.ac.kr"
         }
-        else if noticeData.boardId != 13 {
+        
+        if let url = noticeData.url {
+            noticeUrl = url
             urlRedirectButton.setTitle("원본 글 바로가기", for: .normal)
-            if let url = noticeData.url {
-                noticeUrl = url
-            }
         }
         else {
             urlRedirectButton.isHidden = true
