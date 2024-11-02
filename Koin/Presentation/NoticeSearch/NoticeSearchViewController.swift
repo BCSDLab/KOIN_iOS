@@ -184,6 +184,7 @@ extension NoticeSearchViewController {
     @objc private func searchButtonTapped() {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearchEvent, .click, "검색하기"))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
@@ -198,6 +199,7 @@ extension NoticeSearchViewController {
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearchEvent, .click, "검색하기"))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
