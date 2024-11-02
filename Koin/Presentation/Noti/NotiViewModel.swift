@@ -76,6 +76,10 @@ extension NotiViewModel {
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
             }
+            else if type == .diningImageUpload {
+                let logValue = isOn ? "on" : "off"
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationMenuImageUpload, category: .click, value: logValue)
+            }
         }.store(in: &subscriptions)
 
     }

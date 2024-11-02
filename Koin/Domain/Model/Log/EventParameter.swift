@@ -82,6 +82,7 @@ enum EventParameter {
             case menuImage = "menu_image"
             case menuShare = "menu_share"
             case cafeteriaInfo = "cafeteria_info"
+            case notificationMenuImageUpload = "notification_menu_image_upload"
             
             // Bus
             case mainBus = "main_bus"
