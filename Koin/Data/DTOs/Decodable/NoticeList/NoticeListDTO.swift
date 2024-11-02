@@ -27,6 +27,7 @@ struct NoticeArticleDTO: Decodable {
     let hit: Int
     let content: String?
     let updatedAt: String
+    let url: String?
     let attachments: [NoticeAttachmentDTO]?
     let prevId: Int?
     let nextId: Int?
@@ -35,7 +36,7 @@ struct NoticeArticleDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
-        case title, author, hit, content, attachments
+        case title, author, hit, content, attachments, url
         case prevId = "prev_id"
         case nextId = "next_id"
         case updatedAt = "updated_at"
@@ -68,7 +69,7 @@ extension NoticeListDTO {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], registeredAt: registeredAt)
+        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
@@ -77,7 +78,7 @@ extension NoticeArticleDTO {
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
         let newTitle = title.replacingOccurrences(of: "\n", with: "")
-        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: modifyFontInHtml(html: content ?? ""), updatedAt: updatedAt, attachments: attachments ?? [], prevId: prevId, nextId: nextId, registeredAt: newDate)
+        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: modifyFontInHtml(html: content ?? ""), updatedAt: updatedAt, url: url, attachments: attachments ?? [], prevId: prevId, nextId: nextId, registeredAt: newDate)
     }
     
     private func modifyFontInHtml(html: String) -> String? {
