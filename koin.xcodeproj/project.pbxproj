@@ -46,6 +46,7 @@
 		833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5D2C7375B300982145 /* FetchNoticeDataUseCase.swift */; };
 		833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */; };
 		833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */; };
+		8341E4042CD65B170012B485 /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 83D5E9D92CCE86E700C6D4CD /* diningShare.gif */; };
 		8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */; };
 		83455FC22C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83455FC12C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift */; };
 		83455FC42C96E17D00CEB7A4 /* NoticeAttachmentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83455FC32C96E17D00CEB7A4 /* NoticeAttachmentsTableViewCell.swift */; };
@@ -96,7 +97,6 @@
 		83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
 		83D5E9C82CCB844D00C6D4CD /* (null) in Resources */ = {isa = PBXBuildFile; };
-		83D5E9DA2CCE872000C6D4CD /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 83D5E9D92CCE86E700C6D4CD /* diningShare.gif */; };
 		83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
@@ -571,10 +571,10 @@
 		83B7457C2C9B2EBB005868BD /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		83B7457E2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListSearchTableViewFooter.swift; sourceTree = "<group>"; };
 		83C509612BFA0CBB007379A0 /* ScrollLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLog.swift; sourceTree = "<group>"; };
+		83D5E9D92CCE86E700C6D4CD /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = diningShare.gif; path = ../../../../diningShare.gif; sourceTree = "<group>"; };
+		83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollectionViewCellA.swift; sourceTree = "<group>"; };
 		83DD0D732C4F6FD000278ABD /* BusType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusType.swift; sourceTree = "<group>"; };
-        83D5E9D92CCE86E700C6D4CD /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = diningShare.gif; path = ../../../../diningShare.gif; sourceTree = "<group>"; };
 		83DD0D752C4F6FDE00278ABD /* BusPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlace.swift; sourceTree = "<group>"; };
-        83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollectionViewCellA.swift; sourceTree = "<group>"; };
 		83DD0D772C4F6FF000278ABD /* BusDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDirection.swift; sourceTree = "<group>"; };
 		83DD0D7A2C4F8E6100278ABD /* FetchBusInformationListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBusInformationListRequest.swift; sourceTree = "<group>"; };
 		83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRepository.swift; sourceTree = "<group>"; };
@@ -2771,7 +2771,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83D5E9DA2CCE872000C6D4CD /* diningShare.gif in Resources */,
+				8341E4042CD65B170012B485 /* diningShare.gif in Resources */,
 				D2078BFA2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
