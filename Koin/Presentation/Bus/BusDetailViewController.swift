@@ -87,7 +87,7 @@ final class BusDetailViewController: UIViewController {
 extension BusDetailViewController {
     @objc private func changeCurrentIndex(control: UISegmentedControl) {
         self.currentViewIdx = control.selectedSegmentIndex
-        var logValue = ""
+        let logValue: String
         switch control.selectedSegmentIndex {
         case 0:
             logValue = "운행정보"
