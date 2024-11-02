@@ -80,7 +80,9 @@ enum EventParameter {
             case hamburger = "hamburger"
             case menuTime = "menu_time"
             case menuImage = "menu_image"
+            case menuShare = "menu_share"
             case cafeteriaInfo = "cafeteria_info"
+            case notificationMenuImageUpload = "notification_menu_image_upload"
             
             // Bus
             case mainBus = "main_bus"
@@ -88,10 +90,16 @@ enum EventParameter {
             case mainBusScroll = "main_bus_scroll"
             case busDeparture = "bus_departure"
             case busArrival = "bus_arrival"
+            case busSearchDeparture = "bus_search_departure"
+            case busSearchArrival = "bus_search_arrival"
+            case busSearch = "bus_search"
             case busTimetable = "bus_timetable"
             case busTimetableArea = "bus_timetable_area"
             case busTimetableTime = "bus_timetable_time"
             case busTimetableExpress = "bus_timetable_express"
+            case busTimetableCitybus = "bus_timetable_citybus"
+            case busTimetableCitybusRoute = "bus_timetable_citybus_route"
+            case busTabMenu = "bus_tab_menu"
             
             case noticeTab = "notice_tab"
             case noticePage = "notice_page"
@@ -106,6 +114,9 @@ enum EventParameter {
             case recommendedKeyword = "recommended_keyword"
             case keywordNotification = "keyword_notification"
             case loginPopupKeyword = "login_popup_keyword"
+            case noticeOriginalShortcut = "notice_original_shortcut"
+            case noticeSearchEvent = "notice_search_event"
+            case notificationManageKeyword = "notification_manage_keyword"
             
             var team: String {
                 return "CAMPUS"

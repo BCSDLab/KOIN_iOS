@@ -21,7 +21,7 @@ final class BusCollectionView: UICollectionView, UICollectionViewDataSource, UIC
     var departure: Int?
     var arrival: Int?
     var busTypePublisher = PassthroughSubject<BusType, Never>()
-    let busRequestPublisher = PassthroughSubject<(BusPlace, BusPlace, BusType), Never>()
+    let busRequestPublisher = PassthroughSubject<(Int, (BusPlace, BusPlace, BusType)), Never>()
     let scrollPublisheer = PassthroughSubject<String, Never>()
     var subscriptions = Set<AnyCancellable>()
     private(set) var busItems: [BusInformation] = [
@@ -89,7 +89,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
             
         }
         if (departure ?? 0)%3 != (arrival ?? 0)%3 {
-            scrollPublisheer.send("\(busItems[departure ?? 0].busType.rawValue)>\(busItems[arrival ?? 0].busType.rawValue)")
+            scrollPublisheer.send("\(busItems[departure ?? 0].busType.koreanDescription)>\(busItems[arrival ?? 0].busType.koreanDescription)")
         }
     }
     
@@ -125,7 +125,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         if let visibleIndexPath = self.indexPathForItem(at: visiblePoint) {
             if cellForItem(at: visibleIndexPath) is BusCollectionViewCell {
-                busRequestPublisher.send((busItems[visibleIndexPath.row].startBusArea, busItems[visibleIndexPath.row].endBusArea, busItems[visibleIndexPath.row].busType))
+                busRequestPublisher.send((0, (busItems[visibleIndexPath.row].startBusArea, busItems[visibleIndexPath.row].endBusArea, busItems[visibleIndexPath.row].busType)))
             }
         }
         adjustScrollPosition()
@@ -145,7 +145,7 @@ extension BusCollectionView: UICollectionViewDelegateFlowLayout {
             self.busItems[indexPath.row].startBusArea = self.busItems[indexPath.row].endBusArea
             self.busItems[indexPath.row].endBusArea = temp
             
-            self.busRequestPublisher.send((self.busItems[indexPath.row].startBusArea, self.busItems[indexPath.row].endBusArea, self.busItems[indexPath.row].busType))
+            self.busRequestPublisher.send((1, (self.busItems[indexPath.row].startBusArea, self.busItems[indexPath.row].endBusArea, self.busItems[indexPath.row].busType)))
         }
         
         cell.redirectBtnTappedAction = { [weak self] _ in

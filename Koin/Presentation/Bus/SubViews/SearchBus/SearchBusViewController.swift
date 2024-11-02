@@ -213,10 +213,10 @@ extension SearchBusViewController {
             guard let self = self else {return}
             
             if sender == self.selectedDepartureBtn {
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busDeparture, EventParameter.EventCategory.click, item))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busSearchDeparture, EventParameter.EventCategory.click, item))
             }
             else if sender == self.selectedArrivalBtn {
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busArrival, EventParameter.EventCategory.click, item))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busSearchArrival, EventParameter.EventCategory.click, item))
             }
             let lastBtnTag = sender.tag
             
@@ -277,6 +277,7 @@ extension SearchBusViewController {
         let arrivedPlace = BusPlace.allCases[self.selectedArrivalBtn.tag]
         let selectedBusPlace = SelectedBusPlaceStatus(lastDepartedPlace: nil, nowDepartedPlace: departedPlace, lastArrivedPlace: nil, nowArrivedPlace: arrivedPlace)
         self.inputSubject.send(.searchBusInfo(selectedBusPlace: selectedBusPlace, date: self.departedDatePicker.date, time: self.departedTimePicker.date))
+        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busSearch, .click, "조회"))
     }
     
     private func initializeView() {

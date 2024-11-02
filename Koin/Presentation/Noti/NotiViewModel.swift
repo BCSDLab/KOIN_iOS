@@ -16,6 +16,7 @@ final class NotiViewModel: ViewModelProtocol {
         case getNotiAgreementList
         case switchChanged(SubscribeType, Bool)
         case switchDetailChanged(DetailSubscribeType, Bool)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -33,13 +34,15 @@ final class NotiViewModel: ViewModelProtocol {
     private let changeNotiUseCase: ChangeNotiUseCase
     private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     // MARK: - Initialization
     
-    init(changeNotiUseCase: ChangeNotiUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, fetchNotiListUseCase: FetchNotiListUseCase) {
+    init(changeNotiUseCase: ChangeNotiUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, fetchNotiListUseCase: FetchNotiListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.changeNotiUseCase = changeNotiUseCase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -51,6 +54,8 @@ final class NotiViewModel: ViewModelProtocol {
                 self?.subscribeNoti(type: type, isOn: isOn)
             case let .switchDetailChanged(detailType,isOn):
                 self?.subscribeDetailNoti(detailType: detailType, isOn: isOn)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -70,6 +75,10 @@ extension NotiViewModel {
             print("success")
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
+            }
+            else if type == .diningImageUpload {
+                let logValue = isOn ? "on" : "off"
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationMenuImageUpload, category: .click, value: logValue)
             }
         }.store(in: &subscriptions)
 
@@ -95,5 +104,9 @@ extension NotiViewModel {
             self?.outputSubject.send(.updateSwitch(response))
         }.store(in: &subscriptions)
 
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

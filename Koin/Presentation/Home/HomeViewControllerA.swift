@@ -279,9 +279,10 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         
         busCollectionView.busRequestPublisher
             .sink { [weak self] data in
-                self?.inputSubject.send(.getBusInfo(data.0, data.1, data.2))
-                
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.2.koreanDescription))
+                if data.0 == 1 {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.1.2.koreanDescription))
+                }
+                self?.inputSubject.send(.getBusInfo(data.1.0, data.1.1, data.1.2))
             }
             .store(in: &subscriptions)
         

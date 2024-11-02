@@ -217,6 +217,7 @@ final class DiningViewController: UIViewController {
         
         diningListCollectionView.shareButtonPublisher.sink { [weak self] item in
             self?.inputSubject.send(.shareMenuList(item))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuShare, .click, "공유하기"))
         }.store(in: &subscriptions)
         
         diningListCollectionView.likeButtonPublisher.sink { [weak self] tuple in
@@ -281,7 +282,7 @@ extension DiningViewController {
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let notiViewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase))
+        let notiViewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             notiViewController.title = "알림설정"
         navigationController?.pushViewController(notiViewController, animated: true)
     }

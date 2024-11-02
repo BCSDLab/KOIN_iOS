@@ -230,6 +230,7 @@ final class NotiViewController: UIViewController {
 extension NotiViewController {
     
     @objc private func moveManageKeywordVC() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationManageKeyword, .click, "공지사항 키워드 알림"))
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
         let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))

@@ -225,20 +225,24 @@ extension BusTimetableViewController {
             if self.firstBusFilterBtn.tag == 0 {
                 self.inputSubject.send(.getBusTimetable(busType: .expressBus, firstBusFilterIdx: 1, secondBusFilterIdx: nil))
                 self.firstBusFilterBtn.tag = 1
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableExpress, .click, "야우리 → 한기대"))
             }
             else {
                 self.inputSubject.send(.getBusTimetable(busType: .expressBus, firstBusFilterIdx: 0, secondBusFilterIdx: nil))
                 self.firstBusFilterBtn.tag = 0
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableExpress, .click, "한기대 → 야우리"))
             }
         }
         else {
             if self.firstBusFilterBtn.tag == 0 {
                 self.inputSubject.send(.getBusTimetable(busType: .cityBus, firstBusFilterIdx: 1, secondBusFilterIdx: self.secondBusFilterBtn.tag))
                 self.firstBusFilterBtn.tag = 1
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableCitybus, .click, "터미널 → 병천"))
             }
             else {
                 self.inputSubject.send(.getBusTimetable(busType: .cityBus, firstBusFilterIdx: 0, secondBusFilterIdx: self.secondBusFilterBtn.tag))
                 self.firstBusFilterBtn.tag = 0
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableExpress, .click, "병천 → 터미날"))
             }
         }
     }
@@ -310,6 +314,7 @@ extension BusTimetableViewController {
                 self?.firstBusFilterLabel.text = item
                 self?.firstBusFilterBtn.tag = index
                 self?.inputSubject.send(.getBusTimetable(busType: .shuttleBus, firstBusFilterIdx: index, secondBusFilterIdx: 0))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableArea, .click, item))
             }
         default:
             busFilterDropDown.selectionAction = { [weak self] (index, item) in
@@ -328,6 +333,7 @@ extension BusTimetableViewController {
             self?.chevronImageView.image = UIImage(systemName: SFSymbols.chevronDown.rawValue)?.withConfiguration(UIImage.SymbolConfiguration(font: .appFont(.pretendardBold, size: 13)))
             self?.secondBusFilterLabel.text = busRouteModel[index]
             self?.inputSubject.send(.getBusTimetable(busType: .shuttleBus, firstBusFilterIdx: self?.firstBusFilterBtn.tag ?? 0, secondBusFilterIdx: index))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableTime, .click, item))
             
         }
         busFilterDropDown.show()
@@ -347,6 +353,7 @@ extension BusTimetableViewController {
             self?.secondBusFilterLabel.text = itemList[index]
             self?.secondBusFilterBtn.tag = index
             self?.inputSubject.send(.getBusTimetable(busType: .cityBus, firstBusFilterIdx: self?.firstBusFilterBtn.tag ?? 0, secondBusFilterIdx: index))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busTimetableCitybusRoute, .click, item))
         }
         busFilterDropDown.show()
     }
