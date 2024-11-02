@@ -249,13 +249,14 @@ extension NoticeDataViewController {
             urlRedirectButton.setTitle("학생종합경력개발 바로가기", for: .normal)
             noticeUrl = "https://job.koreatech.ac.kr"
         }
-        
-        if let url = noticeData.url {
-            noticeUrl = url
-            urlRedirectButton.setTitle("원본 글 바로가기", for: .normal)
-        }
         else {
-            urlRedirectButton.isHidden = true
+            if let url = noticeData.url {
+                noticeUrl = url
+                urlRedirectButton.setTitle("원본 글 바로가기", for: .normal)
+            }
+            else {
+                urlRedirectButton.isHidden = true
+            }
         }
     }
     
