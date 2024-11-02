@@ -113,6 +113,7 @@ enum EventParameter {
             case recommendedKeyword = "recommended_keyword"
             case keywordNotification = "keyword_notification"
             case loginPopupKeyword = "login_popup_keyword"
+            case noticeOriginalShortcut = "notice_original_shortcut"
             
             var team: String {
                 return "CAMPUS"

@@ -159,6 +159,7 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
 extension NoticeDataViewController {
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeOriginalShortcut, .click, "\(urlRedirectButton.currentTitle ?? "")"))
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
      }
