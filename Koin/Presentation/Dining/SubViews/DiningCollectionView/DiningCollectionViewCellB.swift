@@ -294,6 +294,10 @@ extension DiningCollectionViewCellB {
     }
     
     private func setUpConstraints() {
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+        }
         wrappedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
