@@ -63,16 +63,19 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     
     func setDiningList(_ list: [DiningItem]) {
         diningList = list
+        if diningList.isEmpty {
+            diningShareToolTipImageView.isHidden = true
+        }
         self.reloadData()
     }
     
     private func checkAndShowToolTip(heightOfDiningCard: CGFloat) {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
-        let leading = (UIScreen.main.bounds.width - 270) / 2 - 10
-        diningShareToolTipImageView.snp.makeConstraints {
-            $0.top.equalTo(self).offset(heightOfDiningCard - 38)
+        let leading = (UIScreen.main.bounds.width - 280) / 2
+        diningShareToolTipImageView.snp.updateConstraints {
+            $0.top.equalTo(self).offset(heightOfDiningCard - 25)
             $0.height.equalTo(100)
-            $0.leading.equalTo(leading)
+            $0.leading.equalTo(self).offset(leading)
             $0.width.equalTo(252)
         }
 
@@ -162,7 +165,7 @@ extension DiningCollectionView {
             dummyCell.layoutIfNeeded()
             let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
             let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-            if indexPath.row == 1 {
+            if indexPath.row == 0 {
                 checkAndShowToolTip(heightOfDiningCard: estimatedSize.height)
             }
             return CGSize(width: width, height: estimatedSize.height)
