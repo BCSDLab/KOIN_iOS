@@ -139,8 +139,8 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
                 self?.updateNoticeData(noticeData: noticeData)
             case let .updatePopularArticles(notices):
                 self?.updatePopularArticle(notices: notices)
-            case let .updateActivityIndictor(isStarted, fileName):
-                self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName)
+            case let .updateActivityIndictor(isStarted, fileName, downloadedPath):
+                self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName, downloadedPath: downloadedPath)
             }
         }.store(in: &subscriptions)
         
@@ -264,14 +264,14 @@ extension NoticeDataViewController {
         hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
     }
     
-    private func updateActivityIndicator(isStarted: Bool, fileName: String?) {
+    private func updateActivityIndicator(isStarted: Bool, fileName: String?, downloadedPath: URL?) {
         if isStarted {
             IndicatorView.show()
         }
         else {
             IndicatorView.dismiss()
-            if let fileName = fileName {
-                presentAlert(title: "\(fileName) 다운로드 완료", preferredStyle: .alert, with: [])
+            if let fileName = fileName, let path = downloadedPath {
+                presentAlert(title: "\(fileName) 다운로드 완료 \n \(path)에 저장", preferredStyle: .alert, with: [])
             }
         }
     }

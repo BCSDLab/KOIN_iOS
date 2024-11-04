@@ -109,7 +109,7 @@ extension String {
             let range = NSMakeRange(0, text.length)
             
             text.enumerateAttribute(NSAttributedString.Key.attachment, in: range, options: []) { (value, _, _) in
-                if let attachment = value as? NSTextAttachment {
+                if let attachment = value as? NSTextAttachment, !imgSrcLists.isEmpty {
                     let imageSrc = imgSrcLists[check]
                     imageSrc.loadImage(from: imageSrc, completion: { image in
                         attachment.image = image

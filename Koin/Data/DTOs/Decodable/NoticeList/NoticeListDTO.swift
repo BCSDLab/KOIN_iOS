@@ -95,16 +95,9 @@ extension NoticeArticleDTO {
             let olTags = try document.select("ol")
             let liTags = try document.select("li")
             
-            var emptyPCount = 0
             for paragraph in paragraphs {
                 let paragraphText = try paragraph.text()
-                if paragraphText.isEmpty {
-                    emptyPCount += 1
-                } else {
-                    emptyPCount = 0
-                }
-                
-                if emptyPCount > 1 {
+                if paragraphText.isEmpty && paragraph.children().array().isEmpty {
                     try paragraph.remove()
                 }
                 
