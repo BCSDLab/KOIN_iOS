@@ -37,8 +37,8 @@ final class DiningViewController: UIViewController {
         segment.insertSegment(withTitle: "아침", at: 0, animated: true)
         segment.insertSegment(withTitle: "점심", at: 1, animated: true)
         segment.insertSegment(withTitle: "저녁", at: 2, animated: true)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .normal)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .selected)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .normal)
+        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
         return segment
     }()
     
@@ -49,17 +49,11 @@ final class DiningViewController: UIViewController {
         return view
     }()
     
-    private let separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .appColor(.neutral100)
-        return view
-    }()
-    
     private let separateViewArray: [UIView] = {
         var viewArray: [UIView] = []
         for _ in 0..<3 {
             let view = UIView()
-            view.backgroundColor = UIColor.appColor(.neutral500)
+            view.backgroundColor = UIColor.appColor(.neutral400)
             viewArray.append(view)
         }
         return viewArray
@@ -68,15 +62,15 @@ final class DiningViewController: UIViewController {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
+        stackView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
         return stackView
     }()
     
     private let diningListCollectionView: DiningCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 0
         let collectionView = DiningCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .appColor(.neutral100)
+        collectionView.backgroundColor = .appColor(.neutral200)
         return collectionView
     }()
     
@@ -153,6 +147,7 @@ final class DiningViewController: UIViewController {
         bind()
         configureSwipeGestures()
         configureView()
+        inputSubject.send(.getABTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -185,13 +180,13 @@ final class DiningViewController: UIViewController {
                 self?.moveUnderLineView(diningType: diningType)
             case let .initCalendar(showingDate):
                 self?.dateCalendarCollectionView.generateDateList(showingDate: showingDate)
-            case let .updateDiningLike(id, isLiked):
-                self?.diningListCollectionView.updateDiningItem(id: id, isLiked: isLiked)
             case let .showBottomSheet((soldOutIsOn, imageUplloadisOn)):
                 self?.showBottomSheet((soldOutIsOn, imageUplloadisOn))
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
+            case let .setABTestResult(abTestResult):
+                self?.diningListCollectionView.setAbTestResult(result: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -218,10 +213,6 @@ final class DiningViewController: UIViewController {
         diningListCollectionView.shareButtonPublisher.sink { [weak self] item in
             self?.inputSubject.send(.shareMenuList(item))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuShare, .click, "공유하기"))
-        }.store(in: &subscriptions)
-        
-        diningListCollectionView.likeButtonPublisher.sink { [weak self] tuple in
-            self?.inputSubject.send(.diningLike(tuple.0, tuple.1))
         }.store(in: &subscriptions)
         
         diningListCollectionView.logScrollPublisher.sink { [weak self] _ in
@@ -362,7 +353,7 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, separatorView].forEach {
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
             self.view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -379,8 +370,13 @@ extension DiningViewController {
     private func setUpConstraints() {
         tabBarView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(separatorView.snp.bottom)
+            $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
             $0.height.equalTo(45)
+        }
+        stackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(tabBarView.snp.bottom)
+            $0.height.equalTo(1)
         }
         warningImageView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -396,11 +392,6 @@ extension DiningViewController {
             $0.leading.equalTo(24)
             $0.trailing.equalTo(24)
             $0.height.equalTo(99)
-        }
-        separatorView.snp.makeConstraints{
-            $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(8)
         }
         diningTypeSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview()
