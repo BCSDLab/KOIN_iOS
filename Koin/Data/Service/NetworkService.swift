@@ -117,12 +117,11 @@ class NetworkService {
         .eraseToAnyPublisher()
     }
     
-    func downloadFiles(api: URLRequest, fileName: String) -> AnyPublisher<Void, ErrorResponse> {
+    func downloadFiles(api: URLRequest, fileName: String) -> AnyPublisher<URL?, ErrorResponse> {
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return Fail(error: ErrorResponse(code: "001", message: "파일 저장 위치 찾기 실패")).eraseToAnyPublisher() }
-        print(documentsDirectory)
+        let fileUrl = documentsDirectory.appendingPathComponent(fileName)
         let destination: DownloadRequest.Destination = { _, _ in
-            let fileUrl = documentsDirectory.appendingPathComponent(fileName)
             return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
         }
         
@@ -136,7 +135,7 @@ class NetworkService {
                 
                 if 200..<300 ~= httpResponse.statusCode {
                     print("File is downloaded")
-                    return
+                    return documentsDirectory
                 } else {
                     if let error = response.error {
                         print("Download Failed - \(error)")
@@ -144,6 +143,7 @@ class NetworkService {
                         throw ErrorResponse(code: "\(httpResponse.statusCode)", message: "알 수 없는 에러")
                     }
                 }
+                return nil
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)

@@ -319,7 +319,7 @@ extension ServiceSelectViewController {
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())))
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
@@ -338,6 +338,7 @@ extension ServiceSelectViewController {
     @objc func facilityInfoSelectButtonTapped() {
         let viewController = FacilityInfoViewController()
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "교내 시설물 정보"))
     }
     
     @objc func landSelectButtonTapped() {

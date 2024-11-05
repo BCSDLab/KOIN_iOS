@@ -87,6 +87,17 @@ final class BusDetailViewController: UIViewController {
 extension BusDetailViewController {
     @objc private func changeCurrentIndex(control: UISegmentedControl) {
         self.currentViewIdx = control.selectedSegmentIndex
+        let logValue: String
+        switch control.selectedSegmentIndex {
+        case 0:
+            logValue = "운행정보"
+        case 1:
+            logValue = "운행정보검색"
+        default:
+            logValue = "시간표"
+        }
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: MockAnalyticsService()))
+        logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.busTabMenu, category: .click, value: logValue)
     }
     
     func initPageViewController(){

@@ -20,6 +20,6 @@ final class DefaultSearchNoticeArticlesUseCase: SearchNoticeArticlesUseCase {
     }
     
     func execute(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {
-        return noticeRepository.searchNoticeArticle(requestModel: requestModel).eraseToAnyPublisher()
+        return noticeRepository.searchNoticeArticle(requestModel: requestModel).map { $0.toDomain() }.eraseToAnyPublisher()
     }
 }

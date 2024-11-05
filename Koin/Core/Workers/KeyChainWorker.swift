@@ -15,6 +15,7 @@ final class KeyChainWorker {
         case fcm
         case accessHistoryId
         case variableName
+        case shareVariableName
     }
     static let shared = KeyChainWorker()
     

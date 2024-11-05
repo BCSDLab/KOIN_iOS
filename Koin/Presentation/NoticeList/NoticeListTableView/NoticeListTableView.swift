@@ -200,7 +200,7 @@ extension NoticeListTableView: UITableViewDelegate {
         if !isForSearch && section == 1 {
             return 95
         }
-        else if isForSearch && section == 1 && noticeArticleList.count / 5 < 5 {
+        else if isForSearch && section == 1 && noticeArticleList.count / 5 > 5 {
             return 58
         }
         else {

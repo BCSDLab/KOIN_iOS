@@ -11,20 +11,20 @@ import Foundation
 final class DiningViewModel: ViewModelProtocol {
     
     enum Input {
+        case getABTestResult
         case updateDisplayDateTime(Date?, DiningType?)
         case shareMenuList(ShareDiningMenu)
         case determineInitDate
-        case diningLike(Int, Bool)
         case changeNoti(Bool, SubscribeType)
         case fetchNotiList
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateDiningList([DiningItem], DiningType)
-        case updateDiningLike(Int, Bool)
         case initCalendar(Date)
         case showBottomSheet((Bool, Bool))
         case showLoginModal
+        case setABTestResult(AssignAbTestResponse)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -35,6 +35,7 @@ final class DiningViewModel: ViewModelProtocol {
     private let changeNotiUseCase: ChangeNotiUseCase
     private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let assignAbTestUseCase: AssignAbTestUseCase
     private let dateProvider: DateProvider
     private var subscriptions: Set<AnyCancellable> = []
     private var sharedDiningItem: CurrentDiningTime?
@@ -44,7 +45,7 @@ final class DiningViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, assignAbTestUseCase: AssignAbTestUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder
@@ -53,6 +54,7 @@ final class DiningViewModel: ViewModelProtocol {
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUsecase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
+        self.assignAbTestUseCase = assignAbTestUseCase
         self.sharedDiningItem = sharedDiningItem
     }
     
@@ -73,12 +75,12 @@ final class DiningViewModel: ViewModelProtocol {
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case let .shareMenuList(shareModel):
                 self.shareMenuList(shareModel: shareModel)
-            case let .diningLike(id, isLiked):
-                self.diningLike(id, isLiked)
             case let .changeNoti(isOn, subscribeType):
                 self.changeNoti(isOn: isOn, type: subscribeType)
             case .fetchNotiList:
                 self.fetchNotiList()
+            case .getABTestResult:
+                self.getAbTestResult()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -141,17 +143,6 @@ extension DiningViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func diningLike(_ id: Int, _ isLiked: Bool) {
-        diningLikeUseCase.execute(diningId: id, isLiked: isLiked).sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.outputSubject.send(.showLoginModal)
-            }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateDiningLike(id, !isLiked))
-        }.store(in: &subscriptions)
-    }
-    
     private func shareMenuList(shareModel: ShareDiningMenu) {
         shareMenuListUseCase.execute(shareModel: shareModel)
     }
@@ -183,6 +174,17 @@ extension DiningViewModel {
         if let type = type {
             currentDate.diningType = type
         }
+    }
+    
+    private func getAbTestResult() {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "campus_share_v1")).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            self?.outputSubject.send(.setABTestResult(abTestResult))
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
