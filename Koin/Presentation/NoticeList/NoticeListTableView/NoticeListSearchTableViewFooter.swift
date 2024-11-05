@@ -35,6 +35,10 @@ final class NoticeSearchTableViewFooter: UITableViewHeaderFooterView {
         configureView()
     }
     
+    override func prepareForReuse() {
+        subscriptions.removeAll()
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configureView()
