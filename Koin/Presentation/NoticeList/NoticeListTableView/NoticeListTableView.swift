@@ -22,6 +22,7 @@ final class NoticeListTableView: UITableView {
     private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
+    private var isLastSearchedPage: Bool = false
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -55,12 +56,13 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isNewKeyword: Bool) {
+    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isLastPage: Bool, isNewKeyword: Bool) {
         if isNewKeyword {
             self.noticeArticleList = []
         }
         self.noticeArticleList.append(contentsOf: noticeArticleList)
         isForSearch = true
+        isLastSearchedPage = isLastPage
         let indexSet = IndexSet(integer: 1)
         reloadSections(indexSet, with: .automatic)
         let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 1)
@@ -169,10 +171,11 @@ extension NoticeListTableView: UITableViewDelegate {
                 return UITableViewHeaderFooterView()
             }
            
-            view.tapBtnPublisher.sink { [weak self] in
+            view.tapBtnPublisher
+                .sink { [weak self] in
                 guard let self = self else { return }
-                let page = Int(self.noticeArticleList.count / 5)
-                self.tapListLoadButtnPublisher.send(page)
+                let page = (self.noticeArticleList.count) / 5
+                self.tapListLoadButtnPublisher.send(page + 1)
             }.store(in: &view.subscriptions)
             
             return view
@@ -200,7 +203,7 @@ extension NoticeListTableView: UITableViewDelegate {
         if !isForSearch && section == 1 {
             return 95
         }
-        else if isForSearch && section == 1 && noticeArticleList.count / 5 > 5 {
+        else if isForSearch && section == 1 && !isLastSearchedPage {
             return 58
         }
         else {

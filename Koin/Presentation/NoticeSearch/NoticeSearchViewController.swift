@@ -188,6 +188,7 @@ extension NoticeSearchViewController {
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
+            textField.resignFirstResponder()
         }
         textField.text = ""
     }
@@ -203,6 +204,7 @@ extension NoticeSearchViewController {
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
+            textField.resignFirstResponder()
         }
         textField.text = ""
         return true
@@ -227,7 +229,7 @@ extension NoticeSearchViewController {
         else {
             emptyNoticeGuideLabel.isHidden = true
             noticeListTableView.isHidden = false
-            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult, isNewKeyword: isNewPage)
+            noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult, isLastPage: isLastPage, isNewKeyword: isNewPage)
         }
     }
 }
