@@ -35,6 +35,7 @@ final class BusTimetableViewController: CustomViewController {
         ]))
         configuration.attributedTitle = title
         configuration.imagePadding = 4
+        configuration.contentInsets = .init(top: 5, leading: 0, bottom: 5, trailing: 0)
         $0.configuration = configuration
     }
     
@@ -97,21 +98,51 @@ extension BusTimetableViewController {
         view.addSubview(navigationBarWrappedView)
         view.addSubview(timetableHeaderView)
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
-            view.addSubview($0)
+            timetableHeaderView.addSubview($0)
+        }
+        [busNoticeLabel, deleteNoticeButton].forEach {
+            busNoticeWrappedView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
         navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.height.equalTo(95)
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.height.equalTo(45)
         }
-        
         timetableHeaderView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(navigationBarWrappedView.snp.bottom)
             $0.height.equalTo(139)
         }
+        typeOftimetableLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(8)
+            $0.leading.trailing.equalTo(24)
+            $0.height.equalTo(32)
+        }
+        incorrectBusInfoButton.snp.makeConstraints {
+            $0.leading.equalTo(typeOftimetableLabel)
+            $0.top.equalTo(typeOftimetableLabel.snp.bottom).offset(8)
+        }
+        busNoticeWrappedView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(8)
+            $0.height.equalTo(56)
+        }
+        busNoticeLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(40)
+        }
+        deleteNoticeButton.snp.makeConstraints {
+            $0.centerY.equalTo(busNoticeLabel)
+            $0.leading.equalTo(busNoticeLabel.snp.trailing)
+            $0.width.equalTo(24)
+            $0.height.equalTo(24)
+        }
+        
     }
     
     private func configureView() {
