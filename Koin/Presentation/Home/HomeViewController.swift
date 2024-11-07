@@ -355,13 +355,9 @@ extension HomeViewController {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .expressBus:
-            let movingPage = BusDetailViewController(selectedPage: (2, .expressBus))
-            movingPage.title = "버스/교통"
-            self.navigationController?.pushViewController(movingPage, animated: true)
+            print("express")
         default:
-            let movingPage = BusDetailViewController(selectedPage: (2, .cityBus))
-            movingPage.title = "버스/교통"
-            self.navigationController?.pushViewController(movingPage, animated: true)
+            print("시내버스")
         }
     }
     
@@ -393,8 +389,7 @@ extension HomeViewController {
     }
     
     @objc private func busViewTapped() {
-        let busViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
-        busViewController.title = "버스/교통"
+        let busViewController = BusTimetableViewController(viewModel: BusTimetableViewModel())
         navigationController?.pushViewController(busViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))
