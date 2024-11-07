@@ -113,6 +113,7 @@ enum ImageAsset: String {
     case checkEmpty
     case callBlue
     case qrCode
+    case incorrectInfo
 }
 
 enum SFSymbols: String {
