@@ -299,11 +299,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func busSelectButtonTapped() {
-        let busDetailViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
-        busDetailViewController.title = "버스/교통"
-        navigationController?.pushViewController(busDetailViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스"))
     }
     
     @objc func diningSelectButtonTapped() {
