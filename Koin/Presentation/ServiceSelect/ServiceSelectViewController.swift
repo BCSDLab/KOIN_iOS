@@ -299,8 +299,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func busSelectButtonTapped() {
-        let busDetailViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
-        busDetailViewController.title = "버스/교통"
+        let busDetailViewController = BusSearchViewController(viewModel: BusSearchViewModel())
         navigationController?.pushViewController(busDetailViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스"))
