@@ -66,6 +66,12 @@ final class BusTimetableViewController: CustomViewController {
         $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardRegular, size: 16)], for: .normal)
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
+        $0.layer.masksToBounds = false
+    }
+    
+    private let shadowView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral400)
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
     }
     
     private let selectedUnderlineView = UIView().then {
@@ -122,7 +128,7 @@ final class BusTimetableViewController: CustomViewController {
 extension BusTimetableViewController {
     private func setUpLayouts() {
         view.addSubview(scrollView)
-        [navigationBarWrappedView, timetableHeaderView, selectedUnderlineView, busTypeSegmentControl].forEach {
+        [navigationBarWrappedView, timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl].forEach {
             scrollView.addSubview($0)
         }
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
@@ -179,6 +185,12 @@ extension BusTimetableViewController {
             $0.width.equalToSuperview()
             $0.top.equalTo(timetableHeaderView.snp.bottom)
             $0.height.equalTo(50)
+        }
+        shadowView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.top.equalTo(busTypeSegmentControl.snp.bottom)
+            $0.height.equalTo(1)
         }
         selectedUnderlineView.snp.makeConstraints {
             $0.leading.equalTo(busTypeSegmentControl.snp.leading)
