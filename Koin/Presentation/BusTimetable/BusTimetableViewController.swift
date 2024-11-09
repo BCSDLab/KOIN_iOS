@@ -18,6 +18,8 @@ final class BusTimetableViewController: CustomViewController {
     private let viewModel: BusTimetableViewModel
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView()
+    
     private let timetableHeaderView = UIView()
     
     private let typeOftimetableLabel = UILabel().then {
@@ -61,8 +63,13 @@ final class BusTimetableViewController: CustomViewController {
         $0.insertSegment(withTitle: "셔틀", at: 0, animated: true)
         $0.insertSegment(withTitle: "대성", at: 1, animated: true)
         $0.insertSegment(withTitle: "시내", at: 2, animated: true)
+        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardRegular, size: 16)], for: .normal)
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
+    }
+    
+    private let selectedUnderlineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
     }
 
     
@@ -83,6 +90,8 @@ final class BusTimetableViewController: CustomViewController {
         configureView()
         setNavigationTitle(title: "버스 시간표")
         setUpNavigationBar()
+        busTypeSegmentControl.selectedSegmentIndex = 0
+        busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
     }
     
     private func bind() {
@@ -90,13 +99,32 @@ final class BusTimetableViewController: CustomViewController {
         
     }
     
-   
+    @objc private func changeSegmentControl(sender: UISegmentedControl) {
+        moveUnderLineView()
+    }
+    
+    private func moveUnderLineView() {
+        let newXPosition = (busTypeSegmentControl.frame.width / CGFloat(busTypeSegmentControl.numberOfSegments)) * CGFloat(busTypeSegmentControl.selectedSegmentIndex)
+        selectedUnderlineView.snp.updateConstraints {
+            $0.leading.equalTo(busTypeSegmentControl).offset(newXPosition)
+        }
+        UIView.animate (
+            withDuration: 0.4,
+            animations: { [weak self] in
+                guard let self = self
+                else { return }
+                self.view.layoutIfNeeded()
+            }
+        )
+    }
 }
 
 extension BusTimetableViewController {
     private func setUpLayouts() {
-        view.addSubview(navigationBarWrappedView)
-        view.addSubview(timetableHeaderView)
+        view.addSubview(scrollView)
+        [navigationBarWrappedView, timetableHeaderView, selectedUnderlineView, busTypeSegmentControl].forEach {
+            scrollView.addSubview($0)
+        }
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
             timetableHeaderView.addSubview($0)
         }
@@ -106,13 +134,17 @@ extension BusTimetableViewController {
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.leading.trailing.bottom.top.equalToSuperview()
+        }
         navigationBarWrappedView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.height.equalTo(45)
         }
         timetableHeaderView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.leading.equalToSuperview()
             $0.top.equalTo(navigationBarWrappedView.snp.bottom)
             $0.height.equalTo(139)
         }
@@ -142,7 +174,18 @@ extension BusTimetableViewController {
             $0.width.equalTo(24)
             $0.height.equalTo(24)
         }
-        
+        busTypeSegmentControl.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.top.equalTo(timetableHeaderView.snp.bottom)
+            $0.height.equalTo(50)
+        }
+        selectedUnderlineView.snp.makeConstraints {
+            $0.leading.equalTo(busTypeSegmentControl.snp.leading)
+            $0.height.equalTo(2)
+            $0.top.equalTo(busTypeSegmentControl.snp.bottom)
+            $0.width.equalTo(busTypeSegmentControl.snp.width).dividedBy(busTypeSegmentControl.numberOfSegments)
+        }
     }
     
     private func configureView() {
