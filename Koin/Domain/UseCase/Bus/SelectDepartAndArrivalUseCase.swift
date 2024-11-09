@@ -8,11 +8,11 @@
 import Combine
 
 protocol SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace)
+    //func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace)
 }
 
 final class DefaultSelectDepartAndArrivalUseCase: SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace){
+    /*func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace){
         let lastDepartedPlace = selectedBusPlace.lastDepartedPlace
         let lastArrivedPlace = selectedBusPlace.lastArrivedPlace
         let nowArrivedPlace = selectedBusPlace.nowArrivedPlace
@@ -32,5 +32,5 @@ final class DefaultSelectDepartAndArrivalUseCase: SelectDepartAndArrivalUseCase 
             
             return (nowDepartedPlace, nowArrivedPlace)
         }
-    }
+    }*/
 }
