@@ -406,6 +406,8 @@
 		D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */; };
 		D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */; };
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
+		D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */; };
+		D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */; };
 		D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */; };
 		D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */; };
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
@@ -879,6 +881,8 @@
 		D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopDataUseCase.swift; sourceTree = "<group>"; };
 		D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
+		D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionView.swift; sourceTree = "<group>"; };
+		D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
 		D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
@@ -1751,6 +1755,7 @@
 		D26B2EC22CD65A1600BEE07C /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
+				D2DCB2852CDF4A74005CABEE /* SubViews */,
 				D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */,
 				D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */,
 			);
@@ -2358,6 +2363,15 @@
 				D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */,
 			);
 			path = Land;
+			sourceTree = "<group>";
+		};
+		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */,
+				D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D2F13E532BD0AD3A00172A9D /* Noti */ = {
@@ -3152,6 +3166,7 @@
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */,
 				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D27DD0902BA608310081FD36 /* HomeViewControllerB.swift in Sources */,
@@ -3203,6 +3218,7 @@
 				83DD0DD02C568E7100278ABD /* BusTimetableTableViewHeaderView.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
+				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,

@@ -18,9 +18,6 @@ final class TimetableViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView = UIScrollView().then { _ in
-    }
-    
     private let semesterSelectButton = UIButton().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
@@ -45,6 +42,9 @@ final class TimetableViewController: UIViewController {
         $0.contentHorizontalAlignment = .leading
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8.5, bottom: 0, trailing: 0)
         $0.configuration = configuration
+    }
+    
+    private let timetableCollectionView = TimetableCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then { collectionView in
     }
     
     // MARK: - Initialization
@@ -94,11 +94,8 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [scrollView, semesterSelectButton, downloadImageButton].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView].forEach {
             view.addSubview($0)
-        }
-        [].forEach {
-            scrollView.addSubview($0)
         }
     }
     
@@ -114,6 +111,12 @@ extension TimetableViewController {
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.width.equalTo(134)
             make.height.equalTo(32)
+        }
+        timetableCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(semesterSelectButton.snp.bottom).offset(14)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(1)
         }
     }
     private func setUpNavigationBar() {
