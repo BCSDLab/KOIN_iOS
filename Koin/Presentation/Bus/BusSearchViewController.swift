@@ -94,7 +94,7 @@ extension BusSearchViewController {
         else {
            busRouteType = 1
         }
-        let busAreaViewController = BusAreaSelectedViewController(busRouteType: busRouteType, busAreaLists: [.koreatech, .station, .terminal])
+        let busAreaViewController = BusAreaSelectedViewController(busRouteType: busRouteType, busAreaLists: [(.koreatech, true), (.station, false), (.terminal, false)])
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
         self.present(bottomSheet, animated: true)
     }

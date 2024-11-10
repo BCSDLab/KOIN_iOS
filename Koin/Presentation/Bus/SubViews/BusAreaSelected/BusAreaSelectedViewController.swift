@@ -13,7 +13,7 @@ final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
     let busAreaPublisher = PassthroughSubject<String, Never>()
     private var busRouteType = 0 // 0이면 출발, 1이면 도착
-    private var busAreaLists: [BusPlace] = []
+    private var busAreaLists: [(BusPlace, Bool)] = []
     
     //MARK: - UI Components
     private let busRouteDescriptionlabel = UILabel().then {
@@ -34,7 +34,7 @@ final class BusAreaSelectedViewController: UIViewController {
     }
     
     //MARK: - Initialization
-    init(busRouteType: Int, busAreaLists: [BusPlace]) {
+    init(busRouteType: Int, busAreaLists:  [(BusPlace, Bool)]) {
         self.busRouteType = busRouteType
         self.busAreaLists = busAreaLists
         super.init(nibName: nil, bundle: nil)
@@ -87,11 +87,11 @@ extension BusAreaSelectedViewController {
         busAreaCollectionView.snp.makeConstraints {
             $0.top.equalTo(busRouteDescriptionlabel.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
+            $0.height.equalTo(160)
         }
         confirmButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(32)
-            $0.top.equalTo(busAreaCollectionView.snp.bottom).offset(83)
+            $0.top.equalTo(busAreaCollectionView.snp.bottom)
             $0.height.equalTo(48)
         }
     }
@@ -112,15 +112,29 @@ extension BusAreaSelectedViewController: UICollectionViewDataSource, UICollectio
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusAreaSelectedCollectionViewCell.identifier, for: indexPath) as? BusAreaSelectedCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(busPlace: busAreaLists[indexPath.row].koreanDescription, isSelected: false)
+        let item = busAreaLists[indexPath.row]
+        
+        cell.configure(busPlace: item.0.koreanDescription, isSelected: item.1)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if !busAreaLists[indexPath.row].1 {
+            for (index, value) in busAreaLists.enumerated() {
+                if index != indexPath.row && value.1 == true {
+                    busAreaLists[index].1.toggle()
+                }
+                busAreaLists[indexPath.row].1.toggle()
+            }
+            collectionView.reloadData()
+        }
     }
 }
 
 extension BusAreaSelectedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.text = busAreaLists[indexPath.row].koreanDescription
+        label.text = busAreaLists[indexPath.row].0.koreanDescription
         label.font = .appFont(.pretendardMedium, size: 15)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 48))
         return CGSize(width: size.width + 32, height: 48)
