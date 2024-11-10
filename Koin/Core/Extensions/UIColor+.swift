@@ -15,6 +15,7 @@ enum SceneColorAsset {
     case warning50, warning100, warning200, warning300, warning400, warning500, warning600, warning700
     case success50, success100, success200, success300, success400, success500, success600, success700
     case info50, info100, info200, info300, info400, info500, info600, info700
+    case orange100
     case bus1, bus2, bus3
     case yellow
     case gray
@@ -89,6 +90,8 @@ extension UIColor {
         case .info500: return UIColor(hexCode: "4BA1FF")
         case .info600: return UIColor(hexCode: "3B82F6")
         case .info700: return UIColor(hexCode: "3A70E2")
+            
+        case .orange100: return UIColor(hexCode: "FBEBD7")
             
         case .bus1: return UIColor(hexCode: "F7941E")
         case .bus2: return UIColor(hexCode: "7C9FAE")
