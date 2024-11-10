@@ -76,6 +76,7 @@ final class BusSearchViewController: CustomViewController {
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "교통편 조회하기")
+        busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
         bind()
     }
     
@@ -100,6 +101,11 @@ final class BusSearchViewController: CustomViewController {
 }
 
 extension BusSearchViewController {
+    @objc private func tapSearchButton(sender: UIButton) {
+        let busSearchResultViewController = BusSearchResultViewController(viewModel: BusSearchResultViewModel())
+        self.navigationController?.pushViewController(busSearchResultViewController, animated: true)
+    }
+    
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let busRouteType: Int
         if sender == departAreaSelectedButton {

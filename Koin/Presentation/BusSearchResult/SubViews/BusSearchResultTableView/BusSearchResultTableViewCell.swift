@@ -59,17 +59,18 @@ extension BusSearchResultTableViewCell {
     
     private func setUpConstraints() {
         busTypeLabel.snp.makeConstraints {
-            $0.leading.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(33)
+            $0.top.equalToSuperview().offset(8)
             $0.width.equalTo(28)
             $0.height.equalTo(18)
         }
         busTimeLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.leading.equalTo(busTypeLabel)
             $0.top.equalTo(busTypeLabel.snp.bottom)
             $0.height.equalTo(32)
         }
         remainTimeLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(31)
             $0.centerY.equalToSuperview()
         }
     }
