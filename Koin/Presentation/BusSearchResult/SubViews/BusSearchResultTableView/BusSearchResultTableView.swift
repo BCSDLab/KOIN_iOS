@@ -33,9 +33,11 @@ final class BusSearchResultTableView: UITableView {
     
     private func commonInit() {
         register(BusSearchResultTableViewCell.self, forCellReuseIdentifier: BusSearchResultTableViewCell.identifier)
+        register(BusSearchResultTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BusSearchResultTableViewHeader.identifier)
         delegate = self
         dataSource = self
         separatorStyle = .none
+        contentInset = .init(top: 8, left: 33, bottom: 8, right: 33)
     }
 }
 
@@ -49,11 +51,21 @@ extension BusSearchResultTableView: UITableViewDataSource {
         cell.configure(searchModel: busSearchResultList[indexPath.row])
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusSearchResultTableViewHeader.identifier) as? BusSearchResultTableViewHeader else { return UIView() }
+        view.configure(departTime: "오늘 오전 10:30", busType: "전체 차종")
+        return view
+    }
 }
 
 extension BusSearchResultTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 72
     }
 }
 
