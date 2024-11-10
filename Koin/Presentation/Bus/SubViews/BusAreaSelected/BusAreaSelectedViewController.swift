@@ -11,7 +11,7 @@ import UIKit
 
 final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
-    let busAreaPublisher = PassthroughSubject<String, Never>()
+    let busAreaPublisher = PassthroughSubject<(BusPlace, Int), Never>()
     private var busRouteType = 0 // 0이면 출발, 1이면 도착
     private var busAreaLists: [(BusPlace, Bool)] = []
     
@@ -34,9 +34,7 @@ final class BusAreaSelectedViewController: UIViewController {
     }
     
     //MARK: - Initialization
-    init(busRouteType: Int, busAreaLists:  [(BusPlace, Bool)]) {
-        self.busRouteType = busRouteType
-        self.busAreaLists = busAreaLists
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,11 +51,17 @@ final class BusAreaSelectedViewController: UIViewController {
         setUpView()
         busAreaCollectionView.delegate = self
         busAreaCollectionView.dataSource = self
-        busAreaCollectionView.reloadData()
+        confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
     }
 }
 
 extension BusAreaSelectedViewController {
+    func configure(busRouteType: Int, busAreaLists:  [(BusPlace, Bool)]) {
+        self.busRouteType = busRouteType
+        self.busAreaLists = busAreaLists
+        busAreaCollectionView.reloadData()
+    }
+    
     private func setUpView() {
         let attributeContainer: [NSAttributedString.Key: Any] = [.font: UIFont.appFont(.pretendardMedium, size: 15), .foregroundColor: UIColor.appColor(.neutral0)]
         if busRouteType == 0 { // 출발지 고르는 경우
@@ -100,6 +104,16 @@ extension BusAreaSelectedViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
+    }
+    
+    @objc private func tapConfirmButton() {
+        for value in busAreaLists {
+            if value.1 == true {
+                busAreaPublisher.send((value.0, busRouteType))
+                break
+            }
+        }
+        dismissView()
     }
 }
 
