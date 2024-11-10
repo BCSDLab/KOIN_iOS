@@ -21,6 +21,7 @@
 		8316DCFB2CE08891009AF9A4 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCFA2CE08891009AF9A4 /* BusSearchResultViewModel.swift */; };
 		8316DCFF2CE08A12009AF9A4 /* BusSearchResultTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCFE2CE08A12009AF9A4 /* BusSearchResultTableView.swift */; };
 		8316DD012CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DD002CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift */; };
+		8316DD032CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DD022CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -496,6 +497,7 @@
 		8316DCFA2CE08891009AF9A4 /* BusSearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultViewModel.swift; sourceTree = "<group>"; };
 		8316DCFE2CE08A12009AF9A4 /* BusSearchResultTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableView.swift; sourceTree = "<group>"; };
 		8316DD002CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		8316DD022CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewHeader.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -1009,6 +1011,7 @@
 			children = (
 				8316DCFE2CE08A12009AF9A4 /* BusSearchResultTableView.swift */,
 				8316DD002CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift */,
+				8316DD022CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift */,
 			);
 			path = BusSearchResultTableView;
 			sourceTree = "<group>";
@@ -3218,6 +3221,7 @@
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
+				8316DD032CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
