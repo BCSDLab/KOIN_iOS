@@ -1212,14 +1212,14 @@
 			path = ../../../..;
 			sourceTree = "<group>";
 		};
-		837BFA402BB70A77001FCBD4 /* Bus */ = {
+		837BFA402BB70A77001FCBD4 /* BusSearch */ = {
 			isa = PBXGroup;
 			children = (
 				8316DCF12CDFE1EB009AF9A4 /* SubViews */,
 				8316DCED2CDFBECA009AF9A4 /* BusSearchViewController.swift */,
 				8316DCEF2CDFBED5009AF9A4 /* BusSearchViewModel.swift */,
 			);
-			path = Bus;
+			path = BusSearch;
 			sourceTree = "<group>";
 		};
 		839423DA2CA302FA001E690F /* NoticeKeywordInformation */ = {
@@ -1764,7 +1764,7 @@
 				D208A7C02CAB9A38007040E7 /* ForceUpdate */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
-				837BFA402BB70A77001FCBD4 /* Bus */,
+				837BFA402BB70A77001FCBD4 /* BusSearch */,
 				D2908CA42BB5EB5F0008F908 /* Timetable */,
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
 				0F74C4F52BA8562D00EF4F58 /* Register */,
