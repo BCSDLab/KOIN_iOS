@@ -15,6 +15,8 @@
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCEE2CDFBECA009AF9A4 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCED2CDFBECA009AF9A4 /* BusSearchViewController.swift */; };
 		8316DCF02CDFBED5009AF9A4 /* BusSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCEF2CDFBED5009AF9A4 /* BusSearchViewModel.swift */; };
+		8316DCF32CDFE201009AF9A4 /* BusAreaSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCF22CDFE201009AF9A4 /* BusAreaSelectedViewController.swift */; };
+		8316DCF62CDFE676009AF9A4 /* BusAreaSelectedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCF52CDFE676009AF9A4 /* BusAreaSelectedCollectionViewCell.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -482,9 +484,11 @@
 		22293661865FA988A23B96CF /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		57DAEFEEBA48B6A14C9B564B /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
+		8316DCED2CDFBECA009AF9A4 /* BusSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchViewController.swift; sourceTree = "<group>"; };
+		8316DCEF2CDFBED5009AF9A4 /* BusSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchViewModel.swift; sourceTree = "<group>"; };
+		8316DCF22CDFE201009AF9A4 /* BusAreaSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedViewController.swift; sourceTree = "<group>"; };
+		8316DCF52CDFE676009AF9A4 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
-        8316DCED2CDFBECA009AF9A4 /* BusSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchViewController.swift; sourceTree = "<group>"; };
-        8316DCEF2CDFBED5009AF9A4 /* BusSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchViewModel.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
 		832FCC912CD667940044AF23 /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = diningShare.gif; sourceTree = "<group>"; };
@@ -957,6 +961,23 @@
 			path = Register;
 			sourceTree = "<group>";
 		};
+		8316DCF12CDFE1EB009AF9A4 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				8316DCF42CDFE629009AF9A4 /* BusAreaSelected */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		8316DCF42CDFE629009AF9A4 /* BusAreaSelected */ = {
+			isa = PBXGroup;
+			children = (
+				8316DCF22CDFE201009AF9A4 /* BusAreaSelectedViewController.swift */,
+				8316DCF52CDFE676009AF9A4 /* BusAreaSelectedCollectionViewCell.swift */,
+			);
+			path = BusAreaSelected;
+			sourceTree = "<group>";
+		};
 		833D9C072C6B243400982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
@@ -1194,6 +1215,7 @@
 		837BFA402BB70A77001FCBD4 /* Bus */ = {
 			isa = PBXGroup;
 			children = (
+				8316DCF12CDFE1EB009AF9A4 /* SubViews */,
 				8316DCED2CDFBECA009AF9A4 /* BusSearchViewController.swift */,
 				8316DCEF2CDFBED5009AF9A4 /* BusSearchViewModel.swift */,
 			);
@@ -3102,6 +3124,7 @@
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
+				8316DCF32CDFE201009AF9A4 /* BusAreaSelectedViewController.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				8354BE312C79A0F1009D4D7A /* MyKeywordCollectionViewCell.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
@@ -3215,6 +3238,7 @@
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
+				8316DCF62CDFE676009AF9A4 /* BusAreaSelectedCollectionViewCell.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
