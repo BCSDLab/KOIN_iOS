@@ -55,6 +55,8 @@ final class BusSearchViewController: CustomViewController {
         $0.layer.cornerRadius = 4
     }
     
+    private let busAreaViewController = BusAreaSelectedViewController()
+    
     // MARK: - Initialization
     
     init(viewModel: BusSearchViewModel) {
@@ -74,6 +76,7 @@ final class BusSearchViewController: CustomViewController {
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "교통편 조회하기")
+        bind()
     }
     
     
@@ -82,6 +85,17 @@ final class BusSearchViewController: CustomViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
+        busAreaViewController.busAreaPublisher.sink { [weak self] busArea, btnType in
+            let sender: UIButton
+            guard let self = self else { return }
+            if btnType == 0 { //출발
+                sender = departAreaSelectedButton
+            }
+            else { //도착
+                sender = arrivedAreaSelectedButton
+            }
+            self.changeBusAreaButton(sender: sender, title: busArea.koreanDescription)
+        }.store(in: &subscriptions)
     }
 }
 
@@ -94,9 +108,17 @@ extension BusSearchViewController {
         else {
            busRouteType = 1
         }
-        let busAreaViewController = BusAreaSelectedViewController(busRouteType: busRouteType, busAreaLists: [(.koreatech, true), (.station, false), (.terminal, false)])
+        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: [(.koreatech, true), (.station, false), (.terminal, false)])
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
         self.present(bottomSheet, animated: true)
+    }
+    
+    private func changeBusAreaButton(sender: UIButton, title: String) {
+        var configuration = UIButton.Configuration.plain()
+        configuration.attributedTitle = AttributedString(title, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardBold, size: 18), .foregroundColor: UIColor.appColor(.neutral800)]))
+        configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
+        sender.configuration = configuration
+        sender.backgroundColor = .clear
     }
 }
 
@@ -110,9 +132,9 @@ extension BusSearchViewController {
             $0.textAlignment = .center
         }
     }
-    
+
     private func setUpButtons() {
-        let buttonNames = ["출발지 선택", "목적지 선택"]
+        let buttonNames = ["출발지 선택", "도착지 선택"]
         let buttons = [departAreaSelectedButton, arrivedAreaSelectedButton]
         for (index, value) in buttons.enumerated() {
             var configuration = UIButton.Configuration.plain()
