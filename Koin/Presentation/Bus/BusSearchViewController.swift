@@ -48,19 +48,13 @@ final class BusSearchViewController: CustomViewController {
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
     }
     
-    private let busInfoSearchButton = UIView().then {
-        let label = UILabel()
-        label.text = "조회하기"
-        label.font = UIFont.appFont(.pretendardMedium, size: 15)
-        label.textColor = .appColor(.neutral600)
-        $0.addSubview(label)
-        label.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
+    private let busInfoSearchButton = UIButton().then {
+        $0.setAttributedTitle(NSAttributedString(string: "조회하기", attributes: [.font: UIFont.appFont(.pretendardMedium, size: 15)]), for: .normal)
         $0.backgroundColor = .appColor(.neutral300)
+        $0.tintColor = .appColor(.neutral600)
         $0.layer.cornerRadius = 4
     }
-   
+    
     // MARK: - Initialization
     
     init(viewModel: BusSearchViewModel) {
@@ -92,9 +86,18 @@ final class BusSearchViewController: CustomViewController {
 }
 
 extension BusSearchViewController {
-    
-   
-    
+    @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
+        let busRouteType: Int
+        if sender == departAreaSelectedButton {
+            busRouteType = 0
+        }
+        else {
+           busRouteType = 1
+        }
+        let busAreaViewController = BusAreaSelectedViewController(busRouteType: busRouteType, busAreaLists: [.koreatech, .station, .terminal])
+        let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
+        self.present(bottomSheet, animated: true)
+    }
 }
 
 
@@ -117,6 +120,7 @@ extension BusSearchViewController {
             configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
             value.configuration = configuration
             value.backgroundColor = .appColor(.neutral100)
+            value.addTarget(self, action: #selector(tapBusAreaSelectedButtons), for: .touchUpInside)
         }
     }
     
