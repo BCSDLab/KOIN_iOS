@@ -61,15 +61,16 @@ extension BusSearchResultTableViewHeader {
             departTimeButton.addSubview($0)
         }
         departTimeLabel.snp.makeConstraints {
-            $0.leading.centerX.equalToSuperview()
+            $0.leading.centerY.equalToSuperview()
         }
         imageView.snp.makeConstraints {
-            $0.centerY.trailing.equalToSuperview()
-            $0.width.height.equalTo(24)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(departLabel.snp.trailing).offset(8)
+            $0.width.height.equalTo(15)
         }
         departLabel.snp.makeConstraints {
-            $0.leading.equalTo(departTimeLabel.snp.trailing)
-            $0.centerX.equalTo(departTimeLabel)
+            $0.leading.equalTo(departTimeLabel.snp.trailing).offset(4)
+            $0.centerY.equalTo(departTimeLabel)
         }
     }
     
@@ -79,6 +80,7 @@ extension BusSearchResultTableViewHeader {
         configuration.image = .appImage(asset: .arrowDown)
         configuration.imagePadding = 4
         configuration.contentInsets = .init(top: 9, leading: 16, bottom: 9, trailing: 16)
+        configuration.imagePlacement = .trailing
         busTypeFilterButton.configuration = configuration
     }
     
@@ -96,14 +98,14 @@ extension BusSearchResultTableViewHeader {
         }
         busTypeFilterButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
-            $0.centerX.equalTo(departTimeLabel)
+            $0.centerY.equalTo(departTimeButton)
         }
     }
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        
+        setUpDepartTimeButton()
     }
 }
 

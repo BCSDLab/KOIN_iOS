@@ -37,7 +37,6 @@ final class BusSearchResultTableView: UITableView {
         delegate = self
         dataSource = self
         separatorStyle = .none
-        contentInset = .init(top: 8, left: 33, bottom: 8, right: 33)
     }
 }
 
@@ -61,7 +60,7 @@ extension BusSearchResultTableView: UITableViewDataSource {
 
 extension BusSearchResultTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 66
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
