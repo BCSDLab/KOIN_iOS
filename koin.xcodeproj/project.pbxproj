@@ -415,6 +415,7 @@
 		D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */; };
 		D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */; };
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
+		D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */; };
 		D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */; };
 		D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */; };
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
@@ -896,6 +897,7 @@
 		D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopDataUseCase.swift; sourceTree = "<group>"; };
 		D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
+		D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCallNotificationUseCase.swift; sourceTree = "<group>"; };
 		D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
 		D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
@@ -2553,6 +2555,7 @@
 				D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */,
 				D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */,
 				D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */,
+				D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -3023,6 +3026,7 @@
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
+				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
 				835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */,

@@ -26,6 +26,7 @@ protocol ShopService {
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
     func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
     
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     
 }
@@ -191,6 +192,21 @@ final class DefaultShopService: ShopService {
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
         return request(.fetchReviewList(requestModel))
+    }
+    
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.postCallNotification(shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.postCallNotification(shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {

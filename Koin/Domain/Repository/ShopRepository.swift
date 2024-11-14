@@ -28,5 +28,6 @@ protocol ShopRepository {
     func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 

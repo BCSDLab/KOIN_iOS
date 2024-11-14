@@ -80,4 +80,7 @@ final class DefaultShopRepository: ShopRepository {
         return service.reportReview(requestModel: requestModel, reviewId: reviewId, shopId: shopId)
     }
     
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.postCallNotification(shopId: shopId)
+    }
 }
