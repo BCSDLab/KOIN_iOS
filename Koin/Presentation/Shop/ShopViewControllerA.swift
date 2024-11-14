@@ -231,6 +231,10 @@ final class ShopViewControllerA: UIViewController {
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
         
+        searchedShopCollectionView.selectedShopIdPublisher.sink { [weak self] shopId in
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
+        }.store(in: &subscriptions)
+        
         reviewTooltipImageView.onXButtonTapped = { [weak self] in
             self?.reviewTooltipImageView.isHidden = true
             UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
