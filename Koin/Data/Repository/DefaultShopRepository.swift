@@ -83,4 +83,8 @@ final class DefaultShopRepository: ShopRepository {
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.postCallNotification(shopId: shopId)
     }
+    
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+        return service.searchRelatedShops(text: text)
+    }
 }

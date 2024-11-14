@@ -167,6 +167,8 @@ final class ShopViewControllerA: UIViewController {
                 break
             case .updateBeneficialShops(_):
                 break
+            case let .showSearchedResult(result):
+                print(result)
             }
         }.store(in: &subscriptions)
         

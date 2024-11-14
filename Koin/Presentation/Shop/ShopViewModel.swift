@@ -30,6 +30,7 @@ final class ShopViewModel: ViewModelProtocol {
         case updateEventShops([EventDTO])
         case updateShopBenefits(ShopBenefitsDTO)
         case updateBeneficialShops([Shop])
+        case showSearchedResult([Keyword])
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -179,8 +180,13 @@ extension ShopViewModel {
             }).store(in: &subscriptions)
     }
     private func searchShop(_ text: String) {
-        let filteredShops = searchShopUseCase.execute(text: text, shops: shopList, categoryId: selectedId)
-        outputSubject.send(.changeFilteredShops(filteredShops, selectedId))
+        searchShopUseCase.execute(text: text).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showSearchedResult(response.keywords ?? []))
+        }.store(in: &subscriptions)
         
         makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearch, category: .click, value: selectedId)
     }

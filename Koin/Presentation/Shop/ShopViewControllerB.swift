@@ -157,6 +157,7 @@ final class ShopViewControllerB: UIViewController {
                 })
             case let .updateBeneficialShops(response):
                 self?.updateFilteredShops(response)
+            default: break
             }
         }.store(in: &subscriptions)
         

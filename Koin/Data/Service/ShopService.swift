@@ -15,6 +15,7 @@ protocol ShopService {
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error>
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error>
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error>
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     
     func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse>
     func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse>
@@ -32,6 +33,7 @@ protocol ShopService {
 }
 
 final class DefaultShopService: ShopService {
+
     
     private let networkService = NetworkService()
     
@@ -192,6 +194,10 @@ final class DefaultShopService: ShopService {
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
         return request(.fetchReviewList(requestModel))
+    }
+    
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+        return request(.searchShop(text))
     }
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {

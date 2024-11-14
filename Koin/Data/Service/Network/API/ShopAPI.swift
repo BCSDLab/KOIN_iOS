@@ -24,6 +24,7 @@ enum ShopAPI {
     case modifyReview(WriteReviewRequest, Int, Int)
     case deleteReview(Int, Int)
     case reportReview(ReportReviewRequest, Int, Int)
+    case searchShop(String)
     
     case postCallNotification(Int)
     case uploadFiles([Data])
@@ -54,6 +55,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .reportReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)/reports"
         case .uploadFiles: return "/shops/upload/files"
         case .postCallNotification(let shopId): return "/shops/\(shopId)/call-notification"
+        case .searchShop(let text): return "/shops/search/related/\(text)"
         }
     }
     
@@ -69,7 +71,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits: break
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits, .searchShop: break
         default:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
@@ -87,7 +89,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()
@@ -113,7 +115,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     }
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .fetchShopList:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .fetchShopList, .searchShop:
             return URLEncoding.default
         case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
             return URLEncoding.queryString
