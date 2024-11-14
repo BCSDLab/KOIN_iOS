@@ -74,6 +74,12 @@ final class ShopViewControllerA: UIViewController {
         return textField
     }()
     
+    private let reviewTooltipImageView = CancelableImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.setUpImage(image: UIImage.appImage(asset: .reviewTooltip) ?? UIImage())
+        $0.isHidden = true
+    }
+    
     private lazy var shopCollectionView: ShopInfoCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -109,6 +115,7 @@ final class ShopViewControllerA: UIViewController {
         inputSubject.send(.viewDidLoad)
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         hideKeyboardWhenTappedAround()
+        checkAndShowTooltip()
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -196,10 +203,24 @@ final class ShopViewControllerA: UIViewController {
         shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
+        
+        reviewTooltipImageView.onXButtonTapped = { [weak self] in
+            self?.reviewTooltipImageView.isHidden = true
+            UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
+            print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
+        }
     }
 }
 
 extension ShopViewControllerA {
+    
+    private func checkAndShowTooltip() {
+        let hasShownTooltip = UserDefaults.standard.bool(forKey: "hasShownReviewTooltip")
+        if !hasShownTooltip {
+            reviewTooltipImageView.isHidden = false
+        }
+        
+    }
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -305,7 +326,7 @@ extension ShopViewControllerA {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel].forEach {
+        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel, reviewTooltipImageView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -359,6 +380,13 @@ extension ShopViewControllerA {
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)
             make.bottom.equalTo(scrollView.snp.bottom)
+        }
+        
+        reviewTooltipImageView.snp.makeConstraints { make in
+            make.width.equalTo(249)
+            make.height.equalTo(60)
+            make.leading.equalTo(shopCollectionView.snp.leading).offset(16)
+            make.bottom.equalTo(shopCollectionView.snp.top)
         }
         
     }

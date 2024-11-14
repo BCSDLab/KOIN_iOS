@@ -63,6 +63,12 @@ final class ShopViewControllerB: UIViewController {
         return label
     }()
     
+    private let reviewTooltipImageView = CancelableImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.setUpImage(image: UIImage.appImage(asset: .reviewTooltip) ?? UIImage())
+        $0.isHidden = true
+    }
+    
     private lazy var shopCollectionView: ShopInfoCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -96,6 +102,7 @@ final class ShopViewControllerB: UIViewController {
         bind()
         configureView()
         shopCollectionView.setHeaderVisibility(isHidden: true)
+        checkAndShowTooltip()
         inputSubject.send(.viewDidLoadB)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -186,10 +193,26 @@ final class ShopViewControllerB: UIViewController {
             self?.viewModel.shopCallBenefitFilterName = currentTitle
             self?.inputSubject.send(.getBeneficialShops(selectedId))
         }.store(in: &subscriptions)
+        
+        
+        reviewTooltipImageView.onXButtonTapped = { [weak self] in
+            self?.reviewTooltipImageView.isHidden = true
+            UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
+            print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
+        }
     }
 }
 
 extension ShopViewControllerB {
+    
+    private func checkAndShowTooltip() {
+        let hasShownTooltip = UserDefaults.standard.bool(forKey: "hasShownReviewTooltip")
+        if !hasShownTooltip {
+            reviewTooltipImageView.isHidden = false
+        }
+        
+    }
+    
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -287,7 +310,7 @@ extension ShopViewControllerB {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [callBenefitCollectionView, grayView, eventShopCollectionView, shopCollectionView, eventIndexLabel, callBenefitCollectionView].forEach {
+        [callBenefitCollectionView, grayView, eventShopCollectionView, shopCollectionView, eventIndexLabel, callBenefitCollectionView, reviewTooltipImageView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -335,7 +358,12 @@ extension ShopViewControllerB {
             make.height.equalTo(1)
             make.bottom.equalTo(scrollView.snp.bottom)
         }
-        
+        reviewTooltipImageView.snp.makeConstraints { make in
+            make.width.equalTo(249)
+            make.height.equalTo(60)
+            make.leading.equalTo(shopCollectionView.snp.leading).offset(16)
+            make.bottom.equalTo(shopCollectionView.snp.top)
+        }
     }
     
     private func configureView() {
