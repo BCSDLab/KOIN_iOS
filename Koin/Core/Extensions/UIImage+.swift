@@ -98,6 +98,8 @@ enum ImageAsset: String {
     case koinBigLogo
     case power
     case reviewTooltip
+    case store
+    case menu
 }
 
 enum SFSymbols: String {
