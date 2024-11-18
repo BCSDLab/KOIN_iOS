@@ -573,7 +573,7 @@ extension HomeViewControllerA: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let contentOffsetY = scrollView.contentOffset.y
         let screenHeight = scrollView.frame.height
-        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.3 && scrollDirection != .scrollChecked {
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.25 && scrollDirection != .scrollChecked {
             scrollDirection = .scrollChecked
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainScroll, .click, "70%"))
         }
