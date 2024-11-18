@@ -20,6 +20,7 @@ final class HomeViewModel: ViewModelProtocol {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeInfo
+        case getAbTestResult(String)
     }
     
     // MARK: - Output
@@ -31,6 +32,7 @@ final class HomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case moveBusItem
+        case setAbTestResult(AssignAbTestResponse)
     }
     
     // MARK: - Properties
@@ -44,6 +46,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkVersionUseCase: CheckVersionUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
+    private let assignAbTestUseCase: AssignAbTestUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -54,7 +57,7 @@ final class HomeViewModel: ViewModelProtocol {
          fetchBusInformationListUseCase: FetchBusInformationListUseCase,
          fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
-         dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase) {
+         dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase, assignAbTestUseCase: AssignAbTestUseCase) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -63,6 +66,7 @@ final class HomeViewModel: ViewModelProtocol {
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.dateProvider = dateProvider
         self.checkVersionUseCase = checkVersionUseCase
+        self.assignAbTestUseCase = assignAbTestUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -84,7 +88,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case .getNoticeInfo:
                 self?.getHotNoticeArticles()
-
+            case let .getAbTestResult(abTestTitle):
+                self?.getAbTestResult(abTestTitle: abTestTitle)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -176,6 +181,17 @@ extension HomeViewModel {
         } receiveValue: { [weak self] articles in
             self?.outputSubject.send(.updateHotArticles(articles))
         }.store(in: &subscriptions)
+    }
+    
+    private func getAbTestResult(abTestTitle: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle)).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
+        }).store(in: &subscriptions)
     }
 }
 

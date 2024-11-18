@@ -82,23 +82,9 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         return pageControl
     }()
     
-    private let goNoticePageButton: UIButton = {
-        let button = UIButton()
-        var config = UIButton.Configuration.plain()
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .medium, scale: .medium)
-        let imageView = UIImage(systemName: SFSymbols.chevronRight.rawValue , withConfiguration: imageConfig)
-        var attributedTitle = AttributedString.init("더보기")
-        attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-        config.attributedTitle = attributedTitle
-        config.image = imageView
-        config.imagePadding = 2
-        config.imagePlacement = .trailing
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        button.configuration = config
-        button.tintColor = .appColor(.neutral500)
-        return button
-    }()
+    private let goNoticePageButton = UIButton()
+    
+    private let goDiningPageButton = UIButton()
     
     private let busLabel: UILabel = {
         let label = UILabel()
@@ -207,6 +193,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
+        inputSubject.send(.getAbTestResult("c_main_dining_v1"))
     }
     
     @objc private func appWillEnterForeground() {
@@ -273,6 +260,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
                 self?.updateHotArticles(articles: articles)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
+            case let .setAbTestResult(abTestResult):
+                self?.setAbTestResult(result: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -327,22 +316,13 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
 
 extension HomeViewControllerA {
     
-    @objc private func tapGoNoticePageButton() {
-        let service = DefaultNoticeService()
-        let repository = DefaultNoticeListRepository(service: service)
-        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
-        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
-        navigationController?.pushViewController(noticeListViewController, animated: true)
-    }
-    
-    private func navigateToForceUpdate(version: String) {
-        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))))
-        viewController.modalPresentationStyle = .fullScreen
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
-        self.present(viewController, animated: true, completion: nil)
+    @objc private func tapGoOtherPageButton(sender: UIButton) {
+        if sender == goNoticePageButton {
+           navigateToNoticeList()
+        }
+        else if sender == goDiningPageButton {
+            navigatetoDining()
+        }
     }
     
     private func checkAndShowTooltip() {
@@ -388,11 +368,6 @@ extension HomeViewControllerA {
             movingPage.title = "버스/교통"
             self.navigationController?.pushViewController(movingPage, animated: true)
         }
-    }
-    
-    private func navigateToServiceSelectViewController() {
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-        navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
     
     private func scrollToBusItem() {
@@ -441,26 +416,6 @@ extension HomeViewControllerA {
         navigatetoDining()
     }
     
-    private func navigatetoDining() {
-        let diningService = DefaultDiningService()
-        let shareService = KakaoShareService()
-        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let dateProvider = DefaultDateProvider()
-        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())))
-        let diningViewController = DiningViewController(viewModel: viewModel)
-        diningViewController.title = "식단"
-        navigationController?.pushViewController(diningViewController, animated: true)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "\(menuLabel.text ?? "")", nil, nil, nil, nil))
-    }
-    
     @objc private func busViewTapped() {
         let busViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
         busViewController.title = "버스/교통"
@@ -485,6 +440,16 @@ extension HomeViewControllerA {
     
     private func putImage(data: ShopCategoryDTO) {
         shopCollectionView.updateCategories(data.shopCategories)
+    }
+    
+    private func setAbTestResult(result: AssignAbTestResponse) {
+        let isNeededGoDiningPageButton: Bool
+        if result.variableName == .mainDiningOriginal {
+            goDiningPageButton.isHidden = true
+        }
+        else if result.variableName == .mainDiningNew {
+            goDiningPageButton.isHidden = false
+        }
     }
     
     func didTapCell(at id: Int) {
@@ -530,6 +495,49 @@ extension HomeViewControllerA {
         refreshControl.endRefreshing()
     }
     
+    // navigate 함수
+    private func navigateToNoticeList() {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeListViewModel(fetchNoticeArticlesUseCase: fetchArticleListUseCase, fetchMyKeywordUseCase: fetchMyKeywordUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let noticeListViewController = NoticeListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(noticeListViewController, animated: true)
+    }
+    
+    private func navigatetoDining() {
+        let diningService = DefaultDiningService()
+        let shareService = KakaoShareService()
+        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let dateProvider = DefaultDateProvider()
+        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())))
+        let diningViewController = DiningViewController(viewModel: viewModel)
+        diningViewController.title = "식단"
+        navigationController?.pushViewController(diningViewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "\(menuLabel.text ?? "")", nil, nil, nil, nil))
+    }
+    
+    private func navigateToServiceSelectViewController() {
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        navigationController?.pushViewController(serviceSelectViewController, animated: true)
+    }
+    
+    private func navigateToForceUpdate(version: String) {
+        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))))
+        viewController.modalPresentationStyle = .fullScreen
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
+        self.present(viewController, animated: true, completion: nil)
+    }
 }
 
 extension HomeViewControllerA {
@@ -551,13 +559,31 @@ extension HomeViewControllerA {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
     }
     
+    private func setUpButtons() {
+        [goNoticePageButton, goDiningPageButton].forEach {
+            var config = UIButton.Configuration.plain()
+            
+            let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .medium, scale: .medium)
+            let imageView = UIImage(systemName: SFSymbols.chevronRight.rawValue , withConfiguration: imageConfig)
+            var attributedTitle = AttributedString.init("더보기")
+            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+            config.attributedTitle = attributedTitle
+            config.image = imageView
+            config.imagePadding = 2
+            config.imagePlacement = .trailing
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            $0.configuration = config
+            $0.tintColor = .appColor(.neutral500)
+        }
+    }
+    
     private func setUpLayOuts() {
         
         [wrapperView, logoView].forEach {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton].forEach {
             scrollView.addSubview($0)
         }
         
@@ -600,6 +626,11 @@ extension HomeViewControllerA {
         }
         goNoticePageButton.snp.makeConstraints { make in
             make.top.equalTo(noticeLabel).offset(3)
+            make.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(22)
+        }
+        goDiningPageButton.snp.makeConstraints { make in
+            make.top.equalTo(menuLabel).offset(3)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(22)
         }
@@ -673,6 +704,7 @@ extension HomeViewControllerA {
     
     private func configureView() {
         setUpNavigationBar()
+        setUpButtons()
         setUpLayOuts()
         setUpConstraints()
         setUpShadow()
@@ -680,7 +712,8 @@ extension HomeViewControllerA {
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         noticePageControl.addTarget(self, action: #selector(pageControlDidChange), for: .valueChanged)
-        goNoticePageButton.addTarget(self, action: #selector(tapGoNoticePageButton), for: .touchUpInside)
+        goNoticePageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
+        goDiningPageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
         scrollView.refreshControl = refreshControl
         self.view.backgroundColor = .systemBackground
     }
