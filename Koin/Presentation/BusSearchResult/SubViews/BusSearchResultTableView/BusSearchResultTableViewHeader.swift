@@ -13,9 +13,12 @@ import UIKit
 final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     // MARK: - Properties
     var subscriptions = Set<AnyCancellable>()
+    let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UIComponents
-    private let departTimeButton = UIView()
+    private let departTimeButton = UIView().then {
+        $0.isUserInteractionEnabled = true
+    }
     
     private let departTimeLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -35,10 +38,6 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         configureView()
     }
     
-    override func prepareForReuse() {
-        subscriptions.removeAll()
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configureView()
@@ -47,6 +46,10 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     func configure(departTime: String, busType: String) {
         departTimeLabel.text = departTime
         setUpBusTypeFilterButton(busType: busType)
+    }
+    
+    @objc private func tapDepartTimeButton() {
+        tapDepartTimeButtonPublisher.send()
     }
 }
 
@@ -94,7 +97,8 @@ extension BusSearchResultTableViewHeader {
         departTimeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalToSuperview().offset(23)
-            $0.height.equalTo(26)
+            $0.height.equalTo(40)
+            $0.width.equalTo(165)
         }
         busTypeFilterButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
@@ -106,6 +110,8 @@ extension BusSearchResultTableViewHeader {
         setUpLayouts()
         setUpConstraints()
         setUpDepartTimeButton()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapDepartTimeButton))
+        departTimeButton.addGestureRecognizer(tapGesture)
     }
 }
 
