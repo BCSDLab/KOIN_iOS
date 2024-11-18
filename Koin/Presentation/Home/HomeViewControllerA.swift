@@ -443,13 +443,17 @@ extension HomeViewControllerA {
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
-        let isNeededGoDiningPageButton: Bool
+        var logValue: String = ""
+        
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
+            logValue = "더보기X"
         }
         else if result.variableName == .mainDiningNew {
+            logValue = "더보기O"
             goDiningPageButton.isHidden = false
         }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, logValue))
     }
     
     func didTapCell(at id: Int) {
