@@ -17,6 +17,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
     private var subscriptions: Set<AnyCancellable> = []
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
+    private var scrollDirection: ScrollLog = .scrollToDown
     
     // MARK: - UI Components
     
@@ -194,6 +195,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        scrollView.delegate = self
     }
     
     @objc private func appWillEnterForeground() {
@@ -556,6 +558,27 @@ extension HomeViewControllerA {
     }
 }
 
+extension HomeViewControllerA: UIScrollViewDelegate {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
+        if velocity.y > 0 {
+            scrollDirection = .scrollToTop
+        }
+        else {
+            if scrollDirection != .scrollChecked {
+                scrollDirection = .scrollToDown
+            }
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let contentOffsetY = scrollView.contentOffset.y
+        let screenHeight = scrollView.frame.height
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.3 && scrollDirection != .scrollChecked {
+            scrollDirection = .scrollChecked
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainScroll, .click, "70%"))
+        }
+    }
+}
 
 extension HomeViewControllerA {
     

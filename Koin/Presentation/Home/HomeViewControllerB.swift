@@ -17,6 +17,7 @@ final class HomeViewControllerB: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
+    private var scrollDirection: ScrollLog = .scrollToDown
     
     // MARK: - UI Components
     
@@ -207,6 +208,7 @@ final class HomeViewControllerB: UIViewController {
         callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        scrollView.delegate = self
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
@@ -586,6 +588,27 @@ extension HomeViewControllerB {
     }
 }
 
+extension HomeViewControllerB: UIScrollViewDelegate {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
+        if velocity.y > 0 {
+            scrollDirection = .scrollToTop
+        }
+        else {
+            if scrollDirection != .scrollChecked {
+                scrollDirection = .scrollToDown
+            }
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let contentOffsetY = scrollView.contentOffset.y
+        let screenHeight = scrollView.frame.height
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.3 && scrollDirection != .scrollChecked {
+            scrollDirection = .scrollChecked
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainScroll, .click, "70%"))
+        }
+    }
+}
 
 extension HomeViewControllerB {
     
