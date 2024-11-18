@@ -55,6 +55,8 @@ class LoginModalViewController: UIViewController {
         return view
     }()
     
+    private var contentViewInContainer: UIView?
+    
     init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor) {
         super.init(nibName: nil, bundle: nil)
         self.containerWidth = width
@@ -87,8 +89,9 @@ class LoginModalViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func updateLoginButton(buttonColor: UIColor) {
+    func updateLoginButton(buttonColor: UIColor, borderWidth: CGFloat) {
         loginButton.backgroundColor = buttonColor
+        loginButton.layer.borderWidth = borderWidth
     }
     
     func updateCloseButton(buttonColor: UIColor) {
@@ -117,6 +120,31 @@ class LoginModalViewController: UIViewController {
         attributedString.addAttribute(.foregroundColor, value: subTitleColor, range: NSRange(location: 0, length: subTitleText.count))
         
         subMessageLabel.attributedText = attributedString
+    }
+    
+    func setContentViewInContainer(view: UIView, frame: CGRect) {
+        self.contentViewInContainer = view
+        self.contentViewInContainer?.frame = frame
+        
+        guard let contentViewInContainer = contentViewInContainer else { return }
+        containerView.addSubview(contentViewInContainer)
+        contentViewInContainer.snp.makeConstraints { make in
+            make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(contentViewInContainer.frame.height)
+        }
+        closeButton.snp.remakeConstraints { make in
+            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
+            make.trailing.equalTo(containerView.snp.centerX).offset(-2)
+            make.width.equalTo(114.5)
+            make.height.equalTo(48)
+        }
+        loginButton.snp.remakeConstraints { make in
+            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
+            make.leading.equalTo(containerView.snp.centerX).offset(2)
+            make.width.equalTo(114.5)
+            make.height.equalTo(48)
+        }
     }
 }
 
