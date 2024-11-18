@@ -22,6 +22,7 @@
 		8316DCFF2CE08A12009AF9A4 /* BusSearchResultTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCFE2CE08A12009AF9A4 /* BusSearchResultTableView.swift */; };
 		8316DD012CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DD002CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift */; };
 		8316DD032CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DD022CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift */; };
+		8316DD072CE10E17009AF9A4 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DD062CE10E17009AF9A4 /* KoinPickerView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -498,6 +499,7 @@
 		8316DCFE2CE08A12009AF9A4 /* BusSearchResultTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableView.swift; sourceTree = "<group>"; };
 		8316DD002CE08A1F009AF9A4 /* BusSearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		8316DD022CE09E69009AF9A4 /* BusSearchResultTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewHeader.swift; sourceTree = "<group>"; };
+		8316DD062CE10E17009AF9A4 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -2345,6 +2347,7 @@
 		D2D380E42BA6EAE7009AD5A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8316DD062CE10E17009AF9A4 /* KoinPickerView.swift */,
 				835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 				D23582A02BC30B9300D615DD /* ZoomingView.swift */,
@@ -3296,6 +3299,7 @@
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */,
+				8316DD072CE10E17009AF9A4 /* KoinPickerView.swift in Sources */,
 				D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */,
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
 				0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */,
