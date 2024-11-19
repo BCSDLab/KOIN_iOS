@@ -408,6 +408,7 @@
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
 		D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */; };
 		D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */; };
+		D2DCB29D2CEB22F5005CABEE /* TimetableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */; };
 		D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */; };
 		D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */; };
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
@@ -883,6 +884,7 @@
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
 		D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionView.swift; sourceTree = "<group>"; };
 		D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableHeaderView.swift; sourceTree = "<group>"; };
 		D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
 		D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
@@ -2370,6 +2372,7 @@
 			children = (
 				D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */,
 				D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */,
+				D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3140,6 +3143,7 @@
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
+				D2DCB29D2CEB22F5005CABEE /* TimetableHeaderView.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				83DD0DC22C5527F200278ABD /* BusTimetableTableView.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
