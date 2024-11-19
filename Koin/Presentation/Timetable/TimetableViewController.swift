@@ -120,7 +120,7 @@ extension TimetableViewController {
             make.top.equalTo(semesterSelectButton.snp.bottom).offset(14)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(1000)
+            make.bottom.equalTo(view.snp.bottom)
         }
     }
     private func setUpNavigationBar() {
