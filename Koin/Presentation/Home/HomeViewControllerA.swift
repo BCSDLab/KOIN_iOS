@@ -77,7 +77,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
     private let noticePageControl: UIPageControl = {
         let pageControl = UIPageControl(frame: .zero)
         pageControl.currentPage = 0
-        pageControl.numberOfPages = 4
+        pageControl.numberOfPages = 5
         pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
         pageControl.pageIndicatorTintColor = .appColor(.neutral300)
         return pageControl
@@ -181,7 +181,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         bind()
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
-        inputSubject.send(.getNoticeInfo)
+        inputSubject.send(.getNoticeBanner(Date()))
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -258,8 +258,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
                 self?.updateBusTime(response)
             case .moveBusItem:
                 self?.scrollToBusItem()
-            case let .updateHotArticles(articles):
-                self?.updateHotArticles(articles: articles)
+            case let .updateNoticeBanners(hotNoticeArticlesInfo, keywordNoticePhrases):
+                self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
@@ -311,6 +311,15 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticedataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
             let viewController = NoticeDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] in
+            let service = DefaultNoticeService()
+            let repository = DefaultNoticeListRepository(service: service)
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+            let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: notiRepository), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: notiRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+            let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
@@ -436,8 +445,8 @@ extension HomeViewControllerA {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO]) {
-        noticeListCollectionView.updateNoticeList(articles)
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)) {
+        noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     
     private func putImage(data: ShopCategoryDTO) {
