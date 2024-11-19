@@ -44,7 +44,11 @@ final class TimetableViewController: UIViewController {
         $0.configuration = configuration
     }
     
-    private let timetableCollectionView = TimetableCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then { collectionView in
+    private let timetableCollectionView = TimetableCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 1.0
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
     }
     
     // MARK: - Initialization
@@ -116,7 +120,7 @@ extension TimetableViewController {
             make.top.equalTo(semesterSelectButton.snp.bottom).offset(14)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(1)
+            make.height.equalTo(1000)
         }
     }
     private func setUpNavigationBar() {
