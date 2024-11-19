@@ -451,7 +451,7 @@ extension HomeViewControllerA {
             goDiningPageButton.isHidden = true
             logValue = "더보기X"
         }
-        else if result.variableName == .mainDiningNew {
+        else {
             logValue = "더보기O"
             goDiningPageButton.isHidden = false
         }
