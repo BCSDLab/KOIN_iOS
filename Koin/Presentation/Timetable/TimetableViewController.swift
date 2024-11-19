@@ -52,6 +52,10 @@ final class TimetableViewController: UIViewController {
     }
     
     private let addClassCollectionView = AddClassCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        $0.isHidden = true
+    }
+    
+    private let addDirectCollectionView = AddDirectCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         $0.isHidden = false
     }
     
@@ -88,21 +92,41 @@ final class TimetableViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        addClassCollectionView.completeButtonPublisher.sink { [weak self] in
+            self?.toggleAddClassCollectionView()
+        }.store(in: &subscriptions)
     }
     
 }
 
 extension TimetableViewController {
     @objc private func modifyTimetableButtonTapped() {
-        
+        toggleAddClassCollectionView()
     }
-    
+    private func toggleAddClassCollectionView() {
+        if addClassCollectionView.isHidden {
+            
+            addClassCollectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
+            addClassCollectionView.isHidden = false
+            
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) { [weak self] in
+                self?.addClassCollectionView.transform = .identity
+            }
+        } else {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+                guard let strongSelf = self else { return }
+                self?.addClassCollectionView.transform = CGAffineTransform(translationX: 0, y: strongSelf.addClassCollectionView.frame.height)
+            }) { [weak self] _ in
+                self?.addClassCollectionView.isHidden = true
+            }
+        }
+    }
 }
 
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView, addDirectCollectionView].forEach {
             view.addSubview($0)
         }
     }
@@ -129,6 +153,9 @@ extension TimetableViewController {
         addClassCollectionView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.centerY)
             make.leading.trailing.bottom.equalToSuperview()
+        }
+        addDirectCollectionView.snp.makeConstraints { make in
+            make.edges.equalTo(addClassCollectionView)
         }
     }
     private func setUpNavigationBar() {
