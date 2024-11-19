@@ -341,6 +341,12 @@
 		D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */; };
 		D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */; };
 		D283A4DF2CECA2B900C238BA /* AddClassHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */; };
+		D283A4E22CECE7D400C238BA /* AddDirectCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */; };
+		D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */; };
+		D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */; };
+		D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */; };
+		D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E92CECF48C00C238BA /* PointLabel.swift */; };
+		D283A4EC2CECF90400C238BA /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4EB2CECF90400C238BA /* ClassComponentView.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -819,6 +825,12 @@
 		D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionView.swift; sourceTree = "<group>"; };
 		D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionViewCell.swift; sourceTree = "<group>"; };
 		D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassHeaderView.swift; sourceTree = "<group>"; };
+		D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectCollectionView.swift; sourceTree = "<group>"; };
+		D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectCollectionViewCell.swift; sourceTree = "<group>"; };
+		D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectHeaderView.swift; sourceTree = "<group>"; };
+		D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectFooterView.swift; sourceTree = "<group>"; };
+		D283A4E92CECF48C00C238BA /* PointLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLabel.swift; sourceTree = "<group>"; };
+		D283A4EB2CECF90400C238BA /* ClassComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassComponentView.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -2157,6 +2169,19 @@
 			path = AddClassCollectionView;
 			sourceTree = "<group>";
 		};
+		D283A4E02CECE55600C238BA /* AddDirectCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
+				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
+				D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */,
+				D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */,
+				D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */,
+				D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */,
+			);
+			path = AddDirectCollectionView;
+			sourceTree = "<group>";
+		};
 		D29F21C82C4E14F300994554 /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
@@ -2396,6 +2421,7 @@
 		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
 				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
 				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
 			);
@@ -2922,6 +2948,7 @@
 				835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				D249CD342C14734B000813F9 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
+				D283A4E22CECE7D400C238BA /* AddDirectCollectionView.swift in Sources */,
 				8354BE2E2C79A0BE009D4D7A /* MyKeywordCollectionView.swift in Sources */,
 				D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */,
 				D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */,
@@ -2939,6 +2966,7 @@
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
+				D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
 				83455FC22C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
@@ -2986,6 +3014,7 @@
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
+				D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				D26B2EC62CD65A2D00BEE07C /* TimetableViewController.swift in Sources */,
 				D22C54632C68F280000826DA /* ReviewListHeaderView.swift in Sources */,
@@ -3023,6 +3052,7 @@
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
+				D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
 				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
@@ -3172,12 +3202,14 @@
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				D2DCB29D2CEB22F5005CABEE /* TimetableHeaderView.swift in Sources */,
+				D283A4EC2CECF90400C238BA /* ClassComponentView.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				83DD0DC22C5527F200278ABD /* BusTimetableTableView.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
 				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
 				D239448E2C3C9D7900048F45 /* ReviewListCollectionViewCell.swift in Sources */,
 				D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */,
+				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,

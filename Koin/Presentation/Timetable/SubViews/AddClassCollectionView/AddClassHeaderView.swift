@@ -5,11 +5,16 @@
 //  Created by 김나훈 on 11/19/24.
 //
 
+import Combine
 import UIKit
 
 final class AddClassHeaderView: UICollectionReusableView {
     
     static let identifier = "AddClassHeaderView"
+    let completeButtonPublisher = PassthroughSubject<Void, Never>()
+    let filterButtonPublisher = PassthroughSubject<Void, Never>()
+    let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
+    let searchClassPublisher = PassthroughSubject<String, Never>()
     
     private let addDirectButton = UIButton().then {
         $0.setTitle("직접추가", for: .normal)
@@ -59,20 +64,40 @@ final class AddClassHeaderView: UICollectionReusableView {
         return textField
     }()
     
-    private let separateView2 = UIView().then { 
+    private let separateView2 = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        addDirectButton.addTarget(self, action: #selector(addDirectButtonTapped), for: .touchUpInside)
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+}
+
+extension AddClassHeaderView {
+    @objc private func completeButtonTapped() {
+        completeButtonPublisher.send(())
+    }
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        searchClassPublisher.send(text)
+    }
+    @objc private func filterButtonTapped() {
+        filterButtonPublisher.send()
+    }
+    @objc private func addDirectButtonTapped() {
+        addDirectButtonPublisher.send()
+    }
+}
+extension AddClassHeaderView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         [addDirectButton, classLabel, completeButton, separateView1, filterButton, searchTextField, separateView2].forEach {
