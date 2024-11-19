@@ -2131,6 +2131,23 @@
 			path = LandOptionCollectionView;
 			sourceTree = "<group>";
 		};
+		D283A4D82CECA25B00C238BA /* TimetableCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */,
+				D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */,
+				D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */,
+			);
+			path = TimetableCollectionView;
+			sourceTree = "<group>";
+		};
+		D283A4D92CECA26A00C238BA /* AddClassCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AddClassCollectionView;
+			sourceTree = "<group>";
+		};
 		D29F21C82C4E14F300994554 /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
@@ -2370,9 +2387,8 @@
 		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */,
-				D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */,
-				D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */,
+				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
+				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
