@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 final class TimetableHeaderView: UICollectionReusableView {
     
     static let identifier = "TimetableHeaderView"

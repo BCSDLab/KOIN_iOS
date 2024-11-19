@@ -338,6 +338,9 @@
 		D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0FD2BA629400081FD36 /* LandImageCollectionView.swift */; };
 		D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0FF2BA6294A0081FD36 /* LandImageCollectionViewCell.swift */; };
 		D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD1012BA62DCC0081FD36 /* LandOptionView.swift */; };
+		D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */; };
+		D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */; };
+		D283A4DF2CECA2B900C238BA /* AddClassHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -813,6 +816,9 @@
 		D27DD0FD2BA629400081FD36 /* LandImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionView.swift; sourceTree = "<group>"; };
 		D27DD0FF2BA6294A0081FD36 /* LandImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD1012BA62DCC0081FD36 /* LandOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionView.swift; sourceTree = "<group>"; };
+		D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionView.swift; sourceTree = "<group>"; };
+		D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionViewCell.swift; sourceTree = "<group>"; };
+		D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassHeaderView.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -2144,6 +2150,9 @@
 		D283A4D92CECA26A00C238BA /* AddClassCollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */,
+				D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */,
+				D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */,
 			);
 			path = AddClassCollectionView;
 			sourceTree = "<group>";
@@ -2972,6 +2981,7 @@
 				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */,
+				D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
@@ -3054,6 +3064,7 @@
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
+				D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */,
 				8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
@@ -3146,6 +3157,7 @@
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
 				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
 				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,
+				D283A4DF2CECA2B900C238BA /* AddClassHeaderView.swift in Sources */,
 				8354BE202C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				8354BE292C78CF41009D4D7A /* ManageNoticeKeywordViewController.swift in Sources */,

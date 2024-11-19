@@ -51,6 +51,10 @@ final class TimetableViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let addClassCollectionView = AddClassCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        $0.isHidden = false
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: TimetableViewModel) {
@@ -98,7 +102,7 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView].forEach {
             view.addSubview($0)
         }
     }
@@ -121,6 +125,10 @@ extension TimetableViewController {
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.bottom.equalTo(view.snp.bottom)
+        }
+        addClassCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.centerY)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     private func setUpNavigationBar() {
