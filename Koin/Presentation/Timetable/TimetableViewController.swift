@@ -137,7 +137,6 @@ final class TimetableViewController: UIViewController {
 
 extension TimetableViewController {
     private func updateTimetable(lectureData: [LectureData]) {
-        print(lectureData)
         containerView.subviews.forEach { $0.removeFromSuperview() }
         
         for lecture in lectureData {

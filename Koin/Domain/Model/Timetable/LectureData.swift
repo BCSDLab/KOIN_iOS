@@ -12,4 +12,5 @@ struct LectureData {
     let name: String
     let professor: String
     let classTime: [Int]
+    let grades: String
 }

@@ -115,7 +115,7 @@ extension AddClassCollectionView {
             self.isAdded[indexPath.row].toggle()
             let item = self.showingLectureList[indexPath.row]
             let isAdd = self.isAdded[indexPath.row]
-            modifyClassButtonPublisher.send(((LectureData(id: item.id, name: item.name, professor: item.professor ?? "", classTime: item.classTime)), isAdd))
+            modifyClassButtonPublisher.send(((LectureData(id: item.id, name: item.name, professor: item.professor ?? "", classTime: item.classTime, grades: item.grades)), isAdd))
         }.store(in: &cell.cancellables)
         return cell
     }
