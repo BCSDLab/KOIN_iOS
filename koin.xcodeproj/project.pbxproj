@@ -2211,9 +2211,6 @@
 		D283A4E02CECE55600C238BA /* AddDirectCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
-				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
-				D283A4ED2CED088900C238BA /* SelectTimeView.swift */,
 				D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */,
 				D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */,
 				D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */,
@@ -2481,6 +2478,9 @@
 		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
+				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
+				D283A4ED2CED088900C238BA /* SelectTimeView.swift */,
 				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
 				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
 				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,

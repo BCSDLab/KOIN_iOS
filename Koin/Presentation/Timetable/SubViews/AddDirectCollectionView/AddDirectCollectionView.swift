@@ -10,7 +10,7 @@ import UIKit
 
 final class AddDirectCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var somethings: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    private var somethings: [Int] = []
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
     let addClassButtonPublisher = PassthroughSubject<Void, Never>()
@@ -20,6 +20,8 @@ final class AddDirectCollectionView: UICollectionView, UICollectionViewDataSourc
     private var footerCancellables = Set<AnyCancellable>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionHeadersPinToVisibleBounds = true
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
@@ -49,15 +51,18 @@ final class AddDirectCollectionView: UICollectionView, UICollectionViewDataSourc
 }
 
 extension AddDirectCollectionView {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width - 48, height: 10)
+        return CGSize(width: collectionView.bounds.width - 48, height: 119)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return somethings.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -76,24 +81,35 @@ extension AddDirectCollectionView {
                 return UICollectionReusableView()
             }
             headerCancellables.removeAll()
-           //
+            headerView.classButtonPublisher.sink { [weak self] in
+                self?.addClassButtonPublisher.send()
+            }.store(in: &headerCancellables)
             return headerView
         } else if kind == UICollectionView.elementKindSectionFooter {
             guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddDirectFooterView.identifier, for: indexPath) as? AddDirectFooterView else {
                 return UICollectionReusableView()
             }
             footerCancellables.removeAll()
-            //
+            footerView.footerTapPublisher.sink { [weak self] in
+                self?.somethings.append(1)
+                self?.reloadData()
+            }.store(in: &footerCancellables)
             return footerView
         }
         return UICollectionReusableView()
     }
-  
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddDirectCollectionViewCell.identifier, for: indexPath) as? AddDirectCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(text: String(somethings[indexPath.row]))
+        
+        cell.deleteButtonPublisher.sink { [weak self] _ in
+
+            self?.somethings.remove(at: indexPath.row)
+            self?.reloadData()
+        }.store(in: &cell.cancellables)
         return cell
     }
 }

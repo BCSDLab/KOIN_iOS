@@ -38,7 +38,7 @@ final class AddDirectHeaderView: UICollectionReusableView {
     private let professorNameView = ClassComponentView(text: "교수명", isPoint: false).then { _ in
     }
     
-    private let selectTimeView = SelectTimeView().then { _ in
+    private let selectTimeView = SelectTimeView(frame: .zero, size: .big).then { _ in
     }
     
     private let placeView = ClassComponentView(text: "장소", isPoint: false).then { _ in
