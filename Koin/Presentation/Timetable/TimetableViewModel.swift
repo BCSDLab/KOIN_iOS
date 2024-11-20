@@ -85,14 +85,35 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
-    // UI 상으로만 해당 강의 추가 / 삭제
+    
+    
     private func modifyLecture(lecture: LectureData, isAdd: Bool) {
         if isAdd {
-            self.lectureData.append(lecture)
+            postLecture(lecture: lecture)
         } else {
-            // ?? 강의보고 어떻게 내가 추가한지 알고 삭제하지 ? 그래서 이렇게 처리.
-            self.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name }
+            deleteLecture(lecture: lecture)
         }
+    }
+    
+    private func postLecture(lecture: LectureData) {
+        postLectureUseCase.execute(request: LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(id: nil, lectureID: lecture.id, classTitle: lecture.name, classTime: lecture.classTime, classPlace: "", professor: lecture.professor, grades: lecture.grades, memo: "")])).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.lectureData = response
+        }.store(in: &subscriptions)
+    }
+    
+    private func deleteLecture(lecture: LectureData) {
+        deleteLectureUseCase.execute(frameId: selectedFrameId ?? 0, lectureId: lecture.id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name }
+        }.store(in: &subscriptions)
+
     }
     
     // 특정 프레임 id의 모든 강의 조회

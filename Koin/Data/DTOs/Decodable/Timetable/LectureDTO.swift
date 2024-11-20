@@ -23,7 +23,7 @@ struct LectureDTO: Codable {
 extension LectureDTO {
     func toDomain() -> [LectureData] {
            return timetable?.map { timetable in
-               LectureData(id: timetable.id, name: timetable.classTitle, professor: timetable.professor ?? "", classTime: timetable.classTime)
+               LectureData(id: timetable.id, name: timetable.classTitle, professor: timetable.professor ?? "", classTime: timetable.classTime, grades: timetable.grades)
            } ?? []
        }
 }
