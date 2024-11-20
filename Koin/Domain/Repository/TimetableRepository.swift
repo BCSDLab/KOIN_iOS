@@ -13,4 +13,7 @@ protocol TimetableRepository {
     func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse>
     func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse>
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
 }

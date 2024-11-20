@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "Benefit")).sink { [weak self] completion in
             guard let self = self else { return }
             if case let .failure(error) = completion {
-                let viewController = self.selectViewController()
+                let viewController = TimetableViewController(viewModel: TimetableViewModel())
                 let navigationController = CustomNavigationController(rootViewController: viewController)
                 window.rootViewController = navigationController
                 self.window = window
@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
-            let viewController = self.selectViewController()
+            let viewController = TimetableViewController(viewModel: TimetableViewModel())
             let navigationController = CustomNavigationController(rootViewController: viewController)
             window.rootViewController = navigationController
             self.window = window
