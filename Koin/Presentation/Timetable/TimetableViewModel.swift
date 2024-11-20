@@ -60,6 +60,11 @@ final class TimetableViewModel: ViewModelProtocol {
             fetchLecture(frameId: selectedFrameId ?? 0)
         }
     }
+    private var lectureData: [LectureData] = [] {
+        didSet {
+            outputSubject.send(.updateMyFrame(lectureData))
+        }
+    }
 
     // MARK: - Initialization
 
@@ -77,13 +82,14 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    // 특정 프레임 id의 모든 강의 조회
     private func fetchLecture(frameId: Int) {
         fetchLectureUseCase.execute(frameId: frameId).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateMyFrame(response))
+            self?.lectureData = response
         }.store(in: &subscriptions)
 
     }

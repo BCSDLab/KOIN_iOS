@@ -212,6 +212,7 @@
 		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
 		D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */; };
 		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
+		D21572712CEE504F0061E725 /* LectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572702CEE504F0061E725 /* LectureView.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -721,6 +722,7 @@
 		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
 		D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
+		D21572702CEE504F0061E725 /* LectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureView.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -2530,6 +2532,7 @@
 		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D21572702CEE504F0061E725 /* LectureView.swift */,
 				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
 				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
 				D283A4ED2CED088900C238BA /* SelectTimeView.swift */,
@@ -3227,6 +3230,7 @@
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
+				D21572712CEE504F0061E725 /* LectureView.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,

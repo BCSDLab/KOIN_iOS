@@ -61,6 +61,8 @@ final class TimetableViewController: UIViewController {
         $0.isHidden = true
     }
     
+    private let containerView = UIView().then { _ in
+    }
     // MARK: - Initialization
     
     init(viewModel: TimetableViewModel) {
@@ -92,12 +94,13 @@ final class TimetableViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateLectureList(lectureList): 
+            case let .updateLectureList(lectureList):
                 self?.addClassCollectionView.setUpLectureList(lectureList: lectureList)
             case let .showingSelectedFrame(semester, frameName):
                 self?.updateSemesterButtonText(semester: semester, frameName: frameName)
             case let .updateMyFrame(lectureList):
-                self?.timetableCollectionView.updateLectureData(lectureData: lectureList)
+                self?.updateTimetable(lectureData: lectureList)
+                //              self?.timetableCollectionView.updateLectureData(lectureData: lectureList)
             }
         }.store(in: &subscriptions)
         
@@ -127,13 +130,74 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
-          //  self?.toggleCollectionView()
+            //  self?.toggleCollectionView()
         }.store(in: &subscriptions)
     }
     
 }
 
 extension TimetableViewController {
+    private func updateTimetable(lectureData: [LectureData]) {
+        for lecture in lectureData {
+            let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 }
+            
+            for (day, times) in groupedByDay {
+                let separatedTimes = splitIntoContinuousRanges(times)
+                
+                for range in separatedTimes {
+                    if let firstTime = range.first {
+                        let width = Int(containerView.frame.width / 5) + 1// 5열 기준
+                        let height = 35
+                        
+                        // LectureView 생성
+                        let lectureView = LectureView(id: lecture.id, lectureName: lecture.name, professorName: lecture.professor, color: .red)
+                        
+                        // GestureRecognizer 추가
+                        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLectureTap(_:)))
+                        lectureView.addGestureRecognizer(tapGesture)
+                        lectureView.isUserInteractionEnabled = true
+                        
+                        containerView.addSubview(lectureView)
+                        lectureView.snp.makeConstraints { make in
+                            make.width.equalTo(width)
+                            make.height.equalTo(height * range.count) // 강의 시간의 개수만큼 높이 설정
+                            make.top.equalTo(containerView.snp.top).offset(height * (firstTime % 100))
+                            make.leading.equalTo(containerView.snp.leading).offset(width * day)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
+        if let tappedView = sender.view as? LectureView {
+            print(tappedView.id)
+        }
+    }
+
+    // Helper: 연속된 시간대를 분리
+    func splitIntoContinuousRanges(_ times: [Int]) -> [[Int]] {
+        let sortedTimes = times.sorted() // 정렬하여 연속 여부 확인
+        var result: [[Int]] = []
+        var currentRange: [Int] = []
+        
+        for time in sortedTimes {
+            if let last = currentRange.last, time == last + 1 {
+                currentRange.append(time) // 연속된 시간
+            } else {
+                if !currentRange.isEmpty {
+                    result.append(currentRange) // 이전 범위를 결과에 추가
+                }
+                currentRange = [time] // 새로운 범위 시작
+            }
+        }
+        if !currentRange.isEmpty {
+            result.append(currentRange) // 마지막 범위 추가
+        }
+        return result
+    }
+
     
     private func updateSemesterButtonText(semester: String, frameName: String?) {
         if let frameName = frameName {
@@ -143,7 +207,7 @@ extension TimetableViewController {
         }
     }
     @objc private func modifyTimetableButtonTapped() {
-
+        
         
         if addClassCollectionView.isHidden && addDirectCollectionView.isHidden {
             toggleCollectionView(collectionView: addClassCollectionView, animate: true)
@@ -171,7 +235,7 @@ extension TimetableViewController {
                 }
             }
         } else {
-           
+            
         }
         
         
@@ -182,7 +246,7 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView, addDirectCollectionView].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView, addDirectCollectionView, containerView].forEach {
             view.addSubview($0)
         }
     }
@@ -212,6 +276,11 @@ extension TimetableViewController {
         }
         addDirectCollectionView.snp.makeConstraints { make in
             make.edges.equalTo(addClassCollectionView)
+        }
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(timetableCollectionView.snp.top).offset(16)
+            make.leading.equalTo(timetableCollectionView.snp.leading).offset(18)
+            make.trailing.bottom.equalTo(timetableCollectionView)
         }
     }
     private func setUpNavigationBar() {
