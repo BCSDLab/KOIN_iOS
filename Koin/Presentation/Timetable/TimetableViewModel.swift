@@ -13,6 +13,7 @@ final class TimetableViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchMySemester
+        case modifyLecture(LectureData, Bool)
     }
     
     // MARK: - Output
@@ -73,6 +74,8 @@ final class TimetableViewModel: ViewModelProtocol {
             switch input {
             case .fetchMySemester:
                 self?.fetchMySemester()
+            case let .modifyLecture(lecture, isAdd):
+                self?.modifyLecture(lecture: lecture, isAdd: isAdd)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -81,6 +84,16 @@ final class TimetableViewModel: ViewModelProtocol {
 }
 
 extension TimetableViewModel {
+    
+    // UI 상으로만 해당 강의 추가 / 삭제
+    private func modifyLecture(lecture: LectureData, isAdd: Bool) {
+        if isAdd {
+            self.lectureData.append(lecture)
+        } else {
+            // ?? 강의보고 어떻게 내가 추가한지 알고 삭제하지 ? 그래서 이렇게 처리.
+            self.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name }
+        }
+    }
     
     // 특정 프레임 id의 모든 강의 조회
     private func fetchLecture(frameId: Int) {

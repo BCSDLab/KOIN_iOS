@@ -117,8 +117,7 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
-            print(lecture.0)
-            print(lecture.1)
+            self?.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
         }.store(in: &subscriptions)
         
         
@@ -138,6 +137,9 @@ final class TimetableViewController: UIViewController {
 
 extension TimetableViewController {
     private func updateTimetable(lectureData: [LectureData]) {
+        print(lectureData)
+        containerView.subviews.forEach { $0.removeFromSuperview() }
+        
         for lecture in lectureData {
             let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 }
             
@@ -169,13 +171,13 @@ extension TimetableViewController {
             }
         }
     }
-
+    
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
             print(tappedView.id)
         }
     }
-
+    
     // Helper: 연속된 시간대를 분리
     func splitIntoContinuousRanges(_ times: [Int]) -> [[Int]] {
         let sortedTimes = times.sorted() // 정렬하여 연속 여부 확인
@@ -197,7 +199,7 @@ extension TimetableViewController {
         }
         return result
     }
-
+    
     
     private func updateSemesterButtonText(semester: String, frameName: String?) {
         if let frameName = frameName {
@@ -246,7 +248,7 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView, addClassCollectionView, addDirectCollectionView, containerView].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView, containerView, addClassCollectionView, addDirectCollectionView].forEach {
             view.addSubview($0)
         }
     }
