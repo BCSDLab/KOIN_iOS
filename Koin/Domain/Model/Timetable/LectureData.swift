@@ -11,6 +11,5 @@ struct LectureData {
     let id: Int
     let name: String
     let professor: String
-    let clasTime: [Int]
-    let isAdd: Bool
+    let classTime: [Int]
 }

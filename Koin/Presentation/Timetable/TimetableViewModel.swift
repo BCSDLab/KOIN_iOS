@@ -12,7 +12,6 @@ final class TimetableViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
-        case fetchLectureList
         case fetchMySemester
     }
     
@@ -21,6 +20,7 @@ final class TimetableViewModel: ViewModelProtocol {
     enum Output {
         case updateLectureList([SemesterLecture])
         case showingSelectedFrame(String, String?)
+        case updateMyFrame([LectureData])
     }
     
     // MARK: - Properties
@@ -57,7 +57,7 @@ final class TimetableViewModel: ViewModelProtocol {
     }
     private var selectedFrameId: Int? {
         didSet {
-            
+            fetchLecture(frameId: selectedFrameId ?? 0)
         }
     }
 
@@ -66,8 +66,6 @@ final class TimetableViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .fetchLectureList:
-                self?.fetchLectureList(semester: "20241")
             case .fetchMySemester:
                 self?.fetchMySemester()
             }
@@ -79,6 +77,18 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    private func fetchLecture(frameId: Int) {
+        fetchLectureUseCase.execute(frameId: frameId).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateMyFrame(response))
+        }.store(in: &subscriptions)
+
+    }
+    
+    // 해당 학기 모든 프레임 조회 ( 처음에 보여줄 학기 시간표 선택 위해 필요 )
     private func fetchFrame(semester: String) {
         fetchFrameUseCase.execute(semester: semester).sink { completion in
             if case let .failure(error) = completion {
@@ -86,6 +96,7 @@ extension TimetableViewModel {
             }
         } receiveValue: { [weak self] response  in
             if let firstMainFrame = response.first(where: { $0.isMain }) {
+                self?.selectedFrameId = firstMainFrame.id
                 self?.outputSubject.send(.showingSelectedFrame(semester, firstMainFrame.timetableName))
             } else {
                 self?.outputSubject.send(.showingSelectedFrame("학기 추가하기", nil))
@@ -94,13 +105,14 @@ extension TimetableViewModel {
 
     }
     
+    // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
     private func fetchMySemester() {
         fetchMySemesterUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }receiveValue: { [weak self] response in
-            if let lastSemester = response.semesters.last {
+            if let lastSemester = response.semesters.first {
                 self?.selectedSemester = lastSemester
                 self?.fetchFrame(semester: lastSemester)
             } else {
