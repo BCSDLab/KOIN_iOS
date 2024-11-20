@@ -47,6 +47,8 @@ final class AddDirectHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        classButton.addTarget(self, action: #selector(classButtonTapped), for: .touchUpInside)
+        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {

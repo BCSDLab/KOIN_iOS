@@ -83,6 +83,7 @@ extension AddDirectCollectionView {
             headerCancellables.removeAll()
             headerView.classButtonPublisher.sink { [weak self] in
                 self?.addClassButtonPublisher.send()
+                
             }.store(in: &headerCancellables)
             return headerView
         } else if kind == UICollectionView.elementKindSectionFooter {

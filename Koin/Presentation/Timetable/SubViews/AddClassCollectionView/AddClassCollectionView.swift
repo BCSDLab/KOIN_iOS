@@ -10,7 +10,7 @@ import UIKit
 
 final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var somethings: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    private var lectureList: [SemesterLecture] = []
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
     let addClassButtonPublisher = PassthroughSubject<Void, Never>()
@@ -39,8 +39,8 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
         delegate = self
     }
     
-    func setUpSomethings() {
-        
+    func setUpLectureList(lectureList: [SemesterLecture]) {
+        self.lectureList = lectureList
         reloadData()
     }
     
@@ -55,7 +55,7 @@ extension AddClassCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return somethings.count
+        return lectureList.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
@@ -79,7 +79,7 @@ extension AddClassCollectionView {
                 self?.completeButtonPublisher.send()
             }.store(in: &headerCancellables)
             headerView.addDirectButtonPublisher.sink { [weak self] in
-                self?.addClassButtonPublisher.send()
+                self?.addDirectButtonPublisher.send()
             }.store(in: &headerCancellables)
             headerView.filterButtonPublisher.sink { [weak self] in
                 self?.filterButtonPublisher.send()
@@ -96,7 +96,7 @@ extension AddClassCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddClassCollectionViewCell.identifier, for: indexPath) as? AddClassCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row]))
+        cell.configure(lecture: lectureList[indexPath.row])
         return cell
     }
 }

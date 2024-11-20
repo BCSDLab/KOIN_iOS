@@ -19,6 +19,8 @@ final class TimetableViewController: UIViewController {
     // MARK: - UI Components
     
     private let semesterSelectButton = UIButton().then {
+        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
         $0.layer.borderWidth = 1.0
@@ -56,7 +58,7 @@ final class TimetableViewController: UIViewController {
     }
     
     private let addDirectCollectionView = AddDirectCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        $0.isHidden = false
+        $0.isHidden = true
     }
     
     // MARK: - Initialization
@@ -79,6 +81,7 @@ final class TimetableViewController: UIViewController {
         bind()
         configureView()
         print(KeyChainWorker.shared.read(key: .access))
+        inputSubject.send(.fetchMySemester)
     }
     
     
@@ -89,49 +92,78 @@ final class TimetableViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-                
+            case let .updateLectureList(lectureList): 
+                self?.addClassCollectionView.setUpLectureList(lectureList: lectureList)
+            case let .showingSelectedFrame(semester, frameName):
+                self?.updateSemesterButtonText(semester: semester, frameName: frameName)
             }
         }.store(in: &subscriptions)
         
         addClassCollectionView.completeButtonPublisher.sink { [weak self] in
-            self?.toggleAddClassCollectionView()
+            guard let self = self else { return }
+            self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
+        }.store(in: &subscriptions)
+        
+        addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
+            self?.addClassCollectionView.isHidden.toggle()
+            self?.addDirectCollectionView.isHidden.toggle()
+        }.store(in: &subscriptions)
+        
+        addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
+            self?.addClassCollectionView.isHidden.toggle()
+            self?.addDirectCollectionView.isHidden.toggle()
+        }.store(in: &subscriptions)
+        
+        addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
+          //  self?.toggleCollectionView()
         }.store(in: &subscriptions)
     }
     
 }
 
 extension TimetableViewController {
-    @objc private func modifyTimetableButtonTapped() {
-        let a = DefaultDeleteLectureUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
-        
-        a.execute(frameId: 12434, lectureId: 16615) .sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                
-            }
-        } receiveValue: { response in
-                print(response)
-            }.store(in: &subscriptions)
-        
-        toggleAddClassCollectionView()
+    
+    private func updateSemesterButtonText(semester: String, frameName: String?) {
+        if let frameName = frameName {
+            semesterSelectButton.setTitle("\(semester) / \(frameName)", for: .normal)
+        } else {
+            semesterSelectButton.setTitle("\(semester)", for: .normal)
+        }
     }
-    private func toggleAddClassCollectionView() {
-        if addClassCollectionView.isHidden {
-            
-            addClassCollectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
-            addClassCollectionView.isHidden = false
-            
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) { [weak self] in
-                self?.addClassCollectionView.transform = .identity
+    @objc private func modifyTimetableButtonTapped() {
+
+        
+        if addClassCollectionView.isHidden && addDirectCollectionView.isHidden {
+            toggleCollectionView(collectionView: addClassCollectionView, animate: true)
+        } else {
+            let selectedCollectionView = addClassCollectionView.isHidden ? addDirectCollectionView : addClassCollectionView
+            toggleCollectionView(collectionView: selectedCollectionView, animate: true)
+        }
+    }
+    
+    private func toggleCollectionView(collectionView: UICollectionView, animate: Bool) {
+        
+        
+        if animate {
+            if collectionView.isHidden {
+                collectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
+                collectionView.isHidden = false
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                    collectionView.transform = .identity
+                }
+            } else {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                    collectionView.transform = CGAffineTransform(translationX: 0, y: collectionView.frame.height)
+                }) { _ in
+                    collectionView.isHidden = true
+                }
             }
         } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
-                guard let strongSelf = self else { return }
-                self?.addClassCollectionView.transform = CGAffineTransform(translationX: 0, y: strongSelf.addClassCollectionView.frame.height)
-            }) { [weak self] _ in
-                self?.addClassCollectionView.isHidden = true
-            }
+           
         }
+        
+        
+        
     }
 }
 

@@ -51,12 +51,12 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(text: String) {
-        classTitleLabel.text = "직업능력훈련평가"
-        professorNameLabel.text = "이미나"
-        classTimeLabel.text = "목 02 ~ 03"
-        gradeLabel.text = "2학점"
-        classCodeLabel.text = "HRD220"
+    func configure(lecture: SemesterLecture) {
+        classTitleLabel.text = lecture.name
+        professorNameLabel.text = lecture.professor
+        classTimeLabel.text = "\(lecture.classTime)"
+        gradeLabel.text = "\(lecture.grades)학점"
+        classCodeLabel.text = lecture.code
     }
 }
 
