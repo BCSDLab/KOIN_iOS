@@ -18,4 +18,20 @@ final class DefaultTimetableRepository: TimetableRepository {
     func fetchDeptList() -> AnyPublisher<[DeptDTO], Error> {
         return service.fetchDeptList()
     }
+    
+    func fetchFrame(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse> {
+        service.fetchFrame(semester: semester)
+    }
+    
+    func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.deleteFrame(id: id)
+    }
+    
+    func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse> {
+        service.createFrame(semester: semester)
+    }
+    
+    func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse> {
+        service.modifyFrame(frame: frame)
+    }
 }

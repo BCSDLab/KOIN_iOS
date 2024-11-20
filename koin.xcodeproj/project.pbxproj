@@ -193,6 +193,11 @@
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
 		D21460372BD09ACF006F579A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D21460362BD09ACF006F579A /* GoogleService-Info.plist */; };
+		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
+		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
+		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
+		D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */; };
+		D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -677,6 +682,11 @@
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		D21460362BD09ACF006F579A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
+		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
+		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
+		D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameUseCase.swift; sourceTree = "<group>"; };
+		D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyFrameUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -1655,6 +1665,7 @@
 				D2D4225C2BAAEE0900A8AF04 /* DeptDTO.swift */,
 				D2908D272BB8D1580008F908 /* LectureDTO.swift */,
 				D2908D252BB8D11A0008F908 /* SemesterDTO.swift */,
+				D215724D2CEDBEC60061E725 /* FrameDTO.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2186,6 +2197,10 @@
 			isa = PBXGroup;
 			children = (
 				D29F21CB2C4E157E00994554 /* FetchDeptListUseCase.swift */,
+				D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */,
+				D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */,
+				D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */,
+				D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -3129,6 +3144,7 @@
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
+				D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				837BFA542BB7E4A3001FCBD4 /* SearchBusViewController.swift in Sources */,
@@ -3158,6 +3174,7 @@
 				83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */,
 				D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */,
 				833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */,
+				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
 				D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */,
@@ -3226,6 +3243,7 @@
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
+				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
 				837BFA522BB7E48A001FCBD4 /* BusInformaitionViewController.swift in Sources */,
 				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
@@ -3250,6 +3268,7 @@
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCell.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
 				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
+				D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
@@ -3278,6 +3297,7 @@
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
 				D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */,
 				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
+				D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
