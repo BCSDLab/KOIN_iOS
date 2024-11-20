@@ -78,6 +78,7 @@ final class TimetableViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        print(KeyChainWorker.shared.read(key: .access))
     }
     
     

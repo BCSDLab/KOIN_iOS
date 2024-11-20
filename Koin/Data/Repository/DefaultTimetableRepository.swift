@@ -34,4 +34,16 @@ final class DefaultTimetableRepository: TimetableRepository {
     func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse> {
         service.modifyFrame(frame: frame)
     }
+    
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.fetchLecture(frameId: frameId)
+    }
+    
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.modifyLecture(request: request)
+    }
+    
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.postLecture(request: request)
+    }
 }

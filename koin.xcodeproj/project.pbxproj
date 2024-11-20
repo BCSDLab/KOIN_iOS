@@ -202,6 +202,10 @@
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
 		D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */; };
 		D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */; };
+		D215725C2CEDD04C0061E725 /* LectureRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215725B2CEDD04C0061E725 /* LectureRequest.swift */; };
+		D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */; };
+		D21572602CEDD2C60061E725 /* ModifyLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */; };
+		D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -701,6 +705,10 @@
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyFrameUseCase.swift; sourceTree = "<group>"; };
+		D215725B2CEDD04C0061E725 /* LectureRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureRequest.swift; sourceTree = "<group>"; };
+		D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureUseCase.swift; sourceTree = "<group>"; };
+		D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyLectureUseCase.swift; sourceTree = "<group>"; };
+		D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLectureUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -2238,6 +2246,9 @@
 				D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */,
 				D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */,
 				D21572552CEDC1830061E725 /* ModifyFrameUseCase.swift */,
+				D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */,
+				D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */,
+				D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2294,6 +2305,7 @@
 			children = (
 				D2908D3D2BBD1E190008F908 /* TimetableRequest.swift */,
 				D2908D4F2BBE64B90008F908 /* Removetimetable.swift */,
+				D215725B2CEDD04C0061E725 /* LectureRequest.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2990,6 +3002,7 @@
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
+				D215725C2CEDD04C0061E725 /* LectureRequest.swift in Sources */,
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
@@ -3127,6 +3140,7 @@
 				833D9C522C73451000982145 /* NoticeDataViewController.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
+				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
@@ -3187,6 +3201,7 @@
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
+				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				8354BE372C79C6AF009D4D7A /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
@@ -3198,6 +3213,7 @@
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
 				D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,
+				D21572602CEDD2C60061E725 /* ModifyLectureUseCase.swift in Sources */,
 				D27DD0F22BA60D220081FD36 /* LandDetailViewController.swift in Sources */,
 				D20AB9522C5534F7006BC684 /* FetchNotiListUseCase.swift in Sources */,
 				D29F21CA2C4E151000994554 /* TimetableRepository.swift in Sources */,

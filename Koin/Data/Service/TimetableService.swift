@@ -14,6 +14,9 @@ protocol TimetableService {
     func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse>
     func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse>
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
 }
 
 final class DefaultTimetableService: TimetableService {
@@ -22,6 +25,51 @@ final class DefaultTimetableService: TimetableService {
     
     func fetchDeptList() -> AnyPublisher<[DeptDTO], Error> {
         return request(.fetchDeptList)
+    }
+    
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: TimetableAPI.fetchLecture(frameId: frameId))
+            .catch { [weak self] error -> AnyPublisher<LectureDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: TimetableAPI.fetchLecture(frameId: frameId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: TimetableAPI.modifyLecture(request: request))
+            .catch { [weak self] error -> AnyPublisher<LectureDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: TimetableAPI.modifyLecture(request: request)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: TimetableAPI.postLecture(request: request))
+            .catch { [weak self] error -> AnyPublisher<LectureDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: TimetableAPI.postLecture(request: request)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     func fetchFrame(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse> {
