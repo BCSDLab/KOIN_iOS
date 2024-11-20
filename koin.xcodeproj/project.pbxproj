@@ -206,6 +206,10 @@
 		D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */; };
 		D21572602CEDD2C60061E725 /* ModifyLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */; };
 		D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */; };
+		D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572632CEDDCA80061E725 /* SemesterLecture.swift */; };
+		D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */; };
+		D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */; };
+		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -709,6 +713,10 @@
 		D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureUseCase.swift; sourceTree = "<group>"; };
 		D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyLectureUseCase.swift; sourceTree = "<group>"; };
 		D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLectureUseCase.swift; sourceTree = "<group>"; };
+		D21572632CEDDCA80061E725 /* SemesterLecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterLecture.swift; sourceTree = "<group>"; };
+		D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMySemesterUseCase.swift; sourceTree = "<group>"; };
+		D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureListUseCase.swift; sourceTree = "<group>"; };
+		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -1706,6 +1714,7 @@
 				D2908D272BB8D1580008F908 /* LectureDTO.swift */,
 				D2908D252BB8D11A0008F908 /* SemesterDTO.swift */,
 				D215724D2CEDBEC60061E725 /* FrameDTO.swift */,
+				D21572632CEDDCA80061E725 /* SemesterLecture.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2249,6 +2258,9 @@
 				D215725D2CEDD2BD0061E725 /* FetchLectureUseCase.swift */,
 				D215725F2CEDD2C60061E725 /* ModifyLectureUseCase.swift */,
 				D21572612CEDD2CF0061E725 /* PostLectureUseCase.swift */,
+				D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */,
+				D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */,
+				D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -3018,6 +3030,7 @@
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
+				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
 				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
@@ -3174,6 +3187,7 @@
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
+				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
 				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
 				D27DD0FA2BA6292C0081FD36 /* LandOptionCollectionView.swift in Sources */,
@@ -3313,6 +3327,7 @@
 				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
+				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
 				833D9C4D2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
@@ -3387,6 +3402,7 @@
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
 				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
+				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
 				83DD0DD02C568E7100278ABD /* BusTimetableTableViewHeaderView.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,

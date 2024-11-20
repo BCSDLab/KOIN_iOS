@@ -102,6 +102,17 @@ final class TimetableViewController: UIViewController {
 
 extension TimetableViewController {
     @objc private func modifyTimetableButtonTapped() {
+        let a = DefaultFetchLectureListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        
+        a.execute(semester: "20241").sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                
+            }
+        } receiveValue: { response in
+                print(response)
+            }.store(in: &subscriptions)
+        
         toggleAddClassCollectionView()
     }
     private func toggleAddClassCollectionView() {

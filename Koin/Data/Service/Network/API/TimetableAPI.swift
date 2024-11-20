@@ -16,6 +16,9 @@ enum TimetableAPI {
     case fetchLecture(frameId: Int)
     case modifyLecture(request: LectureRequest)
     case postLecture(request: LectureRequest)
+    case fetchMySemester
+    case fetchLectureList(semester: String)
+    case fetchSemester
 }
 
 extension TimetableAPI: Router, URLRequestConvertible {
@@ -32,12 +35,15 @@ extension TimetableAPI: Router, URLRequestConvertible {
         case .createFrame: return "/v2/timetables/frame"
         case .modifyFrame(let frame): return "/v2/timetables/frame/\(frame.id)"
         case .fetchLecture, .modifyLecture, .postLecture :  return "/v2/timetables/lecture"
+        case .fetchMySemester: return "/semesters/check"
+        case .fetchLectureList: return "/lectures"
+        case .fetchSemester: return "/semesters"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchDeptList, .fetchFrame, .fetchLecture: return .get
+        case .fetchDeptList, .fetchFrame, .fetchLecture, .fetchMySemester, .fetchLectureList, .fetchSemester: return .get
         case .deleteFrame: return .delete
         case .createFrame, .postLecture: return .post
         case .modifyFrame, .modifyLecture: return .put
@@ -47,7 +53,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture:
+        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -64,7 +70,9 @@ extension TimetableAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchDeptList: return nil
+        case .fetchDeptList, .fetchSemester, .fetchMySemester: return nil
+        case .fetchLectureList(let semester):
+            return ["semester_date": semester]
         case .fetchFrame(let semester):
             return ["semester": semester] // Query parameter
         case .deleteFrame(let id):
@@ -82,8 +90,8 @@ extension TimetableAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchDeptList: return URLEncoding.default
-        case .fetchFrame, .fetchLecture: return URLEncoding.queryString
+        case .fetchDeptList, .fetchSemester, .fetchMySemester: return URLEncoding.default
+        case .fetchFrame, .fetchLecture, .fetchLectureList: return URLEncoding.queryString
         case .deleteFrame: return URLEncoding.queryString
         case .createFrame, .modifyFrame, .postLecture, .modifyLecture: return JSONEncoding.default
         }
