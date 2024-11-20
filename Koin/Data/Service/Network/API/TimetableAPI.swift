@@ -39,7 +39,8 @@ extension TimetableAPI: Router, URLRequestConvertible {
         case .fetchMySemester: return "/semesters/check"
         case .fetchLectureList: return "/lectures"
         case .fetchSemester: return "/semesters"
-        case .deleteLecture(frameId: let frameId, lectureId: let lectureId): return "/v2/timetables/frame/\(frameId)/lecture/\(lectureId)"
+            // FIXME: 네이밍, api 고치기 이거 lectureid가 아니라 id임
+        case .deleteLecture(frameId: let frameId, lectureId: let lectureId): return "/v2/timetables/lecture/\(lectureId)"
         }
     }
     

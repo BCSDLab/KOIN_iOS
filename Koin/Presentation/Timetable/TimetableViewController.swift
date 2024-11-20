@@ -18,6 +18,10 @@ final class TimetableViewController: UIViewController {
     
     // MARK: - UI Components
     
+    private let deleteLectureView = DeleteLectureView().then {
+        $0.isHidden = true
+    }
+    
     private let semesterSelectButton = UIButton().then {
         $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
@@ -128,8 +132,21 @@ final class TimetableViewController: UIViewController {
             self?.addDirectCollectionView.isHidden.toggle()
         }.store(in: &subscriptions)
         
-        addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
+        addDirectCollectionView.addClassButtonPublisher.sink { [weak self] lecture in
             //  self?.toggleCollectionView()
+        }.store(in: &subscriptions)
+        
+        
+        
+        // MARK: ETC
+        
+        deleteLectureView.completeButtonPublisher.sink { [weak self] in
+            self?.deleteLectureView.isHidden = true
+        }.store(in: &subscriptions)
+        
+        deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
+            self?.deleteLectureView.isHidden = true
+            self?.inputSubject.send(.modifyLecture(lecture, false))
         }.store(in: &subscriptions)
     }
     
@@ -151,7 +168,7 @@ extension TimetableViewController {
                         let height = 35
                         
                         // LectureView 생성
-                        let lectureView = LectureView(id: lecture.id, lectureName: lecture.name, professorName: lecture.professor, color: .red)
+                        let lectureView = LectureView(info: lecture, color: .red)
                         
                         // GestureRecognizer 추가
                         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLectureTap(_:)))
@@ -173,7 +190,8 @@ extension TimetableViewController {
     
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
-            print(tappedView.id)
+            deleteLectureView.configure(lecture: tappedView.info)
+            deleteLectureView.isHidden = false
         }
     }
     
@@ -247,7 +265,7 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView, containerView, addClassCollectionView, addDirectCollectionView].forEach {
+        [semesterSelectButton, downloadImageButton, timetableCollectionView, containerView, addClassCollectionView, addDirectCollectionView, deleteLectureView].forEach {
             view.addSubview($0)
         }
     }
@@ -282,6 +300,10 @@ extension TimetableViewController {
             make.top.equalTo(timetableCollectionView.snp.top).offset(16)
             make.leading.equalTo(timetableCollectionView.snp.leading).offset(18)
             make.trailing.bottom.equalTo(timetableCollectionView)
+        }
+        deleteLectureView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(220)
         }
     }
     private func setUpNavigationBar() {
