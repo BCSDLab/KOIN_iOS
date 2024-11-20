@@ -20,6 +20,14 @@ struct LectureDTO: Codable {
     }
 }
 
+extension LectureDTO {
+    func toDomain() -> [LectureData] {
+           return timetable?.map { timetable in
+               LectureData(id: timetable.id, name: timetable.classTitle, professor: timetable.professor ?? "", classTime: timetable.classTime)
+           } ?? []
+       }
+}
+
 struct Timetable: Codable {
     let id: Int
     let lectureID: Int?

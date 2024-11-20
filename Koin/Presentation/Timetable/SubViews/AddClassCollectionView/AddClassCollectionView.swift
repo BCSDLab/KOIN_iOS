@@ -15,7 +15,7 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
-    let modifyClassButtonPublisher = PassthroughSubject<LectureData, Never>()
+    let modifyClassButtonPublisher = PassthroughSubject<(LectureData, Bool), Never>()
     let didTapCellPublisher = PassthroughSubject<Void, Never>()
     let filterButtonPublisher = PassthroughSubject<Void, Never>()
     private var headerCancellables = Set<AnyCancellable>()
@@ -107,7 +107,7 @@ extension AddClassCollectionView {
             self.isAdded[indexPath.row].toggle()
             let item = self.lectureList[indexPath.row]
             let isAdd = self.isAdded[indexPath.row]
-            modifyClassButtonPublisher.send(LectureData(id: item.id, name: item.name, professor: item.professor ?? "", clasTime: item.classTime, isAdd: isAdd))
+            modifyClassButtonPublisher.send(((LectureData(id: item.id, name: item.name, professor: item.professor ?? "", classTime: item.classTime)), isAdd))
         }.store(in: &cell.cancellables)
         return cell
     }

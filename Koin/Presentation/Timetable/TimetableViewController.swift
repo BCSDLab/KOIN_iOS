@@ -96,6 +96,8 @@ final class TimetableViewController: UIViewController {
                 self?.addClassCollectionView.setUpLectureList(lectureList: lectureList)
             case let .showingSelectedFrame(semester, frameName):
                 self?.updateSemesterButtonText(semester: semester, frameName: frameName)
+            case let .updateMyFrame(lectureList):
+                self?.timetableCollectionView.updateLectureData(lectureData: lectureList)
             }
         }.store(in: &subscriptions)
         
@@ -112,7 +114,8 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
-            print(lecture)
+            print(lecture.0)
+            print(lecture.1)
         }.store(in: &subscriptions)
         
         

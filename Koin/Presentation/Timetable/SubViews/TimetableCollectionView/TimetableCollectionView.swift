@@ -9,7 +9,8 @@ import UIKit
 
 final class TimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var somethings: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    private var lectureData: [LectureData] = []
+    private var timeTexts: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17]
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -32,8 +33,9 @@ final class TimetableCollectionView: UICollectionView, UICollectionViewDataSourc
         delegate = self
     }
     
-    func setUpSomethings() {
-        
+    func updateLectureData(lectureData: [LectureData]) {
+        self.lectureData = lectureData
+        print(lectureData)
         reloadData()
     }
     
@@ -45,14 +47,14 @@ extension TimetableCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return somethings.count
+        return timeTexts.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0 
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -72,7 +74,23 @@ extension TimetableCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimetableCollectionViewCell.identifier, for: indexPath) as? TimetableCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row]))
+        cell.configure(text: String(timeTexts[indexPath.row]))
+        
+        for lecture in lectureData {
+            for time in lecture.classTime {
+                
+                let timeSlot = time / 10
+                let cellIndex = time % 100 / 2
+                let column = time % 100 % 2
+                
+                let row = String(time).count < 3 ? 0 : Int(String(String(time).first ?? "0")) ?? 0
+          
+                if cellIndex == indexPath.row {
+                    cell.updateBackgroundColor(row: row, column: column, color: .red)
+                }
+            }
+        }
+        
         return cell
     }
 }

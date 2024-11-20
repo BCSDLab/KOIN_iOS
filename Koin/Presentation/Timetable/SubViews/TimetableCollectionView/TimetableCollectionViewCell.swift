@@ -32,7 +32,17 @@ final class TimetableCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    func updateBackgroundColor(row: Int, column: Int, color: UIColor) {
+           guard row < horizontalStackView.arrangedSubviews.count,
+                 let verticalStackView = horizontalStackView.arrangedSubviews[row] as? UIStackView,
+                 column < verticalStackView.arrangedSubviews.count else {
+               return
+           }
+           
+           // 특정 위치의 배경색 변경
+           let targetView = verticalStackView.arrangedSubviews[column]
+           targetView.backgroundColor = color
+       }
     func configure(text: String) {
         timeLabel.text = text
     }
