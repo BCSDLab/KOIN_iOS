@@ -32,6 +32,7 @@ final class TimetableViewModel: ViewModelProtocol {
     enum NextInput {
         case fetchFrameList
         case createFrame(String)
+        case deleteFrame(FrameDTO)
     }
     enum NextOutput {
         case reloadData
@@ -111,6 +112,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.fetchMySemesters()
             case .createFrame(let semester):
                 self?.createFrame(semester: semester)
+            case .deleteFrame(let frame):
+                self?.deleteFrame(frame: frame)
             }
         }.store(in: &subscriptions)
         return nextOutputSubject.eraseToAnyPublisher()
@@ -119,6 +122,30 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    private func deleteFrame(frame: FrameDTO) {
+        deleteFrameUseCase.execute(id: frame.id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] in
+            guard let self = self else { return }
+                           
+                           // `frameData`에서 해당 프레임 삭제
+                           for (index, frameData) in self.frameData.enumerated() {
+                               if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
+                                   self.frameData[index].frame.remove(at: frameIndex)
+                                   
+                                   // `frameData`에서 학기가 빈 경우 제거 (선택사항)
+                                   if self.frameData[index].frame.isEmpty {
+                                       self.frameData.remove(at: index)
+                                   }
+                                   
+                                   break // 찾았으면 루프 종료
+                               }
+                           }
+        }.store(in: &subscriptions)
+
+    }
     private func createFrame(semester: String) {
         createFrameUseCase.execute(semester: semester).sink { completion in
             if case let .failure(error) = completion {
