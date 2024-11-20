@@ -38,7 +38,7 @@ final class AddDirectHeaderView: UICollectionReusableView {
     private let professorNameView = ClassComponentView(text: "교수명", isPoint: false).then { _ in
     }
     
-    private let view = UIView().then { view in
+    private let selectTimeView = SelectTimeView().then { _ in
     }
     
     private let placeView = ClassComponentView(text: "장소", isPoint: false).then { _ in
@@ -66,7 +66,7 @@ extension AddDirectHeaderView {
 extension AddDirectHeaderView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
-        [addDirectLabel, classButton, completeButton, calendarView, professorNameView, view, placeView].forEach {
+        [addDirectLabel, classButton, completeButton, calendarView, professorNameView, selectTimeView, placeView].forEach {
             self.addSubview($0)
         }
         [calendarView, professorNameView, placeView].forEach {
@@ -103,12 +103,12 @@ extension AddDirectHeaderView {
             make.top.equalTo(calendarView.snp.bottom).offset(8)
             make.leading.trailing.height.equalTo(calendarView)
         }
-        view.snp.makeConstraints { make in
+        selectTimeView.snp.makeConstraints { make in
             make.top.equalTo(professorNameView.snp.bottom).offset(8)
             make.leading.trailing.height.equalTo(calendarView)
         }
         placeView.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.bottom).offset(8)
+            make.top.equalTo(selectTimeView.snp.bottom).offset(8)
             make.leading.trailing.height.equalTo(calendarView)
         }
     }

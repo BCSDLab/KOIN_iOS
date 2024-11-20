@@ -38,11 +38,11 @@ final class PointLabel: UIView {
         addSubview(mainLabel)
         
         starLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
+            make.centerY.equalTo(self.snp.top)
+            make.trailing.equalTo(self.snp.leading)
         }
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(4)
-            make.leading.equalTo(starLabel.snp.trailing).offset(2)
+            make.edges.equalToSuperview()
         }
     }
     

@@ -21,7 +21,9 @@ final class ClassComponentView: UIView {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
-    private let textField = UITextField().then { _ in
+    private let textField = UITextField().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.tintColor = UIColor.appColor(.neutral500)
     }
     
     // MARK: - Initializers
@@ -49,13 +51,13 @@ final class ClassComponentView: UIView {
         }
     
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(8)
-            make.leading.equalTo(self.snp.leading).offset(5)
-            make.width.equalTo(38)
-            make.height.equalTo(19)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(self.snp.leading).offset(13)
+            make.height.equalTo(16)
+            make.width.equalTo(32)
         }
         pointLabel.snp.makeConstraints { make in
-            make.top.leading.width.height.equalTo(mainLabel)
+            make.edges.equalTo(mainLabel)
         }
         separateView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(5)
