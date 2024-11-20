@@ -74,7 +74,7 @@ final class AddClassHeaderView: UICollectionReusableView {
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         addDirectButton.addTarget(self, action: #selector(addDirectButtonTapped), for: .touchUpInside)
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        searchTextField.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -82,7 +82,14 @@ final class AddClassHeaderView: UICollectionReusableView {
     }
 }
 
-extension AddClassHeaderView {
+extension AddClassHeaderView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            guard let text = textField.text else { return false }
+            searchClassPublisher.send(text)
+            textField.resignFirstResponder() // 키보드 닫기
+            return true
+        }
+    
     @objc private func completeButtonTapped() {
         completeButtonPublisher.send(())
     }

@@ -11,6 +11,7 @@ import UIKit
 final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var lectureList: [SemesterLecture] = []
+    private var showingLectureList: [SemesterLecture] = []
     private var isAdded: [Bool] = []
     
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
@@ -23,7 +24,7 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionHeadersPinToVisibleBounds = true
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: frame, collectionViewLayout: flowLayout)
         commonInit()
     }
     
@@ -45,6 +46,7 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     
     func setUpLectureList(lectureList: [SemesterLecture]) {
         self.lectureList = lectureList
+        self.showingLectureList = lectureList
         self.isAdded = Array(repeating: false, count: lectureList.count)
         reloadData()
     }
@@ -60,7 +62,7 @@ extension AddClassCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lectureList.count
+        return showingLectureList.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
@@ -90,7 +92,13 @@ extension AddClassCollectionView {
                 self?.filterButtonPublisher.send()
             }.store(in: &headerCancellables)
             headerView.searchClassPublisher.sink { [weak self] text in
-                //
+                guard let self = self else { return }
+                if text.isEmpty {
+                    showingLectureList = lectureList
+                } else {
+                    self.showingLectureList = self.lectureList.filter { $0.name.contains(text) }
+                }
+                reloadData()
             }.store(in: &headerCancellables)
             return headerView
         }
@@ -101,11 +109,11 @@ extension AddClassCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddClassCollectionViewCell.identifier, for: indexPath) as? AddClassCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(lecture: lectureList[indexPath.row])
+        cell.configure(lecture: showingLectureList[indexPath.row])
         cell.modifyClassButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
             self.isAdded[indexPath.row].toggle()
-            let item = self.lectureList[indexPath.row]
+            let item = self.showingLectureList[indexPath.row]
             let isAdd = self.isAdded[indexPath.row]
             modifyClassButtonPublisher.send(((LectureData(id: item.id, name: item.name, professor: item.professor ?? "", classTime: item.classTime)), isAdd))
         }.store(in: &cell.cancellables)

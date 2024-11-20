@@ -76,20 +76,6 @@ extension TimetableCollectionView {
         }
         cell.configure(text: String(timeTexts[indexPath.row]))
         
-//        for lecture in lectureData {
-//            for time in lecture.classTime {
-//                
-//                let timeSlot = time / 10
-//                let cellIndex = time % 100 / 2
-//                let column = time % 100 % 2
-//                
-//                let row = String(time).count < 3 ? 0 : Int(String(String(time).first ?? "0")) ?? 0
-//          
-//                if cellIndex == indexPath.row {
-//                    cell.updateBackgroundColor(row: row, column: column, color: .red)
-//                }
-//            }
-//        }
         
         return cell
     }
