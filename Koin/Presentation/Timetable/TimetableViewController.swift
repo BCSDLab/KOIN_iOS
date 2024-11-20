@@ -85,14 +85,15 @@ final class TimetableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
-        configureView()        
+        configureView()
+        inputSubject.send(.fetchMySemester)
         print(KeyChainWorker.shared.read(key: .access))
         semesterSelectButton.addTarget(self, action: #selector(modifySemesterButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        inputSubject.send(.fetchMySemester)
+        //    inputSubject.send(.fetchMySemester)
     }
     // MARK: - Bind
     
@@ -227,9 +228,9 @@ extension TimetableViewController {
     
     private func updateSemesterButtonText(semester: String, frameName: String?) {
         if let frameName = frameName {
-            semesterSelectButton.setTitle("\(semester) / \(frameName)", for: .normal)
+            semesterSelectButton.setTitle("\(semester.reverseFormatSemester()) / \(frameName)", for: .normal)
         } else {
-            semesterSelectButton.setTitle("\(semester)", for: .normal)
+            semesterSelectButton.setTitle("\(semester.reverseFormatSemester())", for: .normal)
         }
     }
     @objc private func modifyTimetableButtonTapped() {

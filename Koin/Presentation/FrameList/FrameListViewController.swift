@@ -8,6 +8,7 @@
 import Combine
 import UIKit
 
+
 final class FrameListViewController: UIViewController {
     
     // MARK: - Properties
@@ -64,12 +65,20 @@ final class FrameListViewController: UIViewController {
     }
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 55 // 원하는 셀 높이 설정
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60 // 원하는 높이 설정
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.frameData.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.frameData[section].semester // 섹션 헤더에 학기 이름 표시
+        return viewModel.frameData[section].semester.reverseFormatSemester() // 섹션 헤더에 학기 이름 표시
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,47 +86,55 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableCell", for: indexPath)
-        cell.textLabel?.text = viewModel.frameData[indexPath.section].frame[indexPath.row].timetableName
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TimetableCell", for: indexPath) as? TimetableCell else {
+            fatalError("TimetableCell not found")
+        }
+        let timetable = viewModel.frameData[indexPath.section].frame[indexPath.row]
+        cell.configure(with: timetable)
         return cell
     }
-    
-}
-
-extension FrameListViewController {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = .systemGroupedBackground
+        headerView.backgroundColor = .systemBackground
         
         let label = UILabel()
         label.text = viewModel.frameData[section].semester
-        label.font = .boldSystemFont(ofSize: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.appFont(.pretendardBold, size: 20)
         
-        let addButton = UIButton(type: .contactAdd)
+        let addButton = UIButton()
+        addButton.setImage(UIImage.appImage(asset: .plusBold), for: .normal)
         addButton.tag = section // 섹션 정보를 태그로 저장
         addButton.addTarget(self, action: #selector(addTimetableTapped(_:)), for: .touchUpInside)
-        addButton.translatesAutoresizingMaskIntoConstraints = false
         
         headerView.addSubview(label)
         headerView.addSubview(addButton)
         
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            label.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-            
-            addButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            addButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
-        ])
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(headerView.snp.leading).offset(24)
+            make.centerY.equalTo(headerView.snp.centerY)
+        }
+        addButton.snp.makeConstraints { make in
+            make.trailing.equalTo(headerView.snp.trailing).offset(-32)
+            make.centerY.equalTo(headerView.snp.centerY)
+            make.width.height.equalTo(24)
+        }
         
         return headerView
     }
+}
+
+extension FrameListViewController {
     
     @objc private func addTimetableTapped(_ sender: UIButton) {
-        //        let section = sender.tag
-        //        let newTimetable = Timetable1(id: UUID(), name: "새 시간표")
-        //        semesters[section].timetables.append(newTimetable)
-        //        tableView.reloadSections(IndexSet(integer: section), with: .automatic)
+        guard let headerView = sender.superview else { return } // 버튼의 부모 뷰 (headerView) 가져오기
+        for subview in headerView.subviews {
+            if let label = subview as? UILabel {
+                if let semesterText = label.text {
+                    inputSubject.send(.createFrame(semesterText.formatSemester()))
+                }
+                return
+            }
+        }
     }
 }
 
@@ -126,17 +143,13 @@ extension FrameListViewController {
     
     private func setUpTableView() {
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TimetableCell")
+        tableView.register(TimetableCell.self, forCellReuseIdentifier: "TimetableCell")
     }
     
     @objc private func modifySemesterButtonTapped() {

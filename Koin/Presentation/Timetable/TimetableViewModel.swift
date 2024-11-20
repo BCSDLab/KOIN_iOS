@@ -9,7 +9,7 @@ import Combine
 
 struct FrameData {
     let semester: String
-    let frame: [FrameDTO]
+    var frame: [FrameDTO]
 }
 
 final class TimetableViewModel: ViewModelProtocol {
@@ -31,6 +31,7 @@ final class TimetableViewModel: ViewModelProtocol {
     
     enum NextInput {
         case fetchFrameList
+        case createFrame(String)
     }
     enum NextOutput {
         case reloadData
@@ -108,6 +109,8 @@ final class TimetableViewModel: ViewModelProtocol {
             switch input {
             case .fetchFrameList:
                 self?.fetchMySemesters()
+            case .createFrame(let semester):
+                self?.createFrame(semester: semester)
             }
         }.store(in: &subscriptions)
         return nextOutputSubject.eraseToAnyPublisher()
@@ -115,42 +118,63 @@ final class TimetableViewModel: ViewModelProtocol {
 }
 
 extension TimetableViewModel {
+    
+    private func createFrame(semester: String) {
+        createFrameUseCase.execute(semester: semester).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            
+            // `frameData`에서 해당 `semester`를 찾음
+            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
+                // `frameData`의 해당 `semester` 배열의 마지막에 `response` 추가
+                self.frameData[index].frame.append(response)
+            } else {
+                // `frameData`에 `semester`가 없으면 새로 추가
+                self.frameData.append(FrameData(semester: semester, frame: [response]))
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    
     private func fetchMySemesters() {
         
-          fetchMySemesterUseCase.execute()
-              .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
-                  guard let self = self else { return Just([]).eraseToAnyPublisher() }
-                  let semesters = response.semesters
-                  return semesters.publisher // 배열을 퍼블리셔로 변환
-                      .flatMap { semester -> AnyPublisher<FrameData, Never> in
-                          self.fetchFrame(for: semester)
-                      }
-                      .collect() // 모든 FrameData를 하나의 배열로 수집
-                      .eraseToAnyPublisher()
-              }
-              .sink(receiveCompletion: { completion in
-                  if case let .failure(error) = completion {
-                      Log.make().error("Failed fetching semesters: \(error)")
-                  }
-              }, receiveValue: { [weak self] fetchedFrames in
-                  self?.frameData = fetchedFrames
-                  Log.make().info("FrameData updated: \(fetchedFrames)")
-              })
-              .store(in: &subscriptions)
-      }
-      
-      private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
-          fetchFrameUseCase.execute(semester: semester)
-              .map { frames -> FrameData in
-                  // FrameDTO를 기반으로 FrameData 생성
-                  return FrameData(semester: semester, frame: frames)
-              }
-              .catch { error -> Just<FrameData> in
-                  Log.make().error("Failed fetching frames for semester \(semester): \(error)")
-                  return Just(FrameData(semester: semester, frame: [])) // 실패 시 빈 데이터 반환
-              }
-              .eraseToAnyPublisher()
-      }
+        fetchMySemesterUseCase.execute()
+            .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
+                guard let self = self else { return Just([]).eraseToAnyPublisher() }
+                let semesters = response.semesters
+                return semesters.publisher // 배열을 퍼블리셔로 변환
+                    .flatMap { semester -> AnyPublisher<FrameData, Never> in
+                        self.fetchFrame(for: semester)
+                    }
+                    .collect() // 모든 FrameData를 하나의 배열로 수집
+                    .eraseToAnyPublisher()
+            }
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("Failed fetching semesters: \(error)")
+                }
+            }, receiveValue: { [weak self] fetchedFrames in
+                self?.frameData = fetchedFrames
+                Log.make().info("FrameData updated: \(fetchedFrames)")
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
+        fetchFrameUseCase.execute(semester: semester)
+            .map { frames -> FrameData in
+                // FrameDTO를 기반으로 FrameData 생성
+                return FrameData(semester: semester, frame: frames)
+            }
+            .catch { error -> Just<FrameData> in
+                Log.make().error("Failed fetching frames for semester \(semester): \(error)")
+                return Just(FrameData(semester: semester, frame: [])) // 실패 시 빈 데이터 반환
+            }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension TimetableViewModel {
