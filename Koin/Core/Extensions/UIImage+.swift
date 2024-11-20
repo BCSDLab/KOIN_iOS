@@ -104,6 +104,8 @@ enum ImageAsset: String {
     case minusCircle
     case bookmark
     case plusBold
+    case checkFill
+    case checkEmpty
 }
 
 enum SFSymbols: String {

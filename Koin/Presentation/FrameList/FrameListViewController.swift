@@ -20,6 +20,9 @@ final class FrameListViewController: UIViewController {
     // MARK: - UI Components
     private let tableView = UITableView()
     
+    private let deleteFrameModalViewController: DeleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216)
+    
+    
     // MARK: - Initialization
     
     init(viewModel: TimetableViewModel) {
@@ -56,13 +59,50 @@ final class FrameListViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        deleteFrameModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] frame in
+            self?.inputSubject.send(.deleteFrame(frame))
+        }).store(in: &subscriptions)
         
+        deleteFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
+            //
+        }).store(in: &subscriptions)
     }
+    
+}
+
+extension FrameListViewController: TimetableCellDelegate {
+    @objc private func addTimetableTapped(_ sender: UIButton) {
+        guard let headerView = sender.superview else { return } // 버튼의 부모 뷰 (headerView) 가져오기
+        for subview in headerView.subviews {
+            if let label = subview as? UILabel {
+                if let semesterText = label.text {
+                    inputSubject.send(.createFrame(semesterText.formatSemester()))
+                }
+                return
+            }
+        }
+    }
+    func settingButtonTapped(at indexPath: IndexPath) {
+            let section = indexPath.section
+            let row = indexPath.row
+            print("Setting button tapped at Section: \(section), Row: \(row)")
+            
+            // 추가 동작 (예: 삭제 모달 띄우기)
+            let timetable = viewModel.frameData[section].frame[row]
+            print("타임테이블 이름: \(timetable.timetableName)")
+     //   deleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216, frame:  viewModel.frameData[section].frame[row])\
+        
+        deleteFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
+            self.present(deleteFrameModalViewController, animated: true)
+
+       
+        }
     @objc private func addSemesterTapped() {
         //            let newSemester = Semester(id: UUID(), name: "새 학기", timetables: [])
         //            semesters.append(newSemester)
         //            tableView.reloadData()
     }
+    
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -90,7 +130,8 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError("TimetableCell not found")
         }
         let timetable = viewModel.frameData[indexPath.section].frame[indexPath.row]
-        cell.configure(with: timetable)
+        cell.configure(with: timetable, at: indexPath)
+         cell.delegate = self // Delegate 연결
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -125,17 +166,6 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension FrameListViewController {
     
-    @objc private func addTimetableTapped(_ sender: UIButton) {
-        guard let headerView = sender.superview else { return } // 버튼의 부모 뷰 (headerView) 가져오기
-        for subview in headerView.subviews {
-            if let label = subview as? UILabel {
-                if let semesterText = label.text {
-                    inputSubject.send(.createFrame(semesterText.formatSemester()))
-                }
-                return
-            }
-        }
-    }
 }
 
 

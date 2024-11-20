@@ -10,7 +10,7 @@ import Foundation
 struct FrameDTO: Decodable {
     let id: Int
     let timetableName: String
-    let isMain: Bool
+    var isMain: Bool
     enum CodingKeys: String, CodingKey {
         case id
         case timetableName = "timetable_name"

@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol TimetableCellDelegate: AnyObject {
+    func settingButtonTapped(at indexPath: IndexPath)
+}
+
 final class TimetableCell: UITableViewCell {
+    
+    
+    weak var delegate: TimetableCellDelegate?
+     var indexPath: IndexPath? // 셀의 indexPath를 저장
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -26,6 +34,7 @@ final class TimetableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
         setupConstraints()
+        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -33,10 +42,15 @@ final class TimetableCell: UITableViewCell {
     }
     
     // MARK: - Configure Cell
-    func configure(with timetable: FrameDTO) {
-        titleLabel.text = timetable.timetableName
-        bookmarkImageView.image = timetable.isMain ? UIImage.appImage(asset: .bookmark) : UIImage()
-    }
+    func configure(with timetable: FrameDTO, at indexPath: IndexPath) {
+            titleLabel.text = timetable.timetableName
+            bookmarkImageView.image = timetable.isMain ? UIImage.appImage(asset: .bookmark) : UIImage()
+            self.indexPath = indexPath // 셀의 indexPath 저장
+        }
+    @objc private func settingButtonTapped() {
+           guard let indexPath = indexPath else { return }
+           delegate?.settingButtonTapped(at: indexPath) // Delegate 호출
+       }
     
     // MARK: - Setup UI
     private func setupViews() {
