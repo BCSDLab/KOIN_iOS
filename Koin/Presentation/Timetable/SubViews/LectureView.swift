@@ -9,7 +9,7 @@ import UIKit
 
 final class LectureView: UIView {
     
-    private(set) var id: Int
+    private(set) var info: LectureData
     
     private let separateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral800)
@@ -22,14 +22,14 @@ final class LectureView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.numberOfLines = 0
     }
-    init(id: Int, lectureName: String, professorName: String, color: UIColor) {
-        self.id = id
+    init(info: LectureData, color: UIColor) {
+        self.info = info
         super.init(frame: .zero)
         lectureNameLabel.backgroundColor = color
-        lectureNameLabel.text = lectureName
+        lectureNameLabel.text = info.name
         professorNameLabel.backgroundColor = color
         self.backgroundColor = color
-        professorNameLabel.text = professorName
+        professorNameLabel.text = info.professor
         setupLayouts()
         setupConstraints()
     }
