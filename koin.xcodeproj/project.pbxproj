@@ -211,6 +211,7 @@
 		D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */; };
 		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
 		D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */; };
+		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -719,6 +720,7 @@
 		D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureListUseCase.swift; sourceTree = "<group>"; };
 		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
 		D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureUseCase.swift; sourceTree = "<group>"; };
+		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -1523,6 +1525,14 @@
 			);
 			name = Noti;
 			path = "ㅜㅐ샤";
+			sourceTree = "<group>";
+		};
+		D215726D2CEE28C30061E725 /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				D215726E2CEE28D70061E725 /* LectureData.swift */,
+			);
+			path = Timetable;
 			sourceTree = "<group>";
 		};
 		D22421322C897C5E00E8B480 /* Settings */ = {
@@ -2599,6 +2609,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D215726D2CEE28C30061E725 /* Timetable */,
 				833D9C102C6B269000982145 /* NoticeList */,
 				D29F21EF2C4FD22900994554 /* Land */,
 				D29F21E32C4F4C2B00994554 /* User */,
@@ -3336,6 +3347,7 @@
 				833D9C4D2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
 				D29F21CE2C4E162600994554 /* TimetableService.swift in Sources */,
+				D215726F2CEE28D70061E725 /* LectureData.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,

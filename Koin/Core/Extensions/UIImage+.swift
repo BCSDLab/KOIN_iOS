@@ -106,6 +106,7 @@ enum ImageAsset: String {
     case plusCircle
     case classFilter
     case add
+    case minusCircle
 }
 
 enum SFSymbols: String {

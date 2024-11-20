@@ -11,14 +11,18 @@ import UIKit
 final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var lectureList: [SemesterLecture] = []
+    private var isAdded: [Bool] = []
+    
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
-    let addClassButtonPublisher = PassthroughSubject<Void, Never>()
+    let modifyClassButtonPublisher = PassthroughSubject<LectureData, Never>()
     let didTapCellPublisher = PassthroughSubject<Void, Never>()
     let filterButtonPublisher = PassthroughSubject<Void, Never>()
     private var headerCancellables = Set<AnyCancellable>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionHeadersPinToVisibleBounds = true
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
@@ -41,6 +45,7 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     
     func setUpLectureList(lectureList: [SemesterLecture]) {
         self.lectureList = lectureList
+        self.isAdded = Array(repeating: false, count: lectureList.count)
         reloadData()
     }
     
@@ -97,6 +102,13 @@ extension AddClassCollectionView {
             return UICollectionViewCell()
         }
         cell.configure(lecture: lectureList[indexPath.row])
+        cell.modifyClassButtonPublisher.sink { [weak self] _ in
+            guard let self = self else { return }
+            self.isAdded[indexPath.row].toggle()
+            let item = self.lectureList[indexPath.row]
+            let isAdd = self.isAdded[indexPath.row]
+            modifyClassButtonPublisher.send(LectureData(id: item.id, name: item.name, professor: item.professor ?? "", clasTime: item.classTime, isAdd: isAdd))
+        }.store(in: &cell.cancellables)
         return cell
     }
 }

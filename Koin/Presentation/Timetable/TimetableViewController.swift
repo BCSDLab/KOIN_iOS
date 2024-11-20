@@ -99,6 +99,8 @@ final class TimetableViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        // MARK: CLASS
+        
         addClassCollectionView.completeButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
@@ -108,6 +110,13 @@ final class TimetableViewController: UIViewController {
             self?.addClassCollectionView.isHidden.toggle()
             self?.addDirectCollectionView.isHidden.toggle()
         }.store(in: &subscriptions)
+        
+        addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
+            print(lecture)
+        }.store(in: &subscriptions)
+        
+        
+        // MARK: DIRECT
         
         addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
             self?.addClassCollectionView.isHidden.toggle()
