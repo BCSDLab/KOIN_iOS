@@ -102,9 +102,9 @@ final class TimetableViewController: UIViewController {
 
 extension TimetableViewController {
     @objc private func modifyTimetableButtonTapped() {
-        let a = DefaultFetchLectureListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        let a = DefaultDeleteLectureUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
         
-        a.execute(semester: "20241").sink { completion in
+        a.execute(frameId: 12434, lectureId: 16615) .sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 
