@@ -7,6 +7,11 @@
 
 import Combine
 
+struct FrameData {
+    let semester: String
+    let frame: [FrameDTO]
+}
+
 final class TimetableViewModel: ViewModelProtocol {
     
     // MARK: - Input
@@ -24,9 +29,17 @@ final class TimetableViewModel: ViewModelProtocol {
         case updateMyFrame([LectureData])
     }
     
+    enum NextInput {
+        case fetchFrameList
+    }
+    enum NextOutput {
+        case reloadData
+    }
+    
     // MARK: - Properties
     
     private let outputSubject = PassthroughSubject<Output, Never>()
+    private let nextOutputSubject = PassthroughSubject<NextOutput, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let timetableRepository = DefaultTimetableRepository(service: DefaultTimetableService())
     
@@ -48,27 +61,36 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var fetchLectureUseCase = DefaultFetchLectureUseCase(timetableRepository: timetableRepository)
     private lazy var fetchSemesterUseCase = DefaultFetchSemesterUseCase(timetableRepository: timetableRepository)
     
-    
-    
-    
+    // 현재 선택된 학기
     private var selectedSemester: String? {
         didSet {
             fetchLectureList(semester: selectedSemester ?? "")
         }
     }
+    
+    // 현재보여주고 있는 프레임
     private var selectedFrameId: Int? {
         didSet {
             fetchLecture(frameId: selectedFrameId ?? 0)
         }
     }
+    
+    // 현재 보여주고있는 시간표 리스트
     private var lectureData: [LectureData] = [] {
         didSet {
             outputSubject.send(.updateMyFrame(lectureData))
         }
     }
-
+    
+    private(set) var frameData: [FrameData] = [] {
+        didSet {
+            nextOutputSubject.send(.reloadData)
+        }
+    }
+    
+    
     // MARK: - Initialization
-
+    
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
@@ -81,11 +103,57 @@ final class TimetableViewModel: ViewModelProtocol {
         return outputSubject.eraseToAnyPublisher()
     }
     
+    func transform(with input: AnyPublisher<NextInput, Never>) -> AnyPublisher<NextOutput, Never> {
+        input.sink { [weak self] input in
+            switch input {
+            case .fetchFrameList:
+                self?.fetchMySemesters()
+            }
+        }.store(in: &subscriptions)
+        return nextOutputSubject.eraseToAnyPublisher()
+    }
 }
 
 extension TimetableViewModel {
-    
-    
+    private func fetchMySemesters() {
+        
+          fetchMySemesterUseCase.execute()
+              .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
+                  guard let self = self else { return Just([]).eraseToAnyPublisher() }
+                  let semesters = response.semesters
+                  return semesters.publisher // 배열을 퍼블리셔로 변환
+                      .flatMap { semester -> AnyPublisher<FrameData, Never> in
+                          self.fetchFrame(for: semester)
+                      }
+                      .collect() // 모든 FrameData를 하나의 배열로 수집
+                      .eraseToAnyPublisher()
+              }
+              .sink(receiveCompletion: { completion in
+                  if case let .failure(error) = completion {
+                      Log.make().error("Failed fetching semesters: \(error)")
+                  }
+              }, receiveValue: { [weak self] fetchedFrames in
+                  self?.frameData = fetchedFrames
+                  Log.make().info("FrameData updated: \(fetchedFrames)")
+              })
+              .store(in: &subscriptions)
+      }
+      
+      private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
+          fetchFrameUseCase.execute(semester: semester)
+              .map { frames -> FrameData in
+                  // FrameDTO를 기반으로 FrameData 생성
+                  return FrameData(semester: semester, frame: frames)
+              }
+              .catch { error -> Just<FrameData> in
+                  Log.make().error("Failed fetching frames for semester \(semester): \(error)")
+                  return Just(FrameData(semester: semester, frame: [])) // 실패 시 빈 데이터 반환
+              }
+              .eraseToAnyPublisher()
+      }
+}
+
+extension TimetableViewModel {
     
     private func modifyLecture(lecture: LectureData, isAdd: Bool) {
         if isAdd {
@@ -113,7 +181,7 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] _ in
             self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name }
         }.store(in: &subscriptions)
-
+        
     }
     
     // 특정 프레임 id의 모든 강의 조회
@@ -125,7 +193,7 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] response in
             self?.lectureData = response
         }.store(in: &subscriptions)
-
+        
     }
     
     // 해당 학기 모든 프레임 조회 ( 처음에 보여줄 학기 시간표 선택 위해 필요 )
@@ -142,7 +210,7 @@ extension TimetableViewModel {
                 self?.outputSubject.send(.showingSelectedFrame("학기 추가하기", nil))
             }
         }.store(in: &subscriptions)
-
+        
     }
     
     // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
@@ -159,7 +227,7 @@ extension TimetableViewModel {
                 self?.outputSubject.send(.showingSelectedFrame("학기 추가하기", nil))
             }
         }.store(in: &subscriptions)
-
+        
     }
     private func fetchLectureList(semester: String) {
         fetchLectureListUseCase.execute(semester: semester).sink { completion in
@@ -169,7 +237,7 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateLectureList(response))
         }.store(in: &subscriptions)
-
+        
     }
     
 }

@@ -85,12 +85,15 @@ final class TimetableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
-        configureView()
+        configureView()        
         print(KeyChainWorker.shared.read(key: .access))
-        inputSubject.send(.fetchMySemester)
+        semesterSelectButton.addTarget(self, action: #selector(modifySemesterButtonTapped), for: .touchUpInside)
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        inputSubject.send(.fetchMySemester)
+    }
     // MARK: - Bind
     
     private func bind() {
@@ -153,6 +156,10 @@ final class TimetableViewController: UIViewController {
 }
 
 extension TimetableViewController {
+    @objc private func modifySemesterButtonTapped() {
+        navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
+    }
+    
     private func updateTimetable(lectureData: [LectureData]) {
         containerView.subviews.forEach { $0.removeFromSuperview() }
         

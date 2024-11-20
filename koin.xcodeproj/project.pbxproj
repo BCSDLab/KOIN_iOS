@@ -210,6 +210,7 @@
 		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
 		D21572712CEE504F0061E725 /* LectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572702CEE504F0061E725 /* LectureView.swift */; };
 		D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572722CEE67130061E725 /* DeleteLectureView.swift */; };
+		D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572752CEE76D80061E725 /* FrameListViewController.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -711,6 +712,7 @@
 		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
 		D21572702CEE504F0061E725 /* LectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureView.swift; sourceTree = "<group>"; };
 		D21572722CEE67130061E725 /* DeleteLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureView.swift; sourceTree = "<group>"; };
+		D21572752CEE76D80061E725 /* FrameListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameListViewController.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -1508,6 +1510,14 @@
 			path = Timetable;
 			sourceTree = "<group>";
 		};
+		D21572742CEE76C40061E725 /* FrameList */ = {
+			isa = PBXGroup;
+			children = (
+				D21572752CEE76D80061E725 /* FrameListViewController.swift */,
+			);
+			path = FrameList;
+			sourceTree = "<group>";
+		};
 		D22421322C897C5E00E8B480 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1844,6 +1854,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D21572742CEE76C40061E725 /* FrameList */,
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
 				D224213C2C897DE300E8B480 /* ChangePassword */,
@@ -3137,6 +3148,7 @@
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
+				D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */,
 				D2D380F02BA71994009AD5A9 /* LoginViewController.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
