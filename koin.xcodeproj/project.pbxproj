@@ -206,6 +206,7 @@
 		D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */; };
 		D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */; };
 		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
+		D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -703,6 +704,7 @@
 		D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMySemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureListUseCase.swift; sourceTree = "<group>"; };
 		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
+		D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -2224,6 +2226,7 @@
 				D21572652CEDDDC60061E725 /* FetchMySemesterUseCase.swift */,
 				D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */,
 				D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */,
+				D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -3182,6 +3185,7 @@
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
 				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
+				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,

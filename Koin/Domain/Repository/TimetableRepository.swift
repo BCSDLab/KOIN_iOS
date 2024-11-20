@@ -19,4 +19,5 @@ protocol TimetableRepository {
     func fetchMySemester() -> AnyPublisher<MySemesterDTO, ErrorResponse>
     func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error>
     func fetchSemester() -> AnyPublisher<[SemesterDTO], Error>
+    func deleteLecture(frameId: Int, lectureId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
