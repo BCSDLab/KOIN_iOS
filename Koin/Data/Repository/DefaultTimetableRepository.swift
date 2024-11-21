@@ -15,7 +15,51 @@ final class DefaultTimetableRepository: TimetableRepository {
         self.service = service
     }
     
+    func deleteLecture(frameId: Int, lectureId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.deleteLecture(frameId: frameId, lectureId: lectureId)
+    }
+    
+    func fetchMySemester() -> AnyPublisher<MySemesterDTO, ErrorResponse> {
+        service.fetchMySemester()
+    }
+    
+    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error> {
+        service.fetchLectureList(semester: semester)
+    }
+    
+    func fetchSemester() -> AnyPublisher<[SemesterDTO], Error> {
+        service.fetchSemester()
+    }
+    
     func fetchDeptList() -> AnyPublisher<[DeptDTO], Error> {
         return service.fetchDeptList()
+    }
+    
+    func fetchFrame(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse> {
+        service.fetchFrame(semester: semester)
+    }
+    
+    func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.deleteFrame(id: id)
+    }
+    
+    func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse> {
+        service.createFrame(semester: semester)
+    }
+    
+    func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse> {
+        service.modifyFrame(frame: frame)
+    }
+    
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.fetchLecture(frameId: frameId)
+    }
+    
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.modifyLecture(request: request)
+    }
+    
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.postLecture(request: request)
     }
 }

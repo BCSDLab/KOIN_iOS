@@ -78,6 +78,7 @@ final class TimetableViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        print(KeyChainWorker.shared.read(key: .access))
     }
     
     
@@ -101,6 +102,17 @@ final class TimetableViewController: UIViewController {
 
 extension TimetableViewController {
     @objc private func modifyTimetableButtonTapped() {
+        let a = DefaultDeleteLectureUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        
+        a.execute(frameId: 12434, lectureId: 16615) .sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                
+            }
+        } receiveValue: { response in
+                print(response)
+            }.store(in: &subscriptions)
+        
         toggleAddClassCollectionView()
     }
     private func toggleAddClassCollectionView() {
