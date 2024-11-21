@@ -18,7 +18,17 @@ final class SelectTimeView: UIView {
     
     private let timeLabel = PointLabel(text: "시간").then { _ in
     }
+    var selectedDay: String {
+            selectWeekButton.currentTitle ?? "월요일"
+        }
+        
+        var selectedTime: String {
+            startTimeButton.currentTitle ?? "09:00"
+        }
     
+    var endedTime: String {
+        endTimeButton.currentTitle ?? "10:00"
+    }
     private let selectWeekButton = UIButton().then {
             $0.setTitle("월요일", for: .normal) // 기본값 설정
             $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)

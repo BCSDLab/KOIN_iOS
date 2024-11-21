@@ -32,16 +32,16 @@ final class AddDirectHeaderView: UICollectionReusableView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 18)
     }
     
-    private let calendarView = ClassComponentView(text: "일정명", isPoint: true).then { _ in
+    let calendarView = ClassComponentView(text: "일정명", isPoint: true).then { _ in
     }
     
     private let professorNameView = ClassComponentView(text: "교수명", isPoint: false).then { _ in
     }
     
-    private let selectTimeView = SelectTimeView(frame: .zero, size: .big).then { _ in
+    let selectTimeView = SelectTimeView(frame: .zero, size: .big).then { _ in
     }
     
-    private let placeView = ClassComponentView(text: "장소", isPoint: false).then { _ in
+    let placeView = ClassComponentView(text: "장소", isPoint: false).then { _ in
     }
     
     override init(frame: CGRect) {

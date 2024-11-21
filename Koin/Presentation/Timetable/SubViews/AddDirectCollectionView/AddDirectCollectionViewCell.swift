@@ -13,7 +13,7 @@ final class AddDirectCollectionViewCell: UICollectionViewCell {
     var cancellables = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
 
-    private let selectTimeView = SelectTimeView(frame: .zero, size: .small).then { _ in
+    let selectTimeView = SelectTimeView(frame: .zero, size: .small).then { _ in
     }
     
     private let placeView = ClassComponentView(text: "장소", isPoint: false).then {

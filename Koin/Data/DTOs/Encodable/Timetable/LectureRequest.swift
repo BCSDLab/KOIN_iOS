@@ -18,7 +18,7 @@ struct LectureRequest: Codable {
 // MARK: - TimetableLecture
 struct TimetableLecture: Codable {
     let id: Int?
-    let lectureID: Int
+    let lectureID: Int?
     let classTitle: String
     let classTime: [Int]
     let classPlace, professor, grades, memo: String
