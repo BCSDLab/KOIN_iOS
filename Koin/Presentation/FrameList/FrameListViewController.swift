@@ -65,7 +65,7 @@ final class FrameListViewController: UIViewController {
         
         deleteFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
             self?.inputSubject.send(.modifyFrame(frame))
-
+            
         }).store(in: &subscriptions)
     }
     
@@ -84,20 +84,20 @@ extension FrameListViewController: TimetableCellDelegate {
         }
     }
     func settingButtonTapped(at indexPath: IndexPath) {
-            let section = indexPath.section
-            let row = indexPath.row
-            print("Setting button tapped at Section: \(section), Row: \(row)")
-            
-            // 추가 동작 (예: 삭제 모달 띄우기)
-            let timetable = viewModel.frameData[section].frame[row]
-            print("타임테이블 이름: \(timetable.timetableName)")
-     //   deleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216, frame:  viewModel.frameData[section].frame[row])\
+        let section = indexPath.section
+        let row = indexPath.row
+        print("Setting button tapped at Section: \(section), Row: \(row)")
+        
+        // 추가 동작 (예: 삭제 모달 띄우기)
+        let timetable = viewModel.frameData[section].frame[row]
+        print("타임테이블 이름: \(timetable.timetableName)")
+        //   deleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216, frame:  viewModel.frameData[section].frame[row])\
         
         deleteFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
-            self.present(deleteFrameModalViewController, animated: true)
-
-       
-        }
+        self.present(deleteFrameModalViewController, animated: true)
+        
+        
+    }
     @objc private func addSemesterTapped() {
         //            let newSemester = Semester(id: UUID(), name: "새 학기", timetables: [])
         //            semesters.append(newSemester)
@@ -106,7 +106,20 @@ extension FrameListViewController: TimetableCellDelegate {
     
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 셀 탭 이벤트 처리
+        let section = indexPath.section
+        let row = indexPath.row
+        let timetable = viewModel.frameData[section].frame[row]
+        print(viewModel.selectedSemester)
+        print(viewModel.selectedFrameId)
+        viewModel.selectedSemester = viewModel.frameData[section].semester
+        viewModel.selectedFrameId = viewModel.frameData[section].frame[row].id
+        navigationController?.popViewController(animated: true)
+        print("셀 탭 이벤트 발생: Section \(section), Row \(row), Timetable Name: \(timetable.timetableName)")
+        
+        // 원하는 동작 수행 (예: 상세 화면으로 이동)
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 55 // 원하는 셀 높이 설정
     }
@@ -132,7 +145,7 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         let timetable = viewModel.frameData[indexPath.section].frame[indexPath.row]
         cell.configure(with: timetable, at: indexPath)
-         cell.delegate = self // Delegate 연결
+        cell.delegate = self // Delegate 연결
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
