@@ -15,6 +15,10 @@ final class DefaultTimetableRepository: TimetableRepository {
         self.service = service
     }
     
+    func deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service._deleteLecture(id: id)
+    }
+    
     func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse> {
         service.deleteSemester(semester: semester)
     }

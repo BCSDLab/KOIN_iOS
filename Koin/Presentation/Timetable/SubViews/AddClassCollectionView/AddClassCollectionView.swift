@@ -12,7 +12,7 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     
     private var lectureList: [SemesterLecture] = []
     private var showingLectureList: [SemesterLecture] = []
-    private var isAdded: [Bool] = []
+    private var myLectureList: [LectureData] = []
     
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
@@ -47,7 +47,11 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     func setUpLectureList(lectureList: [SemesterLecture]) {
         self.lectureList = lectureList
         self.showingLectureList = lectureList
-        self.isAdded = Array(repeating: false, count: lectureList.count)
+        reloadData()
+    }
+    
+    func setUpMyLecture(myLectureList: [LectureData]) {
+        self.myLectureList = myLectureList
         reloadData()
     }
     
@@ -109,14 +113,37 @@ extension AddClassCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddClassCollectionViewCell.identifier, for: indexPath) as? AddClassCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(lecture: showingLectureList[indexPath.row])
+        
+        let lecture = showingLectureList[indexPath.row]
+        
+        // `isAdded` 계산
+        let isAdded = myLectureList.contains { myLecture in
+            myLecture.name == lecture.name &&
+            myLecture.classTime == lecture.classTime &&
+            myLecture.professor == (lecture.professor ?? "")
+        }
+        
+        cell.configure(lecture: lecture, isAdded: isAdded)
+        
+        // 셀의 버튼 액션 처리
         cell.modifyClassButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
-            self.isAdded[indexPath.row].toggle()
-            let item = self.showingLectureList[indexPath.row]
-            let isAdd = self.isAdded[indexPath.row]
-            modifyClassButtonPublisher.send(((LectureData(id: item.id, name: item.name, professor: item.professor ?? "", classTime: item.classTime, grades: item.grades)), isAdd))
+            let item = showingLectureList[indexPath.row]
+            // 버튼 액션에 따라 `modifyClassButtonPublisher`에 데이터 전달
+            self.modifyClassButtonPublisher.send((
+                LectureData(
+                    id: item.id,
+                    name: item.name,
+                    professor: item.professor ?? "",
+                    classTime: item.classTime,
+                    grades: item.grades
+                ),
+                !isAdded // isAdded가 true면 삭제 요청, false면 추가 요청
+            ))
         }.store(in: &cell.cancellables)
+        print(isAdded)
         return cell
     }
+
+
 }

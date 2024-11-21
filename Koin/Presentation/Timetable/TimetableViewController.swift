@@ -108,6 +108,7 @@ final class TimetableViewController: UIViewController {
                 self?.updateSemesterButtonText(semester: semester, frameName: frameName)
             case let .updateMyFrame(lectureList):
                 self?.updateTimetable(lectureData: lectureList)
+                self?.addClassCollectionView.setUpMyLecture(myLectureList: lectureList)
                 //              self?.timetableCollectionView.updateLectureData(lectureData: lectureList)
             }
         }.store(in: &subscriptions)
@@ -176,7 +177,7 @@ extension TimetableViewController {
                         let height = 35
                         
                         // LectureView 생성
-                        let lectureView = LectureView(info: lecture, color: .red)
+                        let lectureView = LectureView(info: lecture, color: UIColor.appColor(.neutral300))
                         
                         // GestureRecognizer 추가
                         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLectureTap(_:)))

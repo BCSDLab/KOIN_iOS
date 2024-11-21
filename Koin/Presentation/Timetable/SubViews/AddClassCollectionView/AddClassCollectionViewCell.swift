@@ -38,8 +38,7 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
-    private let modifyClassButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .plusCircle), for: .normal)
+    private let modifyClassButton = UIButton().then { _ in
     }
     
     private let separateView = UIView().then {
@@ -61,20 +60,21 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
     }
-    func configure(lecture: SemesterLecture) {
+    func configure(lecture: SemesterLecture, isAdded: Bool) {
         classTitleLabel.text = lecture.name
         professorNameLabel.text = lecture.professor
         classTimeLabel.text = "\(lecture.classTime)"
         gradeLabel.text = "\(lecture.grades)학점"
         classCodeLabel.text = lecture.code
+        
+        modifyClassButton.setImage(UIImage.appImage(asset: !isAdded ? .plusCircle : .minusCircle), for: .normal)
     }
 }
 
 extension AddClassCollectionViewCell {
     @objc private func modifyClassButtonTapped() {
         modifyClassButtonPublisher.send()
-        modifyClassButton.setImage(UIImage.appImage(asset: modifyClassButton.isSelected ? .plusCircle : .minusCircle), for: .normal)
-        modifyClassButton.isSelected.toggle()
+       
     }
 }
 extension AddClassCollectionViewCell {
