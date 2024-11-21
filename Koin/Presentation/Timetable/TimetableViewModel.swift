@@ -19,6 +19,7 @@ final class TimetableViewModel: ViewModelProtocol {
     enum Input {
         case fetchMySemester
         case modifyLecture(LectureData, Bool)
+        case _deleteLecture(LectureData)
     }
     
     // MARK: - Output
@@ -53,6 +54,7 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var modifyLectureUseCase = DefaultModifyLectureUseCase(timetableRepository: timetableRepository)
     private lazy var postLectureUseCase = DefaultPostLectureUseCase(timetableRepository: timetableRepository)
     private lazy var deleteLectureUseCase = DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var _deleteLectureUseCase = _DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
     
     // MARK: 프레임
     private lazy var fetchFrameUseCase = DefaultFetchFrameUseCase(timetableRepository: timetableRepository)
@@ -105,6 +107,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.fetchMySemester()
             case let .modifyLecture(lecture, isAdd):
                 self?.modifyLecture(lecture: lecture, isAdd: isAdd)
+            case ._deleteLecture(let lecture):
+                self?._deleteLecture(lecture)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -136,7 +140,16 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
-    
+    private func _deleteLecture(_ lecture: LectureData) {
+        _deleteLectureUseCase.execute(id: lecture.id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor}
+        }.store(in: &subscriptions)
+    }
     private func deleteSemester(semester: String) {
         deleteSemesterUseCase.execute(semester: semester).sink { completion in
             if case let .failure(error) = completion {
@@ -320,7 +333,7 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] _ in
-            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name }
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor}
         }.store(in: &subscriptions)
         
     }
