@@ -19,26 +19,38 @@ final class SelectTimeView: UIView {
     private let timeLabel = PointLabel(text: "시간").then { _ in
     }
     
-    private let selectWeekButton = UIButton().then { _ in
-    }
-    
-    private let startTimeButton = UIButton().then { _ in
-    }
-    
-    private let separateLabel = UILabel().then {
-        $0.text = "~"
-        $0.textAlignment = .center
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let endTimeButton = UIButton().then { _ in
-    }
+    private let selectWeekButton = UIButton().then {
+            $0.setTitle("월요일", for: .normal) // 기본값 설정
+            $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 12)
+        }
+        
+        private let startTimeButton = UIButton().then {
+            $0.setTitle("09:00", for: .normal) // 기본값 설정
+            $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 12)
+        }
+        
+        private let separateLabel = UILabel().then {
+            $0.text = "~"
+            $0.textAlignment = .center
+            $0.textColor = UIColor.appColor(.neutral800)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+        }
+        
+        private let endTimeButton = UIButton().then {
+            $0.setTitle("10:00", for: .normal) // 기본값 설정
+            $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 12)
+        }
     
     init(frame: CGRect, size: Size) {
         self.size = size // 전달받은 size 값을 초기화
         super.init(frame: frame)
         setupViews()
+        selectWeekButton.addTarget(self, action: #selector(didTapSelectWeek), for: .touchUpInside)
+              startTimeButton.addTarget(self, action: #selector(didTapStartTime), for: .touchUpInside)
+              endTimeButton.addTarget(self, action: #selector(didTapEndTime), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +60,52 @@ final class SelectTimeView: UIView {
 }
 
 extension SelectTimeView {
+    @objc private func didTapSelectWeek() {
+        let alertController = UIAlertController(title: "요일 선택", message: nil, preferredStyle: .actionSheet)
+        let weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일"]
+        
+        weekdays.forEach { day in
+            alertController.addAction(UIAlertAction(title: day, style: .default, handler: { _ in
+                self.selectWeekButton.setTitle(day, for: .normal)
+            }))
+        }
+        
+        alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        UIApplication.shared.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
     
+    @objc private func didTapStartTime() {
+        showTimePicker(for: startTimeButton)
+    }
+    
+    @objc private func didTapEndTime() {
+        showTimePicker(for: endTimeButton)
+    }
+    
+    private func showTimePicker(for button: UIButton) {
+        let alertController = UIAlertController(title: "시간 선택", message: nil, preferredStyle: .actionSheet)
+        let times = generateTimeIntervals(startHour: 9, endHour: 24, intervalMinutes: 30)
+        
+        times.forEach { time in
+            alertController.addAction(UIAlertAction(title: time, style: .default, handler: { _ in
+                button.setTitle(time, for: .normal)
+            }))
+        }
+        
+        alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        UIApplication.shared.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func generateTimeIntervals(startHour: Int, endHour: Int, intervalMinutes: Int) -> [String] {
+        var times: [String] = []
+        for hour in startHour..<endHour {
+            for minute in stride(from: 0, to: 60, by: intervalMinutes) {
+                let time = String(format: "%02d:%02d", hour, minute)
+                times.append(time)
+            }
+        }
+        return times
+    }
 }
 
 extension SelectTimeView {
