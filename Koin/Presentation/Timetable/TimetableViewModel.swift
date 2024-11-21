@@ -20,6 +20,7 @@ final class TimetableViewModel: ViewModelProtocol {
         case fetchMySemester
         case modifyLecture(LectureData, Bool)
         case _deleteLecture(LectureData)
+        case postCustomLecture(String, [Int])
     }
     
     // MARK: - Output
@@ -109,6 +110,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.modifyLecture(lecture: lecture, isAdd: isAdd)
             case ._deleteLecture(let lecture):
                 self?._deleteLecture(lecture)
+            case let .postCustomLecture(lectureName, lectureTime):
+                self?.postCustomLecture(lectureName: lectureName, classTime: lectureTime)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -315,6 +318,16 @@ extension TimetableViewModel {
         } else {
             deleteLecture(lecture: lecture)
         }
+    }
+    
+    private func postCustomLecture(lectureName: String, classTime: [Int]) {
+        postLectureUseCase.execute(request: LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(id: nil, lectureID: nil, classTitle: lectureName, classTime: classTime, classPlace: "", professor: "", grades: "0", memo: "asdasd")])).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.lectureData = response
+        }.store(in: &subscriptions)
     }
     
     private func postLecture(lecture: LectureData) {

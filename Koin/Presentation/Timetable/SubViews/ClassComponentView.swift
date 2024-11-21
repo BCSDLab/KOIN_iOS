@@ -9,6 +9,10 @@ import UIKit
 
 final class ClassComponentView: UIView {
     
+    var textValue: String {
+        return textField.text ?? ""
+    }
+    
     private let mainLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 12)
@@ -49,7 +53,7 @@ final class ClassComponentView: UIView {
         [mainLabel, pointLabel, separateView, textField].forEach {
             self.addSubview($0)
         }
-    
+        
         mainLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(self.snp.leading).offset(13)
@@ -72,5 +76,5 @@ final class ClassComponentView: UIView {
             make.bottom.equalTo(self.snp.bottom).offset(-7)
         }
     }
-
+    
 }

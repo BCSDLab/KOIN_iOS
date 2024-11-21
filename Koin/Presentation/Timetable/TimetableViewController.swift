@@ -121,8 +121,8 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
-            self?.addClassCollectionView.isHidden.toggle()
-            self?.addDirectCollectionView.isHidden.toggle()
+            self?.addClassCollectionView.isHidden = true
+            self?.addDirectCollectionView.isHidden = false
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
@@ -133,25 +133,33 @@ final class TimetableViewController: UIViewController {
         // MARK: DIRECT
         
         addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
-            self?.addClassCollectionView.isHidden.toggle()
-            self?.addDirectCollectionView.isHidden.toggle()
+            self?.addClassCollectionView.isHidden = false
+            self?.addDirectCollectionView.isHidden = true
         }.store(in: &subscriptions)
         
         addDirectCollectionView.addClassButtonPublisher.sink { [weak self] lecture in
             //  self?.toggleCollectionView()
         }.store(in: &subscriptions)
         
+        addDirectCollectionView.completeButtonPublisher.sink { [weak self] item in
+            guard let self = self else { return }
+            
+            self.toggleCollectionView(collectionView: self.addDirectCollectionView, animate: true)
+            self.inputSubject.send(.postCustomLecture(item.0, item.1))
+        }.store(in: &subscriptions)
         
         
         // MARK: ETC
         
         deleteLectureView.completeButtonPublisher.sink { [weak self] in
             self?.deleteLectureView.isHidden = true
+            
         }.store(in: &subscriptions)
         
         deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
             self?.deleteLectureView.isHidden = true
             self?.inputSubject.send(.modifyLecture(lecture, false))
+            
         }.store(in: &subscriptions)
     }
     
@@ -247,24 +255,20 @@ extension TimetableViewController {
     
     private func toggleCollectionView(collectionView: UICollectionView, animate: Bool) {
         
-        
-        if animate {
-            if collectionView.isHidden {
-                collectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
-                collectionView.isHidden = false
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-                    collectionView.transform = .identity
-                }
-            } else {
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-                    collectionView.transform = CGAffineTransform(translationX: 0, y: collectionView.frame.height)
-                }) { _ in
-                    collectionView.isHidden = true
-                }
-            }
-        } else {
-            
-        }
+        collectionView.isHidden.toggle()
+//        if collectionView.isHidden {
+//            collectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
+//            collectionView.isHidden = false
+//            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+//                collectionView.transform = .identity // 초기화
+//            }
+//        } else {
+//            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+//                collectionView.transform = CGAffineTransform(translationX: 0, y: collectionView.frame.height)
+//            }) { _ in
+//                collectionView.isHidden = true
+//            }
+//        }
         
         
         
