@@ -276,6 +276,8 @@
 		D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */; };
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
 		D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */; };
+		D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */; };
+		D26B2EC62CD65A2D00BEE07C /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */; };
 		D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */; };
 		D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D992C6B97D200C4275F /* InsetLabel.swift */; };
 		D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */; };
@@ -339,18 +341,20 @@
 		D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0FD2BA629400081FD36 /* LandImageCollectionView.swift */; };
 		D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0FF2BA6294A0081FD36 /* LandImageCollectionViewCell.swift */; };
 		D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD1012BA62DCC0081FD36 /* LandOptionView.swift */; };
+		D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */; };
+		D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */; };
+		D283A4DF2CECA2B900C238BA /* AddClassHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */; };
+		D283A4E22CECE7D400C238BA /* AddDirectCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */; };
+		D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */; };
+		D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */; };
+		D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */; };
+		D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E92CECF48C00C238BA /* PointLabel.swift */; };
+		D283A4EC2CECF90400C238BA /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4EB2CECF90400C238BA /* ClassComponentView.swift */; };
+		D283A4EE2CED088900C238BA /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4ED2CED088900C238BA /* SelectTimeView.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
-		D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908CA52BB5EB710008F908 /* TimetableViewController.swift */; };
-		D2908CA82BB5EB790008F908 /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908CA72BB5EB790008F908 /* TimetableViewModel.swift */; };
-		D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908CAE2BB7A5870008F908 /* TimetableCollectionView.swift */; };
-		D2908CB12BB7A5940008F908 /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908CB02BB7A5940008F908 /* TimetableCollectionViewCell.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
-		D2908D2A2BB9B1F90008F908 /* SemesterSelectTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D292BB9B1F90008F908 /* SemesterSelectTableView.swift */; };
 		D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D2B2BB9D4150008F908 /* TimetablesDTO.swift */; };
-		D2908D382BBCA3460008F908 /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D372BBCA3460008F908 /* AddClassCollectionView.swift */; };
-		D2908D3A2BBCA35C0008F908 /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D392BBCA35C0008F908 /* AddClassCollectionViewCell.swift */; };
-		D2908D3C2BBCDA300008F908 /* AddClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D3B2BBCDA300008F908 /* AddClassView.swift */; };
 		D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D3D2BBD1E190008F908 /* TimetableRequest.swift */; };
 		D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D4F2BBE64B90008F908 /* Removetimetable.swift */; };
 		D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21C02C4DDF5300994554 /* DefaultUserRepository.swift */; };
@@ -415,6 +419,9 @@
 		D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */; };
 		D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */; };
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
+		D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */; };
+		D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */; };
+		D2DCB29D2CEB22F5005CABEE /* TimetableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */; };
 		D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */; };
 		D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */; };
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
@@ -755,6 +762,8 @@
 		D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDiningTime.swift; sourceTree = "<group>"; };
 		D249CD402C15CBAA000813F9 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewModel.swift; sourceTree = "<group>"; };
+		D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
 		D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		D27A5D992C6B97D200C4275F /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListRequest.swift; sourceTree = "<group>"; };
@@ -819,18 +828,20 @@
 		D27DD0FD2BA629400081FD36 /* LandImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionView.swift; sourceTree = "<group>"; };
 		D27DD0FF2BA6294A0081FD36 /* LandImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD1012BA62DCC0081FD36 /* LandOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionView.swift; sourceTree = "<group>"; };
+		D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionView.swift; sourceTree = "<group>"; };
+		D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionViewCell.swift; sourceTree = "<group>"; };
+		D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassHeaderView.swift; sourceTree = "<group>"; };
+		D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectCollectionView.swift; sourceTree = "<group>"; };
+		D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectCollectionViewCell.swift; sourceTree = "<group>"; };
+		D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectHeaderView.swift; sourceTree = "<group>"; };
+		D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDirectFooterView.swift; sourceTree = "<group>"; };
+		D283A4E92CECF48C00C238BA /* PointLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLabel.swift; sourceTree = "<group>"; };
+		D283A4EB2CECF90400C238BA /* ClassComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassComponentView.swift; sourceTree = "<group>"; };
+		D283A4ED2CED088900C238BA /* SelectTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTimeView.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
-		D2908CA52BB5EB710008F908 /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
-		D2908CA72BB5EB790008F908 /* TimetableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewModel.swift; sourceTree = "<group>"; };
-		D2908CAE2BB7A5870008F908 /* TimetableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionView.swift; sourceTree = "<group>"; };
-		D2908CB02BB7A5940008F908 /* TimetableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
-		D2908D292BB9B1F90008F908 /* SemesterSelectTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterSelectTableView.swift; sourceTree = "<group>"; };
 		D2908D2B2BB9D4150008F908 /* TimetablesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetablesDTO.swift; sourceTree = "<group>"; };
-		D2908D372BBCA3460008F908 /* AddClassCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionView.swift; sourceTree = "<group>"; };
-		D2908D392BBCA35C0008F908 /* AddClassCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassCollectionViewCell.swift; sourceTree = "<group>"; };
-		D2908D3B2BBCDA300008F908 /* AddClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClassView.swift; sourceTree = "<group>"; };
 		D2908D3D2BBD1E190008F908 /* TimetableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableRequest.swift; sourceTree = "<group>"; };
 		D2908D4F2BBE64B90008F908 /* Removetimetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Removetimetable.swift; sourceTree = "<group>"; };
 		D29F21C02C4DDF5300994554 /* DefaultUserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserRepository.swift; sourceTree = "<group>"; };
@@ -896,6 +907,9 @@
 		D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopDataUseCase.swift; sourceTree = "<group>"; };
 		D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
+		D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionView.swift; sourceTree = "<group>"; };
+		D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableHeaderView.swift; sourceTree = "<group>"; };
 		D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
 		D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
@@ -1773,6 +1787,16 @@
 			path = Dining;
 			sourceTree = "<group>";
 		};
+		D26B2EC22CD65A1600BEE07C /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				D2DCB2852CDF4A74005CABEE /* SubViews */,
+				D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */,
+				D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */,
+			);
+			path = Timetable;
+			sourceTree = "<group>";
+		};
 		D27DD0202BA608310081FD36 /* Koin */ = {
 			isa = PBXGroup;
 			children = (
@@ -1789,6 +1813,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
 				D224213C2C897DE300E8B480 /* ChangePassword */,
 				D22421372C897D7300E8B480 /* MyProfile */,
@@ -1802,7 +1827,6 @@
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
 				837BFA402BB70A77001FCBD4 /* Bus */,
-				D2908CA42BB5EB5F0008F908 /* Timetable */,
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
 				0F74C4F52BA8562D00EF4F58 /* Register */,
 				D2D380EE2BA7197B009AD5A9 /* Login */,
@@ -2142,43 +2166,35 @@
 			path = LandOptionCollectionView;
 			sourceTree = "<group>";
 		};
-		D2908CA42BB5EB5F0008F908 /* Timetable */ = {
+		D283A4D82CECA25B00C238BA /* TimetableCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				D2908CAD2BB7A5720008F908 /* SubViews */,
-				D2908CA52BB5EB710008F908 /* TimetableViewController.swift */,
-				D2908CA72BB5EB790008F908 /* TimetableViewModel.swift */,
-			);
-			path = Timetable;
-			sourceTree = "<group>";
-		};
-		D2908CAD2BB7A5720008F908 /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				D2908D362BBCA3030008F908 /* AddClassCollectionView */,
-				D2908D2D2BB9F1B30008F908 /* TimetableCollectionView */,
-				D2908D292BB9B1F90008F908 /* SemesterSelectTableView.swift */,
-				D2908D3B2BBCDA300008F908 /* AddClassView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		D2908D2D2BB9F1B30008F908 /* TimetableCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				D2908CAE2BB7A5870008F908 /* TimetableCollectionView.swift */,
-				D2908CB02BB7A5940008F908 /* TimetableCollectionViewCell.swift */,
+				D2DCB2862CDF4A89005CABEE /* TimetableCollectionView.swift */,
+				D2DCB2882CDF4A99005CABEE /* TimetableCollectionViewCell.swift */,
+				D2DCB29C2CEB22F5005CABEE /* TimetableHeaderView.swift */,
 			);
 			path = TimetableCollectionView;
 			sourceTree = "<group>";
 		};
-		D2908D362BBCA3030008F908 /* AddClassCollectionView */ = {
+		D283A4D92CECA26A00C238BA /* AddClassCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				D2908D372BBCA3460008F908 /* AddClassCollectionView.swift */,
-				D2908D392BBCA35C0008F908 /* AddClassCollectionViewCell.swift */,
+				D283A4DA2CECA2A000C238BA /* AddClassCollectionView.swift */,
+				D283A4DC2CECA2A800C238BA /* AddClassCollectionViewCell.swift */,
+				D283A4DE2CECA2B900C238BA /* AddClassHeaderView.swift */,
 			);
 			path = AddClassCollectionView;
+			sourceTree = "<group>";
+		};
+		D283A4E02CECE55600C238BA /* AddDirectCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D283A4E12CECE7D400C238BA /* AddDirectCollectionView.swift */,
+				D283A4E32CECE7DE00C238BA /* AddDirectCollectionViewCell.swift */,
+				D283A4E52CECE7EA00C238BA /* AddDirectHeaderView.swift */,
+				D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */,
+			);
+			path = AddDirectCollectionView;
 			sourceTree = "<group>";
 		};
 		D29F21C82C4E14F300994554 /* Timetable */ = {
@@ -2415,6 +2431,19 @@
 				D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */,
 			);
 			path = Land;
+			sourceTree = "<group>";
+		};
+		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
+				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
+				D283A4ED2CED088900C238BA /* SelectTimeView.swift */,
+				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
+				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
+				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D2F13E532BD0AD3A00172A9D /* Noti */ = {
@@ -2921,7 +2950,6 @@
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
-				D2908D3A2BBCA35C0008F908 /* AddClassCollectionViewCell.swift in Sources */,
 				D22C54662C69250F000826DA /* ShopReviewReportViewModel.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
 				838F114E2CA51C6C00BF3B25 /* (null) in Sources */,
@@ -2940,6 +2968,7 @@
 				835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				D249CD342C14734B000813F9 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
+				D283A4E22CECE7D400C238BA /* AddDirectCollectionView.swift in Sources */,
 				8354BE2E2C79A0BE009D4D7A /* MyKeywordCollectionView.swift in Sources */,
 				D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */,
 				D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */,
@@ -2957,6 +2986,7 @@
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
+				D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
 				83455FC22C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
@@ -2999,18 +3029,20 @@
 				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
 				83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */,
+				D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
+				D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
+				D26B2EC62CD65A2D00BEE07C /* TimetableViewController.swift in Sources */,
 				D22C54632C68F280000826DA /* ReviewListHeaderView.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
-				D2908D2A2BB9B1F90008F908 /* SemesterSelectTableView.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
@@ -3022,6 +3054,7 @@
 				D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */,
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
+				D283A4EE2CED088900C238BA /* SelectTimeView.swift in Sources */,
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
@@ -3030,7 +3063,6 @@
 				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
 				D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */,
 				D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */,
-				D2908CB12BB7A5940008F908 /* TimetableCollectionViewCell.swift in Sources */,
 				833D9C522C73451000982145 /* NoticeDataViewController.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
@@ -3041,6 +3073,7 @@
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
+				D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
 				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
@@ -3064,7 +3097,6 @@
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
-				D2908D382BBCA3460008F908 /* AddClassCollectionView.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
@@ -3083,6 +3115,7 @@
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
+				D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */,
 				8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
@@ -3175,12 +3208,12 @@
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
 				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
 				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,
+				D283A4DF2CECA2B900C238BA /* AddClassHeaderView.swift in Sources */,
 				8354BE202C78AE2C009D4D7A /* RecommendedSearchCollectionViewCell.swift in Sources */,
 				D249CD362C1473B3000813F9 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				8354BE292C78CF41009D4D7A /* ManageNoticeKeywordViewController.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
-				D2908CAF2BB7A5870008F908 /* TimetableCollectionView.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
@@ -3189,12 +3222,15 @@
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
+				D2DCB29D2CEB22F5005CABEE /* TimetableHeaderView.swift in Sources */,
+				D283A4EC2CECF90400C238BA /* ClassComponentView.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				83DD0DC22C5527F200278ABD /* BusTimetableTableView.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
 				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
 				D239448E2C3C9D7900048F45 /* ReviewListCollectionViewCell.swift in Sources */,
 				D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */,
+				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
@@ -3215,6 +3251,7 @@
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */,
 				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D27DD0902BA608310081FD36 /* HomeViewControllerB.swift in Sources */,
@@ -3234,7 +3271,6 @@
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
-				D2908CA62BB5EB710008F908 /* TimetableViewController.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
@@ -3268,13 +3304,13 @@
 				83DD0DD02C568E7100278ABD /* BusTimetableTableViewHeaderView.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
+				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
-				D2908CA82BB5EB790008F908 /* TimetableViewModel.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
@@ -3284,8 +3320,8 @@
 				D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */,
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
 				0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */,
+				D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
-				D2908D3C2BBCDA300008F908 /* AddClassView.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
@@ -3539,7 +3575,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3574,7 +3610,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
