@@ -66,14 +66,14 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var fetchSemesterUseCase = DefaultFetchSemesterUseCase(timetableRepository: timetableRepository)
     
     // 현재 선택된 학기
-    private var selectedSemester: String? {
+    var selectedSemester: String? {
         didSet {
             fetchLectureList(semester: selectedSemester ?? "")
         }
     }
     
     // 현재보여주고 있는 프레임
-    private var selectedFrameId: Int? {
+    var selectedFrameId: Int? {
         didSet {
             fetchLecture(frameId: selectedFrameId ?? 0)
         }
@@ -271,7 +271,15 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.lectureData = response
+            guard let self = self else { return }
+            self.lectureData = response
+            for frameData in self.frameData {
+                for frame in frameData.frame {
+                    if frame.id == frameId {
+                        self.outputSubject.send(.showingSelectedFrame(frameData.semester, frame.timetableName))
+                    }
+                }
+            }
         }.store(in: &subscriptions)
         
     }
