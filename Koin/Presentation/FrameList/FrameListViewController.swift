@@ -22,6 +22,7 @@ final class FrameListViewController: UIViewController {
     
     private let deleteFrameModalViewController: DeleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216)
     
+    private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
     
     // MARK: - Initialization
     
@@ -67,11 +68,17 @@ final class FrameListViewController: UIViewController {
             self?.inputSubject.send(.modifyFrame(frame))
             
         }).store(in: &subscriptions)
+        
     }
     
 }
 
 extension FrameListViewController: TimetableCellDelegate {
+    
+    @objc private func modifySemesterButtonTapped() {
+        self.present(modifySemesterModalViewController, animated: true)
+    }
+    
     @objc private func addTimetableTapped(_ sender: UIButton) {
         guard let headerView = sender.superview else { return } // 버튼의 부모 뷰 (headerView) 가져오기
         for subview in headerView.subviews {
@@ -196,9 +203,6 @@ extension FrameListViewController {
         tableView.register(TimetableCell.self, forCellReuseIdentifier: "TimetableCell")
     }
     
-    @objc private func modifySemesterButtonTapped() {
-        
-    }
 }
 
 extension FrameListViewController {
