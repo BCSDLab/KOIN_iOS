@@ -78,13 +78,6 @@ final class DeleteFrameModalViewController: UIViewController {
         textField.delegate = self
     }
     
-    func configure(frame: FrameDTO) {
-        self.frame = frame
-        self.textField.text = frame.timetableName
-        self.frame = frame
-        self.checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -99,10 +92,16 @@ final class DeleteFrameModalViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
+    func configure(frame: FrameDTO) {
+        self.frame = frame
+        self.textField.text = frame.timetableName
+        self.frame = frame
+        self.checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
+    }
+    
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         frame.timetableName = text
-        
     }
     
     @objc private func checkButtonTapped() {
@@ -125,8 +124,6 @@ final class DeleteFrameModalViewController: UIViewController {
             textField.resignFirstResponder() // 키보드 내리기
             return true
         }
-  
-    
    
 }
 
