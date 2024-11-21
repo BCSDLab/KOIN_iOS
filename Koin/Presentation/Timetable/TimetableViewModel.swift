@@ -34,6 +34,7 @@ final class TimetableViewModel: ViewModelProtocol {
         case createFrame(String)
         case deleteFrame(FrameDTO)
         case modifyFrame(FrameDTO)
+        case modifySemester([String], [String])
     }
     enum NextOutput {
         case reloadData
@@ -58,6 +59,8 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var createFrameUseCase = DefaultCreateFrameUseCase(timetableRepository: timetableRepository)
     private lazy var deleteFrameUseCase = DefaultDeleteFrameUseCase(timetableRepository: timetableRepository)
     private lazy var modifyFrameUseCase = DefaultModifyFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteSemesterUseCase = DefaultDeleteSemesterUseCase(timetableRepository: timetableRepository)
+    
     
     // MARK: 기타
     private lazy var fetchMySemesterUseCase = DefaultFetchMySemesterUseCase(timetableRepository: timetableRepository)
@@ -118,6 +121,13 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.deleteFrame(frame: frame)
             case .modifyFrame(let frame):
                 self?.modifyFrame(frame: frame)
+            case let .modifySemester(addedSemester, removedSemester):
+                addedSemester.forEach {
+                    self?.createFrame(semester: $0)
+                }
+                removedSemester.forEach {
+                    self?.deleteSemester(semester: $0)
+                }
             }
         }.store(in: &subscriptions)
         return nextOutputSubject.eraseToAnyPublisher()
@@ -125,6 +135,22 @@ final class TimetableViewModel: ViewModelProtocol {
 }
 
 extension TimetableViewModel {
+    
+    
+    private func deleteSemester(semester: String) {
+        deleteSemesterUseCase.execute(semester: semester).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+            guard let self = self else { return }
+            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
+                      self.frameData.remove(at: index)
+                      Log.make().info("Semester \(semester) deleted from frameData")
+                  }
+        }.store(in: &subscriptions)
+
+    }
     
     private func modifyFrame(frame: FrameDTO) {
         

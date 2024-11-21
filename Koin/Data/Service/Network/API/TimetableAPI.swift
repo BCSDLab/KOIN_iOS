@@ -20,6 +20,7 @@ enum TimetableAPI {
     case fetchLectureList(semester: String)
     case fetchSemester
     case deleteLecture(frameId: Int, lectureId: Int)
+    case deleteSemester(semester: String)
 }
 
 extension TimetableAPI: Router, URLRequestConvertible {
@@ -41,13 +42,14 @@ extension TimetableAPI: Router, URLRequestConvertible {
         case .fetchSemester: return "/semesters"
             // FIXME: 네이밍, api 고치기 이거 lectureid가 아니라 id임
         case .deleteLecture(frameId: let frameId, lectureId: let lectureId): return "/v2/timetables/lecture/\(lectureId)"
+        case .deleteSemester(semester: let semester): return "/v2/all/timetables/frame"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .fetchDeptList, .fetchFrame, .fetchLecture, .fetchMySemester, .fetchLectureList, .fetchSemester: return .get
-        case .deleteFrame, .deleteLecture: return .delete
+        case .deleteFrame, .deleteLecture, .deleteSemester: return .delete
         case .createFrame, .postLecture: return .post
         case .modifyFrame, .modifyLecture: return .put
         }
@@ -56,7 +58,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester, .deleteLecture:
+        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester, .deleteLecture, .deleteSemester:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -88,6 +90,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
             return ["timetable_frame_id": id]
         case let .postLecture(request): return try? request.toDictionary()
         case let .modifyLecture(request): return try? request.toDictionary()
+        case let .deleteSemester(semester) : return ["semester": semester]
         }
     }
     
@@ -95,7 +98,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDeptList, .fetchSemester, .fetchMySemester, .deleteLecture: return URLEncoding.default
         case .fetchFrame, .fetchLecture, .fetchLectureList: return URLEncoding.queryString
-        case .deleteFrame: return URLEncoding.queryString
+        case .deleteFrame, .deleteSemester: return URLEncoding.queryString
         case .createFrame, .modifyFrame, .postLecture, .modifyLecture: return JSONEncoding.default
         }
     }

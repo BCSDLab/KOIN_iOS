@@ -21,6 +21,7 @@ protocol TimetableService {
     func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error>
     func fetchSemester() -> AnyPublisher<[SemesterDTO], Error>
     func deleteLecture(frameId: Int, lectureId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultTimetableService: TimetableService {
@@ -34,6 +35,21 @@ final class DefaultTimetableService: TimetableService {
                 if error.code == "401" {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.request(api: TimetableAPI.deleteLecture(frameId: frameId, lectureId: lectureId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: TimetableAPI.deleteSemester(semester: semester))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: TimetableAPI.deleteSemester(semester: semester)) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()
