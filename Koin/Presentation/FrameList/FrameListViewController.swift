@@ -69,6 +69,10 @@ final class FrameListViewController: UIViewController {
             
         }).store(in: &subscriptions)
         
+        modifySemesterModalViewController.applyButtonPublisher.sink { [weak self] addedSemester, removedSemester in
+            self?.inputSubject.send(.modifySemester(addedSemester, removedSemester))
+        }.store(in: &subscriptions)
+        
     }
     
 }
@@ -76,7 +80,10 @@ final class FrameListViewController: UIViewController {
 extension FrameListViewController: TimetableCellDelegate {
     
     @objc private func modifySemesterButtonTapped() {
+        
+        modifySemesterModalViewController.configre(frameList: viewModel.frameData)
         self.present(modifySemesterModalViewController, animated: true)
+        
     }
     
     @objc private func addTimetableTapped(_ sender: UIButton) {
@@ -93,22 +100,13 @@ extension FrameListViewController: TimetableCellDelegate {
     func settingButtonTapped(at indexPath: IndexPath) {
         let section = indexPath.section
         let row = indexPath.row
-        print("Setting button tapped at Section: \(section), Row: \(row)")
         
         // 추가 동작 (예: 삭제 모달 띄우기)
         let timetable = viewModel.frameData[section].frame[row]
-        print("타임테이블 이름: \(timetable.timetableName)")
-        //   deleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216, frame:  viewModel.frameData[section].frame[row])\
-        
         deleteFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
         self.present(deleteFrameModalViewController, animated: true)
         
         
-    }
-    @objc private func addSemesterTapped() {
-        //            let newSemester = Semester(id: UUID(), name: "새 학기", timetables: [])
-        //            semesters.append(newSemester)
-        //            tableView.reloadData()
     }
     
 }
