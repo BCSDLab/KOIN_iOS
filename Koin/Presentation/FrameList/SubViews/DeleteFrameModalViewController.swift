@@ -75,6 +75,7 @@ final class DeleteFrameModalViewController: UIViewController {
         self.containerWidth = width
         self.containerHeight = height
         super.init(nibName: nil, bundle: nil)
+        textField.delegate = self
     }
     
     func configure(frame: FrameDTO) {
@@ -91,14 +92,22 @@ final class DeleteFrameModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        frame.timetableName = text
+        
+    }
+    
     @objc private func checkButtonTapped() {
         frame.isMain.toggle()
+        checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
     }
     @objc private func deleteButtonTapped() {
         deleteButtonPublisher.send(frame)
@@ -112,7 +121,10 @@ final class DeleteFrameModalViewController: UIViewController {
         saveButtonPublisher.send(frame)
         dismiss(animated: true, completion: nil)
     }
-    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder() // 키보드 내리기
+            return true
+        }
   
     
    
