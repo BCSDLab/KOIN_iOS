@@ -33,9 +33,11 @@ final class TimetableViewModel: ViewModelProtocol {
         case fetchFrameList
         case createFrame(String)
         case deleteFrame(FrameDTO)
+        case modifyFrame(FrameDTO)
     }
     enum NextOutput {
         case reloadData
+        case showToast(String)
     }
     
     // MARK: - Properties
@@ -114,6 +116,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.createFrame(semester: semester)
             case .deleteFrame(let frame):
                 self?.deleteFrame(frame: frame)
+            case .modifyFrame(let frame):
+                self?.modifyFrame(frame: frame)
             }
         }.store(in: &subscriptions)
         return nextOutputSubject.eraseToAnyPublisher()
@@ -122,6 +126,31 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    private func modifyFrame(frame: FrameDTO) {
+        
+        modifyFrameUseCase.execute(frame: frame).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.nextOutputSubject.send(.showToast(error.message))
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            for (index, frameData) in self.frameData.enumerated() {
+                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
+                    self.frameData[index].frame[frameIndex] = frame
+                    if frame.isMain {
+                        self.frameData[index].frame = self.frameData[index].frame.map { existingFrame in
+                            var updatedFrame = existingFrame
+                            updatedFrame.isMain = (existingFrame.id == frame.id) // 현재 프레임만 true
+                            return updatedFrame
+                        }
+                    }
+                    break // 찾았으면 루프 종료
+                }
+            }
+        }.store(in: &subscriptions)
+        
+    }
     private func deleteFrame(frame: FrameDTO) {
         deleteFrameUseCase.execute(id: frame.id).sink { completion in
             if case let .failure(error) = completion {
@@ -129,22 +158,22 @@ extension TimetableViewModel {
             }
         } receiveValue: { [weak self] in
             guard let self = self else { return }
-                           
-                           // `frameData`에서 해당 프레임 삭제
-                           for (index, frameData) in self.frameData.enumerated() {
-                               if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
-                                   self.frameData[index].frame.remove(at: frameIndex)
-                                   
-                                   // `frameData`에서 학기가 빈 경우 제거 (선택사항)
-                                   if self.frameData[index].frame.isEmpty {
-                                       self.frameData.remove(at: index)
-                                   }
-                                   
-                                   break // 찾았으면 루프 종료
-                               }
-                           }
+            
+            // `frameData`에서 해당 프레임 삭제
+            for (index, frameData) in self.frameData.enumerated() {
+                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
+                    self.frameData[index].frame.remove(at: frameIndex)
+                    
+                    // `frameData`에서 학기가 빈 경우 제거 (선택사항)
+                    if self.frameData[index].frame.isEmpty {
+                        self.frameData.remove(at: index)
+                    }
+                    
+                    break // 찾았으면 루프 종료
+                }
+            }
         }.store(in: &subscriptions)
-
+        
     }
     private func createFrame(semester: String) {
         createFrameUseCase.execute(semester: semester).sink { completion in

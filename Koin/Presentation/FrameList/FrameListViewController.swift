@@ -55,7 +55,7 @@ final class FrameListViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case .reloadData: self?.tableView.reloadData()
-                
+            case .showToast(let message): self?.showToast(message: message, success: true)
             }
         }.store(in: &subscriptions)
         
@@ -64,7 +64,8 @@ final class FrameListViewController: UIViewController {
         }).store(in: &subscriptions)
         
         deleteFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
-            //
+            self?.inputSubject.send(.modifyFrame(frame))
+
         }).store(in: &subscriptions)
     }
     
