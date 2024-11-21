@@ -145,11 +145,11 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] _ in
             guard let self = self else { return }
             if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
-                      self.frameData.remove(at: index)
-                      Log.make().info("Semester \(semester) deleted from frameData")
-                  }
+                self.frameData.remove(at: index)
+                Log.make().info("Semester \(semester) deleted from frameData")
+            }
         }.store(in: &subscriptions)
-
+        
     }
     
     private func modifyFrame(frame: FrameDTO) {
@@ -178,9 +178,10 @@ extension TimetableViewModel {
         
     }
     private func deleteFrame(frame: FrameDTO) {
-        deleteFrameUseCase.execute(id: frame.id).sink { completion in
+        deleteFrameUseCase.execute(id: frame.id).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
+                self?.nextOutputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] in
             guard let self = self else { return }
@@ -201,50 +202,84 @@ extension TimetableViewModel {
         }.store(in: &subscriptions)
         
     }
-    private func createFrame(semester: String) {
-        createFrameUseCase.execute(semester: semester).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            
-            // `frameData`에서 해당 `semester`를 찾음
-            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
-                // `frameData`의 해당 `semester` 배열의 마지막에 `response` 추가
-                self.frameData[index].frame.append(response)
-            } else {
-                // `frameData`에 `semester`가 없으면 새로 추가
-                self.frameData.append(FrameData(semester: semester, frame: [response]))
-            }
-        }.store(in: &subscriptions)
-        
-    }
-    
-    private func fetchMySemesters() {
-        
-        fetchMySemesterUseCase.execute()
-            .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
-                guard let self = self else { return Just([]).eraseToAnyPublisher() }
-                let semesters = response.semesters
-                return semesters.publisher // 배열을 퍼블리셔로 변환
-                    .flatMap { semester -> AnyPublisher<FrameData, Never> in
-                        self.fetchFrame(for: semester)
-                    }
-                    .collect() // 모든 FrameData를 하나의 배열로 수집
-                    .eraseToAnyPublisher()
-            }
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("Failed fetching semesters: \(error)")
-                }
-            }, receiveValue: { [weak self] fetchedFrames in
-                self?.frameData = fetchedFrames
-                Log.make().info("FrameData updated: \(fetchedFrames)")
-            })
-            .store(in: &subscriptions)
-    }
-    
+    private func sortFrames(_ frames: [FrameData]) -> [FrameData] {
+         func sortSemester(_ semester: String) -> (year: Int, priority: Int) {
+             var year = 0
+             var priority = 0
+             
+             if semester.contains("겨울") {
+                 year = Int(semester.replacingOccurrences(of: "겨울", with: "")) ?? 0
+                 priority = 4
+             } else if semester.contains("여름") {
+                 year = Int(semester.replacingOccurrences(of: "여름", with: "")) ?? 0
+                 priority = 2
+             } else if semester.hasSuffix("2") {
+                 year = Int(String(semester.dropLast())) ?? 0
+                 priority = 3
+             } else if semester.hasSuffix("1") {
+                 year = Int(String(semester.dropLast())) ?? 0
+                 priority = 1
+             }
+             
+             return (year, priority)
+         }
+         
+         return frames.sorted {
+             let left = sortSemester($0.semester)
+             let right = sortSemester($1.semester)
+             return left.year > right.year || (left.year == right.year && left.priority > right.priority)
+         }
+     }
+     
+     // MARK: - Modified Methods
+     
+     private func createFrame(semester: String) {
+         createFrameUseCase.execute(semester: semester).sink { completion in
+             if case let .failure(error) = completion {
+                 Log.make().error("\(error)")
+             }
+         } receiveValue: { [weak self] response in
+             guard let self = self else { return }
+             
+             // `frameData`에서 해당 `semester`를 찾음
+             if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
+                 // `frameData`의 해당 `semester` 배열에 새로운 frame 추가
+                 self.frameData[index].frame.append(response)
+             } else {
+                 // `frameData`에 새로운 `semester` 추가
+                 self.frameData.append(FrameData(semester: semester, frame: [response]))
+             }
+             
+             // 정렬 후 업데이트
+             self.frameData = self.sortFrames(self.frameData)
+         }.store(in: &subscriptions)
+     }
+     
+     private func fetchMySemesters() {
+         fetchMySemesterUseCase.execute()
+             .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
+                 guard let self = self else { return Just([]).eraseToAnyPublisher() }
+                 let semesters = response.semesters
+                 return semesters.publisher
+                     .flatMap { semester -> AnyPublisher<FrameData, Never> in
+                         self.fetchFrame(for: semester)
+                     }
+                     .collect()
+                     .eraseToAnyPublisher()
+             }
+             .sink(receiveCompletion: { completion in
+                 if case let .failure(error) = completion {
+                     Log.make().error("Failed fetching semesters: \(error)")
+                 }
+             }, receiveValue: { [weak self] fetchedFrames in
+                 guard let self = self else { return }
+                 
+                 // 정렬 후 업데이트
+                 self.frameData = self.sortFrames(fetchedFrames)
+                 Log.make().info("FrameData updated: \(self.frameData)")
+             })
+             .store(in: &subscriptions)
+     }
     private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
         fetchFrameUseCase.execute(semester: semester)
             .map { frames -> FrameData in
