@@ -19,7 +19,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
-        case getNoticeBanner(Date)
+        case getNoticeBanner(Date?)
         case getAbTestResult(String)
     }
     
@@ -28,7 +28,7 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusCardInformation)
-        case updateNoticeBanners([NoticeArticleDTO], (String, String))
+        case updateNoticeBanners([NoticeArticleDTO], (String, String)?)
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case moveBusItem
@@ -175,14 +175,22 @@ extension HomeViewModel {
         getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
     }
     
-    private func getNoticeBanners(date: Date) {
-        let phrase = fetchKeywordNoticePhraseUseCase.execute(date: date)
+    private func getNoticeBanners(date: Date?) {
+        var phrase: (String, String) = ("", "")
+        if let date = date {
+            phrase = fetchKeywordNoticePhraseUseCase.execute(date: date)
+        }
         fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] articles in
-            self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
+            if date == nil {
+                self?.outputSubject.send(.updateNoticeBanners(articles, nil))
+            }
+            else {
+                self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
+            }
         }.store(in: &subscriptions)
     }
     

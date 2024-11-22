@@ -77,7 +77,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
     private let noticePageControl: UIPageControl = {
         let pageControl = UIPageControl(frame: .zero)
         pageControl.currentPage = 0
-        pageControl.numberOfPages = 5
+        pageControl.numberOfPages = 4
         pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
         pageControl.pageIndicatorTintColor = .appColor(.neutral300)
         return pageControl
@@ -181,7 +181,6 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         bind()
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
-        inputSubject.send(.getNoticeBanner(Date()))
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -195,6 +194,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
     }
     
@@ -445,7 +445,8 @@ extension HomeViewControllerA {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)) {
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)?) {
+        print("asdas")
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     
@@ -454,17 +455,22 @@ extension HomeViewControllerA {
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
-        var logValue: String = ""
-        
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            logValue = "더보기X"
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기X"))
+        }
+        else if result.variableName == .mainDiningNew {
+            goDiningPageButton.isHidden = false
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기O"))
+        }
+        else if result.variableName == .bannerNew {
+            noticePageControl.numberOfPages = 5
+            inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            logValue = "더보기O"
-            goDiningPageButton.isHidden = false
+            noticePageControl.numberOfPages = 4
+            inputSubject.send(.getNoticeBanner(nil))
         }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, logValue))
     }
     
     func didTapCell(at id: Int) {

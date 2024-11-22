@@ -77,7 +77,7 @@ final class HomeViewControllerB: UIViewController {
     private let noticePageControl: UIPageControl = {
         let pageControl = UIPageControl(frame: .zero)
         pageControl.currentPage = 0
-        pageControl.numberOfPages = 5
+        pageControl.numberOfPages = 4
         pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
         pageControl.pageIndicatorTintColor = .appColor(.neutral300)
         return pageControl
@@ -199,7 +199,6 @@ final class HomeViewControllerB: UIViewController {
         configureView()
         configureTapGesture()
         configureSwipeGestures()
-        inputSubject.send(.getNoticeBanner(Date()))
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
@@ -208,6 +207,7 @@ final class HomeViewControllerB: UIViewController {
         callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
@@ -444,10 +444,10 @@ extension HomeViewControllerB {
         navigatetoDining()
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)) {
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
-    
+   
     @objc private func busViewTapped() {
         let busViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
         busViewController.title = "버스/교통"
@@ -467,17 +467,22 @@ extension HomeViewControllerB {
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
-        var logValue: String = ""
-        
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            logValue = "더보기X"
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기X"))
+        }
+        else if result.variableName == .mainDiningNew {
+            goDiningPageButton.isHidden = false
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기O"))
+        }
+        else if result.variableName == .bannerNew {
+            noticePageControl.numberOfPages = 5
+            inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            logValue = "더보기O"
-            goDiningPageButton.isHidden = false
+            noticePageControl.numberOfPages = 4
+            inputSubject.send(.getNoticeBanner(nil))
         }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, logValue))
     }
     
     @objc private func shopSelectButtonTapped() {
