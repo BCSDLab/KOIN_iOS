@@ -446,7 +446,6 @@ extension HomeViewControllerA {
     }
     
     private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)?) {
-        print("asdas")
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     

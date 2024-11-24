@@ -35,7 +35,7 @@ final class DefaultFetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseC
                 print(daysDifference)
                 
                 let difference = daysDifference % 7 == 0 ? daysDifference - 1 : daysDifference
-                let index = ((difference) / 7) % 4
+                let index = ((difference + 1) / 7) % 4
                 return noticePhrases[index]
             }
         } else {
