@@ -151,6 +151,9 @@ extension NoticeListCollectionView {
         if let keywordNoticePhrase = keywordNoticePhrase, indexPath.row == 0 {
             moveKeywordManagePagePublisher.send(keywordNoticePhrase.1)
         }
+        else if keywordNoticePhrase != nil {
+            tapNoticeListPublisher.send((popularNoticeList[indexPath.row - 1].id, popularNoticeList[indexPath.row - 1].title))
+        }
         else {
             tapNoticeListPublisher.send((popularNoticeList[indexPath.row].id, popularNoticeList[indexPath.row].title))
         }
