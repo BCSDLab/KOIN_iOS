@@ -11,10 +11,10 @@ import UIKit
 final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     private var popularNoticeList: [NoticeArticleDTO] = []
-    private var keywordNoticePhrase: (String, String)?
+    private var keywordNoticePhrase: ((String, String), Int)?
     let pageDidChangedPublisher = PassthroughSubject<Int, Never>()
-    let tapNoticeListPublisher = PassthroughSubject<Int, Never>()
-    let moveKeywordManagePagePublisher = PassthroughSubject<Void, Never>()
+    let tapNoticeListPublisher = PassthroughSubject<(Int, String), Never>()
+    let moveKeywordManagePagePublisher = PassthroughSubject<Int, Never>()
     private var timer: Timer?
     private var currentIdx = 0
     private var isLastIdx: Bool = false
@@ -39,7 +39,7 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
         isPagingEnabled = true
     }
     
-    func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO], _ keywordNoticePhrase: (String, String)?) {
+    func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO], _ keywordNoticePhrase: ((String, String), Int)?) {
         self.popularNoticeList = popularNoticeList
         self.keywordNoticePhrase = keywordNoticePhrase
         bannerCount = keywordNoticePhrase == nil ? popularNoticeList.count : popularNoticeList.count + 1
@@ -133,7 +133,7 @@ extension NoticeListCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KeywordNotiCollectionViewCell.reuseIdentifier, for: indexPath) as? KeywordNotiCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            cell.configure(title: keywordNotice.0, subTitle: keywordNotice.1)
+            cell.configure(title: keywordNotice.0.0, subTitle: keywordNotice.0.1)
             return cell
         }
         else {
@@ -148,11 +148,11 @@ extension NoticeListCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 && keywordNoticePhrase != nil {
-            moveKeywordManagePagePublisher.send()
+        if let keywordNoticePhrase = keywordNoticePhrase, indexPath.row == 0 {
+            moveKeywordManagePagePublisher.send(keywordNoticePhrase.1)
         }
         else {
-            tapNoticeListPublisher.send(popularNoticeList[indexPath.row].id)
+            tapNoticeListPublisher.send((popularNoticeList[indexPath.row].id, popularNoticeList[indexPath.row].title))
         }
     }
 }

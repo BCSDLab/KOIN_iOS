@@ -317,7 +317,7 @@ final class HomeViewControllerB: UIViewController {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId in
+        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
@@ -329,7 +329,7 @@ final class HomeViewControllerB: UIViewController {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] in
+        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] bannerIndex in
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -444,7 +444,7 @@ extension HomeViewControllerB {
         navigatetoDining()
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)?) {
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
    

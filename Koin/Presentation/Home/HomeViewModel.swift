@@ -28,7 +28,7 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusCardInformation)
-        case updateNoticeBanners([NoticeArticleDTO], (String, String)?)
+        case updateNoticeBanners([NoticeArticleDTO], ((String, String), Int)?)
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case moveBusItem
@@ -176,7 +176,7 @@ extension HomeViewModel {
     }
     
     private func getNoticeBanners(date: Date?) {
-        var phrase: (String, String) = ("", "")
+        var phrase: ((String, String), Int) = (("", ""), 0)
         if let date = date {
             phrase = fetchKeywordNoticePhraseUseCase.execute(date: date)
         }

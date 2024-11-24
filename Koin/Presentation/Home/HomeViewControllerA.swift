@@ -302,7 +302,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId in
+        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNoticeBanner, .click, noticeTitle))
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
@@ -314,7 +315,10 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] in
+        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] bannerIndex in
+            let bannerLogValue = ["자취방 양도", "안내글", "근로", "해외탐방"]
+            let logValue = bannerLogValue[bannerIndex]
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.toManageKeyword, .click, logValue))
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -330,6 +334,7 @@ extension HomeViewControllerA {
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
            navigateToNoticeList()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.appMainNoticeDetail, .click, "더보기"))
         }
         else if sender == goDiningPageButton {
             navigatetoDining()
@@ -445,7 +450,7 @@ extension HomeViewControllerA {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: (String, String)?) {
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     
@@ -464,10 +469,12 @@ extension HomeViewControllerA {
         }
         else if result.variableName == .bannerNew {
             noticePageControl.numberOfPages = 5
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점O"))
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
             noticePageControl.numberOfPages = 4
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점X"))
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
