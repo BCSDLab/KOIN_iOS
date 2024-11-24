@@ -17,7 +17,7 @@ final class DefaultFetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseC
     }
     
     private func makeKeywordNoticePhrase(date: Date) -> (String, String) {
-        let titles = ["자취방 양도글, 가장 먼저 확인하고 싶을 때?", "키워드가 포함된 공지가 업로드 되면\n가장 먼저 알림을 보내드려요!", "근로 공지, 놓치고 싶지 않다면?", "해외탐방 공지, 놓치고 싶지 않다면?", "해외탐방 공지, 놓치고 싶지 않다면?"]
+        let titles = ["자취방 양도글, 가장 먼저 확인하고 싶을 때?", "키워드가 포함된 공지가 업로드 되면\n가장 먼저 알림을 보내드려요!", "근로 공지, 놓치고 싶지 않다면?", "해외탐방 공지, 놓치고 싶지 않다면?"]
         let subTitles = ["공지가 업로드 되면 바로 알려주는\n키워드 알림 설정하러가기", "키워드 알림 설정 바로가기", "공지가 업로드 되면 바로 알려주는\n키워드 알림 설정하러가기", "공지가 업로드 되면 바로 알려주는\n키워드 알림 설정하러가기"]
         var noticePhrases: [(String, String)] = []
         
