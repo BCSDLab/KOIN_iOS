@@ -195,9 +195,12 @@ extension HomeViewModel {
     }
     
     private func getAbTestResult(abTestTitle: String) {
-        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle)).sink(receiveCompletion: { completion in
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle)).sink(receiveCompletion: { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
+                if abTestTitle == "c_keyword_ banner_v1" {
+                    self?.getNoticeBanners(date: nil)
+                }
             }
         }, receiveValue: { [weak self] abTestResult in
             print(abTestResult)
