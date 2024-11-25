@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>340135824028-7o5mdm8leu54amdlbk4dk6tme5s95cqb.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyADr5F_DEgnwbRijWTGmyHez4xSAVvZhAw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>340135824028</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bcsdlab.koin</string>
+	<key>PROJECT_ID</key>
+	<string>kap-chat</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kap-chat.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:340135824028:ios:c0ebfc7e9469eaff987b59</string>
+	<key>DATABASE_URL</key>
+	<string>https://kap-chat.firebaseio.com</string>
+</dict>
+</plist>
