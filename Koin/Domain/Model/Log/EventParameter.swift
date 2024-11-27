@@ -161,6 +161,7 @@ enum EventParameter {
         case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"
+        case notification
     }
     
     enum EventLabelNeededDuration: String {

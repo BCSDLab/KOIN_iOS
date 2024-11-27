@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         if let keyword = extractValue(from: schemeUri, value: "keyword") {
                             let logAnalyticsEventUseCase = 
                             DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: MockAnalyticsService()))
-                            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: keyword)
+                            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.keywordNotification, category: .notification, value: keyword)
                         }
                     } else {
                         print("No schemeUri found")
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     private func extractValue(from urlString: String, value: String) -> String? {
          // URLComponents로 URL을 파싱
-         var components = URLComponents(string: urlString)
+        let components = URLComponents(string: urlString)
          
          // URL 쿼리 아이템에서 "id" 추출
          return components?.queryItems?.first(where: { $0.name == value })?.value
