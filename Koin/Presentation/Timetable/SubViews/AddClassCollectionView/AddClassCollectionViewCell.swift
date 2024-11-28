@@ -63,7 +63,7 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
     func configure(lecture: SemesterLecture, isAdded: Bool) {
         classTitleLabel.text = lecture.name
         professorNameLabel.text = lecture.professor
-        classTimeLabel.text = "\(lecture.classTime)"
+        classTimeLabel.text = timeLabelText(from: lecture.classTime)
         gradeLabel.text = "\(lecture.grades)학점"
         classCodeLabel.text = lecture.code
         
