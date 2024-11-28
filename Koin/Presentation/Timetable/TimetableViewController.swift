@@ -15,10 +15,11 @@ final class TimetableViewController: UIViewController {
     private let viewModel: TimetableViewModel
     private let inputSubject: PassthroughSubject<TimetableViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    
+
     
     // MARK: - UI Components
-    
+
+    private let emptyView = UIView()
     private let timetableColors: [(TimetableColorAsset, TimetableColorAsset)] = [
         (.body1, .header1),
         (.body2, .header2),
@@ -37,6 +38,9 @@ final class TimetableViewController: UIViewController {
         (.body15, .header15)
     ]
 
+    
+    private let scrollView = UIScrollView().then { _ in
+    }
     
     private let deleteLectureView = DeleteLectureView().then {
         $0.isHidden = true
@@ -114,9 +118,6 @@ final class TimetableViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        timetableCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
-        }
     }
     // MARK: - Bind
     
@@ -132,6 +133,7 @@ final class TimetableViewController: UIViewController {
             case let .updateMyFrame(lectureList):
                 self?.updateTimetable(lectureData: lectureList)
                 self?.addClassCollectionView.setUpMyLecture(myLectureList: lectureList)
+                self?.setUpCollectionViewHeight(lectureList)
             }
         }.store(in: &subscriptions)
         
@@ -188,6 +190,32 @@ final class TimetableViewController: UIViewController {
 }
 
 extension TimetableViewController {
+    private func setUpCollectionViewHeight(_ lectureList: [LectureData]) {
+        // 강의 시간에서 마지막 2자리 추출
+        let lastTwoDigits = lectureList.flatMap { $0.classTime.map { $0 % 100 } }
+        
+        // 마지막 2자리 숫자의 최댓값 구하기
+        guard let maxLastTwoDigits = lastTwoDigits.max() else { return }
+        
+        // 마지막 2자리 최댓값을 2로 나눈 값 계산
+        let dividedValue = maxLastTwoDigits / 2
+        
+        print(maxLastTwoDigits)
+    
+        // 17과 (9 + dividedValue) 중 최댓값 계산
+        let upperLimit = max(17, 9 + dividedValue)
+        
+        // 9부터 upperLimit까지의 배열 생성
+        let resultArray = Array(9...upperLimit)
+        timetableCollectionView.updateLecture(lectureTime: resultArray)
+        timetableCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
+        }
+//        containerView.snp.updateConstraints { make in
+//            make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
+//        }
+    }
+
     @objc private func modifySemesterButtonTapped() {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
@@ -401,8 +429,11 @@ extension TimetableViewController {
 extension TimetableViewController {
     
     private func setUpLayOuts() {
-        [semesterSelectButton, downloadImageButton, timetableCollectionView, containerView, addClassCollectionView, addDirectCollectionView, deleteLectureView].forEach {
+        [scrollView, semesterSelectButton, downloadImageButton, addClassCollectionView, addDirectCollectionView, deleteLectureView].forEach {
             view.addSubview($0)
+        }
+        [timetableCollectionView, containerView, emptyView].forEach {
+            scrollView.addSubview($0)
         }
     }
     
@@ -419,11 +450,16 @@ extension TimetableViewController {
             make.width.equalTo(134)
             make.height.equalTo(32)
         }
-        timetableCollectionView.snp.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.top.equalTo(semesterSelectButton.snp.bottom).offset(14)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+        timetableCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.snp.top)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(100)
+            make.bottom.equalTo(scrollView.snp.bottom)
         }
         addClassCollectionView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.centerY)
@@ -440,6 +476,9 @@ extension TimetableViewController {
         deleteLectureView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(220)
+        }
+        emptyView.snp.makeConstraints { make in
+            make.width.equalTo(view.snp.width)
         }
     }
     private func setUpNavigationBar() {

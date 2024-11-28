@@ -9,7 +9,6 @@ import UIKit
 
 final class TimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var lectureData: [LectureData] = []
     private var timeTexts: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17]
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -26,15 +25,15 @@ final class TimetableCollectionView: UICollectionView, UICollectionViewDataSourc
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
-        isScrollEnabled = true
+        isScrollEnabled = false
         register(TimetableCollectionViewCell.self, forCellWithReuseIdentifier: TimetableCollectionViewCell.identifier)
         register(TimetableHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TimetableHeaderView.identifier)
         dataSource = self
         delegate = self
     }
     
-    func updateLectureData(lectureData: [LectureData]) {
-        self.lectureData = lectureData
+    func updateLecture(lectureTime: [Int]) {
+        self.timeTexts = lectureTime
         reloadData()
     }
     
