@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 struct FrameData {
     let semester: String
@@ -321,7 +322,8 @@ extension TimetableViewModel {
     }
     
     private func postCustomLecture(lectureName: String, classTime: [Int]) {
-        postLectureUseCase.execute(request: LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(id: nil, lectureID: nil, classTitle: lectureName, classTime: classTime, classPlace: "", professor: "", grades: "0", memo: "asdasd")])).sink { completion in
+        let request = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: nil, classTitle: lectureName, classInfos: [ClassInfo(classTime: classTime, classPlace: "")], professor: "", grades: "0", memo: "no memo")])
+        postLectureUseCase.execute(request: request).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
@@ -331,7 +333,9 @@ extension TimetableViewModel {
     }
     
     private func postLecture(lecture: LectureData) {
-        postLectureUseCase.execute(request: LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(id: nil, lectureID: lecture.id, classTitle: lecture.name, classTime: lecture.classTime, classPlace: "", professor: lecture.professor, grades: lecture.grades, memo: "")])).sink { completion in
+        let lectureRequest = LectureRequest(timetableFrameID: 12817, timetableLecture: [TimetableLecture(lectureID: nil, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
+      
+        postLectureUseCase.execute(request: lectureRequest).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

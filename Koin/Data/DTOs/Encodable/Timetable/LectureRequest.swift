@@ -17,18 +17,28 @@ struct LectureRequest: Codable {
 
 // MARK: - TimetableLecture
 struct TimetableLecture: Codable {
-    let id: Int?
     let lectureID: Int?
     let classTitle: String
-    let classTime: [Int]
-    let classPlace, professor, grades, memo: String
+    let classInfos: [ClassInfo]
+    let professor: String?
+    let grades: String
+    let memo: String
 
     enum CodingKeys: String, CodingKey {
-        case id
         case lectureID = "lecture_id"
         case classTitle = "class_title"
+        case classInfos = "class_infos"
+        case professor, grades, memo
+    }
+}
+
+// MARK: - ClassInfo
+struct ClassInfo: Codable {
+    let classTime: [Int]?
+    let classPlace: String?
+
+    enum CodingKeys: String, CodingKey {
         case classTime = "class_time"
         case classPlace = "class_place"
-        case professor, grades, memo
     }
 }
