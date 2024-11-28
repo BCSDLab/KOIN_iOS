@@ -7,33 +7,35 @@
 
 import UIKit
 
+
 final class LectureView: UIView {
     
     private(set) var info: LectureData
     
-    private let separateView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral800)
+     let separateView = UIView().then { _ in
     }
-    private let lectureNameLabel = UILabel().then {
+    let lectureNameLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.numberOfLines = 0
     }
-    private let professorNameLabel = UILabel().then {
+    let professorNameLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.numberOfLines = 0
     }
     init(info: LectureData, color: UIColor) {
         self.info = info
         super.init(frame: .zero)
-        lectureNameLabel.backgroundColor = color
+        
+        
+      
         lectureNameLabel.text = info.name
-        professorNameLabel.backgroundColor = color
-        self.backgroundColor = color
         professorNameLabel.text = info.professor
+        
         setupLayouts()
         setupConstraints()
     }
-    
+
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -20,7 +20,52 @@ enum SceneColorAsset {
     case gray
 }
 
+enum TimetableColorAsset {
+    case header1, header2, header3, header4, header5, header6, header7, header8, header9, header10, header11, header12, header13, header14, header15
+    case body1, body2, body3, body4, body5, body6, body7, body8, body9, body10, body11, body12, body13, body14, body15
+}
 extension UIColor {
+    static func timetableColor(_name: TimetableColorAsset) -> UIColor {
+        switch _name {
+        case .header1: return UIColor(hexCode: "890000")
+        case .header2: return UIColor(hexCode: "FF4444")
+        case .header3: return UIColor(hexCode: "FF993B")
+        case .header4: return UIColor(hexCode: "E8D52A")
+        case .header5: return UIColor(hexCode: "D0AE00")
+        case .header6: return UIColor(hexCode: "513A00")
+            
+        case .header7: return UIColor(hexCode: "0C9D61")
+        case .header8: return UIColor(hexCode: "7ABA78")
+        case .header9: return UIColor(hexCode: "366718")
+        case .header10: return UIColor(hexCode: "80C4E9")
+        case .header11: return UIColor(hexCode: "1679AB")
+        case .header12: return UIColor(hexCode: "074173")
+            
+        case .header13: return UIColor(hexCode: "523AE2")
+        case .header14: return UIColor(hexCode: "6F6F6F")
+        case .header15: return UIColor(hexCode: "CBCBCB")
+            
+        case .body1: return UIColor(hexCode: "E7CCCC")
+        case .body2: return UIColor(hexCode: "FFDADA")
+        case .body3: return UIColor(hexCode: "FFEBD8")
+        case .body4: return UIColor(hexCode: "FAF7D4")
+        case .body5: return UIColor(hexCode: "F6EFCC")
+        case .body6: return UIColor(hexCode: "DCD8CC")
+            
+        case .body7: return UIColor(hexCode: "CEEBDF")
+        case .body8: return UIColor(hexCode: "E4F1E4")
+        case .body9: return UIColor(hexCode: "D7E1D1")
+        case .body10: return UIColor(hexCode: "E6F3FB")
+        case .body11: return UIColor(hexCode: "D0E4EE")
+        case .body12: return UIColor(hexCode: "CDD9E3")
+            
+        case .body13: return UIColor(hexCode: "DCD8F9")
+        case .body14: return UIColor(hexCode: "E2E2E2")
+        case .body15: return UIColor(hexCode: "F5F5F5")
+        }
+
+    }
+    
     static func appColor(_ name: SceneColorAsset) -> UIColor {
         switch name {
         case .primary100: return UIColor(hexCode: "CFF1F9")
