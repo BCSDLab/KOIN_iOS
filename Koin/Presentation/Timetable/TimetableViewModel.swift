@@ -266,9 +266,10 @@ extension TimetableViewModel {
      // MARK: - Modified Methods
      
      private func createFrame(semester: String) {
-         createFrameUseCase.execute(semester: semester).sink { completion in
+         createFrameUseCase.execute(semester: semester).sink { [weak self] completion in
              if case let .failure(error) = completion {
                  Log.make().error("\(error)")
+                 self?.nextOutputSubject.send(.showToast(error.message))
              }
          } receiveValue: { [weak self] response in
              guard let self = self else { return }
