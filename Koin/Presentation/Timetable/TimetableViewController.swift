@@ -89,6 +89,7 @@ final class TimetableViewController: UIViewController {
         inputSubject.send(.fetchMySemester)
         print(KeyChainWorker.shared.read(key: .access))
         semesterSelectButton.addTarget(self, action: #selector(modifySemesterButtonTapped), for: .touchUpInside)
+        downloadImageButton.addTarget(self, action: #selector(downloadTimetableAsImage), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -255,25 +256,56 @@ extension TimetableViewController {
     }
     
     private func toggleCollectionView(collectionView: UICollectionView, animate: Bool) {
-        
         collectionView.isHidden.toggle()
-//        if collectionView.isHidden {
-//            collectionView.transform = CGAffineTransform(translationX: 0, y: addClassCollectionView.frame.height)
-//            collectionView.isHidden = false
-//            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-//                collectionView.transform = .identity // 초기화
-//            }
-//        } else {
-//            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-//                collectionView.transform = CGAffineTransform(translationX: 0, y: collectionView.frame.height)
-//            }) { _ in
-//                collectionView.isHidden = true
-//            }
-//        }
-        
-        
-        
     }
+}
+
+extension TimetableViewController {
+    @objc private func downloadTimetableAsImage() {
+        // 각각의 뷰를 캡처
+        let timetableImage = captureViewAsImage(view: timetableCollectionView)
+        let containerImage = captureViewAsImage(view: containerView)
+
+        // 두 이미지를 같은 영역에 합쳐서 하나의 이미지 생성
+        let combinedImage = combineImagesInSameArea(topImage: containerImage, bottomImage: timetableImage)
+
+        // 이미지를 앨범에 저장
+        UIImageWriteToSavedPhotosAlbum(combinedImage, self, #selector(saveImageCallback(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+
+
+    // 특정 뷰를 이미지로 캡처
+    private func captureViewAsImage(view: UIView) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        return renderer.image { context in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+    }
+
+    // 두 이미지를 세로로 합치기
+    private func combineImagesInSameArea(topImage: UIImage, bottomImage: UIImage) -> UIImage {
+        let size = CGSize(width: max(topImage.size.width, bottomImage.size.width),
+                          height: max(topImage.size.height, bottomImage.size.height))
+        
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            // 아래 이미지를 먼저 그리기
+            bottomImage.draw(in: CGRect(origin: .zero, size: size))
+            // 위 이미지를 동일한 위치에 겹쳐서 그리기
+            topImage.draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+
+
+    // 이미지 저장 콜백
+    @objc private func saveImageCallback(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            print("이미지 저장 실패: \(error.localizedDescription)")
+        } else {
+            print("이미지 저장 성공!")
+        }
+    }
+
 }
 
 extension TimetableViewController {
