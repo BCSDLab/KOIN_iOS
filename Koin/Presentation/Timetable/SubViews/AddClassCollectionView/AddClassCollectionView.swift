@@ -122,14 +122,13 @@ extension AddClassCollectionView {
             myLecture.classTime == lecture.classTime &&
             myLecture.professor == (lecture.professor ?? "")
         }
-        
+   
         cell.configure(lecture: lecture, isAdded: isAdded)
         
         // 셀의 버튼 액션 처리
         cell.modifyClassButtonPublisher.sink { [weak self] _ in
             guard let self = self else { return }
             let item = showingLectureList[indexPath.row]
-            // 버튼 액션에 따라 `modifyClassButtonPublisher`에 데이터 전달
             self.modifyClassButtonPublisher.send((
                 LectureData(
                     id: item.id,
@@ -138,7 +137,7 @@ extension AddClassCollectionView {
                     classTime: item.classTime,
                     grades: item.grades
                 ),
-                !isAdded // isAdded가 true면 삭제 요청, false면 추가 요청
+                !isAdded
             ))
         }.store(in: &cell.cancellables)
         return cell
