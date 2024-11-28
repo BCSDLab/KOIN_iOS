@@ -228,6 +228,7 @@ extension TimetableViewModel {
                     break // 찾았으면 루프 종료
                 }
             }
+            self.fetchAllFramesForReload()
         }.store(in: &subscriptions)
         
     }
@@ -408,6 +409,35 @@ extension TimetableViewModel {
         }.store(in: &subscriptions)
         
     }
+    
+    private func fetchAllFramesForReload() {
+        // 모든 학기에 대해 데이터 가져오기
+        let publishers = frameData.map { frameItem in
+            fetchFrameUseCase.execute(semester: frameItem.semester)
+                .map { (semester: frameItem.semester, response: $0) } // 학기와 응답을 함께 반환
+        }
+        
+        // Combine의 Publishers.MergeMany를 사용하여 여러 요청을 병합
+        Publishers.MergeMany(publishers)
+            .collect() // 모든 요청 결과를 하나로 수집
+            .sink { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            } receiveValue: { [weak self] responses in
+                guard let self = self else { return }
+                
+                // 응답 결과를 frameData에 업데이트
+                for result in responses {
+                    if let index = self.frameData.firstIndex(where: { $0.semester == result.semester }) {
+                        self.frameData[index].frame = result.response
+                    }
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
+
     
     // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
     private func fetchMySemester() {
