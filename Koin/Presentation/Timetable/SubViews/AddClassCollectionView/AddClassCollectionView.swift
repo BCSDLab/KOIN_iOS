@@ -141,7 +141,6 @@ extension AddClassCollectionView {
                 !isAdded // isAdded가 true면 삭제 요청, false면 추가 요청
             ))
         }.store(in: &cell.cancellables)
-        print(isAdded)
         return cell
     }
 

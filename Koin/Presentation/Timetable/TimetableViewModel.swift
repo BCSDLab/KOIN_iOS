@@ -56,7 +56,7 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var modifyLectureUseCase = DefaultModifyLectureUseCase(timetableRepository: timetableRepository)
     private lazy var postLectureUseCase = DefaultPostLectureUseCase(timetableRepository: timetableRepository)
     private lazy var deleteLectureUseCase = DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
-    private lazy var _deleteLectureUseCase = _DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteLecturByIdUseCase = _DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
     
     // MARK: 프레임
     private lazy var fetchFrameUseCase = DefaultFetchFrameUseCase(timetableRepository: timetableRepository)
@@ -110,7 +110,7 @@ final class TimetableViewModel: ViewModelProtocol {
             case let .modifyLecture(lecture, isAdd):
                 self?.modifyLecture(lecture: lecture, isAdd: isAdd)
             case ._deleteLecture(let lecture):
-                self?._deleteLecture(lecture)
+                self?.deleteLectureById(lecture: lecture)
             case let .postCustomLecture(lectureName, lectureTime):
                 self?.postCustomLecture(lectureName: lectureName, classTime: lectureTime)
             }
@@ -144,8 +144,23 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    private func deleteLectureById(lecture: LectureData) {
+        print(lecture)
+        
+        deleteLecturByIdUseCase.execute(id: lecture.id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == lecture.professor}
+        }.store(in: &subscriptions)
+        
+    }
+    
     private func _deleteLecture(_ lecture: LectureData) {
-        _deleteLectureUseCase.execute(id: lecture.id).sink { completion in
+        print(lecture)
+        
+        deleteLectureUseCase.execute(frameId: selectedFrameId ?? 0, lectureId: lecture.id) .sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
@@ -291,7 +306,6 @@ extension TimetableViewModel {
              }, receiveValue: { [weak self] fetchedFrames in
                  guard let self = self else { return }
                  
-                 // 정렬 후 업데이트
                  self.frameData = self.sortFrames(fetchedFrames)
                  Log.make().info("FrameData updated: \(self.frameData)")
              })
@@ -314,10 +328,11 @@ extension TimetableViewModel {
 extension TimetableViewModel {
     
     private func modifyLecture(lecture: LectureData, isAdd: Bool) {
+        print(isAdd)
         if isAdd {
             postLecture(lecture: lecture)
         } else {
-            deleteLecture(lecture: lecture)
+            _deleteLecture(lecture)
         }
     }
     
@@ -333,7 +348,7 @@ extension TimetableViewModel {
     }
     
     private func postLecture(lecture: LectureData) {
-        let lectureRequest = LectureRequest(timetableFrameID: 12817, timetableLecture: [TimetableLecture(lectureID: nil, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
+        let lectureRequest = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: lecture.id, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
       
         postLectureUseCase.execute(request: lectureRequest).sink { completion in
             if case let .failure(error) = completion {
@@ -342,17 +357,6 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] response in
             self?.lectureData = response
         }.store(in: &subscriptions)
-    }
-    
-    private func deleteLecture(lecture: LectureData) {
-        _deleteLectureUseCase.execute(id: lecture.id).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] _ in
-            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == lecture.professor}
-        }.store(in: &subscriptions)
-        
     }
     
     // 특정 프레임 id의 모든 강의 조회
