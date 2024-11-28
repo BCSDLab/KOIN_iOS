@@ -15,6 +15,7 @@ final class ModifySemesterModalViewController: UIViewController {
     var containerWidth: CGFloat
     var containerHeight: CGFloat
     
+    // FIXME: 고치기
     private var selectedYear: String = "2024" // 기본 연도
     private var selectedFrames: Set<String> = [] // 선택된 학기 (학기 문자열, 예: "20241")
     
