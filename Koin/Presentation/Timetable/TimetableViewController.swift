@@ -93,7 +93,9 @@ final class TimetableViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        //    inputSubject.send(.fetchMySemester)
+        timetableCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
+        }
     }
     // MARK: - Bind
     
@@ -109,7 +111,6 @@ final class TimetableViewController: UIViewController {
             case let .updateMyFrame(lectureList):
                 self?.updateTimetable(lectureData: lectureList)
                 self?.addClassCollectionView.setUpMyLecture(myLectureList: lectureList)
-                //              self?.timetableCollectionView.updateLectureData(lectureData: lectureList)
             }
         }.store(in: &subscriptions)
         
@@ -300,7 +301,7 @@ extension TimetableViewController {
             make.top.equalTo(semesterSelectButton.snp.bottom).offset(14)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.bottom.equalTo(view.snp.bottom)
+            make.height.equalTo(100)
         }
         addClassCollectionView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.centerY)
