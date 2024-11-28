@@ -54,15 +54,18 @@ final class AddClassHeaderView: UICollectionReusableView {
         textField.layer.masksToBounds = true
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        let imageView = UIImageView(image: UIImage.appImage(asset: .search))
-        imageView.contentMode = .scaleAspectFit
-        let iconContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 12, height: 24))
-        imageView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        iconContainerView.addSubview(imageView)
+        let searchButton = UIButton(type: .system)
+        searchButton.setImage(UIImage.appImage(asset: .search), for: .normal)
+        searchButton.tintColor = UIColor.appColor(.neutral600)
+        searchButton.addTarget(nil, action: #selector(AddClassHeaderView.searchButtonTapped), for: .touchUpInside)
+        let iconContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 35))
+        searchButton.frame = CGRect(x: 5, y: 5, width: 24, height: 24)
+        iconContainerView.addSubview(searchButton)
         textField.rightView = iconContainerView
         textField.rightViewMode = .always
         return textField
     }()
+
     
     private let separateView2 = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
@@ -83,6 +86,12 @@ final class AddClassHeaderView: UICollectionReusableView {
 }
 
 extension AddClassHeaderView: UITextFieldDelegate {
+    
+    @objc private func searchButtonTapped() {
+        guard let text = searchTextField.text, !text.isEmpty else { return }
+        searchClassPublisher.send(text)
+        searchTextField.resignFirstResponder() // 키보드 닫기
+    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             guard let text = textField.text else { return false }
             searchClassPublisher.send(text)
