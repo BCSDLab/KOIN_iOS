@@ -128,8 +128,6 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
-            print(lecture)
-            
             self?.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
         }.store(in: &subscriptions)
         

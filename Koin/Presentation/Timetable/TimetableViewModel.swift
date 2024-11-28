@@ -145,7 +145,6 @@ final class TimetableViewModel: ViewModelProtocol {
 extension TimetableViewModel {
     
     private func deleteLectureById(lecture: LectureData) {
-        print(lecture)
         
         deleteLecturByIdUseCase.execute(id: lecture.id).sink { completion in
             if case let .failure(error) = completion {
@@ -158,8 +157,6 @@ extension TimetableViewModel {
     }
     
     private func _deleteLecture(_ lecture: LectureData) {
-        print(lecture)
-        
         deleteLectureUseCase.execute(frameId: selectedFrameId ?? 0, lectureId: lecture.id) .sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -234,34 +231,73 @@ extension TimetableViewModel {
         }.store(in: &subscriptions)
         
     }
+    
+    private func fetchMySemesters() {
+        fetchMySemesterUseCase.execute()
+            .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
+                guard let self = self else { return Just([]).eraseToAnyPublisher() }
+                let semesters = response.semesters
+                return semesters.publisher
+                    .flatMap { semester -> AnyPublisher<FrameData, Never> in
+                        self.fetchFrame(for: semester)
+                    }
+                    .collect()
+                    .eraseToAnyPublisher()
+            }
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("Failed fetching semesters: \(error)")
+                }
+            }, receiveValue: { [weak self] fetchedFrames in
+                guard let self = self else { return }
+                print()
+                print(self.sortFrames(fetchedFrames), terminator: "123")
+                self.frameData = self.sortFrames(fetchedFrames)
+            })
+            .store(in: &subscriptions)
+    }
     private func sortFrames(_ frames: [FrameData]) -> [FrameData] {
-         func sortSemester(_ semester: String) -> (year: Int, priority: Int) {
-             var year = 0
-             var priority = 0
-             
-             if semester.contains("겨울") {
-                 year = Int(semester.replacingOccurrences(of: "겨울", with: "")) ?? 0
-                 priority = 4
-             } else if semester.contains("여름") {
-                 year = Int(semester.replacingOccurrences(of: "여름", with: "")) ?? 0
-                 priority = 2
-             } else if semester.hasSuffix("2") {
-                 year = Int(String(semester.dropLast())) ?? 0
-                 priority = 3
-             } else if semester.hasSuffix("1") {
-                 year = Int(String(semester.dropLast())) ?? 0
-                 priority = 1
-             }
-             
-             return (year, priority)
-         }
-         
-         return frames.sorted {
-             let left = sortSemester($0.semester)
-             let right = sortSemester($1.semester)
-             return left.year > right.year || (left.year == right.year && left.priority > right.priority)
-         }
-     }
+        func sortSemester(_ semester: String) -> (year: Int, priority: Int) {
+            var year = 0
+            var priority = 0
+            
+            // '20242', '20241' 형식 처리
+            if let yearValue = Int(semester.prefix(4)) {
+                year = yearValue
+                if semester.hasSuffix("2") {
+                    priority = 1 // 2학기 (겨울 다음 우선순위)
+                } else if semester.hasSuffix("1") {
+                    priority = 3 // 1학기 (가장 낮은 우선순위)
+                }
+            }
+            
+            // '2024-여름', '2024-겨울' 형식 처리
+            if semester.contains("여름") {
+                year = Int(semester.prefix(4)) ?? 0
+                priority = 2 // 여름학기 (2학기 다음 우선순위)
+            } else if semester.contains("겨울") {
+                year = Int(semester.prefix(4)) ?? 0
+                priority = 0 // 겨울학기 (가장 높은 우선순위)
+            }
+            
+            return (year, priority)
+        }
+        
+        // 프레임 정렬
+        return frames.sorted {
+            let left = sortSemester($0.semester)
+            let right = sortSemester($1.semester)
+            
+            // 동일 연도인 경우 우선순위로 정렬
+            if left.year == right.year {
+                return left.priority < right.priority
+            }
+            // 연도가 다르면 최신 연도 우선
+            return left.year > right.year
+        }
+    }
+
+
      
      // MARK: - Modified Methods
      
@@ -288,30 +324,7 @@ extension TimetableViewModel {
          }.store(in: &subscriptions)
      }
      
-     private func fetchMySemesters() {
-         fetchMySemesterUseCase.execute()
-             .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
-                 guard let self = self else { return Just([]).eraseToAnyPublisher() }
-                 let semesters = response.semesters
-                 return semesters.publisher
-                     .flatMap { semester -> AnyPublisher<FrameData, Never> in
-                         self.fetchFrame(for: semester)
-                     }
-                     .collect()
-                     .eraseToAnyPublisher()
-             }
-             .sink(receiveCompletion: { completion in
-                 if case let .failure(error) = completion {
-                     Log.make().error("Failed fetching semesters: \(error)")
-                 }
-             }, receiveValue: { [weak self] fetchedFrames in
-                 guard let self = self else { return }
-                 
-                 self.frameData = self.sortFrames(fetchedFrames)
-                 Log.make().info("FrameData updated: \(self.frameData)")
-             })
-             .store(in: &subscriptions)
-     }
+  
     private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
         fetchFrameUseCase.execute(semester: semester)
             .map { frames -> FrameData in
@@ -329,7 +342,6 @@ extension TimetableViewModel {
 extension TimetableViewModel {
     
     private func modifyLecture(lecture: LectureData, isAdd: Bool) {
-        print(isAdd)
         if isAdd {
             postLecture(lecture: lecture)
         } else {
