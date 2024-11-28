@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ClassComponentView: UIView {
+final class ClassComponentView: UIView, UITextFieldDelegate {
     
     var textValue: String {
         return textField.text ?? ""
@@ -41,11 +41,17 @@ final class ClassComponentView: UIView {
         textField.placeholder = "\(text)\(text.hasFinalConsonant() ? "을":"를") 입력하세요."
         pointLabel.isHidden = !isPoint
         mainLabel.isHidden = isPoint
+        textField.delegate = self
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     // MARK: - Setup Views
