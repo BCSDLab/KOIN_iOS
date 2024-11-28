@@ -181,7 +181,6 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         bind()
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
-        inputSubject.send(.getNoticeInfo)
         configureView()
         shopCollectionView.storeDelegate = self
         configureTapGesture()
@@ -195,6 +194,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
     }
     
@@ -258,8 +258,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
                 self?.updateBusTime(response)
             case .moveBusItem:
                 self?.scrollToBusItem()
-            case let .updateHotArticles(articles):
-                self?.updateHotArticles(articles: articles)
+            case let .updateNoticeBanners(hotNoticeArticlesInfo, keywordNoticePhrases):
+                self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
@@ -302,7 +302,8 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId in
+        noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNoticeBanner, .click, noticeTitle))
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
@@ -313,6 +314,18 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
             let viewController = NoticeDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] bannerIndex in
+            let bannerLogValue = ["자취방 양도", "안내글", "근로", "해외탐방"]
+            let logValue = bannerLogValue[bannerIndex]
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.toManageKeyword, .click, logValue))
+            let service = DefaultNoticeService()
+            let repository = DefaultNoticeListRepository(service: service)
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+            let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: notiRepository), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: notiRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+            let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
@@ -321,6 +334,7 @@ extension HomeViewControllerA {
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
            navigateToNoticeList()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.appMainNoticeDetail, .click, "더보기"))
         }
         else if sender == goDiningPageButton {
             navigatetoDining()
@@ -436,8 +450,8 @@ extension HomeViewControllerA {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO]) {
-        noticeListCollectionView.updateNoticeList(articles)
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
+        noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     
     private func putImage(data: ShopCategoryDTO) {
@@ -445,17 +459,24 @@ extension HomeViewControllerA {
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
-        var logValue: String = ""
-        
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            logValue = "더보기X"
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기X"))
+        }
+        else if result.variableName == .mainDiningNew {
+            goDiningPageButton.isHidden = false
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기O"))
+        }
+        else if result.variableName == .bannerNew {
+            noticePageControl.numberOfPages = 5
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점O"))
+            inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            logValue = "더보기O"
-            goDiningPageButton.isHidden = false
+            noticePageControl.numberOfPages = 4
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점X"))
+            inputSubject.send(.getNoticeBanner(nil))
         }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, logValue))
     }
     
     func didTapCell(at id: Int) {

@@ -73,8 +73,6 @@ extension NoticeListCollectionViewCell {
     
     private func configureView() {
         contentView.backgroundColor = .appColor(.neutral100)
-        contentView.layer.cornerRadius = 8
-        self.layer.cornerRadius = 8
         setUpLayouts()
         setUpConstraints()
     }
