@@ -208,7 +208,19 @@ extension TimetableViewController {
         // 이미 사용된 body 색상을 추적
         var usedColors: Set<UIColor> = Set(existingLectureViews.compactMap { $0.backgroundColor })
         
-        // 사용 가능한 색상 쌍에서 body 색상이 이미 사용된 것을 제외
+        // 강의 ID와 할당된 색상 쌍을 저장
+        var lectureColorMap: [Int: (UIColor, UIColor)] = [:]
+        
+        for lectureView in existingLectureViews {
+            let lecture = lectureView.info // `info`가 Optional이 아니므로 바로 사용 가능
+            if let bodyColor = lectureView.backgroundColor, let headerColor = lectureView.separateView.backgroundColor {
+                lectureColorMap[lecture.id] = (bodyColor, headerColor)
+            }
+        }
+
+
+        
+        // 사용 가능한 색상 쌍에서 이미 사용된 것을 제외
         var unusedColorPairs = timetableColors.compactMap { colorPair -> (UIColor, UIColor)? in
             let bodyColor = UIColor.timetableColor(_name: colorPair.0)
             let headerColor = UIColor.timetableColor(_name: colorPair.1)
@@ -220,15 +232,22 @@ extension TimetableViewController {
             let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 } // 요일별로 그룹화
             
             for (day, times) in groupedByDay {
-                let separatedTimes = splitIntoContinuousRanges(times) // 연속된 시간을 나눔
+                let separatedTimes = times.splitIntoContinuousRanges() // 연속된 시간을 나눔
                 
                 for range in separatedTimes {
                     if let firstTime = range.first {
                         let width = Int(containerView.frame.width / 5) + 1 // 5열 기준
                         let height = 35
                         
-                        // 색상 쌍을 가져옴 (사용되지 않은 색상, 없으면 기본값)
-                        let colorPair = unusedColorPairs.isEmpty ? (UIColor.appColor(.neutral300), UIColor.appColor(.neutral800)) : unusedColorPairs.removeFirst()
+                        // 색상 쌍을 가져옴 (기존 강의 색상이 있으면 동일한 색 사용)
+                        let colorPair: (UIColor, UIColor)
+                        if let existingColor = lectureColorMap[lecture.id] {
+                            colorPair = existingColor
+                        } else {
+                            colorPair = unusedColorPairs.isEmpty ? (UIColor.appColor(.neutral300), UIColor.appColor(.neutral800)) : unusedColorPairs.removeFirst()
+                            lectureColorMap[lecture.id] = colorPair // 새 강의에 색상 맵핑
+                        }
+                        
                         let bodyColor = colorPair.0
                         let headerColor = colorPair.1
                         
@@ -261,8 +280,6 @@ extension TimetableViewController {
             }
         }
     }
-
-
     
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
