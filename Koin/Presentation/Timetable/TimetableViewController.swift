@@ -354,14 +354,30 @@ extension TimetableViewController {
     }
 
 
-    // 이미지 저장 콜백
+   
     @objc private func saveImageCallback(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            print("이미지 저장 실패: \(error.localizedDescription)")
+            // 저장 실패 시 알림
+            showAlert(title: "저장 실패", message: error.localizedDescription)
         } else {
-            print("이미지 저장 성공!")
+            // 저장 성공 시 알림
+            showAlert(title: "저장 성공", message: "이미지가 앨범에 저장되었습니다.")
         }
     }
+
+    // 알림창을 표시하는 메서드
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default) { _ in
+            // 확인 버튼을 누르면 알림창 닫힘
+        }
+        alert.addAction(action)
+        // 현재 화면에 알림창 표시
+        if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
+            topViewController.present(alert, animated: true, completion: nil)
+        }
+    }
+
 
 }
 

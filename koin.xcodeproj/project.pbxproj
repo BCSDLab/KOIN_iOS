@@ -281,6 +281,7 @@
 		D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A12C3CFAA500048F45 /* ScoreView.swift */; };
 		D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */; };
 		D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */; };
+		D24858392CF86D46009F3698 /* TempExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24858382CF86D46009F3698 /* TempExtention.swift */; };
 		D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD222C12DB73000813F9 /* DiningRepository.swift */; };
 		D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */; };
 		D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD272C12DCCC000813F9 /* DiningService.swift */; };
@@ -788,6 +789,7 @@
 		D23944A12C3CFAA500048F45 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionView.swift; sourceTree = "<group>"; };
 		D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		D24858382CF86D46009F3698 /* TempExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TempExtention.swift; path = ../../../../../TempExtention.swift; sourceTree = "<group>"; };
 		D249CD222C12DB73000813F9 /* DiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRepository.swift; sourceTree = "<group>"; };
 		D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCase.swift; sourceTree = "<group>"; };
 		D249CD272C12DCCC000813F9 /* DiningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningService.swift; sourceTree = "<group>"; };
@@ -2519,6 +2521,7 @@
 				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
 				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
 				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
+				D24858382CF86D46009F3698 /* TempExtention.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3191,6 +3194,7 @@
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
 				833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */,
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
+				D24858392CF86D46009F3698 /* TempExtention.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
