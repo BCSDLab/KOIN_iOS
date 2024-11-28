@@ -84,7 +84,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
         case .deleteFrame(let id):
             return ["id": id]
         case .createFrame(let semester):
-            return ["semester": semester, "timetable_name": "시간표 1"]
+            return ["semester": semester]
         case .modifyFrame(let frame):
             return ["timetable_name": frame.timetableName, "is_main": frame.isMain]
         case .fetchLecture(let id):
