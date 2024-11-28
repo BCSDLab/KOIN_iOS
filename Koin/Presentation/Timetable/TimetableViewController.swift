@@ -128,6 +128,8 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
+            print(lecture)
+            
             self?.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
         }.store(in: &subscriptions)
         
@@ -160,7 +162,7 @@ final class TimetableViewController: UIViewController {
         
         deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
             self?.deleteLectureView.isHidden = true
-            self?.inputSubject.send(.modifyLecture(lecture, false))
+            self?.inputSubject.send(._deleteLecture(lecture))
             
         }.store(in: &subscriptions)
     }

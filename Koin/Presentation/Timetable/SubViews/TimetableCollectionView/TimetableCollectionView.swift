@@ -35,7 +35,6 @@ final class TimetableCollectionView: UICollectionView, UICollectionViewDataSourc
     
     func updateLectureData(lectureData: [LectureData]) {
         self.lectureData = lectureData
-        print(lectureData)
         reloadData()
     }
     
