@@ -18,14 +18,16 @@ final class FrameListViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let deleteFrameModalViewController: DeleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216)
     
     private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
     
     // MARK: - Initialization
-    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return .leastNormalMagnitude // 기본 여백 제거
+    }
     init(viewModel: TimetableViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -45,6 +47,9 @@ final class FrameListViewController: UIViewController {
         configureView()
         setUpTableView()
         inputSubject.send(.fetchFrameList)
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0 // 섹션 헤더 상단 간격 제거
+        }
     }
     
     
@@ -121,9 +126,6 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         viewModel.selectedSemester = viewModel.frameData[section].semester
         viewModel.selectedFrameId = viewModel.frameData[section].frame[row].id
         navigationController?.popViewController(animated: true)
-        print("셀 탭 이벤트 발생: Section \(section), Row \(row), Timetable Name: \(timetable.timetableName)")
-        
-        // 원하는 동작 수행 (예: 상세 화면으로 이동)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 55 // 원하는 셀 높이 설정
@@ -131,7 +133,7 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60 // 원하는 높이 설정
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.frameData.count
     }
@@ -161,9 +163,14 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         addButton.setImage(UIImage.appImage(asset: .plusBold), for: .normal)
         addButton.tag = section // 섹션 정보를 태그로 저장
         addButton.addTarget(self, action: #selector(addTimetableTapped(_:)), for: .touchUpInside)
-        
+        let view1 = UIView()
+        let view2 = UIView()
+        view1.backgroundColor = UIColor.appColor(.neutral300)
+        view2.backgroundColor = UIColor.appColor(.neutral300)
         headerView.addSubview(label)
         headerView.addSubview(addButton)
+        headerView.addSubview(view1)
+        headerView.addSubview(view2)
         
         label.snp.makeConstraints { make in
             make.leading.equalTo(headerView.snp.leading).offset(24)
@@ -174,9 +181,22 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
             make.centerY.equalTo(headerView.snp.centerY)
             make.width.height.equalTo(24)
         }
+        view1.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalTo(headerView.snp.leading).offset(15)
+            make.trailing.equalTo(headerView.snp.trailing)
+            make.height.equalTo(1)
+        }
+        view2.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.equalTo(headerView.snp.leading).offset(15)
+            make.trailing.equalTo(headerView.snp.trailing)
+            make.height.equalTo(1)
+        }
         
         return headerView
     }
+    
 }
 
 extension FrameListViewController {
