@@ -345,12 +345,12 @@ extension TimetableViewModel {
     }
     
     private func deleteLecture(lecture: LectureData) {
-        deleteLectureUseCase.execute(frameId: selectedFrameId ?? 0, lectureId: lecture.id).sink { completion in
+        _deleteLectureUseCase.execute(id: lecture.id).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] _ in
-            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor}
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == lecture.professor}
         }.store(in: &subscriptions)
         
     }
