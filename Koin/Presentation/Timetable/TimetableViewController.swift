@@ -16,7 +16,27 @@ final class TimetableViewController: UIViewController {
     private let inputSubject: PassthroughSubject<TimetableViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
+    
     // MARK: - UI Components
+    
+    private let timetableColors: [(TimetableColorAsset, TimetableColorAsset)] = [
+        (.body1, .header1),
+        (.body2, .header2),
+        (.body3, .header3),
+        (.body4, .header4),
+        (.body5, .header5),
+        (.body6, .header6),
+        (.body7, .header7),
+        (.body8, .header8),
+        (.body9, .header9),
+        (.body10, .header10),
+        (.body11, .header11),
+        (.body12, .header12),
+        (.body13, .header13),
+        (.body14, .header14),
+        (.body15, .header15)
+    ]
+
     
     private let deleteLectureView = DeleteLectureView().then {
         $0.isHidden = true
@@ -171,23 +191,55 @@ extension TimetableViewController {
     @objc private func modifySemesterButtonTapped() {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
-    
     private func updateTimetable(lectureData: [LectureData]) {
-        containerView.subviews.forEach { $0.removeFromSuperview() }
+        // 현재 남아있는 LectureView들의 `info`를 비교하기 위해 사용
+        let existingLectureViews = containerView.subviews.compactMap { $0 as? LectureView }
         
-        for lecture in lectureData {
-            let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 }
+        // 새로 추가된 LectureData와 기존 LectureView를 비교
+        let existingLectureInfos = Set(existingLectureViews.map { $0.info })
+        let newLectureInfos = Set(lectureData)
+        
+        // 추가된 강의 데이터 (새로운 데이터)
+        let addedLectures = newLectureInfos.subtracting(existingLectureInfos)
+        // 제거된 강의 데이터 (기존에 있던 데이터 중 새로 들어온 데이터에 없는 경우)
+        let removedLectureViews = existingLectureViews.filter { !newLectureInfos.contains($0.info) }
+        removedLectureViews.forEach { $0.removeFromSuperview() }
+        
+        // 이미 사용된 body 색상을 추적
+        var usedColors: Set<UIColor> = Set(existingLectureViews.compactMap { $0.backgroundColor })
+        
+        // 사용 가능한 색상 쌍에서 body 색상이 이미 사용된 것을 제외
+        var unusedColorPairs = timetableColors.compactMap { colorPair -> (UIColor, UIColor)? in
+            let bodyColor = UIColor.timetableColor(_name: colorPair.0)
+            let headerColor = UIColor.timetableColor(_name: colorPair.1)
+            return usedColors.contains(bodyColor) ? nil : (bodyColor, headerColor)
+        }
+        
+        // 새로운 강의 데이터를 추가
+        for lecture in addedLectures {
+            let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 } // 요일별로 그룹화
             
             for (day, times) in groupedByDay {
-                let separatedTimes = splitIntoContinuousRanges(times)
+                let separatedTimes = splitIntoContinuousRanges(times) // 연속된 시간을 나눔
                 
                 for range in separatedTimes {
                     if let firstTime = range.first {
-                        let width = Int(containerView.frame.width / 5) + 1// 5열 기준
+                        let width = Int(containerView.frame.width / 5) + 1 // 5열 기준
                         let height = 35
                         
+                        // 색상 쌍을 가져옴 (사용되지 않은 색상, 없으면 기본값)
+                        let colorPair = unusedColorPairs.isEmpty ? (UIColor.appColor(.neutral300), UIColor.appColor(.neutral800)) : unusedColorPairs.removeFirst()
+                        let bodyColor = colorPair.0
+                        let headerColor = colorPair.1
+                        
                         // LectureView 생성
-                        let lectureView = LectureView(info: lecture, color: UIColor.appColor(.neutral300))
+                        let lectureView = LectureView(info: lecture, color: bodyColor)
+                        lectureView.separateView.backgroundColor = headerColor // separateView는 headerColor 사용
+                        
+                        // 나머지 3개의 UI 요소에 bodyColor 적용
+                        lectureView.backgroundColor = bodyColor
+                        lectureView.lectureNameLabel.backgroundColor = bodyColor
+                        lectureView.professorNameLabel.backgroundColor = bodyColor
                         
                         // GestureRecognizer 추가
                         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLectureTap(_:)))
@@ -201,11 +253,16 @@ extension TimetableViewController {
                             make.top.equalTo(containerView.snp.top).offset(height * (firstTime % 100))
                             make.leading.equalTo(containerView.snp.leading).offset(width * day)
                         }
+                        
+                        // 새로 추가된 body 색상을 사용된 색상으로 추가
+                        usedColors.insert(bodyColor)
                     }
                 }
             }
         }
     }
+
+
     
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
