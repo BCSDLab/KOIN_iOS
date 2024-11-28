@@ -136,10 +136,6 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         return viewModel.frameData.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.frameData[section].semester.reverseFormatSemester() // 섹션 헤더에 학기 이름 표시
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.frameData[section].frame.count
     }
@@ -158,7 +154,7 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.backgroundColor = .systemBackground
         
         let label = UILabel()
-        label.text = viewModel.frameData[section].semester
+        label.text = viewModel.frameData[section].semester.reverseFormatSemester()
         label.font = UIFont.appFont(.pretendardBold, size: 20)
         
         let addButton = UIButton()
