@@ -101,6 +101,7 @@ enum ImageAsset: String {
     case store
     case menu
     case arrowUpLeft
+    case noticeBell
 }
 
 enum SFSymbols: String {

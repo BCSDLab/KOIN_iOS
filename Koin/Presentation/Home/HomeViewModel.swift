@@ -19,7 +19,8 @@ final class HomeViewModel: ViewModelProtocol {
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
-        case getNoticeInfo
+        case getNoticeBanner(Date?)
+        case getAbTestResult(String)
     }
     
     // MARK: - Output
@@ -27,10 +28,11 @@ final class HomeViewModel: ViewModelProtocol {
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateBus(BusCardInformation)
-        case updateHotArticles([NoticeArticleDTO])
+        case updateNoticeBanners([NoticeArticleDTO], ((String, String), Int)?)
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case moveBusItem
+        case setAbTestResult(AssignAbTestResponse)
     }
     
     // MARK: - Properties
@@ -44,6 +46,8 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkVersionUseCase: CheckVersionUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
+    private let assignAbTestUseCase: AssignAbTestUseCase
+    private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -54,7 +58,7 @@ final class HomeViewModel: ViewModelProtocol {
          fetchBusInformationListUseCase: FetchBusInformationListUseCase,
          fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
-         dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase) {
+         dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase, assignAbTestUseCase: AssignAbTestUseCase, fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -63,6 +67,8 @@ final class HomeViewModel: ViewModelProtocol {
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.dateProvider = dateProvider
         self.checkVersionUseCase = checkVersionUseCase
+        self.assignAbTestUseCase = assignAbTestUseCase
+        self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -82,9 +88,10 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
-            case .getNoticeInfo:
-                self?.getHotNoticeArticles()
-
+            case let .getNoticeBanner(date):
+                self?.getNoticeBanners(date: date)
+            case let .getAbTestResult(abTestTitle):
+                self?.getAbTestResult(abTestTitle: abTestTitle)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -168,14 +175,39 @@ extension HomeViewModel {
         getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
     }
     
-    private func getHotNoticeArticles() {
+    private func getNoticeBanners(date: Date?) {
+        var phrase: ((String, String), Int) = (("", ""), 0)
+        if let date = date {
+            phrase = fetchKeywordNoticePhraseUseCase.execute(date: date)
+        }
         fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] articles in
-            self?.outputSubject.send(.updateHotArticles(articles))
+            if date == nil {
+                self?.outputSubject.send(.updateNoticeBanners(articles, nil))
+            }
+            else {
+                self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
+            }
         }.store(in: &subscriptions)
+    }
+    
+    private func getAbTestResult(abTestTitle: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
+            .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
+            .sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                if abTestTitle == "c_keyword_ banner_v1" {
+                    self?.getNoticeBanners(date: nil)
+                }
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
+        }).store(in: &subscriptions)
     }
 }
 

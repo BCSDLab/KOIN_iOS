@@ -21,6 +21,10 @@ enum UserAssignType: String, Decodable {
     case a = "A", b = "B", c = "C", d = "D", e = "E"
     case shareOriginal = "share_original"
     case shareNew = "share_new"
+    case mainDiningOriginal = "main_dining_original"
+    case mainDiningNew = "main_dining_new"
+    case bannerOriginal = "banner_original"
+    case bannerNew = "banner_new"
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

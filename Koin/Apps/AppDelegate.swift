@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     // schemeUri에서 ID 추출
                     if let schemeUri = userInfo["schemeUri"] as? String {
                         
-                        guard let id = extractID(from: schemeUri) else { return }// schemeUri에서 ID 추출하는 함수 호출
+                        guard let id = extractValue(from: schemeUri, value: "id") else { return }// schemeUri에서 ID 추출하는 함수 호출
                         guard let intId = Int(id) else { return }
                         let currentVc = UIApplication.topViewController()
                              let service = DefaultNoticeService()
@@ -47,7 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                              let vc = NoticeDataViewController(viewModel: viewModel)
                              currentVc?.navigationController?.pushViewController(vc, animated: true)
 
-                        
+                        if let keyword = extractValue(from: schemeUri, value: "keyword") {
+                            let logAnalyticsEventUseCase = 
+                            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: MockAnalyticsService()))
+                            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.keywordNotification, category: .notification, value: keyword)
+                        }
                     } else {
                         print("No schemeUri found")
                         
@@ -61,14 +65,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    private func extractID(from urlString: String) -> String? {
+    private func extractValue(from urlString: String, value: String) -> String? {
          // URLComponents로 URL을 파싱
-         var components = URLComponents(string: urlString)
+        let components = URLComponents(string: urlString)
          
          // URL 쿼리 아이템에서 "id" 추출
-         return components?.queryItems?.first(where: { $0.name == "id" })?.value
+         return components?.queryItems?.first(where: { $0.name == value })?.value
      }
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         KakaoSDK.initSDK(appKey: Bundle.main.kakaoApiKey)
         let appearance = UINavigationBarAppearance()
