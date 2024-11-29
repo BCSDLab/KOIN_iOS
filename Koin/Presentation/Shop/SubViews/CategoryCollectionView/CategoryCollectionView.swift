@@ -45,8 +45,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         selectedId = id
         for case let cell as CategoryCollectionViewCell in visibleCells {
             if let indexPath = indexPath(for: cell) {
-                let categoryIndex = indexPath.section == 0 ? indexPath.row : indexPath.row + 6
-                let category = shopCategories[categoryIndex]
+                let category = shopCategories[indexPath.row]
                 let isSelected = category.id == id
                 cell.configure(info: category, isSelected)
             }
@@ -54,39 +53,26 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         selectedCategoryPublisher.send(selectedId)
     }
     
-    // MARK: UICollectionViewDataSource
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2 // 상단 섹션과 하단 섹션 2개로 나눔
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return section == 0 ? 6 : 5 // 첫 번째 섹션에는 6개, 두 번째 섹션에는 5개 아이템
-    }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else {
             return UICollectionViewCell()
         }
         
-        let categoryIndex = indexPath.section == 0 ? indexPath.row : indexPath.row + 6
         
-        // 범위 검사를 통해 안전하게 데이터 할당
-        guard categoryIndex < shopCategories.count else {
-            return cell
-        }
-        
-        let category = shopCategories[categoryIndex]
+
+        let category = shopCategories[indexPath.row]
         let isSelected = category.id == selectedId
         cell.configure(info: category, isSelected)
         
         return cell
     }
 
-    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        shopCategories.count
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryIndex = indexPath.section == 0 ? indexPath.row : indexPath.row + 6
-        let category = shopCategories[categoryIndex]
+        let category = shopCategories[indexPath.row]
         selectedId = category.id
         cellTapPublisher.send(selectedId)
         reloadData()
@@ -113,7 +99,7 @@ extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
     
     // 줄 간격 설정 (수평 레이아웃에서는 적용되지 않음)
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10 // 줄 간격 10
+        return 30 // 줄 간격 10
     }
     
     // 섹션 내부 패딩 설정
