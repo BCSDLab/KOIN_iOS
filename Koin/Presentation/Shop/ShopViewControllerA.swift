@@ -74,6 +74,32 @@ final class ShopViewControllerA: UIViewController {
         return textField
     }()
     
+    private let searchedShopCollectionView: RelatedShopCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        let screenWidth = UIScreen.main.bounds.width
+        let cellWidth = screenWidth - 32
+        let collectionView = RelatedShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 40)
+        flowLayout.minimumLineSpacing = 0
+        collectionView.isScrollEnabled = false
+        collectionView.isHidden = true
+        return collectionView
+    }()
+    
+    private let dimView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        view.isHidden = true
+        return view
+    }()
+    
+    private let reviewTooltipImageView = CancelableImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.setUpImage(image: UIImage.appImage(asset: .reviewTooltip) ?? UIImage())
+        $0.isHidden = true
+    }
+    
     private lazy var shopCollectionView: ShopInfoCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -107,15 +133,28 @@ final class ShopViewControllerA: UIViewController {
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         hideKeyboardWhenTappedAround()
+        checkAndShowTooltip()
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView))
+        tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
+        view.addGestureRecognizer(tapGesture)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
     }
-    
+    @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
+        // 터치된 위치가 searchTextField 외부인지 확인하여 컬렉션 뷰를 숨기고 키보드를 내림
+        if !searchTextField.frame.contains(sender.location(in: view)) {
+            searchedShopCollectionView.isHidden = true
+            dimView.isHidden = true
+            searchTextField.resignFirstResponder() // 키보드 내리기
+        }
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         eventShopCollectionView.stopAutoScroll()
@@ -160,6 +199,9 @@ final class ShopViewControllerA: UIViewController {
                 break
             case .updateBeneficialShops(_):
                 break
+            case let .showSearchedResult(result):
+                self?.searchedShopCollectionView.updateShop(keywords: result)
+                print(result)
             }
         }.store(in: &subscriptions)
         
@@ -196,10 +238,34 @@ final class ShopViewControllerA: UIViewController {
         shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
             self?.filterToggleLogEvent(toggleType: toggleType)
         }.store(in: &subscriptions)
+        
+        searchedShopCollectionView.selectedShopIdPublisher.sink { [weak self] shopId in
+            self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
+        }.store(in: &subscriptions)
+        
+        reviewTooltipImageView.onXButtonTapped = { [weak self] in
+            self?.reviewTooltipImageView.isHidden = true
+            UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
+            print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
+        }
     }
 }
 
 extension ShopViewControllerA {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        searchedShopCollectionView.isHidden = false
+        dimView.isHidden = false
+        inputSubject.send(.searchTextChanged(text))
+    }
+    
+    private func checkAndShowTooltip() {
+        let hasShownTooltip = UserDefaults.standard.bool(forKey: "hasShownReviewTooltip")
+        if !hasShownTooltip {
+            reviewTooltipImageView.isHidden = false
+        }
+        
+    }
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -266,11 +332,12 @@ extension ShopViewControllerA {
         let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: shopRepository)
         let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
         let fetchShopReviewListUsecase = DefaultFetchShopReviewListUseCase(shopRepository: shopRepository)
+        let postCallNotificationUseCase = DefaultPostCallNotificationUseCase(shopRepository: shopRepository)
         let fetchMyReviewUseCase = DefaultFetchMyReviewUseCase(shopRepository: shopRepository)
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
         let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
@@ -292,10 +359,6 @@ extension ShopViewControllerA {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        inputSubject.send(.searchTextChanged(text))
-    }
     
     @objc private func textFieldClicked(_ textField: UITextField) {
         self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
@@ -305,7 +368,7 @@ extension ShopViewControllerA {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel].forEach {
+        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel, reviewTooltipImageView, searchedShopCollectionView, dimView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -324,8 +387,19 @@ extension ShopViewControllerA {
             make.height.equalTo(44)
         }
         
+        searchedShopCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchTextField.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(200)
+        }
+        dimView.snp.makeConstraints { make in
+            make.top.equalTo(searchedShopCollectionView.snp.bottom)
+            make.leading.trailing.equalTo(searchedShopCollectionView)
+            make.bottom.equalTo(view.snp.bottom)
+        }
+        
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(19)
+            make.top.equalTo(searchTextField.snp.bottom)
             make.leading.equalTo(scrollView.snp.leading).offset(23)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-23)
             make.height.equalTo(180)
@@ -359,6 +433,13 @@ extension ShopViewControllerA {
             make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             make.height.equalTo(1)
             make.bottom.equalTo(scrollView.snp.bottom)
+        }
+        
+        reviewTooltipImageView.snp.makeConstraints { make in
+            make.width.equalTo(249)
+            make.height.equalTo(60)
+            make.leading.equalTo(shopCollectionView.snp.leading).offset(16)
+            make.bottom.equalTo(shopCollectionView.snp.top)
         }
         
     }

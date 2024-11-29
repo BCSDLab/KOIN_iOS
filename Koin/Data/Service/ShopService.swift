@@ -15,6 +15,7 @@ protocol ShopService {
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error>
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error>
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error>
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     
     func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse>
     func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse>
@@ -26,11 +27,13 @@ protocol ShopService {
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
     func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
     
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     
 }
 
 final class DefaultShopService: ShopService {
+
     
     private let networkService = NetworkService()
     
@@ -191,6 +194,25 @@ final class DefaultShopService: ShopService {
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
         return request(.fetchReviewList(requestModel))
+    }
+    
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+        return request(.searchShop(text))
+    }
+    
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ShopAPI.postCallNotification(shopId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ShopAPI.postCallNotification(shopId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {

@@ -417,6 +417,11 @@
 		D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */; };
 		D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */; };
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
+		D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */; };
+		D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */; };
+		D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2962CE5EA3E005CABEE /* RelatedShopCollectionView.swift */; };
+		D2DCB2992CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2982CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift */; };
+		D2DCB29B2CE5EA71005CABEE /* RelatedShopHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB29A2CE5EA71005CABEE /* RelatedShopHeaderView.swift */; };
 		D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */; };
 		D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */; };
 		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
@@ -490,8 +495,8 @@
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
+		832FCC912CD667940044AF23 /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = diningShare.gif; sourceTree = "<group>"; };
 		833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
-        832FCC912CD667940044AF23 /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = diningShare.gif; sourceTree = "<group>"; };
 		833D9C0D2C6B24EF00982145 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
 		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
 		833D9C132C6B28BB00982145 /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -900,6 +905,11 @@
 		D2DA83902C181A1400A2F156 /* FetchShopDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopDataUseCase.swift; sourceTree = "<group>"; };
 		D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
+		D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCallNotificationUseCase.swift; sourceTree = "<group>"; };
+		D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedKeywordsDTO.swift; sourceTree = "<group>"; };
+		D2DCB2962CE5EA3E005CABEE /* RelatedShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedShopCollectionView.swift; sourceTree = "<group>"; };
+		D2DCB2982CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedShopCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2DCB29A2CE5EA71005CABEE /* RelatedShopHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedShopHeaderView.swift; sourceTree = "<group>"; };
 		D2F13E562BD0AD7000172A9D /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
 		D2F13E5A2BD0AD8100172A9D /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
@@ -1637,6 +1647,7 @@
 				D23944812C3C24A200048F45 /* ReviewsDTO.swift */,
 				D22C54802C6A5957000826DA /* FileUploadResponse.swift */,
 				D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */,
+				D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -1972,6 +1983,7 @@
 		D27DD04F2BA608310081FD36 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D2DCB2952CE5EA23005CABEE /* RelatedShopCollectionView */,
 				D208A7AF2CA12D43007040E7 /* CallBenefitCollectionView */,
 				D27DD0542BA608310081FD36 /* CategoryCollectionView */,
 				D27DD0512BA608310081FD36 /* ShopInfoCollectionView */,
@@ -2423,6 +2435,16 @@
 			path = Land;
 			sourceTree = "<group>";
 		};
+		D2DCB2952CE5EA23005CABEE /* RelatedShopCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D2DCB2962CE5EA3E005CABEE /* RelatedShopCollectionView.swift */,
+				D2DCB2982CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift */,
+				D2DCB29A2CE5EA71005CABEE /* RelatedShopHeaderView.swift */,
+			);
+			path = RelatedShopCollectionView;
+			sourceTree = "<group>";
+		};
 		D2F13E532BD0AD3A00172A9D /* Noti */ = {
 			isa = PBXGroup;
 			children = (
@@ -2559,6 +2581,7 @@
 				D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */,
 				D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */,
 				D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */,
+				D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -2905,6 +2928,7 @@
 				837BFA562BB7E4B6001FCBD4 /* BusTimetableViewController.swift in Sources */,
 				D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */,
 				D27DD0D62BA6085E0081FD36 /* LandViewModel.swift in Sources */,
+				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */,
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
@@ -3007,6 +3031,7 @@
 				83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
+				D2DCB2992CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
@@ -3029,6 +3054,7 @@
 				D249CD2F2C1466D3000813F9 /* DiningNoticeViewController.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
+				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
 				835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */,
@@ -3129,6 +3155,7 @@
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
+				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
@@ -3300,6 +3327,7 @@
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
+				D2DCB29B2CE5EA71005CABEE /* RelatedShopHeaderView.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
 				D27DD0DE2BA6092B0081FD36 /* MenuListCollectionView.swift in Sources */,
 			);
@@ -3547,7 +3575,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3582,7 +3610,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

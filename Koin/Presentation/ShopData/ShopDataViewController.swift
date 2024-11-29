@@ -470,6 +470,7 @@ extension ShopDataViewController {
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+        inputSubject.send(.postCallNotification)
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
         let shopTitle = shopTitleLabel.text ?? ""
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, .click, shopTitle, nil, .shopCall))
