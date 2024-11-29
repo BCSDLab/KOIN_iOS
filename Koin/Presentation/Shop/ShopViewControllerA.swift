@@ -87,6 +87,13 @@ final class ShopViewControllerA: UIViewController {
         return collectionView
     }()
     
+    private let dimView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        view.isHidden = true
+        return view
+    }()
+    
     private let reviewTooltipImageView = CancelableImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.setUpImage(image: UIImage.appImage(asset: .reviewTooltip) ?? UIImage())
@@ -133,20 +140,21 @@ final class ShopViewControllerA: UIViewController {
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView))
-               tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
-               view.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
+        view.addGestureRecognizer(tapGesture)
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
     }
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
-         // 터치된 위치가 searchTextField 외부인지 확인하여 컬렉션 뷰를 숨기고 키보드를 내림
-         if !searchTextField.frame.contains(sender.location(in: view)) {
-             searchedShopCollectionView.isHidden = true
-             searchTextField.resignFirstResponder() // 키보드 내리기
-         }
-     }
+        // 터치된 위치가 searchTextField 외부인지 확인하여 컬렉션 뷰를 숨기고 키보드를 내림
+        if !searchTextField.frame.contains(sender.location(in: view)) {
+            searchedShopCollectionView.isHidden = true
+            dimView.isHidden = true
+            searchTextField.resignFirstResponder() // 키보드 내리기
+        }
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         eventShopCollectionView.stopAutoScroll()
@@ -245,13 +253,10 @@ final class ShopViewControllerA: UIViewController {
 
 extension ShopViewControllerA {
     @objc private func textFieldDidChange(_ textField: UITextField) {
-            guard let text = textField.text else { return }
-        inputSubject.send(.searchTextChanged(text))
-        }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else { return }
         searchedShopCollectionView.isHidden = false
-        return true // true를 반환하면 편집이 시작되고 키보드가 나타납니다.
+        dimView.isHidden = false
+        inputSubject.send(.searchTextChanged(text))
     }
     
     private func checkAndShowTooltip() {
@@ -363,7 +368,7 @@ extension ShopViewControllerA {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel, reviewTooltipImageView, searchedShopCollectionView].forEach {
+        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel, reviewTooltipImageView, searchedShopCollectionView, dimView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -385,7 +390,12 @@ extension ShopViewControllerA {
         searchedShopCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchTextField.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(296)
+            make.height.equalTo(200)
+        }
+        dimView.snp.makeConstraints { make in
+            make.top.equalTo(searchedShopCollectionView.snp.bottom)
+            make.leading.trailing.equalTo(searchedShopCollectionView)
+            make.bottom.equalTo(view.snp.bottom)
         }
         
         categoryCollectionView.snp.makeConstraints { make in

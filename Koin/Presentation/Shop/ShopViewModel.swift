@@ -44,7 +44,6 @@ final class ShopViewModel: ViewModelProtocol {
     private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
-    var shopCallBenefitFilterName: String = "배달비 깎아드려유"
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
         didSet {
             getShopInfo(id: selectedId)
@@ -78,6 +77,7 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeCategory(id)
             case let .searchTextChanged(text):
                 self?.searchShop(text)
+                self?.searchShops(text)
             case let .changeSortStandard(standard):
                 self?.changeSortStandard(standard)
             case .getShopInfo:
@@ -103,6 +103,10 @@ final class ShopViewModel: ViewModelProtocol {
 
 extension ShopViewModel {
     
+    private func searchShops(_ text: String) {
+        let shops = shopList.filter { $0.name.contains(text) }
+        outputSubject.send(.changeFilteredShops(shops, selectedId))
+    }
     private func fetchShopBenefits() {
         fetchShopBenefitUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
