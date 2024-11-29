@@ -22,6 +22,11 @@ final class RelatedShopCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private let arrowImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -34,13 +39,16 @@ final class RelatedShopCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
+        arrowImageView.image = nil
     }
     
     func configure(info: Keyword) {
         if info.shopIds == [] || info.shopIds == nil {
             imageView.image = UIImage.appImage(asset: .store)
+            arrowImageView.image = UIImage.appImage(asset: .arrowUpLeft)
         } else {
             imageView.image = UIImage.appImage(asset: .menu)
+            arrowImageView.image = UIImage()
         }
         nameLabel.text = info.keyword
     }
@@ -48,7 +56,7 @@ final class RelatedShopCollectionViewCell: UICollectionViewCell {
 
 extension RelatedShopCollectionViewCell {
     private func setUpLayouts() {
-        [imageView, nameLabel].forEach {
+        [imageView, nameLabel, arrowImageView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -63,6 +71,11 @@ extension RelatedShopCollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(imageView.snp.trailing).offset(4)
             make.centerY.equalTo(self.snp.centerY)
+        }
+        arrowImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalTo(self.snp.trailing).offset(-24)
+            make.height.width.equalTo(16)
         }
     }
     

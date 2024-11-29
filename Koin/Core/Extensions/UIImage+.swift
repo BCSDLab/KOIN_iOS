@@ -100,6 +100,7 @@ enum ImageAsset: String {
     case reviewTooltip
     case store
     case menu
+    case arrowUpLeft
 }
 
 enum SFSymbols: String {

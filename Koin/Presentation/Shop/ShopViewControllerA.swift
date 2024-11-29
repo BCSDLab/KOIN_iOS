@@ -389,7 +389,7 @@ extension ShopViewControllerA {
         }
         
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(19)
+            make.top.equalTo(searchTextField.snp.bottom)
             make.leading.equalTo(scrollView.snp.leading).offset(23)
             make.trailing.equalTo(scrollView.snp.trailing).offset(-23)
             make.height.equalTo(180)
