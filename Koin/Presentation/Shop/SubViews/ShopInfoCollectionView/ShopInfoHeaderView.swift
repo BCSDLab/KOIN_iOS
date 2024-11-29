@@ -61,7 +61,7 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         }
     }
     private func addButtonItems() {
-        let categories = ["# 리뷰순", "# 별점순", "# 영업중", "# 배달 가능"]
+        let categories = ["▼ 리뷰순", "▼ 별점순", "# 영업중", "# 배달 가능"]
         let widthSize: CGFloat = 76.25
         
         for (index, categoryTitle) in categories.enumerated() {

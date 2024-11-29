@@ -97,6 +97,10 @@ enum ImageAsset: String {
     case smallBenefit
     case koinBigLogo
     case power
+    case reviewTooltip
+    case store
+    case menu
+    case arrowUpLeft
     case noticeBell
 }
 

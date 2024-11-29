@@ -23,6 +23,7 @@ final class ShopDataViewModel: ViewModelProtocol {
     private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let deleteReviewUseCase: DeleteReviewUseCase
+    private let postCallNotificationUseCase: PostCallNotificationUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private(set) var eventItem: [ShopEvent] = []
     private(set) var menuItem: [MenuCategory] = []
@@ -36,6 +37,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case viewDidLoad
         case fetchShopEventList
         case fetchShopMenuList
+        case postCallNotification
         case fetchShopReviewList(Int, Bool)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case deleteReview(Int, Int)
@@ -54,13 +56,14 @@ final class ShopDataViewModel: ViewModelProtocol {
         case disappearReview(Int, Int)
     }
     
-    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, shopId: Int, shopName: String, categoryId: Int?, enterByShopCallBenefit: Bool) {
+    init(fetchShopDataUseCase: FetchShopDataUseCase, fetchShopMenuListUseCase: FetchShopMenuListUseCase, fetchShopEventListUseCase: FetchShopEventListUseCase, fetchShopReviewListUseCase: FetchShopReviewListUseCase, fetchMyReviewUseCase: FetchMyReviewUseCase, deleteReviewUseCase: DeleteReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, postCallNotificationUseCase: PostCallNotificationUseCase, shopId: Int, shopName: String, categoryId: Int?, enterByShopCallBenefit: Bool) {
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
         self.fetchShopReviewListUseCase = fetchShopReviewListUseCase
         self.fetchMyReviewUseCase = fetchMyReviewUseCase
         self.deleteReviewUseCase = deleteReviewUseCase
+        self.postCallNotificationUseCase = postCallNotificationUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.shopId = shopId
@@ -98,6 +101,8 @@ final class ShopDataViewModel: ViewModelProtocol {
                 self?.fetchShopReviewList(page: 1, disappear: false)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case .postCallNotification:
+                self?.postCallNotification()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -105,6 +110,17 @@ final class ShopDataViewModel: ViewModelProtocol {
 }
 
 extension ShopDataViewModel {
+    private func postCallNotification() {
+        postCallNotificationUseCase.execute(shopId: shopId).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { response in
+            print(response)
+        }.store(in: &subscriptions)
+
+    }
+    
     private func updateReviewCount() {
         fetchShopReviewListUseCase.execute(requestModel: FetchShopReviewRequest(shopId: shopId, page: 1, sorter: fetchStandard.0)).sink { completion in
             if case let .failure(error) = completion {

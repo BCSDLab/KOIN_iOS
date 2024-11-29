@@ -51,6 +51,11 @@ final class NotiViewController: UIViewController {
         return view
     }()
     
+    private let reviewWrapView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let diningGuideLabel: UILabel = {
         let label = UILabel()
         let paragraphStyle = NSMutableParagraphStyle()
@@ -117,7 +122,19 @@ final class NotiViewController: UIViewController {
         return label
     }()
     
+    private let reviewNotiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "리뷰 작성 요청 알림"
+        return label
+    }()
+    
     private let eventSwitch: UISwitch = {
+        let uiSwitch = UISwitch()
+        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        return uiSwitch
+    }()
+    
+    private let reviewSwitch: UISwitch = {
         let uiSwitch = UISwitch()
         uiSwitch.onTintColor = UIColor.appColor(.primary500)
         return uiSwitch
@@ -138,6 +155,12 @@ final class NotiViewController: UIViewController {
     private let eventDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "모든 주변상점의 이벤트 알림을 받습니다."
+        return label
+    }()
+    
+    private let reviewDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "전화 주문 시 리뷰 작성 요청 알림을 받습니다."
         return label
     }()
     
@@ -194,6 +217,7 @@ final class NotiViewController: UIViewController {
         inputSubject.send(.getNotiAgreementList)
         soldOutSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
         eventSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+        reviewSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
         diningImageUploadSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
         mealSwitches.forEach { switchControl in
             switchControl.addTarget(self, action: #selector(switchDetailValueChanged), for: .valueChanged)
@@ -259,7 +283,9 @@ extension NotiViewController {
         switch sender {
         case soldOutSwitch: inputSubject.send(.switchChanged(.diningSoldOut, sender.isOn))
         case diningImageUploadSwitch: inputSubject.send(.switchChanged(.diningImageUpload, sender.isOn))
-        default: inputSubject.send(.switchChanged(.shopEvent, sender.isOn))
+        case eventSwitch: inputSubject.send(.switchChanged(.shopEvent, sender.isOn))
+        case reviewSwitch: inputSubject.send(.switchChanged(.reviewPrompt, sender.isOn))
+        default: break
         }
     }
     
@@ -284,7 +310,7 @@ extension NotiViewController {
     }
     
     private func changeSwitch(_ dto: NotiAgreementDTO) {
-        
+        print(dto)
         dto.subscribes?.forEach { subscribe in
             switch subscribe.type {
             case .diningSoldOut:
@@ -297,6 +323,8 @@ extension NotiViewController {
                 eventSwitch.isOn = subscribe.isPermit ?? false
             case .diningImageUpload:
                 diningImageUploadSwitch.isOn = subscribe.isPermit ?? false
+            case .reviewPrompt:
+                reviewSwitch.isOn = subscribe.isPermit ?? false
             default:
                 print("none")
             }
@@ -338,7 +366,7 @@ extension NotiViewController {
             self.view.addSubview($0)
         }
         
-        [shopGuideLabel, eventWrapView].forEach {
+        [shopGuideLabel, eventWrapView, reviewWrapView].forEach {
             self.view.addSubview($0)
         }
         
@@ -356,6 +384,9 @@ extension NotiViewController {
         
         [eventNotiLabel, eventSwitch, eventDescriptionLabel].forEach {
             eventWrapView.addSubview($0)
+        }
+        [reviewNotiLabel, reviewSwitch, reviewDescriptionLabel].forEach {
+            reviewWrapView.addSubview($0)
         }
         
     }
@@ -478,6 +509,29 @@ extension NotiViewController {
             make.top.equalTo(eventNotiLabel.snp.bottom).offset(8)
             make.height.equalTo(17)
         }
+        
+        reviewWrapView.snp.makeConstraints { make in
+            make.top.equalTo(eventWrapView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(83)
+        }
+        
+        reviewNotiLabel.snp.makeConstraints { make in
+            make.leading.equalTo(24)
+            make.height.equalTo(26)
+            make.top.equalTo(16)
+        }
+        
+        reviewSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
+        reviewSwitch.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(21)
+            make.top.equalToSuperview().inset(15)
+        }
+        reviewDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(24)
+            make.top.equalTo(reviewNotiLabel.snp.bottom).offset(8)
+            make.height.equalTo(17)
+        }
     }
     
     private func setUpViewDetails() {
@@ -488,19 +542,19 @@ extension NotiViewController {
             label.contentMode = .center
         }
         
-        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel].forEach { label in
+        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel, reviewNotiLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral800)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardMedium, size: 16)
         }
         
-        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel].forEach { label in
+        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel, reviewDescriptionLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral500)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardRegular, size: 13)
         }
         
-        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView].forEach { view in
+        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView, reviewWrapView].forEach { view in
             view.backgroundColor = .systemBackground
             view.layer.borderWidth = 0.5
             view.layer.borderColor = UIColor.appColor(.neutral100).cgColor

@@ -44,6 +44,7 @@ enum SubscribeType: String, Codable {
     case diningSoldOut = "DINING_SOLD_OUT"
     case diningImageUpload = "DINING_IMAGE_UPLOAD"
     case articleKeyWord = "ARTICLE_KEYWORD"
+    case reviewPrompt = "REVIEW_PROMPT"
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

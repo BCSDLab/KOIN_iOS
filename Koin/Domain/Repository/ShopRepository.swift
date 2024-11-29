@@ -26,7 +26,9 @@ protocol ShopRepository {
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
     func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
+    func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 
