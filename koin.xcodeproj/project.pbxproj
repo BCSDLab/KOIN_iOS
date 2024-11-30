@@ -17,10 +17,6 @@
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
 		8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCE12CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift */; };
-		8316DCE42CDF8A88009AF9A4 /* BusTimetableRouteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCE32CDF8A88009AF9A4 /* BusTimetableRouteCollectionViewCell.swift */; };
-		8316DCE72CDF8F27009AF9A4 /* ShuttleRouteCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCE62CDF8F27009AF9A4 /* ShuttleRouteCollectionViewDataSource.swift */; };
-		8316DCE92CDF8F3F009AF9A4 /* ExpressRouteCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCE82CDF8F3F009AF9A4 /* ExpressRouteCollectionViewDataSource.swift */; };
-		8316DCEB2CDF8F4D009AF9A4 /* CityRouteCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCEA2CDF8F4D009AF9A4 /* CityRouteCollectionViewDataSource.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -129,6 +125,8 @@
 		83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */; };
 		83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */; };
 		83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DED2C575C9300278ABD /* BusNumber.swift */; };
+		83E770A62CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770A52CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift */; };
+		83E770AA2CFA0AD100EB3F84 /* BusTimetableRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770A92CFA0AD100EB3F84 /* BusTimetableRouteView.swift */; };
 		83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
@@ -496,10 +494,6 @@
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCE12CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableRouteCollectionView.swift; sourceTree = "<group>"; };
-		8316DCE32CDF8A88009AF9A4 /* BusTimetableRouteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableRouteCollectionViewCell.swift; sourceTree = "<group>"; };
-		8316DCE62CDF8F27009AF9A4 /* ShuttleRouteCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleRouteCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		8316DCE82CDF8F3F009AF9A4 /* ExpressRouteCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressRouteCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		8316DCEA2CDF8F4D009AF9A4 /* CityRouteCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityRouteCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -611,6 +605,8 @@
 		83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBusTimetableDTO.swift; sourceTree = "<group>"; };
 		83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCityBusTimetableUseCase.swift; sourceTree = "<group>"; };
 		83DD0DED2C575C9300278ABD /* BusNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNumber.swift; sourceTree = "<group>"; };
+		83E770A52CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableRouteCollectionViewCell.swift; sourceTree = "<group>"; };
+		83E770A92CFA0AD100EB3F84 /* BusTimetableRouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableRouteView.swift; sourceTree = "<group>"; };
 		83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDTO.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -987,24 +983,14 @@
 			path = BusTimetableTableView;
 			sourceTree = "<group>";
 		};
-		8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteCollectionView */ = {
+		8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteView */ = {
 			isa = PBXGroup;
 			children = (
-				8316DCE52CDF8E9B009AF9A4 /* BusTimetableRouteDataSource */,
 				8316DCE12CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift */,
-				8316DCE32CDF8A88009AF9A4 /* BusTimetableRouteCollectionViewCell.swift */,
+				83E770A52CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift */,
+				83E770A92CFA0AD100EB3F84 /* BusTimetableRouteView.swift */,
 			);
-			path = BusTimetableRouteCollectionView;
-			sourceTree = "<group>";
-		};
-		8316DCE52CDF8E9B009AF9A4 /* BusTimetableRouteDataSource */ = {
-			isa = PBXGroup;
-			children = (
-				8316DCE62CDF8F27009AF9A4 /* ShuttleRouteCollectionViewDataSource.swift */,
-				8316DCE82CDF8F3F009AF9A4 /* ExpressRouteCollectionViewDataSource.swift */,
-				8316DCEA2CDF8F4D009AF9A4 /* CityRouteCollectionViewDataSource.swift */,
-			);
-			path = BusTimetableRouteDataSource;
+			path = BusTimetableRouteView;
 			sourceTree = "<group>";
 		};
 		833D9C072C6B243400982145 /* NoticeList */ = {
@@ -1244,7 +1230,7 @@
 		837BFA402BB70A77001FCBD4 /* BusTimetable */ = {
 			isa = PBXGroup;
 			children = (
-				8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteCollectionView */,
+				8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteView */,
 				8316DCD72CDF5C64009AF9A4 /* BusTimetableTableView */,
 				837BFA552BB7E4B6001FCBD4 /* BusTimetableViewController.swift */,
 				834E1CDB2BBCE3B0003D4271 /* BusTimetableViewModel.swift */,
@@ -2936,7 +2922,6 @@
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
 				D22C547D2C6A2BC9000826DA /* FetchMyReviewRequest.swift in Sources */,
 				83B7457B2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift in Sources */,
-				8316DCE42CDF8A88009AF9A4 /* BusTimetableRouteCollectionViewCell.swift in Sources */,
 				D27DD0DC2BA6090F0081FD36 /* MenuImageCollectionViewCell.swift in Sources */,
 				83DD0DE82C57478200278ABD /* FetchCityBusTimetableRequest.swift in Sources */,
 				D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */,
@@ -2986,7 +2971,6 @@
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
-				8316DCEB2CDF8F4D009AF9A4 /* CityRouteCollectionViewDataSource.swift in Sources */,
 				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
@@ -3047,6 +3031,7 @@
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				D239448C2C3C9D6D00048F45 /* ReviewListCollectionView.swift in Sources */,
+				83E770A62CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
@@ -3083,9 +3068,9 @@
 				D23944652C38432100048F45 /* EventListViewController.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
-				8316DCE92CDF8F3F009AF9A4 /* ExpressRouteCollectionViewDataSource.swift in Sources */,
 				833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */,
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
+				83E770AA2CFA0AD100EB3F84 /* BusTimetableRouteView.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
@@ -3296,7 +3281,6 @@
 				0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
 				D2908D3C2BBCDA300008F908 /* AddClassView.swift in Sources */,
-				8316DCE72CDF8F27009AF9A4 /* ShuttleRouteCollectionViewDataSource.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,

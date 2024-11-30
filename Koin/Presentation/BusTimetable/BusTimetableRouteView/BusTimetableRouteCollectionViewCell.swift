@@ -1,8 +1,8 @@
 //
-//  BusTimetableRouteCollectionViewCell.swift
+//  ShuttleTimetableRouteCollectionViewCell.swift
 //  koin
 //
-//  Created by JOOMINKYUNG on 11/9/24.
+//  Created by JOOMINKYUNG on 11/29/24.
 //
 
 import UIKit
@@ -20,7 +20,24 @@ final class BusTimetableRouteCollectionViewCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
+        super.init(frame: .zero)
+        configureView()
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(isSelected: Bool, route: String) {
+        routeLabel.text = route
+        
+        if isSelected {
+            routeLabel.font = .appFont(.pretendardBold, size: 14)
+            routeLabel.textColor = .appColor(.neutral0)
+            contentView.backgroundColor = .appColor(.primary500)
+        }
+        else {
+            routeLabel.font = .appFont(.pretendardMedium, size: 14)
+            routeLabel.textColor = .appColor(.neutral500)
+            contentView.backgroundColor = .clear
+        }
     }
 }
 
@@ -45,3 +62,4 @@ extension BusTimetableRouteCollectionViewCell {
         contentView.layer.cornerRadius = 17
     }
 }
+
