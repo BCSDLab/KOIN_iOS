@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class BusTimetableViewController: CustomViewController {
+final class BusTimetableViewController: CustomViewController, UIScrollViewDelegate {
     
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
@@ -19,6 +19,8 @@ final class BusTimetableViewController: CustomViewController {
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
     
     private let timetableHeaderView = UIView()
     
@@ -79,7 +81,9 @@ final class BusTimetableViewController: CustomViewController {
     }
     
     private let busTimetableRouteView = BusTimetableRouteView()
-
+    
+    private let expressOrCityTimetableTableView = ExpressOrCityTimetableTableView(frame: .zero, style: .plain)
+    
     
     // MARK: - Initialization
     init(viewModel: BusTimetableViewModel) {
@@ -100,6 +104,7 @@ final class BusTimetableViewController: CustomViewController {
         setUpNavigationBar()
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        scrollView.delegate = self
         bind()
         inputSubject.send(.getBusRoute(.shuttleBus))
     }
@@ -159,9 +164,12 @@ final class BusTimetableViewController: CustomViewController {
 
 extension BusTimetableViewController {
     private func setUpLayouts() {
-        view.addSubview(scrollView)
-        [navigationBarWrappedView, timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView].forEach {
-            scrollView.addSubview($0)
+        [navigationBarWrappedView, scrollView].forEach {
+            view.addSubview($0)
+        }
+        scrollView.addSubview(contentView)
+        [timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView, expressOrCityTimetableTableView].forEach {
+            contentView.addSubview($0)
         }
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
             timetableHeaderView.addSubview($0)
@@ -173,7 +181,13 @@ extension BusTimetableViewController {
     
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
-            $0.leading.trailing.bottom.top.equalToSuperview()
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(1000).priority(.low)
         }
         navigationBarWrappedView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -183,7 +197,7 @@ extension BusTimetableViewController {
         timetableHeaderView.snp.makeConstraints {
             $0.width.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalToSuperview()
             $0.height.equalTo(139)
         }
         typeOftimetableLabel.snp.makeConstraints {
@@ -235,6 +249,11 @@ extension BusTimetableViewController {
             $0.width.equalToSuperview()
             $0.top.equalTo(selectedUnderlineView.snp.bottom)
             $0.height.equalTo(62)
+        }
+        expressOrCityTimetableTableView.snp.makeConstraints {
+            $0.top.equalTo(busTimetableRouteView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     
