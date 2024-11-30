@@ -13,7 +13,7 @@ import UIKit
 final class BusTimetableViewController: CustomViewController {
     
     // MARK: - Properties
-    private var cancellables: Set<AnyCancellable> = []
+    private var subscriptions: Set<AnyCancellable> = []
     private var inputSubject: PassthroughSubject<BusTimetableViewModel.Input, Never> = .init()
     private let viewModel: BusTimetableViewModel
     
@@ -77,6 +77,8 @@ final class BusTimetableViewController: CustomViewController {
     private let selectedUnderlineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.primary500)
     }
+    
+    private let busTimetableRouteView = BusTimetableRouteView()
 
     
     // MARK: - Initialization
@@ -98,15 +100,41 @@ final class BusTimetableViewController: CustomViewController {
         setUpNavigationBar()
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        bind()
+        inputSubject.send(.getBusRoute(.shuttleBus))
     }
     
     private func bind() {
-        let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
+            switch output {
+            case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
+                self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
+            }
+        }.store(in: &subscriptions)
         
+        busTimetableRouteView.busRouteContentHeightPublisher.sink { [weak self] height in
+            DispatchQueue.main.async { [weak self] in
+                self?.busTimetableRouteView.snp.updateConstraints {
+                    $0.height.equalTo(height)
+                }
+            }
+        }.store(in: &subscriptions)
     }
     
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
         moveUnderLineView()
+        let busType: BusType
+        switch sender.selectedSegmentIndex {
+        case 0:
+            busType = .shuttleBus
+        case 1:
+            busType = .expressBus
+        default:
+            busType = .cityBus
+        }
+        inputSubject.send(.getBusRoute(busType))
     }
     
     private func moveUnderLineView() {
@@ -123,12 +151,16 @@ final class BusTimetableViewController: CustomViewController {
             }
         )
     }
+    
+    private func updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?) {
+        busTimetableRouteView.setBusType(busType: busType, firstRouteList: firstBusRoute, secondRouteList: secondBusRoute)
+    }
 }
 
 extension BusTimetableViewController {
     private func setUpLayouts() {
         view.addSubview(scrollView)
-        [navigationBarWrappedView, timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl].forEach {
+        [navigationBarWrappedView, timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView].forEach {
             scrollView.addSubview($0)
         }
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
@@ -197,6 +229,12 @@ extension BusTimetableViewController {
             $0.height.equalTo(2)
             $0.top.equalTo(busTypeSegmentControl.snp.bottom)
             $0.width.equalTo(busTypeSegmentControl.snp.width).dividedBy(busTypeSegmentControl.numberOfSegments)
+        }
+        busTimetableRouteView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.top.equalTo(selectedUnderlineView.snp.bottom)
+            $0.height.equalTo(62)
         }
     }
     
