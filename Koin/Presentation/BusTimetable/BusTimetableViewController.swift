@@ -84,6 +84,7 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     
     private let expressOrCityTimetableTableView = ExpressOrCityTimetableTableView(frame: .zero, style: .plain)
     
+    private let shuttleTimetableTableView = ShuttleTimetableTableView(frame: .zero, style: .grouped)
     
     // MARK: - Initialization
     init(viewModel: BusTimetableViewModel) {
@@ -159,6 +160,14 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     
     private func updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?) {
         busTimetableRouteView.setBusType(busType: busType, firstRouteList: firstBusRoute, secondRouteList: secondBusRoute)
+        if busType == .shuttleBus {
+            shuttleTimetableTableView.isHidden = false
+            expressOrCityTimetableTableView.isHidden = true
+        }
+        else {
+            shuttleTimetableTableView.isHidden = true
+            expressOrCityTimetableTableView.isHidden = false
+        }
     }
 }
 
@@ -168,7 +177,7 @@ extension BusTimetableViewController {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
-        [timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView, expressOrCityTimetableTableView].forEach {
+        [timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView, expressOrCityTimetableTableView, shuttleTimetableTableView].forEach {
             contentView.addSubview($0)
         }
         [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
@@ -251,6 +260,11 @@ extension BusTimetableViewController {
             $0.height.equalTo(62)
         }
         expressOrCityTimetableTableView.snp.makeConstraints {
+            $0.top.equalTo(busTimetableRouteView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        shuttleTimetableTableView.snp.makeConstraints {
             $0.top.equalTo(busTimetableRouteView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
