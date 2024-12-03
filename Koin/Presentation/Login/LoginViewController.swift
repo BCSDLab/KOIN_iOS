@@ -127,7 +127,6 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "로그인"
-        navigationController?.setNavigationBarHidden(false, animated: true)
         configureView()
         bind()
         hideKeyboardWhenTappedAround()

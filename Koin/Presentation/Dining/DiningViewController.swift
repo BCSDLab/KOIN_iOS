@@ -143,7 +143,6 @@ final class DiningViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
         bind()
         configureSwipeGestures()
         configureView()
