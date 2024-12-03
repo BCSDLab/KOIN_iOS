@@ -61,8 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         KakaoSDK.initSDK(appKey: Bundle.main.kakaoApiKey)
         
         FirebaseApp.configure()
-        setUpNavigationBar()
-        
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
@@ -128,22 +126,6 @@ extension AppDelegate {
 
 extension AppDelegate: MessagingDelegate {
     
-    private func setUpNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.appColor(.primary500)
-        
-        let font = UIFont.appFont(.pretendardMedium, size: 20)
-        let titleAttribute = [
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ]
-        appearance.titleTextAttributes = titleAttribute
-        appearance.largeTitleTextAttributes = titleAttribute
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor.appColor(.neutral0)
-    }
+ 
 }
 

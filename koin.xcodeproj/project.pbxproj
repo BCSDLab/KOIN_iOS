@@ -444,6 +444,7 @@
 		D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */; };
 		D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */; };
 		D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE802CFE96600097A388 /* NotificationHandler.swift */; };
+		D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -933,6 +934,7 @@
 		D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GA4AnalyticsRepository.swift; sourceTree = "<group>"; };
 		D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
 		D2FCBE802CFE96600097A388 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarStyle.swift"; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2060,6 +2062,7 @@
 				D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */,
 				8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */,
 				8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */,
+				D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3279,6 +3282,7 @@
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
+				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,
