@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeListViewController: CustomViewController, UIGestureRecognizerDelegate {
+final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeListViewModel
@@ -29,47 +29,42 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
         flowLayout?.scrollDirection = .horizontal
     }
     
-    private let searchButton = UIButton().then {
-        $0.setImage(.appImage(symbol: .magnifyingGlass), for: .normal)
-        $0.tintColor = .appColor(.neutral800)
-    }
-    
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
-    
-    // MARK: - Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setNavigationTitle(title: "공지사항")
-        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-        configureView()
-        bind()
-        inputSubject.send(.changeBoard(.all))
-        configureSwipeGestures()
-        tabBarCollectionView.tag = 0
-        setUpNavigationBar()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        inputSubject.send(.getUserKeywordList())
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
     
     // MARK: - Initialization
     
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "공지사항"
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let settingButton = UIBarButtonItem(
+            image: .appImage(symbol: .magnifyingGlass) , style: .plain, target: self, action: #selector(searchButtonTapped))
+        settingButton.tintColor = UIColor.appColor(.neutral800)
+        configureView()
+        bind()
+        inputSubject.send(.changeBoard(.all))
+        configureSwipeGestures()
+        tabBarCollectionView.tag = 0
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.getUserKeywordList())
+        configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     private func bind() {
@@ -122,7 +117,7 @@ final class NoticeListViewController: CustomViewController, UIGestureRecognizerD
                     self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
                 }
                 self?.inputSubject.send(.getUserKeywordList(keyword))
-        }.store(in: &subscriptions)
+            }.store(in: &subscriptions)
         
         noticeTableView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.manageKeyword, .click, "키워드관리"))
@@ -174,8 +169,8 @@ extension NoticeListViewController {
         let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-    let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
-    navigationController?.pushViewController(viewController, animated: true)
+        let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func checkAndShowToolTip(isLogined: Bool) {
@@ -205,7 +200,7 @@ extension NoticeListViewController {
             tabBarCollectionView.tag = 7
         }
     }
- 
+    
     private func updateUserKeywordList(keywords: [NoticeKeywordDTO], keywordIdx: Int) {
         noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
     }
@@ -222,27 +217,16 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, tabBarCollectionView, noticeTableView, noticeToolTipImageView, searchButton].forEach {
+        [tabBarCollectionView, noticeTableView, noticeToolTipImageView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        searchButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.trailing.equalToSuperview().inset(24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
-        }
-        
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.height.equalTo(95)
-        }
         
         tabBarCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.height.equalTo(50)
         }
         

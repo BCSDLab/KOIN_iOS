@@ -116,6 +116,7 @@ final class ShopViewControllerB: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))

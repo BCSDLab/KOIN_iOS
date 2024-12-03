@@ -9,7 +9,7 @@ import Combine
 import Then
 import UIKit
 
-final class NoticeDataViewController: CustomViewController, UIGestureRecognizerDelegate {
+final class NoticeDataViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -103,6 +103,7 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
     init(viewModel: NoticeDataViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "공지사항"
     }
     
     @available(*, unavailable)
@@ -120,13 +121,14 @@ final class NoticeDataViewController: CustomViewController, UIGestureRecognizerD
         contentTextView.isEditable = false
         contentTextView.delegate = self
         bind()
-        setNavigationTitle(title: "공지사항")
         inputSubject.send(.getNoticeData)
         inputSubject.send(.getPopularNotices)
         configureView()
-        setUpNavigationBar()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     // MARK: - Bind
@@ -318,7 +320,7 @@ extension NoticeDataViewController {
             contentView.addSubview($0)
         }
     
-        [navigationBarWrappedView, titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
+        [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
         [contentTextView, inventoryButton, attachmentGuideLabel, noticeAttachmentsTableView, urlRedirectButton].forEach {
@@ -343,14 +345,10 @@ extension NoticeDataViewController {
             $0.leading.top.trailing.equalToSuperview()
         }
         
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.height.equalTo(48)
-        }
         
         titleGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(9)
+            $0.top.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {

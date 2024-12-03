@@ -124,6 +124,7 @@ final class MyProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.fetchUserData)
+        configureNavigationBar(style: .empty)
     }
     
     

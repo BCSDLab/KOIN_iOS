@@ -61,6 +61,11 @@ final class PolicyViewController: UIViewController {
         scrollTopButton.addTarget(self, action: #selector(scrollTopButtonTapped), for: .touchUpInside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
+    }
+    
     private func bind() {
         policyListTableView.selectedCellPublisher.sink { [weak self] cellIndex in
             self?.scrollToCell(at: cellIndex)

@@ -214,11 +214,17 @@ final class LandDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "복덕방"
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
         prevButton.addTarget(self, action: #selector(prevButtonTapped), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
     }
     
     // MARK: - Bind

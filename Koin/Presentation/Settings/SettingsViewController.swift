@@ -96,7 +96,7 @@ final class SettingsViewController: UIViewController {
         licenceButton.addTarget(self, action: #selector(licenseButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
         nowVersionLabel.text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        navigationController?.setNavigationBarHidden(false, animated: true)
+    
         // 이것들 시점 usecase나 뷰모델이나 그런데로 다 뺴기
         fetchAppStoreVersion(bundleID: Bundle.main.bundleIdentifier ?? "") { [weak self] appStoreVersion in
             guard let self = self else { return }
@@ -114,7 +114,11 @@ final class SettingsViewController: UIViewController {
             }
         }
         
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     

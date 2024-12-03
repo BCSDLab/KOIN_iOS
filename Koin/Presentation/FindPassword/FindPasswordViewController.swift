@@ -76,6 +76,7 @@ final class FindPasswordViewController: UIViewController {
     init(viewModel: FindPasswordViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "비밀번호 찾기"
     }
     
     @available(*, unavailable)
@@ -92,6 +93,11 @@ final class FindPasswordViewController: UIViewController {
         emailTextField.delegate = self
         hideKeyboardWhenTappedAround()
         findButton.addTarget(self, action: #selector(findButtonTapped), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
     }
 
     // MARK: - Bind

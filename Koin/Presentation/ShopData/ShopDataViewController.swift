@@ -212,6 +212,7 @@ final class ShopDataViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         enablePopGestureRecognizer()
+        configureNavigationBar(style: .fill)
         self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     

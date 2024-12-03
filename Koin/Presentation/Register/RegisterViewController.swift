@@ -252,6 +252,7 @@ final class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "회원가입"
         configureView()
         bind()
         inputSubject.send(.getDeptList)
@@ -266,6 +267,12 @@ final class RegisterViewController: UIViewController {
         genderButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         deptButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
     }
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())

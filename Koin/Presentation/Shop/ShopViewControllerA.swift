@@ -128,7 +128,6 @@ final class ShopViewControllerA: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
         navigationItem.title = "주변상점"
         bind()
         configureView()
@@ -162,6 +161,7 @@ final class ShopViewControllerA: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
         eventShopCollectionView.startAutoScroll()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))

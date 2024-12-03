@@ -83,6 +83,11 @@ final class ChangePasswordViewController: UIViewController {
         changePasswordView.passwordTextField.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
+    }
+    
     
     // MARK: - Bind
     

@@ -172,6 +172,11 @@ final class ChangeMyProfileViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
+    }
+    
     
     // MARK: - Bind
     
