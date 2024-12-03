@@ -107,6 +107,11 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
         reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
+    }
+    
     // MARK: - Bind
     
     private func bind() {
