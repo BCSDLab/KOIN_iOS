@@ -88,7 +88,6 @@
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
 		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
-		839423DE2CA31471001E690F /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839423DD2CA31471001E690F /* CustomViewController.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2617F2C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift */; };
@@ -572,7 +571,6 @@
 		838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoticeKeywordType.swift; sourceTree = "<group>"; };
 		839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataClass.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataProperties.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		839423DD2CA31471001E690F /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		839D711A2BEB1570001BC7F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2375,7 +2373,6 @@
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
-				839423DD2CA31471001E690F /* CustomViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3029,7 +3026,6 @@
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
-				839423DE2CA31471001E690F /* CustomViewController.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
