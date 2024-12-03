@@ -338,7 +338,7 @@ extension NoticeDataViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            $0.width.equalTo(view.snp.width)
+            $0.width.equalTo(scrollView)
         }
         
         titleWrappedView.snp.makeConstraints {
@@ -348,7 +348,7 @@ extension NoticeDataViewController {
         
         titleGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {
