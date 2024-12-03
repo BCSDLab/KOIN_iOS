@@ -147,12 +147,18 @@ final class DiningViewController: UIViewController {
         bind()
         configureSwipeGestures()
         configureView()
+        navigationItem.title = "식단"
         inputSubject.send(.getABTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NoticeSearchViewController: CustomViewController, UIGestureRecognizerDelegate {
+final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
     private let viewModel: NoticeSearchViewModel
@@ -76,6 +76,23 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
         $0.numberOfLines = 2
     }
     
+    // MARK: - Initialization
+    
+    init(viewModel: NoticeSearchViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "공지글 검색"
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -90,31 +107,18 @@ final class NoticeSearchViewController: CustomViewController, UIGestureRecognize
         textField.delegate = self
         noticeListTableView.isHidden = true
         emptyNoticeGuideLabel.isHidden = true
-        setUpNavigationBar()
-        setNavigationTitle(title: "공지글 검색")
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
-   
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
-    
-    // MARK: - Initialization
-    
-    init(viewModel: NoticeSearchViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -236,21 +240,17 @@ extension NoticeSearchViewController {
 
 extension NoticeSearchViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
+        [textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.top.trailing.equalToSuperview()
-            $0.height.equalTo(100)
-        }
         
         textField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
             $0.height.equalTo(40)
         }
         

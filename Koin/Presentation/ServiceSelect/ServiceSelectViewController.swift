@@ -18,20 +18,6 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     
     // MARK: - UI Components
     
-    private let backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(symbol: .chevronLeft), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral800)
-        return button
-    }()
-    
-    private let settingButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .gear), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral800)
-        return button
-    }()
-    
     private let logoImageview: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.appImage(asset: .mainLogo)
@@ -154,20 +140,20 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     }
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let settingButton = UIBarButtonItem(
+              image: UIImage.appImage(asset: .gear), style: .plain, target: self, action: #selector(settingButtonTapped))
+          settingButton.tintColor = UIColor.appColor(.neutral800)
+          navigationItem.rightBarButtonItem = settingButton
         configureView()
         setupButtonActions()
         bind()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        configureNavigationBar(style: .empty)
         inputSubject.send(.fetchUserData)
     }
     
@@ -214,7 +200,6 @@ extension ServiceSelectViewController {
     }
     
     private func setupButtonActions() {
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         shopSelectButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
         busSelectButton.addTarget(self, action: #selector(busSelectButtonTapped), for: .touchUpInside)
         diningSelectButton.addTarget(self, action: #selector(diningSelectButtonTapped), for: .touchUpInside)
@@ -223,7 +208,6 @@ extension ServiceSelectViewController {
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
         //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
-        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
         noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
         facilityInfoSelectButton.addTarget(self, action: #selector(facilityInfoSelectButtonTapped), for: .touchUpInside)
@@ -404,7 +388,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton, noticeListButton, facilityInfoSelectButton].forEach {
+        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, inquryButton, noticeListButton, facilityInfoSelectButton].forEach {
             view.addSubview($0)
         }
     }
@@ -436,24 +420,12 @@ extension ServiceSelectViewController {
     }
     
     private func setUpConstraints() {
-        backButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.leading.equalTo(view.snp.leading).offset(10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-        }
-        settingButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.trailing.equalTo(view.snp.trailing).offset(-10)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        }
         nicknameLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(30)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         makeLoginDescription.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(30)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         greetingLabel.snp.makeConstraints { make in
@@ -467,13 +439,13 @@ extension ServiceSelectViewController {
             make.width.equalTo(60)
         }
         servicePaddingLabel.snp.makeConstraints { make in
-            make.top.equalTo(settingButton.snp.bottom).offset(128)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(140)
             make.leading.equalTo(view.snp.leading)
             make.width.equalTo(24)
             make.height.equalTo(33)
         }
         serviceGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(settingButton.snp.bottom).offset(128)
+            make.top.equalTo(servicePaddingLabel)
             make.leading.equalTo(servicePaddingLabel.snp.trailing)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)

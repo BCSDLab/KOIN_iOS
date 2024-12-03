@@ -229,7 +229,7 @@ final class NotiViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.setNavigationBar()
+        configureNavigationBar(style: .fill)
     }
     
     // MARK: - Bind
@@ -347,10 +347,6 @@ extension NotiViewController {
 }
 
 extension NotiViewController {
-    
-    private func setNavigationBar() {
-        self.navigationItem.rightBarButtonItem = nil
-    }
     
     private func setUpLayOuts() {
         

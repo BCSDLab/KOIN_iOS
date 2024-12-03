@@ -126,6 +126,7 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "로그인"
         navigationController?.setNavigationBarHidden(false, animated: true)
         configureView()
         bind()
@@ -136,6 +137,11 @@ final class LoginViewController: UIViewController {
         findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
         emailTextField.delegate = self
         passwordTextField.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .fill)
     }
     
     private func bind() {

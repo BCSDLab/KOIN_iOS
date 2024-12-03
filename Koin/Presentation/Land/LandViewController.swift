@@ -49,11 +49,16 @@ final class LandViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = "복덕방"
         bind()
         configureView()
         inputSubject.send(.viewDidLoad)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        configureNavigationBar(style: .fill)
     }
     
     // MARK: - Bind
