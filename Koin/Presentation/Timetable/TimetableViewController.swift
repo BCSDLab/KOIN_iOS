@@ -260,7 +260,7 @@ extension TimetableViewController {
             let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 } // 요일별로 그룹화
             
             for (day, times) in groupedByDay {
-                let separatedTimes = times.splitIntoContinuousRanges() // 연속된 시간을 나눔
+                let separatedTimes = splitIntoContinuousRanges(times) // 연속된 시간을 나눔
                 
                 for range in separatedTimes {
                     if let firstTime = range.first {

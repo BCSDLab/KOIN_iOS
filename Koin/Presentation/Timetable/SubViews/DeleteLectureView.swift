@@ -77,11 +77,9 @@ final class DeleteLectureView: UIView {
     
     func configure(lecture: LectureData) {
         
-        print(lecture.classTime)
-        print(timeLabelText(from: lecture.classTime))
         classTitleLabel.text = lecture.name
         professorNameLabel.text = lecture.professor
-        classTimeLabel.text = timeLabelText(from: lecture.classTime)
+        classTimeLabel.text = lecture.classTime.timeLabelText()
         gradeLabel.text = "\(lecture.grades)학점"
         info = lecture
     }

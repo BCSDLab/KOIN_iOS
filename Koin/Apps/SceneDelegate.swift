@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
+
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -59,5 +60,16 @@ extension SceneDelegate {
         )
         let viewController = HomeViewControllerA(viewModel: homeViewModel)
         return viewController
+        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "A"
+        let variableName = UserAssignType(rawValue: userType) ?? .a
+        let mainViewController: UIViewController
+        switch variableName {
+        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
+        default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
+        }
+        
+        return mainViewController
     }
+    
+   
 }

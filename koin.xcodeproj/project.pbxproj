@@ -285,7 +285,6 @@
 		D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A12C3CFAA500048F45 /* ScoreView.swift */; };
 		D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */; };
 		D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */; };
-		D24858392CF86D46009F3698 /* TempExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24858382CF86D46009F3698 /* TempExtention.swift */; };
 		D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD222C12DB73000813F9 /* DiningRepository.swift */; };
 		D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */; };
 		D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD272C12DCCC000813F9 /* DiningService.swift */; };
@@ -475,6 +474,7 @@
 		D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */; };
 		D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE802CFE96600097A388 /* NotificationHandler.swift */; };
 		D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */; };
+		D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE912D004EF30097A388 /* TimetableText+.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -803,7 +803,6 @@
 		D23944A12C3CFAA500048F45 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionView.swift; sourceTree = "<group>"; };
 		D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		D24858382CF86D46009F3698 /* TempExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TempExtention.swift; path = ../../../../../TempExtention.swift; sourceTree = "<group>"; };
 		D249CD222C12DB73000813F9 /* DiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRepository.swift; sourceTree = "<group>"; };
 		D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCase.swift; sourceTree = "<group>"; };
 		D249CD272C12DCCC000813F9 /* DiningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningService.swift; sourceTree = "<group>"; };
@@ -992,10 +991,13 @@
 		D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsService.swift; sourceTree = "<group>"; };
 		D2FB23702C0412C70098BA2B /* EventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParameter.swift; sourceTree = "<group>"; };
 		D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GA4AnalyticsRepository.swift; sourceTree = "<group>"; };
-		D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
-		D2FCBE802CFE96600097A388 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
-		D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarStyle.swift"; sourceTree = "<group>"; };
-		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
+	        D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
+        D2FCBE802CFE96600097A388 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+        D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarStyle.swift"; sourceTree = "<group>"; };
+        D2FCBE912D004EF30097A388 /* TimetableText+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimetableText+.swift"; sourceTree = "<group>"; };
+        D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1889,6 +1891,7 @@
 				D2DCB2852CDF4A74005CABEE /* SubViews */,
 				D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */,
 				D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */,
+				D2FCBE912D004EF30097A388 /* TimetableText+.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2578,7 +2581,6 @@
 				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
 				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
 				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
-				D24858382CF86D46009F3698 /* TempExtention.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3188,6 +3190,7 @@
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
+				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
@@ -3257,7 +3260,6 @@
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
 				833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */,
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
-				D24858392CF86D46009F3698 /* TempExtention.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
