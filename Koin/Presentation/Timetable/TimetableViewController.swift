@@ -166,6 +166,7 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addDirectCollectionView.completeButtonPublisher.sink { [weak self] item in
+            
             guard let self = self else { return }
             
             self.toggleCollectionView(collectionView: self.addDirectCollectionView, animate: true)

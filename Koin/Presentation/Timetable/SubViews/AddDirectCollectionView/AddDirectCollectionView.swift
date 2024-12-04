@@ -149,7 +149,6 @@ final class AddDirectCollectionView: UICollectionView, UICollectionViewDataSourc
     
     // 완료 버튼 눌렀을 때 데이터 취합
     func completeButtonTapped() {
-        
         if let schedule = collectSchedules() {
             print(schedule.times)
             completeButtonPublisher.send((schedule.name, schedule.times.map { Int($0) ?? 0} ) )
@@ -158,6 +157,9 @@ final class AddDirectCollectionView: UICollectionView, UICollectionViewDataSourc
 }
 
 extension AddDirectCollectionView {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1 // 최소 한 개의 섹션을 반환
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
     }

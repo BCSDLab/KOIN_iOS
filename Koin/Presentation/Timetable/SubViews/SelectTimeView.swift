@@ -94,6 +94,8 @@ extension SelectTimeView {
     
     private func showTimePicker(for button: UIButton) {
         let alertController = UIAlertController(title: "시간 선택", message: nil, preferredStyle: .actionSheet)
+        
+        // 9시부터 24시까지 30분 간격으로 시간을 생성
         let times = generateTimeIntervals(startHour: 9, endHour: 24, intervalMinutes: 30)
         
         times.forEach { time in
@@ -105,17 +107,23 @@ extension SelectTimeView {
         alertController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
         UIApplication.shared.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
-    
+
     private func generateTimeIntervals(startHour: Int, endHour: Int, intervalMinutes: Int) -> [String] {
         var times: [String] = []
-        for hour in startHour..<endHour {
+        
+        for hour in startHour...endHour {
             for minute in stride(from: 0, to: 60, by: intervalMinutes) {
+                if hour == endHour && minute > 0 {
+                    break // 마지막 시간(24:00)을 넘어가는 항목 제거
+                }
                 let time = String(format: "%02d:%02d", hour, minute)
                 times.append(time)
             }
         }
+        
         return times
     }
+
 }
 
 extension SelectTimeView {
