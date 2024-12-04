@@ -121,8 +121,6 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         let row = indexPath.row
         let timetable = viewModel.frameData[section].frame[row]
-        print(viewModel.selectedSemester)
-        print(viewModel.selectedFrameId)
         viewModel.selectedSemester = viewModel.frameData[section].semester
         viewModel.selectedFrameId = viewModel.frameData[section].frame[row].id
         navigationController?.popViewController(animated: true)

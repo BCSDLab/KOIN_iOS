@@ -62,6 +62,7 @@ final class TimetableCell: UITableViewCell {
     private func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(32)
+            make.trailing.lessThanOrEqualToSuperview().offset(-150)
             make.centerY.equalToSuperview()
         }
         bookmarkImageView.snp.makeConstraints { make in
