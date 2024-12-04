@@ -5,9 +5,13 @@
 //  Created by 김나훈 on 11/19/24.
 //
 
+import Combine
 import UIKit
 
 final class AddClassCollectionViewCell: UICollectionViewCell {
+    
+    var cancellables = Set<AnyCancellable>()
+    let modifyClassButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let classTitleLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 12)
@@ -34,8 +38,7 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
-    private let addClassButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .plusCircle), for: .normal)
+    private let modifyClassButton = UIButton().then { _ in
     }
     
     private let separateView = UIView().then {
@@ -45,24 +48,38 @@ final class AddClassCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        modifyClassButton.addTarget(self, action: #selector(modifyClassButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(text: String) {
-        classTitleLabel.text = "직업능력훈련평가"
-        professorNameLabel.text = "이미나"
-        classTimeLabel.text = "목 02 ~ 03"
-        gradeLabel.text = "2학점"
-        classCodeLabel.text = "HRD220"
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    func configure(lecture: SemesterLecture, isAdded: Bool) {
+        classTitleLabel.text = lecture.name
+        professorNameLabel.text = lecture.professor
+        classTimeLabel.text = timeLabelText(from: lecture.classTime)
+        gradeLabel.text = "\(lecture.grades)학점"
+        classCodeLabel.text = lecture.code
+        
+        modifyClassButton.setImage(UIImage.appImage(asset: !isAdded ? .plusCircle : .minusCircle), for: .normal)
     }
 }
 
 extension AddClassCollectionViewCell {
+    @objc private func modifyClassButtonTapped() {
+        modifyClassButtonPublisher.send()
+       
+    }
+}
+extension AddClassCollectionViewCell {
     private func setUpLayouts() {
-        [classTitleLabel, professorNameLabel, classTimeLabel, gradeLabel, classCodeLabel, addClassButton, separateView].forEach {
+        [classTitleLabel, professorNameLabel, classTimeLabel, gradeLabel, classCodeLabel, modifyClassButton, separateView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -88,7 +105,7 @@ extension AddClassCollectionViewCell {
             make.top.equalTo(classTimeLabel.snp.bottom).offset(5)
             make.leading.equalTo(gradeLabel.snp.trailing).offset(10)
         }
-        addClassButton.snp.makeConstraints { make in
+        modifyClassButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.snp.centerY)
             make.trailing.equalTo(self.snp.trailing).offset(-7)
             make.width.height.equalTo(24)

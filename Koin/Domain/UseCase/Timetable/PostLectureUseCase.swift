@@ -8,7 +8,7 @@
 import Combine
 
 protocol PostLectureUseCase {
-    func execute(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func execute(request: LectureRequest) -> AnyPublisher<[LectureData], ErrorResponse>
 }
 
 final class DefaultPostLectureUseCase: PostLectureUseCase {
@@ -19,8 +19,9 @@ final class DefaultPostLectureUseCase: PostLectureUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
-        return timetableRepository.postLecture(request: request)
+    func execute(request: LectureRequest) -> AnyPublisher<[LectureData], ErrorResponse> {
+        return timetableRepository.postLecture(request: request).map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
 }

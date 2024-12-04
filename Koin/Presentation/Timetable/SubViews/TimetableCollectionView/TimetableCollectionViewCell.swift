@@ -26,6 +26,8 @@ final class TimetableCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.clipsToBounds = false           // 셀의 경계 클리핑 해제
+        self.contentView.clipsToBounds = false // contentView의 경계 클리핑 해제
         configureView()
     }
     
@@ -33,10 +35,40 @@ final class TimetableCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updateBackgroundColor(row: Int, column: Int, color: UIColor) {
+        guard row < horizontalStackView.arrangedSubviews.count,
+              let verticalStackView = horizontalStackView.arrangedSubviews[row] as? UIStackView,
+              column < verticalStackView.arrangedSubviews.count else {
+            return
+        }
+        
+        let targetView = verticalStackView.arrangedSubviews[column]
+        targetView.backgroundColor = color
+    }
+    
+    func addOverlay(color: UIColor) {
+        let overlayView = UIView()
+        overlayView.backgroundColor = color
+        overlayView.layer.cornerRadius = 10
+        overlayView.layer.masksToBounds = true
+        overlayView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(overlayView)
+        contentView.sendSubviewToBack(overlayView)
+
+        NSLayoutConstraint.activate([
+            overlayView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10),
+            overlayView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -10),
+            overlayView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            overlayView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 10),
+        ])
+    }
+
     func configure(text: String) {
         timeLabel.text = text
     }
 }
+
 
 extension TimetableCollectionViewCell {
     private func setUpLayouts() {

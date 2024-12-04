@@ -207,6 +207,15 @@
 		D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */; };
 		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
 		D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */; };
+		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
+		D21572712CEE504F0061E725 /* LectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572702CEE504F0061E725 /* LectureView.swift */; };
+		D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572722CEE67130061E725 /* DeleteLectureView.swift */; };
+		D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572752CEE76D80061E725 /* FrameListViewController.swift */; };
+		D215727A2CEE8E500061E725 /* TimetableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572792CEE8E500061E725 /* TimetableCell.swift */; };
+		D215727D2CEE9A460061E725 /* DeleteFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */; };
+		D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */; };
+		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
+		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -272,6 +281,7 @@
 		D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A12C3CFAA500048F45 /* ScoreView.swift */; };
 		D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */; };
 		D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */; };
+		D24858392CF86D46009F3698 /* TempExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24858382CF86D46009F3698 /* TempExtention.swift */; };
 		D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD222C12DB73000813F9 /* DiningRepository.swift */; };
 		D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */; };
 		D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD272C12DCCC000813F9 /* DiningService.swift */; };
@@ -705,6 +715,15 @@
 		D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLectureListUseCase.swift; sourceTree = "<group>"; };
 		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
 		D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureUseCase.swift; sourceTree = "<group>"; };
+		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
+		D21572702CEE504F0061E725 /* LectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureView.swift; sourceTree = "<group>"; };
+		D21572722CEE67130061E725 /* DeleteLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureView.swift; sourceTree = "<group>"; };
+		D21572752CEE76D80061E725 /* FrameListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameListViewController.swift; sourceTree = "<group>"; };
+		D21572792CEE8E500061E725 /* TimetableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCell.swift; sourceTree = "<group>"; };
+		D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameModalViewController.swift; sourceTree = "<group>"; };
+		D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifySemesterModalViewController.swift; sourceTree = "<group>"; };
+		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
+		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -770,6 +789,7 @@
 		D23944A12C3CFAA500048F45 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionView.swift; sourceTree = "<group>"; };
 		D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		D24858382CF86D46009F3698 /* TempExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TempExtention.swift; path = ../../../../../TempExtention.swift; sourceTree = "<group>"; };
 		D249CD222C12DB73000813F9 /* DiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRepository.swift; sourceTree = "<group>"; };
 		D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCase.swift; sourceTree = "<group>"; };
 		D249CD272C12DCCC000813F9 /* DiningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningService.swift; sourceTree = "<group>"; };
@@ -1494,6 +1514,33 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
+		D215726D2CEE28C30061E725 /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				D215726E2CEE28D70061E725 /* LectureData.swift */,
+			);
+			path = Timetable;
+			sourceTree = "<group>";
+		};
+		D21572742CEE76C40061E725 /* FrameList */ = {
+			isa = PBXGroup;
+			children = (
+				D215727B2CEE9A270061E725 /* SubViews */,
+				D21572752CEE76D80061E725 /* FrameListViewController.swift */,
+			);
+			path = FrameList;
+			sourceTree = "<group>";
+		};
+		D215727B2CEE9A270061E725 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */,
+				D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */,
+				D21572792CEE8E500061E725 /* TimetableCell.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		D22421322C897C5E00E8B480 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1830,6 +1877,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D21572742CEE76C40061E725 /* FrameList */,
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
 				D224213C2C897DE300E8B480 /* ChangePassword */,
@@ -2227,6 +2275,8 @@
 				D21572672CEDDE0E0061E725 /* FetchLectureListUseCase.swift */,
 				D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */,
 				D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */,
+				D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */,
+				D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -2463,12 +2513,15 @@
 		D2DCB2852CDF4A74005CABEE /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D21572702CEE504F0061E725 /* LectureView.swift */,
 				D283A4E92CECF48C00C238BA /* PointLabel.swift */,
 				D283A4EB2CECF90400C238BA /* ClassComponentView.swift */,
 				D283A4ED2CED088900C238BA /* SelectTimeView.swift */,
+				D21572722CEE67130061E725 /* DeleteLectureView.swift */,
 				D283A4E02CECE55600C238BA /* AddDirectCollectionView */,
 				D283A4D92CECA26A00C238BA /* AddClassCollectionView */,
 				D283A4D82CECA25B00C238BA /* TimetableCollectionView */,
+				D24858382CF86D46009F3698 /* TempExtention.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2542,6 +2595,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D215726D2CEE28C30061E725 /* Timetable */,
 				833D9C102C6B269000982145 /* NoticeList */,
 				D29F21EF2C4FD22900994554 /* Land */,
 				D29F21E32C4F4C2B00994554 /* User */,
@@ -3012,6 +3066,7 @@
 				D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
+				D215727A2CEE8E500061E725 /* TimetableCell.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
 				D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
@@ -3021,6 +3076,7 @@
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */,
 				833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */,
+				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
@@ -3114,12 +3170,14 @@
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
+				D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
 				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
+				D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */,
 				D2D380F02BA71994009AD5A9 /* LoginViewController.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
@@ -3136,6 +3194,7 @@
 				D27DD0F42BA60FEC0081FD36 /* HouseInfoView.swift in Sources */,
 				833D9C4F2C72249700982145 /* NoticeListTableViewFooter.swift in Sources */,
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
+				D24858392CF86D46009F3698 /* TempExtention.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
@@ -3153,6 +3212,7 @@
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
+				D21572712CEE504F0061E725 /* LectureView.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
@@ -3164,6 +3224,7 @@
 				D2F4FD592CBE089D008C91D8 /* ShopCollectionViewCell.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
+				D215727D2CEE9A460061E725 /* DeleteFrameModalViewController.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
 				D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,
@@ -3272,6 +3333,7 @@
 				833D9C4D2C721A7D00982145 /* NoticeListTableViewKeyWordCell.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
 				D29F21CE2C4E162600994554 /* TimetableService.swift in Sources */,
+				D215726F2CEE28D70061E725 /* LectureData.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
@@ -3312,6 +3374,7 @@
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
+				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
@@ -3345,6 +3408,7 @@
 				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
+				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,

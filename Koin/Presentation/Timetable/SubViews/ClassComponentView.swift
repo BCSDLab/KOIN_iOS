@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class ClassComponentView: UIView {
+final class ClassComponentView: UIView, UITextFieldDelegate {
+    
+    var textValue: String {
+        return textField.text ?? ""
+    }
     
     private let mainLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
@@ -37,6 +41,7 @@ final class ClassComponentView: UIView {
         textField.placeholder = "\(text)\(text.hasFinalConsonant() ? "을":"를") 입력하세요."
         pointLabel.isHidden = !isPoint
         mainLabel.isHidden = isPoint
+        textField.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -44,12 +49,17 @@ final class ClassComponentView: UIView {
         setupViews()
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     // MARK: - Setup Views
     private func setupViews() {
         [mainLabel, pointLabel, separateView, textField].forEach {
             self.addSubview($0)
         }
-    
+        
         mainLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(self.snp.leading).offset(13)
@@ -72,5 +82,5 @@ final class ClassComponentView: UIView {
             make.bottom.equalTo(self.snp.bottom).offset(-7)
         }
     }
-
+    
 }

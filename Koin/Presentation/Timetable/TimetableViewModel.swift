@@ -6,40 +6,464 @@
 //
 
 import Combine
+import Foundation
+
+struct FrameData {
+    let semester: String
+    var frame: [FrameDTO]
+}
 
 final class TimetableViewModel: ViewModelProtocol {
     
     // MARK: - Input
     
     enum Input {
-       
+        case fetchMySemester
+        case modifyLecture(LectureData, Bool)
+        case _deleteLecture(LectureData)
+        case postCustomLecture(String, [Int])
     }
     
     // MARK: - Output
     
     enum Output {
-
+        case updateLectureList([SemesterLecture])
+        case showingSelectedFrame(String, String?)
+        case updateMyFrame([LectureData])
+    }
+    
+    enum NextInput {
+        case fetchFrameList
+        case createFrame(String)
+        case deleteFrame(FrameDTO)
+        case modifyFrame(FrameDTO)
+        case modifySemester([String], [String])
+    }
+    enum NextOutput {
+        case reloadData
+        case showToast(String)
     }
     
     // MARK: - Properties
     
     private let outputSubject = PassthroughSubject<Output, Never>()
+    private let nextOutputSubject = PassthroughSubject<NextOutput, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-
+    private let timetableRepository = DefaultTimetableRepository(service: DefaultTimetableService())
+    
+    // MARK: 강의정보
+    private lazy var fetchLectureListUseCase = DefaultFetchLectureListUseCase(timetableRepository: timetableRepository)
+    private lazy var modifyLectureUseCase = DefaultModifyLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var postLectureUseCase = DefaultPostLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteLectureUseCase = DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteLecturByIdUseCase = _DefaultDeleteLectureUseCase(timetableRepository: timetableRepository)
+    
+    // MARK: 프레임
+    private lazy var fetchFrameUseCase = DefaultFetchFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var createFrameUseCase = DefaultCreateFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteFrameUseCase = DefaultDeleteFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var modifyFrameUseCase = DefaultModifyFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var deleteSemesterUseCase = DefaultDeleteSemesterUseCase(timetableRepository: timetableRepository)
+    
+    
+    // MARK: 기타
+    private lazy var fetchMySemesterUseCase = DefaultFetchMySemesterUseCase(timetableRepository: timetableRepository)
+    private lazy var fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: timetableRepository)
+    private lazy var fetchLectureUseCase = DefaultFetchLectureUseCase(timetableRepository: timetableRepository)
+    private lazy var fetchSemesterUseCase = DefaultFetchSemesterUseCase(timetableRepository: timetableRepository)
+    
+    // 현재 선택된 학기
+    var selectedSemester: String? {
+        didSet {
+            fetchLectureList(semester: selectedSemester ?? "")
+        }
+    }
+    
+    // 현재보여주고 있는 프레임
+    var selectedFrameId: Int? {
+        didSet {
+            fetchLecture(frameId: selectedFrameId ?? 0)
+        }
+    }
+    
+    // 현재 보여주고있는 시간표 리스트
+    private var lectureData: [LectureData] = [] {
+        didSet {
+            outputSubject.send(.updateMyFrame(lectureData))
+        }
+    }
+    
+    private(set) var frameData: [FrameData] = [] {
+        didSet {
+            nextOutputSubject.send(.reloadData)
+        }
+    }
+    
+    
     // MARK: - Initialization
-
+    
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-           
+            case .fetchMySemester:
+                self?.fetchMySemester()
+            case let .modifyLecture(lecture, isAdd):
+                self?.modifyLecture(lecture: lecture, isAdd: isAdd)
+            case ._deleteLecture(let lecture):
+                self?.deleteLectureById(lecture: lecture)
+            case let .postCustomLecture(lectureName, lectureTime):
+                self?.postCustomLecture(lectureName: lectureName, classTime: lectureTime)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
     }
     
+    func transform(with input: AnyPublisher<NextInput, Never>) -> AnyPublisher<NextOutput, Never> {
+        input.sink { [weak self] input in
+            switch input {
+            case .fetchFrameList:
+                self?.fetchMySemesters()
+            case .createFrame(let semester):
+                self?.createFrame(semester: semester)
+            case .deleteFrame(let frame):
+                self?.deleteFrame(frame: frame)
+            case .modifyFrame(let frame):
+                self?.modifyFrame(frame: frame)
+            case let .modifySemester(addedSemester, removedSemester):
+                addedSemester.forEach {
+                    self?.createFrame(semester: $0)
+                }
+                removedSemester.forEach {
+                    self?.deleteSemester(semester: $0)
+                }
+            }
+        }.store(in: &subscriptions)
+        return nextOutputSubject.eraseToAnyPublisher()
+    }
 }
 
-extension ChangePasswordViewModel {
+extension TimetableViewModel {
     
+    private func deleteLectureById(lecture: LectureData) {
+        
+        deleteLecturByIdUseCase.execute(id: lecture.id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == lecture.professor}
+        }.store(in: &subscriptions)
+        
+    }
+    
+    private func _deleteLecture(_ lecture: LectureData) {
+        deleteLectureUseCase.execute(frameId: selectedFrameId ?? 0, lectureId: lecture.id) .sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+
+            self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor}
+        }.store(in: &subscriptions)
+    }
+    private func deleteSemester(semester: String) {
+        deleteSemesterUseCase.execute(semester: semester).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] _ in
+            guard let self = self else { return }
+            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
+                self.frameData.remove(at: index)
+                Log.make().info("Semester \(semester) deleted from frameData")
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    
+    private func modifyFrame(frame: FrameDTO) {
+        
+        modifyFrameUseCase.execute(frame: frame).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.nextOutputSubject.send(.showToast(error.message))
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            for (index, frameData) in self.frameData.enumerated() {
+                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
+                    self.frameData[index].frame[frameIndex] = frame
+                    if frame.isMain {
+                        self.frameData[index].frame = self.frameData[index].frame.map { existingFrame in
+                            var updatedFrame = existingFrame
+                            updatedFrame.isMain = (existingFrame.id == frame.id) // 현재 프레임만 true
+                            return updatedFrame
+                        }
+                    }
+                    break // 찾았으면 루프 종료
+                }
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    private func deleteFrame(frame: FrameDTO) {
+        deleteFrameUseCase.execute(id: frame.id).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.nextOutputSubject.send(.showToast(error.message))
+            }
+        } receiveValue: { [weak self] in
+            guard let self = self else { return }
+            
+            // `frameData`에서 해당 프레임 삭제
+            for (index, frameData) in self.frameData.enumerated() {
+                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
+                    self.frameData[index].frame.remove(at: frameIndex)
+                    
+                    // `frameData`에서 학기가 빈 경우 제거 (선택사항)
+                    if self.frameData[index].frame.isEmpty {
+                        self.frameData.remove(at: index)
+                    }
+                    
+                    break // 찾았으면 루프 종료
+                }
+            }
+            self.fetchAllFramesForReload()
+        }.store(in: &subscriptions)
+        
+    }
+    
+    private func fetchMySemesters() {
+        fetchMySemesterUseCase.execute()
+            .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
+                guard let self = self else { return Just([]).eraseToAnyPublisher() }
+                let semesters = response.semesters
+                return semesters.publisher
+                    .flatMap { semester -> AnyPublisher<FrameData, Never> in
+                        self.fetchFrame(for: semester)
+                    }
+                    .collect()
+                    .eraseToAnyPublisher()
+            }
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("Failed fetching semesters: \(error)")
+                }
+            }, receiveValue: { [weak self] fetchedFrames in
+                guard let self = self else { return }
+                print()
+                print(self.sortFrames(fetchedFrames), terminator: "123")
+                self.frameData = self.sortFrames(fetchedFrames)
+            })
+            .store(in: &subscriptions)
+    }
+    private func sortFrames(_ frames: [FrameData]) -> [FrameData] {
+        func sortSemester(_ semester: String) -> (year: Int, priority: Int) {
+            var year = 0
+            var priority = 0
+            
+            // '20242', '20241' 형식 처리
+            if let yearValue = Int(semester.prefix(4)) {
+                year = yearValue
+                if semester.hasSuffix("2") {
+                    priority = 1 // 2학기 (겨울 다음 우선순위)
+                } else if semester.hasSuffix("1") {
+                    priority = 3 // 1학기 (가장 낮은 우선순위)
+                }
+            }
+            
+            // '2024-여름', '2024-겨울' 형식 처리
+            if semester.contains("여름") {
+                year = Int(semester.prefix(4)) ?? 0
+                priority = 2 // 여름학기 (2학기 다음 우선순위)
+            } else if semester.contains("겨울") {
+                year = Int(semester.prefix(4)) ?? 0
+                priority = 0 // 겨울학기 (가장 높은 우선순위)
+            }
+            
+            return (year, priority)
+        }
+        
+        // 프레임 정렬
+        return frames.sorted {
+            let left = sortSemester($0.semester)
+            let right = sortSemester($1.semester)
+            
+            // 동일 연도인 경우 우선순위로 정렬
+            if left.year == right.year {
+                return left.priority < right.priority
+            }
+            // 연도가 다르면 최신 연도 우선
+            return left.year > right.year
+        }
+    }
+
+
+     
+     // MARK: - Modified Methods
+     
+     private func createFrame(semester: String) {
+         createFrameUseCase.execute(semester: semester).sink { [weak self] completion in
+             if case let .failure(error) = completion {
+                 Log.make().error("\(error)")
+                 self?.nextOutputSubject.send(.showToast(error.message))
+             }
+         } receiveValue: { [weak self] response in
+             guard let self = self else { return }
+             
+             // `frameData`에서 해당 `semester`를 찾음
+             if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
+                 // `frameData`의 해당 `semester` 배열에 새로운 frame 추가
+                 self.frameData[index].frame.append(response)
+             } else {
+                 // `frameData`에 새로운 `semester` 추가
+                 self.frameData.append(FrameData(semester: semester, frame: [response]))
+             }
+             
+             // 정렬 후 업데이트
+             self.frameData = self.sortFrames(self.frameData)
+         }.store(in: &subscriptions)
+     }
+     
+  
+    private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
+        fetchFrameUseCase.execute(semester: semester)
+            .map { frames -> FrameData in
+                // FrameDTO를 기반으로 FrameData 생성
+                return FrameData(semester: semester, frame: frames)
+            }
+            .catch { error -> Just<FrameData> in
+                Log.make().error("Failed fetching frames for semester \(semester): \(error)")
+                return Just(FrameData(semester: semester, frame: [])) // 실패 시 빈 데이터 반환
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+extension TimetableViewModel {
+    
+    private func modifyLecture(lecture: LectureData, isAdd: Bool) {
+        if isAdd {
+            postLecture(lecture: lecture)
+        } else {
+            _deleteLecture(lecture)
+        }
+    }
+    
+    private func postCustomLecture(lectureName: String, classTime: [Int]) {
+        let request = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: nil, classTitle: lectureName, classInfos: [ClassInfo(classTime: classTime, classPlace: "")], professor: "", grades: "0", memo: "no memo")])
+        postLectureUseCase.execute(request: request).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.lectureData = response
+        }.store(in: &subscriptions)
+    }
+    
+    private func postLecture(lecture: LectureData) {
+        let lectureRequest = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: lecture.id, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
+      
+        postLectureUseCase.execute(request: lectureRequest).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.lectureData = response
+        }.store(in: &subscriptions)
+    }
+    
+    // 특정 프레임 id의 모든 강의 조회
+    private func fetchLecture(frameId: Int) {
+        fetchLectureUseCase.execute(frameId: frameId).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            self.lectureData = response
+            for frameData in self.frameData {
+                for frame in frameData.frame {
+                    if frame.id == frameId {
+                        self.outputSubject.send(.showingSelectedFrame(frameData.semester, frame.timetableName))
+                    }
+                }
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    
+    // 해당 학기 모든 프레임 조회 ( 처음에 보여줄 학기 시간표 선택 위해 필요 )
+    private func fetchFrame(semester: String) {
+        fetchFrameUseCase.execute(semester: semester).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response  in
+            if let firstMainFrame = response.first(where: { $0.isMain }) {
+                self?.selectedFrameId = firstMainFrame.id
+                self?.outputSubject.send(.showingSelectedFrame(semester, firstMainFrame.timetableName))
+            } else {
+                self?.outputSubject.send(.showingSelectedFrame("학기 추가하기", nil))
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    
+    private func fetchAllFramesForReload() {
+        // 모든 학기에 대해 데이터 가져오기
+        let publishers = frameData.map { frameItem in
+            fetchFrameUseCase.execute(semester: frameItem.semester)
+                .map { (semester: frameItem.semester, response: $0) } // 학기와 응답을 함께 반환
+        }
+        
+        // Combine의 Publishers.MergeMany를 사용하여 여러 요청을 병합
+        Publishers.MergeMany(publishers)
+            .collect() // 모든 요청 결과를 하나로 수집
+            .sink { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            } receiveValue: { [weak self] responses in
+                guard let self = self else { return }
+                
+                // 응답 결과를 frameData에 업데이트
+                for result in responses {
+                    if let index = self.frameData.firstIndex(where: { $0.semester == result.semester }) {
+                        self.frameData[index].frame = result.response
+                    }
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
+
+    
+    // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
+    private func fetchMySemester() {
+        fetchMySemesterUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }receiveValue: { [weak self] response in
+            if let lastSemester = response.semesters.first {
+                self?.selectedSemester = lastSemester
+                self?.fetchFrame(semester: lastSemester)
+            } else {
+                self?.outputSubject.send(.showingSelectedFrame("학기 추가하기", nil))
+            }
+        }.store(in: &subscriptions)
+        
+    }
+    private func fetchLectureList(semester: String) {
+        fetchLectureListUseCase.execute(semester: semester).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateLectureList(response))
+        }.store(in: &subscriptions)
+        
+    }
     
 }

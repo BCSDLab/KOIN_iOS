@@ -9,7 +9,7 @@ import UIKit
 
 final class TimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var somethings: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    private var timeTexts: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17]
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -25,15 +25,15 @@ final class TimetableCollectionView: UICollectionView, UICollectionViewDataSourc
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
-        isScrollEnabled = true
+        isScrollEnabled = false
         register(TimetableCollectionViewCell.self, forCellWithReuseIdentifier: TimetableCollectionViewCell.identifier)
         register(TimetableHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TimetableHeaderView.identifier)
         dataSource = self
         delegate = self
     }
     
-    func setUpSomethings() {
-        
+    func updateLecture(lectureTime: [Int]) {
+        self.timeTexts = lectureTime
         reloadData()
     }
     
@@ -45,14 +45,14 @@ extension TimetableCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return somethings.count
+        return timeTexts.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0 
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -72,7 +72,9 @@ extension TimetableCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimetableCollectionViewCell.identifier, for: indexPath) as? TimetableCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row]))
+        cell.configure(text: String(timeTexts[indexPath.row]))
+        
+        
         return cell
     }
 }
