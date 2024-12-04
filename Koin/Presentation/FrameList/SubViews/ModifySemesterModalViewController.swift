@@ -101,13 +101,13 @@ extension ModifySemesterModalViewController {
         
         for (button, semester) in semesterMapping {
             if frameList.contains(where: { $0.semester == semester }) {
-                // 이미 존재하는 학기
                 button.tag = 2
-                button.backgroundColor = UIColor.appColor(.success500) // 초록색
+                button.backgroundColor = UIColor.appColor(.success700)
+                button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             } else {
-                // 존재하지 않는 학기
                 button.tag = 0
-                button.backgroundColor = .white // 흰색
+                button.backgroundColor = UIColor.appColor(.neutral0)
+                button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
             }
         }
     }
@@ -116,16 +116,20 @@ extension ModifySemesterModalViewController {
         switch sender.tag {
         case 0: // 초기 상태(흰색)
             sender.tag = 1
-            sender.backgroundColor = UIColor.appColor(.success500) // 초록색
+            sender.backgroundColor = UIColor.appColor(.success700)
+            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         case 1: // 새로 선택된 학기(초록색)
             sender.tag = 0
-            sender.backgroundColor = .white // 흰색
+            sender.backgroundColor = UIColor.appColor(.neutral0)
+            sender.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         case 2: // 이미 존재하는 학기(초록색)
             sender.tag = 3
-            sender.backgroundColor = UIColor.appColor(.danger500) // 빨간색
+            sender.backgroundColor = UIColor.appColor(.danger700)
+            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         case 3: // 삭제 예정(빨간색)
             sender.tag = 2
-            sender.backgroundColor = UIColor.appColor(.success500) // 초록색 복구
+            sender.backgroundColor = UIColor.appColor(.success700)
+            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         default:
             break
         }
