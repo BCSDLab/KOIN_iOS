@@ -155,7 +155,12 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
-            self?.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
+            guard let self = self else { return }
+            if lecture.1 && viewModel.checkDuplicatedClassTime(classTime: lecture.0.classTime){
+                self.present(substituteTimetableModalViewController, animated: true)
+            } else {
+                self.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
+            }
         }.store(in: &subscriptions)
         
         
@@ -175,7 +180,11 @@ final class TimetableViewController: UIViewController {
             guard let self = self else { return }
             
             self.toggleCollectionView(collectionView: self.addDirectCollectionView, animate: true)
-            self.inputSubject.send(.postCustomLecture(item.0, item.1))
+            if viewModel.checkDuplicatedClassTime(classTime: item.1) {
+                self.present(substituteTimetableModalViewController, animated: true)
+            } else {
+                self.inputSubject.send(.postCustomLecture(item.0, item.1))
+            }
         }.store(in: &subscriptions)
         
         
@@ -201,26 +210,24 @@ extension TimetableViewController {
         let lastTwoDigits = lectureList.flatMap { $0.classTime.map { $0 % 100 } }
         
         // 마지막 2자리 숫자의 최댓값 구하기
-        guard let maxLastTwoDigits = lastTwoDigits.max() else { return }
-        
+        let maxLastTwoDigits = lastTwoDigits.max() ?? 0 // 실패 시 기본값 0 처리
+
         // 마지막 2자리 최댓값을 2로 나눈 값 계산
         let dividedValue = maxLastTwoDigits / 2
-        
-        print(maxLastTwoDigits)
-    
+
         // 17과 (9 + dividedValue) 중 최댓값 계산
         let upperLimit = max(17, 9 + dividedValue)
-        
+
         // 9부터 upperLimit까지의 배열 생성
         let resultArray = Array(9...upperLimit)
+        
+        // timetableCollectionView 업데이트
         timetableCollectionView.updateLecture(lectureTime: resultArray)
         timetableCollectionView.snp.updateConstraints { make in
             make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
         }
-//        containerView.snp.updateConstraints { make in
-//            make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
-//        }
     }
+
 
     @objc private func modifySemesterButtonTapped() {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)

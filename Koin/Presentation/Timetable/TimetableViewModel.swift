@@ -144,6 +144,17 @@ final class TimetableViewModel: ViewModelProtocol {
 
 extension TimetableViewModel {
     
+    func checkDuplicatedClassTime(classTime: [Int]) -> Bool {
+        for lecture in lectureData {
+            // 겹치는 시간이 있으면 true 반환
+            if !Set(lecture.classTime).isDisjoint(with: classTime) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    
     private func deleteLectureById(lecture: LectureData) {
         
         deleteLecturByIdUseCase.execute(id: lecture.id).sink { completion in
@@ -162,7 +173,7 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] _ in
-
+            
             self?.lectureData.removeAll { $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor}
         }.store(in: &subscriptions)
     }
@@ -229,12 +240,12 @@ extension TimetableViewModel {
             return left.year > right.year
         }
     }
-
-
-     
-     // MARK: - Modified Methods
-
-  
+    
+    
+    
+    // MARK: - Modified Methods
+    
+    
     private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
         fetchFrameUseCase.execute(semester: semester)
             .map { frames -> FrameData in
@@ -272,7 +283,7 @@ extension TimetableViewModel {
     
     private func postLecture(lecture: LectureData) {
         let lectureRequest = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: lecture.id, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
-      
+        
         postLectureUseCase.execute(request: lectureRequest).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -291,6 +302,7 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
             self.lectureData = response
+            
             for frameData in self.frameData {
                 for frame in frameData.frame {
                     if frame.id == frameId {
