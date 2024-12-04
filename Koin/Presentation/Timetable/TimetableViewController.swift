@@ -402,10 +402,8 @@ extension TimetableViewController {
    
     @objc private func saveImageCallback(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            // 저장 실패 시 알림
-            showAlert(title: "저장 실패", message: error.localizedDescription)
+            showAlert(title: "저장 실패", message: "이미지를 앨범에 저장할 권한을 추가해주세요")
         } else {
-            // 저장 성공 시 알림
             showAlert(title: "저장 성공", message: "이미지가 앨범에 저장되었습니다.")
         }
     }
