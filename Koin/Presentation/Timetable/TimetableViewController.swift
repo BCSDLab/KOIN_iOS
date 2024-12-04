@@ -89,6 +89,11 @@ final class TimetableViewController: UIViewController {
         $0.isHidden = true
     }
     
+    private let substituteTimetableModalViewController = SubstituteTimetableModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     private let containerView = UIView().then { _ in
     }
     // MARK: - Initialization
