@@ -200,6 +200,13 @@ final class TimetableViewController: UIViewController {
             self?.inputSubject.send(._deleteLecture(lecture))
             
         }.store(in: &subscriptions)
+        
+        timetableCollectionView.heightChangedPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            self.timetableCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(self.timetableCollectionView.calculateDynamicHeight())
+            }
+        }.store(in: &subscriptions)
     }
     
 }
@@ -469,7 +476,7 @@ extension TimetableViewController {
             make.top.equalTo(scrollView.snp.top)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(100)
+            make.height.equalTo(646)
             make.bottom.equalTo(scrollView.snp.bottom)
         }
         addClassCollectionView.snp.makeConstraints { make in

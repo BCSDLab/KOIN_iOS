@@ -5,11 +5,20 @@
 //  Created by 김나훈 on 11/9/24.
 //
 
+import Combine
 import UIKit
 
 final class TimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var timeTexts: [Int] = [9, 10, 11, 12, 13, 14, 15, 16, 17]
+    let heightChangedPublisher = PassthroughSubject<Void, Never>()
+    
+    private var timeTexts: [Int] = [] {
+        didSet {
+            reloadData()
+            
+            heightChangedPublisher.send()
+        }
+    }
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -30,6 +39,7 @@ final class TimetableCollectionView: UICollectionView, UICollectionViewDataSourc
         register(TimetableHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TimetableHeaderView.identifier)
         dataSource = self
         delegate = self
+        timeTexts = [9, 10, 11, 12, 13, 14, 15, 16, 17]
     }
     
     func updateLecture(lectureTime: [Int]) {
