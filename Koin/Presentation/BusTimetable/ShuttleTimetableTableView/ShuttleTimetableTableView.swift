@@ -68,7 +68,13 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section != busInfo.count - 1 {
             let view = UIView()
-            view.backgroundColor = .appColor(.neutral100)
+            let coloredView = UIView()
+            view.backgroundColor = .systemBackground
+            coloredView.backgroundColor = .appColor(.neutral100)
+            view.addSubview(coloredView)
+            
+            view.frame = .init(x: 0, y: 0, width: tableView.frame.width, height: 14)
+            coloredView.frame = .init(x: 0, y: 7, width: tableView.frame.width, height: 7)
             return view
         }
         return nil
@@ -102,7 +108,7 @@ extension ShuttleTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 7
+        return 14
     }
 }
 
