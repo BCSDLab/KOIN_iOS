@@ -82,7 +82,7 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     
     private let busTimetableRouteView = BusTimetableRouteView()
     
-    private let expressOrCityTimetableTableView = ExpressOrCityTimetableTableView(frame: .zero, style: .plain)
+    private let expressOrCityTimetableTableView = ExpressOrCityTimetableTableView(frame: .zero, style: .grouped)
     
     private let shuttleTimetableTableView = ShuttleTimetableTableView(frame: .zero, style: .grouped)
     
