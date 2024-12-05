@@ -31,6 +31,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
         separatorStyle = .none
         showsVerticalScrollIndicator = false
         isScrollEnabled = false
+        backgroundColor = .systemBackground
     }
     
     func updateExpressBusInfo(busInfo: BusTimetableInfo) {
@@ -55,6 +56,25 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        let morningLabel = UILabel()
+        let afternoonLabel = UILabel()
+        morningLabel.text = "오전"
+        afternoonLabel.text = "오후"
+        [morningLabel, afternoonLabel].forEach {
+            $0.font = .appFont(.pretendardRegular, size: 16)
+            $0.textColor = .appColor(.neutral600)
+            $0.textAlignment = .left
+            view.addSubview($0)
+        }
+        morningLabel.frame = .init(x: 24, y: 16, width: 163, height: 26)
+        afternoonLabel.frame = .init(x: tableView.frame.width - 24 - 163, y: 16, width: 163, height: 26)
+        
+        view.frame = CGRect(x: 0, y: 16, width: tableView.frame.width, height: 50)
+        return view
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
     }
@@ -63,6 +83,10 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
 extension ExpressOrCityTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 61
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
 }
 
