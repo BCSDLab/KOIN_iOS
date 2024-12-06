@@ -277,8 +277,6 @@ extension TimetableViewController {
             }
         }
 
-
-        
         // 사용 가능한 색상 쌍에서 이미 사용된 것을 제외
         var unusedColorPairs = timetableColors.compactMap { colorPair -> (UIColor, UIColor)? in
             let bodyColor = UIColor.timetableColor(_name: colorPair.0)
@@ -325,12 +323,18 @@ extension TimetableViewController {
                         lectureView.isUserInteractionEnabled = true
                         
                         containerView.addSubview(lectureView)
+                        
                         lectureView.snp.makeConstraints { make in
-                            make.width.equalTo(width)
-                            make.height.equalTo(height * range.count) // 강의 시간의 개수만큼 높이 설정
-                            make.top.equalTo(containerView.snp.top).offset(height * (firstTime % 100))
-                            make.leading.equalTo(containerView.snp.leading).offset(width * day)
+                            make.height.equalTo(height * range.count - 2)
+                            make.top.equalTo(containerView.snp.top).offset(height * (firstTime % 100) + 2)
+                            let sectionWidth = containerView.frame.width / 5
+                            let leadingOffset = sectionWidth * CGFloat(day)
+                            let trailingOffset = sectionWidth * CGFloat(day + 1)
+                            make.leading.equalTo(containerView.snp.leading).offset(leadingOffset + 1)
+                            make.trailing.equalTo(containerView.snp.leading).offset(trailingOffset - 1)
                         }
+
+
                         
                         // 새로 추가된 body 색상을 사용된 색상으로 추가
                         usedColors.insert(bodyColor)
@@ -339,6 +343,7 @@ extension TimetableViewController {
             }
         }
     }
+
     
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
@@ -374,7 +379,7 @@ extension TimetableViewController {
         if let frameName = frameName {
             semesterSelectButton.setTitle("\(semester.reverseFormatSemester()) / \(frameName)", for: .normal)
         } else {
-            semesterSelectButton.setTitle("\(semester.reverseFormatSemester())", for: .normal)
+            semesterSelectButton.setTitle("\(semester)", for: .normal)
         }
     }
     @objc private func modifyTimetableButtonTapped() {

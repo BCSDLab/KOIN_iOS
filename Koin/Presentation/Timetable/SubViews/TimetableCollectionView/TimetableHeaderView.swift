@@ -22,7 +22,7 @@ final class TimetableHeaderView: UICollectionReusableView {
     
     private let separateView: UIView = {
         let view = UIView()
-        view.layer.borderWidth = 1.0
+        view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         return view
     }()
@@ -48,7 +48,7 @@ final class TimetableHeaderView: UICollectionReusableView {
             label.textColor = UIColor.appColor(.neutral500)
             label.font = UIFont.appFont(.pretendardBold, size: 13)
             label.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-            label.layer.borderWidth = 1.0
+            label.layer.borderWidth = 0.5
             daysStackView.addArrangedSubview(label)
         }
         addSubview(daysStackView)

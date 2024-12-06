@@ -11,7 +11,7 @@ final class TimetableCollectionViewCell: UICollectionViewCell {
     
     private let timeLabel = InsetLabel(top: -35, left: 0, bottom: 0, right: 0).then {
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.layer.borderWidth = 1.0
+        $0.layer.borderWidth = 0.5
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .center
@@ -99,7 +99,7 @@ extension TimetableCollectionViewCell {
             for _ in 0..<2 {
                 let view = UIView()
                 view.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-                view.layer.borderWidth = 1.0
+                view.layer.borderWidth = 0.5
                 view.snp.makeConstraints { make in
                     make.height.equalTo(35)
                 }
