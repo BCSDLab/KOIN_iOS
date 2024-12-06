@@ -94,6 +94,9 @@ final class TimetableViewController: UIViewController {
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private let selectDeptModalViewController = SelectDeptModalViewController().then { _ in
+    }
+    
     private let containerView = UIView().then { _ in
     }
     // MARK: - Initialization
@@ -163,6 +166,10 @@ final class TimetableViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        addClassCollectionView.filterButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            self.present(self.selectDeptModalViewController, animated: false)
+        }.store(in: &subscriptions)
         
         // MARK: DIRECT
         
@@ -206,6 +213,10 @@ final class TimetableViewController: UIViewController {
             self.timetableCollectionView.snp.updateConstraints { make in
                 make.height.equalTo(self.timetableCollectionView.calculateDynamicHeight())
             }
+        }.store(in: &subscriptions)
+        
+        selectDeptModalViewController.selectedDeptPublisher.sink { [weak self] dept in
+            self?.addClassCollectionView.setUpSelectedDept(dept: dept)
         }.store(in: &subscriptions)
     }
     

@@ -54,6 +54,14 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
         self.myLectureList = myLectureList
         reloadData()
     }
+    func setUpSelectedDept(dept: String?) {
+        if let dept {
+            showingLectureList = lectureList.filter { $0.department == dept }
+        } else {
+            showingLectureList = lectureList
+        }
+        reloadData()
+    }
     
 }
 
