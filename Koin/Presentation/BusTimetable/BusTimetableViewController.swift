@@ -126,6 +126,11 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
         }.store(in: &subscriptions)
+        
+        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] in
+            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel())
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
     
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
