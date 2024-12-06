@@ -24,6 +24,14 @@ final class FrameListViewController: UIViewController {
     
     private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
     
+    private let emptyFrameLabel = UILabel().then {
+        $0.text = "우측 상단의 버튼으로 학기를 추가해\n시간표 기능을 사용해 보세요!"
+        $0.textAlignment = .center
+        $0.numberOfLines = 2
+        $0.textColor = UIColor.appColor(.neutral600)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 13)
+    }
+    
     // MARK: - Initialization
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude // 기본 여백 제거
@@ -45,7 +53,9 @@ final class FrameListViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
-        setUpTableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(TimetableCell.self, forCellReuseIdentifier: "TimetableCell")
         inputSubject.send(.fetchFrameList)
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0 // 섹션 헤더 상단 간격 제거
@@ -59,8 +69,11 @@ final class FrameListViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
-            case .reloadData: self?.tableView.reloadData()
+            case .reloadData: 
+                self?.tableView.reloadData()
+                self?.emptyFrameLabel.isHidden = !strongSelf.viewModel.frameData.isEmpty
             case .showToast(let message): self?.showToast(message: message, success: true)
             }
         }.store(in: &subscriptions)
@@ -204,29 +217,20 @@ extension FrameListViewController {
 
 extension FrameListViewController {
     
-    private func setUpTableView() {
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(TimetableCell.self, forCellReuseIdentifier: "TimetableCell")
-    }
-    
-}
-
-extension FrameListViewController {
-    
     private func setUpLayOuts() {
-        [tableView].forEach {
+        [tableView, emptyFrameLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        
+        emptyFrameLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(view.snp.centerY)
+            make.centerX.equalTo(view.snp.centerX)
+        }
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     private func setUpNavigationBar() {
         let modifyTimetableButton = UIBarButtonItem(image: UIImage.appImage(asset: .write), style: .plain, target: self, action: #selector(modifySemesterButtonTapped))

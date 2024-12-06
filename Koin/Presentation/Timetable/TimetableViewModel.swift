@@ -93,6 +93,7 @@ final class TimetableViewModel: ViewModelProtocol {
         }
     }
     
+    // 전체 프레임 리스트
     private(set) var frameData: [FrameData] = [] {
         didSet {
             nextOutputSubject.send(.reloadData)
