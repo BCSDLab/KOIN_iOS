@@ -12,6 +12,7 @@ import UIKit
 final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
+    let moveDetailTimetablePublisher = PassthroughSubject<Void, Never>()
     private var busInfo: [ShuttleTimetableInfos]  = [ShuttleTimetableInfos(region: "천안 아산", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역")]), ShuttleTimetableInfos(region: "청주", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "청주셔틀"), ShuttleTimetableInfo(routeType: .circular, routeName: "용암동"), ShuttleTimetableInfo(routeType: .circular, routeName: "동남지구"), ShuttleTimetableInfo(routeType: .circular, routeName: "산남/분평")])]
     
     // MARK: - Initialization
@@ -94,7 +95,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        moveDetailTimetablePublisher.send()
     }
 }
 
