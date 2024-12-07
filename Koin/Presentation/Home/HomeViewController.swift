@@ -390,7 +390,8 @@ extension HomeViewController {
     }
     
     @objc private func busViewTapped() {
-        let busViewController = BusTimetableViewController(viewModel: BusTimetableViewModel())
+        let repository = DefaultBusRepository(service: DefaultBusService())
+        let busViewController = BusTimetableViewController(viewModel: BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getCityFiltersUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository)))
         navigationController?.pushViewController(busViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))

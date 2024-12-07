@@ -28,13 +28,13 @@ final class DefaultFetchExpressTimetableUseCase: FetchExpressTimetableUseCase, G
         }.eraseToAnyPublisher()
     }
     
-    func getBusFirstFilter() -> [BusCourseInfo] {
-        return setBusFirstFilter()
+    func getBusFirstFilter() -> [String] {
+        return ["병천방면", "천안방면"]
     }
     
     private func setBusFirstFilter() -> [BusCourseInfo] {
-        let fromCourse = BusCourseInfo(busCourse: "한기대 → 야우리", busType: .expressBus, direction: .from, region: "천안")
-        let toCourse = BusCourseInfo(busCourse: "야우리 → 한기대", busType: .expressBus, direction: .to, region: "천안")
+        let fromCourse = BusCourseInfo(busCourse: "병천방면", busType: .expressBus, direction: .from, region: "천안")
+        let toCourse = BusCourseInfo(busCourse: "천안방면", busType: .expressBus, direction: .to, region: "천안")
         return [fromCourse, toCourse]
     }
     

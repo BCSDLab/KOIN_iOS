@@ -107,8 +107,11 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "천안셔틀 주말 시간표")
-        scrollView.isHidden = true
+        scrollView.isHidden = false
         segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
+            $0.isHidden = true
+        }
     }
     
     private func bind() {
