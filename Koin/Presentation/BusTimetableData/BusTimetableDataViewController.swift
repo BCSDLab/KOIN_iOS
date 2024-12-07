@@ -52,7 +52,23 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         $0.backgroundColor = .appColor(.neutral400)
     }
     
+    private let busTimetableSeparateView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
+    
     private let oneBusTimetableDataTableView = OneBusTimetableTableView(frame: .zero, style: .grouped)
+    
+    private let manyBusTimetableDataTableView = ManyBusTimetableTableView(frame: .zero, style: .grouped)
+    
+    private let manyBusTimetableDataCollectionView = ManyBusTimetableCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        $0.collectionViewLayout = layout
+    }
+    
+    private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
     
     // MARK: - Initialization
     init(viewModel: BusTimetableDataViewModel) {
@@ -71,6 +87,7 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "천안셔틀 주말 시간표")
+        oneBusTimetableDataTableView.isHidden = true
     }
     
     private func bind() {
@@ -85,8 +102,12 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
 
 extension BusTimetableDataViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, oneBusTimetableDataTableView, busTimetableBorderView].forEach {
+        [navigationBarWrappedView, shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, scrollView].forEach {
             view.addSubview($0)
+        }
+        scrollView.addSubview(contentView)
+        [oneBusTimetableDataTableView, busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
+            contentView.addSubview($0)
         }
     }
     
@@ -95,6 +116,15 @@ extension BusTimetableDataViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.height.equalTo(45)
+        }
+        scrollView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(16)
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(1000)
         }
         shuttleRouteTypeLabel.snp.makeConstraints {
             $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(16)
@@ -117,8 +147,19 @@ extension BusTimetableDataViewController {
         }
         busTimetableBorderView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(16)
+            $0.top.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        manyBusTimetableDataTableView.snp.makeConstraints {
+            $0.leading.bottom.equalToSuperview()
+            $0.width.equalTo(152)
+            $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
+        }
+        manyBusTimetableDataCollectionView.snp.makeConstraints {
+            $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
+            $0.trailing.equalToSuperview()
+            $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
+            $0.bottom.equalToSuperview()
         }
     }
     
