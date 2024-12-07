@@ -167,8 +167,15 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         if busType == .shuttleBus {
             shuttleTimetableTableView.isHidden = false
             expressOrCityTimetableTableView.isHidden = true
+            typeOftimetableLabel.text = "셔틀버스 시간표"
         }
         else {
+            if busType == .expressBus {
+                typeOftimetableLabel.text = "대성고속 시간표"
+            }
+            else {
+                typeOftimetableLabel.text = "시내버스 시간표"
+            }
             shuttleTimetableTableView.isHidden = true
             expressOrCityTimetableTableView.isHidden = false
         }
