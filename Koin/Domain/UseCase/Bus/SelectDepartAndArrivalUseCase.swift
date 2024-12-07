@@ -7,6 +7,13 @@
 
 import Combine
 
+struct SelectedBusPlaceStatus {
+    let lastDepartedPlace: BusPlace?
+    let nowDepartedPlace: BusPlace
+    let lastArrivedPlace: BusPlace?
+    let nowArrivedPlace: BusPlace
+}
+
 protocol SelectDepartAndArrivalUseCase {
     func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace)
 }
