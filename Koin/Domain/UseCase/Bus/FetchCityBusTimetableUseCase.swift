@@ -32,18 +32,13 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, G
         }.eraseToAnyPublisher()
     }
     
-    func getBusFilter(busDirection: Int) -> [CityBusCourseInfo] {
-        if busDirection == 0 {
-            return setFromCityBusCourses()
-        }
-        else {
-            return setToCityBusCourses()
-        }
+    func getBusFilter() -> ([String], [String]) {
+        return (["병천방면", "천안방면"], ["400번", "402번", "405번"])
     }
 
     private func setToCityBusCourses() -> [CityBusCourseInfo] {
         var cityBusInfos: [CityBusCourseInfo] = []
-        let busCourseText = "터미널 → 병천"
+        let busCourseText = "병천방면"
         for busNumber in BusNumber.allCases {
             var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .byungChun)
             switch busNumber {
@@ -61,7 +56,7 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, G
     
     private func setFromCityBusCourses() -> [CityBusCourseInfo] {
         var cityBusInfos: [CityBusCourseInfo] = []
-        let busCourseText = "병천 → 터미널"
+        let busCourseText = "천안방면"
         for busNumber in BusNumber.allCases {
             var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .terminal)
             switch busNumber {

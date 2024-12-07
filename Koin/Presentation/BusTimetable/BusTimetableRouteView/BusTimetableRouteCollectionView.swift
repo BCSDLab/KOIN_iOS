@@ -12,6 +12,8 @@ final class BusTimetableRouteCollectionView: UICollectionView, UICollectionViewD
     //MARK: - Properties
     private var routeList: [String] = []
     private var selectedList: [Bool] = []
+    private var subscriptions: Set<AnyCancellable> = []
+    let filterIdxPublisher = PassthroughSubject<Int, Never>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -67,6 +69,7 @@ extension BusTimetableRouteCollectionView {
                 selectedList[index] = false
             }
         }
+        filterIdxPublisher.send(indexPath.row)
         reloadData()
     }
 }

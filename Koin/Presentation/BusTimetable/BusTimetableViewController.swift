@@ -117,6 +117,8 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
             switch output {
             case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
                 self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
+            case let .updateBusTimetable(busType: busType, busTimetableInfo: busTimetableInfo):
+                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo)
             }
         }.store(in: &subscriptions)
         
@@ -132,12 +134,27 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
             let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel())
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        busTimetableRouteView.busFilterIdxPublisher.sink { [weak self] (firstIdx, secondIdx) in
+            guard let self = self else { return }
+            self.inputSubject.send(.getBusTimetable(currentBusType(), firstIdx, secondIdx))
+        }.store(in: &subscriptions)
+        
+        expressOrCityTimetableTableView.heightPublisher.sink { [weak self] height in
+            self?.contentView.snp.updateConstraints {
+                $0.height.equalTo(300 + height)
+            }
+        }.store(in: &subscriptions)
     }
     
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
         moveUnderLineView()
+        inputSubject.send(.getBusRoute(currentBusType()))
+    }
+    
+    private func currentBusType() -> BusType {
         let busType: BusType
-        switch sender.selectedSegmentIndex {
+        switch busTypeSegmentControl.selectedSegmentIndex {
         case 0:
             busType = .shuttleBus
         case 1:
@@ -145,7 +162,7 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
         default:
             busType = .cityBus
         }
-        inputSubject.send(.getBusRoute(busType))
+        return busType
     }
     
     private func moveUnderLineView() {
@@ -166,19 +183,32 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     private func updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?) {
         busTimetableRouteView.setBusType(busType: busType, firstRouteList: firstBusRoute, secondRouteList: secondBusRoute)
         if busType == .shuttleBus {
-            shuttleTimetableTableView.isHidden = false
-            expressOrCityTimetableTableView.isHidden = true
             typeOftimetableLabel.text = "셔틀버스 시간표"
+            inputSubject.send(.getBusTimetable(.shuttleBus, 0, nil))
         }
         else {
             if busType == .expressBus {
                 typeOftimetableLabel.text = "대성고속 시간표"
+                inputSubject.send(.getBusTimetable(.expressBus, 0, nil))
             }
             else {
                 typeOftimetableLabel.text = "시내버스 시간표"
+                inputSubject.send(.getBusTimetable(.cityBus, 0, 0))
             }
             shuttleTimetableTableView.isHidden = true
             expressOrCityTimetableTableView.isHidden = false
+        }
+    }
+    
+    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
+        switch busType {
+        case .shuttleBus:
+            shuttleTimetableTableView.isHidden = false
+            expressOrCityTimetableTableView.isHidden = true
+        default:
+            shuttleTimetableTableView.isHidden = true
+            expressOrCityTimetableTableView.isHidden = false
+            expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
         }
     }
 }
@@ -208,7 +238,7 @@ extension BusTimetableViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(1000).priority(.low)
+            $0.height.equalTo(1000)
         }
         navigationBarWrappedView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()

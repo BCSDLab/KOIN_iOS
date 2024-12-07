@@ -13,9 +13,9 @@ protocol GetShuttleBusFiltersUseCase {
 }
 
 protocol GetExpressFiltersUseCase {
-    func getBusFirstFilter() -> [BusCourseInfo]
+    func getBusFirstFilter() -> [String]
 }
 
 protocol GetCityFiltersUseCase {
-    func getBusFilter(busDirection: Int) -> [CityBusCourseInfo]
+    func getBusFilter() -> ([String], [String])
 }

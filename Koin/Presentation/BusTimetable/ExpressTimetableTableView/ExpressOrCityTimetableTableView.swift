@@ -11,7 +11,8 @@ import UIKit
 final class ExpressOrCityTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busInfo: BusTimetableInfo = .init(courseName: "", routeName: "", arrivalInfos: [BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46")], updatedAt: "")
+    private var busInfo: BusTimetableInfo = .init(courseName: "", routeName: "", arrivalInfos: [], updatedAt: "")
+    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -34,9 +35,14 @@ final class ExpressOrCityTimetableTableView: UITableView {
         backgroundColor = .systemBackground
     }
     
-    func updateExpressBusInfo(busInfo: BusTimetableInfo) {
+    func updateBusInfo(busInfo: BusTimetableInfo) {
         self.busInfo = busInfo
         reloadData()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heightPublisher.send(self.contentSize.height)
     }
 }
 
