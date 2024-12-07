@@ -70,6 +70,25 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
     
     private let contentView = UIView()
     
+    private let segmentControl = UISegmentedControl().then {
+        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        $0.insertSegment(withTitle: "등교", at: 0, animated: true)
+        $0.insertSegment(withTitle: "하교", at: 1, animated: true)
+        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardRegular, size: 16)], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
+        $0.layer.masksToBounds = false
+    }
+    
+    private let shadowView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral400)
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
+    }
+    
+    private let selectedUnderlineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
+    
     // MARK: - Initialization
     init(viewModel: BusTimetableDataViewModel) {
         self.viewModel = viewModel
@@ -87,7 +106,8 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "천안셔틀 주말 시간표")
-        oneBusTimetableDataTableView.isHidden = true
+        scrollView.isHidden = true
+        segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
     }
     
     private func bind() {
@@ -95,18 +115,37 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             
         }.store(in: &subscriptions)
-        
-        
     }
   }
 
 extension BusTimetableDataViewController {
+    @objc private func changeSegmentControl(sender: UISegmentedControl) {
+        moveUnderLineView()
+    }
+    
+    private func moveUnderLineView() {
+        let newXPosition = (segmentControl.frame.width / CGFloat(segmentControl.numberOfSegments)) * CGFloat(segmentControl.selectedSegmentIndex)
+        selectedUnderlineView.snp.updateConstraints {
+            $0.leading.equalTo(segmentControl).offset(newXPosition)
+        }
+        UIView.animate (
+            withDuration: 0.4,
+            animations: { [weak self] in
+                guard let self = self
+                else { return }
+                self.view.layoutIfNeeded()
+            }
+        )
+    }
+}
+
+extension BusTimetableDataViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, scrollView].forEach {
+        [navigationBarWrappedView, shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, scrollView, segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
-        [oneBusTimetableDataTableView, busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
+        [busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -142,7 +181,7 @@ extension BusTimetableDataViewController {
         }
         oneBusTimetableDataTableView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
+            $0.top.equalTo(selectedUnderlineView.snp.bottom)
             $0.height.equalTo(500)
         }
         busTimetableBorderView.snp.makeConstraints {
@@ -160,6 +199,23 @@ extension BusTimetableDataViewController {
             $0.trailing.equalToSuperview()
             $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
+        }
+        segmentControl.snp.makeConstraints {
+            $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
+        }
+        shadowView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.top.equalTo(segmentControl.snp.bottom)
+            $0.height.equalTo(1)
+        }
+        selectedUnderlineView.snp.makeConstraints {
+            $0.leading.equalTo(segmentControl.snp.leading)
+            $0.height.equalTo(2)
+            $0.top.equalTo(segmentControl.snp.bottom)
+            $0.width.equalTo(segmentControl.snp.width).dividedBy(segmentControl.numberOfSegments)
         }
     }
     
