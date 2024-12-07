@@ -13,11 +13,12 @@ import UIKit
 final class ShuttleTimetableTableViewCell: UITableViewCell {  
     //MARK: - UI Components
     private var shuttleRouteTypeLabel = UILabel().then {
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
         $0.font = .appFont(.pretendardRegular, size: 11)
         $0.textAlignment = .center
         $0.textColor = .appColor(.neutral0)
-        $0.backgroundColor = .orange
+        $0.backgroundColor = .appColor(.fluorescentOrange)
     }
     
     private let shuttleBusRouteLabel = UILabel().then {

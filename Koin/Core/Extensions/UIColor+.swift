@@ -18,6 +18,7 @@ enum SceneColorAsset {
     case bus1, bus2, bus3
     case yellow
     case gray
+    case fluorescentGreen, fluorescentOrange, fluorescentBlue
 }
 
 enum TimetableColorAsset {
@@ -140,6 +141,9 @@ extension UIColor {
         case .bus3: return UIColor(hexCode: "4DB297")
         case .yellow: return UIColor(hexCode: "#F4CE83")
         case .gray: return UIColor(hexCode: "8E8E8E")
+        case .fluorescentGreen: return UIColor(hexCode: "#4ED92C")
+        case .fluorescentOrange: return UIColor(hexCode: "#FFB443")
+        case .fluorescentBlue: return UIColor(hexCode: "#34ADFF")
         }
     }
     static func randomLightColor() -> UIColor {
