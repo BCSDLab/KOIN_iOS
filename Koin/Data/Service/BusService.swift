@@ -11,13 +11,14 @@ import Combine
 protocol BusService {
     func fetchBusInformationList(requestModel: FetchBusInformationListRequest) -> AnyPublisher<BusDTO, Error>
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error>
-    func fetchShuttleTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ShuttleBusTimetableDTO, Error>
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
-    func getBusCourse() -> AnyPublisher<BusCourses, Error>
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
 }
 
 final class DefaultBusService: BusService {
+    let mockNetworkService = MockNetworkService()
+    
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error> {
         return request(.fetchBusTimetableList(requestModel))
     }
@@ -30,12 +31,15 @@ final class DefaultBusService: BusService {
         return request(.searchBusInformation(requestModel))
     }
     
-    func fetchShuttleTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
-        return request(.fetchBusTimetableList(requestModel))
-    }
-    
-    func getBusCourse() -> AnyPublisher<BusCourses, Error> {
-        return request(.getBusCourse)
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error> {
+        guard let url = URL(string: "https://c01aaba6-9825-4309-b30e-aff4753bebfe.mock.pstmn.io/test/bus/courses") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+      
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = HTTPMethod.get.rawValue
+        return mockNetworkService.request(api: urlRequest)
+            .eraseToAnyPublisher()
     }
     
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {

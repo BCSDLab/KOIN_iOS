@@ -23,8 +23,8 @@ final class DefaultBusRepository: BusRepository {
         return service.searchBusInformation(requestModel: requestModel)
     }
     
-    func fetchShuttleBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
-        return service.fetchShuttleTimetableList(requestModel: requestModel)
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error> {
+        return service.fetchShuttleRouteList()
     }
     
     func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error> {
@@ -33,9 +33,5 @@ final class DefaultBusRepository: BusRepository {
     
     func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {
         return service.fetchCityTimetableList(requestModel: requestModel)
-    }
-    
-    func getBusCourse() -> AnyPublisher<BusCourses, Error> {
-        return service.getBusCourse()
     }
 }

@@ -13,7 +13,7 @@ final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<Void, Never>()
-    private var busInfo: [ShuttleTimetableInfos]  = [ShuttleTimetableInfos(region: "천안 아산", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역")]), ShuttleTimetableInfos(region: "청주", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "청주셔틀"), ShuttleTimetableInfo(routeType: .circular, routeName: "용암동"), ShuttleTimetableInfo(routeType: .circular, routeName: "동남지구"), ShuttleTimetableInfo(routeType: .circular, routeName: "산남/분평")])]
+    private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -37,7 +37,7 @@ final class ShuttleTimetableTableView: UITableView {
         self.backgroundColor = .systemBackground
     }
     
-    func updateShuttleBusInfo(busInfo: [ShuttleTimetableInfos]) {
+    func updateShuttleBusInfo(busInfo: ShuttleRouteDTO) {
         self.busInfo = busInfo
         reloadData()
     }
@@ -45,17 +45,17 @@ final class ShuttleTimetableTableView: UITableView {
 
 extension ShuttleTimetableTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return busInfo.count
+        return busInfo.routeRegions.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo[section].routes.count
+        return busInfo.routeRegions[section].routes.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let label = UILabel()
-        label.text = busInfo[section].region
+        label.text = busInfo.routeRegions[section].region
         label.font = .appFont(.pretendardBold, size: 18)
         label.textColor = .appColor(.neutral800)
         view.addSubview(label)
@@ -67,7 +67,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section != busInfo.count - 1 {
+        if section != busInfo.routeRegions.count - 1 {
             let view = UIView()
             let coloredView = UIView()
             view.backgroundColor = .systemBackground
@@ -89,8 +89,8 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let routeInfo = busInfo[section].routes[indexPath.row]
-        cell.configure(routeType: routeInfo.routeType.rawValue, route: routeInfo.routeName)
+        let routeInfo = busInfo.routeRegions[section].routes[indexPath.row]
+        cell.configure(routeType: routeInfo.type.rawValue, route: routeInfo.routeName)
         return cell
     }
     

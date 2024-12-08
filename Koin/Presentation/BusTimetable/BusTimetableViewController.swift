@@ -112,12 +112,13 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
             switch output {
             case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
                 self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
             case let .updateBusTimetable(busType: busType, busTimetableInfo: busTimetableInfo):
                 self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo)
+            case let .updateShuttleBusRoutes(busRoutes: busRoutes):
+                self?.updateShuttleBusRoutes(busRoutes: busRoutes)
             }
         }.store(in: &subscriptions)
         
@@ -200,15 +201,15 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
-        switch busType {
-        case .shuttleBus:
-            shuttleTimetableTableView.isHidden = false
-            expressOrCityTimetableTableView.isHidden = true
-        default:
-            shuttleTimetableTableView.isHidden = true
-            expressOrCityTimetableTableView.isHidden = false
-            expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
-        }
+        shuttleTimetableTableView.isHidden = true
+        expressOrCityTimetableTableView.isHidden = false
+        expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
+    }
+    
+    private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {
+        shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
+        shuttleTimetableTableView.isHidden = false
+        expressOrCityTimetableTableView.isHidden = true
     }
 }
 

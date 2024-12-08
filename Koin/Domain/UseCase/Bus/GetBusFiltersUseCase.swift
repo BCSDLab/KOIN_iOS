@@ -7,15 +7,32 @@
 
 import Combine
 
-protocol GetShuttleBusFiltersUseCase {
-    func getBusFirstFilter() -> AnyPublisher<[BusCourseInfo], Error>
-    func getBusSecondFilter(firstFilterIdx: Int) -> AnyPublisher<[String], Error>
+protocol GetShuttleBusFilterUseCase {
+    func execute() -> [String]
 }
 
-protocol GetExpressFiltersUseCase {
-    func getBusFirstFilter() -> [String]
+protocol GetExpressFilterUseCase {
+    func execute() -> [String]
 }
 
 protocol GetCityFiltersUseCase {
-    func getBusFilter() -> ([String], [String])
+    func execute() -> ([String], [String])
+}
+
+final class DefaultGetShuttleBusFilterUseCase: GetShuttleBusFilterUseCase {
+    func execute() -> [String] {
+        return ["전체", "순환노선", "주말노선", "주중노선"]
+    }
+}
+
+final class DefaultGetExpressFilterUseCase: GetExpressFilterUseCase {
+    func execute() -> [String] {
+        return ["병천방면", "천안방면"]
+    }
+}
+
+final class DefaultGetCityFiltersUseCase: GetCityFiltersUseCase {
+    func execute() -> ([String], [String]) {
+        return (["병천방면", "천안방면"], ["400번", "402번", "405번"])
+    }
 }
