@@ -84,7 +84,19 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             coloredView.frame = .init(x: 0, y: 7, width: tableView.frame.width, height: 7)
             return view
         }
-        return nil
+        else {
+            let view = UIView()
+            let label = UILabel()
+            label.text = "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.term))의\n시간표가 제공됩니다."
+            label.font = .appFont(.pretendardRegular, size: 14)
+            label.textAlignment = .left
+            label.textColor = .appColor(.neutral500)
+            label.numberOfLines = 0
+            label.frame = .init(x: 23, y: 8, width: tableView.frame.width, height: 44)
+            view.addSubview(label)
+            view.frame = .init(x: 0, y: 0, width: tableView.frame.width, height: 60)
+            return view
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,7 +133,12 @@ extension ShuttleTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 14
+        if section != busInfo.routeRegions.count - 1 {
+            return 14
+        }
+        else {
+            return 60
+        }
     }
 }
 
