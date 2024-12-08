@@ -183,18 +183,14 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
             DispatchQueue.main.async { [weak self] in
                 self?.shuttleTimetableTableView.isHidden = false
                 self?.expressOrCityTimetableTableView.isHidden = true
-            }
-        case 1:
-            busType = .expressBus
-            DispatchQueue.main.async { [weak self] in
-                self?.shuttleTimetableTableView.isHidden = true
-                self?.expressOrCityTimetableTableView.isHidden = false
+                self?.updateLayoutsByNotice(isDeleted: false)
             }
         default:
-            busType = .cityBus
+            busType = busTypeSegmentControl.selectedSegmentIndex == 1 ? .expressBus : .cityBus
             DispatchQueue.main.async { [weak self] in
                 self?.shuttleTimetableTableView.isHidden = true
                 self?.expressOrCityTimetableTableView.isHidden = false
+                self?.updateLayoutsByNotice(isDeleted: true)
             }
         }
         return busType
@@ -256,6 +252,21 @@ extension BusTimetableViewController {
         }
         [busNoticeLabel, deleteNoticeButton].forEach {
             busNoticeWrappedView.addSubview($0)
+        }
+    }
+    
+    private func updateLayoutsByNotice(isDeleted: Bool) {
+        if isDeleted {
+            busNoticeWrappedView.isHidden = true
+            timetableHeaderView.snp.updateConstraints {
+                $0.height.equalTo(75)
+            }
+        }
+        else {
+            busNoticeWrappedView.isHidden = false
+            timetableHeaderView.snp.updateConstraints {
+                $0.height.equalTo(139)
+            }
         }
     }
     
