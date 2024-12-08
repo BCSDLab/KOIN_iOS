@@ -12,6 +12,9 @@ import UIKit
 final class BusTimetableRouteView: UIView {
     // MARK: - properties
     let busRouteContentHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    let busFilterIdxPublisher = CurrentValueSubject<(Int, Int?), Never>((0, nil))
+    private var subscriptions: Set<AnyCancellable> = []
+    
     // MARK: - UI Components
     private let firstBusTimetableRouteCollectionView =  BusTimetableRouteCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
@@ -43,6 +46,20 @@ final class BusTimetableRouteView: UIView {
     
     private func commonInit() {
         configureView()
+        
+        firstBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index in
+            if let secondFilterIdx = self?.busFilterIdxPublisher.value.1 {
+                self?.busFilterIdxPublisher.send((index, secondFilterIdx))
+            }
+            else {
+                self?.busFilterIdxPublisher.send((index, nil))
+            }
+        }.store(in: &subscriptions)
+        
+        secondBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index in
+            guard let self = self else { return }
+            self.busFilterIdxPublisher.send((self.busFilterIdxPublisher.value.0, index))
+        }.store(in: &subscriptions)
     }
     
     func setBusType(busType: BusType, firstRouteList: [String], secondRouteList: [String]?) {

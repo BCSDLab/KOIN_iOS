@@ -8,17 +8,17 @@
 import Combine
 
 protocol FetchCityBusTimetableUseCase {
-    func fetchCityBusTimetableUseCase(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error>
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error>
 }
 
-final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, GetCityFiltersUseCase {
+final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
     let busRepository: BusRepository
     
     init(busRepository: BusRepository) {
         self.busRepository = busRepository
     }
     
-    func fetchCityBusTimetableUseCase(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error> {
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error> {
         var busCourses: [CityBusCourseInfo] = []
         if firstFilterIdx == 0 {
             busCourses = setFromCityBusCourses()
@@ -32,18 +32,9 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, G
         }.eraseToAnyPublisher()
     }
     
-    func getBusFilter(busDirection: Int) -> [CityBusCourseInfo] {
-        if busDirection == 0 {
-            return setFromCityBusCourses()
-        }
-        else {
-            return setToCityBusCourses()
-        }
-    }
-
     private func setToCityBusCourses() -> [CityBusCourseInfo] {
         var cityBusInfos: [CityBusCourseInfo] = []
-        let busCourseText = "터미널 → 병천"
+        let busCourseText = "병천방면"
         for busNumber in BusNumber.allCases {
             var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .byungChun)
             switch busNumber {
@@ -61,7 +52,7 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, G
     
     private func setFromCityBusCourses() -> [CityBusCourseInfo] {
         var cityBusInfos: [CityBusCourseInfo] = []
-        let busCourseText = "병천 → 터미널"
+        let busCourseText = "천안방면"
         for busNumber in BusNumber.allCases {
             var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .terminal)
             switch busNumber {

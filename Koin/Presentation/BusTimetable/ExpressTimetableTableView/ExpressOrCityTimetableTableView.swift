@@ -11,7 +11,8 @@ import UIKit
 final class ExpressOrCityTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busInfo: BusTimetableInfo = .init(courseName: "", routeName: "", arrivalInfos: [BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46"), BusArrivalInfo(leftNode: "08:03", rightNode: "21:46")], updatedAt: "")
+    private var busInfo: BusTimetableInfo = .init(arrivalInfos: [], updatedAt: "")
+    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -34,9 +35,14 @@ final class ExpressOrCityTimetableTableView: UITableView {
         backgroundColor = .systemBackground
     }
     
-    func updateExpressBusInfo(busInfo: BusTimetableInfo) {
+    func updateBusInfo(busInfo: BusTimetableInfo) {
         self.busInfo = busInfo
         reloadData()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heightPublisher.send(self.contentSize.height)
     }
 }
 
@@ -75,6 +81,19 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
         return view
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        let label = UILabel()
+        label.text = "업데이트 날짜: \(busInfo.updatedAt)"
+        label.font = UIFont.appFont(.pretendardRegular, size: 14)
+        label.textColor = .appColor(.neutral500)
+        label.textAlignment = .left
+        label.frame = .init(x: 24, y: 8, width: tableView.frame.width, height: 38)
+        view.addSubview(label)
+        view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 38)
+        return view
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
     }
@@ -87,6 +106,10 @@ extension ExpressOrCityTimetableTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 38
     }
 }
 

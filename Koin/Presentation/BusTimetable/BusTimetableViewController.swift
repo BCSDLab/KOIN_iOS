@@ -46,14 +46,14 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     private let busNoticeWrappedView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.info100)
         $0.layer.cornerRadius = 8
+        $0.isUserInteractionEnabled = true
     }
     
     private let busNoticeLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.primary500)
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
-        $0.lineBreakMode = .byTruncatingTail 
-        $0.text = "[긴급] 9.27(금) 대학등교방향 천안셔틀버스 터미널"
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     private let deleteNoticeButton = UIButton().then {
@@ -105,18 +105,28 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
         setUpNavigationBar()
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
+        deleteNoticeButton.addTarget(self, action: #selector(tapDeleteNoticeInfoButton), for: .touchUpInside)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapNoticeInfoButton))
+        busNoticeWrappedView.addGestureRecognizer(tapGesture)
         scrollView.delegate = self
         bind()
         inputSubject.send(.getBusRoute(.shuttleBus))
+        inputSubject.send(.getEmergencyNotice)
     }
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
             switch output {
             case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
                 self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
+            case let .updateBusTimetable(busType: busType, busTimetableInfo: busTimetableInfo):
+                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo)
+            case let .updateShuttleBusRoutes(busRoutes: busRoutes):
+                self?.updateShuttleBusRoutes(busRoutes: busRoutes)
+            case let .updateEmergencyNotice(notice):
+                self?.updateEmergencyNotice(notice: notice)
             }
         }.store(in: &subscriptions)
         
@@ -128,24 +138,83 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
             }
         }.store(in: &subscriptions)
         
-        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] in
-            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel())
+        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id in
+            let busRepository = DefaultBusRepository(service: DefaultBusService())
+            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), shuttleRouteId: id))
             self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        busTimetableRouteView.busFilterIdxPublisher.sink { [weak self] (firstIdx, secondIdx) in
+            guard let self = self else { return }
+            self.inputSubject.send(.getBusTimetable(currentBusType(), firstIdx, secondIdx))
+        }.store(in: &subscriptions)
+        
+        expressOrCityTimetableTableView.heightPublisher.sink { [weak self] height in
+            DispatchQueue.main.async { [weak self] in
+                if self?.shuttleTimetableTableView.isHidden ?? false {
+                    self?.contentView.snp.updateConstraints {
+                        $0.height.equalTo(height + 300)
+                    }
+                }
+            }
+        }.store(in: &subscriptions)
+    
+        shuttleTimetableTableView.heightPublisher.sink { [weak self] height in
+            DispatchQueue.main.async { [weak self] in
+                if !(self?.shuttleTimetableTableView.isHidden ?? false) {
+                    self?.contentView.snp.updateConstraints {
+                        $0.height.equalTo(height + 300)
+                    }
+                }
+            }
         }.store(in: &subscriptions)
     }
     
+    @objc private func tapIncorrentInfoButton() {
+        if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @objc private func tapDeleteNoticeInfoButton() {
+        updateLayoutsByNotice(isDeleted: true)
+    }
+    
+    @objc private func tapNoticeInfoButton() {
+        let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag)
+        let viewController = NoticeDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
         moveUnderLineView()
+        inputSubject.send(.getBusRoute(currentBusType()))
+        switch busTypeSegmentControl.selectedSegmentIndex {
+        case 0:
+            DispatchQueue.main.async { [weak self] in
+                self?.shuttleTimetableTableView.isHidden = false
+                self?.expressOrCityTimetableTableView.isHidden = true
+            }
+        default:
+            DispatchQueue.main.async { [weak self] in
+                self?.shuttleTimetableTableView.isHidden = true
+                self?.expressOrCityTimetableTableView.isHidden = false
+                self?.updateLayoutsByNotice(isDeleted: true)
+            }
+        }
+    }
+    
+    private func currentBusType() -> BusType {
         let busType: BusType
-        switch sender.selectedSegmentIndex {
+        switch busTypeSegmentControl.selectedSegmentIndex {
         case 0:
             busType = .shuttleBus
-        case 1:
-            busType = .expressBus
         default:
-            busType = .cityBus
+            busType = busTypeSegmentControl.selectedSegmentIndex == 1 ? .expressBus : .cityBus
         }
-        inputSubject.send(.getBusRoute(busType))
+        return busType
     }
     
     private func moveUnderLineView() {
@@ -165,13 +234,37 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
     
     private func updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?) {
         busTimetableRouteView.setBusType(busType: busType, firstRouteList: firstBusRoute, secondRouteList: secondBusRoute)
-        if busType == .shuttleBus {
-            shuttleTimetableTableView.isHidden = false
-            expressOrCityTimetableTableView.isHidden = true
+        switch busType {
+        case .shuttleBus:
+            typeOftimetableLabel.text = "셔틀버스 시간표"
+            inputSubject.send(.getBusTimetable(.shuttleBus, 0, nil))
+        case .expressBus:
+            typeOftimetableLabel.text = "대성고속 시간표"
+            inputSubject.send(.getBusTimetable(.expressBus, 0, nil))
+        default:
+            typeOftimetableLabel.text = "시내버스 시간표"
+            inputSubject.send(.getBusTimetable(.cityBus, 0, 0))
         }
-        else {
-            shuttleTimetableTableView.isHidden = true
-            expressOrCityTimetableTableView.isHidden = false
+    }
+    
+    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
+        expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
+    }
+    
+    private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {
+        shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
+    }
+    
+    private func updateEmergencyNotice(notice: BusNoticeDTO) {
+        updateLayoutsByNotice(isDeleted: false)
+        busNoticeLabel.text = notice.title
+        busNoticeWrappedView.tag = notice.id
+        let userDefault = UserDefaults.standard
+        if let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int, noticeId != notice.id {
+            inputSubject.send(.getEmergencyNotice)
+            UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
+        } else {
+            updateLayoutsByNotice(isDeleted: true)
         }
     }
 }
@@ -193,6 +286,23 @@ extension BusTimetableViewController {
         }
     }
     
+    private func updateLayoutsByNotice(isDeleted: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            if isDeleted {
+                self?.busNoticeWrappedView.isHidden = true
+                self?.timetableHeaderView.snp.updateConstraints {
+                    $0.height.equalTo(75)
+                }
+            }
+            else {
+                self?.busNoticeWrappedView.isHidden = false
+                self?.timetableHeaderView.snp.updateConstraints {
+                    $0.height.equalTo(139)
+                }
+            }
+        }
+    }
+    
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(navigationBarWrappedView.snp.bottom)
@@ -201,7 +311,7 @@ extension BusTimetableViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(1000).priority(.low)
+            $0.height.equalTo(1000)
         }
         navigationBarWrappedView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()

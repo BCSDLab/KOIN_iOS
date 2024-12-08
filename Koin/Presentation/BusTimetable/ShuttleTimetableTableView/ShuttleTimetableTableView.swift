@@ -12,8 +12,9 @@ import UIKit
 final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    let moveDetailTimetablePublisher = PassthroughSubject<Void, Never>()
-    private var busInfo: [ShuttleTimetableInfos]  = [ShuttleTimetableInfos(region: "천안 아산", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역"), ShuttleTimetableInfo(routeType: .circular, routeName: "천안역")]), ShuttleTimetableInfos(region: "청주", routes: [ShuttleTimetableInfo(routeType: .circular, routeName: "청주셔틀"), ShuttleTimetableInfo(routeType: .circular, routeName: "용암동"), ShuttleTimetableInfo(routeType: .circular, routeName: "동남지구"), ShuttleTimetableInfo(routeType: .circular, routeName: "산남/분평")])]
+    let moveDetailTimetablePublisher = PassthroughSubject<String, Never>()
+    let heightPublisher = PassthroughSubject<CGFloat, Never>()
+    private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -37,25 +38,30 @@ final class ShuttleTimetableTableView: UITableView {
         self.backgroundColor = .systemBackground
     }
     
-    func updateShuttleBusInfo(busInfo: [ShuttleTimetableInfos]) {
+    func updateShuttleBusInfo(busInfo: ShuttleRouteDTO) {
         self.busInfo = busInfo
         reloadData()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heightPublisher.send(self.contentSize.height)
     }
 }
 
 extension ShuttleTimetableTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return busInfo.count
+        return busInfo.routeRegions.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo[section].routes.count
+        return busInfo.routeRegions[section].routes.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let label = UILabel()
-        label.text = busInfo[section].region
+        label.text = busInfo.routeRegions[section].region
         label.font = .appFont(.pretendardBold, size: 18)
         label.textColor = .appColor(.neutral800)
         view.addSubview(label)
@@ -67,7 +73,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section != busInfo.count - 1 {
+        if section != busInfo.routeRegions.count - 1 {
             let view = UIView()
             let coloredView = UIView()
             view.backgroundColor = .systemBackground
@@ -78,7 +84,19 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             coloredView.frame = .init(x: 0, y: 7, width: tableView.frame.width, height: 7)
             return view
         }
-        return nil
+        else {
+            let view = UIView()
+            let label = UILabel()
+            label.text = "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.term))의\n시간표가 제공됩니다."
+            label.font = .appFont(.pretendardRegular, size: 14)
+            label.textAlignment = .left
+            label.textColor = .appColor(.neutral500)
+            label.numberOfLines = 0
+            label.frame = .init(x: 23, y: 8, width: tableView.frame.width, height: 44)
+            view.addSubview(label)
+            view.frame = .init(x: 0, y: 0, width: tableView.frame.width, height: 60)
+            return view
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,19 +107,25 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let routeInfo = busInfo[section].routes[indexPath.row]
-        cell.configure(routeType: routeInfo.routeType.rawValue, route: routeInfo.routeName)
+        let routeInfo = busInfo.routeRegions[section].routes[indexPath.row]
+        cell.configure(routeType: routeInfo.type, route: routeInfo.routeName, subRoute: routeInfo.subName)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        moveDetailTimetablePublisher.send()
+        moveDetailTimetablePublisher.send(busInfo.routeRegions[indexPath.section].routes[indexPath.row].id)
     }
 }
 
 extension ShuttleTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 38
+        let routeInfo = busInfo.routeRegions[indexPath.section].routes[indexPath.row]
+        if routeInfo.subName != nil {
+            return 57
+        }
+        else {
+            return 38
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -109,7 +133,12 @@ extension ShuttleTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 14
+        if section != busInfo.routeRegions.count - 1 {
+            return 14
+        }
+        else {
+            return 60
+        }
     }
 }
 

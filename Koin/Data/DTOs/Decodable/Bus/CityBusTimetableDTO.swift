@@ -80,14 +80,7 @@ extension CityBusTimetableDTO {
                 }
             }
         }
-        var busCourseName: String = ""
-        if self.busInfo.departNode == .terminal {
-            busCourseName = "터미널 → 병천"
-        }
-        else {
-            busCourseName = "병천 → 터미널"
-        }
-        return BusTimetableInfo(courseName: busCourseName, routeName: "\(busInfo.number?.rawValue ?? 0)번", arrivalInfos: arrivalInfos, updatedAt: updatedAtText)
+        return BusTimetableInfo(arrivalInfos: arrivalInfos, updatedAt: updatedAtText)
     }
     
     private func isMorning(timeString: String) -> Bool {

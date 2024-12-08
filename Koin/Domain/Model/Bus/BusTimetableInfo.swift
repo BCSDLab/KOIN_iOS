@@ -8,8 +8,6 @@
 import Foundation
 
 struct BusTimetableInfo {
-    var courseName: String
-    let routeName: String
     let arrivalInfos: [BusArrivalInfo]
     let updatedAt: String
 }
