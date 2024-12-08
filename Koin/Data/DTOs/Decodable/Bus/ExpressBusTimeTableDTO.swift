@@ -98,7 +98,7 @@ extension ExpressTimetableDTO {
                 arrivalInfos.append(arrivalInfo)
             }
         }
-        let timetableinfo = BusTimetableInfo(courseName: "", routeName: "", arrivalInfos: arrivalInfos, updatedAt: updatedAtText)
+        let timetableinfo = BusTimetableInfo(arrivalInfos: arrivalInfos, updatedAt: updatedAtText)
         return timetableinfo
     }
 }
