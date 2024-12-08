@@ -96,7 +96,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
         }
         cell.selectionStyle = .none
         let routeInfo = busInfo.routeRegions[section].routes[indexPath.row]
-        cell.configure(routeType: routeInfo.type.rawValue, route: routeInfo.routeName, subRoute: routeInfo.subName)
+        cell.configure(routeType: routeInfo.type, route: routeInfo.routeName, subRoute: routeInfo.subName)
         return cell
     }
     

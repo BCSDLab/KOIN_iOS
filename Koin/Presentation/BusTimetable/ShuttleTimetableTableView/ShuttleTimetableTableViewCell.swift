@@ -48,9 +48,10 @@ final class ShuttleTimetableTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    func configure(routeType: String, route: String, subRoute: String?) {
-        self.shuttleBusRouteLabel.text = route
-        self.shuttleRouteTypeLabel.text = routeType
+    func configure(routeType: ShuttleRouteType, route: String, subRoute: String?) {
+        shuttleBusRouteLabel.text = route
+        shuttleRouteTypeLabel.text = routeType.rawValue
+        shuttleRouteTypeLabel.backgroundColor = routeType.returnRouteColor()
         if let subRoute = subRoute {
             busRouteSubLabel.isHidden = false
             busRouteSubLabel.text = subRoute
