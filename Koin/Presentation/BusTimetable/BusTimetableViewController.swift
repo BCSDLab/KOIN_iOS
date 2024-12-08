@@ -137,8 +137,9 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
             }
         }.store(in: &subscriptions)
         
-        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] in
-            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel())
+        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id in
+            let busRepository = DefaultBusRepository(service: DefaultBusService())
+            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), shuttleRouteId: id))
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         

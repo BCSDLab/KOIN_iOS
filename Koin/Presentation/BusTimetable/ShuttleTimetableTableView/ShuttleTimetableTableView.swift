@@ -12,7 +12,7 @@ import UIKit
 final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    let moveDetailTimetablePublisher = PassthroughSubject<Void, Never>()
+    let moveDetailTimetablePublisher = PassthroughSubject<String, Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
     private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
     
@@ -101,7 +101,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        moveDetailTimetablePublisher.send()
+        moveDetailTimetablePublisher.send(busInfo.routeRegions[indexPath.section].routes[indexPath.row].id)
     }
 }
 

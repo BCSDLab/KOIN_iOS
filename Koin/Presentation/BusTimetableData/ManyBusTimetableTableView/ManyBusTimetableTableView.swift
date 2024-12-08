@@ -11,7 +11,7 @@ import UIKit
 final class ManyBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busPlaces: [String] = ["본교", "천안터미널", "천안역", "본교"]
+    private var busPlaces: [NodeInfo] = []
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -34,6 +34,10 @@ final class ManyBusTimetableTableView: UITableView {
         backgroundColor = .systemBackground
     }
     
+    func configure(timetable: [NodeInfo]) {
+        self.busPlaces = timetable
+        reloadData()
+    }
 }
 
 extension ManyBusTimetableTableView: UITableViewDataSource {
@@ -43,7 +47,7 @@ extension ManyBusTimetableTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ManyBusTimetableTableViewCell.identifier, for: indexPath) as? ManyBusTimetableTableViewCell else { return UITableViewCell() }
-        cell.configure(busPlace: busPlaces[indexPath.row])
+        cell.configure(busPlace: busPlaces[indexPath.row].name, subBusPlace: busPlaces[indexPath.row].detail)
         return cell
     }
     

@@ -7,37 +7,37 @@
 
 import Foundation
 
-// MARK: - ShuttleBusTimetableDTO
-struct ShuttleRouteDTO: Decodable {
-    let routeRegions: [RouteRegion]
-    let semesterInfo: SemesterInfo
-
-    enum CodingKeys: String, CodingKey {
-        case routeRegions = "route_regions"
-        case semesterInfo = "semester_info"
-    }
-}
-
-// MARK: - RouteRegion
-struct RouteRegion: Decodable {
-    let region: String
-    let routes: [Route]
-}
-
-// MARK: - Route
-struct Route: Decodable {
-    let id, routeName: String
-    let type: ShuttleRouteType
+// MARK: - ShuttleBusTimetableInfo
+struct ShuttleBusTimetableDTO: Decodable {
+    let id, region, routeName: String
+    let routeType: ShuttleRouteType
     let subName: String?
+    let nodeInfo: [NodeInfo]
+    let routeInfo: [RouteInfo]
 
     enum CodingKeys: String, CodingKey {
-        case id, type
+        case id, region
+        case routeType = "route_type"
         case routeName = "route_name"
         case subName = "sub_name"
+        case nodeInfo = "node_info"
+        case routeInfo = "route_info"
     }
 }
 
-// MARK: - SemesterInfo
-struct SemesterInfo: Decodable {
-    let name, term: String
+// MARK: - NodeInfo
+struct NodeInfo: Decodable {
+    let name: String
+    let detail: String?
+}
+
+// MARK: - RouteInfo
+struct RouteInfo: Decodable {
+    let name: String
+    let arrivalTime: [String?]
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case arrivalTime = "arrival_time"
+    }
 }
