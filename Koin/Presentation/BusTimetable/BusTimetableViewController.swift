@@ -142,14 +142,28 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
         }.store(in: &subscriptions)
         
         expressOrCityTimetableTableView.heightPublisher.sink { [weak self] height in
-            self?.contentView.snp.updateConstraints {
-                $0.height.equalTo(300 + height)
+            DispatchQueue.main.async { [weak self] in
+                if self?.shuttleTimetableTableView.isHidden ?? false {
+                    self?.contentView.snp.updateConstraints {
+                        $0.height.equalTo(height + 300)
+                    }
+                }
+            }
+        }.store(in: &subscriptions)
+    
+        shuttleTimetableTableView.heightPublisher.sink { [weak self] height in
+            DispatchQueue.main.async { [weak self] in
+                if !(self?.shuttleTimetableTableView.isHidden ?? false) {
+                    self?.contentView.snp.updateConstraints {
+                        $0.height.equalTo(height + 300)
+                    }
+                }
             }
         }.store(in: &subscriptions)
     }
-    
-    @objc private func changeSegmentControl(sender: UISegmentedControl) {
-        moveUnderLineView()
+
+@objc private func changeSegmentControl(sender: UISegmentedControl) {
+    moveUnderLineView()
         inputSubject.send(.getBusRoute(currentBusType()))
     }
     
@@ -158,10 +172,22 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
         switch busTypeSegmentControl.selectedSegmentIndex {
         case 0:
             busType = .shuttleBus
+            DispatchQueue.main.async { [weak self] in
+                self?.shuttleTimetableTableView.isHidden = false
+                self?.expressOrCityTimetableTableView.isHidden = true
+            }
         case 1:
             busType = .expressBus
+            DispatchQueue.main.async { [weak self] in
+                self?.shuttleTimetableTableView.isHidden = true
+                self?.expressOrCityTimetableTableView.isHidden = false
+            }
         default:
             busType = .cityBus
+            DispatchQueue.main.async { [weak self] in
+                self?.shuttleTimetableTableView.isHidden = true
+                self?.expressOrCityTimetableTableView.isHidden = false
+            }
         }
         return busType
     }
@@ -196,21 +222,15 @@ final class BusTimetableViewController: CustomViewController, UIScrollViewDelega
                 typeOftimetableLabel.text = "시내버스 시간표"
                 inputSubject.send(.getBusTimetable(.cityBus, 0, 0))
             }
-            shuttleTimetableTableView.isHidden = true
-            expressOrCityTimetableTableView.isHidden = false
         }
     }
     
     private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
-        shuttleTimetableTableView.isHidden = true
-        expressOrCityTimetableTableView.isHidden = false
         expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
     }
     
     private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {
         shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
-        shuttleTimetableTableView.isHidden = false
-        expressOrCityTimetableTableView.isHidden = true
     }
 }
 
