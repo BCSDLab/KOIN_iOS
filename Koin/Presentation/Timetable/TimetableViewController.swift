@@ -400,63 +400,51 @@ extension TimetableViewController {
 
 extension TimetableViewController {
     @objc private func downloadTimetableAsImage() {
-        // 각각의 뷰를 캡처
-        let timetableImage = captureViewAsImage(view: timetableCollectionView)
-        let containerImage = captureViewAsImage(view: containerView)
-
-        // 두 이미지를 같은 영역에 합쳐서 하나의 이미지 생성
-        let combinedImage = combineImagesInSameArea(topImage: containerImage, bottomImage: timetableImage)
-
-        // 이미지를 앨범에 저장
-        UIImageWriteToSavedPhotosAlbum(combinedImage, self, #selector(saveImageCallback(_:didFinishSavingWithError:contextInfo:)), nil)
+        let renderer = UIGraphicsImageRenderer(size: timetableCollectionView.bounds.size)
+        let combinedImage = renderer.image { context in
+            timetableCollectionView.drawHierarchy(in: timetableCollectionView.bounds, afterScreenUpdates: true)
+            let containerFrame = CGRect(
+                origin: CGPoint(x: containerView.frame.origin.x - 24,
+                                y: containerView.frame.origin.y),
+                size: containerView.bounds.size
+            )
+            containerView.drawHierarchy(in: containerFrame, afterScreenUpdates: true)
+        }
+        UIImageWriteToSavedPhotosAlbum(combinedImage, self, #selector(saveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
     }
 
-
-    // 특정 뷰를 이미지로 캡처
     private func captureViewAsImage(view: UIView) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
-        return renderer.image { context in
+        return renderer.image { _ in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
     }
 
-    // 두 이미지를 세로로 합치기
-    private func combineImagesInSameArea(topImage: UIImage, bottomImage: UIImage) -> UIImage {
-        let size = CGSize(width: max(topImage.size.width, bottomImage.size.width),
-                          height: max(topImage.size.height, bottomImage.size.height))
-        
-        let renderer = UIGraphicsImageRenderer(size: size)
+    private func mergeImages(topImage: UIImage, bottomImage: UIImage) -> UIImage {
+        let newSize = CGSize(width: max(topImage.size.width, bottomImage.size.width),
+                             height: topImage.size.height + bottomImage.size.height)
+
+        let renderer = UIGraphicsImageRenderer(size: newSize)
         return renderer.image { context in
-            // 아래 이미지를 먼저 그리기
-            bottomImage.draw(in: CGRect(origin: .zero, size: size))
-            // 위 이미지를 동일한 위치에 겹쳐서 그리기
-            topImage.draw(in: CGRect(origin: .zero, size: size))
+            topImage.draw(at: .zero)
+            bottomImage.draw(at: CGPoint(x: 0, y: topImage.size.height))
         }
     }
 
-
-   
-    @objc private func saveImageCallback(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    @objc private func saveCompletion(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            showAlert(title: "저장 실패", message: "이미지를 앨범에 저장할 권한을 추가해주세요")
+            showAlert(title: "저장 실패", message: "이미지를 갤러리에 저장할 권한이 없습니다. 권한을 추가해 주세요.")
         } else {
-            showAlert(title: "저장 성공", message: "이미지가 앨범에 저장되었습니다.")
+            showAlert(title: "저장 완료", message: "시간표 이미지가 사진 앱에 저장되었습니다.")
         }
     }
 
-    // 알림창을 표시하는 메서드
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "확인", style: .default) { _ in
-            // 확인 버튼을 누르면 알림창 닫힘
-        }
+        let action = UIAlertAction(title: "확인", style: .default)
         alert.addAction(action)
-        // 현재 화면에 알림창 표시
-        if let topViewController = UIApplication.shared.keyWindow?.rootViewController {
-            topViewController.present(alert, animated: true, completion: nil)
-        }
+        present(alert, animated: true)
     }
-
 
 }
 
