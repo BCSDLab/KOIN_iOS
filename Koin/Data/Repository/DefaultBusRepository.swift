@@ -34,4 +34,8 @@ final class DefaultBusRepository: BusRepository {
     func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {
         return service.fetchCityTimetableList(requestModel: requestModel)
     }
+    
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error> {
+        return service.fetchEmergencyNotice()
+    }
 }

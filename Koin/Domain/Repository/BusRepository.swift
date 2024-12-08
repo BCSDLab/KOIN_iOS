@@ -13,4 +13,5 @@ protocol BusRepository {
     func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
     func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
     func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error>
 }

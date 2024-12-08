@@ -11,12 +11,14 @@ final class BusTimetableViewModel: ViewModelProtocol {
     enum Input {
         case getBusRoute(BusType)
         case getBusTimetable(BusType, Int, Int?)
+        case getEmergencyNotice
     }
 
     enum Output {
         case updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?)
         case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
         case updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO)
+        case updateEmergencyNotice(notice: BusNoticeDTO)
     }
     
     // MARK: - properties
@@ -28,14 +30,16 @@ final class BusTimetableViewModel: ViewModelProtocol {
     private let fetchCityTimetableUseCase: FetchCityBusTimetableUseCase
     private let getShuttleFilterUseCase: GetShuttleBusFilterUseCase
     private let fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase
+    private let fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase
     
-    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFilterUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase, getShuttleFilterUseCase: GetShuttleBusFilterUseCase, fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase) {
+    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFilterUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase, getShuttleFilterUseCase: GetShuttleBusFilterUseCase, fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase, fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase) {
         self.fetchExpressTimetableUseCase = fetchExpressTimetableUseCase
         self.getExpressFiltersUseCase = getExpressFiltersUseCase
         self.getCityFiltersUseCase = getCityFiltersUseCase
         self.fetchCityTimetableUseCase = fetchCityTimetableUseCase
         self.getShuttleFilterUseCase = getShuttleFilterUseCase
         self.fetchShuttleRoutesUseCase = fetchShuttleRoutesUseCase
+        self.fetchEmergencyNoticeUseCase = fetchEmergencyNoticeUseCase
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -45,6 +49,8 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 self?.getBusRoute(busType: busType)
             case let .getBusTimetable(busType, firstFilterIdx, secondFilterIdx):
                 self?.getBusTimetable(busType: busType, firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx)
+            case .getEmergencyNotice:
+                self?.getEmergencyNotice()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -93,5 +99,15 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
             }).store(in: &subscriptions)
         }
+    }
+    
+    private func getEmergencyNotice() {
+        fetchEmergencyNoticeUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] notice in
+            self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
+        }).store(in: &subscriptions)
     }
 }
