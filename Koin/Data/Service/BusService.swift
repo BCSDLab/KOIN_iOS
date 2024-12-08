@@ -14,6 +14,7 @@ protocol BusService {
     func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error>
 }
 
 final class DefaultBusService: BusService {
@@ -44,6 +45,17 @@ final class DefaultBusService: BusService {
     
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {
         return request(.fetchCityBusTimetableList(requestModel))
+    }
+    
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error> {
+        guard let url = URL(string: "https://c01aaba6-9825-4309-b30e-aff4753bebfe.mock.pstmn.io/bus/Notice") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+      
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = HTTPMethod.get.rawValue
+        return mockNetworkService.request(api: urlRequest)
+            .eraseToAnyPublisher()
     }
     
 
