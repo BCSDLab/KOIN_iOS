@@ -104,6 +104,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         configureNavigationBar(style: .empty)
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
         scrollView.delegate = self
         bind()
         inputSubject.send(.getBusRoute(.shuttleBus))
@@ -160,9 +161,16 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
             }
         }.store(in: &subscriptions)
     }
+    
+    @objc private func tapIncorrentInfoButton() {
+        if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
 
-@objc private func changeSegmentControl(sender: UISegmentedControl) {
-    moveUnderLineView()
+    @objc private func changeSegmentControl(sender: UISegmentedControl) {
+        moveUnderLineView()
         inputSubject.send(.getBusRoute(currentBusType()))
     }
     
