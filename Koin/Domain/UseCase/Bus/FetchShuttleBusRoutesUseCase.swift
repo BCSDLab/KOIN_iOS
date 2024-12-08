@@ -7,27 +7,23 @@
 
 import Combine
 
-protocol FetchShuttleBusTimetableUseCase {
-    func fetchShuttleBusTimetable(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error>
+protocol FetchShuttleBusRoutesUseCase {
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error>
 }
 
-final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseCase, GetShuttleBusFilterUseCase {
+final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
     let busRepository: BusRepository
     
     init(busRepository: BusRepository) {
         self.busRepository = busRepository
     }
     
-    func fetchShuttleBusTimetable(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error> {
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error> {
         return busRepository.fetchShuttleRouteList().map { [weak self] routeList in
             return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDTO(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
         }.eraseToAnyPublisher()
     }
-    
-    func getBusFilter() -> [ShuttleRouteType] {
-        return ShuttleRouteType.allCases
-    }
-    
+
     private func filterByShuttleRouteType(busTimetableInfo: ShuttleRouteDTO, shuttleRouteType: ShuttleRouteType) -> ShuttleRouteDTO {
         if shuttleRouteType == .overall {
             return busTimetableInfo

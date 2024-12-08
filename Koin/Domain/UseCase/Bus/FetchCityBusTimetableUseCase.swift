@@ -8,17 +8,17 @@
 import Combine
 
 protocol FetchCityBusTimetableUseCase {
-    func fetchCityBusTimetableUseCase(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error>
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error>
 }
 
-final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, GetCityFiltersUseCase {
+final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
     let busRepository: BusRepository
     
     init(busRepository: BusRepository) {
         self.busRepository = busRepository
     }
     
-    func fetchCityBusTimetableUseCase(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error> {
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error> {
         var busCourses: [CityBusCourseInfo] = []
         if firstFilterIdx == 0 {
             busCourses = setFromCityBusCourses()
@@ -32,10 +32,6 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase, G
         }.eraseToAnyPublisher()
     }
     
-    func getBusFilter() -> ([String], [String]) {
-        return (["병천방면", "천안방면"], ["400번", "402번", "405번"])
-    }
-
     private func setToCityBusCourses() -> [CityBusCourseInfo] {
         var cityBusInfos: [CityBusCourseInfo] = []
         let busCourseText = "병천방면"

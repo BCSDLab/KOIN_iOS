@@ -16,21 +16,26 @@ final class BusTimetableViewModel: ViewModelProtocol {
     enum Output {
         case updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?)
         case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
+        case updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO)
     }
     
     // MARK: - properties
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchExpressTimetableUseCase: FetchExpressTimetableUseCase
-    private let getExpressFiltersUseCase: GetExpressFiltersUseCase
+    private let getExpressFiltersUseCase: GetExpressFilterUseCase
     private let getCityFiltersUseCase: GetCityFiltersUseCase
     private let fetchCityTimetableUseCase: FetchCityBusTimetableUseCase
+    private let getShuttleFilterUseCase: GetShuttleBusFilterUseCase
+    private let fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase
     
-    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFiltersUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase) {
+    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFilterUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase, getShuttleFilterUseCase: GetShuttleBusFilterUseCase, fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase) {
         self.fetchExpressTimetableUseCase = fetchExpressTimetableUseCase
         self.getExpressFiltersUseCase = getExpressFiltersUseCase
         self.getCityFiltersUseCase = getCityFiltersUseCase
         self.fetchCityTimetableUseCase = fetchCityTimetableUseCase
+        self.getShuttleFilterUseCase = getShuttleFilterUseCase
+        self.fetchShuttleRoutesUseCase = fetchShuttleRoutesUseCase
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -50,12 +55,12 @@ final class BusTimetableViewModel: ViewModelProtocol {
         var secondBusRoute: [String]?
         switch busType {
         case .shuttleBus:
-            print("as")
+            firstBusRoute = getShuttleFilterUseCase.execute()
         case .expressBus:
-            firstBusRoute = getExpressFiltersUseCase.getBusFirstFilter()
+            firstBusRoute = getExpressFiltersUseCase.execute()
         default:
-            firstBusRoute = getCityFiltersUseCase.getBusFilter().0
-            secondBusRoute = getCityFiltersUseCase.getBusFilter().1
+            firstBusRoute = getCityFiltersUseCase.execute().0
+            secondBusRoute = getCityFiltersUseCase.execute().1
         }
         outputSubject.send(.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute))
     }
@@ -63,22 +68,29 @@ final class BusTimetableViewModel: ViewModelProtocol {
     private func getBusTimetable(busType: BusType, firstFilterIdx: Int, secondFilterIdx: Int?) {
         switch busType {
         case .shuttleBus:
-            print("as")
-        case .expressBus:
-            fetchExpressTimetableUseCase.fetchExpressTimetable(firstFilterIdx: firstFilterIdx).sink(receiveCompletion: { completion in
+            fetchShuttleRoutesUseCase.execute(busRouteType: ShuttleRouteType.allCases[firstFilterIdx]).sink(receiveCompletion: {
+                completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { timetable in
-                self.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+            }, receiveValue: { [weak self] busRoutes in
+                self?.outputSubject.send(.updateShuttleBusRoutes(busRoutes: busRoutes))
+            }).store(in: &subscriptions)
+        case .expressBus:
+            fetchExpressTimetableUseCase.execute(filterIdx: firstFilterIdx).sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { [weak self] timetable in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
             }).store(in: &subscriptions)
         default:
-            fetchCityTimetableUseCase.fetchCityBusTimetableUseCase(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(receiveCompletion: { completion in
+            fetchCityTimetableUseCase.execute(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { timetable in
-                self.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+            }, receiveValue: { [weak self] timetable in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
             }).store(in: &subscriptions)
         }
     }
