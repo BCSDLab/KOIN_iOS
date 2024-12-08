@@ -24,7 +24,6 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         $0.layer.masksToBounds = true
         $0.font = .appFont(.pretendardRegular, size: 11)
         $0.textAlignment = .center
-        $0.text = "순환"
         $0.textColor = .appColor(.neutral0)
         $0.backgroundColor = .appColor(.fluorescentOrange)
     }
@@ -32,7 +31,6 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
     private let busTimetablePlaceLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 20)
         $0.textColor = .appColor(.neutral800)
-        $0.text = "천안셔틀 주말 토, 일 노산"
         $0.textAlignment = .left
     }
     
@@ -109,15 +107,21 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         setNavigationTitle(title: "천안셔틀 주말 시간표")
         scrollView.isHidden = false
         segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
+        incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
         [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
             $0.isHidden = true
         }
+        bind()
+        inputSubject.send(.getBusTimetable)
     }
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            
+            switch output {
+            case let .updateBusRoute(busTimetable: timetable):
+                self?.updateShuttleBusTimetable(timetable: timetable)
+            }
         }.store(in: &subscriptions)
     }
   }
@@ -125,6 +129,13 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
 extension BusTimetableDataViewController {
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
         moveUnderLineView()
+    }
+    
+    @objc private func tapIncorrentInfoButton() {
+        if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     private func moveUnderLineView() {
@@ -140,6 +151,14 @@ extension BusTimetableDataViewController {
                 self.view.layoutIfNeeded()
             }
         )
+    }
+    
+    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO) {
+        manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
+        manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
+        shuttleRouteTypeLabel.text = timetable.routeType.rawValue
+        shuttleRouteTypeLabel.backgroundColor = timetable.routeType.returnRouteColor()
+        busTimetablePlaceLabel.text = timetable.routeName
     }
 }
 

@@ -27,8 +27,8 @@ final class ManyBusTimetableCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(busTime: String) {
-        busTimeLabel.text = busTime
+    func configure(busTime: String?) {
+        busTimeLabel.text = busTime ?? ""
     }
 }
 

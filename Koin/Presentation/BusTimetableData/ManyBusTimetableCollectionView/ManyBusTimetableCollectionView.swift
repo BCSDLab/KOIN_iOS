@@ -12,9 +12,8 @@ import UIKit
 
 final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     //MARK: - Properties
-    var subscriptions = Set<AnyCancellable>()
-    let busTimeData: [[String]] = [["07:30", "08:00", "08:30", "09:00"], ["07:30", "08:00", "08:30", "09:00"], ["07:30", "08:00", "08:30", "09:00"], ["07:30", "08:00", "08:30", "09:00"]]
-    var busTimeNumbers: [Int] = []
+    private var subscriptions = Set<AnyCancellable>()
+    private var busTimeData: [RouteInfo] = []
   
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -38,12 +37,11 @@ final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDa
         isScrollEnabled = true
         showsHorizontalScrollIndicator = false
         contentInset = .zero
-        
-        busTimeNumbers = Array(1...busTimeData.count)
     }
     
-    func configure() {
-        busTimeNumbers = Array(1...busTimeData.count)
+    func configure(busInfo: [RouteInfo]) {
+        self.busTimeData = busInfo
+        reloadData()
     }
 }
 
@@ -53,18 +51,18 @@ extension ManyBusTimetableCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (busTimeData.first?.count ?? 0) + 1
+        return busTimeData[section].arrivalTime.count + 1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier, for: indexPath) as? ManyBusTimetableCollectionViewHeaderCell else { return UICollectionViewCell() }
-            cell.configure(busTimeNumber: busTimeNumbers[indexPath.section])
+            cell.configure(busTimeNumber: busTimeData[indexPath.section].name)
             return cell
         }
         else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier, for: indexPath) as? ManyBusTimetableCollectionViewCell else { return UICollectionViewCell() }
-            cell.configure(busTime: busTimeData[indexPath.section][indexPath.row - 1])
+            cell.configure(busTime: busTimeData[indexPath.section].arrivalTime[indexPath.row - 1])
             return cell
         }
     }
