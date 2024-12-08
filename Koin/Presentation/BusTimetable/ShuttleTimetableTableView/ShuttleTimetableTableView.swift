@@ -13,6 +13,7 @@ final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<Void, Never>()
+    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
     
     // MARK: - Initialization
@@ -40,6 +41,11 @@ final class ShuttleTimetableTableView: UITableView {
     func updateShuttleBusInfo(busInfo: ShuttleRouteDTO) {
         self.busInfo = busInfo
         reloadData()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        heightPublisher.send(self.contentSize.height)
     }
 }
 
