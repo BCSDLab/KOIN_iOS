@@ -11,7 +11,7 @@ import UIKit
 final class ExpressOrCityTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busInfo: BusTimetableInfo = .init(courseName: "", routeName: "", arrivalInfos: [], updatedAt: "")
+    private var busInfo: BusTimetableInfo = .init(arrivalInfos: [], updatedAt: "")
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
