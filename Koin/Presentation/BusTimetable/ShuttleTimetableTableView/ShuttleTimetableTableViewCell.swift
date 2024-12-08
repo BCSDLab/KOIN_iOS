@@ -27,6 +27,13 @@ final class ShuttleTimetableTableViewCell: UITableViewCell {
         $0.textAlignment = .left
     }
     
+    private let busRouteSubLabel = UILabel().then {
+        $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.neutral500)
+        $0.textAlignment = .left
+        $0.lineBreakMode = .byTruncatingTail
+    }
+    
     private let arrowRightImage = UIImageView().then {
         $0.image = .appImage(asset: .chevronRight)
     }
@@ -41,15 +48,22 @@ final class ShuttleTimetableTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    func configure(routeType: String, route: String) {
+    func configure(routeType: String, route: String, subRoute: String?) {
         self.shuttleBusRouteLabel.text = route
         self.shuttleRouteTypeLabel.text = routeType
+        if let subRoute = subRoute {
+            busRouteSubLabel.isHidden = false
+            busRouteSubLabel.text = subRoute
+        }
+        else {
+            busRouteSubLabel.isHidden = true
+        }
     }
 }
 
 extension ShuttleTimetableTableViewCell {
     private func setUpLayouts() {
-        [shuttleRouteTypeLabel, shuttleBusRouteLabel, arrowRightImage].forEach {
+        [shuttleRouteTypeLabel, shuttleBusRouteLabel, arrowRightImage, busRouteSubLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -57,18 +71,25 @@ extension ShuttleTimetableTableViewCell {
     private func setUpConstraints() {
         shuttleRouteTypeLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(32)
-            $0.centerY.equalToSuperview()
+            $0.top.equalToSuperview().offset(6)
             $0.width.equalTo(28)
             $0.height.equalTo(18)
         }
         shuttleBusRouteLabel.snp.makeConstraints {
             $0.centerY.equalTo(shuttleRouteTypeLabel)
             $0.leading.equalTo(shuttleRouteTypeLabel.snp.trailing).offset(8)
+            $0.height.equalTo(26)
         }
         arrowRightImage.snp.makeConstraints {
-            $0.centerY.equalTo(shuttleRouteTypeLabel)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(31)
             $0.width.height.equalTo(17)
+        }
+        busRouteSubLabel.snp.makeConstraints {
+            $0.leading.equalTo(shuttleBusRouteLabel)
+            $0.top.equalTo(shuttleBusRouteLabel.snp.bottom)
+            $0.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(19)
         }
     }
     

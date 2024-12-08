@@ -96,7 +96,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
         }
         cell.selectionStyle = .none
         let routeInfo = busInfo.routeRegions[section].routes[indexPath.row]
-        cell.configure(routeType: routeInfo.type.rawValue, route: routeInfo.routeName)
+        cell.configure(routeType: routeInfo.type.rawValue, route: routeInfo.routeName, subRoute: routeInfo.subName)
         return cell
     }
     
@@ -107,7 +107,13 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
 
 extension ShuttleTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 38
+        let routeInfo = busInfo.routeRegions[indexPath.section].routes[indexPath.row]
+        if routeInfo.subName != nil {
+            return 57
+        }
+        else {
+            return 38
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
