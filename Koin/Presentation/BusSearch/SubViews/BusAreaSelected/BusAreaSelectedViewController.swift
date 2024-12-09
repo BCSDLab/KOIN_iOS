@@ -28,6 +28,10 @@ final class BusAreaSelectedViewController: UIViewController {
         $0.contentInset = .init(top: 16, left: 32, bottom: 16, right: 32)
     }
     
+    private let separateView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
+    
     private let confirmButton = UIButton().then {
         $0.backgroundColor = .appColor(.primary500)
         $0.layer.cornerRadius = 4
@@ -78,7 +82,7 @@ extension BusAreaSelectedViewController {
 extension BusAreaSelectedViewController {
     
     private func setUpLayOuts() {
-        [busRouteDescriptionlabel, busAreaCollectionView, confirmButton].forEach {
+        [busRouteDescriptionlabel, busAreaCollectionView, confirmButton, separateView].forEach {
             view.addSubview($0)
         }
     }
@@ -89,7 +93,7 @@ extension BusAreaSelectedViewController {
             $0.leading.equalToSuperview().offset(32)
         }
         busAreaCollectionView.snp.makeConstraints {
-            $0.top.equalTo(busRouteDescriptionlabel.snp.bottom)
+            $0.top.equalTo(separateView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(160)
         }
@@ -97,6 +101,11 @@ extension BusAreaSelectedViewController {
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.top.equalTo(busAreaCollectionView.snp.bottom)
             $0.height.equalTo(48)
+        }
+        separateView.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(busRouteDescriptionlabel.snp.bottom).offset(12)
         }
     }
     
