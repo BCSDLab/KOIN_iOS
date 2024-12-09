@@ -25,7 +25,7 @@ enum BusPlace: String, Decodable, CaseIterable {
         case .station:
             return "천안역"
         case .terminal:
-            return "야우리"
+            return "천안 터미널"
         }
     }
     
@@ -35,7 +35,7 @@ enum BusPlace: String, Decodable, CaseIterable {
             return .koreatech
         case "천안역":
             return .station
-        case "야우리":
+        case "천안 터미널":
             return .terminal
         default:
             return .koreatech
