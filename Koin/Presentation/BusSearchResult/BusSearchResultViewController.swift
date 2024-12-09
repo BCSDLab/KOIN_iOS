@@ -20,7 +20,7 @@ final class BusSearchResultViewController: CustomViewController {
     
     private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
     
-    private var busSearchDatePickerView = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
+    private var busSearchDatePickerViewController = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
     
     // MARK: - Initialization
     
@@ -50,11 +50,12 @@ final class BusSearchResultViewController: CustomViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
-        tableView.tapDepartTimeButtonPublisher.sink { [weak self] in
+        tableView.tapDepartTimeButtonPublisher
+            .sink { [weak self] in
             self?.showBusSearchAlertViewController()
         }.store(in: &subscriptions)
         
-        busSearchDatePickerView.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
+        busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
             if selectedItem.count > 3 {
                 let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]) : \(selectedItem[3])"
                 self?.tableView.setBusSearchDate(searchDate: time)
@@ -96,8 +97,8 @@ extension BusSearchResultViewController {
     private func showBusSearchAlertViewController() {
         let items = setUpDatePickerView().0
         let selectedItems = setUpDatePickerView().1
-        busSearchDatePickerView.setPickerItems(items: items, selectedItems: selectedItems)
-        self.present(busSearchDatePickerView, animated: true)
+        busSearchDatePickerViewController.setPickerItems(items: items, selectedItems: selectedItems)
+        self.present(busSearchDatePickerViewController, animated: true)
     }
 }
 

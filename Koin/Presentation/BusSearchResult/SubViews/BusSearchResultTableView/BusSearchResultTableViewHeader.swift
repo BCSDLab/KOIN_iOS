@@ -43,6 +43,11 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         configureView()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        subscriptions.removeAll()
+    }
+    
     func configure(departTime: String, busType: String) {
         departTimeLabel.text = departTime
         setUpBusTypeFilterButton(busType: busType)
