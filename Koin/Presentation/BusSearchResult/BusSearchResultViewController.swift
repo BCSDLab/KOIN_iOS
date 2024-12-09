@@ -42,6 +42,7 @@ final class BusSearchResultViewController: CustomViewController {
         setUpNavigationBar()
         setNavigationTitle(title: "한기대 -> 천안터미널")
         bind()
+        inputSubject.send(.getDatePickerData)
     }
     
     
@@ -50,9 +51,18 @@ final class BusSearchResultViewController: CustomViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            switch output {
+            case let .updateDatePickerData((dates, selectedDate)):
+                self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
+            }
+        }.store(in: &subscriptions)
+        
+        
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
-            self?.showBusSearchAlertViewController()
+                guard let self = self else { return }
+                present(busSearchDatePickerViewController, animated: true)
         }.store(in: &subscriptions)
         
         busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
@@ -65,43 +75,9 @@ final class BusSearchResultViewController: CustomViewController {
 }
 
 extension BusSearchResultViewController {
-    //추후 유스케이스로 빼야 함.
-    private func setUpDatePickerView() -> ([[String]], [String]) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일(EEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
-        
-        let sequence = Array(2..<90)
-        let dateArray = Date().generateDateArray(formatter: formatter, sequence: sequence)
-        let amPmArray = ["오전", "오후"]
-        let calendar = Calendar.current
-        let currentDate = Date()
-        let currentHour = calendar.component(.hour, from: currentDate)
-        let currentMinute = calendar.component(.minute, from: currentDate)
-        let hourArray: [String] = Array(0..<12).map { String($0) }
-        let minuteArray: [String] = Array(0..<60).map { String(format: "%02d", $0) }
-      
-        let amPmIndex = currentHour < 12 ? 0 : 1 
-        let selectedAmPm = amPmArray[amPmIndex]
-      
-        let adjustedHour = currentHour % 12
-        let selectedHour = String(adjustedHour == 0 ? 12 : adjustedHour)
-        
-        let selectedMinute = String(format: "%02d", currentMinute)
-       
-        let selectedItems = [dateArray[0], selectedAmPm, selectedHour, selectedMinute]
-        
-        return ([dateArray, amPmArray, hourArray, minuteArray], selectedItems)
-    }
     
-    private func showBusSearchAlertViewController() {
-        let items = setUpDatePickerView().0
-        let selectedItems = setUpDatePickerView().1
-        busSearchDatePickerViewController.setPickerItems(items: items, selectedItems: selectedItems)
-        self.present(busSearchDatePickerViewController, animated: true)
-    }
-}
 
+}
 
 extension BusSearchResultViewController {
     private func setUpLayOuts() {
