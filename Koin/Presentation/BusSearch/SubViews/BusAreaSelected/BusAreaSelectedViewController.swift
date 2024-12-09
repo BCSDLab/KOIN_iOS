@@ -11,10 +11,11 @@ import UIKit
 
 final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
-    let busAreaPublisher = PassthroughSubject<(BusPlace, Int), Never>()
+    let busAreaPublisher = PassthroughSubject<(BusPlace, BusPlace), Never>()
     private var busRouteType = 0 // 0이면 출발, 1이면 도착
     private var busAreaLists: [(BusPlace, Bool)] = []
-    private var selectedArea: (BusPlace?, BusPlace?)
+    private var buttonState: BusAreaButtonState = .allSelected
+    private var selectedArea: (BusPlace?, BusPlace?) = (nil, nil)
     
     //MARK: - UI Components
     private let busRouteDescriptionlabel = UILabel().then {
@@ -53,7 +54,6 @@ final class BusAreaSelectedViewController: UIViewController {
         super.viewDidLoad()
         busAreaCollectionView.register(BusAreaSelectedCollectionViewCell.self, forCellWithReuseIdentifier: BusAreaSelectedCollectionViewCell.identifier)
         configureView()
-        setUpView()
         busAreaCollectionView.delegate = self
         busAreaCollectionView.dataSource = self
         confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
@@ -61,22 +61,96 @@ final class BusAreaSelectedViewController: UIViewController {
 }
 
 extension BusAreaSelectedViewController {
-    func configure(busRouteType: Int, busAreaLists: [(BusPlace, Bool)], selectedArea: (BusPlace?, BusPlace?)) {
+    func configure(busRouteType: Int, busAreaLists: [(BusPlace, Bool)], buttonState: BusAreaButtonState) {
         self.busRouteType = busRouteType
         self.busAreaLists = busAreaLists
-        self.selectedArea = selectedArea
+        self.buttonState = buttonState
+        setUpView()
         busAreaCollectionView.reloadData()
     }
     
     private func setUpView() {
         let attributeContainer: [NSAttributedString.Key: Any] = [.font: UIFont.appFont(.pretendardMedium, size: 15), .foregroundColor: UIColor.appColor(.neutral0)]
+        var confirmButtonTitle: String = ""
+        switch buttonState {
+        case .notSelected:
+            confirmButtonTitle = busRouteType == 0 ? "도착지 선택하기" : "출발지 선택하기"
+        default:
+            confirmButtonTitle = "확인하기"
+        }
+        confirmButton.setAttributedTitle(NSAttributedString(string: confirmButtonTitle, attributes: attributeContainer), for: .normal)
         if busRouteType == 0 { // 출발지 고르는 경우
             busRouteDescriptionlabel.text = "어디서 출발하시나요?"
-            confirmButton.setAttributedTitle(NSAttributedString(string: "도착지 선택하기", attributes: attributeContainer), for: .normal)
         }
         else { // 도착지 고르는 경우
             busRouteDescriptionlabel.text = "목적지가 어디인가요?"
-            confirmButton.setAttributedTitle(NSAttributedString(string: "확인하기", attributes: attributeContainer), for: .normal)
+        }
+    }
+    
+    
+    @objc private func tapConfirmButton() {
+        switch buttonState {
+        case .notSelected:
+            handleNotSelectedState()  //아무것도 선택하지 않은 상태일때
+        default:
+            handleSelectedState() // 출발지, 도착지 중 하나를 선택한 상태일때
+        }
+        
+        configure(busRouteType: busRouteType, busAreaLists: busAreaLists, buttonState: buttonState)
+    }
+
+    private func handleNotSelectedState() {
+        buttonState = busRouteType == 0 ? .departureSelected : .arrivalSelected
+        updateSelectedArea()
+        toggleBusAreaSelection()
+        busRouteType = busRouteType == 0 ? 1 : 0
+    }
+
+    private func handleSelectedState() {
+        let area = busRouteType == 0 ? selectedArea.0 : selectedArea.1
+        updateSelectedAreaIfNeeded(area: area)
+        
+        if let departedArea = selectedArea.0, let arrivedArea = selectedArea.1 {
+            busAreaPublisher.send((departedArea, arrivedArea))
+        }
+        
+        selectedArea = (nil, nil)
+        dismissView()
+    }
+
+    private func updateSelectedArea() {
+        for (index, value) in busAreaLists.enumerated() {
+            if value.1 {
+                if busRouteType == 0 {
+                    selectedArea.0 = value.0
+                } else {
+                    selectedArea.1 = value.0
+                }
+            }
+        }
+    }
+
+    private func toggleBusAreaSelection() {
+        var isChecked = false
+        for (index, _) in busAreaLists.enumerated() {
+            if busAreaLists[index].1 == false && !isChecked {
+                busAreaLists[index].1 = true
+                isChecked = true
+            } else {
+                busAreaLists[index].1 = false
+            }
+        }
+    }
+
+    private func updateSelectedAreaIfNeeded(area: BusPlace?) {
+        for (_, value) in busAreaLists.enumerated() {
+            if value.1, area == nil {
+                if busRouteType == 0 {
+                    selectedArea.0 = value.0
+                } else {
+                    selectedArea.1 = value.0
+                }
+            }
         }
     }
 }
@@ -116,16 +190,6 @@ extension BusAreaSelectedViewController {
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
     }
-    
-    @objc private func tapConfirmButton() {
-        for value in busAreaLists {
-            if value.1 == true {
-                busAreaPublisher.send((value.0, busRouteType))
-                break
-            }
-        }
-        dismissView()
-    }
 }
 
 extension BusAreaSelectedViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -138,21 +202,28 @@ extension BusAreaSelectedViewController: UICollectionViewDataSource, UICollectio
             return UICollectionViewCell()
         }
         let item = busAreaLists[indexPath.row]
-        
+        let busPlace = busRouteType == 0 ? selectedArea.1 : selectedArea.0
         cell.configure(busPlace: item.0.koreanDescription, isSelected: item.1)
+        if let busPlace = busPlace, busPlace == busAreaLists[indexPath.row].0 {
+            print(indexPath.row)
+            cell.disableCell()
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if !busAreaLists[indexPath.row].1 {
-            for (index, value) in busAreaLists.enumerated() {
-                if index != indexPath.row && value.1 == true {
-                    busAreaLists[index].1.toggle()
-                }
-                busAreaLists[indexPath.row].1.toggle()
-            }
-            collectionView.reloadData()
+        let selectedIndex = indexPath.row
+        for (index, _) in busAreaLists.enumerated() {
+            busAreaLists[index].1 = (index == selectedIndex)
         }
+        collectionView.reloadData()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        let area = busRouteType == 0 ? selectedArea.1 : selectedArea.0
+        print(area)
+        let isEnabled = busAreaLists[indexPath.row].0 != area
+        return isEnabled
     }
 }
 

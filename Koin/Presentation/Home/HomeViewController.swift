@@ -389,7 +389,7 @@ extension HomeViewController {
     }
     
     @objc private func busViewTapped() {
-        let busViewController = BusSearchViewController(viewModel: BusSearchViewModel())
+        let busViewController = BusSearchViewController(viewModel: BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase()))
         navigationController?.pushViewController(busViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))

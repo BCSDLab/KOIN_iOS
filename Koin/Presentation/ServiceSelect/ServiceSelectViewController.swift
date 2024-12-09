@@ -299,7 +299,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func busSelectButtonTapped() {
-        let busDetailViewController = BusSearchViewController(viewModel: BusSearchViewModel())
+        let busDetailViewController = BusSearchViewController(viewModel: BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase()))
         navigationController?.pushViewController(busDetailViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스"))
