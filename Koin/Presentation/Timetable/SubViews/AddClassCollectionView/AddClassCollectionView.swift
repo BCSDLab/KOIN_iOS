@@ -88,6 +88,18 @@ extension AddClassCollectionView {
         return CGSize(width: collectionView.bounds.width - 48, height: 103)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedLecture = showingLectureList[indexPath.row]
+        
+        let filteredLectures = lectureList.filter { lecture in
+            lecture.name == selectedLecture.name &&
+            lecture != selectedLecture
+        }
+        
+        print("자기 자신 제외한 필터된 강의 목록: \(filteredLectures)")
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddClassHeaderView.identifier, for: indexPath) as? AddClassHeaderView else {

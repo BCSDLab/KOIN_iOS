@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 11/20/24.
 //
 
-struct SemesterLecture: Codable {
+struct SemesterLecture: Codable, Equatable {
     let id: Int
     let code, name, grades, lectureClass: String
     let regularNumber, professor: String?
