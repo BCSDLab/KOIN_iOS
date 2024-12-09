@@ -102,7 +102,7 @@ final class BusSearchViewController: CustomViewController {
 
 extension BusSearchViewController {
     @objc private func tapSearchButton(sender: UIButton) {
-        let busSearchResultViewController = BusSearchResultViewController(viewModel: BusSearchResultViewModel())
+        let busSearchResultViewController = BusSearchResultViewController(viewModel: BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase()))
         self.navigationController?.pushViewController(busSearchResultViewController, animated: true)
     }
     
