@@ -51,8 +51,9 @@ final class BusSearchViewController: CustomViewController {
     private let busInfoSearchButton = UIButton().then {
         $0.setAttributedTitle(NSAttributedString(string: "조회하기", attributes: [.font: UIFont.appFont(.pretendardMedium, size: 15)]), for: .normal)
         $0.backgroundColor = .appColor(.neutral300)
-        $0.tintColor = .appColor(.neutral600)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
         $0.layer.cornerRadius = 4
+        $0.isEnabled = false
     }
     
     private let busAreaViewController = BusAreaSelectedViewController()
@@ -77,6 +78,7 @@ final class BusSearchViewController: CustomViewController {
         setUpNavigationBar()
         setNavigationTitle(title: "교통편 조회하기")
         busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
+        swapAreaButton.addTarget(self, action: #selector(swapDepartureAndArrival), for: .touchUpInside)
         bind()
     }
     
@@ -96,8 +98,7 @@ final class BusSearchViewController: CustomViewController {
             guard let self = self else { return }
             changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
             changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
-            departAreaSelectedButton.tag = (BusPlace.allCases.firstIndex(of: departureArea) ?? 0) + 1
-            arrivedAreaSelectedButton.tag = (BusPlace.allCases.firstIndex(of: arrivalArea) ?? 0) + 1
+            manageSearchButton(isActivated: true)
         }.store(in: &subscriptions)
     }
 }
@@ -111,6 +112,15 @@ extension BusSearchViewController {
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let busRouteType = sender == departAreaSelectedButton ? 0 : 1
         inputSubject.send(.selectBusArea(departAreaSelectedButton.tag, arrivedAreaSelectedButton.tag, busRouteType))
+    }
+    
+    @objc private func swapDepartureAndArrival(sender: UIButton) {
+        guard departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 else { return }
+        
+        let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
+        let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
+        changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
+        changeBusAreaButton(sender: arrivedAreaSelectedButton, title: departure)
     }
     
     private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?, busRouteType: Int) {
@@ -138,14 +148,16 @@ extension BusSearchViewController {
         sender.tag = (BusPlace.allCases.firstIndex(of: title) ?? 0) + 1
     }
     
-    private func manageSearchButton(isActivated: Bool, sender: UIButton) {
-        if isActivated {
-            sender.backgroundColor = .appColor(.neutral300)
-            sender.tintColor = .appColor(.neutral600)
+    private func manageSearchButton(isActivated: Bool) {
+        if !isActivated {
+            busInfoSearchButton.backgroundColor = .appColor(.neutral300)
+            busInfoSearchButton.setTitleColor(.appColor(.neutral600), for: .normal)
+            busInfoSearchButton.isEnabled = false
         }
         else {
-            sender.backgroundColor = .appColor(.primary500)
-            sender.tintColor = .appColor(.neutral300)
+            busInfoSearchButton.isEnabled = true
+            busInfoSearchButton.backgroundColor = .appColor(.primary500)
+            busInfoSearchButton.setTitleColor(.appColor(.neutral0), for: .normal)
         }
     }
 }
