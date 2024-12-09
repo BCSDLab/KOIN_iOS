@@ -85,6 +85,9 @@ final class BusSearchViewController: CustomViewController {
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+          
+        }.store(in: &subscriptions)
         
         busAreaViewController.busAreaPublisher.sink { [weak self] busArea, btnType in
             let sender: UIButton
@@ -95,7 +98,7 @@ final class BusSearchViewController: CustomViewController {
             else { //도착
                 sender = arrivedAreaSelectedButton
             }
-            self.changeBusAreaButton(sender: sender, title: busArea.koreanDescription)
+            changeBusAreaButton(sender: sender, title: busArea)
         }.store(in: &subscriptions)
     }
 }
@@ -103,28 +106,48 @@ final class BusSearchViewController: CustomViewController {
 extension BusSearchViewController {
     @objc private func tapSearchButton(sender: UIButton) {
         let busSearchResultViewController = BusSearchResultViewController(viewModel: BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase()))
-        self.navigationController?.pushViewController(busSearchResultViewController, animated: true)
+        navigationController?.pushViewController(busSearchResultViewController, animated: true)
     }
     
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
-        let busRouteType: Int
-        if sender == departAreaSelectedButton {
-            busRouteType = 0
+        let busRouteType = sender == departAreaSelectedButton ? 0 : 1
+        var departureBusPlace: BusPlace? = nil
+        var arrivalBusPlace: BusPlace? = nil
+        print(sender.tag)
+        if departAreaSelectedButton.tag != 0 {
+            departureBusPlace = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         }
-        else {
-           busRouteType = 1
+       
+        if arrivedAreaSelectedButton.tag != 0 {
+            arrivalBusPlace = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         }
-        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: [(.koreatech, true), (.station, false), (.terminal, false)])
+        var busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
+        let sender = busRouteType == 0 ? departAreaSelectedButton : arrivedAreaSelectedButton
+        if sender.tag == 0 { sender.tag = 1 } // tag가 1이면 한기대, 2이면 천안역, 3이면 천안 터미널
+        busAreaList[sender.tag - 1].1 = true
+        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: busAreaList, selectedArea: (departureBusPlace, arrivalBusPlace))
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
-        self.present(bottomSheet, animated: true)
+        present(bottomSheet, animated: true)
     }
     
-    private func changeBusAreaButton(sender: UIButton, title: String) {
+    private func changeBusAreaButton(sender: UIButton, title: BusPlace) {
         var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString(title, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardBold, size: 18), .foregroundColor: UIColor.appColor(.neutral800)]))
+        configuration.attributedTitle = AttributedString(title.koreanDescription, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardBold, size: 18), .foregroundColor: UIColor.appColor(.neutral800)]))
         configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
         sender.configuration = configuration
         sender.backgroundColor = .clear
+        sender.tag = (BusPlace.allCases.firstIndex(of: title) ?? 0) + 1
+    }
+    
+    private func manageSearchButton(isActivated: Bool, sender: UIButton) {
+        if isActivated {
+            sender.backgroundColor = .appColor(.neutral300)
+            sender.tintColor = .appColor(.neutral600)
+        }
+        else {
+            sender.backgroundColor = .appColor(.primary500)
+            sender.tintColor = .appColor(.neutral300)
+        }
     }
 }
 

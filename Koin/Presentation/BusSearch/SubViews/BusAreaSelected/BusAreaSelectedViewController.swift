@@ -14,6 +14,7 @@ final class BusAreaSelectedViewController: UIViewController {
     let busAreaPublisher = PassthroughSubject<(BusPlace, Int), Never>()
     private var busRouteType = 0 // 0이면 출발, 1이면 도착
     private var busAreaLists: [(BusPlace, Bool)] = []
+    private var selectedArea: (BusPlace?, BusPlace?)
     
     //MARK: - UI Components
     private let busRouteDescriptionlabel = UILabel().then {
@@ -60,9 +61,10 @@ final class BusAreaSelectedViewController: UIViewController {
 }
 
 extension BusAreaSelectedViewController {
-    func configure(busRouteType: Int, busAreaLists:  [(BusPlace, Bool)]) {
+    func configure(busRouteType: Int, busAreaLists: [(BusPlace, Bool)], selectedArea: (BusPlace?, BusPlace?)) {
         self.busRouteType = busRouteType
         self.busAreaLists = busAreaLists
+        self.selectedArea = selectedArea
         busAreaCollectionView.reloadData()
     }
     
