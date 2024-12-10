@@ -32,6 +32,9 @@ final class FrameListViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardMedium, size: 13)
     }
     
+    private let deleteSemesterModalViewController = DeleteSemesterModalViewController().then { _ in
+    }
+    
     // MARK: - Initialization
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude // 기본 여백 제거
@@ -88,9 +91,17 @@ final class FrameListViewController: UIViewController {
         }).store(in: &subscriptions)
         
         modifySemesterModalViewController.applyButtonPublisher.sink { [weak self] addedSemester, removedSemester in
-            self?.inputSubject.send(.modifySemester(addedSemester, removedSemester))
+            guard let self = self else { return }
+            inputSubject.send(.modifySemester(addedSemester, []))
+            if !removedSemester.isEmpty {
+                deleteSemesterModalViewController.setSemesters(semesters: removedSemester)
+                present(deleteSemesterModalViewController, animated: false)
+            }
         }.store(in: &subscriptions)
         
+        deleteSemesterModalViewController.deleteButtonPublisher.sink { [weak self] semesters in
+            self?.inputSubject.send(.modifySemester([], semesters))
+        }.store(in: &subscriptions)
     }
     
 }

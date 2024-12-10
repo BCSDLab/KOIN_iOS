@@ -478,6 +478,7 @@
 		D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE972D0060950097A388 /* SubstituteTimetableModalViewController.swift */; };
 		D2FCBE9C2D02C2D20097A388 /* SelectDeptModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9B2D02C2D20097A388 /* SelectDeptModalViewController.swift */; };
 		D2FCBE9E2D07EA2B0097A388 /* DeleteLectureModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9D2D07EA2B0097A388 /* DeleteLectureModelViewController.swift */; };
+		D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -990,8 +991,8 @@
 		D2FB23612BFDAC240098BA2B /* ShopAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopAPI.swift; sourceTree = "<group>"; };
 		D2FB23632BFDB53C0098BA2B /* ShopService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopService.swift; sourceTree = "<group>"; };
 		D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsRepository.swift; sourceTree = "<group>"; };
-		D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsEventUseCase.swift; sourceTree = "<group>"; };
-	        D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsService.swift; sourceTree = "<group>"; };
+        D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsEventUseCase.swift; sourceTree = "<group>"; };
+        D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsService.swift; sourceTree = "<group>"; };
         D2FB23702C0412C70098BA2B /* EventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParameter.swift; sourceTree = "<group>"; };
         D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GA4AnalyticsRepository.swift; sourceTree = "<group>"; };
         D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
@@ -1001,6 +1002,7 @@
         D2FCBE972D0060950097A388 /* SubstituteTimetableModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstituteTimetableModalViewController.swift; sourceTree = "<group>"; };
         D2FCBE9B2D02C2D20097A388 /* SelectDeptModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDeptModalViewController.swift; sourceTree = "<group>"; };
         D2FCBE9D2D07EA2B0097A388 /* DeleteLectureModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureModelViewController.swift; sourceTree = "<group>"; };
+        D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterModalViewController.swift; sourceTree = "<group>"; };
         D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1577,6 +1579,7 @@
 				D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */,
 				D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */,
 				D21572792CEE8E500061E725 /* TimetableCell.swift */,
+				D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3329,6 +3332,7 @@
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
+				D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
 				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,

@@ -152,7 +152,7 @@ extension ModifySemesterModalViewController {
     }
     
     @objc private func applyButtonTapped() {
-
+        dismiss(animated: true, completion: nil)
         let semesterMapping: [(UIButton, String)] = [
             (firstSemesterButton, "\(selectedYear)1"),
             (summerSelectButton, "\(selectedYear)-여름"),
@@ -176,7 +176,6 @@ extension ModifySemesterModalViewController {
         applyButtonPublisher.send((addedSemesters, removedSemesters))
 
         updateSemesterButtons()
-        dismiss(animated: true, completion: nil)
     }
 
     
