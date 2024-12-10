@@ -63,6 +63,8 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
+    private let busView = BusView()
+    
     private let noticeListCollectionView: NoticeListCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let width = UIScreen.main.bounds.width - 48
@@ -89,21 +91,21 @@ final class HomeViewController: UIViewController {
     
     private let busLabel: UILabel = {
         let label = UILabel()
-        label.text = "버스/교통"
+        label.text = "버스"
         label.textColor = UIColor.appColor(.primary500)
         label.font = UIFont.appFont(.pretendardBold, size: 15)
         return label
     }()
     
-    private let busCollectionView: BusCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width - 120
-        flowLayout.itemSize = CGSize(width: width, height: 175)
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 8
-        let collectionView = BusCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.decelerationRate = .fast
-        return collectionView
+    private let busQrCodeButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .qrCode)
+        configuration.attributedTitle = AttributedString("셔틀 시간표", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
+        configuration.imagePadding = 3
+        configuration.imagePlacement = .leading
+        let button = UIButton()
+        button.configuration = configuration
+        return button
     }()
     
     private let shopLabel: UILabel = {
@@ -177,9 +179,7 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         bind()
         inputSubject.send(.viewDidLoad)
-        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
-        configureTapGesture()
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -195,11 +195,6 @@ final class HomeViewController: UIViewController {
     }
     
     @objc private func appWillEnterForeground() {
-        if let centerIndexPath = busCollectionView.centerCellIndex {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
-        }
-        
         inputSubject.send(.categorySelected(getDiningPlace()))
         inputSubject.send(.getUserScreenAction(Date(), .enterForeground))
     }
@@ -214,13 +209,6 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea, busItem.endBusArea, busItem.busType))
-        } else {
-            inputSubject.send(.getBusInfo(.koreatech, .koreatech, .shuttleBus))
-        }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -250,10 +238,6 @@ final class HomeViewController: UIViewController {
                 self?.updateDining(item: diningItem, type: diningType, isToday: isToday)
             case let .putImage(response):
                 self?.putImage(data: response)
-            case let .updateBus(response):
-                self?.updateBusTime(response)
-            case .moveBusItem:
-                self?.scrollToBusItem()
             case let .updateNoticeBanners(hotNoticeArticlesInfo, keywordNoticePhrases):
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
@@ -263,27 +247,8 @@ final class HomeViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        
-        busCollectionView.busRequestPublisher
-            .sink { [weak self] data in
-                if data.0 == 1 {
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.1.2.koreanDescription))
-                }
-                self?.inputSubject.send(.getBusInfo(data.1.0, data.1.1, data.1.2))
-            }
-            .store(in: &subscriptions)
-        
-        busCollectionView.busTypePublisher
-            .sink { [weak self] busType in
-                self?.redirectByBusCardBtn(busType: busType)
-            }.store(in: &subscriptions)
-        
         logoView.lineButtonPublisher.sink { [weak self] in
             self?.navigateToServiceSelectViewController()
-        }.store(in: &subscriptions)
-        
-        busCollectionView.scrollPublisheer.sink { [weak self] item in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusScroll, .scroll, item))
         }.store(in: &subscriptions)
         
         diningTooltipImageView.onImageTapped = { [weak self] in
@@ -385,25 +350,6 @@ extension HomeViewController {
             movingPage.title = "버스/교통"
             self.navigationController?.pushViewController(movingPage, animated: true)
         }
-    }
-    
-    private func scrollToBusItem() {
-        let initialIndexPath = IndexPath(item: 4, section: 0)
-        busCollectionView.scrollToItem(at: initialIndexPath, at: .centeredHorizontally, animated: false)
-        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
-    }
-    
-    private func updateBusTime(_ data: BusCardInformation) {
-        busCollectionView.updateText(data: data)
-    }
-    
-    private func configureTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuViewTapped))
-        menuBackgroundView.addGestureRecognizer(tapGesture)
-        
-        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(busViewTapped))
-        busCollectionView.addGestureRecognizer(tapGesture2)
-        
     }
     
     private func configureSwipeGestures() {
@@ -522,12 +468,6 @@ extension HomeViewController {
     }
     
     @objc private func refresh() {
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
-        }
-        
         inputSubject.send(.categorySelected(getDiningPlace()))
         
         refreshControl.endRefreshing()
@@ -642,7 +582,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton].forEach {
             scrollView.addSubview($0)
         }
         
@@ -699,15 +639,20 @@ extension HomeViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        busCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(busLabel.snp.bottom).offset(11)
+        busQrCodeButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(24)
+            make.centerY.equalTo(busLabel)
+            make.height.equalTo(22)
+        }
+        busView.snp.makeConstraints { make in
+            make.top.equalTo(busLabel.snp.bottom).offset(16)
+            make.leading.equalTo(scrollView)
+            make.trailing.equalTo(scrollView)
+            make.height.equalTo(65)
             make.width.equalTo(scrollView.snp.width)
-            make.height.equalTo(185)
-            make.leading.equalTo(scrollView.snp.leading)
-            make.trailing.equalTo(scrollView.snp.trailing)
         }
         shopLabel.snp.makeConstraints { make in
-            make.top.equalTo(busCollectionView.snp.bottom).offset(40)
+            make.top.equalTo(busView.snp.bottom).offset(40)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
