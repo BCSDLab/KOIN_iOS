@@ -24,11 +24,27 @@ protocol TimetableService {
     func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse>
     func _deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse>
 }
 
 final class DefaultTimetableService: TimetableService {
         
     private let networkService = NetworkService()
+    
+    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: TimetableAPI.fetchAllFrames)
+            .catch { [weak self] error -> AnyPublisher<SemestersDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: TimetableAPI.fetchAllFrames) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: TimetableAPI.rollbackFrame(id: id))

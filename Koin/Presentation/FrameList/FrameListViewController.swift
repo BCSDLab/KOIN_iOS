@@ -77,12 +77,20 @@ final class FrameListViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-            case .reloadData: 
+            case .reloadData:
                 self?.tableView.reloadData()
                 self?.emptyFrameLabel.isHidden = !strongSelf.viewModel.frameData.isEmpty
             case .showToast(let message): self?.showToast(message: message, success: true)
+            case .showToastWithId(let message, let id):
+                self?.showToast(message: "\(message)\(message.hasFinalConsonant() ? "이" : "가") 삭제되었어요.", buttonTitle: "되돌리기", buttonId: id)
             }
         }.store(in: &subscriptions)
+        
+        toastButtonPublisher
+            .sink { [weak self] id in
+                self?.inputSubject.send(.rollbackFrame(id ?? 0))
+            }
+            .store(in: &subscriptions)
         
         modifyFrameModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] frame in
             guard let self = self else { return }
@@ -164,7 +172,7 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60 // 원하는 높이 설정
     }
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.frameData.count
     }

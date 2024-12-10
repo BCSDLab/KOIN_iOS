@@ -23,4 +23,5 @@ protocol TimetableRepository {
     func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse>
     func deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse>
 }

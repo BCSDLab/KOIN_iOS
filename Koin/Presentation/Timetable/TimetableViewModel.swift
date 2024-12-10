@@ -38,10 +38,12 @@ final class TimetableViewModel: ViewModelProtocol {
         case deleteFrame(FrameDTO)
         case modifyFrame(FrameDTO)
         case modifySemester([String], [String])
+        case rollbackFrame(Int)
     }
     enum NextOutput {
         case reloadData
         case showToast(String)
+        case showToastWithId(String, Int)
     }
     
     // MARK: - Properties
@@ -65,6 +67,7 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var modifyFrameUseCase = DefaultModifyFrameUseCase(timetableRepository: timetableRepository)
     private lazy var deleteSemesterUseCase = DefaultDeleteSemesterUseCase(timetableRepository: timetableRepository)
     private lazy var rollbackFrameUseCase = DefaultRollbackFrameUseCase(timetableRepository: timetableRepository)
+    private lazy var fetchFramesUseCase = DefaultFetchFramesUseCase(timetableRepository: timetableRepository)
     
     
     // MARK: 기타
@@ -125,7 +128,7 @@ final class TimetableViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .fetchFrameList:
-                self?.fetchMySemesters()
+                self?.fetchFrames()
             case .createFrame(let semester):
                 self?.createFrame(semester: semester)
             case .deleteFrame(let frame):
@@ -139,6 +142,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 removedSemester.forEach {
                     self?.deleteSemester(semester: $0)
                 }
+            case .rollbackFrame(let id):
+                self?.rollbackFrame(id: id)
             }
         }.store(in: &subscriptions)
         return nextOutputSubject.eraseToAnyPublisher()
@@ -181,85 +186,15 @@ extension TimetableViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func fetchMySemesters() {
-        fetchMySemesterUseCase.execute()
-            .flatMap { [weak self] response -> AnyPublisher<[FrameData], Never> in
-                guard let self = self else { return Just([]).eraseToAnyPublisher() }
-                let semesters = response.semesters
-                return semesters.publisher
-                    .flatMap { semester -> AnyPublisher<FrameData, Never> in
-                        self.fetchFrame(for: semester)
-                    }
-                    .collect()
-                    .eraseToAnyPublisher()
+    private func fetchFrames() {
+        fetchFramesUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("Failed fetching semesters: \(error)")
-                }
-            }, receiveValue: { [weak self] fetchedFrames in
-                guard let self = self else { return }
-                self.frameData = self.sortFrames(fetchedFrames)
-            })
-            .store(in: &subscriptions)
-    }
-    private func sortFrames(_ frames: [FrameData]) -> [FrameData] {
-        func sortSemester(_ semester: String) -> (year: Int, priority: Int) {
-            var year = 0
-            var priority = 0
-            
-            // '20242', '20241' 형식 처리
-            if let yearValue = Int(semester.prefix(4)) {
-                year = yearValue
-                if semester.hasSuffix("2") {
-                    priority = 1 // 2학기 (겨울 다음 우선순위)
-                } else if semester.hasSuffix("1") {
-                    priority = 3 // 1학기 (가장 낮은 우선순위)
-                }
-            }
-            
-            // '2024-여름', '2024-겨울' 형식 처리
-            if semester.contains("여름") {
-                year = Int(semester.prefix(4)) ?? 0
-                priority = 2 // 여름학기 (2학기 다음 우선순위)
-            } else if semester.contains("겨울") {
-                year = Int(semester.prefix(4)) ?? 0
-                priority = 0 // 겨울학기 (가장 높은 우선순위)
-            }
-            
-            return (year, priority)
-        }
-        
-        // 프레임 정렬
-        return frames.sorted {
-            let left = sortSemester($0.semester)
-            let right = sortSemester($1.semester)
-            
-            // 동일 연도인 경우 우선순위로 정렬
-            if left.year == right.year {
-                return left.priority < right.priority
-            }
-            // 연도가 다르면 최신 연도 우선
-            return left.year > right.year
-        }
-    }
-    
-    
-    
-    // MARK: - Modified Methods
-    
-    
-    private func fetchFrame(for semester: String) -> AnyPublisher<FrameData, Never> {
-        fetchFrameUseCase.execute(semester: semester)
-            .map { frames -> FrameData in
-                // FrameDTO를 기반으로 FrameData 생성
-                return FrameData(semester: semester, frame: frames)
-            }
-            .catch { error -> Just<FrameData> in
-                Log.make().error("Failed fetching frames for semester \(semester): \(error)")
-                return Just(FrameData(semester: semester, frame: [])) // 실패 시 빈 데이터 반환
-            }
-            .eraseToAnyPublisher()
+        } receiveValue: { [weak self] response in
+            self?.frameData = response
+        }.store(in: &subscriptions)
+
     }
 }
 
@@ -390,7 +325,18 @@ extension TimetableViewModel {
     
 }
 
+// FrameList
 extension TimetableViewModel {
+    
+    private func rollbackFrame(id: Int) {
+        rollbackFrameUseCase.execute(id: id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.fetchAllFramesForReload()
+        }.store(in: &subscriptions)
+    }
     
     // 프레임 1개 삭제
     private func deleteFrame(frame: FrameDTO) {
@@ -412,6 +358,7 @@ extension TimetableViewModel {
                 }
             }
             self.fetchAllFramesForReload()
+            self.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
         }.store(in: &subscriptions)
     }
     
@@ -448,15 +395,7 @@ extension TimetableViewModel {
                 self?.nextOutputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            
-            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
-                self.frameData[index].frame.append(response)
-            } else {
-                self.frameData.append(FrameData(semester: semester, frame: [response]))
-            }
-            
-            self.frameData = self.sortFrames(self.frameData)
+            self?.fetchFrames()
         }.store(in: &subscriptions)
     }
     
@@ -467,11 +406,7 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] _ in
-            guard let self = self else { return }
-            if let index = self.frameData.firstIndex(where: { $0.semester == semester }) {
-                self.frameData.remove(at: index)
-                Log.make().info("Semester \(semester) deleted from frameData")
-            }
+            self?.fetchFrames()
         }.store(in: &subscriptions)
         
     }

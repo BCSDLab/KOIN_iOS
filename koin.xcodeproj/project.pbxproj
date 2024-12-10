@@ -481,6 +481,7 @@
 		D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */; };
 		D2FCBEA22D07FCB00097A388 /* DeleteFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */; };
 		D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */; };
+		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -989,8 +990,8 @@
 		D2FB23522BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopCategoryListUseCase.swift; sourceTree = "<group>"; };
 		D2FB23542BFD49520098BA2B /* ShopRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopRepository.swift; sourceTree = "<group>"; };
 		D2FB23562BFD50120098BA2B /* DefaultShopRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultShopRepository.swift; sourceTree = "<group>"; };
-		D2FB235F2BFDABBB0098BA2B /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		D2FB23612BFDAC240098BA2B /* ShopAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopAPI.swift; sourceTree = "<group>"; };
+        D2FB235F2BFDABBB0098BA2B /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+        D2FB23612BFDAC240098BA2B /* ShopAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopAPI.swift; sourceTree = "<group>"; };
         D2FB23632BFDB53C0098BA2B /* ShopService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopService.swift; sourceTree = "<group>"; };
         D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsRepository.swift; sourceTree = "<group>"; };
         D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsEventUseCase.swift; sourceTree = "<group>"; };
@@ -1007,8 +1008,10 @@
         D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterModalViewController.swift; sourceTree = "<group>"; };
         D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameModalViewController.swift; sourceTree = "<group>"; };
         D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollbackFrameUseCase.swift; sourceTree = "<group>"; };
+        D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFramesUseCase.swift; sourceTree = "<group>"; };
         D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
 
 
 
@@ -2335,6 +2338,7 @@
 				D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */,
 				D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */,
 				D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */,
+				D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -3108,6 +3112,7 @@
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
 				D2FB23532BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift in Sources */,
+				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,

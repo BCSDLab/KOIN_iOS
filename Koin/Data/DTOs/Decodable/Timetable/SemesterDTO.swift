@@ -22,3 +22,25 @@ struct MySemesterDTO: Codable {
         case semesters
     }
 }
+
+struct SemestersDTO: Codable {
+    let semesters: [String: [Semester]]
+    func toDomain() -> [FrameData] {
+            return semesters.map { semester, frames in
+                let frameDTOs = frames.map { FrameDTO(id: $0.id, timetableName: $0.timetableName, isMain: $0.isMain) }
+                return FrameData(semester: semester, frame: frameDTOs)
+            }
+        }
+}
+
+struct Semester: Codable {
+    let id: Int
+    let timetableName: String
+    let isMain: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case timetableName = "timetable_name"
+        case isMain = "is_main"
+    }
+}

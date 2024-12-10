@@ -15,6 +15,10 @@ final class DefaultTimetableRepository: TimetableRepository {
         self.service = service
     }
     
+    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse> {
+        service.fetchAllFrames()
+    }
+    
     func deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         service._deleteLecture(id: id)
     }
