@@ -99,6 +99,10 @@ final class TimetableViewController: UIViewController {
     
     private let containerView = UIView().then { _ in
     }
+    
+    private let didTapCellLectureView = UIView().then { _ in
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: TimetableViewModel) {
@@ -171,6 +175,20 @@ final class TimetableViewController: UIViewController {
             self.present(self.selectDeptModalViewController, animated: false)
         }.store(in: &subscriptions)
         
+        addClassCollectionView.didTapCellPublisher.sink { [weak self] (selectedLecture, filteredLectures) in
+            guard let self = self else { return }
+
+            self.didTapCellLectureView.subviews.forEach {
+                $0.removeFromSuperview()
+            }
+            if let selectedLecture = selectedLecture {
+                self.addLectureHighlightView(for: selectedLecture, isDashed: false)
+            }
+            filteredLectures.forEach { lecture in
+                self.addLectureHighlightView(for: lecture, isDashed: true)
+            }
+        }.store(in: &subscriptions)
+        
         // MARK: DIRECT
         
         addDirectCollectionView.addClassButtonPublisher.sink { [weak self] in
@@ -178,9 +196,6 @@ final class TimetableViewController: UIViewController {
             self?.addDirectCollectionView.isHidden = true
         }.store(in: &subscriptions)
         
-        addDirectCollectionView.addClassButtonPublisher.sink { [weak self] lecture in
-            //  self?.toggleCollectionView()
-        }.store(in: &subscriptions)
         
         addDirectCollectionView.completeButtonPublisher.sink { [weak self] item in
             
@@ -223,6 +238,62 @@ final class TimetableViewController: UIViewController {
 }
 
 extension TimetableViewController {
+    private func addLectureHighlightView(for lecture: SemesterLecture, isDashed: Bool) {
+        
+        let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 }
+        
+        for (day, times) in groupedByDay {
+            let continuousRanges = splitIntoContinuousRanges(times)
+            
+            for range in continuousRanges {
+                if let firstTime = range.first {
+                    let width = Int(containerView.frame.width / 5)
+                    let height = 35
+                    
+                    let highlightView = UIView()
+                    highlightView.backgroundColor = .clear
+                    
+                    if isDashed {
+                        let dashedBorder = CAShapeLayer()
+                        dashedBorder.strokeColor = UIColor.appColor(.neutral500).cgColor
+                        dashedBorder.fillColor = UIColor.clear.cgColor
+                        dashedBorder.lineDashPattern = [6, 4]
+                        dashedBorder.lineWidth = 1.0
+                        highlightView.layer.addSublayer(dashedBorder)
+                        highlightView.layoutIfNeeded()
+                        dashedBorder.path = UIBezierPath(rect: highlightView.bounds).cgPath
+                        dashedBorder.frame = highlightView.bounds
+                    } else {
+                        highlightView.layer.borderWidth = 1.0
+                        highlightView.layer.borderColor = UIColor.appColor(.neutral500).cgColor
+                    }
+                    
+                    didTapCellLectureView.addSubview(highlightView)
+                    
+                    highlightView.snp.makeConstraints { make in
+                        make.height.equalTo(height * range.count - 2)
+                        make.top.equalTo(containerView.snp.top).offset(height * (firstTime % 100) + 2)
+                        let sectionWidth = containerView.frame.width / 5
+                        let leadingOffset = sectionWidth * CGFloat(day)
+                        let trailingOffset = sectionWidth * CGFloat(day + 1)
+                        make.leading.equalTo(containerView.snp.leading).offset(leadingOffset + 1)
+                        make.trailing.equalTo(containerView.snp.leading).offset(trailingOffset - 1)
+                    }
+                    
+                    // 레이아웃 업데이트 후 점선 테두리 보정
+                    if isDashed {
+                        highlightView.layoutIfNeeded()
+                        if let dashedBorder = highlightView.layer.sublayers?.first as? CAShapeLayer {
+                            dashedBorder.path = UIBezierPath(rect: highlightView.bounds).cgPath
+                            dashedBorder.frame = highlightView.bounds
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     private func setUpCollectionViewHeight(_ lectureList: [LectureData]) {
         // 강의 시간에서 마지막 2자리 추출
         let lastTwoDigits = lectureList.flatMap { $0.classTime.map { $0 % 100 } }
@@ -454,7 +525,7 @@ extension TimetableViewController {
         [scrollView, semesterSelectButton, downloadImageButton, addClassCollectionView, addDirectCollectionView, deleteLectureView].forEach {
             view.addSubview($0)
         }
-        [timetableCollectionView, containerView, emptyView].forEach {
+        [timetableCollectionView, containerView, emptyView, didTapCellLectureView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -494,6 +565,9 @@ extension TimetableViewController {
             make.top.equalTo(timetableCollectionView.snp.top).offset(16)
             make.leading.equalTo(timetableCollectionView.snp.leading).offset(18)
             make.trailing.bottom.equalTo(timetableCollectionView)
+        }
+        didTapCellLectureView.snp.makeConstraints { make in
+            make.edges.equalTo(containerView)
         }
         deleteLectureView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()

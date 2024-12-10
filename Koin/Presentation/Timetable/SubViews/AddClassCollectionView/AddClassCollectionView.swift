@@ -13,11 +13,12 @@ final class AddClassCollectionView: UICollectionView, UICollectionViewDataSource
     private var lectureList: [SemesterLecture] = []
     private var showingLectureList: [SemesterLecture] = []
     private var myLectureList: [LectureData] = []
+    private var selectedLecture: SemesterLecture?
     
     let completeButtonPublisher = PassthroughSubject<Void, Never>()
     let addDirectButtonPublisher = PassthroughSubject<Void, Never>()
     let modifyClassButtonPublisher = PassthroughSubject<(LectureData, Bool), Never>()
-    let didTapCellPublisher = PassthroughSubject<Void, Never>()
+    let didTapCellPublisher = PassthroughSubject<(SemesterLecture?, [SemesterLecture]), Never>()
     let filterButtonPublisher = PassthroughSubject<Void, Never>()
     private var headerCancellables = Set<AnyCancellable>()
     
@@ -89,16 +90,20 @@ extension AddClassCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedLecture = showingLectureList[indexPath.row]
-        
-        let filteredLectures = lectureList.filter { lecture in
-            lecture.name == selectedLecture.name &&
-            lecture != selectedLecture
+            let selectedLecture = showingLectureList[indexPath.row]
+            
+            if selectedLecture == self.selectedLecture {
+                didTapCellPublisher.send((nil, []))
+                self.selectedLecture = nil
+                return
+            }
+            self.selectedLecture = selectedLecture
+            let filteredLectures = lectureList.filter { lecture in
+                lecture.name == selectedLecture.name &&
+                lecture != selectedLecture
+            }
+            didTapCellPublisher.send((selectedLecture, filteredLectures))
         }
-        
-        print("자기 자신 제외한 필터된 강의 목록: \(filteredLectures)")
-    }
-
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
