@@ -293,11 +293,13 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         }.store(in: &subscriptions)
         
         busView.moveBusSearchPublisher.sink {
-            //추후 버스 노선 검색 화면 이동
+        
         }.store(in: &subscriptions)
         
-        busView.moveBusTimetablePublisher.sink {
-            //추후 버스 시간표 화면 이동
+        busView.moveBusTimetablePublisher.sink { [weak self] in
+            let viewModel = BusTimetableViewModel()
+            let viewController = BusTimetableViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
