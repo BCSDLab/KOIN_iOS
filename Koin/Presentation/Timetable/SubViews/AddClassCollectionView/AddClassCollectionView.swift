@@ -90,20 +90,24 @@ extension AddClassCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let selectedLecture = showingLectureList[indexPath.row]
-            
-            if selectedLecture == self.selectedLecture {
-                didTapCellPublisher.send((nil, []))
-                self.selectedLecture = nil
-                return
-            }
-            self.selectedLecture = selectedLecture
-            let filteredLectures = lectureList.filter { lecture in
-                lecture.name == selectedLecture.name &&
-                lecture != selectedLecture
-            }
-            didTapCellPublisher.send((selectedLecture, filteredLectures))
+        let selectedLecture = showingLectureList[indexPath.row]
+
+        if selectedLecture == self.selectedLecture {
+            didTapCellPublisher.send((nil, [])) // View를 모두 제거
+            self.selectedLecture = nil // 선택 해제
+            return
         }
+    
+        self.selectedLecture = selectedLecture
+
+        let filteredLectures = lectureList.filter { lecture in
+            lecture.name == selectedLecture.name &&
+            lecture != selectedLecture &&
+            !lecture.classTime.contains(where: selectedLecture.classTime.contains)
+        }
+        didTapCellPublisher.send((selectedLecture, filteredLectures))
+    }
+
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
@@ -133,7 +137,7 @@ extension AddClassCollectionView {
         }
         return UICollectionReusableView()
     }
-  
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddClassCollectionViewCell.identifier, for: indexPath) as? AddClassCollectionViewCell else {
             return UICollectionViewCell()
@@ -147,7 +151,7 @@ extension AddClassCollectionView {
             myLecture.classTime == lecture.classTime &&
             myLecture.professor == (lecture.professor ?? "")
         }
-   
+        
         cell.configure(lecture: lecture, isAdded: isAdded)
         
         // 셀의 버튼 액션 처리
@@ -167,6 +171,6 @@ extension AddClassCollectionView {
         }.store(in: &cell.cancellables)
         return cell
     }
-
-
+    
+    
 }

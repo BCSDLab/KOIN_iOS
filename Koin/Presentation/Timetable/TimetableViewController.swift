@@ -100,7 +100,8 @@ final class TimetableViewController: UIViewController {
     private let containerView = UIView().then { _ in
     }
     
-    private let didTapCellLectureView = UIView().then { _ in
+    private let didTapCellLectureView = UIView().then {
+        $0.isUserInteractionEnabled = false
     }
     
     // MARK: - Initialization
@@ -153,8 +154,10 @@ final class TimetableViewController: UIViewController {
         
         addClassCollectionView.completeButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
+            self.view.endEditing(true)
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
         }.store(in: &subscriptions)
+
         
         addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
             self?.addClassCollectionView.isHidden = true
