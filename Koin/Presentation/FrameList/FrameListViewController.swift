@@ -20,7 +20,7 @@ final class FrameListViewController: UIViewController {
     // MARK: - UI Components
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    private let deleteFrameModalViewController: ModifyFrameModalViewController = ModifyFrameModalViewController(width: 327, height: 216)
+    private let modifyFrameModalViewController: ModifyFrameModalViewController = ModifyFrameModalViewController(width: 327, height: 216)
     
     private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
     
@@ -33,6 +33,9 @@ final class FrameListViewController: UIViewController {
     }
     
     private let deleteSemesterModalViewController = DeleteSemesterModalViewController().then { _ in
+    }
+    
+    private let deleteFrameModalViewController = DeleteFrameModalViewController().then { _ in
     }
     
     // MARK: - Initialization
@@ -81,11 +84,13 @@ final class FrameListViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        deleteFrameModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] frame in
-            self?.inputSubject.send(.deleteFrame(frame))
+        modifyFrameModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] frame in
+            guard let self = self else { return }
+            deleteFrameModalViewController.configure(frame: frame)
+            present(deleteFrameModalViewController, animated: false)
         }).store(in: &subscriptions)
         
-        deleteFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
+        modifyFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
             self?.inputSubject.send(.modifyFrame(frame))
             
         }).store(in: &subscriptions)
@@ -101,6 +106,10 @@ final class FrameListViewController: UIViewController {
         
         deleteSemesterModalViewController.deleteButtonPublisher.sink { [weak self] semesters in
             self?.inputSubject.send(.modifySemester([], semesters))
+        }.store(in: &subscriptions)
+        
+        deleteFrameModalViewController.deleteButtonPublisher.sink { [weak self] frame in
+            self?.inputSubject.send(.deleteFrame(frame))
         }.store(in: &subscriptions)
     }
     
@@ -132,8 +141,8 @@ extension FrameListViewController: TimetableCellDelegate {
         
         // 추가 동작 (예: 삭제 모달 띄우기)
         let timetable = viewModel.frameData[section].frame[row]
-        deleteFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
-        self.present(deleteFrameModalViewController, animated: true)
+        modifyFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
+        self.present(modifyFrameModalViewController, animated: true)
         
         
     }

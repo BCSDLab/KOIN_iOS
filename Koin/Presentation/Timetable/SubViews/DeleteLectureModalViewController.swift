@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class DeleteLectureModelViewController: UIViewController {
+final class DeleteLectureModalViewController: UIViewController {
     
     let deleteButtonPublisher = PassthroughSubject<LectureData, Never>()
     private var lectureData: LectureData? = nil
@@ -69,7 +69,7 @@ final class DeleteLectureModelViewController: UIViewController {
     }
 }
 
-extension DeleteLectureModelViewController {
+extension DeleteLectureModalViewController {
 
     func setMessageLabelText(lectureData: LectureData) {
         self.lectureData = lectureData

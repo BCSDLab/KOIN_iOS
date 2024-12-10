@@ -108,8 +108,8 @@ final class ModifyFrameModalViewController: UIViewController {
         checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
     }
     @objc private func deleteButtonTapped() {
-        deleteButtonPublisher.send(frame)
         dismiss(animated: true, completion: nil)
+        deleteButtonPublisher.send(frame)
     }
     @objc private func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)

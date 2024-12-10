@@ -97,7 +97,7 @@ final class TimetableViewController: UIViewController {
     private let selectDeptModalViewController = SelectDeptModalViewController().then { _ in
     }
     
-    private let deleteLectureModelViewController: DeleteLectureModelViewController = DeleteLectureModelViewController().then { _ in
+    private let deleteLectureModelViewController: DeleteLectureModalViewController = DeleteLectureModalViewController().then { _ in
     }
     
     private let containerView = UIView().then { _ in
