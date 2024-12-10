@@ -407,7 +407,11 @@ extension TimetableViewController {
                             make.leading.equalTo(containerView.snp.leading).offset(leadingOffset + 1)
                             make.trailing.equalTo(containerView.snp.leading).offset(trailingOffset - 1)
                         }
-
+                        if range.count == 1 {
+                            lectureView.lectureNameLabel.snp.updateConstraints { make in
+                                make.height.equalTo(30)
+                            }
+                        }
 
                         
                         // 새로 추가된 body 색상을 사용된 색상으로 추가

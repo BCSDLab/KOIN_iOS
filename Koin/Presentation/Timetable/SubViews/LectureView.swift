@@ -12,8 +12,9 @@ final class LectureView: UIView {
     
     private(set) var info: LectureData
     
-     let separateView = UIView().then { _ in
+    let separateView = UIView().then { _ in
     }
+    
     let lectureNameLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.numberOfLines = 0
@@ -25,21 +26,16 @@ final class LectureView: UIView {
     init(info: LectureData, color: UIColor) {
         self.info = info
         super.init(frame: .zero)
-        
-        
-      
         lectureNameLabel.text = info.name
         professorNameLabel.text = info.professor
-        
         setupLayouts()
         setupConstraints()
     }
-
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Layouts
     private func setupLayouts() {
         addSubview(separateView)
