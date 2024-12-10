@@ -112,7 +112,7 @@ final class TimetableViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .fetchMySemester:
-                self?.fetchMySemester()
+                self?.fetchMyFrames()
             case let .modifyLecture(lecture, isAdd):
                 self?.modifyLecture(lecture: lecture, isAdd: isAdd)
             case ._deleteLecture(let lecture):
@@ -259,7 +259,7 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response  in
-            if let firstMainFrame = response.first(where: { $0.isMain }) {
+            if let firstMainFrame = response.first(where: { $0.isMain }) ?? response.first {
                 self?.selectedFrameId = firstMainFrame.id
                 self?.outputSubject.send(.showingSelectedFrame(semester, firstMainFrame.timetableName))
             } else {
@@ -269,14 +269,14 @@ extension TimetableViewModel {
         
     }
     
-    // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
-    private func fetchMySemester() {
-        fetchMySemesterUseCase.execute().sink { completion in
+    private func fetchMyFrames() {
+        fetchFramesUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
-        }receiveValue: { [weak self] response in
-            if let lastSemester = response.semesters.first {
+        } receiveValue: { [weak self] response in
+            
+            if let lastSemester = response.first?.semester {
                 self?.selectedSemester = lastSemester
                 self?.fetchFrame(semester: lastSemester)
             } else {
@@ -323,7 +323,7 @@ extension TimetableViewModel {
             self?.fetchFrames()
             self?.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
             if frame.id == self?.selectedFrameId {
-                self?.fetchMySemester()
+                self?.fetchMyFrames()
             }
         }.store(in: &subscriptions)
     }
@@ -360,7 +360,7 @@ extension TimetableViewModel {
         } receiveValue: { [weak self] _ in
             self?.fetchFrames()
             if semester == self?.selectedSemester {
-                self?.fetchMySemester()
+                self?.fetchMyFrames()
             }
         }.store(in: &subscriptions)
         
