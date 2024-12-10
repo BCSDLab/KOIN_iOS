@@ -129,6 +129,7 @@
 		83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */; };
 		83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */; };
 		83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DED2C575C9300278ABD /* BusNumber.swift */; };
+		83E7710F2D08382200EB3F84 /* BusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7710E2D08382200EB3F84 /* BusView.swift */; };
 		83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
@@ -286,8 +287,6 @@
 		D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */; };
 		D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0272BA608310081FD36 /* LandCollectionView.swift */; };
 		D27DD08F2BA608310081FD36 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD02A2BA608310081FD36 /* HomeViewModel.swift */; };
-		D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0312BA608310081FD36 /* BusCollectionViewCell.swift */; };
-		D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0322BA608310081FD36 /* BusCollectionView.swift */; };
 		D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0342BA608310081FD36 /* MenuCollectionViewCell.swift */; };
 		D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0362BA608310081FD36 /* MenuCollectionView.swift */; };
 		D27DD0982BA608310081FD36 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0372BA608310081FD36 /* MenuView.swift */; };
@@ -610,6 +609,7 @@
 		83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBusTimetableDTO.swift; sourceTree = "<group>"; };
 		83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCityBusTimetableUseCase.swift; sourceTree = "<group>"; };
 		83DD0DED2C575C9300278ABD /* BusNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNumber.swift; sourceTree = "<group>"; };
+		83E7710E2D08382200EB3F84 /* BusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusView.swift; sourceTree = "<group>"; };
 		83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDTO.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -772,8 +772,6 @@
 		D27DD0262BA608310081FD36 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0272BA608310081FD36 /* LandCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
 		D27DD02A2BA608310081FD36 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		D27DD0312BA608310081FD36 /* BusCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusCollectionViewCell.swift; sourceTree = "<group>"; };
-		D27DD0322BA608310081FD36 /* BusCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusCollectionView.swift; sourceTree = "<group>"; };
 		D27DD0342BA608310081FD36 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0362BA608310081FD36 /* MenuCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCollectionView.swift; sourceTree = "<group>"; };
 		D27DD0372BA608310081FD36 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
@@ -1869,7 +1867,7 @@
 			children = (
 				D2F4FD572CBE089C008C91D8 /* ShopCollectionView */,
 				83FA91892C81E2D00090351F /* NoticeListCollectionView */,
-				D27DD0302BA608310081FD36 /* BusCollectionView */,
+				D27DD0302BA608310081FD36 /* BusView */,
 				D27DD0332BA608310081FD36 /* MenuView */,
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
@@ -1877,13 +1875,12 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
-		D27DD0302BA608310081FD36 /* BusCollectionView */ = {
+		D27DD0302BA608310081FD36 /* BusView */ = {
 			isa = PBXGroup;
 			children = (
-				D27DD0312BA608310081FD36 /* BusCollectionViewCell.swift */,
-				D27DD0322BA608310081FD36 /* BusCollectionView.swift */,
+				83E7710E2D08382200EB3F84 /* BusView.swift */,
 			);
-			path = BusCollectionView;
+			path = BusView;
 			sourceTree = "<group>";
 		};
 		D27DD0332BA608310081FD36 /* MenuView */ = {
@@ -3071,6 +3068,7 @@
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,
+				83E7710F2D08382200EB3F84 /* BusView.swift in Sources */,
 				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				8354BE262C78BC3B009D4D7A /* RecentSearchTableViewCell.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
@@ -3106,7 +3104,6 @@
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
-				D27DD0932BA608310081FD36 /* BusCollectionViewCell.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
@@ -3126,7 +3123,6 @@
 				8354BE372C79C6AF009D4D7A /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
-				D27DD0942BA608310081FD36 /* BusCollectionView.swift in Sources */,
 				D2F4FD592CBE089D008C91D8 /* ShopCollectionViewCell.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
