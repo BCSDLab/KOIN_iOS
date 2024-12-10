@@ -171,7 +171,7 @@ extension NoticeDataViewController {
             let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
             navigationController.setViewControllers(viewControllersToKeep, animated: false)
         } else {
-            if let index = navigationController.viewControllers.lastIndex(where: { $0 is HomeViewControllerA || $0 is HomeViewControllerB }) {
+            if let index = navigationController.viewControllers.lastIndex(where: { $0 is HomeViewController }) {
                 let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
                 navigationController.setViewControllers(viewControllersToKeep, animated: false)
                 let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
