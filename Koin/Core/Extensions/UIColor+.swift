@@ -15,9 +15,11 @@ enum SceneColorAsset {
     case warning50, warning100, warning200, warning300, warning400, warning500, warning600, warning700
     case success50, success100, success200, success300, success400, success500, success600, success700
     case info50, info100, info200, info300, info400, info500, info600, info700
+    case orange100
     case bus1, bus2, bus3
     case yellow
     case gray
+    case pastelGreen, pastelBlue, pastelOrange
 }
 
 extension UIColor {
@@ -90,11 +92,16 @@ extension UIColor {
         case .info600: return UIColor(hexCode: "3B82F6")
         case .info700: return UIColor(hexCode: "3A70E2")
             
+        case .orange100: return UIColor(hexCode: "FBEBD7")
+            
         case .bus1: return UIColor(hexCode: "F7941E")
         case .bus2: return UIColor(hexCode: "7C9FAE")
         case .bus3: return UIColor(hexCode: "4DB297")
         case .yellow: return UIColor(hexCode: "#F4CE83")
         case .gray: return UIColor(hexCode: "8E8E8E")
+        case .pastelGreen: return UIColor(hexCode: "#D7FBEB")
+        case .pastelBlue: return UIColor(hexCode: "#D7E6FB")
+        case .pastelOrange: return UIColor(hexCode: "#FBEBD7")
         }
     }
     static func randomLightColor() -> UIColor {

@@ -71,8 +71,24 @@ extension Date {
     }
     
     func formatDateToCustom() -> String {
-          let dateFormatter = DateFormatter()
-          dateFormatter.dateFormat = "yyyy.MM.dd '업데이트'"
-          return dateFormatter.string(from: self)
-      }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd '업데이트'"
+        return dateFormatter.string(from: self)
+    }
+    
+    func generateDateArray<S: Sequence>(formatter: DateFormatter, sequence: S) -> [String] where S.Element == Int {
+        var dateArray: [String] = []
+        let today = Date()
+        dateArray.append("오늘")
+        dateArray.append("내일")
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+        for dayOffset in sequence {
+            let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: today) ?? Date()
+            let formattedDate = formatter.string(from: futureDate)
+            dateArray.append(formattedDate) 
+        }
+        
+        return dateArray
+    }
+
 }
