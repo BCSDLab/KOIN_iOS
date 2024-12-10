@@ -1,5 +1,5 @@
 //
-//  DeleteFrameModalViewController.swift
+//  ModifyFrameModalViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 11/21/24.
@@ -8,8 +8,7 @@
 import Combine
 import UIKit
 
-final class DeleteFrameModalViewController: UIViewController {
-    
+final class ModifyFrameModalViewController: UIViewController {
     
     let deleteButtonPublisher = PassthroughSubject<FrameDTO, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
@@ -127,7 +126,7 @@ final class DeleteFrameModalViewController: UIViewController {
    
 }
 
-extension DeleteFrameModalViewController {
+extension ModifyFrameModalViewController {
     
     private func setUpLayOuts() {
         [containerView].forEach {

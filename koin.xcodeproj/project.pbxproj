@@ -216,7 +216,7 @@
 		D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572722CEE67130061E725 /* DeleteLectureView.swift */; };
 		D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572752CEE76D80061E725 /* FrameListViewController.swift */; };
 		D215727A2CEE8E500061E725 /* TimetableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572792CEE8E500061E725 /* TimetableCell.swift */; };
-		D215727D2CEE9A460061E725 /* DeleteFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */; };
+		D215727D2CEE9A460061E725 /* ModifyFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727C2CEE9A460061E725 /* ModifyFrameModalViewController.swift */; };
 		D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */; };
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
@@ -738,7 +738,7 @@
 		D21572722CEE67130061E725 /* DeleteLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureView.swift; sourceTree = "<group>"; };
 		D21572752CEE76D80061E725 /* FrameListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameListViewController.swift; sourceTree = "<group>"; };
 		D21572792CEE8E500061E725 /* TimetableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCell.swift; sourceTree = "<group>"; };
-		D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameModalViewController.swift; sourceTree = "<group>"; };
+		D215727C2CEE9A460061E725 /* ModifyFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyFrameModalViewController.swift; sourceTree = "<group>"; };
 		D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifySemesterModalViewController.swift; sourceTree = "<group>"; };
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
@@ -1576,7 +1576,7 @@
 		D215727B2CEE9A270061E725 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				D215727C2CEE9A460061E725 /* DeleteFrameModalViewController.swift */,
+				D215727C2CEE9A460061E725 /* ModifyFrameModalViewController.swift */,
 				D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */,
 				D21572792CEE8E500061E725 /* TimetableCell.swift */,
 				D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */,
@@ -3304,7 +3304,7 @@
 				D2F4FD592CBE089D008C91D8 /* ShopCollectionViewCell.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
-				D215727D2CEE9A460061E725 /* DeleteFrameModalViewController.swift in Sources */,
+				D215727D2CEE9A460061E725 /* ModifyFrameModalViewController.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
 				D224217C2C8A90D200E8B480 /* ChangePasswordView.swift in Sources */,
 				D27DD0C82BA608310081FD36 /* UIImage+.swift in Sources */,

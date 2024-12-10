@@ -20,7 +20,7 @@ final class FrameListViewController: UIViewController {
     // MARK: - UI Components
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    private let deleteFrameModalViewController: DeleteFrameModalViewController = DeleteFrameModalViewController(width: 327, height: 216)
+    private let deleteFrameModalViewController: ModifyFrameModalViewController = ModifyFrameModalViewController(width: 327, height: 216)
     
     private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
     
