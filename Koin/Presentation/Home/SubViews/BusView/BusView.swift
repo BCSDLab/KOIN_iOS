@@ -5,11 +5,16 @@
 //  Created by JOOMINKYUNG on 12/10/24.
 //
 
+import Combine
 import Foundation
 import Then
 import UIKit
 
 final class BusView: UIView {
+    //MARK: - Properties
+    let moveBusTimetablePublisher = PassthroughSubject<Void, Never>()
+    let moveBusSearchPublisher = PassthroughSubject<Void, Never>()
+    
     //MARK: - UI Components
     private let busTimetableButton = UIView()
     private let busSearchButton = UIView()
@@ -43,12 +48,20 @@ final class BusView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc private func tapBusTimetableButton() {
+        moveBusTimetablePublisher.send()
+    }
+    
+    @objc private func tapBusSearchButton() {
+        moveBusSearchPublisher.send()
+    }
 }
 
 extension BusView {
     private func configureUIComponents() {
         [busTimetableButton, busSearchButton].forEach {
             $0.backgroundColor = .appColor(.neutral50)
+            $0.isUserInteractionEnabled = true
         }
         
         [busTimetableLabel, busSearchLabel].forEach {
@@ -131,6 +144,10 @@ extension BusView {
         configureUIComponents()
         setLayouts()
         setConstraints()
+        let moveBusTimetableGesture = UITapGestureRecognizer(target: self, action: #selector(tapBusTimetableButton))
+        let moveBusSearchGesture = UITapGestureRecognizer(target: self, action: #selector(tapBusSearchButton))
+        busTimetableButton.addGestureRecognizer(moveBusTimetableGesture)
+        busSearchButton.addGestureRecognizer(moveBusSearchGesture)
     }
 }
 

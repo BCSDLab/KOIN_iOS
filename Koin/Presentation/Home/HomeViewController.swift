@@ -100,7 +100,7 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
     private let busQrCodeButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .qrCode)
-        configuration.attributedTitle = AttributedString("셔틀 시간표", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
+        configuration.attributedTitle = AttributedString("셔틀 탑승권", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
         configuration.imagePadding = 3
         configuration.imagePlacement = .leading
         let button = UIButton()
@@ -291,10 +291,24 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
             let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        busView.moveBusSearchPublisher.sink {
+            //추후 버스 노선 검색 화면 이동
+        }.store(in: &subscriptions)
+        
+        busView.moveBusTimetablePublisher.sink {
+            //추후 버스 시간표 화면 이동
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    
+    @objc private func tapBusQrCode() {
+        if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
     
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
@@ -708,6 +722,7 @@ extension HomeViewController {
         goNoticePageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
         goDiningPageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
         scrollView.refreshControl = refreshControl
+        busQrCodeButton.addTarget(self, action: #selector(tapBusQrCode), for: .touchUpInside)
         self.view.backgroundColor = .systemBackground
     }
     
