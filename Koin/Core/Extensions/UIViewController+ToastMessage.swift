@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 8/13/24.
 //
 
+import Combine
 import UIKit
 
 extension UIViewController {
@@ -67,6 +68,67 @@ extension UIViewController {
         navigationController?.pushViewController(loginViewController, animated: true)
     }
 }
+extension UIViewController {
+    private static var toastButtonSubject = PassthroughSubject<Int?, Never>()
+    
+    var toastButtonPublisher: PassthroughSubject<Int?, Never> {
+        UIViewController.toastButtonSubject
+    }
+    
+    private struct AssociatedKeys {
+        static var toastButtonPublisher = "toastButtonPublisher"
+    }
+    func showToast(message: String, buttonTitle: String? = nil, buttonId: Int? = nil) {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+            return
+        }
+        
+        let backgroundColor = UIColor.appColor(.primary900)
+        
+        let toastLabel = PaddingLabel(frame: CGRect(x: 16, y: window.frame.height - 81, width: window.frame.width - 32, height: 54))
+        toastLabel.font = UIFont.systemFont(ofSize: 14)
+        toastLabel.textAlignment = .left
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 5
+        toastLabel.clipsToBounds = true
+        toastLabel.backgroundColor = backgroundColor
+        toastLabel.textColor = .white
+        
+        let button = UIButton(type: .system)
+        if let buttonTitle = buttonTitle {
+            button.setTitle(buttonTitle, for: .normal)
+            button.setTitleColor(UIColor.appColor(.sub500), for: .normal)
+            button.backgroundColor = .clear
+            button.frame = CGRect(x: toastLabel.frame.width - 65, y: window.frame.height - 81, width: 65, height: 54)
+            button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+            button.addTarget(self, action: #selector(didTapToastButton(_:)), for: .touchUpInside)
+            button.tag = buttonId ?? 0
+        }
+        
+        window.addSubview(toastLabel)
+        window.addSubview(button)
+        let animator = UIViewPropertyAnimator(duration: 5.0, curve: .easeOut) {
+            toastLabel.alpha = 0.1
+            button.alpha = 0.1
+        }
+        
+        animator.addCompletion { _ in
+            toastLabel.removeFromSuperview()
+            button.removeFromSuperview()
+        }
+        animator.startAnimation()
+    }
+    
+    @objc private func didTapToastButton(_ sender: UIButton) {
+        sender.removeFromSuperview()
+        let id = sender.tag == 0 ? nil : sender.tag 
+        UIViewController.toastButtonSubject.send(id)
+    }
+}
+
 
 // TODO: 이거 공통으로 사용가능한 컴포넌트로 만들기. left를 init으로 받기
 final class PaddingLabel: UILabel {
