@@ -269,32 +269,6 @@ extension TimetableViewModel {
         
     }
     
-    private func fetchAllFramesForReload() {
-        // 모든 학기에 대해 데이터 가져오기
-        let publishers = frameData.map { frameItem in
-            fetchFrameUseCase.execute(semester: frameItem.semester)
-                .map { (semester: frameItem.semester, response: $0) } // 학기와 응답을 함께 반환
-        }
-        
-        // Combine의 Publishers.MergeMany를 사용하여 여러 요청을 병합
-        Publishers.MergeMany(publishers)
-            .collect() // 모든 요청 결과를 하나로 수집
-            .sink { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            } receiveValue: { [weak self] responses in
-                guard let self = self else { return }
-                
-                // 응답 결과를 frameData에 업데이트
-                for result in responses {
-                    if let index = self.frameData.firstIndex(where: { $0.semester == result.semester }) {
-                        self.frameData[index].frame = result.response
-                    }
-                }
-            }
-            .store(in: &subscriptions)
-    }
     // 나의 모든 학기 조회 ( 처음에 보여줄 학기들 리스트 보여주기 위해 필요 )
     private func fetchMySemester() {
         fetchMySemesterUseCase.execute().sink { completion in
@@ -334,7 +308,7 @@ extension TimetableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.fetchAllFramesForReload()
+            self?.fetchFrames()
         }.store(in: &subscriptions)
     }
     
@@ -346,23 +320,14 @@ extension TimetableViewModel {
                 self?.nextOutputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] in
-            guard let self = self else { return }
-            
-            for (index, frameData) in self.frameData.enumerated() {
-                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
-                    self.frameData[index].frame.remove(at: frameIndex)
-                    if self.frameData[index].frame.isEmpty {
-                        self.frameData.remove(at: index)
-                    }
-                    break
-                }
+            self?.fetchFrames()
+            self?.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
+            if frame.id == self?.selectedFrameId {
+                self?.fetchMySemester()
             }
-            self.fetchAllFramesForReload()
-            self.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
         }.store(in: &subscriptions)
     }
     
-    // 프레임 수정하기
     private func modifyFrame(frame: FrameDTO) {
         modifyFrameUseCase.execute(frame: frame).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -370,20 +335,7 @@ extension TimetableViewModel {
                 self?.nextOutputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            for (index, frameData) in self.frameData.enumerated() {
-                if let frameIndex = frameData.frame.firstIndex(where: { $0.id == frame.id }) {
-                    self.frameData[index].frame[frameIndex] = frame
-                    if frame.isMain {
-                        self.frameData[index].frame = self.frameData[index].frame.map { existingFrame in
-                            var updatedFrame = existingFrame
-                            updatedFrame.isMain = (existingFrame.id == frame.id)
-                            return updatedFrame
-                        }
-                    }
-                    break
-                }
-            }
+            self?.fetchFrames()
         }.store(in: &subscriptions)
     }
     
@@ -407,6 +359,9 @@ extension TimetableViewModel {
             }
         } receiveValue: { [weak self] _ in
             self?.fetchFrames()
+            if semester == self?.selectedSemester {
+                self?.fetchMySemester()
+            }
         }.store(in: &subscriptions)
         
     }
