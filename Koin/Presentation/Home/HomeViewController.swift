@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class HomeViewControllerB: UIViewController {
+final class HomeViewController: UIViewController, CollectionViewDelegate {
     
     // MARK: - Properties
     
@@ -63,6 +63,8 @@ final class HomeViewControllerB: UIViewController {
         return label
     }()
     
+    private let busView = BusView()
+    
     private let noticeListCollectionView: NoticeListCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let width = UIScreen.main.bounds.width - 48
@@ -95,15 +97,15 @@ final class HomeViewControllerB: UIViewController {
         return label
     }()
     
-    private let busCollectionView: BusCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width - 120
-        flowLayout.itemSize = CGSize(width: width, height: 175)
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 8
-        let collectionView = BusCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.decelerationRate = .fast
-        return collectionView
+    private let busQrCodeButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .qrCode)
+        configuration.attributedTitle = AttributedString("셔틀 탑승권", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
+        configuration.imagePadding = 3
+        configuration.imagePlacement = .leading
+        let button = UIButton()
+        button.configuration = configuration
+        return button
     }()
     
     private let shopLabel: UILabel = {
@@ -114,29 +116,14 @@ final class HomeViewControllerB: UIViewController {
         return label
     }()
     
-    private let shopListButton = UIButton().then { button in
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .smallShop)
-        var text = AttributedString("상점 목록")
-        text.font = UIFont.appFont(.pretendardMedium, size: 16)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 8
-        configuration.baseBackgroundColor = .systemBackground
-        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        button.configuration = configuration
-    }
-    
-    private let callBenefitButton = UIButton().then { button in
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .smallBenefit)
-        var text = AttributedString("전화 주문 혜택")
-        text.font = UIFont.appFont(.pretendardMedium, size: 16)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 8
-        configuration.baseBackgroundColor = .systemBackground
-        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        button.configuration = configuration
-    }
+    private let shopCollectionView: ShopCollectionView = {
+        let shopCollectionViewFlowLayout = UICollectionViewFlowLayout()
+        shopCollectionViewFlowLayout.itemSize = CGSize(width: 45, height: 90)
+        shopCollectionViewFlowLayout.scrollDirection = .horizontal
+        shopCollectionViewFlowLayout.minimumLineSpacing = 8
+        let shopCollectionView = ShopCollectionView(frame: .zero, collectionViewLayout: shopCollectionViewFlowLayout)
+        return shopCollectionView
+    }()
     
     private let menuLabel: UILabel = {
         let label = UILabel()
@@ -195,31 +182,23 @@ final class HomeViewControllerB: UIViewController {
         super.viewDidLoad()
         bind()
         inputSubject.send(.viewDidLoad)
-        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
-        configureTapGesture()
+        shopCollectionView.storeDelegate = self
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-        shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
-        callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
-        inputSubject.send(.getAbTestResult("c_main_dining_v1"))
-        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
-        scrollView.delegate = self
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
+        inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
+        scrollView.delegate = self
     }
     
     @objc private func appWillEnterForeground() {
-        if let centerIndexPath = busCollectionView.centerCellIndex {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
-        }
-        
         inputSubject.send(.categorySelected(getDiningPlace()))
         inputSubject.send(.getUserScreenAction(Date(), .enterForeground))
     }
@@ -234,16 +213,8 @@ final class HomeViewControllerB: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea, busItem.endBusArea, busItem.busType))
-        } else {
-            inputSubject.send(.getBusInfo(.koreatech, .koreatech, .shuttleBus))
-        }
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.categorySelected(getDiningPlace()))
-        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopBenefit))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
@@ -269,11 +240,8 @@ final class HomeViewControllerB: UIViewController {
             switch output {
             case let .updateDining(diningItem, diningType, isToday):
                 self?.updateDining(item: diningItem, type: diningType, isToday: isToday)
-            case let .updateBus(response):
-                self?.updateBusTime(response)
-            case .moveBusItem:
-                self?.scrollToBusItem()
-            case .putImage: break
+            case let .putImage(response):
+                self?.putImage(data: response)
             case let .updateNoticeBanners(hotNoticeArticlesInfo, keywordNoticePhrases):
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
@@ -283,27 +251,8 @@ final class HomeViewControllerB: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        
-        busCollectionView.busRequestPublisher
-            .sink { [weak self] data in
-                if data.0 == 1 {
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusChangeToFrom, .click, data.1.2.koreanDescription))
-                }
-                self?.inputSubject.send(.getBusInfo(data.1.0, data.1.1, data.1.2))
-            }
-            .store(in: &subscriptions)
-        
-        busCollectionView.busTypePublisher
-            .sink { [weak self] busType in
-                self?.redirectByBusCardBtn(busType: busType)
-            }.store(in: &subscriptions)
-        
         logoView.lineButtonPublisher.sink { [weak self] in
             self?.navigateToServiceSelectViewController()
-        }.store(in: &subscriptions)
-        
-        busCollectionView.scrollPublisheer.sink { [weak self] item in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusScroll, .scroll, item))
         }.store(in: &subscriptions)
         
         diningTooltipImageView.onImageTapped = { [weak self] in
@@ -313,11 +262,13 @@ final class HomeViewControllerB: UIViewController {
         diningTooltipImageView.onXButtonTapped = { [weak self] in
             self?.diningTooltipImageView.isHidden = true
         }
+        
         noticeListCollectionView.pageDidChangedPublisher.sink { [weak self] page in
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNoticeBanner, .click, noticeTitle))
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let fetchNoticedataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: repository)
@@ -330,6 +281,9 @@ final class HomeViewControllerB: UIViewController {
         }.store(in: &subscriptions)
         
         noticeListCollectionView.moveKeywordManagePagePublisher.sink { [weak self] bannerIndex in
+            let bannerLogValue = ["자취방 양도", "안내글", "근로", "해외탐방"]
+            let logValue = bannerLogValue[bannerIndex]
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.toManageKeyword, .click, logValue))
             let service = DefaultNoticeService()
             let repository = DefaultNoticeListRepository(service: service)
             let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -337,15 +291,29 @@ final class HomeViewControllerB: UIViewController {
             let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        busView.moveBusSearchPublisher.sink {
+            //추후 버스 노선 검색 화면 이동
+        }.store(in: &subscriptions)
+        
+        busView.moveBusTimetablePublisher.sink {
+            //추후 버스 시간표 화면 이동
+        }.store(in: &subscriptions)
     }
-
 }
 
-extension HomeViewControllerB {
+extension HomeViewController {
+    
+    @objc private func tapBusQrCode() {
+        if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
     
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
            navigateToNoticeList()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.appMainNoticeDetail, .click, "더보기"))
         }
         else if sender == goDiningPageButton {
             navigatetoDining()
@@ -354,17 +322,16 @@ extension HomeViewControllerB {
     
     private func checkAndShowTooltip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownTooltip")
-        
         if !hasShownImage {
-                    diningTooltipImageView.setUpImage(image: .appImage(asset: .diningTooltip) ?? UIImage())
+            diningTooltipImageView.setUpImage(image: .appImage(asset: .diningTooltip) ?? UIImage())
             diningTooltipImageView.isHidden = false
             UserDefaults.standard.set(true, forKey: "hasShownTooltip")
         }
     }
     
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
-          noticeListCollectionView.pageControlChanged(sender.currentPage)
-      }
+        noticeListCollectionView.pageControlChanged(sender.currentPage)
+    }
     
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
         inputSubject.send(.categorySelected(getDiningPlace()))
@@ -398,25 +365,6 @@ extension HomeViewControllerB {
         }
     }
     
-    private func scrollToBusItem() {
-        let initialIndexPath = IndexPath(item: 4, section: 0)
-        busCollectionView.scrollToItem(at: initialIndexPath, at: .centeredHorizontally, animated: false)
-        inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
-    }
-    
-    private func updateBusTime(_ data: BusCardInformation) {
-        busCollectionView.updateText(data: data)
-    }
-    
-    private func configureTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuViewTapped))
-        menuBackgroundView.addGestureRecognizer(tapGesture)
-        
-        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(busViewTapped))
-        busCollectionView.addGestureRecognizer(tapGesture2)
-        
-    }
-    
     private func configureSwipeGestures() {
         let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
         swipeLeftGesture.direction = .left
@@ -444,10 +392,6 @@ extension HomeViewControllerB {
         navigatetoDining()
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
-        noticeListCollectionView.updateNoticeList(articles, phrases)
-    }
-   
     @objc private func busViewTapped() {
         let busViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
         busViewController.title = "버스/교통"
@@ -466,6 +410,14 @@ extension HomeViewControllerB {
         }
     }
     
+    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
+        noticeListCollectionView.updateNoticeList(articles, phrases)
+    }
+    
+    private func putImage(data: ShopCategoryDTO) {
+        shopCollectionView.updateCategories(data.shopCategories)
+    }
+    
     private func setAbTestResult(result: AssignAbTestResponse) {
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
@@ -477,25 +429,17 @@ extension HomeViewControllerB {
         }
         else if result.variableName == .bannerNew {
             noticePageControl.numberOfPages = 5
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점O"))
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
             noticePageControl.numberOfPages = 4
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점X"))
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
     
-    @objc private func shopSelectButtonTapped() {
-        navigateToShop(section: .shopList)
-    }
-    
-    @objc private func callBenefitButtonTapped() {
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .mainShopBenefit))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .endEvent, .mainShopBenefit))
-        navigateToShop(section: .callBenefit)
-    }
-    
-    private func navigateToShop(section: ShopViewControllerB.Section) {
+    func didTapCell(at id: Int) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         
@@ -515,38 +459,24 @@ extension HomeViewControllerB {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: 0
+            selectedId: id
         )
-        let viewController: UIViewController
-        switch section {
-        case .shopList: viewController = ShopViewControllerA(viewModel: viewModel)
-        case .callBenefit: viewController = ShopViewControllerB(viewModel: viewModel, section: section)
-        }
-        navigationController?.pushViewController(viewController, animated: true)
+        let shopViewController = ShopViewControllerA(viewModel: viewModel)
+        shopViewController.title = "주변상점"
+        navigationController?.pushViewController(shopViewController, animated: true)
         
-        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: 0)
+        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
         inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-        switch section {
-        case .shopList:
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
-        case .callBenefit: break
-            // TODO: 로깅
-        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
     }
     
     @objc private func refresh() {
-        if let centerIndexPath = busCollectionView.centerCellIndex,
-           let cell = busCollectionView.cellForItem(at: centerIndexPath) as? BusCollectionViewCell {
-            let busItem = busCollectionView.busItems[centerIndexPath.row]
-            inputSubject.send(.getBusInfo(busItem.startBusArea , busItem.endBusArea, busItem.busType))
-        }
-        
         inputSubject.send(.categorySelected(getDiningPlace()))
         
         refreshControl.endRefreshing()
     }
     
-    //navigate 함수
+    // navigate 함수
     private func navigateToNoticeList() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -591,7 +521,7 @@ extension HomeViewControllerB {
     }
 }
 
-extension HomeViewControllerB {
+extension HomeViewController {
     
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
@@ -603,7 +533,7 @@ extension HomeViewControllerB {
     }
 }
 
-extension HomeViewControllerB: UIScrollViewDelegate {
+extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
         if velocity.y > 0 {
@@ -618,17 +548,35 @@ extension HomeViewControllerB: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let contentOffsetY = scrollView.contentOffset.y
         let screenHeight = scrollView.frame.height
-        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.3 && scrollDirection != .scrollChecked {
+        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.25 && scrollDirection != .scrollChecked {
             scrollDirection = .scrollChecked
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainScroll, .click, "70%"))
         }
     }
 }
 
-extension HomeViewControllerB {
+extension HomeViewController {
     
     private func setUpNavigationBar() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+    }
+    
+    private func setUpButtons() {
+        [goNoticePageButton, goDiningPageButton].forEach {
+            var config = UIButton.Configuration.plain()
+            
+            let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .medium, scale: .medium)
+            let imageView = UIImage(systemName: SFSymbols.chevronRight.rawValue , withConfiguration: imageConfig)
+            var attributedTitle = AttributedString.init("더보기")
+            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+            config.attributedTitle = attributedTitle
+            config.image = imageView
+            config.imagePadding = 2
+            config.imagePlacement = .trailing
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            $0.configuration = config
+            $0.tintColor = .appColor(.neutral500)
+        }
     }
     
     private func setUpLayOuts() {
@@ -637,7 +585,7 @@ extension HomeViewControllerB {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, menuLabel, menuBackgroundView, tabBarView, grayColorView, shopListButton, callBenefitButton, goDiningPageButton].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton].forEach {
             scrollView.addSubview($0)
         }
         
@@ -694,34 +642,33 @@ extension HomeViewControllerB {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        busCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(busLabel.snp.bottom).offset(11)
+        busQrCodeButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(24)
+            make.centerY.equalTo(busLabel)
+            make.height.equalTo(22)
+        }
+        busView.snp.makeConstraints { make in
+            make.top.equalTo(busLabel.snp.bottom).offset(16)
+            make.leading.equalTo(scrollView)
+            make.trailing.equalTo(scrollView)
+            make.height.equalTo(65)
             make.width.equalTo(scrollView.snp.width)
-            make.height.equalTo(185)
-            make.leading.equalTo(scrollView.snp.leading)
-            make.trailing.equalTo(scrollView.snp.trailing)
         }
         shopLabel.snp.makeConstraints { make in
-            make.top.equalTo(busCollectionView.snp.bottom).offset(40)
+            make.top.equalTo(busView.snp.bottom).offset(40)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        shopListButton.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.centerX).offset(-5)
-            make.height.equalTo(64)
-        }
-        callBenefitButton.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.centerX).offset(5)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(64)
+        shopCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(shopLabel.snp.bottom).offset(11)
+            make.leading.equalTo(scrollView.snp.leading).offset(20)
+            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            make.height.equalTo(70)
         }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
-            make.top.equalTo(callBenefitButton.snp.bottom).offset(30)
+            make.top.equalTo(shopCollectionView.snp.bottom).offset(40)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
         diningTooltipImageView.snp.makeConstraints { make in
@@ -762,46 +709,20 @@ extension HomeViewControllerB {
         logoView.layer.shadowRadius = 4
     }
     
-    private func setUpButtons() {
-        [shopListButton, callBenefitButton].forEach {
-            $0.layer.cornerRadius = 8
-            $0.layer.shadowColor = UIColor.gray.cgColor
-            $0.layer.shadowOpacity = 0.2
-            $0.layer.shadowOffset = CGSize.zero
-            $0.layer.shadowRadius = 6
-            $0.backgroundColor = .systemBackground
-           }
-        
-        [goNoticePageButton, goDiningPageButton].forEach {
-            var config = UIButton.Configuration.plain()
-            
-            let imageConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .medium, scale: .medium)
-            let imageView = UIImage(systemName: SFSymbols.chevronRight.rawValue , withConfiguration: imageConfig)
-            var attributedTitle = AttributedString.init("더보기")
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-            config.attributedTitle = attributedTitle
-            config.image = imageView
-            config.imagePadding = 2
-            config.imagePlacement = .trailing
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            $0.configuration = config
-            $0.tintColor = .appColor(.neutral500)
-        }
-    }
-    
     private func configureView() {
         setUpNavigationBar()
+        setUpButtons()
         setUpLayOuts()
         setUpConstraints()
         setUpShadow()
-        setUpButtons()
         setUpRoundedCorners()
         scrollView.alwaysBounceVertical = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         noticePageControl.addTarget(self, action: #selector(pageControlDidChange), for: .valueChanged)
-              goNoticePageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
+        goNoticePageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
         goDiningPageButton.addTarget(self, action: #selector(tapGoOtherPageButton), for: .touchUpInside)
         scrollView.refreshControl = refreshControl
+        busQrCodeButton.addTarget(self, action: #selector(tapBusQrCode), for: .touchUpInside)
         self.view.backgroundColor = .systemBackground
     }
     
@@ -819,5 +740,3 @@ extension HomeViewControllerB {
         tabBarView.addSubview(underlineView)
     }
 }
-
-

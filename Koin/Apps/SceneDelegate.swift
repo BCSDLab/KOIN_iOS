@@ -19,27 +19,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-
-        let abTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
-        abTestUseCase.execute(requestModel: AssignAbTestRequest(title: "Benefit")).sink { [weak self] completion in
-            guard let self = self else { return }
-            if case let .failure(error) = completion {
-                let viewController = self.selectViewController()
-                let navigationController = CustomNavigationController(rootViewController: viewController)
-                window.rootViewController = navigationController
-                self.window = window
-                window.makeKeyAndVisible()
-            }
-        } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            let viewController = self.selectViewController()
-            let navigationController = CustomNavigationController(rootViewController: viewController)
-            window.rootViewController = navigationController
-            self.window = window
-            window.makeKeyAndVisible()
-        }.store(in: &subscriptions)
-        
-        
+        let viewController = self.selectViewController()
+        let navigationController = CustomNavigationController(rootViewController: viewController)
+        window.rootViewController = navigationController
+        self.window = window
+        window.makeKeyAndVisible()
         // URL 처리
         if let urlContext = connectionOptions.urlContexts.first {
             handleIncomingURL(urlContext.url)
@@ -70,16 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
             dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()
         )
-
-       
-        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "A"
-        let variableName = UserAssignType(rawValue: userType) ?? .a
-        let mainViewController: UIViewController
-        switch variableName {
-        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
-        default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
-        }
-        
+        let mainViewController = HomeViewController(viewModel: homeViewModel)
         return mainViewController
     }
     
