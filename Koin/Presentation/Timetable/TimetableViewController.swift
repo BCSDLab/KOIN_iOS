@@ -15,10 +15,10 @@ final class TimetableViewController: UIViewController {
     private let viewModel: TimetableViewModel
     private let inputSubject: PassthroughSubject<TimetableViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-
+    
     
     // MARK: - UI Components
-
+    
     private let emptyView = UIView()
     private let timetableColors: [(TimetableColorAsset, TimetableColorAsset)] = [
         (.body1, .header1),
@@ -37,7 +37,7 @@ final class TimetableViewController: UIViewController {
         (.body14, .header14),
         (.body15, .header15)
     ]
-
+    
     
     private let scrollView = UIScrollView().then { _ in
     }
@@ -95,6 +95,9 @@ final class TimetableViewController: UIViewController {
     }
     
     private let selectDeptModalViewController = SelectDeptModalViewController().then { _ in
+    }
+    
+    private let deleteLectureModelViewController: DeleteLectureModelViewController = DeleteLectureModelViewController().then { _ in
     }
     
     private let containerView = UIView().then { _ in
@@ -157,7 +160,7 @@ final class TimetableViewController: UIViewController {
             self.view.endEditing(true)
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
         }.store(in: &subscriptions)
-
+        
         
         addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
             self?.addClassCollectionView.isHidden = true
@@ -180,7 +183,7 @@ final class TimetableViewController: UIViewController {
         
         addClassCollectionView.didTapCellPublisher.sink { [weak self] (selectedLecture, filteredLectures) in
             guard let self = self else { return }
-
+            
             self.didTapCellLectureView.subviews.forEach {
                 $0.removeFromSuperview()
             }
@@ -221,9 +224,10 @@ final class TimetableViewController: UIViewController {
         }.store(in: &subscriptions)
         
         deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
-            self?.deleteLectureView.isHidden = true
-            self?.inputSubject.send(._deleteLecture(lecture))
-            
+            guard let self = self else { return }
+            self.deleteLectureView.isHidden = true
+            deleteLectureModelViewController.setMessageLabelText(lectureData: lecture)
+            self.present(deleteLectureModelViewController, animated: false)
         }.store(in: &subscriptions)
         
         timetableCollectionView.heightChangedPublisher.sink { [weak self] in
@@ -236,6 +240,12 @@ final class TimetableViewController: UIViewController {
         selectDeptModalViewController.selectedDeptPublisher.sink { [weak self] dept in
             self?.addClassCollectionView.setUpSelectedDept(dept: dept)
         }.store(in: &subscriptions)
+        
+        deleteLectureModelViewController.deleteButtonPublisher.sink { [weak self] lecture in
+            self?.inputSubject.send(._deleteLecture(lecture))
+        }.store(in: &subscriptions)
+        
+        
     }
     
 }
@@ -295,21 +305,21 @@ extension TimetableViewController {
             }
         }
     }
-
-
+    
+    
     private func setUpCollectionViewHeight(_ lectureList: [LectureData]) {
         // 강의 시간에서 마지막 2자리 추출
         let lastTwoDigits = lectureList.flatMap { $0.classTime.map { $0 % 100 } }
         
         // 마지막 2자리 숫자의 최댓값 구하기
         let maxLastTwoDigits = lastTwoDigits.max() ?? 0 // 실패 시 기본값 0 처리
-
+        
         // 마지막 2자리 최댓값을 2로 나눈 값 계산
         let dividedValue = maxLastTwoDigits / 2
-
+        
         // 17과 (9 + dividedValue) 중 최댓값 계산
         let upperLimit = max(17, 9 + dividedValue)
-
+        
         // 9부터 upperLimit까지의 배열 생성
         let resultArray = Array(9...upperLimit)
         
@@ -319,8 +329,8 @@ extension TimetableViewController {
             make.height.equalTo(timetableCollectionView.calculateDynamicHeight())
         }
     }
-
-
+    
+    
     @objc private func modifySemesterButtonTapped() {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
@@ -350,7 +360,7 @@ extension TimetableViewController {
                 lectureColorMap[lecture.id] = (bodyColor, headerColor)
             }
         }
-
+        
         // 사용 가능한 색상 쌍에서 이미 사용된 것을 제외
         var unusedColorPairs = timetableColors.compactMap { colorPair -> (UIColor, UIColor)? in
             let bodyColor = UIColor.timetableColor(_name: colorPair.0)
@@ -412,7 +422,7 @@ extension TimetableViewController {
                                 make.height.equalTo(30)
                             }
                         }
-
+                        
                         
                         // 새로 추가된 body 색상을 사용된 색상으로 추가
                         usedColors.insert(bodyColor)
@@ -421,7 +431,7 @@ extension TimetableViewController {
             }
         }
     }
-
+    
     
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
@@ -490,25 +500,25 @@ extension TimetableViewController {
         }
         UIImageWriteToSavedPhotosAlbum(combinedImage, self, #selector(saveCompletion(_:didFinishSavingWithError:contextInfo:)), nil)
     }
-
+    
     private func captureViewAsImage(view: UIView) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
         return renderer.image { _ in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
     }
-
+    
     private func mergeImages(topImage: UIImage, bottomImage: UIImage) -> UIImage {
         let newSize = CGSize(width: max(topImage.size.width, bottomImage.size.width),
                              height: topImage.size.height + bottomImage.size.height)
-
+        
         let renderer = UIGraphicsImageRenderer(size: newSize)
         return renderer.image { context in
             topImage.draw(at: .zero)
             bottomImage.draw(at: CGPoint(x: 0, y: topImage.size.height))
         }
     }
-
+    
     @objc private func saveCompletion(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             showAlert(title: "저장 실패", message: "이미지를 갤러리에 저장할 권한이 없습니다. 권한을 추가해 주세요.")
@@ -516,14 +526,14 @@ extension TimetableViewController {
             showAlert(title: "저장 완료", message: "시간표 이미지가 사진 앱에 저장되었습니다.")
         }
     }
-
+    
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default)
         alert.addAction(action)
         present(alert, animated: true)
     }
-
+    
 }
 
 extension TimetableViewController {
