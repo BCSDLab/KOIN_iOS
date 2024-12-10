@@ -15,9 +15,12 @@ final class ModifySemesterModalViewController: UIViewController {
     var containerWidth: CGFloat
     var containerHeight: CGFloat
     
-    // FIXME: 고치기
-    private var selectedYear: String = "2024" // 기본 연도
-    private var selectedFrames: Set<String> = [] // 선택된 학기 (학기 문자열, 예: "20241")
+    private var selectedYear: String = {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return "\(currentYear)"
+    }()
+
+    private var selectedFrames: Set<String> = []
     
     
     private let containerView: UIView = {
@@ -27,13 +30,15 @@ final class ModifySemesterModalViewController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-    // FIXME: 이거 고정값 변경
+    
     private let selectYearButton = UIButton().then {
+        let currentYear = Calendar.current.component(.year, from: Date())
         $0.backgroundColor = UIColor.appColor(.neutral300)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
-        $0.setTitle("2024", for: .normal)
+        $0.setTitle("\(currentYear)", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
     }
+
     private let messageLabel = UILabel().then {
         $0.text = "학기 편집"
         $0.font = UIFont.appFont(.pretendardBold, size: 18)
@@ -180,7 +185,10 @@ extension ModifySemesterModalViewController {
 
     
     @objc private func selectYearButtonTapped() {
-        let years = ["2024", "2023", "2022", "2021", "2020", "2019"]
+        // 현재 연도 계산
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let years = (2019...currentYear).reversed().map { "\($0)" } // 2019년부터 현재 연도까지
+        
         let alert = UIAlertController(title: "연도 선택", message: nil, preferredStyle: .actionSheet)
         
         for year in years {
@@ -198,6 +206,7 @@ extension ModifySemesterModalViewController {
         
         present(alert, animated: true, completion: nil)
     }
+
     
     
     
