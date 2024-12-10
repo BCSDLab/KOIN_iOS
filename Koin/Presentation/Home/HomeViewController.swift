@@ -293,11 +293,13 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         }.store(in: &subscriptions)
         
         busView.moveBusSearchPublisher.sink {
-            //추후 버스 노선 검색 화면 이동
+        
         }.store(in: &subscriptions)
         
-        busView.moveBusTimetablePublisher.sink {
-            //추후 버스 시간표 화면 이동
+        busView.moveBusTimetablePublisher.sink { [weak self] in
+            let viewModel = BusTimetableViewModel()
+            let viewController = BusTimetableViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
@@ -355,13 +357,9 @@ extension HomeViewController {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .expressBus:
-            let movingPage = BusDetailViewController(selectedPage: (2, .expressBus))
-            movingPage.title = "버스/교통"
-            self.navigationController?.pushViewController(movingPage, animated: true)
+            print("express")
         default:
-            let movingPage = BusDetailViewController(selectedPage: (2, .cityBus))
-            movingPage.title = "버스/교통"
-            self.navigationController?.pushViewController(movingPage, animated: true)
+            print("시내버스")
         }
     }
     
@@ -393,8 +391,7 @@ extension HomeViewController {
     }
     
     @objc private func busViewTapped() {
-        let busViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
-        busViewController.title = "버스/교통"
+        let busViewController = BusTimetableViewController(viewModel: BusTimetableViewModel())
         navigationController?.pushViewController(busViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))

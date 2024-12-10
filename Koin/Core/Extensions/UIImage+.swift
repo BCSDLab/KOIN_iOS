@@ -103,6 +103,7 @@ enum ImageAsset: String {
     case arrowUpLeft
     case noticeBell
     case qrCode
+    case incorrectInfo
 }
 
 enum SFSymbols: String {
