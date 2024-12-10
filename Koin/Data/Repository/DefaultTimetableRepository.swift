@@ -70,4 +70,8 @@ final class DefaultTimetableRepository: TimetableRepository {
     func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
         service.postLecture(request: request)
     }
+    
+    func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+        service.rollbackFrame(id: id)
+    }
 }

@@ -480,6 +480,7 @@
 		D2FCBE9E2D07EA2B0097A388 /* DeleteLectureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9D2D07EA2B0097A388 /* DeleteLectureModalViewController.swift */; };
 		D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */; };
 		D2FCBEA22D07FCB00097A388 /* DeleteFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */; };
+		D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -990,8 +991,8 @@
 		D2FB23562BFD50120098BA2B /* DefaultShopRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultShopRepository.swift; sourceTree = "<group>"; };
 		D2FB235F2BFDABBB0098BA2B /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D2FB23612BFDAC240098BA2B /* ShopAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopAPI.swift; sourceTree = "<group>"; };
-		D2FB23632BFDB53C0098BA2B /* ShopService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopService.swift; sourceTree = "<group>"; };
-	        D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsRepository.swift; sourceTree = "<group>"; };
+        D2FB23632BFDB53C0098BA2B /* ShopService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopService.swift; sourceTree = "<group>"; };
+        D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsRepository.swift; sourceTree = "<group>"; };
         D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsEventUseCase.swift; sourceTree = "<group>"; };
         D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsService.swift; sourceTree = "<group>"; };
         D2FB23702C0412C70098BA2B /* EventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParameter.swift; sourceTree = "<group>"; };
@@ -1005,8 +1006,10 @@
         D2FCBE9D2D07EA2B0097A388 /* DeleteLectureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureModalViewController.swift; sourceTree = "<group>"; };
         D2FCBE9F2D07F7630097A388 /* DeleteSemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterModalViewController.swift; sourceTree = "<group>"; };
         D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameModalViewController.swift; sourceTree = "<group>"; };
+        D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollbackFrameUseCase.swift; sourceTree = "<group>"; };
         D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
 
 
 
@@ -2331,6 +2334,7 @@
 				D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */,
 				D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */,
 				D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */,
+				D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -3165,6 +3169,7 @@
 				834E1CDA2BBCDFBF003D4271 /* BusTimeTableDTO.swift in Sources */,
 				D208A7B52CA12D7E007040E7 /* CallBenefitFooterView.swift in Sources */,
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
+				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,

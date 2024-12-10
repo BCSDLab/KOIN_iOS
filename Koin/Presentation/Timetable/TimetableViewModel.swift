@@ -64,6 +64,7 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var deleteFrameUseCase = DefaultDeleteFrameUseCase(timetableRepository: timetableRepository)
     private lazy var modifyFrameUseCase = DefaultModifyFrameUseCase(timetableRepository: timetableRepository)
     private lazy var deleteSemesterUseCase = DefaultDeleteSemesterUseCase(timetableRepository: timetableRepository)
+    private lazy var rollbackFrameUseCase = DefaultRollbackFrameUseCase(timetableRepository: timetableRepository)
     
     
     // MARK: 기타
@@ -104,6 +105,7 @@ final class TimetableViewModel: ViewModelProtocol {
     // MARK: - Initialization
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        
         input.sink { [weak self] input in
             switch input {
             case .fetchMySemester:

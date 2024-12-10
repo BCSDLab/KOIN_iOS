@@ -97,7 +97,7 @@ final class TimetableViewController: UIViewController {
     private let selectDeptModalViewController = SelectDeptModalViewController().then { _ in
     }
     
-    private let deleteLectureModelViewController: DeleteLectureModalViewController = DeleteLectureModalViewController().then { _ in
+    private let deleteLectureModalViewController: DeleteLectureModalViewController = DeleteLectureModalViewController().then { _ in
     }
     
     private let containerView = UIView().then { _ in
@@ -157,18 +157,27 @@ final class TimetableViewController: UIViewController {
         
         addClassCollectionView.completeButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
+            self.didTapCellLectureView.subviews.forEach {
+                $0.removeFromSuperview()
+            }
             self.view.endEditing(true)
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
+        
         }.store(in: &subscriptions)
-        
-        
+                
         addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
+            self?.didTapCellLectureView.subviews.forEach {
+                $0.removeFromSuperview()
+            }
             self?.addClassCollectionView.isHidden = true
             self?.addDirectCollectionView.isHidden = false
         }.store(in: &subscriptions)
         
         addClassCollectionView.modifyClassButtonPublisher.sink { [weak self] lecture in
             guard let self = self else { return }
+            self.didTapCellLectureView.subviews.forEach {
+                $0.removeFromSuperview()
+            }
             if lecture.1 && viewModel.checkDuplicatedClassTime(classTime: lecture.0.classTime){
                 self.present(substituteTimetableModalViewController, animated: true)
             } else {
@@ -226,8 +235,8 @@ final class TimetableViewController: UIViewController {
         deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
             guard let self = self else { return }
             self.deleteLectureView.isHidden = true
-            deleteLectureModelViewController.setMessageLabelText(lectureData: lecture)
-            self.present(deleteLectureModelViewController, animated: false)
+            deleteLectureModalViewController.setMessageLabelText(lectureData: lecture)
+            self.present(deleteLectureModalViewController, animated: false)
         }.store(in: &subscriptions)
         
         timetableCollectionView.heightChangedPublisher.sink { [weak self] in
@@ -241,7 +250,7 @@ final class TimetableViewController: UIViewController {
             self?.addClassCollectionView.setUpSelectedDept(dept: dept)
         }.store(in: &subscriptions)
         
-        deleteLectureModelViewController.deleteButtonPublisher.sink { [weak self] lecture in
+        deleteLectureModalViewController.deleteButtonPublisher.sink { [weak self] lecture in
             self?.inputSubject.send(._deleteLecture(lecture))
         }.store(in: &subscriptions)
         

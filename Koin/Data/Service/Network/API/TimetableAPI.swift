@@ -22,6 +22,7 @@ enum TimetableAPI {
     case deleteLecture(frameId: Int, lectureId: Int)
     case deleteSemester(semester: String)
     case _deleteLecture(id: Int)
+    case rollbackFrame(id: Int)
 }
 
 extension TimetableAPI: Router, URLRequestConvertible {
@@ -44,6 +45,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
         case .deleteLecture(frameId: let frameId, lectureId: let lectureId): return "/v2/timetables/frame/\(frameId)/lecture/\(lectureId)"
         case ._deleteLecture(let id): return "/v2/timetables/lecture/\(id)"
         case .deleteSemester(semester: let semester): return "/v2/all/timetables/frame"
+        case .rollbackFrame: return "/v2/timetables/frame/rollback"
         }
     }
     
@@ -51,7 +53,7 @@ extension TimetableAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDeptList, .fetchFrame, .fetchLecture, .fetchMySemester, .fetchLectureList, .fetchSemester: return .get
         case .deleteFrame, .deleteLecture, .deleteSemester, ._deleteLecture : return .delete
-        case .createFrame, .postLecture: return .post
+        case .createFrame, .postLecture, .rollbackFrame: return .post
         case .modifyFrame, .modifyLecture: return .put
         }
     }
@@ -59,14 +61,14 @@ extension TimetableAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester, .deleteLecture, .deleteSemester, ._deleteLecture:
+        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester, .deleteLecture, .deleteSemester, ._deleteLecture, .rollbackFrame:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
         default: break
         }
         switch self {
-        case .createFrame, .modifyFrame, .postLecture, .modifyLecture:
+        case .createFrame, .modifyFrame, .postLecture, .modifyLecture, .rollbackFrame:
             baseHeaders["Content-Type"] = "application/json"
         default:
             break
@@ -91,14 +93,15 @@ extension TimetableAPI: Router, URLRequestConvertible {
             return ["timetable_frame_id": id]
         case let .postLecture(request): return try? request.toDictionary()
         case let .modifyLecture(request): return try? request.toDictionary()
-        case let .deleteSemester(semester) : return ["semester": semester]
+        case let .deleteSemester(semester): return ["semester": semester]
+        case let .rollbackFrame(id): return ["timetable_frame_id": id]
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
         case .fetchDeptList, .fetchSemester, .fetchMySemester, .deleteLecture, ._deleteLecture: return URLEncoding.default
-        case .fetchFrame, .fetchLecture, .fetchLectureList: return URLEncoding.queryString
+        case .fetchFrame, .fetchLecture, .fetchLectureList, .rollbackFrame: return URLEncoding.queryString
         case .deleteFrame, .deleteSemester: return URLEncoding.queryString
         case .createFrame, .modifyFrame, .postLecture, .modifyLecture: return JSONEncoding.default
         }
