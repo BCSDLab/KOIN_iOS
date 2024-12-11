@@ -162,7 +162,9 @@ enum EventParameter {
         case click
         case scroll
         case swipe
-        case abTest = "a/b test 로깅(3차 스프린트, 혜택페이지)"
+        case abTestBenefit = "a/b test 로깅(3차 스프린트, 혜택페이지)"
+        case abTestDining = "a/b test 로깅(식단 메인 진입점)"
+        case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"
         case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"

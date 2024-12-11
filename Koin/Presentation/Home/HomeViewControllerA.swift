@@ -192,7 +192,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
         print("위가 엑세스 아래가 리프레시")
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
@@ -461,20 +461,20 @@ extension HomeViewControllerA {
     private func setAbTestResult(result: AssignAbTestResponse) {
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기X"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestDining, "더보기X"))
         }
         else if result.variableName == .mainDiningNew {
             goDiningPageButton.isHidden = false
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기O"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestDining, "더보기O"))
         }
         else if result.variableName == .bannerNew {
             noticePageControl.numberOfPages = 5
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점O"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTestKeyword, "진입점O"))
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
             noticePageControl.numberOfPages = 4
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTest, "진입점X"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTestKeyword, "진입점X"))
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
