@@ -124,6 +124,11 @@ enum EventParameter {
             case popularNoticeBanner = "popular_notice_banner"
             case toManageKeyword = "to_manage_keyword"
             
+            case notificationSoldOut = "notification_sold_out"
+            case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
+            case notificationLunchSoldOut = "notification_lunch_sold_out"
+            case notificationDinnerSoldOut = "notification_dinner_sold_out"
+            
             var team: String {
                 return "CAMPUS"
             }
