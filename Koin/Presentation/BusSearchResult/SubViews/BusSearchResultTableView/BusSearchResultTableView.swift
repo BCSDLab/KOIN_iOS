@@ -8,19 +8,12 @@
 import Combine
 import UIKit
 
-//추후 API 명세를 받고 모델을 정의할 것
-struct TempBusSearchResult {
-    let busType: BusType
-    let busTime: String
-    let remainTime: String
-}
-
 final class BusSearchResultTableView: UITableView {
     // MARK: - Properties
     let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
+    let departTimeAndBusTypePublisher = PassthroughSubject<(String, BusType), Never>()
     private var subscribtions = Set<AnyCancellable>()
-    private var busTime: String = ""
-    private var busSearchResultList = [TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전")]
+    private var busSearchResult: [ScheduleInformation] = []
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -39,28 +32,33 @@ final class BusSearchResultTableView: UITableView {
         delegate = self
         dataSource = self
         separatorStyle = .none
+        backgroundColor = .systemBackground
     }
     
-    func setBusSearchDate(searchDate: String) {
-        busTime = searchDate
+    func configureDepartInfo(date: String) {
+        guard let view = self.headerView(forSection: 0) as? BusSearchResultTableViewHeader else { return }
+        view.configureDepartTime(departTime: date)
+    }
+    
+    func setBusSearchDate(busSearchResult: [ScheduleInformation]) {
+        self.busSearchResult = busSearchResult
         reloadData()
     }
 }
 
 extension BusSearchResultTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busSearchResultList.count
+        return busSearchResult.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BusSearchResultTableViewCell.identifier, for: indexPath) as? BusSearchResultTableViewCell else { return UITableViewCell() }
-        cell.configure(searchModel: busSearchResultList[indexPath.row])
+        cell.configure(searchModel: busSearchResult[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusSearchResultTableViewHeader.identifier) as? BusSearchResultTableViewHeader else { return UIView() }
-        view.configure(departTime: busTime, busType: "전체 차종")
         view.tapDepartTimeButtonPublisher.sink { [weak self] in
             self?.tapDepartTimeButtonPublisher.send()
         }.store(in: &view.subscriptions)

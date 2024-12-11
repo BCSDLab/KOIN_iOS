@@ -15,8 +15,6 @@ final class DefaultSelectDepartAndArrivalUseCase: SelectDepartAndArrivalUseCase 
     func execute(departedAreaIdx: Int, arrivalAreaIdx: Int, busRouteType: Int) -> (BusAreaButtonState, BusPlace?) {
         var buttonState: BusAreaButtonState = .allSelected
         var busPlace: BusPlace? = nil
-        print(departedAreaIdx)
-        print(arrivalAreaIdx)
         if departedAreaIdx == 0 && arrivalAreaIdx == 0 || (departedAreaIdx != 0 && arrivalAreaIdx != 0) {
             buttonState = .notSelected
             if departedAreaIdx != 0 && arrivalAreaIdx != 0 {

@@ -40,12 +40,12 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         super.init(coder: coder)
         configureView()
     }
-    
-    //추후 API 명세를 받고 모델을 정의할 것
-    func configure(searchModel: TempBusSearchResult) {
+
+    func configure(searchModel: ScheduleInformation) {
         busTypeLabel.text = String(searchModel.busType.koreanDescription.prefix(2))
-        busTimeLabel.text = searchModel.busTime
-        remainTimeLabel.text = searchModel.remainTime
+        busTypeLabel.backgroundColor = searchModel.busType.returnBusTypeColor()
+        busTimeLabel.text = searchModel.departTime.formatDateToHHMM(isHH: false)
+        remainTimeLabel.text = "\(searchModel.remainTime)"
     }
    
 }

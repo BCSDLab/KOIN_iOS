@@ -205,7 +205,6 @@ extension BusAreaSelectedViewController: UICollectionViewDataSource, UICollectio
         let busPlace = busRouteType == 0 ? selectedArea.1 : selectedArea.0
         cell.configure(busPlace: item.0.koreanDescription, isSelected: item.1)
         if let busPlace = busPlace, busPlace == busAreaLists[indexPath.row].0 {
-            print(indexPath.row)
             cell.disableCell()
         }
         return cell
@@ -221,7 +220,6 @@ extension BusAreaSelectedViewController: UICollectionViewDataSource, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         let area = busRouteType == 0 ? selectedArea.1 : selectedArea.0
-        print(area)
         let isEnabled = busAreaLists[indexPath.row].0 != area
         return isEnabled
     }
