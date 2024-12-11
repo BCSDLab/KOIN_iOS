@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 import SnapKit
 
-final class FacilityInfoViewController: CustomViewController, WKNavigationDelegate, WKUIDelegate, UIScrollViewDelegate {
+final class FacilityInfoViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, UIScrollViewDelegate {
     // MARK: UI Components
     
     private var webView = WKWebView()
@@ -11,13 +11,17 @@ final class FacilityInfoViewController: CustomViewController, WKNavigationDelega
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "교내 시설물 정보"
         configureView()
-        setUpNavigationBar()
-        setNavigationTitle(title: "교내 시설물 정보")
         loadWebView()
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.scrollView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     private func loadWebView() {
@@ -39,19 +43,15 @@ final class FacilityInfoViewController: CustomViewController, WKNavigationDelega
 
 extension FacilityInfoViewController {
     private func setUpLayOuts() {
-        [navigationBarWrappedView, backgroundView].forEach {
+        [backgroundView].forEach {
             view.addSubview($0)
         }
         backgroundView.addSubview(webView)
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(100)
-        }
         backgroundView.snp.makeConstraints {
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         webView.snp.makeConstraints {

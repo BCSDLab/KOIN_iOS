@@ -191,6 +191,7 @@ final class HomeViewControllerA: UIViewController, CollectionViewDelegate {
         checkAndShowTooltip()
         print(KeyChainWorker.shared.read(key: .access) ?? "")
         print(KeyChainWorker.shared.read(key: .refresh) ?? "")
+        print(KeyChainWorker.shared.read(key: .fcm))
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))

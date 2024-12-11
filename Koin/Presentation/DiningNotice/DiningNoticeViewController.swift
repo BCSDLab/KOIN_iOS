@@ -17,18 +17,6 @@ final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDel
     private let inputSubject: PassthroughSubject<DiningNoticeViewModel.Input, Never> = .init()
     
     // MARK: - UI Components
-    
-    private let navigationTitle: UILabel = {
-        let label = UILabel()
-        label.text = "학생식당 정보"
-        return label
-    }()
-    
-    private let backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .arrowBack), for: .normal)
-        return button
-    }()
 
     private let diningGuideLabel: UILabel = {
         let label = UILabel()
@@ -111,19 +99,13 @@ final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDel
         configureView()
         bind()
         inputSubject.send(.fetchCoopShopList)
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationItem.title = "학생식당 정보"
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        configureNavigationBar(style: .empty)
     }
 
     // MARK: - Bind
@@ -167,24 +149,14 @@ extension DiningNoticeViewController {
 
 extension DiningNoticeViewController {
     private func setUpLayOuts() {
-        [backButton, navigationTitle, updateDateLabel, diningGuideLabel, placeGuideLabel, placeTextLabel, phoneGuideLabel, phoneTextLabel, separateView, weekdayTimeLabel, weekdayTimeCollectionView, weekendTimeLabel, weekendTimeCollectionView].forEach {
+        [updateDateLabel, diningGuideLabel, placeGuideLabel, placeTextLabel, phoneGuideLabel, phoneTextLabel, separateView, weekdayTimeLabel, weekdayTimeCollectionView, weekendTimeLabel, weekendTimeCollectionView].forEach {
             self.view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        backButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        }
-        navigationTitle.snp.makeConstraints { make in
-            make.centerY.equalTo(backButton.snp.centerY)
-            make.centerX.equalTo(view.snp.centerX)
-        }
         diningGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(28)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28)
             make.leading.equalTo(updateDateLabel.snp.leading)
             make.height.equalTo(32)
         }
@@ -261,10 +233,6 @@ extension DiningNoticeViewController {
         [weekdayTimeLabel, weekendTimeLabel].forEach { label in
             label.font = UIFont.appFont(.pretendardBold, size: 18)
             label.textColor = UIColor.appColor(.primary500)
-        }
-        [navigationTitle].forEach { label in
-            label.font = UIFont.appFont(.pretendardMedium, size: 18)
-            label.textColor = UIColor.appColor(.neutral800)
         }
     }
     private func configureView() {

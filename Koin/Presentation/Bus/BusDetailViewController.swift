@@ -62,7 +62,7 @@ final class BusDetailViewController: UIViewController {
         self.currentViewIdx = selectedPage.0
         self.selectedTimetableIdx = selectedPage.1
         super.init(nibName: nil, bundle: nil)
-        
+        navigationItem.title = "버스/교통"
     }
     
     required init?(coder: NSCoder) {
@@ -72,14 +72,17 @@ final class BusDetailViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
         view.backgroundColor = .systemBackground
         configure()
         setUpLayout()
         createPages()
         initPageViewController()
         self.segmentControl.addTarget(self, action: #selector(changeCurrentIndex), for: .valueChanged)
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
 }

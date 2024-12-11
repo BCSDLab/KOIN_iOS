@@ -88,7 +88,6 @@
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
 		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
-		839423DE2CA31471001E690F /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839423DD2CA31471001E690F /* CustomViewController.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A2617F2C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift */; };
@@ -443,6 +442,8 @@
 		D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23702C0412C70098BA2B /* EventParameter.swift */; };
 		D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */; };
 		D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */; };
+		D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE802CFE96600097A388 /* NotificationHandler.swift */; };
+		D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -570,7 +571,6 @@
 		838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoticeKeywordType.swift; sourceTree = "<group>"; };
 		839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataClass.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataProperties.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		839423DD2CA31471001E690F /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		839D711A2BEB1570001BC7F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -931,6 +931,8 @@
 		D2FB23702C0412C70098BA2B /* EventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParameter.swift; sourceTree = "<group>"; };
 		D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GA4AnalyticsRepository.swift; sourceTree = "<group>"; };
 		D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
+		D2FCBE802CFE96600097A388 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarStyle.swift"; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2058,6 +2060,7 @@
 				D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */,
 				8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */,
 				8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */,
+				D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2138,6 +2141,7 @@
 			children = (
 				D27DD0872BA608310081FD36 /* AppDelegate.swift */,
 				D27DD0882BA608310081FD36 /* SceneDelegate.swift */,
+				D2FCBE802CFE96600097A388 /* NotificationHandler.swift */,
 			);
 			path = Apps;
 			sourceTree = "<group>";
@@ -2369,7 +2373,6 @@
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
-				839423DD2CA31471001E690F /* CustomViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3004,6 +3007,7 @@
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D208A7D52CAE7754007040E7 /* HomeViewControllerA.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
+				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
@@ -3022,7 +3026,6 @@
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
-				839423DE2CA31471001E690F /* CustomViewController.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
@@ -3275,6 +3278,7 @@
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				837BFA5B2BB8FB01001FCBD4 /* BusInformationCollectionViewCell.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
+				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,

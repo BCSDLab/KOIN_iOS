@@ -22,6 +22,11 @@ final class NotiViewController: UIViewController {
     
     // MARK: - UI Components
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
     private let stackView: UIView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -229,7 +234,7 @@ final class NotiViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.setNavigationBar()
+        configureNavigationBar(style: .fill)
     }
     
     // MARK: - Bind
@@ -348,26 +353,26 @@ extension NotiViewController {
 
 extension NotiViewController {
     
-    private func setNavigationBar() {
-        self.navigationItem.rightBarButtonItem = nil
-    }
-    
     private func setUpLayOuts() {
         
+        view.addSubview(scrollView)
+        
+        
+        
         [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView].forEach {
-            self.view.addSubview($0)
+            scrollView.addSubview($0)
         }
         
         mealViews.forEach {
-            self.view.addSubview($0)
+            scrollView.addSubview($0)
         }
         
         [diningImageUploadWrapView].forEach {
-            self.view.addSubview($0)
+            scrollView.addSubview($0)
         }
         
         [shopGuideLabel, eventWrapView, reviewWrapView].forEach {
-            self.view.addSubview($0)
+            scrollView.addSubview($0)
         }
         
         [soldOutNotiLabel, soldOutSwitch, soldOutDescriptionLabel].forEach {
@@ -392,8 +397,13 @@ extension NotiViewController {
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         diningGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(scrollView.snp.top)
+            make.width.equalTo(view.snp.width)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)
@@ -413,7 +423,7 @@ extension NotiViewController {
         
         soldOutSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         soldOutSwitch.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(21)
+            make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
         }
         soldOutDescriptionLabel.snp.makeConstraints { make in
@@ -427,7 +437,8 @@ extension NotiViewController {
         for mealView in mealViews {
             mealView.snp.makeConstraints { make in
                 make.top.equalTo(previousView.snp.bottom) // 간격 조정
-                make.leading.trailing.equalToSuperview()
+                make.leading.equalToSuperview()
+                make.trailing.equalTo(view.snp.trailing)
                 make.height.equalTo(58)
             }
             previousView = mealView
@@ -447,7 +458,7 @@ extension NotiViewController {
         
         diningImageUploadSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         diningImageUploadSwitch.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(21)
+            make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
         }
         diningImageUploadDescriptionLabel.snp.makeConstraints { make in
@@ -501,7 +512,7 @@ extension NotiViewController {
         
         eventSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         eventSwitch.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(21)
+            make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
         }
         eventDescriptionLabel.snp.makeConstraints { make in
@@ -524,13 +535,14 @@ extension NotiViewController {
         
         reviewSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         reviewSwitch.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(21)
+            make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
         }
         reviewDescriptionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(24)
             make.top.equalTo(reviewNotiLabel.snp.bottom).offset(8)
             make.height.equalTo(17)
+            make.bottom.equalTo(scrollView.snp.bottom)
         }
     }
     
