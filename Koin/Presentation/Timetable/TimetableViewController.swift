@@ -367,14 +367,19 @@ extension TimetableViewController {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
     private func updateTimetable(lectureData: [LectureData]) {
+        print(lectureData)
         
         let existingLectureViews = containerView.subviews.compactMap { $0 as? LectureView }
         let existingLectureInfos = Set(existingLectureViews.map { $0.info })
         
+        // 새 강의와 제거된 강의 필터링
         let addedLectures = lectureData.filter { !existingLectureInfos.contains($0) }
         let removedLectureViews = existingLectureViews.filter { !lectureData.contains($0.info) }
         
+        // 사용된 색상 추적
         var usedColors: [UIColor] = existingLectureViews.compactMap { $0.backgroundColor }
+        
+        // 제거된 강의 색상 복원
         for lectureView in removedLectureViews {
             if let removedColor = lectureView.backgroundColor {
                 usedColors.removeAll { $0 == removedColor }
@@ -382,6 +387,7 @@ extension TimetableViewController {
             lectureView.removeFromSuperview()
         }
         
+        // 강의 ID별 색상 매핑
         var lectureColorMap: [Int: (UIColor, UIColor)] = [:]
         for lectureView in existingLectureViews {
             let lecture = lectureView.info
@@ -390,12 +396,14 @@ extension TimetableViewController {
             }
         }
         
+        // 미사용 색상 추적
         var unusedColorPairs: [(UIColor, UIColor)] = timetableColors.compactMap { colorPair in
             let bodyColor = UIColor.timetableColor(_name: colorPair.0)
             let headerColor = UIColor.timetableColor(_name: colorPair.1)
             return usedColors.contains(bodyColor) ? nil : (bodyColor, headerColor)
         }
         
+        // 새 강의 추가
         for lecture in addedLectures {
             let groupedByDay = Dictionary(grouping: lecture.classTime) { $0 / 100 }
             
@@ -407,24 +415,32 @@ extension TimetableViewController {
                         let width = Int(containerView.frame.width / 5) + 1
                         let height = 35
                         
-                        // 기존 강의 색상 재사용 또는 새 색상 할당
+                        // 색상 재사용 또는 할당
                         let colorPair: (UIColor, UIColor)
                         if let existingColor = lectureColorMap[lecture.id] {
                             colorPair = existingColor
                         } else {
-                            colorPair = unusedColorPairs.isEmpty ?
-                                (UIColor.appColor(.neutral300), UIColor.appColor(.neutral800)) :
-                                unusedColorPairs.removeFirst()
+                            // 모든 색상을 사용한 경우 재순환
+                            if unusedColorPairs.isEmpty {
+                                unusedColorPairs = timetableColors.compactMap { colorPair in
+                                    let bodyColor = UIColor.timetableColor(_name: colorPair.0)
+                                    let headerColor = UIColor.timetableColor(_name: colorPair.1)
+                                    return (bodyColor, headerColor)
+                                }
+                            }
+                            
+                            colorPair = unusedColorPairs.removeFirst()
                             lectureColorMap[lecture.id] = colorPair
                         }
                         
                         let bodyColor = colorPair.0
                         let headerColor = colorPair.1
                         
+                        // 강의 뷰 생성
                         let lectureView = LectureView(info: lecture, color: bodyColor)
                         lectureView.separateView.backgroundColor = headerColor
                         
-                        // 기본 UI 설정
+                        // UI 설정
                         lectureView.backgroundColor = bodyColor
                         lectureView.lectureNameLabel.backgroundColor = bodyColor
                         lectureView.professorNameLabel.backgroundColor = bodyColor
@@ -454,12 +470,14 @@ extension TimetableViewController {
                             }
                         }
                         
+                        // 새로 추가된 색상 기록
                         usedColors.append(bodyColor)
                     }
                 }
             }
         }
     }
+
  
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
