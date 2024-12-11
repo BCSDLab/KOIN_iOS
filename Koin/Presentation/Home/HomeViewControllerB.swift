@@ -205,7 +205,7 @@ final class HomeViewControllerB: UIViewController {
         checkAndShowTooltip()
         shopListButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
         callBenefitButton.addTarget(self, action: #selector(callBenefitButtonTapped), for: .touchUpInside)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTest, "혜택O", nil, nil, nil, nil))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택O", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
@@ -469,11 +469,11 @@ extension HomeViewControllerB {
     private func setAbTestResult(result: AssignAbTestResponse) {
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기X"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestDining, "더보기X"))
         }
         else if result.variableName == .mainDiningNew {
             goDiningPageButton.isHidden = false
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTest, "더보기O"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestKeyword, "더보기O"))
         }
         else if result.variableName == .bannerNew {
             noticePageControl.numberOfPages = 5

@@ -12,15 +12,35 @@ struct SemesterDTO: Decodable {
     let semester: String
 }
 
-extension SemesterDTO {
-    var formattedSemester: String {
 
-        let yearIndex = semester.index(semester.startIndex, offsetBy: 4)
-        let yearPart = semester[..<yearIndex]
-        let semesterPart = semester[yearIndex...]
-        
-        let semesterNumber = semesterPart == "1" ? "1학기" : "2학기"
-        
-        return "\(yearPart)년 \(semesterNumber)" 
+struct MySemesterDTO: Codable {
+    let userID: Int
+    let semesters: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case userID = "user_id"
+        case semesters
+    }
+}
+
+struct SemestersDTO: Codable {
+    let semesters: [String: [Semester]]
+    func toDomain() -> [FrameData] {
+            return semesters.map { semester, frames in
+                let frameDTOs = frames.map { FrameDTO(id: $0.id, timetableName: $0.timetableName, isMain: $0.isMain) }
+                return FrameData(semester: semester, frame: frameDTOs)
+            }
+        }
+}
+
+struct Semester: Codable {
+    let id: Int
+    let timetableName: String
+    let isMain: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case timetableName = "timetable_name"
+        case isMain = "is_main"
     }
 }

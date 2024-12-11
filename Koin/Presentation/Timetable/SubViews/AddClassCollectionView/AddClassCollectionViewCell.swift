@@ -1,141 +1,123 @@
-////
-////  AddClassCollectionViewCell.swift
-////  koin
-////
-////  Created by 김나훈 on 4/3/24.
-////
 //
-//import UIKit
+//  AddClassCollectionViewCell.swift
+//  koin
 //
-//final class AddClassCollectionViewCell: UICollectionViewCell {
-//    
-//    var buttonTappedAction: ((LectureDTO) -> Void)?
-//    private var lectureInfo: LectureDTO?
-//    
-//    // MARK: - UI Components
+//  Created by 김나훈 on 11/19/24.
 //
-//    private let classTitleLabel: UILabel = {
-//        let label = UILabel()
-//        label.font = UIFont.appFont(.pretendardRegular, size: 15)
-//        label.textColor = UIColor.appColor(.black)
-//        return label
-//    }()
-//    
-//    private let classTimeLabel: UILabel = {
-//        let label = UILabel()
-//        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-//        return label
-//    }()
-//    
-//    private let classInfoLabel: UILabel = {
-//        let label = UILabel()
-//        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-//        return label
-//    }()
-//    
-//    private let addButton: UIButton = {
-//        let button = UIButton()
-//        button.layer.borderWidth = 1
-//        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-//        button.layer.borderColor = UIColor.appColor(.bus1).cgColor
-//        button.layer.cornerRadius = 5
-//        button.setTitle("추가", for: .normal)
-//        button.setTitleColor(UIColor.appColor(.bus1), for: .normal)
-//        return button
-//    }()
-//    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        configureView()
-//        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
-//    func configure(info: LectureDTO) {
-//        lectureInfo = info
-//        classTitleLabel.text = info.name
-//        classTimeLabel.text = formatClassTimes(info.classTime)
-//        classInfoLabel.text = "\(info.department) / \(info.code) / \(info.grades)학점 / \(info.professor)"
-//    }
-//    
-//    @objc private func addButtonTapped() {
-//        if let lectureInfo = lectureInfo {
-//            buttonTappedAction?(lectureInfo)  
-//        }
-//    }
-//    
-//    private func formatClassTimes(_ classTimes: [Int]) -> String {
-//        let days = ["월", "화", "수", "목", "금"]
-//        var formattedTimes: [String] = []
-//        var previousDayIndex: Int?
-//
-//        for time in classTimes {
-//            let dayIndex = time / 100 // 요일을 나타내는 100의 자리 숫자
-//            let periodIndex = time % 100 // 시간대를 나타내는 10의 자리와 1의 자리 숫자
-//
-//            // dayIndex가 배열의 범위를 벗어나지 않는지 확인합니다.
-//            let dayString = days.indices.contains(dayIndex) ? days[dayIndex] : "월"
-//            let periodString = "\(periodIndex / 2 + 1)\(periodIndex % 2 == 0 ? "A" : "B")"
-//
-//            if previousDayIndex != dayIndex {
-//                formattedTimes.append("\(dayString)\(periodString)")
-//            } else {
-//                formattedTimes.append(periodString)
-//            }
-//
-//            previousDayIndex = dayIndex
-//        }
-//
-//        return formattedTimes.joined(separator: ", ")
-//    }
-//
-//}
-//
-//extension AddClassCollectionViewCell {
-//    private func setUpLayouts() {
-//        [classTitleLabel, classTimeLabel, classInfoLabel, addButton].forEach {
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//            contentView.addSubview($0)
-//        }
-//    }
-//    
-//    private func setUpConstraints() {
-//        NSLayoutConstraint.activate([
-//            classTitleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 17),
-//            classTitleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-//            classTimeLabel.topAnchor.constraint(equalTo: classTitleLabel.bottomAnchor, constant: 2),
-//            classTimeLabel.leadingAnchor.constraint(equalTo: classTitleLabel.leadingAnchor),
-//            
-//            classInfoLabel.topAnchor.constraint(equalTo: classTimeLabel.bottomAnchor, constant: 2),
-//            classInfoLabel.leadingAnchor.constraint(equalTo: classTitleLabel.leadingAnchor),
-//            
-//            addButton.topAnchor.constraint(equalTo: classTitleLabel.topAnchor),
-//            addButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-//            addButton.heightAnchor.constraint(equalToConstant: 26),
-//            addButton.widthAnchor.constraint(equalToConstant: 56)
-//        ])
-//    }
-//    
-//    private func configureView() {
-//        setUpLayouts()
-//        setUpConstraints()
-//        setUpBorder()
-//    }
-//    
-//    private func setUpBorder() {
-//        self.layer.borderWidth = 1.0
-//        self.layer.borderColor = UIColor.appColor(.borderGray).cgColor
-//    }
-//}
-//
-//extension AddClassCollectionViewCell {
-//    enum Metrics {
-//        
-//    }
-//    enum Padding {
-//        
-//    }
-//}
+
+import Combine
+import UIKit
+
+final class AddClassCollectionViewCell: UICollectionViewCell {
+    
+    var cancellables = Set<AnyCancellable>()
+    let modifyClassButtonPublisher = PassthroughSubject<Void, Never>()
+    
+    private let classTitleLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let professorNameLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let classTimeLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let gradeLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
+    private let classCodeLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
+    private let modifyClassButton = UIButton().then { _ in
+    }
+    
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureView()
+        modifyClassButton.addTarget(self, action: #selector(modifyClassButtonTapped), for: .touchUpInside)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    func configure(lecture: SemesterLecture, isAdded: Bool) {
+        classTitleLabel.text = lecture.name
+        professorNameLabel.text = lecture.professor
+        classTimeLabel.text = lecture.classTime.timeLabelText()
+        gradeLabel.text = "\(lecture.grades)학점"
+        classCodeLabel.text = lecture.code
+        
+        modifyClassButton.setImage(UIImage.appImage(asset: !isAdded ? .plusCircle : .minusCircle), for: .normal)
+    }
+}
+
+extension AddClassCollectionViewCell {
+    @objc private func modifyClassButtonTapped() {
+        modifyClassButtonPublisher.send()
+       
+    }
+}
+extension AddClassCollectionViewCell {
+    private func setUpLayouts() {
+        [classTitleLabel, professorNameLabel, classTimeLabel, gradeLabel, classCodeLabel, modifyClassButton, separateView].forEach {
+            contentView.addSubview($0)
+        }
+    }
+    
+    private func setUpConstraints() {
+        classTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.snp.top).offset(4)
+            make.leading.equalToSuperview()
+        }
+        professorNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(classTitleLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview()
+        }
+        classTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(professorNameLabel.snp.bottom).offset(7)
+            make.leading.equalToSuperview()
+        }
+        gradeLabel.snp.makeConstraints { make in
+            make.top.equalTo(classTimeLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview()
+        }
+        classCodeLabel.snp.makeConstraints { make in
+            make.top.equalTo(classTimeLabel.snp.bottom).offset(5)
+            make.leading.equalTo(gradeLabel.snp.trailing).offset(10)
+        }
+        modifyClassButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self.snp.centerY)
+            make.trailing.equalTo(self.snp.trailing).offset(-7)
+            make.width.height.equalTo(24)
+        }
+        separateView.snp.makeConstraints { make in
+            make.bottom.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
+        }
+    }
+    
+    private func configureView() {
+        setUpLayouts()
+        setUpConstraints()
+    }
+}

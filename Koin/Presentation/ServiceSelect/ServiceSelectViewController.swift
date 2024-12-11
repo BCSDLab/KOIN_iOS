@@ -18,20 +18,6 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     
     // MARK: - UI Components
     
-    private let backButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(symbol: .chevronLeft), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral800)
-        return button
-    }()
-    
-    private let settingButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .gear), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral800)
-        return button
-    }()
-    
     private let logoImageview: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.appImage(asset: .mainLogo)
@@ -109,10 +95,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     
     private let timetableSelectButton: UIButton = {
         let button = UIButton()
-        button.setTitle("시간표", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 16)
         return button
     }()
     
@@ -154,21 +137,26 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     }
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let settingButton = UIBarButtonItem(
+              image: UIImage.appImage(asset: .gear), style: .plain, target: self, action: #selector(settingButtonTapped))
+          settingButton.tintColor = UIColor.appColor(.neutral800)
+          navigationItem.rightBarButtonItem = settingButton
         configureView()
         setupButtonActions()
         bind()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        configureNavigationBar(style: .empty)
         inputSubject.send(.fetchUserData)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     // MARK: - Bind
@@ -214,16 +202,14 @@ extension ServiceSelectViewController {
     }
     
     private func setupButtonActions() {
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         shopSelectButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
         busSelectButton.addTarget(self, action: #selector(busSelectButtonTapped), for: .touchUpInside)
         diningSelectButton.addTarget(self, action: #selector(diningSelectButtonTapped), for: .touchUpInside)
-        //timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
+        timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
         businessSelectButton.addTarget(self, action: #selector(businessSelectButtonTapped), for: .touchUpInside)
         //     myInfoButton.addTarget(self, action: #selector(myInfoButtonTapped), for: .touchUpInside)
         logOutButton.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
-        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
         noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
         facilityInfoSelectButton.addTarget(self, action: #selector(facilityInfoSelectButtonTapped), for: .touchUpInside)
@@ -254,6 +240,15 @@ extension ServiceSelectViewController {
             navigationController?.pushViewController(loginViewController, animated: true)
             
             inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerLogin, .click, "햄버거 로그인"))
+        }
+    }
+    @objc private func timetableSelectButtonTapped() {
+        
+        if viewModel.isLogined {
+            let viewController = TimetableViewController(viewModel: TimetableViewModel())
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            showToast(message: "로그인이 필요한 기능입니다.", success: true)
         }
     }
     
@@ -404,15 +399,15 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [backButton,nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, settingButton, inquryButton, noticeListButton, facilityInfoSelectButton].forEach {
+        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, inquryButton, noticeListButton, facilityInfoSelectButton, timetableSelectButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "교내 시설물 정보", "복덕방", "코인 for Business"]
-        for idx in 0...6 {
+        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
+        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        for idx in 0..<buttonName.count {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
             var attributedString = AttributedString.init(stringLiteral: buttonName[idx])
@@ -436,24 +431,12 @@ extension ServiceSelectViewController {
     }
     
     private func setUpConstraints() {
-        backButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.leading.equalTo(view.snp.leading).offset(10)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-        }
-        settingButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
-            make.trailing.equalTo(view.snp.trailing).offset(-10)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        }
         nicknameLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(30)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         makeLoginDescription.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(30)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         greetingLabel.snp.makeConstraints { make in
@@ -467,13 +450,13 @@ extension ServiceSelectViewController {
             make.width.equalTo(60)
         }
         servicePaddingLabel.snp.makeConstraints { make in
-            make.top.equalTo(settingButton.snp.bottom).offset(128)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(140)
             make.leading.equalTo(view.snp.leading)
             make.width.equalTo(24)
             make.height.equalTo(33)
         }
         serviceGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(settingButton.snp.bottom).offset(128)
+            make.top.equalTo(servicePaddingLabel)
             make.leading.equalTo(servicePaddingLabel.snp.trailing)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(33)
@@ -502,8 +485,14 @@ extension ServiceSelectViewController {
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        facilityInfoSelectButton.snp.makeConstraints { make in
+        timetableSelectButton.snp.makeConstraints { make in
             make.top.equalTo(diningSelectButton.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(58)
+        }
+        facilityInfoSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(timetableSelectButton.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(58)
         }
