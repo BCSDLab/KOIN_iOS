@@ -422,7 +422,7 @@ extension TimetableViewModel {
             }
         } receiveValue: { [weak self] in
             self?.fetchFrames()
-            self?.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
+//            self?.nextOutputSubject.send(.showToastWithId(frame.timetableName, frame.id))
             if frame.id == self?.selectedFrameId {
                 self?.fetchMyFrames()
             }
