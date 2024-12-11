@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class ManageNoticeKeywordViewController: CustomViewController {
+final class ManageNoticeKeywordViewController: UIViewController {
     // MARK: - Properties
     
     private let viewModel: ManageNoticeKeywordViewModel
@@ -94,6 +94,18 @@ final class ManageNoticeKeywordViewController: CustomViewController {
     
     private let recommendedKeywordCollectionView = RecommendedKeywordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
     
+    // MARK: - Initialization
+    
+    init(viewModel: ManageNoticeKeywordViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "키워드 관리"
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -105,25 +117,13 @@ final class ManageNoticeKeywordViewController: CustomViewController {
         hideKeyboardWhenTappedAround()
         bind()
         textField.delegate = self
-        setNavigationTitle(title: "키워드 관리")
-        setUpNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
         inputSubject.send(.getMyKeyword)
         inputSubject.send(.fetchSubscription)
-    }
-
-    // MARK: - Initialization
-    
-    init(viewModel: ManageNoticeKeywordViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     private func bind() {
@@ -230,19 +230,15 @@ extension ManageNoticeKeywordViewController {
 
 extension ManageNoticeKeywordViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, myKeywordGuideLabel, numberOfKeywordLabel, addKeywordDescriptionLabel, addKeywordButton, textField, myKeywordCollectionView ,separatorView, recommendedKeywordCollectionView, keywordNotificationGuideLabel, keywordNotificationLabel, keywordNotificationDescriptionLabel, keywordNotificationSwtich, recommendedKeywordGuideLabel].forEach {
+        [myKeywordGuideLabel, numberOfKeywordLabel, addKeywordDescriptionLabel, addKeywordButton, textField, myKeywordCollectionView ,separatorView, recommendedKeywordCollectionView, keywordNotificationGuideLabel, keywordNotificationLabel, keywordNotificationDescriptionLabel, keywordNotificationSwtich, recommendedKeywordGuideLabel].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(100)
-        }
         
         myKeywordGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(29)
         }
