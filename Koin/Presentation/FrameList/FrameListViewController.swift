@@ -68,6 +68,10 @@ final class FrameListViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        configureNavigationBar(style: .fill)
+    }
     
     // MARK: - Bind
     
