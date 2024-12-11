@@ -72,14 +72,16 @@ extension NotiViewModel {
                 self?.outputSubject.send(.requestLogInAgain)
             }
         } receiveValue: { [weak self] response in
-            print("success")
+            let logValue = isOn ? "on" : "off"
+             
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationSoldOut, category: .click, value: logValue)
             }
             else if type == .diningImageUpload {
-                let logValue = isOn ? "on" : "off"
                 self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationMenuImageUpload, category: .click, value: logValue)
             }
+            
         }.store(in: &subscriptions)
 
     }
@@ -89,8 +91,9 @@ extension NotiViewModel {
             if case .failure = completion {
                 self?.outputSubject.send(.requestLogInAgain)
             }
-        } receiveValue: { response in
-            print("success")
+        } receiveValue: { [weak self] response in
+            let logValue = isOn ? "on" : "off"
+            self?.makeLogByDetailSubsciption(type: detailType, value: logValue)
         }.store(in: &subscriptions)
 
     }
@@ -108,5 +111,18 @@ extension NotiViewModel {
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+    
+    private func makeLogByDetailSubsciption(type: DetailSubscribeType, value: String) {
+        let eventLabel: EventParameter.EventLabel.Campus
+        switch type {
+        case .breakfast:
+            eventLabel = .notificationBreakfastSoldOut
+        case .lunch:
+            eventLabel = .notificationLunchSoldOut
+        default:
+            eventLabel = .notificationDinnerSoldOut
+        }
+        makeLogAnalyticsEvent(label: eventLabel, category: .click, value: value)
     }
 }
