@@ -22,8 +22,7 @@ final class DefaultFetchFramesUseCase: FetchFramesUseCase {
     func execute() -> AnyPublisher<[FrameData], ErrorResponse> {
         return timetableRepository.fetchAllFrames()
             .map { semestersDTO in
-                var frameDataList = semestersDTO.toDomain()
-                return self.sortFrames(frameDataList)
+                return self.sortFrames(semestersDTO.toDomain())
             }
             .eraseToAnyPublisher()
     }

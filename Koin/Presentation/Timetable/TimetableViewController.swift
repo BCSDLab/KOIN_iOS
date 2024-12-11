@@ -162,9 +162,9 @@ final class TimetableViewController: UIViewController {
             }
             self.view.endEditing(true)
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
-        
+            
         }.store(in: &subscriptions)
-                
+        
         addClassCollectionView.addDirectButtonPublisher.sink { [weak self] in
             self?.didTapCellLectureView.subviews.forEach {
                 $0.removeFromSuperview()
@@ -179,6 +179,7 @@ final class TimetableViewController: UIViewController {
                 $0.removeFromSuperview()
             }
             if lecture.1 && viewModel.checkDuplicatedClassTime(classTime: lecture.0.classTime){
+                substituteTimetableModalViewController.configure(lectureData: lecture.0)
                 self.present(substituteTimetableModalViewController, animated: true)
             } else {
                 self.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
@@ -218,6 +219,7 @@ final class TimetableViewController: UIViewController {
             
             self.toggleCollectionView(collectionView: self.addDirectCollectionView, animate: true)
             if viewModel.checkDuplicatedClassTime(classTime: item.1) {
+                substituteTimetableModalViewController.configure(customLecture: (item.0, item.1))
                 self.present(substituteTimetableModalViewController, animated: true)
             } else {
                 self.inputSubject.send(.postCustomLecture(item.0, item.1))
@@ -254,6 +256,27 @@ final class TimetableViewController: UIViewController {
             self?.inputSubject.send(._deleteLecture(lecture))
         }.store(in: &subscriptions)
         
+        substituteTimetableModalViewController.substituteButtonPublisher.sink { [weak self] response in
+            guard let self = self else { return }
+            
+            if let lectureData = response as? LectureData {
+                    self.viewModel.performLectureModification(lectureData: lectureData)
+                        .sink(receiveCompletion: { _ in
+                            self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
+                        }, receiveValue: { _ in })
+                        .store(in: &self.subscriptions)
+                    
+                } else if let customLecture = response as? (String, [Int]) {
+                    self.viewModel.performCustomLectureModification(
+                        lectureName: customLecture.0,
+                        lectureTime: customLecture.1
+                    ).sink(receiveCompletion: { _ in
+                        self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
+                    }, receiveValue: { _ in })
+                    .store(in: &self.subscriptions)
+                }
+        }.store(in: &subscriptions)
+
         
     }
     

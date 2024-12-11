@@ -10,7 +10,9 @@ import UIKit
 
 final class SubstituteTimetableModalViewController: UIViewController {
     
-    let substituteButtonPublisher = PassthroughSubject<Void, Never>()
+    let substituteButtonPublisher = PassthroughSubject<Any, Never>()
+    private var lectureData: LectureData?
+    private var customLecture: (String, [Int])?
     
     private let messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
@@ -74,7 +76,24 @@ final class SubstituteTimetableModalViewController: UIViewController {
     
     @objc private func substituteButtonTapped() {
         dismiss(animated: true, completion: nil)
-        substituteButtonPublisher.send(())
+        if let lectureData = lectureData {
+                substituteButtonPublisher.send(lectureData)
+            } else if let customLecture = customLecture {
+                substituteButtonPublisher.send(customLecture)
+            } 
+    }
+    
+    func configure(lectureData: LectureData) {
+        self.lectureData = nil
+        self.customLecture = nil
+        
+        self.lectureData = lectureData
+    }
+    func configure(customLecture: (String, [Int])) {
+        self.lectureData = nil
+        self.customLecture = nil
+        
+        self.customLecture = customLecture
     }
 }
 

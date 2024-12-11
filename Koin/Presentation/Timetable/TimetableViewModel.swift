@@ -91,7 +91,7 @@ final class TimetableViewModel: ViewModelProtocol {
     }
     
     // 현재 보여주고있는 시간표 리스트
-    private var lectureData: [LectureData] = [] {
+    private(set) var lectureData: [LectureData] = [] {
         didSet {
             outputSubject.send(.updateMyFrame(lectureData))
         }
@@ -151,6 +151,107 @@ final class TimetableViewModel: ViewModelProtocol {
 }
 
 extension TimetableViewModel {
+    
+    func performLectureModification(lectureData: LectureData) -> AnyPublisher<Void, Never> {
+        let deleteDuplicatesPublisher = Future<Void, Never> { [weak self] promise in
+            guard let self = self else {
+                promise(.success(()))
+                return
+            }
+            let duplicatedLectures = self.lectureData.filter { existingLecture in
+                existingLecture.classTime.contains { lectureData.classTime.contains($0) }
+            }
+            let deletePublishers = duplicatedLectures.map { lecture in
+                Future<Void, Never> { promise in
+                    self.deleteLecturByIdUseCase.execute(id: lecture.id).sink(
+                        receiveCompletion: { _ in promise(.success(())) },
+                        receiveValue: { _ in }
+                    ).store(in: &self.subscriptions)
+                }
+            }
+            Publishers.MergeMany(deletePublishers)
+                .collect()
+                .sink(receiveCompletion: { _ in promise(.success(())) },
+                      receiveValue: { _ in })
+                .store(in: &self.subscriptions)
+        }
+        let modifyPublisher = Future<Void, Never> { [weak self] promise in
+            guard let self = self else {
+                promise(.success(()))
+                return
+            }
+            let lectureRequest = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: lectureData.id, classTitle: lectureData.name, classInfos: [ ClassInfo( classTime: lectureData.classTime, classPlace: "")], professor: lectureData.professor, grades: lectureData.grades, memo: "메모메모")])
+            self.postLectureUseCase.execute(request: lectureRequest).sink(
+                receiveCompletion: { _ in promise(.success(())) },
+                receiveValue: { [weak self] _ in
+                    self?.lectureData.append(lectureData)
+                }
+            ).store(in: &self.subscriptions)
+        }
+        return deleteDuplicatesPublisher
+            .flatMap { modifyPublisher }
+            .eraseToAnyPublisher()
+    }
+    func performCustomLectureModification(
+        lectureName: String,
+        lectureTime: [Int]
+    ) -> AnyPublisher<Void, Never> {
+        let deleteDuplicatesPublisher = Future<Void, Never> { [weak self] promise in
+            guard let self = self else {
+                promise(.success(()))
+                return
+            }
+            
+            let duplicatedLectures = self.lectureData.filter { existingLecture in
+                existingLecture.classTime.contains { lectureTime.contains($0) }
+            }
+            let deletePublishers = duplicatedLectures.map { lecture in
+                Future<Void, Never> { promise in
+                    self.deleteLecturByIdUseCase.execute(id: lecture.id).sink(
+                        receiveCompletion: { _ in promise(.success(())) },
+                        receiveValue: { _ in }
+                    ).store(in: &self.subscriptions)
+                }
+            }
+            
+            Publishers.MergeMany(deletePublishers)
+                .collect()
+                .sink(receiveCompletion: { _ in promise(.success(())) },
+                      receiveValue: { _ in })
+                .store(in: &self.subscriptions)
+        }
+        
+        let postPublisher = Future<Void, Never> { [weak self] promise in
+            guard let self = self else {
+                promise(.success(()))
+                return
+            }
+            
+            let lectureRequest = LectureRequest(
+                timetableFrameID: selectedFrameId ?? 0,
+                timetableLecture: [
+                    TimetableLecture(
+                        lectureID: nil,
+                        classTitle: lectureName,
+                        classInfos: [ClassInfo(classTime: lectureTime, classPlace: "")],
+                        professor: "",
+                        grades: "0",
+                        memo: "no memo"
+                    )
+                ]
+            )
+            self.postLectureUseCase.execute(request: lectureRequest).sink(
+                receiveCompletion: { _ in promise(.success(())) },
+                receiveValue: { [weak self] response in
+                    self?.lectureData = response
+                }
+            ).store(in: &self.subscriptions)
+        }
+        
+        return deleteDuplicatesPublisher
+            .flatMap { postPublisher }
+            .eraseToAnyPublisher()
+    }
     
     func checkDuplicatedClassTime(classTime: [Int]) -> Bool {
         for lecture in lectureData {
