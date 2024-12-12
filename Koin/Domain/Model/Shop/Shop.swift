@@ -19,4 +19,5 @@ struct Shop {
     let reviewCount: Int
     let averageRate: Double
     let benefitDetails: [String]
+    let benefitDetail: String?
 }

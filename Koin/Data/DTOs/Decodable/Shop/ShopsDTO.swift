@@ -31,6 +31,7 @@ struct ShopDTO: Decodable {
     let averageRate: Double
     let reviewCount: Int
     let benefitDetails: [String]?
+    let benefitDetail: String?
 
     enum CodingKeys: String, CodingKey {
         case categoryIds = "category_ids"
@@ -44,12 +45,13 @@ struct ShopDTO: Decodable {
         case averageRate = "average_rate"
         case reviewCount = "review_count"
         case benefitDetails = "benefit_details"
+        case benefitDetail = "benefit_detail"
     }
 }
 
 extension ShopDTO {
     func toDomain() -> Shop {
-        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [])
+        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [], benefitDetail: benefitDetail)
     }
 }
 

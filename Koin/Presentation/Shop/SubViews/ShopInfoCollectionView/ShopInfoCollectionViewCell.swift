@@ -99,8 +99,12 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         case 1...9: reviewCountLabel.text = "( 리뷰 \(info.reviewCount)개 )"
         default: reviewCountLabel.text = "( 리뷰 10+ 개 )"
         }
-        print(info.benefitDetails.first)
-        benefitLabel.text = info.benefitDetails.first
+        
+        if let detail = info.benefitDetail {
+            benefitLabel.text = info.benefitDetail
+        } else {
+            benefitLabel.text = info.benefitDetails.first
+        }
     }
 }
 
