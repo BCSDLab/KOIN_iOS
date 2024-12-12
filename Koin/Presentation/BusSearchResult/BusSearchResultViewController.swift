@@ -64,6 +64,7 @@ final class BusSearchResultViewController: CustomViewController {
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
+                busSearchDatePickerViewController.modalPresentationStyle = .overFullScreen
                 present(busSearchDatePickerViewController, animated: true)
         }.store(in: &subscriptions)
         
