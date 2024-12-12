@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class HomeViewController: UIViewController, CollectionViewDelegate {
+final class HomeViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -114,13 +114,10 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         return label
     }()
     
-    private let shopCollectionView: ShopCollectionView = {
-        let shopCollectionViewFlowLayout = UICollectionViewFlowLayout()
-        shopCollectionViewFlowLayout.itemSize = CGSize(width: 45, height: 90)
-        shopCollectionViewFlowLayout.scrollDirection = .horizontal
-        shopCollectionViewFlowLayout.minimumLineSpacing = 8
-        let shopCollectionView = ShopCollectionView(frame: .zero, collectionViewLayout: shopCollectionViewFlowLayout)
-        return shopCollectionView
+    private let categoryCollectionView: CategoryCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        let collectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
     }()
     
     private let menuLabel: UILabel = {
@@ -182,7 +179,6 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getBusInfo(.koreatech, .terminal, .shuttleBus))
         configureView()
-        shopCollectionView.storeDelegate = self
         configureTapGesture()
         configureSwipeGestures()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -304,6 +300,11 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
         
         noticeListCollectionView.pageDidChangedPublisher.sink { [weak self] page in
             self?.noticePageControl.currentPage = page
+        }.store(in: &subscriptions)
+        
+        
+        categoryCollectionView.cellTapPublisher.sink { [weak self] id in
+            self?.didTapCell(at: id)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
@@ -459,7 +460,7 @@ extension HomeViewController {
     }
     
     private func putImage(data: ShopCategoryDTO) {
-        shopCollectionView.updateCategories(data.shopCategories)
+        categoryCollectionView.updateCategories(data.shopCategories)
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
@@ -635,7 +636,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, shopCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, busCollectionView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton].forEach {
             scrollView.addSubview($0)
         }
         
@@ -705,15 +706,15 @@ extension HomeViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
-        shopCollectionView.snp.makeConstraints { make in
+        categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(shopLabel.snp.bottom).offset(11)
-            make.leading.equalTo(scrollView.snp.leading).offset(20)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-            make.height.equalTo(70)
+            make.leading.equalTo(scrollView.snp.leading)
+            make.trailing.equalTo(scrollView.snp.trailing)
+            make.height.equalTo(146)
         }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
-            make.top.equalTo(shopCollectionView.snp.bottom).offset(40)
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(24)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
         diningTooltipImageView.snp.makeConstraints { make in

@@ -33,7 +33,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
         dataSource = self
         delegate = self
-      //  collectionViewLayout = createLayout() // 새 레이아웃 설정
+        //  collectionViewLayout = createLayout() // 새 레이아웃 설정
     }
     
     func updateCategories(_ categories: [ShopCategory]) {
@@ -59,18 +59,18 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         }
         
         
-
+        
         let category = shopCategories[indexPath.row]
         let isSelected = category.id == selectedId
         cell.configure(info: category, isSelected)
         
         return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         shopCategories.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let category = shopCategories[indexPath.row]
         selectedId = category.id
@@ -79,32 +79,26 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
     }
 }
 
-// MARK: - CategoryCollectionView Layout
-extension CategoryCollectionView {
-    
-    
-}
-
 extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
     
-    // 셀 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50) // 셀 크기 50x50
+        return CGSize(width: 44, height: 64)
     }
     
-    // 셀 간 좌우 간격 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5 // 셀 간 간격 20
+        let screenWidth = UIScreen.main.bounds.width
+        let totalCellWidth: CGFloat = 44 * 6
+        let totalPadding: CGFloat = screenWidth - 40 - totalCellWidth
+        let interItemSpacing = floor(totalPadding / 5)
+        return max(interItemSpacing, 0)
     }
     
-    // 줄 간격 설정 (수평 레이아웃에서는 적용되지 않음)
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 30 // 줄 간격 10
-    }
-    
-    // 섹션 내부 패딩 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 15, left: 0, bottom: 10, right: 0) // 섹션 간격 설정
+        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20) 
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 18
+    }
+    
 }
 

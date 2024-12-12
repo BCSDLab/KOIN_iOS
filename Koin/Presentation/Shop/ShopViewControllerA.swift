@@ -399,14 +399,14 @@ extension ShopViewControllerA {
         }
         
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom)
-            make.leading.equalTo(scrollView.snp.leading).offset(23)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-23)
-            make.height.equalTo(180)
+            make.top.equalTo(searchTextField.snp.bottom).offset(16)
+            make.leading.equalTo(scrollView.snp.leading)
+            make.trailing.equalTo(scrollView.snp.trailing)
+            make.height.equalTo(146)
         }
         
         shopGuideView.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(16)
             make.leading.equalTo(scrollView.snp.leading)
             make.width.equalTo(view.snp.width)
             make.height.equalTo(32)

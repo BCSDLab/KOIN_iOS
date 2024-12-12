@@ -17,7 +17,7 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
+        label.font = UIFont.appFont(.pretendardRegular, size: 10)
         label.lineBreakMode = .byClipping
         label.sizeToFit()
         return label
@@ -50,13 +50,12 @@ extension CategoryCollectionViewCell {
     
     private func setUpConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).offset(10)
+            make.top.width.equalToSuperview()
             make.centerX.equalTo(contentView.snp.centerX)
-            make.height.equalTo(50)
-            make.width.equalTo(50)
+            make.height.equalTo(44)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(10)
+            make.top.equalTo(imageView.snp.bottom).offset(4)
             make.height.equalTo(19)
             make.centerX.equalTo(imageView.snp.centerX)
         }
