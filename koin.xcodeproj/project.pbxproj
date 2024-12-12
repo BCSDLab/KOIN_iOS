@@ -322,7 +322,7 @@
 		D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0462BA608310081FD36 /* ShopDataViewModel.swift */; };
 		D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0482BA608310081FD36 /* GuideLabel.swift */; };
 		D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0492BA608310081FD36 /* PossibilityLabel.swift */; };
-		D27DD0A82BA608310081FD36 /* ShopDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD04D2BA608310081FD36 /* ShopDataViewController.swift */; };
+		D27DD0A82BA608310081FD36 /* ShopDataViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD04D2BA608310081FD36 /* ShopDataViewControllerA.swift */; };
 		D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0502BA608310081FD36 /* ShopGuideView.swift */; };
 		D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0522BA608310081FD36 /* ShopInfoCollectionViewCell.swift */; };
 		D27DD0AB2BA608310081FD36 /* ShopInfoColletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0532BA608310081FD36 /* ShopInfoColletionView.swift */; };
@@ -481,6 +481,7 @@
 		D2FCBEA22D07FCB00097A388 /* DeleteFrameModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */; };
 		D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */; };
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
+		D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -847,7 +848,7 @@
 		D27DD0462BA608310081FD36 /* ShopDataViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopDataViewModel.swift; sourceTree = "<group>"; };
 		D27DD0482BA608310081FD36 /* GuideLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideLabel.swift; sourceTree = "<group>"; };
 		D27DD0492BA608310081FD36 /* PossibilityLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PossibilityLabel.swift; sourceTree = "<group>"; };
-		D27DD04D2BA608310081FD36 /* ShopDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopDataViewController.swift; sourceTree = "<group>"; };
+		D27DD04D2BA608310081FD36 /* ShopDataViewControllerA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopDataViewControllerA.swift; sourceTree = "<group>"; };
 		D27DD0502BA608310081FD36 /* ShopGuideView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopGuideView.swift; sourceTree = "<group>"; };
 		D27DD0522BA608310081FD36 /* ShopInfoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopInfoCollectionViewCell.swift; sourceTree = "<group>"; };
 		D27DD0532BA608310081FD36 /* ShopInfoColletionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopInfoColletionView.swift; sourceTree = "<group>"; };
@@ -1007,6 +1008,7 @@
 		D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameModalViewController.swift; sourceTree = "<group>"; };
 		D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollbackFrameUseCase.swift; sourceTree = "<group>"; };
 		D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFramesUseCase.swift; sourceTree = "<group>"; };
+		D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataViewControllerB.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2064,7 +2066,8 @@
 			children = (
 				D27DD0472BA608310081FD36 /* SubViews */,
 				D27DD0462BA608310081FD36 /* ShopDataViewModel.swift */,
-				D27DD04D2BA608310081FD36 /* ShopDataViewController.swift */,
+				D27DD04D2BA608310081FD36 /* ShopDataViewControllerA.swift */,
+				D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */,
 			);
 			path = ShopData;
 			sourceTree = "<group>";
@@ -3088,7 +3091,7 @@
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
 				D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */,
-				D27DD0A82BA608310081FD36 /* ShopDataViewController.swift in Sources */,
+				D27DD0A82BA608310081FD36 /* ShopDataViewControllerA.swift in Sources */,
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
 				D2FB23532BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift in Sources */,
@@ -3440,6 +3443,7 @@
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
+				D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */,
 				83BB83112CEC724300946623 /* KeywordNotiCollectionViewCell.swift in Sources */,
 				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
 				83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */,

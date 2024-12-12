@@ -201,13 +201,14 @@ final class ShopViewControllerA: UIViewController {
                 break
             case let .showSearchedResult(result):
                 self?.searchedShopCollectionView.updateShop(keywords: result)
-                print(result)
+            case let .navigateToShopData(shopId, shopName, categoryId):
+                self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
             }
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
-            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
+            self?.viewModel.assignShopAbTest(shopId: shopId, shopName: shopName, categoryId: self?.categoryCollectionView.selectedCategoryPublisher.value ?? 0)
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .endEvent, .shopClick))
         }.store(in: &subscriptions)
@@ -338,7 +339,13 @@ extension ShopViewControllerA {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
-        let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
+        
+        let shopDataViewController: UIViewController
+        if viewModel.userAssignType == .callNumber {
+            shopDataViewController = ShopDataViewControllerA(viewModel: shopDataViewModel)
+        } else {
+            shopDataViewController = ShopDataViewControllerB(viewModel: shopDataViewModel)
+        }
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
     }

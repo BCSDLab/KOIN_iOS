@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class ShopDataViewController: UIViewController {
+final class ShopDataViewControllerA: UIViewController {
     
     // MARK: - Properties
     
@@ -50,9 +50,25 @@ final class ShopDataViewController: UIViewController {
         return label
     }()
     
-    private let phoneGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "전화번호")
+    private let phoneLeadingLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.appColor(.neutral500)
+        label.font = UIFont.appFont(.pretendardRegular, size: 15)
+        label.text = "전화번호"
         return label
+    }()
+    
+    private let phoneCallButton1: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(UIColor.appColor(.primary500), for: .normal)
+        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
+        return button
+    }()
+    
+    private let phoneCallButton2: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.appImage(asset: .callBlue), for: .normal)
+        return button
     }()
     
     private let timeGuideLabel: GuideLabel = {
@@ -194,7 +210,9 @@ final class ShopDataViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         menuTitleImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .call), style: .plain, target: self, action: #selector(callButtonTapped))
+        [phoneCallButton1, phoneCallButton2].forEach {
+            $0.addTarget(self, action: #selector(callButtonTapped), for: .touchUpInside)
+        }
     }
     
     @objc private func appWillResignActive() {
@@ -303,7 +321,7 @@ final class ShopDataViewController: UIViewController {
 }
 
 
-extension ShopDataViewController: UIScrollViewDelegate {
+extension ShopDataViewControllerA: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollViewContentOffsetY = scrollView.contentOffset.y
         
@@ -413,7 +431,7 @@ extension ShopDataViewController: UIScrollViewDelegate {
         }
     }
 }
-extension ShopDataViewController {
+extension ShopDataViewControllerA {
     private func updateButtons(for stackView: UIStackView, with categories: [MenuCategory]) {
         var findFirstButton = false
         var tagCounter = 0
@@ -466,7 +484,7 @@ extension ShopDataViewController {
     }
     
     @objc private func callButtonTapped() {
-        if let phoneNumber = phoneGuideLabel.rightLabel.text,
+        if let phoneNumber = phoneCallButton1.currentTitle,
            let url = URL(string: "tel://\(phoneNumber)"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -493,7 +511,7 @@ extension ShopDataViewController {
         ]
         let attributedString = NSAttributedString(string: data.name, attributes: attributes)
         stickyShopTitleLabel.attributedText = attributedString
-        phoneGuideLabel.configure(text: data.phone)
+        phoneCallButton1.setTitle(data.phone, for: .normal)
         setTimeGuideLabel(data.open)
         addressGuideLabel.configure(text: data.address)
         deliveryGuideLabel.configure(text: "\(data.deliveryPrice)원")
@@ -601,14 +619,14 @@ extension ShopDataViewController {
 }
 
 
-extension ShopDataViewController {
+extension ShopDataViewControllerA {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         addChild(pageViewController)
         
         pageViewController.didMove(toParent: self)
-        [menuTitleImageView, shopTitleLabel, phoneGuideLabel, timeGuideLabel, addressGuideLabel, etcGuideLabel, deliveryGuideLabel, deliveryPossibilityLabel, cardPossibilityLabel, bankPossibilityLabel, lastUpdateDayLabel, grayView, menuImageCollectionView, categorySelectSegmentControl, pageViewController.view, accountGuideLabel].forEach {
+        [menuTitleImageView, shopTitleLabel, phoneLeadingLabel, phoneCallButton1, phoneCallButton2, timeGuideLabel, addressGuideLabel, etcGuideLabel, deliveryGuideLabel, deliveryPossibilityLabel, cardPossibilityLabel, bankPossibilityLabel, lastUpdateDayLabel, grayView, menuImageCollectionView, categorySelectSegmentControl, pageViewController.view, accountGuideLabel].forEach {
             scrollView.addSubview($0)
         }
         [emptyWhiteView, stickyShopTitleLabel, stickySelectSegmentControl, stickyButtonStackView].forEach { component in
@@ -663,14 +681,23 @@ extension ShopDataViewController {
             make.leading.equalTo(scrollView.snp.leading).offset(24)
         }
         
-        phoneGuideLabel.snp.makeConstraints { make in
+        phoneLeadingLabel.snp.makeConstraints { make in
             make.top.equalTo(shopTitleLabel.snp.bottom).offset(12)
             make.leading.equalTo(shopTitleLabel.snp.leading)
-            make.trailing.equalTo(scrollView.snp.trailing)
+        }
+        phoneCallButton1.snp.makeConstraints { make in
+            make.leading.equalTo(phoneLeadingLabel.snp.trailing).offset(8.19)
+            make.bottom.equalTo(phoneLeadingLabel.snp.bottom)
+            make.height.equalTo(phoneLeadingLabel.snp.height)
+        }
+        phoneCallButton2.snp.makeConstraints { make in
+            make.leading.equalTo(phoneCallButton1.snp.trailing).offset(7)
+            make.centerY.equalTo(phoneCallButton1.snp.centerY)
+            make.width.height.equalTo(16)
         }
         
         timeGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(phoneGuideLabel.snp.bottom).offset(12)
+            make.top.equalTo(phoneLeadingLabel.snp.bottom).offset(12)
             make.leading.equalTo(shopTitleLabel.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
@@ -766,7 +793,7 @@ extension ShopDataViewController {
     }
 }
 
-extension ShopDataViewController {
+extension ShopDataViewControllerA {
     
     private func setTimeGuideLabel(_ data: [Open]) {
         
@@ -830,7 +857,7 @@ extension ShopDataViewController {
     }
 }
 
-extension ShopDataViewController: UIGestureRecognizerDelegate {
+extension ShopDataViewControllerA: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
