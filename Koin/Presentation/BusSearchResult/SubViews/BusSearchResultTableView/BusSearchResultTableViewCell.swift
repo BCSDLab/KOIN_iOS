@@ -15,7 +15,6 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         $0.font = .appFont(.pretendardRegular, size: 11)
         $0.textColor = .appColor(.neutral600)
         $0.textAlignment = .center
-        $0.backgroundColor = .appColor(.orange100)
     }
     
     private let busTimeLabel = UILabel().then {
@@ -40,12 +39,20 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         super.init(coder: coder)
         configureView()
     }
-    
-    //추후 API 명세를 받고 모델을 정의할 것
-    func configure(searchModel: TempBusSearchResult) {
+
+    func configure(searchModel: ScheduleInformation) {
         busTypeLabel.text = String(searchModel.busType.koreanDescription.prefix(2))
-        busTimeLabel.text = searchModel.busTime
-        remainTimeLabel.text = searchModel.remainTime
+        busTypeLabel.backgroundColor = searchModel.busType.returnBusTypeColor()
+        busTimeLabel.text = searchModel.departTime.formatDateToHHMM(isHH: false)
+        let remainTime = searchModel.remainTime.timeDifference()
+        if let time = remainTime.hours {
+            if time > 24 {
+            }
+            remainTimeLabel.text = "\(time)시간 \(remainTime.minutes)분 전"
+        }
+        else {
+            remainTimeLabel.text = "\(remainTime.minutes)분 전"
+        }
     }
    
 }

@@ -4,8 +4,19 @@
 //
 //  Created by JOOMINKYUNG on 7/26/24.
 //
+
+import Foundation
+
 struct SearchBusInfoResult {
-    let shuttleTime: String?
-    let expressTime: String?
-    let commutingTime: String?
+    let depart: BusPlace
+    let arrival: BusPlace
+    let departDate: Date
+    let departTime: Date
+    let schedule: Array<ScheduleInformation>
+}
+
+struct ScheduleInformation {
+    let busType: BusType
+    let departTime: Date
+    let remainTime: TimeInterval
 }

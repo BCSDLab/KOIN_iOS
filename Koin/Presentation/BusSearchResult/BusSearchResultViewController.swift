@@ -18,7 +18,7 @@ final class BusSearchResultViewController: CustomViewController {
     
     // MARK: - UI Components
     
-    private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
+    private let tableView = BusSearchResultTableView(frame: .zero, style: .grouped)
     
     private var busSearchDatePickerViewController = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
     
@@ -40,9 +40,10 @@ final class BusSearchResultViewController: CustomViewController {
         super.viewDidLoad()
         configureView()
         setUpNavigationBar()
-        setNavigationTitle(title: "한기대 -> 천안터미널")
+        setNavigationTitle(title: "\(viewModel.busPlaces.0.koreanDescription) -> \(viewModel.busPlaces.1.koreanDescription)")
         bind()
         inputSubject.send(.getDatePickerData)
+        inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
     }
     
     
@@ -55,6 +56,8 @@ final class BusSearchResultViewController: CustomViewController {
             switch output {
             case let .updateDatePickerData((dates, selectedDate)):
                 self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
+            case let .udpatesSearchedResult(departTime, busSearchedResult):
+                self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
             }
         }.store(in: &subscriptions)
         
@@ -62,21 +65,30 @@ final class BusSearchResultViewController: CustomViewController {
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
+                busSearchDatePickerViewController.modalPresentationStyle = .overFullScreen
                 present(busSearchDatePickerViewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
+            self?.inputSubject.send(.getSearchedResult(nil, busType))
         }.store(in: &subscriptions)
         
         busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
             if selectedItem.count > 3 {
                 let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]) : \(selectedItem[3])"
-                self?.tableView.setBusSearchDate(searchDate: time)
+                self?.inputSubject.send(.getSearchedResult(time, nil))
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchResultViewController {
-    
-
+    private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
+        if let time = departTime {
+            tableView.setBusSearchTime(departTime: "\(time)")
+        }
+        tableView.setBusSearchResult(busSearchResult: departInfo)
+    }
 }
 
 extension BusSearchResultViewController {

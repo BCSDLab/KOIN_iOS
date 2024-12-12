@@ -48,16 +48,19 @@ final class BusSearchViewController: CustomViewController {
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
     }
     
-    private let busInfoSearchButton = UIButton().then {
-        $0.setAttributedTitle(NSAttributedString(string: "조회하기", attributes: [.font: UIFont.appFont(.pretendardMedium, size: 15)]), for: .normal)
+    private let busInfoSearchButton = UIView().then {
+        let label = UILabel()
+        label.text = "조회하기"
+        label.font = UIFont.appFont(.pretendardMedium, size: 15)
+        label.textColor = .appColor(.neutral600)
+        $0.addSubview(label)
+        label.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+        }
         $0.backgroundColor = .appColor(.neutral300)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
         $0.layer.cornerRadius = 4
-        $0.isEnabled = false
     }
-    
-    private let busAreaViewController = BusAreaSelectedViewController()
-    
+   
     // MARK: - Initialization
     
     init(viewModel: BusSearchViewModel) {
@@ -77,9 +80,6 @@ final class BusSearchViewController: CustomViewController {
         configureView()
         setUpNavigationBar()
         setNavigationTitle(title: "교통편 조회하기")
-        busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
-        swapAreaButton.addTarget(self, action: #selector(swapDepartureAndArrival), for: .touchUpInside)
-        bind()
     }
     
     
@@ -87,83 +87,14 @@ final class BusSearchViewController: CustomViewController {
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            switch output {
-            case let .updateBusArea(buttonState, busPlace, busRouteType):
-                self?.updateSelectedBusArea(buttonState: buttonState, busPlace: busPlace, busRouteType: busRouteType)
-            }
-        }.store(in: &subscriptions)
         
-        busAreaViewController.busAreaPublisher.sink { [weak self] departureArea, arrivalArea in
-            guard let self = self else { return }
-            changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
-            changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
-            manageSearchButton(isActivated: true)
-        }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchViewController {
-    @objc private func tapSearchButton(sender: UIButton) {
-        let repository = DefaultBusRepository(service: DefaultBusService())
-        let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
-        let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
-        let viewModel = BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase(), busPlaces: (departure, arrival), fetchSearchedResultUseCase: DefaultSearchBusInfoUseCase(busRepository: repository))
-        let busSearchResultViewController = BusSearchResultViewController(viewModel: viewModel)
-        navigationController?.pushViewController(busSearchResultViewController, animated: true)
-    }
     
-    @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
-        let busRouteType = sender == departAreaSelectedButton ? 0 : 1
-        inputSubject.send(.selectBusArea(departAreaSelectedButton.tag, arrivedAreaSelectedButton.tag, busRouteType))
-    }
+   
     
-    @objc private func swapDepartureAndArrival(sender: UIButton) {
-        guard departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 else { return }
-        
-        let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
-        let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
-        changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
-        changeBusAreaButton(sender: arrivedAreaSelectedButton, title: departure)
-    }
-    
-    private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?, busRouteType: Int) {
-        var busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
-        for (index, value) in busAreaList.enumerated() {
-            if value.0 == busPlace  {
-                busAreaList[index].1 = true
-            }
-            else if busPlace == nil {
-                busAreaList[0].1 = true
-            }
-        }
-        
-        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: busAreaList, buttonState: buttonState)
-        let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
-        present(bottomSheet, animated: true)
-    }
-    
-    private func changeBusAreaButton(sender: UIButton, title: BusPlace) {
-        var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString(title.koreanDescription, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardBold, size: 18), .foregroundColor: UIColor.appColor(.neutral800)]))
-        configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
-        sender.configuration = configuration
-        sender.backgroundColor = .clear
-        sender.tag = (BusPlace.allCases.firstIndex(of: title) ?? 0) + 1
-    }
-    
-    private func manageSearchButton(isActivated: Bool) {
-        if !isActivated {
-            busInfoSearchButton.backgroundColor = .appColor(.neutral300)
-            busInfoSearchButton.setTitleColor(.appColor(.neutral600), for: .normal)
-            busInfoSearchButton.isEnabled = false
-        }
-        else {
-            busInfoSearchButton.isEnabled = true
-            busInfoSearchButton.backgroundColor = .appColor(.primary500)
-            busInfoSearchButton.setTitleColor(.appColor(.neutral0), for: .normal)
-        }
-    }
 }
 
 
@@ -176,9 +107,9 @@ extension BusSearchViewController {
             $0.textAlignment = .center
         }
     }
-
+    
     private func setUpButtons() {
-        let buttonNames = ["출발지 선택", "도착지 선택"]
+        let buttonNames = ["출발지 선택", "목적지 선택"]
         let buttons = [departAreaSelectedButton, arrivedAreaSelectedButton]
         for (index, value) in buttons.enumerated() {
             var configuration = UIButton.Configuration.plain()
@@ -186,7 +117,6 @@ extension BusSearchViewController {
             configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
             value.configuration = configuration
             value.backgroundColor = .appColor(.neutral100)
-            value.addTarget(self, action: #selector(tapBusAreaSelectedButtons), for: .touchUpInside)
         }
     }
     

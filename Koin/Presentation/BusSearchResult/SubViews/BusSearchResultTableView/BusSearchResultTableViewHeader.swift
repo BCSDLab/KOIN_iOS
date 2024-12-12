@@ -14,6 +14,8 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     // MARK: - Properties
     var subscriptions = Set<AnyCancellable>()
     let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
+    let tapDepartBusTypeButtonPublisher = PassthroughSubject<Void, Never>()
+    
     
     // MARK: - UIComponents
     private let departTimeButton = UIView().then {
@@ -36,6 +38,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureView()
+        setUpBusTypeFilterButton(busType: BusType.noValue.koreanDescription)
     }
     
     required init?(coder: NSCoder) {
@@ -48,13 +51,22 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         subscriptions.removeAll()
     }
     
-    func configure(departTime: String, busType: String) {
+    func configureDepartTime(departTime: String) {
         departTimeLabel.text = departTime
-        setUpBusTypeFilterButton(busType: busType)
+        setUpDepartTimeButton()
+    }
+    
+    func configureDepartBusType(busType: BusType) {
+        setUpBusTypeFilterButton(busType: busType.koreanDescription)
     }
     
     @objc private func tapDepartTimeButton() {
         tapDepartTimeButtonPublisher.send()
+        
+    }
+    
+    @objc private func tapDepartBusTypeButton() {
+        tapDepartBusTypeButtonPublisher.send()
     }
 }
 
@@ -101,13 +113,15 @@ extension BusSearchResultTableViewHeader {
     private func setUpConstraints() {
         departTimeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalToSuperview().offset(23)
-            $0.height.equalTo(40)
+            $0.centerY.equalToSuperview()
             $0.width.equalTo(165)
+            $0.height.equalTo(42)
         }
         busTypeFilterButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
             $0.centerY.equalTo(departTimeButton)
+            $0.width.equalTo(104)
+            $0.height.equalTo(40)
         }
     }
     
@@ -117,6 +131,7 @@ extension BusSearchResultTableViewHeader {
         setUpDepartTimeButton()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapDepartTimeButton))
         departTimeButton.addGestureRecognizer(tapGesture)
+        busTypeFilterButton.addTarget(self, action: #selector(tapDepartBusTypeButton), for: .touchUpInside)
     }
 }
 

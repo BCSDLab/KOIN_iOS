@@ -292,8 +292,10 @@ final class HomeViewController: UIViewController, CollectionViewDelegate {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        busView.moveBusSearchPublisher.sink {
-            //추후 버스 노선 검색 화면 이동
+        busView.moveBusSearchPublisher.sink { [weak self] in
+            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase())
+            let viewController = BusSearchViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
         busView.moveBusTimetablePublisher.sink {
@@ -389,7 +391,7 @@ extension HomeViewController {
     }
     
     @objc private func busViewTapped() {
-        let busViewController = BusSearchViewController(viewModel: BusSearchViewModel())
+        let busViewController = BusSearchViewController(viewModel: BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase()))
         navigationController?.pushViewController(busViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))
