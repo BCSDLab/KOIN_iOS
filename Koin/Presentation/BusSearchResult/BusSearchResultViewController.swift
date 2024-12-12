@@ -43,7 +43,7 @@ final class BusSearchResultViewController: CustomViewController {
         setNavigationTitle(title: "\(viewModel.busPlaces.0.koreanDescription) -> \(viewModel.busPlaces.1.koreanDescription)")
         bind()
         inputSubject.send(.getDatePickerData)
-        inputSubject.send(.getSearchedResult("\(Date().formatDateToMDEEE()) \(Date().formatDateToHHMM(isHH: false))", .noValue))
+        inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
     }
     
     
