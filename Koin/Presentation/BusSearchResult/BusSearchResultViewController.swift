@@ -71,7 +71,7 @@ final class BusSearchResultViewController: CustomViewController {
         busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
             if selectedItem.count > 3 {
                 let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]) : \(selectedItem[3])"
-                self?.tableView.configureDepartInfo(date: time)
+                self?.tableView.setBusSearchTime(departTime: time)
             }
         }.store(in: &subscriptions)
     }
