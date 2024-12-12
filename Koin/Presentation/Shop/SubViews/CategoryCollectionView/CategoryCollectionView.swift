@@ -61,8 +61,13 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         
         
         let category = shopCategories[indexPath.row]
-        let isSelected = category.id == selectedId
-        cell.configure(info: category, isSelected)
+        if shopCategories.contains(where: { $0.id == -1 }) {
+            cell.configure(info: category, false)
+        } else {
+            let isSelected = category.id == selectedId
+            cell.configure(info: category, isSelected)
+        }
+        
         
         return cell
     }

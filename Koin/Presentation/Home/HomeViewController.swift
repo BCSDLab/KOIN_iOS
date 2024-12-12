@@ -186,11 +186,7 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         print(KeyChainWorker.shared.read(key: .access) ?? "")
-        print(KeyChainWorker.shared.read(key: .refresh) ?? "")
-        print(KeyChainWorker.shared.read(key: .fcm))
-        print(KeyChainWorker.shared.read(key: .accessHistoryId))
-        print(KeyChainWorker.shared.read(key: .shareVariableName))
-        print(KeyChainWorker.shared.read(key: .variableName))
+        
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
@@ -460,7 +456,10 @@ extension HomeViewController {
     }
     
     private func putImage(data: ShopCategoryDTO) {
-        categoryCollectionView.updateCategories(data.shopCategories)
+        var categories = data.shopCategories
+        let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://stage-static.koreatech.in/upload/SHOPS/2024/12/12/fc8da75a-a3ca-48ed-8a16-023394f8315a/shopBenefit.svg")
+           categories.insert(newCategory, at: 0)
+        categoryCollectionView.updateCategories(categories)
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
@@ -506,13 +505,19 @@ extension HomeViewController {
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: id
         )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
-        shopViewController.title = "주변상점"
-        navigationController?.pushViewController(shopViewController, animated: true)
         
-        let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-        inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+        if id >= 0 {
+            let shopViewController = ShopViewControllerA(viewModel: viewModel)
+            shopViewController.title = "주변상점"
+            navigationController?.pushViewController(shopViewController, animated: true)
+            
+            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
+            inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+        } else if id == -1 {
+            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
+            navigationController?.pushViewController(shopViewController, animated: true)
+        }
     }
     
     @objc private func refresh() {
