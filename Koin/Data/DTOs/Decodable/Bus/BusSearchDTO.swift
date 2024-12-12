@@ -9,7 +9,8 @@ import Foundation
 
 // MARK: - Welcome
 struct BusSearchDTO: Decodable {
-    let depart, arrival: BusPlace
+    let depart: BusPlace
+    let arrival: BusPlace
     let departDate, departTime: String
     let schedule: [Schedule]
 
@@ -24,34 +25,34 @@ struct BusSearchDTO: Decodable {
 // MARK: - Schedule
 struct Schedule: Decodable {
     let busType: BusType
-    let routeName, departTime: String
+    let busName, departTime: String
 
     enum CodingKeys: String, CodingKey {
         case busType = "bus_type"
-        case routeName = "route_name"
+        case busName = "bus_name"
         case departTime = "depart_time"
     }
 }
 
 extension BusSearchDTO {
     func toDomain() -> SearchBusInfoResult {
-        var dateFormatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = Date().stringToDate(dateValue: departDate, dateFormatter: dateFormatter) ?? Date()
         let timeFormater = DateFormatter()
-        timeFormater.dateFormat = "HH:mm"
+        timeFormater.dateFormat = "HH:mm:ss"
         let time = Date().stringToDate(dateValue: departTime, dateFormatter: dateFormatter) ?? Date()
-        let domainSchedule = schedule.map { $0.toDomain() }
+        let domainSchedule = schedule.map { $0.toDomain(date: departDate) }
         return SearchBusInfoResult(depart: depart, arrival: arrival, departDate: date, departTime: time, schedule: domainSchedule)
     }
 }
 
 extension Schedule {
-    func toDomain() -> ScheduleInformation {
+    func toDomain(date: String) -> ScheduleInformation {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        let time = Date().stringToDate(dateValue: departTime, dateFormatter: dateFormatter) ?? Date()
-        let timeInterval = time.timeIntervalSince(Date())
-        return ScheduleInformation(busType: busType, departTime: time, remainTime: timeInterval)
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = Date().stringToDate(dateValue: "\(date) \(departTime)", dateFormatter: dateFormatter) ?? Date()
+        let timeInterval = date.timeIntervalSinceNow
+        return ScheduleInformation(busType: busType, departTime: date, remainTime: timeInterval)
     }
 }

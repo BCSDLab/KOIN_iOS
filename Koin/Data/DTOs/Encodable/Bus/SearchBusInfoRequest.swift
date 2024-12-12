@@ -13,4 +13,12 @@ struct SearchBusInfoRequest: Encodable {
     let busType: String
     let depart: String
     let arrival: String
+    
+    enum CodingKeys: String, CodingKey {
+        case busType = "bus_type"
+        case depart
+        case arrival
+        case date
+        case time
+    }
 }
