@@ -12,6 +12,8 @@ final class ManyBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var busPlaces: [NodeInfo] = []
+    let contentHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -32,6 +34,11 @@ final class ManyBusTimetableTableView: UITableView {
         showsVerticalScrollIndicator = false
         isScrollEnabled = false
         backgroundColor = .systemBackground
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentHeightPublisher.send(self.contentSize.height)
     }
     
     func configure(timetable: [NodeInfo]) {

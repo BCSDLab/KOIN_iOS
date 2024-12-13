@@ -45,6 +45,7 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     }
     
     private func getShuttleBusTimetable(shuttleTimetableType: ShuttleTimetableType) {
+        print(shuttleRouteId)
         fetchShuttleTimetableUseCase.execute(id: shuttleRouteId).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
