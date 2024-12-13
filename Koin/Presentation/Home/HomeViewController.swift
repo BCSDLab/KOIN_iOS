@@ -297,8 +297,11 @@ final class HomeViewController: UIViewController {
             //추후 버스 노선 검색 화면 이동
         }.store(in: &subscriptions)
         
-        busView.moveBusTimetablePublisher.sink {
-            //추후 버스 시간표 화면 이동
+        busView.moveBusTimetablePublisher.sink {[weak self] in
+            let repository = DefaultBusRepository(service: DefaultBusService())
+            let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
+            let viewController = BusTimetableViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
