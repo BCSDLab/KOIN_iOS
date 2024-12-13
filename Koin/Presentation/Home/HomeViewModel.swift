@@ -160,7 +160,7 @@ extension HomeViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-            if eventLabelNeededDuration == .mainShopBenefit {
+            if eventLabelNeededDuration == .mainShopBenefit || eventLabelNeededDuration == .benefitShopCategories {
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             }
             
