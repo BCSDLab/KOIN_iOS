@@ -20,6 +20,6 @@ final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseC
     }
     
     func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
-        return repository.fetchShuttleBusTimetable(id: id)
+        return repository.fetchShuttleBusTimetable(id: id).map { $0.toDomain() }.eraseToAnyPublisher()
     }
 }

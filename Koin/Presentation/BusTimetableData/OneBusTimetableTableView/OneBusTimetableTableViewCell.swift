@@ -23,6 +23,12 @@ final class OneBusTimetableTableViewCell: UITableViewCell {
         $0.textAlignment = .left
         $0.textColor = .black
     }
+    
+    private let subBusPlaceLabel = UILabel().then {
+        $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.neutral500)
+        $0.textAlignment = .left
+    }
    
     //MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -35,15 +41,16 @@ final class OneBusTimetableTableViewCell: UITableViewCell {
         configureView()
     }
     
-    func configure(busTime: String, busPlace: String) {
+    func configure(busPlace: NodeInfo, busTime: String?) {
         busTimeLabel.text = busTime
-        busPlaceLabel.text = busPlace
+        busPlaceLabel.text = busPlace.name
+        subBusPlaceLabel.text = busPlace.detail
     }
 }
 
 extension OneBusTimetableTableViewCell {
     private func setUpLayouts() {
-        [busTimeLabel, busPlaceLabel].forEach {
+        [busTimeLabel, busPlaceLabel, subBusPlaceLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -57,6 +64,11 @@ extension OneBusTimetableTableViewCell {
         busPlaceLabel.snp.makeConstraints {
             $0.centerY.equalTo(busTimeLabel)
             $0.leading.equalTo(busTimeLabel.snp.trailing).offset(18)
+        }
+        subBusPlaceLabel.snp.makeConstraints {
+            $0.top.equalTo(busPlaceLabel.snp.bottom)
+            $0.leading.equalTo(busPlaceLabel)
+            $0.height.equalTo(19)
         }
     }
     
