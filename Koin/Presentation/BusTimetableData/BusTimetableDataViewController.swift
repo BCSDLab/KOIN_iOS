@@ -123,6 +123,12 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
                 self?.updateShuttleBusTimetable(timetable: timetable, shuttleTimetableType: shuttleTimetableType)
             }
         }.store(in: &subscriptions)
+        
+        manyBusTimetableDataTableView.contentHeightPublisher.sink { [weak self] height in
+            self?.contentView.snp.updateConstraints {
+                $0.height.equalTo(height + 100)
+            }
+        }.store(in: &subscriptions)
     }
   }
 
@@ -217,7 +223,7 @@ extension BusTimetableDataViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(1000)
+            $0.height.equalTo(1500)
         }
         shuttleRouteTypeLabel.snp.makeConstraints {
             $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(16)
