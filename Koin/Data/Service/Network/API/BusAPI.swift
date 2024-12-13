@@ -13,6 +13,7 @@ enum BusAPI {
     case fetchBusTimetableList(FetchBusTimetableRequest)
     case fetchCityBusTimetableList(FetchCityBusTimetableRequest)
     case fetchShuttleBusTimetableRoute
+    case fetchShuttleBusTimetableList(String)
 }
 
 extension BusAPI: Router, URLRequestConvertible {
@@ -28,26 +29,19 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchBusTimetableList: return "/bus/timetable/v2"
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
         case .fetchShuttleBusTimetableRoute: return "/bus/courses/shuttle"
+        case let .fetchShuttleBusTimetableList(id): return "/bus/timetable/shuttle/\(id)"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchBusInformationList: return .get
-        case .searchBusInformation: return .get
-        case .fetchBusTimetableList: return .get
-        case .fetchCityBusTimetableList: return .get
-        case .fetchShuttleBusTimetableRoute: return .get
+        default: return .get
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchBusInformationList: return [:]
-        case .searchBusInformation: return [:]
-        case .fetchBusTimetableList: return [:]
-        case .fetchCityBusTimetableList: return [:]
-        case .fetchShuttleBusTimetableRoute: return [:]
+        default: return [:]
         }
     }
     
@@ -64,16 +58,15 @@ extension BusAPI: Router, URLRequestConvertible {
             return nil
         case .fetchCityBusTimetableList(let request):
             return try? request.toDictionary()
+        case .fetchShuttleBusTimetableList(let id):
+            return try? id.toDictionary()
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchBusInformationList: return URLEncoding.default
-        case .searchBusInformation: return URLEncoding.default
-        case .fetchBusTimetableList: return URLEncoding.default
         case .fetchShuttleBusTimetableRoute: return nil
-        case .fetchCityBusTimetableList: return URLEncoding.default
+        default: return URLEncoding.default
         }
     }
  

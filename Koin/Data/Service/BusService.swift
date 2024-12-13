@@ -53,14 +53,7 @@ final class DefaultBusService: BusService {
     }
     
     func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
-        guard let url = URL(string: "https://c01aaba6-9825-4309-b30e-aff4753bebfe.mock.pstmn.io/bus/timetable") else {
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
-        }
-      
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = HTTPMethod.get.rawValue
-        return mockNetworkService.request(api: urlRequest)
-            .eraseToAnyPublisher()
+        return request(.fetchShuttleBusTimetableList(id))
     }
 
     private func request<T: Decodable>(_ api: BusAPI) -> AnyPublisher<T, Error> {
