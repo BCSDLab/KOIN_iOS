@@ -137,7 +137,7 @@ final class ShopViewControllerA: UIViewController {
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
-        
+        categoryCollectionView.enableFooter(true)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView))
         tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
         view.addGestureRecognizer(tapGesture)
@@ -249,6 +249,35 @@ final class ShopViewControllerA: UIViewController {
             UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
             print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
         }
+        
+        categoryCollectionView.publisher.sink { [weak self] in
+            let shopService = DefaultShopService()
+            let shopRepository = DefaultShopRepository(service: shopService)
+            
+            let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+            let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+            let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+            let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+            let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+            let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            
+            let viewModel = ShopViewModel(
+                fetchShopListUseCase: fetchShopListUseCase,
+                fetchEventListUseCase: fetchEventListUseCase,
+                fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                selectedId: 0
+            )
+            
+                let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
+            self?.navigationController?.pushViewController(shopViewController, animated: true)
+
+        }.store(in: &subscriptions)
+
     }
 }
 
@@ -409,7 +438,7 @@ extension ShopViewControllerA {
             make.top.equalTo(searchTextField.snp.bottom).offset(16)
             make.leading.equalTo(scrollView.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
-            make.height.equalTo(146)
+            make.height.equalTo(180)
         }
         
         shopGuideView.snp.makeConstraints { make in

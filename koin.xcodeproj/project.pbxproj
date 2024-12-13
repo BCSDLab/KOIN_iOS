@@ -482,6 +482,7 @@
 		D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */; };
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */; };
+		D2FCBEAA2D0AF4700097A388 /* CategoryFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1009,6 +1010,7 @@
 		D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollbackFrameUseCase.swift; sourceTree = "<group>"; };
 		D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFramesUseCase.swift; sourceTree = "<group>"; };
 		D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataViewControllerB.swift; sourceTree = "<group>"; };
+		D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFooterView.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2130,6 +2132,7 @@
 			children = (
 				D27DD0552BA608310081FD36 /* CategoryCollectionViewCell.swift */,
 				D27DD0562BA608310081FD36 /* CategoryCollectionView.swift */,
+				D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */,
 			);
 			path = CategoryCollectionView;
 			sourceTree = "<group>";
@@ -3058,6 +3061,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2FCBEAA2D0AF4700097A388 /* CategoryFooterView.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
@@ -3746,7 +3750,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 321;
+				CURRENT_PROJECT_VERSION = 368;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -3763,7 +3767,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.0.0;
+				MARKETING_VERSION = 4.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3781,7 +3785,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 321;
+				CURRENT_PROJECT_VERSION = 368;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -3798,7 +3802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.0.0;
+				MARKETING_VERSION = 4.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
