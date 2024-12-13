@@ -11,7 +11,7 @@ import UIKit
 final class OneBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busInfo: [(String, String)] = [("08:18", "천안역 학화호두과자 앞"), ("08:18", "천안역 학화호두과자 앞"), ("08:18", "천안역 학화호두과자 앞"), ("08:18", "천안역 학화호두과자 앞"), ("08:18", "천안역 학화호두과자 앞"), ("08:18", "천안역 학화호두과자 앞")]
+    private var busInfo: ([NodeInfo], [String?]) = ([], [])
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -34,16 +34,20 @@ final class OneBusTimetableTableView: UITableView {
         backgroundColor = .systemBackground
     }
     
+    func configure(nodeInfo: [NodeInfo], routeInfo: [String?]) {
+        self.busInfo = (nodeInfo, routeInfo)
+        reloadData()
+    }
 }
 
 extension OneBusTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo.count
+        return busInfo.1.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: OneBusTimetableTableViewCell.identifier, for: indexPath) as? OneBusTimetableTableViewCell else { return UITableViewCell() }
-        cell.configure(busTime: busInfo[indexPath.row].0, busPlace: busInfo[indexPath.row].1)
+        cell.configure(busPlace: busInfo.0[indexPath.row], busTime: busInfo.1[indexPath.row])
         return cell
     }
     

@@ -112,15 +112,15 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
             $0.isHidden = true
         }
         bind()
-        inputSubject.send(.getBusTimetable)
+        inputSubject.send(.getBusTimetable(.manyRoute))
     }
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateBusRoute(busTimetable: timetable):
-                self?.updateShuttleBusTimetable(timetable: timetable)
+            case let .updateBusRoute(timetable, shuttleTimetableType):
+                self?.updateShuttleBusTimetable(timetable: timetable, shuttleTimetableType: shuttleTimetableType)
             }
         }.store(in: &subscriptions)
     }
@@ -129,6 +129,14 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
 extension BusTimetableDataViewController {
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
         moveUnderLineView()
+        let shuttleTimetableType: ShuttleTimetableType
+        switch sender.selectedSegmentIndex {
+        case 0:
+            shuttleTimetableType = .goSchool
+        default:
+            shuttleTimetableType = .dropOffSchool
+        }
+        inputSubject.send(.getBusTimetable(shuttleTimetableType))
     }
     
     @objc private func tapIncorrentInfoButton() {
@@ -153,12 +161,35 @@ extension BusTimetableDataViewController {
         )
     }
     
-    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO) {
-        manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
-        manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
+    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO, shuttleTimetableType: ShuttleTimetableType) {
         shuttleRouteTypeLabel.text = timetable.routeType.rawValue
         shuttleRouteTypeLabel.backgroundColor = timetable.routeType.returnRouteColor()
         busTimetablePlaceLabel.text = timetable.routeName
+        if shuttleTimetableType == .manyRoute && timetable.routeType != .weekday {
+            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
+                $0.isHidden = true
+            }
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView].forEach {
+                $0.isHidden = false
+            }
+            manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
+            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
+        }
+        else {
+            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
+            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
+                $0.isHidden = false
+            }
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView].forEach {
+                $0.isHidden = true
+            }
+            if shuttleTimetableType == .dropOffSchool && timetable.routeInfo.count > 1 {
+                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo[1].arrivalTime)
+            }
+            else {
+                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo.first?.arrivalTime ?? [])
+            }
+        }
     }
 }
 

@@ -8,14 +8,20 @@
 import Combine
 import Foundation
 
+enum ShuttleTimetableType {
+    case goSchool
+    case dropOffSchool
+    case manyRoute
+}
+
 final class BusTimetableDataViewModel: ViewModelProtocol {
     // MARK: - properties
     enum Input {
-        case getBusTimetable
+        case getBusTimetable(ShuttleTimetableType)
     }
 
     enum Output {
-        case updateBusRoute(busTimetable: ShuttleBusTimetableDTO)
+        case updateBusRoute(ShuttleBusTimetableDTO, ShuttleTimetableType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -31,20 +37,20 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .getBusTimetable:
-                self?.getShuttleBusTimetable()
+            case let .getBusTimetable(shuttleTimetableType):
+                self?.getShuttleBusTimetable(shuttleTimetableType: shuttleTimetableType)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
     }
     
-    private func getShuttleBusTimetable() {
+    private func getShuttleBusTimetable(shuttleTimetableType: ShuttleTimetableType) {
         fetchShuttleTimetableUseCase.execute(id: shuttleRouteId).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] timetable in
-            self?.outputSubject.send(.updateBusRoute(busTimetable: timetable))
+            self?.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
         }).store(in: &subscriptions)
     }
 }

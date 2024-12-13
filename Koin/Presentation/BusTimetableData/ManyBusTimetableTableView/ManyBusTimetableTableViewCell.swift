@@ -45,31 +45,22 @@ final class ManyBusTimetableTableViewCell: UITableViewCell {
 
 extension ManyBusTimetableTableViewCell {
     private func setUpLayouts() {
-        [busPlaceLabel].forEach {
+        [busPlaceLabel, subBusPlaceLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints(isSubBusPlace: Bool) {
-        if isSubBusPlace {
-            busPlaceLabel.snp.makeConstraints {
-                $0.top.equalToSuperview()
-                $0.width.equalTo(132)
-                $0.height.equalTo(26)
-                $0.leading.equalToSuperview().offset(24)
-            }
-            subBusPlaceLabel.snp.makeConstraints {
-                $0.top.equalTo(busPlaceLabel.snp.bottom)
-                $0.leading.equalTo(busPlaceLabel)
-                $0.height.equalTo(19)
-            }
+        busPlaceLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.width.equalTo(132)
+            $0.height.equalTo(26)
+            $0.leading.equalToSuperview().offset(24)
         }
-        else {
-            busPlaceLabel.snp.makeConstraints {
-                $0.centerY.equalToSuperview()
-                $0.width.equalTo(132)
-                $0.leading.equalToSuperview().offset(24)
-            }
+        subBusPlaceLabel.snp.makeConstraints {
+            $0.top.equalTo(busPlaceLabel.snp.bottom)
+            $0.leading.equalTo(busPlaceLabel)
+            $0.height.equalTo(19)
         }
     }
     

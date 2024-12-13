@@ -41,3 +41,25 @@ struct RouteInfo: Decodable {
         case arrivalTime = "arrival_time"
     }
 }
+
+extension ShuttleBusTimetableDTO {
+    func toDomain() -> ShuttleBusTimetableDTO {
+        if routeInfo.count > 1 && routeInfo[1].name == "하교" {
+            return ShuttleBusTimetableDTO(id: id, region: region, routeName: routeName, routeType: routeType, subName: subName, nodeInfo: nodeInfo.reversed(), routeInfo: routeInfo.map { $0.toDomain() })
+        }
+        else {
+            return self
+        }
+    }
+}
+
+extension RouteInfo {
+    func toDomain() -> RouteInfo {
+        if name == "하교" {
+            return RouteInfo(name: name, arrivalTime: arrivalTime.reversed())
+        }
+        else {
+            return self
+        }
+    }
+}
