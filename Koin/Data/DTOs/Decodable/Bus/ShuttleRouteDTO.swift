@@ -39,5 +39,5 @@ struct Route: Decodable {
 
 // MARK: - SemesterInfo
 struct SemesterInfo: Decodable {
-    let name, term: String
+    let name, from, to: String
 }

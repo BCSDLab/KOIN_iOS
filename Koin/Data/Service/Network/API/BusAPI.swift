@@ -11,8 +11,8 @@ enum BusAPI {
     case fetchBusInformationList(FetchBusInformationListRequest)
     case searchBusInformation(SearchBusInfoRequest)
     case fetchBusTimetableList(FetchBusTimetableRequest)
-    case getBusCourse
     case fetchCityBusTimetableList(FetchCityBusTimetableRequest)
+    case fetchShuttleBusTimetableRoute
 }
 
 extension BusAPI: Router, URLRequestConvertible {
@@ -26,8 +26,8 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchBusInformationList: return "/bus"
         case .searchBusInformation: return "/bus/search"
         case .fetchBusTimetableList: return "/bus/timetable/v2"
-        case .getBusCourse: return "/bus/courses"
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
+        case .fetchShuttleBusTimetableRoute: return "/bus/courses/shuttle"
         }
     }
     
@@ -36,8 +36,8 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchBusInformationList: return .get
         case .searchBusInformation: return .get
         case .fetchBusTimetableList: return .get
-        case .getBusCourse: return .get
         case .fetchCityBusTimetableList: return .get
+        case .fetchShuttleBusTimetableRoute: return .get
         }
     }
     
@@ -46,8 +46,8 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchBusInformationList: return [:]
         case .searchBusInformation: return [:]
         case .fetchBusTimetableList: return [:]
-        case .getBusCourse: return [:]
         case .fetchCityBusTimetableList: return [:]
+        case .fetchShuttleBusTimetableRoute: return [:]
         }
     }
     
@@ -60,7 +60,7 @@ extension BusAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchBusTimetableList(let request):
             return try? request.toDictionary()
-        case .getBusCourse:
+        case .fetchShuttleBusTimetableRoute:
             return nil
         case .fetchCityBusTimetableList(let request):
             return try? request.toDictionary()
@@ -72,7 +72,7 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchBusInformationList: return URLEncoding.default
         case .searchBusInformation: return URLEncoding.default
         case .fetchBusTimetableList: return URLEncoding.default
-        case .getBusCourse: return nil
+        case .fetchShuttleBusTimetableRoute: return nil
         case .fetchCityBusTimetableList: return URLEncoding.default
         }
     }

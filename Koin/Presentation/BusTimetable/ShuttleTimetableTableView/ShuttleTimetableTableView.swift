@@ -14,7 +14,7 @@ final class ShuttleTimetableTableView: UITableView {
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<String, Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
-    private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
+    private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -87,7 +87,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
         else {
             let view = UIView()
             let label = UILabel()
-            label.text = "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.term))의\n시간표가 제공됩니다."
+            label.text = "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.from) ~ \(busInfo.semesterInfo.to))의\n시간표가 제공됩니다."
             label.font = .appFont(.pretendardRegular, size: 14)
             label.textAlignment = .left
             label.textColor = .appColor(.neutral500)

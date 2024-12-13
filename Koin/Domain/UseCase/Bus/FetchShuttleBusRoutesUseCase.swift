@@ -20,7 +20,7 @@ final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
     
     func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error> {
         return busRepository.fetchShuttleRouteList().map { [weak self] routeList in
-            return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDTO(routeRegions: [], semesterInfo: SemesterInfo(name: "", term: ""))
+            return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDTO(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
         }.eraseToAnyPublisher()
     }
 
