@@ -12,9 +12,9 @@ final class CategoryFooterView: UICollectionReusableView {
     
     static let identifier = "CategoryFooterView"
 
-    let publisher = PassthroughSubject<Void, Never>()
-    private var subscriptions = Set<AnyCancellable>() // 구독
-    private let button: UIButton = {
+    let buttonTapPublisher = PassthroughSubject<Void, Never>()
+    
+    private let benefitButton: UIButton = {
         let button = UIButton()
         button.setTitle("혜택이 있는 상점 모아보기", for: .normal)
         button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
@@ -22,32 +22,42 @@ final class CategoryFooterView: UICollectionReusableView {
         return button
     }()
     
+    private let separateView1 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+    
+    private let separateView2 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        benefitButton.addTarget(self, action: #selector(benefitButtonTapped), for: .touchUpInside)
     }
-    override func prepareForReuse() {
-           super.prepareForReuse()
-           subscriptions.removeAll() // 재사용 시 기존 구독 취소
-       }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    @objc private func buttonTapped() {
-        publisher.send()
+    @objc private func benefitButtonTapped() {
+        buttonTapPublisher.send()
     }
     
     private func setupViews() {
         
-        [button].forEach { component in
+        [benefitButton, separateView1, separateView2].forEach { component in
             addSubview(component)
         }
-        button.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(123)
-            make.height.equalTo(20)
+        benefitButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        separateView1.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(0.5)
+        }
+        separateView2.snp.makeConstraints { make in
+            make.bottom.leading.trailing.equalToSuperview()
+            make.height.equalTo(0.5)
         }
     }
 
