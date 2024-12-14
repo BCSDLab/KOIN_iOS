@@ -102,7 +102,6 @@ final class ShopViewControllerB: UIViewController {
         bind()
         configureView()
         shopCollectionView.setHeaderVisibility(isHidden: true)
-        checkAndShowTooltip()
         inputSubject.send(.viewDidLoadB)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
