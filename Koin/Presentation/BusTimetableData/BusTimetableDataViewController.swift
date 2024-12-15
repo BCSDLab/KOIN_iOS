@@ -175,7 +175,7 @@ extension BusTimetableDataViewController {
             [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
                 $0.isHidden = true
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView].forEach {
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
                 $0.isHidden = false
             }
             manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
@@ -186,7 +186,7 @@ extension BusTimetableDataViewController {
             [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
                 $0.isHidden = false
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView].forEach {
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
                 $0.isHidden = true
             }
             if shuttleTimetableType == .dropOffSchool && timetable.routeInfo.count > 1 {
@@ -261,6 +261,11 @@ extension BusTimetableDataViewController {
             $0.trailing.equalToSuperview()
             $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
+        }
+        busTimetableSeparateView.snp.makeConstraints {
+            $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
+            $0.width.equalTo(0.5)
+            $0.top.bottom.equalTo(manyBusTimetableDataTableView).inset(10)
         }
         segmentControl.snp.makeConstraints {
             $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(16)
