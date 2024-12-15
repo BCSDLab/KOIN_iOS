@@ -14,6 +14,7 @@ final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDa
     //MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
     private var busTimeData: [RouteInfo] = []
+    private var maxTableWidth: CGFloat = 0
   
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -72,9 +73,22 @@ extension ManyBusTimetableCollectionView {
 extension ManyBusTimetableCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.row == 0 {
-            return CGSize(width: 64, height: 52)
+            let label = UILabel()
+            for time in busTimeData[indexPath.section].arrivalTime {
+                if let time = time {
+                    label.text = time
+                    break
+                }
+            }
+            label.font = .appFont(.pretendardRegular, size: 14)
+            let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 52))
+            return CGSize(width: size.width + 50, height: 52)
         } else {
-            return CGSize(width: 64, height: 46)
+            let label = UILabel()
+            label.text = busTimeData[indexPath.section].arrivalTime[indexPath.row - 1]
+            label.font = .appFont(.pretendardBold, size: 16)
+            let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 46))
+            return CGSize(width: size.width + 20, height: 46)
         }
     }
     
