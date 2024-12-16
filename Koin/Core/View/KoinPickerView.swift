@@ -100,21 +100,7 @@ extension KoinPickerView {
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let title = items[component][row]
-        let attributes: [NSAttributedString.Key: Any]
-        
-        if pickerView.selectedRow(inComponent: component) == row {
-            attributes = [
-                .foregroundColor: selectedColor,
-                .font: self.font
-            ]
-        } else {
-            attributes = [
-                .foregroundColor: deselectedColor,
-                .font: self.font
-            ]
-        }
-        
-        return NSAttributedString(string: title, attributes: attributes)
+        return NSAttributedString(string: title)
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -142,9 +128,10 @@ extension KoinPickerView {
         label.font = font
         
         label.text = items[component][row]
-        if pickerView.selectedRow(inComponent: component) == row {
+        if selectedItem[component] == items[component][row] {
             label.textColor = selectedColor
-        } else {
+        }
+        else {
             label.textColor = deselectedColor
         }
         
