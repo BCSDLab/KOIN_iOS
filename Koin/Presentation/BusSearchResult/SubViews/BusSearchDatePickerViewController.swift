@@ -21,9 +21,17 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
         loginButtonPublisher.sink { [weak self] in
             self?.pickerSelectedItemsPublisher.send(self?.pickerView.selectedItemPublisher.value ?? [])
         }.store(in: &subscriptions)
+        configureView()
     }
     
     func setPickerItems(items: [[String]], selectedItems: [String]) {
         pickerView.setPickerData(items: items, selectedItem: selectedItems)
+    }
+    
+    private func configureView() {
+        updateMessageLabel(alignment: .left)
+        updateSubMessageLabel(alignment: .left)
+        updateLoginButton(borderWidth: 0, title: "완료")
+        updateCloseButton(borderWidth: 0, title: "지금 출발")
     }
 }

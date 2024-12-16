@@ -89,13 +89,16 @@ class LoginModalViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func updateLoginButton(buttonColor: UIColor, borderWidth: CGFloat) {
+    func updateLoginButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
         loginButton.backgroundColor = buttonColor
         loginButton.layer.borderWidth = borderWidth
+        loginButton.setTitle(title, for: .normal)
     }
     
-    func updateCloseButton(buttonColor: UIColor) {
+    func updateCloseButton(buttonColor: UIColor = .systemBackground, borderWidth: CGFloat, title: String) {
         closeButton.backgroundColor = buttonColor
+        closeButton.layer.borderWidth = borderWidth
+        closeButton.setTitle(title, for: .normal)
     }
     
     func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center) {
@@ -168,11 +171,11 @@ extension LoginModalViewController {
         }
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.top).offset(24)
-            make.centerX.equalTo(containerView.snp.centerX)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
         subMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(messageLabel.snp.bottom).offset(paddingBetweenLabels)
-            make.centerX.equalTo(containerView.snp.centerX)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
         closeButton.snp.makeConstraints { make in
             make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
