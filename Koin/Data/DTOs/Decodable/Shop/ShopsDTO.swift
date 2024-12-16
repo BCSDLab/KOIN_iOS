@@ -30,7 +30,7 @@ struct ShopDTO: Decodable {
     let isOpen: Bool
     let averageRate: Double
     let reviewCount: Int
-    let benefitDetails: [String]?
+    let benefitDetails: [String?]?
     let benefitDetail: String?
 
     enum CodingKeys: String, CodingKey {
@@ -51,7 +51,7 @@ struct ShopDTO: Decodable {
 
 extension ShopDTO {
     func toDomain() -> Shop {
-        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [], benefitDetail: benefitDetail)
+        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails?.compactMap { $0 } ?? [], benefitDetail: benefitDetail)
     }
 }
 
