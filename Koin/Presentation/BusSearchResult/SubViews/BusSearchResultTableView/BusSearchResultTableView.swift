@@ -17,7 +17,9 @@ struct TempBusSearchResult {
 
 final class BusSearchResultTableView: UITableView {
     // MARK: - Properties
+    let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
     private var subscribtions = Set<AnyCancellable>()
+    private var busTime: String = ""
     private var busSearchResultList = [TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전"), TempBusSearchResult(busType: .shuttleBus, busTime: "10:33", remainTime: "10분전")]
     
     // MARK: - Initialization
@@ -38,6 +40,12 @@ final class BusSearchResultTableView: UITableView {
         dataSource = self
         separatorStyle = .none
     }
+    
+    func setBusSearchDate(searchDate: String) {
+        print("asda")
+        busTime = searchDate
+        reloadData()
+    }
 }
 
 extension BusSearchResultTableView: UITableViewDataSource {
@@ -53,7 +61,10 @@ extension BusSearchResultTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusSearchResultTableViewHeader.identifier) as? BusSearchResultTableViewHeader else { return UIView() }
-        view.configure(departTime: "오늘 오전 10:30", busType: "전체 차종")
+        view.configure(departTime: busTime, busType: "전체 차종")
+        view.tapDepartTimeButtonPublisher.sink { [weak self] in
+            self?.tapDepartTimeButtonPublisher.send()
+        }.store(in: &subscribtions)
         return view
     }
 }
