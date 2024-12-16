@@ -54,8 +54,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     }
     
     func configureDepartTime(departTime: String) {
-        departTimeLabel.text = departTime
-      
+        setUpDepartTimeButton()
         departTimeAndBusTypePublisher.send((departTime, BusType.allCases[busTypeFilterButton.tag]))
     }
     
@@ -106,9 +105,10 @@ extension BusSearchResultTableViewHeader {
     
     private func setUpConstraints() {
         departTimeButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(24)
+            $0.leading.equalToSuperview().offset(3)
             $0.centerY.equalToSuperview()
             $0.width.equalTo(165)
+            $0.height.equalTo(42)
         }
         busTypeFilterButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
@@ -122,5 +122,6 @@ extension BusSearchResultTableViewHeader {
         setUpDepartTimeButton()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapDepartTimeButton))
         departTimeButton.addGestureRecognizer(tapGesture)
+        departTimeButton.backgroundColor = UIColor.appColor(.pastelOrange)
     }
 }
