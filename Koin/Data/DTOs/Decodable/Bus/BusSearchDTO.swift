@@ -51,9 +51,17 @@ extension Schedule {
     func toDomain(date: String) -> ScheduleInformation {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let date = Date().stringToDate(dateValue: "\(date) \(departTime)", dateFormatter: dateFormatter) ?? Date()
-        let timeInterval = date.timeIntervalSinceNow
+        let dateValue = "\(date) \(departTime)"
+        guard let parsedDate = Date().stringToDate(dateValue: dateValue, dateFormatter: dateFormatter) else {
+            return ScheduleInformation(busType: busType, departTime: Date(), remainTime: 0, busName: "")
+        }
+        
+        let calendar = Calendar.current
+        let isToday = calendar.isDateInToday(parsedDate)
+        
+        let timeInterval = isToday ? parsedDate.timeIntervalSinceNow : nil
+    
         let busNumber = busType == .cityBus ? busName : ""
-        return ScheduleInformation(busType: busType, departTime: date, remainTime: timeInterval, busName: busNumber)
+        return ScheduleInformation(busType: busType, departTime: parsedDate, remainTime: timeInterval, busName: busNumber)
     }
 }

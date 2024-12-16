@@ -47,6 +47,7 @@ final class BusSearchResultTableView: UITableView {
     
     func setBusSearchResult(busSearchResult: SearchBusInfoResult) {
         self.busSearchResult = busSearchResult
+        busSearchResultForLoad.removeAll()
         self.busSearchResultForLoad = Array(busSearchResult.schedule.prefix(itemsToShow)) // 처음 20개만 부여
         shouldShowSeeMoreButton = busSearchResult.schedule.count > itemsToShow
         reloadData()

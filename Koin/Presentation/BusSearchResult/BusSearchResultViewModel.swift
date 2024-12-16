@@ -55,10 +55,12 @@ extension BusSearchResultViewModel {
         var busTypeValue: BusType = .noValue
         if let departDate = departDate {
             departDateValue = departDate
+            self.departBusTime = departDateValue
             busTypeValue = self.departBusType
         }
         else if let busType = busType {
             departDateValue = self.departBusTime
+            self.departBusType = busType
             busTypeValue = busType
         }
         fetchSearchedResultUseCase.execute(date: departDateValue, busType: busTypeValue, departure: busPlaces.0, arrival: busPlaces.1).sink(receiveCompletion: { completion in
