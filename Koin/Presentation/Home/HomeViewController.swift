@@ -294,7 +294,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         busView.moveBusSearchPublisher.sink { [weak self] in
-            let viewModel = BusSearchViewModel()
+            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase())
             let viewController = BusSearchViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
@@ -392,15 +392,6 @@ extension HomeViewController {
     
     @objc private func menuViewTapped() {
         navigatetoDining()
-    }
-    
-    @objc private func busViewTapped() {
-        let repository = DefaultBusRepository(service: DefaultBusService())
-        let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
-        let viewController = BusTimetableViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBus, .click, "버스"))
     }
     
     private func updateDining(item: DiningItem?, type: DiningType, isToday: Bool) {

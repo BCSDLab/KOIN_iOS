@@ -7,37 +7,37 @@
 
 import Combine
 
-struct SelectedBusPlaceStatus {
-    let lastDepartedPlace: BusPlace?
-    let nowDepartedPlace: BusPlace
-    let lastArrivedPlace: BusPlace?
-    let nowArrivedPlace: BusPlace
-}
-
 protocol SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace)
+    func execute(departedAreaIdx: Int, arrivalAreaIdx: Int, busRouteType: Int) -> (BusAreaButtonState, BusPlace?)
 }
 
 final class DefaultSelectDepartAndArrivalUseCase: SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace){
-        let lastDepartedPlace = selectedBusPlace.lastDepartedPlace
-        let lastArrivedPlace = selectedBusPlace.lastArrivedPlace
-        let nowArrivedPlace = selectedBusPlace.nowArrivedPlace
-        let nowDepartedPlace = selectedBusPlace.nowDepartedPlace
-        
-        if nowDepartedPlace != nowArrivedPlace {
-            return (nowDepartedPlace, nowArrivedPlace)
+    func execute(departedAreaIdx: Int, arrivalAreaIdx: Int, busRouteType: Int) -> (BusAreaButtonState, BusPlace?) {
+        var buttonState: BusAreaButtonState = .allSelected
+        var busPlace: BusPlace? = nil
+        print(departedAreaIdx)
+        print(arrivalAreaIdx)
+        if departedAreaIdx == 0 && arrivalAreaIdx == 0 || (departedAreaIdx != 0 && arrivalAreaIdx != 0) {
+            buttonState = .notSelected
+            if departedAreaIdx != 0 && arrivalAreaIdx != 0 {
+                if busRouteType == 0 {
+                    busPlace = BusPlace.allCases[departedAreaIdx - 1]
+                }
+                else {
+                    busPlace = BusPlace.allCases[arrivalAreaIdx - 1]
+                }
+            }
         }
         else {
-            if let lastDepartedPlace = lastDepartedPlace {
-                return (nowDepartedPlace, lastDepartedPlace)
+            if busRouteType == 0 {
+                buttonState = .arrivalSelected
+                busPlace = BusPlace.allCases[departedAreaIdx - 1]
             }
-            
-            if let lastArrivedPlace = lastArrivedPlace {
-                return (lastArrivedPlace, nowArrivedPlace)
+            else {
+                buttonState = .departureSelected
+                busPlace = BusPlace.allCases[arrivalAreaIdx - 1]
             }
-            
-            return (nowDepartedPlace, nowArrivedPlace)
         }
+        return (buttonState, busPlace)
     }
 }

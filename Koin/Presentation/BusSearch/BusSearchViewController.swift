@@ -86,19 +86,18 @@ final class BusSearchViewController: CustomViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-          
+            switch output {
+            case let .updateBusArea(buttonState, busPlace, busRouteType):
+                self?.updateSelectedBusArea(buttonState: buttonState, busPlace: busPlace, busRouteType: busRouteType)
+            }
         }.store(in: &subscriptions)
         
-        busAreaViewController.busAreaPublisher.sink { [weak self] busArea, btnType in
-            let sender: UIButton
+        busAreaViewController.busAreaPublisher.sink { [weak self] departureArea, arrivalArea in
             guard let self = self else { return }
-            if btnType == 0 { //출발
-                sender = departAreaSelectedButton
-            }
-            else { //도착
-                sender = arrivedAreaSelectedButton
-            }
-            changeBusAreaButton(sender: sender, title: busArea)
+            changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
+            changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
+            departAreaSelectedButton.tag = (BusPlace.allCases.firstIndex(of: departureArea) ?? 0) + 1
+            arrivedAreaSelectedButton.tag = (BusPlace.allCases.firstIndex(of: arrivalArea) ?? 0) + 1
         }.store(in: &subscriptions)
     }
 }
@@ -111,21 +110,21 @@ extension BusSearchViewController {
     
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let busRouteType = sender == departAreaSelectedButton ? 0 : 1
-        var departureBusPlace: BusPlace? = nil
-        var arrivalBusPlace: BusPlace? = nil
-        print(sender.tag)
-        if departAreaSelectedButton.tag != 0 {
-            departureBusPlace = BusPlace.allCases[departAreaSelectedButton.tag - 1]
-        }
-       
-        if arrivedAreaSelectedButton.tag != 0 {
-            arrivalBusPlace = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
-        }
+        inputSubject.send(.selectBusArea(departAreaSelectedButton.tag, arrivedAreaSelectedButton.tag, busRouteType))
+    }
+    
+    private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?, busRouteType: Int) {
         var busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
-        let sender = busRouteType == 0 ? departAreaSelectedButton : arrivedAreaSelectedButton
-        if sender.tag == 0 { sender.tag = 1 } // tag가 1이면 한기대, 2이면 천안역, 3이면 천안 터미널
-        busAreaList[sender.tag - 1].1 = true
-        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: busAreaList, selectedArea: (departureBusPlace, arrivalBusPlace))
+        for (index, value) in busAreaList.enumerated() {
+            if value.0 == busPlace  {
+                busAreaList[index].1 = true
+            }
+            else if busPlace == nil {
+                busAreaList[0].1 = true
+            }
+        }
+        
+        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: busAreaList, buttonState: buttonState)
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
         present(bottomSheet, animated: true)
     }

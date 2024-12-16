@@ -35,6 +35,11 @@ final class BusAreaSelectedCollectionViewCell: UICollectionViewCell {
             contentView.backgroundColor = .appColor(.neutral200)
         }
     }
+    
+    func disableCell() {
+        contentView.backgroundColor = .appColor(.neutral100)
+        busPlaceLabel.textColor = .appColor(.neutral600)
+    }
 }
 
 extension BusAreaSelectedCollectionViewCell {
