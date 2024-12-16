@@ -42,7 +42,6 @@ final class BusSearchResultTableView: UITableView {
     }
     
     func setBusSearchDate(searchDate: String) {
-        print("asda")
         busTime = searchDate
         reloadData()
     }
@@ -64,7 +63,7 @@ extension BusSearchResultTableView: UITableViewDataSource {
         view.configure(departTime: busTime, busType: "전체 차종")
         view.tapDepartTimeButtonPublisher.sink { [weak self] in
             self?.tapDepartTimeButtonPublisher.send()
-        }.store(in: &subscribtions)
+        }.store(in: &view.subscriptions)
         return view
     }
 }
