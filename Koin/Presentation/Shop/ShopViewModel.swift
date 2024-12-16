@@ -31,6 +31,7 @@ final class ShopViewModel: ViewModelProtocol {
         case updateShopBenefits(ShopBenefitsDTO)
         case updateBeneficialShops([Shop])
         case showSearchedResult([Keyword])
+        case navigateToShopData(Int, String, Int)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -42,6 +43,8 @@ final class ShopViewModel: ViewModelProtocol {
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
     private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
+    private let assignAbTestUseCase: AssignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
+    
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
@@ -54,6 +57,8 @@ final class ShopViewModel: ViewModelProtocol {
             getShopInfo(id: selectedId)
         }
     }
+    
+    private(set) var userAssignType: UserAssignType = .callFloating
     
     init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchShopBenefitUseCase: FetchShopBenefitUseCase, fetchBeneficialShopUseCase: FetchBeneficialShopUseCase, selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
@@ -102,6 +107,19 @@ final class ShopViewModel: ViewModelProtocol {
 }
 
 extension ShopViewModel {
+    
+    func assignShopAbTest(shopId: Int, shopName: String, categoryId: Int) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "business_call")).sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.navigateToShopData(shopId, shopName, categoryId))
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            self?.userAssignType = abTestResult.variableName
+            print(abTestResult)
+            self?.outputSubject.send(.navigateToShopData(shopId, shopName, categoryId))
+        }).store(in: &subscriptions)
+    }
     
     private func searchShops(_ text: String) {
         let shops = shopList.filter { $0.name.contains(text) }

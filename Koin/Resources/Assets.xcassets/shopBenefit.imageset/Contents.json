@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "shopBenefit.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
