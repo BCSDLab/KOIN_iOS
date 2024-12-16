@@ -516,6 +516,7 @@ extension HomeViewController {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
         } else if id == -1 {
             let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .leaveVC, .mainShopCategories))
             navigationController?.pushViewController(shopViewController, animated: true)
         }
     }

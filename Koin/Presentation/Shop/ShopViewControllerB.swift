@@ -102,7 +102,6 @@ final class ShopViewControllerB: UIViewController {
         bind()
         configureView()
         shopCollectionView.setHeaderVisibility(isHidden: true)
-        checkAndShowTooltip()
         inputSubject.send(.viewDidLoadB)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -285,7 +284,7 @@ extension ShopViewControllerB {
         let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
+        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: true)
         let shopDataViewController = ShopDataViewControllerA(viewModel: shopDataViewModel)
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)

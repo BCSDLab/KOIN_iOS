@@ -16,13 +16,15 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
     private var selectedId = 0
     private var isFooterEnabled: Bool = false // 기본값: 푸터 비활성화
     let publisher = PassthroughSubject<Void, Never>()
-    private var headerCancellables = Set<AnyCancellable>()
+    private var footerCancellables = Set<AnyCancellable>()
        func enableFooter(_ isEnabled: Bool) {
            isFooterEnabled = isEnabled
-           self.reloadData() // 레이아웃 갱신
+           self.reloadData()
        }
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+        let newLayout = CenterFlowLayout()
+        newLayout.minimumLineSpacing = 0
+        super.init(frame: frame, collectionViewLayout: newLayout)
         commonInit()
     }
     
@@ -41,7 +43,6 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
 
         dataSource = self
         delegate = self
-        //  collectionViewLayout = createLayout() // 새 레이아웃 설정
     }
     
     func updateCategories(_ categories: [ShopCategory]) {
@@ -65,9 +66,6 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        
-        
         let category = shopCategories[indexPath.row]
         if shopCategories.contains(where: { $0.id == -1 }) {
             cell.configure(info: category, false)
@@ -75,8 +73,6 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
             let isSelected = category.id == selectedId
             cell.configure(info: category, isSelected)
         }
-        
-        
         return cell
     }
     
@@ -95,7 +91,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
 
 extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-          return isFooterEnabled ? CGSize(width: collectionView.bounds.width, height: 50) : .zero // 푸터 크기 지정 or 숨김
+          return isFooterEnabled ? CGSize(width: collectionView.bounds.width, height: 35) : .zero 
       }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
@@ -107,13 +103,13 @@ extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
                   ) as? CategoryFooterView else {
                 return UICollectionReusableView()
             }
-            headerCancellables.removeAll()
+            footerCancellables.removeAll()
             // Footer 이벤트 연결
-            footerView.publisher
+            footerView.buttonTapPublisher
                 .sink { [weak self] _ in
                     self?.publisher.send()
                 }
-                .store(in: &headerCancellables) // CategoryCollectionView의 구독 관리
+                .store(in: &footerCancellables) // CategoryCollectionView의 구독 관리
 
             return footerView
         }
@@ -134,7 +130,7 @@ extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20) 
+        return UIEdgeInsets(top: 0, left: 20, bottom: isFooterEnabled ? 12 : 0, right: 20)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 18

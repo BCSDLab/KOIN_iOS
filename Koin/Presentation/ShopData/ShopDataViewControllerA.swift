@@ -213,6 +213,7 @@ final class ShopDataViewControllerA: UIViewController {
         [phoneCallButton1, phoneCallButton2].forEach {
             $0.addTarget(self, action: #selector(callButtonTapped), for: .touchUpInside)
         }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessCall, .abTestCall, "number"))
     }
     
     @objc private func appWillResignActive() {

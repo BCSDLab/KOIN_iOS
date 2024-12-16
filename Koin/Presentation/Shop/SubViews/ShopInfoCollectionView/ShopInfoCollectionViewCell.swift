@@ -105,6 +105,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         } else {
             benefitLabel.text = info.benefitDetails.first
         }
+        benefitLabel.isHidden = info.isOpen ? false : true
     }
 }
 

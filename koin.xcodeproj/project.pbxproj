@@ -374,6 +374,7 @@
 		D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4E92CECF48C00C238BA /* PointLabel.swift */; };
 		D283A4EC2CECF90400C238BA /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4EB2CECF90400C238BA /* ClassComponentView.swift */; };
 		D283A4EE2CED088900C238BA /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4ED2CED088900C238BA /* SelectTimeView.swift */; };
+		D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -901,6 +902,7 @@
 		D283A4E92CECF48C00C238BA /* PointLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLabel.swift; sourceTree = "<group>"; };
 		D283A4EB2CECF90400C238BA /* ClassComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassComponentView.swift; sourceTree = "<group>"; };
 		D283A4ED2CED088900C238BA /* SelectTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTimeView.swift; sourceTree = "<group>"; };
+		D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterFlowLayout.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -2112,6 +2114,7 @@
 				D27DD0512BA608310081FD36 /* ShopInfoCollectionView */,
 				D2078BFF2BC5DCF500A39861 /* EventShopCollectionView */,
 				D27DD0502BA608310081FD36 /* ShopGuideView.swift */,
+				D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3099,6 +3102,7 @@
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
 				D2FB23532BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift in Sources */,
+				D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */,
 				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
