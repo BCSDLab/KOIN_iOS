@@ -153,6 +153,7 @@
 		83EBB8702D0FDD4500346018 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB86F2D0FDD4500346018 /* BusSearchResultViewModel.swift */; };
 		83EBB8742D0FDD6B00346018 /* BusSearchResultTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8732D0FDD6B00346018 /* BusSearchResultTableView.swift */; };
 		83EBB8762D0FDD7700346018 /* BusSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8752D0FDD7700346018 /* BusSearchResultTableViewCell.swift */; };
+		83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8772D0FDE6600346018 /* BusSearchResultTableViewHeader.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -698,6 +699,7 @@
 		83EBB86F2D0FDD4500346018 /* BusSearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultViewModel.swift; sourceTree = "<group>"; };
 		83EBB8732D0FDD6B00346018 /* BusSearchResultTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableView.swift; sourceTree = "<group>"; };
 		83EBB8752D0FDD7700346018 /* BusSearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		83EBB8772D0FDE6600346018 /* BusSearchResultTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewHeader.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		94BB6F36D5FE039EC639909C /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1520,6 +1522,7 @@
 			children = (
 				83EBB8732D0FDD6B00346018 /* BusSearchResultTableView.swift */,
 				83EBB8752D0FDD7700346018 /* BusSearchResultTableViewCell.swift */,
+				83EBB8772D0FDE6600346018 /* BusSearchResultTableViewHeader.swift */,
 			);
 			path = BusSearchResultTableView;
 			sourceTree = "<group>";
@@ -3388,6 +3391,7 @@
 				8354BE352C79C699009D4D7A /* RecommendedKeywordCollectionView.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
+				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
