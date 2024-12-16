@@ -406,6 +406,7 @@ extension NotiViewController {
             make.width.equalTo(view.snp.width)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
+            make.leading.trailing.equalTo(scrollView)
             make.height.equalTo(33)
         }
         
