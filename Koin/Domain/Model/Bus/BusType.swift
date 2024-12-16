@@ -11,9 +11,9 @@ import UIKit
 enum BusType: String, Decodable, CaseIterable {
     case shuttleBus = "SHUTTLE"
     case expressBus = "EXPRESS"
-    case commuteBus = "COMMUTING"
     case cityBus = "CITY"
-    case noValue
+    case noValue = "ALL"
+    case commuteBus = "COMMUTING"
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -32,7 +32,7 @@ enum BusType: String, Decodable, CaseIterable {
         case .commuteBus:
             return "통학버스"
         case .noValue:
-            return ""
+            return "전체 차종"
         }
     }
     

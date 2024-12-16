@@ -10,11 +10,11 @@ import Combine
 final class BusSearchResultViewModel: ViewModelProtocol {
     enum Input {
         case getDatePickerData
-        case getSearchedResult(String, BusType)
+        case getSearchedResult(String?, BusType?)
     }
     enum Output {
         case updateDatePickerData(([[String]], [String]))
-        case udpatesSearchedResult(SearchBusInfoResult)
+        case udpatesSearchedResult(String?, SearchBusInfoResult)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -50,13 +50,24 @@ extension BusSearchResultViewModel {
         outputSubject.send(.updateDatePickerData(data))
     }
     
-    private func getSearchedResult(departDate: String, busType: BusType) {
-        fetchSearchedResultUseCase.execute(date: departDate, busType: busType, departure: busPlaces.0, arrival: busPlaces.1).sink(receiveCompletion: { completion in
+    private func getSearchedResult(departDate: String?, busType: BusType?) {
+        var departDateValue: String = ""
+        var busTypeValue: BusType = .noValue
+        if let departDate = departDate {
+            departDateValue = departDate
+            busTypeValue = self.departBusType
+        }
+        else if let busType = busType {
+            departDateValue = self.departBusTime
+            busTypeValue = busType
+        }
+        fetchSearchedResultUseCase.execute(date: departDateValue, busType: busTypeValue, departure: busPlaces.0, arrival: busPlaces.1).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] searchedResult in
-            self?.outputSubject.send(.udpatesSearchedResult(searchedResult))
+            let output = departDate != nil ? (departDate, searchedResult) : (nil, searchedResult)
+            self?.outputSubject.send(.udpatesSearchedResult(output.0, output.1))
         }).store(in: &subscriptions)
     }
 }

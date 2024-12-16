@@ -38,6 +38,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureView()
+        setUpBusTypeFilterButton(busType: BusType.noValue.koreanDescription)
     }
     
     required init?(coder: NSCoder) {

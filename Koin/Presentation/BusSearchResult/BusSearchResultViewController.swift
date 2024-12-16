@@ -43,6 +43,7 @@ final class BusSearchResultViewController: CustomViewController {
         setNavigationTitle(title: "\(viewModel.busPlaces.0.koreanDescription) -> \(viewModel.busPlaces.1.koreanDescription)")
         bind()
         inputSubject.send(.getDatePickerData)
+        inputSubject.send(.getSearchedResult("\(Date().formatDateToMDEEE()) \(Date().formatDateToHHMM(isHH: false))", .noValue))
     }
     
     
@@ -55,8 +56,8 @@ final class BusSearchResultViewController: CustomViewController {
             switch output {
             case let .updateDatePickerData((dates, selectedDate)):
                 self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
-            case let .udpatesSearchedResult(busSearchedResult):
-                self?.updateSearchedResult(departInfo: busSearchedResult)
+            case let .udpatesSearchedResult(departTime, busSearchedResult):
+                self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
             }
         }.store(in: &subscriptions)
         
@@ -68,18 +69,25 @@ final class BusSearchResultViewController: CustomViewController {
                 present(busSearchDatePickerViewController, animated: true)
         }.store(in: &subscriptions)
         
+        tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
+            self?.inputSubject.send(.getSearchedResult(nil, busType))
+        }.store(in: &subscriptions)
+        
         busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
             if selectedItem.count > 3 {
                 let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]) : \(selectedItem[3])"
-                self?.tableView.setBusSearchTime(departTime: time)
+                self?.inputSubject.send(.getSearchedResult(time, nil))
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchResultViewController {
-    private func updateSearchedResult(departInfo: SearchBusInfoResult) {
-        tableView.setBusSearchDate(busSearchResult: departInfo.schedule)
+    private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
+        if let time = departTime {
+            tableView.setBusSearchTime(departTime: "\(time)")
+        }
+        tableView.setBusSearchResult(busSearchResult: departInfo)
     }
 }
 

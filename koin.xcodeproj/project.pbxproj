@@ -157,6 +157,7 @@
 		83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8792D0FDFD700346018 /* KoinPickerView.swift */; };
 		83EBB87C2D0FE02900346018 /* BusSearchDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87B2D0FE02900346018 /* BusSearchDatePickerViewController.swift */; };
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
+		83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87F2D0FE86100346018 /* TimeInterval+.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -706,6 +707,7 @@
 		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		83EBB87B2D0FE02900346018 /* BusSearchDatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDatePickerViewController.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
+		83EBB87F2D0FE86100346018 /* TimeInterval+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+.swift"; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		94BB6F36D5FE039EC639909C /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2319,6 +2321,7 @@
 				8354BE212C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift */,
 				8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */,
 				D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */,
+				83EBB87F2D0FE86100346018 /* TimeInterval+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3661,6 +3664,7 @@
 				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
 				83E770FC2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
+				83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,

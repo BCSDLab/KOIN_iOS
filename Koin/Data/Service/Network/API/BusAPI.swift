@@ -25,7 +25,7 @@ extension BusAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchBusInformationList: return "/bus"
-        case .searchBusInformation: return "/bus/search"
+        case .searchBusInformation: return "/bus/route"
         case .fetchBusTimetableList: return "/bus/timetable/v2"
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
         case .fetchShuttleBusTimetableRoute: return "/bus/courses/shuttle"
