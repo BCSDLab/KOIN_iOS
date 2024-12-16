@@ -53,6 +53,7 @@ extension Schedule {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let date = Date().stringToDate(dateValue: "\(date) \(departTime)", dateFormatter: dateFormatter) ?? Date()
         let timeInterval = date.timeIntervalSinceNow
-        return ScheduleInformation(busType: busType, departTime: date, remainTime: timeInterval)
+        let busNumber = busType == .cityBus ? busName : ""
+        return ScheduleInformation(busType: busType, departTime: date, remainTime: timeInterval, busName: busNumber)
     }
 }

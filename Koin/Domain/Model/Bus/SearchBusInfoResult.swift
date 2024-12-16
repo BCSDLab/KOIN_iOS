@@ -19,4 +19,5 @@ struct ScheduleInformation {
     let busType: BusType
     let departTime: Date
     let remainTime: TimeInterval
+    let busName: String? 
 }

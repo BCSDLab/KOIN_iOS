@@ -29,6 +29,12 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         $0.textAlignment = .right
     }
     
+    private let busNumberLabel = UILabel().then {
+        $0.font = .appFont(.pretendardMedium, size: 14)
+        $0.textColor = .appColor(.neutral800)
+        $0.textAlignment = .left
+    }
+    
     //MARK: -Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,13 +59,14 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         else {
             remainTimeLabel.text = "\(remainTime.minutes)분 전"
         }
+        busNumberLabel.text = searchModel.busName
     }
    
 }
 
 extension BusSearchResultTableViewCell {
     private func setUpLayouts() {
-        [busTypeLabel, busTimeLabel, remainTimeLabel].forEach {
+        [busTypeLabel, busTimeLabel, remainTimeLabel, busNumberLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -79,6 +86,10 @@ extension BusSearchResultTableViewCell {
         remainTimeLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(31)
             $0.centerY.equalToSuperview()
+        }
+        busNumberLabel.snp.makeConstraints {
+            $0.leading.equalTo(busTypeLabel.snp.trailing).offset(10)
+            $0.centerY.equalTo(busTypeLabel)
         }
     }
     
