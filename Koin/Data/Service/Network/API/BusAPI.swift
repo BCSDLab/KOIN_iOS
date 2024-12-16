@@ -14,6 +14,7 @@ enum BusAPI {
     case fetchCityBusTimetableList(FetchCityBusTimetableRequest)
     case fetchShuttleBusTimetableRoute
     case fetchShuttleBusTimetableList(String)
+    case fetchEmergencyNotice
 }
 
 extension BusAPI: Router, URLRequestConvertible {
@@ -30,6 +31,7 @@ extension BusAPI: Router, URLRequestConvertible {
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
         case .fetchShuttleBusTimetableRoute: return "/bus/courses/shuttle"
         case let .fetchShuttleBusTimetableList(id): return "/bus/timetable/shuttle/\(id)"
+        case .fetchEmergencyNotice: return "/bus/notice"
         }
     }
     
@@ -54,7 +56,7 @@ extension BusAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchBusTimetableList(let request):
             return try? request.toDictionary()
-        case .fetchShuttleBusTimetableRoute:
+        case .fetchShuttleBusTimetableRoute, .fetchEmergencyNotice:
             return nil
         case .fetchCityBusTimetableList(let request):
             return try? request.toDictionary()
@@ -65,7 +67,7 @@ extension BusAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchShuttleBusTimetableRoute: return nil
+        case .fetchShuttleBusTimetableRoute, .fetchEmergencyNotice: return nil
         default: return URLEncoding.default
         }
     }
