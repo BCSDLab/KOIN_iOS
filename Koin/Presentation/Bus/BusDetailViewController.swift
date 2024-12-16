@@ -82,7 +82,7 @@ final class BusDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .empty)
+        configureNavigationBar(style: .fill)
     }
     
 }
