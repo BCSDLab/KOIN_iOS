@@ -9,14 +9,22 @@ import Combine
 import UIKit
 
 final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
-    
+    private var subscriptions: Set<AnyCancellable> = []
     private var shopCategories: [ShopCategory] = []
     let cellTapPublisher = PassthroughSubject<Int, Never>()
     let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
     private var selectedId = 0
-    
+    private var isFooterEnabled: Bool = false // 기본값: 푸터 비활성화
+    let publisher = PassthroughSubject<Void, Never>()
+    private var footerCancellables = Set<AnyCancellable>()
+       func enableFooter(_ isEnabled: Bool) {
+           isFooterEnabled = isEnabled
+           self.reloadData()
+       }
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+        let newLayout = CenterFlowLayout()
+        newLayout.minimumLineSpacing = 0
+        super.init(frame: frame, collectionViewLayout: newLayout)
         commonInit()
     }
     
@@ -31,9 +39,10 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         showsVerticalScrollIndicator = false
         contentInset = .zero
         register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+        register(CategoryFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryFooterView.identifier)
+
         dataSource = self
         delegate = self
-      //  collectionViewLayout = createLayout() // 새 레이아웃 설정
     }
     
     func updateCategories(_ categories: [ShopCategory]) {
@@ -57,20 +66,21 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identifier, for: indexPath) as? CategoryCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        
-
         let category = shopCategories[indexPath.row]
-        let isSelected = category.id == selectedId
-        cell.configure(info: category, isSelected)
-        
+        if shopCategories.contains(where: { $0.id == -1 }) {
+            cell.configure(info: category, false)
+        } else {
+            let isSelected = category.id == selectedId
+            cell.configure(info: category, isSelected)
+        }
         return cell
     }
-
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         shopCategories.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let category = shopCategories[indexPath.row]
         selectedId = category.id
@@ -79,32 +89,52 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
     }
 }
 
-// MARK: - CategoryCollectionView Layout
-extension CategoryCollectionView {
-    
-    
-}
-
 extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
-    
-    // 셀 크기 설정
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+          return isFooterEnabled ? CGSize(width: collectionView.bounds.width, height: 35) : .zero 
+      }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionFooter {
+            guard isFooterEnabled,
+                  let footerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: CategoryFooterView.identifier,
+                    for: indexPath
+                  ) as? CategoryFooterView else {
+                return UICollectionReusableView()
+            }
+            footerCancellables.removeAll()
+            // Footer 이벤트 연결
+            footerView.buttonTapPublisher
+                .sink { [weak self] _ in
+                    self?.publisher.send()
+                }
+                .store(in: &footerCancellables) // CategoryCollectionView의 구독 관리
+
+            return footerView
+        }
+
+        return UICollectionReusableView()
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50) // 셀 크기 50x50
+        return CGSize(width: 44, height: 64)
     }
     
-    // 셀 간 좌우 간격 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5 // 셀 간 간격 20
+        let screenWidth = UIScreen.main.bounds.width
+        let totalCellWidth: CGFloat = 44 * 6
+        let totalPadding: CGFloat = screenWidth - 40 - totalCellWidth
+        let interItemSpacing = floor(totalPadding / 5)
+        return max(interItemSpacing, 0)
     }
     
-    // 줄 간격 설정 (수평 레이아웃에서는 적용되지 않음)
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 30 // 줄 간격 10
-    }
-    
-    // 섹션 내부 패딩 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 15, left: 0, bottom: 10, right: 0) // 섹션 간격 설정
+        return UIEdgeInsets(top: 0, left: 20, bottom: isFooterEnabled ? 12 : 0, right: 20)
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 18
+    }
+    
 }
 

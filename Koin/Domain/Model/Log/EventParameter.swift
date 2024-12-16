@@ -31,6 +31,7 @@ enum EventParameter {
             case businessBenefit = "BUSINESS_benefit_1"
             case campusDining = "CAMPUS_dining_1"
             case campusNotice = "CAMPUS_notice_1"
+            case businessCall = "BUSINESS_call_1"
             var team: String {
                 return "AB_TEST"
             }
@@ -165,6 +166,7 @@ enum EventParameter {
         case abTestBenefit = "a/b test 로깅(3차 스프린트, 혜택페이지)"
         case abTestDining = "a/b test 로깅(식단 메인 진입점)"
         case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"
+        case abTestCall = "a/b test 로깅(전화하기)"
         case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"

@@ -58,17 +58,8 @@ extension SceneDelegate {
             fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
             dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()
         )
-        let viewController = HomeViewControllerA(viewModel: homeViewModel)
+        let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController
-        let userType = KeyChainWorker.shared.read(key: .variableName) ?? "A"
-        let variableName = UserAssignType(rawValue: userType) ?? .a
-        let mainViewController: UIViewController
-        switch variableName {
-        case .a: mainViewController = HomeViewControllerA(viewModel: homeViewModel)
-        default: mainViewController = HomeViewControllerB(viewModel: homeViewModel)
-        }
-        
-        return mainViewController
     }
     
    

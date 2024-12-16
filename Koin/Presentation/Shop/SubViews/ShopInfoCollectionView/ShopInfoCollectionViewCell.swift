@@ -51,6 +51,13 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private let benefitLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.appColor(.primary300)
+        label.font = UIFont.appFont(.pretendardRegular, size: 12)
+        return label
+    }()
+    
     private let starImageView = UIImageView().then { _ in
     }
     
@@ -93,12 +100,18 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         default: reviewCountLabel.text = "( 리뷰 10+ 개 )"
         }
         
+        if let detail = info.benefitDetail {
+            benefitLabel.text = info.benefitDetail
+        } else {
+            benefitLabel.text = info.benefitDetails.first
+        }
+        benefitLabel.isHidden = info.isOpen ? false : true
     }
 }
 
 extension ShopInfoCollectionViewCell {
     private func setUpLayouts() {
-        [borderView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView, eventLabel].forEach {
+        [borderView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView, eventLabel, benefitLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -122,6 +135,10 @@ extension ShopInfoCollectionViewCell {
         shopTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(borderView.snp.top).offset(12)
             make.leading.equalTo(self.snp.leading).offset(16)
+        }
+        benefitLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(shopTitleLabel.snp.centerY)
+            make.leading.equalTo(shopTitleLabel.snp.trailing).offset(8)
         }
         
         starImageView.snp.makeConstraints { make in

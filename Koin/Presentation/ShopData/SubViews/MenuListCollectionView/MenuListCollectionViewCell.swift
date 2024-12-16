@@ -23,6 +23,7 @@ final class MenuListCollectionViewCell: UICollectionViewCell {
     
     private let menuTitleLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 2
         label.font = UIFont.appFont(.pretendardMedium, size: 16)
         return label
     }()
@@ -68,8 +69,9 @@ final class MenuListCollectionViewCell: UICollectionViewCell {
             return
         }
         if imageUrls.isEmpty {
-            menuImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+            menuImageView.isHidden = true
         } else {
+            menuImageView.isHidden = false
             menuImageView.loadImage(from: imageUrls[0])
         }
     }
@@ -93,16 +95,15 @@ extension MenuListCollectionViewCell {
     private func setUpConstraints() {
         menuImageView.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(10)
-            make.leading.equalTo(self.snp.leading)
+            make.trailing.equalTo(separateView.snp.trailing)
             make.width.equalTo(68)
             make.height.equalTo(68)
         }
         
         menuTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(menuImageView.snp.top).offset(10)
-            make.leading.equalTo(menuImageView.snp.trailing).offset(16)
-            make.trailing.equalTo(self.snp.trailing)
-            make.height.equalTo(19)
+            make.leading.equalTo(separateView.snp.leading)
+            make.trailing.equalTo(menuImageView.snp.leading).offset(-10)
         }
         
         priceLabel.snp.makeConstraints { make in

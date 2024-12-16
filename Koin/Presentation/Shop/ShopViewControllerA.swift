@@ -137,7 +137,7 @@ final class ShopViewControllerA: UIViewController {
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
-        
+        categoryCollectionView.enableFooter(true)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView))
         tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
         view.addGestureRecognizer(tapGesture)
@@ -201,13 +201,14 @@ final class ShopViewControllerA: UIViewController {
                 break
             case let .showSearchedResult(result):
                 self?.searchedShopCollectionView.updateShop(keywords: result)
-                print(result)
+            case let .navigateToShopData(shopId, shopName, categoryId):
+                self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
             }
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let categoryId = self?.categoryCollectionView.selectedCategoryPublisher.value
-            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
+            self?.viewModel.assignShopAbTest(shopId: shopId, shopName: shopName, categoryId: self?.categoryCollectionView.selectedCategoryPublisher.value ?? 0)
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, shopName, nil, shopName, .endEvent, .shopClick))
         }.store(in: &subscriptions)
@@ -248,6 +249,35 @@ final class ShopViewControllerA: UIViewController {
             UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
             print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
         }
+        
+        categoryCollectionView.publisher.sink { [weak self] in
+            let shopService = DefaultShopService()
+            let shopRepository = DefaultShopRepository(service: shopService)
+            
+            let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+            let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+            let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+            let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+            let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+            let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            
+            let viewModel = ShopViewModel(
+                fetchShopListUseCase: fetchShopListUseCase,
+                fetchEventListUseCase: fetchEventListUseCase,
+                fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                selectedId: 0
+            )
+            
+                let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
+            self?.navigationController?.pushViewController(shopViewController, animated: true)
+
+        }.store(in: &subscriptions)
+
     }
 }
 
@@ -338,7 +368,13 @@ extension ShopViewControllerA {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
-        let shopDataViewController = ShopDataViewController(viewModel: shopDataViewModel)
+        
+        let shopDataViewController: UIViewController
+        if viewModel.userAssignType == .callNumber {
+            shopDataViewController = ShopDataViewControllerA(viewModel: shopDataViewModel)
+        } else {
+            shopDataViewController = ShopDataViewControllerB(viewModel: shopDataViewModel)
+        }
         shopDataViewController.title = "주변상점"
         navigationController?.pushViewController(shopDataViewController, animated: true)
     }
@@ -399,14 +435,14 @@ extension ShopViewControllerA {
         }
         
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom)
-            make.leading.equalTo(scrollView.snp.leading).offset(23)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-23)
-            make.height.equalTo(180)
+            make.top.equalTo(searchTextField.snp.bottom).offset(16)
+            make.leading.equalTo(scrollView.snp.leading)
+            make.trailing.equalTo(scrollView.snp.trailing)
+            make.height.equalTo(193)
         }
         
         shopGuideView.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+            make.top.equalTo(categoryCollectionView.snp.bottom)
             make.leading.equalTo(scrollView.snp.leading)
             make.width.equalTo(view.snp.width)
             make.height.equalTo(32)
