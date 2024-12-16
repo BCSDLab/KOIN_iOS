@@ -147,6 +147,8 @@
 		83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */; };
 		83EBB85E2D0FD6DF00346018 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB85D2D0FD6DF00346018 /* BusSearchViewController.swift */; };
 		83EBB8602D0FD6F100346018 /* BusSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB85F2D0FD6F100346018 /* BusSearchViewModel.swift */; };
+		83EBB8692D0FDB5900346018 /* BusAreaSelectedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8682D0FDB5900346018 /* BusAreaSelectedCollectionViewCell.swift */; };
+		83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB86A2D0FDB6C00346018 /* BusAreaSelectdViewController.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -1461,10 +1463,28 @@
 		83EBB85A2D0FD68700346018 /* BusSearch */ = {
 			isa = PBXGroup;
 			children = (
+				83EBB8662D0FDB2800346018 /* SubViews */,
 				83EBB85D2D0FD6DF00346018 /* BusSearchViewController.swift */,
 				83EBB85F2D0FD6F100346018 /* BusSearchViewModel.swift */,
 			);
 			path = BusSearch;
+			sourceTree = "<group>";
+		};
+		83EBB8662D0FDB2800346018 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				83EBB8672D0FDB4300346018 /* BusAreaSelected */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		83EBB8672D0FDB4300346018 /* BusAreaSelected */ = {
+			isa = PBXGroup;
+			children = (
+				83EBB8682D0FDB5900346018 /* BusAreaSelectedCollectionViewCell.swift */,
+				83EBB86A2D0FDB6C00346018 /* BusAreaSelectdViewController.swift */,
+			);
+			path = BusAreaSelected;
 			sourceTree = "<group>";
 		};
 		83FA91892C81E2D00090351F /* NoticeListCollectionView */ = {
@@ -3140,6 +3160,7 @@
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
+				83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */,
 				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
@@ -3589,6 +3610,7 @@
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
+				83EBB8692D0FDB5900346018 /* BusAreaSelectedCollectionViewCell.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
