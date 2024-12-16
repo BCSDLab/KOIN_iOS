@@ -79,6 +79,8 @@ final class BusSearchResultViewController: CustomViewController {
                 self?.inputSubject.send(.getSearchedResult(time, nil))
             }
         }.store(in: &subscriptions)
+        
+        
     }
 }
 

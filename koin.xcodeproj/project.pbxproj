@@ -158,6 +158,7 @@
 		83EBB87C2D0FE02900346018 /* BusSearchDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87B2D0FE02900346018 /* BusSearchDatePickerViewController.swift */; };
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87F2D0FE86100346018 /* TimeInterval+.swift */; };
+		83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -708,6 +709,7 @@
 		83EBB87B2D0FE02900346018 /* BusSearchDatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDatePickerViewController.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		83EBB87F2D0FE86100346018 /* TimeInterval+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+.swift"; sourceTree = "<group>"; };
+		83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewFooter.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		94BB6F36D5FE039EC639909C /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1533,6 +1535,7 @@
 				83EBB8732D0FDD6B00346018 /* BusSearchResultTableView.swift */,
 				83EBB8752D0FDD7700346018 /* BusSearchResultTableViewCell.swift */,
 				83EBB8772D0FDE6600346018 /* BusSearchResultTableViewHeader.swift */,
+				83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */,
 			);
 			path = BusSearchResultTableView;
 			sourceTree = "<group>";
@@ -3535,6 +3538,7 @@
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
+				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,

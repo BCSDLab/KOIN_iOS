@@ -13,8 +13,11 @@ final class BusSearchResultTableView: UITableView {
     // MARK: - Properties
     let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
     let tapDepartBusTypeButtonPublisher = PassthroughSubject<BusType, Never>()
-    private var subscribtions = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     private var busSearchResult: SearchBusInfoResult = .init(depart: .koreatech, arrival: .terminal, departDate: Date(), departTime: Date(), schedule: [])
+    private var busSearchResultForLoad: [ScheduleInformation] = []
+    private var itemsToShow: Int = 20
+    private var shouldShowSeeMoreButton: Bool = true
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -30,6 +33,7 @@ final class BusSearchResultTableView: UITableView {
     private func commonInit() {
         register(BusSearchResultTableViewCell.self, forCellReuseIdentifier: BusSearchResultTableViewCell.identifier)
         register(BusSearchResultTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BusSearchResultTableViewHeader.identifier)
+        register(BusSearchResultTableViewFooter.self, forHeaderFooterViewReuseIdentifier: BusSearchResultTableViewFooter.reuseIdentifier)
         delegate = self
         dataSource = self
         separatorStyle = .none
@@ -43,6 +47,22 @@ final class BusSearchResultTableView: UITableView {
     
     func setBusSearchResult(busSearchResult: SearchBusInfoResult) {
         self.busSearchResult = busSearchResult
+        self.busSearchResultForLoad = Array(busSearchResult.schedule.prefix(itemsToShow)) // 처음 20개만 부여
+        shouldShowSeeMoreButton = busSearchResult.schedule.count > itemsToShow
+        reloadData()
+    }
+    
+    private func loadMoreResults() {
+        let currentCount = busSearchResultForLoad.count
+        
+        guard currentCount < busSearchResult.schedule.count else {
+            return
+        }
+
+        let newCount = min(currentCount + itemsToShow, busSearchResult.schedule.count)
+        busSearchResultForLoad += Array(busSearchResult.schedule[currentCount..<newCount])
+        shouldShowSeeMoreButton = newCount < busSearchResult.schedule.count
+        
         reloadData()
     }
     
@@ -62,14 +82,15 @@ final class BusSearchResultTableView: UITableView {
     }
 }
 
+
 extension BusSearchResultTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busSearchResult.schedule.count
+        return busSearchResultForLoad.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BusSearchResultTableViewCell.identifier, for: indexPath) as? BusSearchResultTableViewCell else { return UITableViewCell() }
-        cell.configure(searchModel: busSearchResult.schedule[indexPath.row])
+        cell.configure(searchModel: busSearchResultForLoad[indexPath.row])
         return cell
     }
     
@@ -83,6 +104,14 @@ extension BusSearchResultTableView: UITableViewDataSource {
         }.store(in: &view.subscriptions)
         return view
     }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusSearchResultTableViewFooter.reuseIdentifier) as? BusSearchResultTableViewFooter else { return UIView() }
+        view.tapSeeMoreButtonPublisher.sink { [weak self] in
+            self?.loadMoreResults()
+        }.store(in: &view.subscriptions)
+        return view
+    }
 }
 
 extension BusSearchResultTableView: UITableViewDelegate {
@@ -92,6 +121,10 @@ extension BusSearchResultTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 72
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return shouldShowSeeMoreButton ? 90 : 0
     }
 }
 
