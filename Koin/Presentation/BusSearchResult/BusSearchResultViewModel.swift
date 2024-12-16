@@ -20,6 +20,8 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     let busPlaces: (BusPlace, BusPlace)  // navigationItem을 설정하기 위해 private 임시 없앰
+    private var departBusType: BusType = .noValue
+    private var departBusTime: String = ""
     private let fetchDatePickerDataUseCase: FetchKoinPickerDataUseCase
     private let fetchSearchedResultUseCase: SearchBusInfoUseCase
     
