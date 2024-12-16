@@ -22,7 +22,9 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
            self.reloadData()
        }
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+        let newLayout = CenterFlowLayout()
+        newLayout.minimumLineSpacing = 0
+        super.init(frame: frame, collectionViewLayout: newLayout)
         commonInit()
     }
     
