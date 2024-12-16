@@ -29,6 +29,23 @@ final class BusSearchViewController: CustomViewController {
         $0.text = "학기 중 시간표와 다를 수 있습니다."
     }
     
+    private let busNoticeWrappedView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.info100)
+        $0.layer.cornerRadius = 8
+        $0.isUserInteractionEnabled = true
+    }
+    
+    private let busNoticeLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = .appFont(.pretendardMedium, size: 14)
+        $0.textAlignment = .left
+        $0.numberOfLines = 0
+    }
+    
+    private let deleteNoticeButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .delete), for: .normal)
+    }
+    
     private let departGuideLabel = UILabel().then {
         $0.text = "출발"
     }
@@ -79,7 +96,9 @@ final class BusSearchViewController: CustomViewController {
         setNavigationTitle(title: "교통편 조회하기")
         busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
         swapAreaButton.addTarget(self, action: #selector(swapDepartureAndArrival), for: .touchUpInside)
+        deleteNoticeButton.addTarget(self, action: #selector(tapDeleteNoticeInfoButton), for: .touchUpInside)
         bind()
+        inputSubject.send(.fetchBusNotice)
     }
     
     
@@ -91,6 +110,8 @@ final class BusSearchViewController: CustomViewController {
             switch output {
             case let .updateBusArea(buttonState, busPlace, busRouteType):
                 self?.updateSelectedBusArea(buttonState: buttonState, busPlace: busPlace, busRouteType: busRouteType)
+            case let .updateEmergencyNotice(notice):
+                self?.updateEmergencyNotice(notice: notice)
             }
         }.store(in: &subscriptions)
         
@@ -116,6 +137,10 @@ extension BusSearchViewController {
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let busRouteType = sender == departAreaSelectedButton ? 0 : 1
         inputSubject.send(.selectBusArea(departAreaSelectedButton.tag, arrivedAreaSelectedButton.tag, busRouteType))
+    }
+    
+    @objc private func tapDeleteNoticeInfoButton() {
+        updateLayoutsByNotice(isDeleted: true)
     }
     
     @objc private func swapDepartureAndArrival(sender: UIButton) {
@@ -164,6 +189,17 @@ extension BusSearchViewController {
             busInfoSearchButton.setTitleColor(.appColor(.neutral0), for: .normal)
         }
     }
+    
+    private func updateEmergencyNotice(notice: BusNoticeDTO) {
+        updateLayoutsByNotice(isDeleted: false)
+        busNoticeLabel.text = notice.title
+        busNoticeWrappedView.tag = notice.id
+        if let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int, noticeId != notice.id {
+            UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
+        } else {
+            updateLayoutsByNotice(isDeleted: true)
+        }
+    }
 }
 
 
@@ -191,8 +227,31 @@ extension BusSearchViewController {
     }
     
     private func setUpLayOuts() {
-        [navigationBarWrappedView, searchMainDescriptionLabel, searchSubDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton].forEach {
+        [navigationBarWrappedView, searchMainDescriptionLabel, searchSubDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton, busNoticeWrappedView].forEach {
             view.addSubview($0)
+        }
+        
+        [busNoticeLabel, deleteNoticeButton].forEach {
+            busNoticeWrappedView.addSubview($0)
+        }
+    }
+    
+    private func updateLayoutsByNotice(isDeleted: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if isDeleted {
+                self.busNoticeWrappedView.isHidden = true
+                self.searchMainDescriptionLabel.snp.remakeConstraints {
+                    $0.leading.equalToSuperview().offset(24)
+                    $0.top.equalTo(self.navigationBarWrappedView.snp.bottom).offset(24)
+                }
+            }
+            else {
+                self.busNoticeWrappedView.isHidden = false
+                self.searchMainDescriptionLabel.snp.updateConstraints {
+                    $0.top.equalTo(self.busNoticeWrappedView.snp.bottom).offset(18)
+                }
+            }
         }
     }
     
@@ -204,7 +263,7 @@ extension BusSearchViewController {
         }
         searchMainDescriptionLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(16)
+            $0.top.equalTo(busNoticeWrappedView.snp.bottom).offset(18)
         }
         searchSubDescriptionLabel.snp.makeConstraints {
             $0.leading.equalTo(searchMainDescriptionLabel)
@@ -241,6 +300,23 @@ extension BusSearchViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(59)
             $0.height.equalTo(48)
+        }
+        busNoticeWrappedView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+        }
+        busNoticeLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalTo(deleteNoticeButton.snp.leading).inset(3)
+        }
+        deleteNoticeButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.width.equalTo(24)
+            $0.height.equalTo(24)
         }
     }
     

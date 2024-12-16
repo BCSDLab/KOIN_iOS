@@ -258,9 +258,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         updateLayoutsByNotice(isDeleted: false)
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
-        let userDefault = UserDefaults.standard
         if let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int, noticeId != notice.id {
-            inputSubject.send(.getEmergencyNotice)
             UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
         } else {
             updateLayoutsByNotice(isDeleted: true)

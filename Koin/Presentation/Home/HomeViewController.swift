@@ -294,7 +294,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         busView.moveBusSearchPublisher.sink { [weak self] in
-            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase())
+            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
             let viewController = BusSearchViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
