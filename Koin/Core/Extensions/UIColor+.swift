@@ -18,6 +18,7 @@ enum SceneColorAsset {
     case bus1, bus2, bus3
     case yellow
     case gray
+    case orange100
     case fluorescentGreen, fluorescentOrange, fluorescentBlue
 }
 
@@ -135,6 +136,8 @@ extension UIColor {
         case .info500: return UIColor(hexCode: "4BA1FF")
         case .info600: return UIColor(hexCode: "3B82F6")
         case .info700: return UIColor(hexCode: "3A70E2")
+            
+        case .orange100: return UIColor(hexCode: "FBEBD7")
             
         case .bus1: return UIColor(hexCode: "F7941E")
         case .bus2: return UIColor(hexCode: "7C9FAE")
