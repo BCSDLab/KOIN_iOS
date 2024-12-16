@@ -18,6 +18,8 @@ final class BusSearchResultViewController: CustomViewController {
     
     // MARK: - UI Components
     
+    private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
+    
     // MARK: - Initialization
     
     init(viewModel: BusSearchResultViewModel) {
@@ -36,7 +38,7 @@ final class BusSearchResultViewController: CustomViewController {
         super.viewDidLoad()
         configureView()
         setUpNavigationBar()
-        setNavigationTitle(title: "교통편 조회하기")
+        setNavigationTitle(title: "한기대 -> 천안터미널")
         bind()
     }
     
@@ -57,13 +59,21 @@ extension BusSearchResultViewController {
 
 extension BusSearchResultViewController {
     private func setUpLayOuts() {
-        [].forEach {
+        [navigationBarWrappedView, tableView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        
+        navigationBarWrappedView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(45)
+        }
+        tableView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+        }
     }
     
     private func configureView() {
@@ -72,4 +82,3 @@ extension BusSearchResultViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
