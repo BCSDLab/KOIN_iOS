@@ -14,6 +14,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     // MARK: - Properties
     var subscriptions = Set<AnyCancellable>()
     let tapDepartTimeButtonPublisher = PassthroughSubject<Void, Never>()
+    let departTimeAndBusTypePublisher = PassthroughSubject<(String, BusType), Never>()
     
     // MARK: - UIComponents
     private let departTimeButton = UIView().then {
@@ -48,9 +49,14 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         subscriptions.removeAll()
     }
     
-    func configure(departTime: String, busType: String) {
+    func configureDepartBusType(busType: BusType) {
+        setUpBusTypeFilterButton(busType: busType.koreanDescription)
+    }
+    
+    func configureDepartTime(departTime: String) {
         departTimeLabel.text = departTime
-        setUpBusTypeFilterButton(busType: busType)
+      
+        departTimeAndBusTypePublisher.send((departTime, BusType.allCases[busTypeFilterButton.tag]))
     }
     
     @objc private func tapDepartTimeButton() {
@@ -101,8 +107,7 @@ extension BusSearchResultTableViewHeader {
     private func setUpConstraints() {
         departTimeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalToSuperview().offset(23)
-            $0.height.equalTo(40)
+            $0.centerY.equalToSuperview()
             $0.width.equalTo(165)
         }
         busTypeFilterButton.snp.makeConstraints {

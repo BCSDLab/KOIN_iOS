@@ -18,7 +18,7 @@ final class BusSearchResultViewController: CustomViewController {
     
     // MARK: - UI Components
     
-    private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
+    private let tableView = BusSearchResultTableView(frame: .zero, style: .grouped)
     
     private var busSearchDatePickerViewController = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
     
@@ -40,7 +40,7 @@ final class BusSearchResultViewController: CustomViewController {
         super.viewDidLoad()
         configureView()
         setUpNavigationBar()
-        setNavigationTitle(title: "한기대 -> 천안터미널")
+        setNavigationTitle(title: "\(viewModel.busPlaces.0.koreanDescription) -> \(viewModel.busPlaces.1.koreanDescription)")
         bind()
         inputSubject.send(.getDatePickerData)
     }
@@ -55,6 +55,8 @@ final class BusSearchResultViewController: CustomViewController {
             switch output {
             case let .updateDatePickerData((dates, selectedDate)):
                 self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
+            case let .udpatesSearchedResult(busSearchedResult):
+                self?.updateSearchedResult(departInfo: busSearchedResult)
             }
         }.store(in: &subscriptions)
         
@@ -68,15 +70,16 @@ final class BusSearchResultViewController: CustomViewController {
         busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
             if selectedItem.count > 3 {
                 let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]) : \(selectedItem[3])"
-                self?.tableView.setBusSearchDate(searchDate: time)
+                self?.tableView.configureDepartInfo(date: time)
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchResultViewController {
-    
-
+    private func updateSearchedResult(departInfo: SearchBusInfoResult) {
+        tableView.setBusSearchDate(busSearchResult: departInfo.schedule)
+    }
 }
 
 extension BusSearchResultViewController {

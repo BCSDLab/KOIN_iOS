@@ -17,6 +17,14 @@ extension Date {
         return false
     }
     
+    func stringToDate(dateValue: String, dateFormatter: DateFormatter) -> Date? {
+        if let date = dateFormatter.date(from: dateValue) {
+            return date
+        } else {
+            return nil
+        }
+    }
+    
     func formatDateToYYMMDD() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyMMdd"
@@ -33,6 +41,13 @@ extension Date {
         else {
             dateFormatter.dateFormat = "a hh:mm"
         }
+        return dateFormatter.string(from: self)
+    }
+    
+    func formatDateToMDEEE() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.dateFormat = "M월 d일(EEE)"
         return dateFormatter.string(from: self)
     }
     
@@ -81,7 +96,6 @@ extension Date {
         let today = Date()
         dateArray.append("오늘")
         dateArray.append("내일")
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
         for dayOffset in sequence {
             let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: today) ?? Date()
             let formattedDate = formatter.string(from: futureDate)
