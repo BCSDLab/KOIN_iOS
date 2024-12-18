@@ -54,6 +54,7 @@ extension ManyBusTimetableTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ManyBusTimetableTableViewCell.identifier, for: indexPath) as? ManyBusTimetableTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.configure(busPlace: busPlaces[indexPath.row].name, subBusPlace: busPlaces[indexPath.row].detail)
         return cell
     }

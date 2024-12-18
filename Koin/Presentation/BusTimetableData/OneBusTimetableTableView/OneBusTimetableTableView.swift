@@ -47,6 +47,7 @@ extension OneBusTimetableTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: OneBusTimetableTableViewCell.identifier, for: indexPath) as? OneBusTimetableTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.configure(busPlace: busInfo.0[indexPath.row], busTime: busInfo.1[indexPath.row])
         return cell
     }

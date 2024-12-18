@@ -91,6 +91,7 @@ extension BusSearchResultTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BusSearchResultTableViewCell.identifier, for: indexPath) as? BusSearchResultTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.configure(searchModel: busSearchResultForLoad[indexPath.row])
         return cell
     }
