@@ -258,7 +258,8 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         updateLayoutsByNotice(isDeleted: false)
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
-        if let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int, noticeId != notice.id {
+        let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
+        if noticeId != notice.id || noticeId == nil {
             UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
         } else {
             updateLayoutsByNotice(isDeleted: true)
