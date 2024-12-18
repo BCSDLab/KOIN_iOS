@@ -101,7 +101,6 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureNavigationBar(style: .empty)
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
         incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
@@ -112,6 +111,11 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         bind()
         inputSubject.send(.getBusRoute(.shuttleBus))
         inputSubject.send(.getEmergencyNotice)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     private func bind() {
@@ -137,9 +141,10 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
             }
         }.store(in: &subscriptions)
         
-        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id in
+        shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id, routeType in
             let busRepository = DefaultBusRepository(service: DefaultBusService())
             let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), shuttleRouteId: id))
+            viewController.title = "\(routeType) 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         

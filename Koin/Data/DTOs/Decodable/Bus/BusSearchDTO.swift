@@ -12,7 +12,7 @@ struct BusSearchDTO: Decodable {
     let depart: BusPlace
     let arrival: BusPlace
     let departDate, departTime: String
-    let schedule: [Schedule]
+    let schedule: [BusSchedule]
 
     enum CodingKeys: String, CodingKey {
         case depart, arrival
@@ -23,7 +23,7 @@ struct BusSearchDTO: Decodable {
 }
 
 // MARK: - Schedule
-struct Schedule: Decodable {
+struct BusSchedule: Decodable {
     let busType: BusType
     let busName, departTime: String
 
@@ -47,7 +47,7 @@ extension BusSearchDTO {
     }
 }
 
-extension Schedule {
+extension BusSchedule {
     func toDomain(date: String) -> ScheduleInformation {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"

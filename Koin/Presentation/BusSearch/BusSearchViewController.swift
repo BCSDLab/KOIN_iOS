@@ -10,7 +10,7 @@ import DropDown
 import SnapKit
 import UIKit
 
-final class BusSearchViewController: CustomViewController {
+final class BusSearchViewController: UIViewController {
     
     private let viewModel: BusSearchViewModel
     private let inputSubject: PassthroughSubject<BusSearchViewModel.Input, Never> = .init()
@@ -92,13 +92,16 @@ final class BusSearchViewController: CustomViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        setUpNavigationBar()
-        setNavigationTitle(title: "교통편 조회하기")
         busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
         swapAreaButton.addTarget(self, action: #selector(swapDepartureAndArrival), for: .touchUpInside)
         deleteNoticeButton.addTarget(self, action: #selector(tapDeleteNoticeInfoButton), for: .touchUpInside)
         bind()
         inputSubject.send(.fetchBusNotice)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     
@@ -131,6 +134,7 @@ extension BusSearchViewController {
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         let viewModel = BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase(), busPlaces: (departure, arrival), fetchSearchedResultUseCase: DefaultSearchBusInfoUseCase(busRepository: repository))
         let busSearchResultViewController = BusSearchResultViewController(viewModel: viewModel)
+        busSearchResultViewController.title = "\(departure.koreanDescription) → \(arrival.koreanDescription)"
         navigationController?.pushViewController(busSearchResultViewController, animated: true)
     }
     
@@ -228,7 +232,7 @@ extension BusSearchViewController {
     }
     
     private func setUpLayOuts() {
-        [navigationBarWrappedView, searchMainDescriptionLabel, searchSubDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton, busNoticeWrappedView].forEach {
+        [searchMainDescriptionLabel, searchSubDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton, busNoticeWrappedView].forEach {
             view.addSubview($0)
         }
         
@@ -244,7 +248,7 @@ extension BusSearchViewController {
                 self.busNoticeWrappedView.isHidden = true
                 self.searchMainDescriptionLabel.snp.remakeConstraints {
                     $0.leading.equalToSuperview().offset(24)
-                    $0.top.equalTo(self.navigationBarWrappedView.snp.bottom).offset(24)
+                    $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(24)
                 }
             }
             else {
@@ -257,11 +261,6 @@ extension BusSearchViewController {
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(45)
-        }
         searchMainDescriptionLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(busNoticeWrappedView.snp.bottom).offset(18)
@@ -305,7 +304,7 @@ extension BusSearchViewController {
         busNoticeWrappedView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
         busNoticeLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)

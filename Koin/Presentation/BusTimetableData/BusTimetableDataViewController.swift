@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class BusTimetableDataViewController: CustomViewController, UIScrollViewDelegate {
+final class BusTimetableDataViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
@@ -103,8 +103,6 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        setUpNavigationBar()
-        setNavigationTitle(title: "천안셔틀 주말 시간표")
         scrollView.isHidden = false
         segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
         incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
@@ -113,6 +111,11 @@ final class BusTimetableDataViewController: CustomViewController, UIScrollViewDe
         }
         bind()
         inputSubject.send(.getBusTimetable(.manyRoute))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     private func bind() {
@@ -201,7 +204,7 @@ extension BusTimetableDataViewController {
 
 extension BusTimetableDataViewController {
     private func setUpLayouts() {
-        [navigationBarWrappedView, shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, scrollView, segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
+        [shuttleRouteTypeLabel, incorrectBusInfoButton, busTimetablePlaceLabel, scrollView, segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
@@ -211,11 +214,6 @@ extension BusTimetableDataViewController {
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.height.equalTo(45)
-        }
         scrollView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(16)
@@ -226,7 +224,7 @@ extension BusTimetableDataViewController {
             $0.height.equalTo(1500)
         }
         shuttleRouteTypeLabel.snp.makeConstraints {
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom).offset(16)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(28)
             $0.height.equalTo(18)

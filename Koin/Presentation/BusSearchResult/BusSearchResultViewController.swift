@@ -10,7 +10,7 @@ import DropDown
 import SnapKit
 import UIKit
 
-final class BusSearchResultViewController: CustomViewController {
+final class BusSearchResultViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
@@ -39,11 +39,14 @@ final class BusSearchResultViewController: CustomViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        setUpNavigationBar()
-        setNavigationTitle(title: "\(viewModel.busPlaces.0.koreanDescription) -> \(viewModel.busPlaces.1.koreanDescription)")
         bind()
         inputSubject.send(.getDatePickerData)
         inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
     
     
@@ -95,20 +98,15 @@ extension BusSearchResultViewController {
 
 extension BusSearchResultViewController {
     private func setUpLayOuts() {
-        [navigationBarWrappedView, tableView].forEach {
+        [tableView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        navigationBarWrappedView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(45)
-        }
         tableView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(navigationBarWrappedView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
     

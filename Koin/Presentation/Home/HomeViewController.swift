@@ -296,6 +296,7 @@ final class HomeViewController: UIViewController {
         busView.moveBusSearchPublisher.sink { [weak self] in
             let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
             let viewController = BusSearchViewController(viewModel: viewModel)
+            viewController.title = "교통편 조회하기"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
@@ -303,6 +304,7 @@ final class HomeViewController: UIViewController {
             let repository = DefaultBusRepository(service: DefaultBusService())
             let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
             let viewController = BusTimetableViewController(viewModel: viewModel)
+            viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
