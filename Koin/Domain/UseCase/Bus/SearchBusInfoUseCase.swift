@@ -20,27 +20,44 @@ final class DefaultSearchBusInfoUseCase: SearchBusInfoUseCase {
     }
     
     func execute(date: String, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<SearchBusInfoResult, Error> {
-        let departDate: String
+        let (departDate, departTime): (String, String) = self.processDate(date)
+        let request = SearchBusInfoRequest(
+            date: departDate,
+            time: departTime,
+            busType: busType.rawValue,
+            depart: departure.rawValue,
+            arrival: arrival.rawValue
+        )
+        return busRepository.searchBusInformation(requestModel: request)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
+    
+    private func processDate(_ date: String) -> (String, String) {
         let dateFormatter = DateFormatter()
+        var departDate: String
+        var departTime: String
+        
         dateFormatter.locale = Locale(identifier: "ko_kr")
-        dateFormatter.dateFormat = "M월 d일(EEE) a hh:mm"
-        let formattedDate = Date().stringToDate(dateValue: date, dateFormatter: dateFormatter) ?? Date() // string 값으로 받은 것을 date로 변환해줌
+        
         if date.prefix(2) == "오늘" {
             departDate = Date().formatDateToYYYYMMDD(separator: "-")
-        }
-        else if date.prefix(2) == "내일" {
-            departDate = (Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()).formatDateToYYYYMMDD(separator: "-")
-        }
-        else {
+            dateFormatter.dateFormat = "오늘 a h:mm"
+        } else if date.prefix(2) == "내일" {
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+            departDate = tomorrow.formatDateToYYYYMMDD(separator: "-")
+            dateFormatter.dateFormat = "내일 a h:mm"
+        } else {
+            dateFormatter.dateFormat = "M월 d일(EEE) a h:mm"
+            let formattedDate = Date().stringToDate(dateValue: date, dateFormatter: dateFormatter) ?? Date()
             departDate = returnIncludeYear(date: formattedDate).formatDateToYYYYMMDD(separator: "-")
+            departTime = formattedDate.formatDateToHHMM(isHH: true)
+            return (departDate, departTime)
         }
+        let formattedDate = Date().stringToDate(dateValue: date, dateFormatter: dateFormatter) ?? Date()
+        departTime = formattedDate.formatDateToHHMM(isHH: true)
         
-        let departTime = formattedDate.formatDateToHHMM(isHH: true)
-        
-        let request = SearchBusInfoRequest(date: departDate, time: departTime, busType: busType.rawValue, depart: departure.rawValue, arrival: arrival.rawValue)
-        return busRepository.searchBusInformation(requestModel: request).map {
-            $0.toDomain()
-        }.eraseToAnyPublisher()
+        return (departDate, departTime)
     }
     
     private func returnIncludeYear(date: Date) -> Date {
@@ -49,10 +66,10 @@ final class DefaultSearchBusInfoUseCase: SearchBusInfoUseCase {
         let currentYear = calendar.component(.year, from: today)
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
-    
+        
         let comparisonDateComponents = DateComponents(year: currentYear, month: month, day: day)
         let comparisonDate = calendar.date(from: comparisonDateComponents)!
-   
+        
         if comparisonDate >= today {
             return comparisonDate
         } else {

@@ -39,7 +39,7 @@ extension Date {
             dateFormatter.dateFormat = "HH:mm"
         }
         else {
-            dateFormatter.dateFormat = "a hh:mm"
+            dateFormatter.dateFormat = "a h:mm"
         }
         return dateFormatter.string(from: self)
     }
