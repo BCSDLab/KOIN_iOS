@@ -97,13 +97,13 @@ extension BusTimetableRouteView {
     
     private func setUpConstraints() {
         firstBusRouteGuideLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(18)
+            $0.bottom.equalToSuperview().inset(18)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(28)
             $0.height.equalTo(26)
         }
         secondBusRouteGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(firstBusRouteGuideLabel.snp.bottom).offset(18)
+            $0.top.equalToSuperview().offset(18)
             $0.leading.equalTo(firstBusRouteGuideLabel)
             $0.width.equalTo(28)
             $0.height.equalTo(26)
