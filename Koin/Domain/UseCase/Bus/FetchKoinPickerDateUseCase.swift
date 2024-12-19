@@ -24,7 +24,7 @@ final class DefaultFetchKoinPickerDataUseCase: FetchKoinPickerDataUseCase {
         let currentDate = Date()
         let currentHour = calendar.component(.hour, from: currentDate)
         let currentMinute = calendar.component(.minute, from: currentDate)
-        let hourArray: [String] = Array(0..<12).map { String($0) }
+        let hourArray: [String] = Array(1..<13).map { String($0) }
         let minuteArray: [String] = Array(0..<60).map { String(format: "%02d", $0) }
       
         let amPmIndex = currentHour < 12 ? 0 : 1

@@ -76,6 +76,19 @@ final class KoinPickerView: UIView, UIPickerViewDelegate, UIPickerViewDataSource
         }
         pickerView.reloadAllComponents()
     }
+    
+    func setSelectedData(selectedItem: [String]) {
+        self.selectedItem = selectedItem
+        if items.count == selectedItem.count {
+            for idx in 0..<selectedItem.count {
+                if let row = items[idx].firstIndex(of: selectedItem[idx]) {
+                    pickerView.selectRow(row, inComponent: idx, animated: false)
+                }
+            }
+        }
+        selectedItemPublisher.send(selectedItem)
+        pickerView.reloadAllComponents()
+    }
 }
 
 extension KoinPickerView {
