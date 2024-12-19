@@ -61,7 +61,7 @@ extension BusSchedule {
         
         let timeInterval = isToday ? parsedDate.timeIntervalSinceNow : nil
     
-        let busNumber = busType == .cityBus ? busName : ""
+        let busNumber = busType == .cityBus ? busName : nil
         return ScheduleInformation(busType: busType, departTime: parsedDate, remainTime: timeInterval, busName: busNumber)
     }
 }

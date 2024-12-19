@@ -50,7 +50,6 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         busTypeLabel.text = String(searchModel.busType.koreanDescription.prefix(2))
         busTypeLabel.backgroundColor = searchModel.busType.returnBusTypeColor()
         busTimeLabel.text = searchModel.departTime.formatDateToHHMM(isHH: false)
-        busNumberLabel.text = searchModel.busName
         if let remainTime = searchModel.remainTime {
             let remainTimeValue = remainTime.timeDifference()
             if let time = remainTimeValue.hours {
@@ -64,6 +63,10 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         }
         else {
             remainTimeLabel.text = ""
+        }
+        
+        if let busNumber = searchModel.busName {
+            busNumberLabel.text = "\(busNumber)번"
         }
     }
    
