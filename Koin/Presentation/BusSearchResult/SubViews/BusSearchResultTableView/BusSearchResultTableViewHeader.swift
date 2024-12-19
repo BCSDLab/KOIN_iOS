@@ -26,6 +26,16 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         $0.font = .appFont(.pretendardBold, size: 16)
         $0.textColor = .appColor(.info700)
         $0.textAlignment = .left
+        $0.minimumScaleFactor = 0.3
+        $0.adjustsFontSizeToFitWidth = true
+    }
+    
+    private let departGuideLabel = UILabel().then {
+        $0.text = "출발"
+        $0.minimumScaleFactor = 0.3
+        $0.adjustsFontSizeToFitWidth = true
+        $0.font = .appFont(.pretendardBold, size: 16)
+        $0.textColor = .black
     }
     
     private let busTypeFilterButton = UIButton().then {
@@ -53,7 +63,8 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     
     func configureDepartTime(departTime: String) {
         departTimeLabel.text = departTime
-        setUpDepartTimeButton()
+        departTimeLabel.sizeToFit()
+        departTimeButton.sizeToFit()
     }
     
     func configureDepartBusType(busType: BusType) {
@@ -73,24 +84,24 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
 extension BusSearchResultTableViewHeader {
     private func setUpDepartTimeButton() {
         let imageView = UIImageView(image: .appImage(asset: .arrowDown))
-        let departLabel = UILabel()
-        departLabel.text = "출발"
-        departLabel.font = .appFont(.pretendardBold, size: 16)
-        departLabel.textColor = .black
-        [imageView, departLabel, departTimeLabel].forEach {
+        [imageView, departGuideLabel, departTimeLabel].forEach {
             departTimeButton.addSubview($0)
         }
         departTimeLabel.snp.makeConstraints {
             $0.leading.centerY.equalToSuperview()
+            $0.trailing.equalTo(departGuideLabel.snp.leading).offset(-4)
         }
         imageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(departLabel.snp.trailing).offset(8)
+            $0.trailing.equalToSuperview().offset(-4)
+            $0.leading.equalTo(departGuideLabel.snp.trailing).offset(4)
             $0.width.height.equalTo(15)
         }
-        departLabel.snp.makeConstraints {
+        departGuideLabel.snp.makeConstraints {
+            $0.trailing.equalTo(imageView.snp.leading).offset(-4)
             $0.leading.equalTo(departTimeLabel.snp.trailing).offset(4)
             $0.centerY.equalTo(departTimeLabel)
+            $0.width.equalTo(30)
         }
     }
     
@@ -114,7 +125,7 @@ extension BusSearchResultTableViewHeader {
         departTimeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.centerY.equalToSuperview()
-            $0.width.equalTo(165)
+            $0.width.equalTo(173)
             $0.height.equalTo(42)
         }
         busTypeFilterButton.snp.makeConstraints {
