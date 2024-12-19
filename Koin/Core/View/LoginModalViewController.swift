@@ -77,6 +77,9 @@ class LoginModalViewController: UIViewController {
         configureView()
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc func closeButtonTapped() {
@@ -87,6 +90,13 @@ class LoginModalViewController: UIViewController {
     @objc func loginButtonTapped() {
         loginButtonPublisher.send()
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        if !containerView.frame.contains(location) {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     func updateLoginButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
