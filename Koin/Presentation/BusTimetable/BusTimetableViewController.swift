@@ -86,6 +86,16 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     
     private let shuttleTimetableTableView = ShuttleTimetableTableView(frame: .zero, style: .grouped)
     
+    private let busStopImageView = UIImageView().then {
+        $0.image = .appImage(asset: .busStop)
+    }
+    
+    private let busStopLabel = UILabel().then {
+        $0.font = .appFont(.pretendardRegular, size: 13)
+        $0.textColor = .appColor(.primary500)
+        $0.textAlignment = .right
+    }
+    
     // MARK: - Initialization
     init(viewModel: BusTimetableViewModel) {
         self.viewModel = viewModel
@@ -124,8 +134,8 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
             switch output {
             case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
                 self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
-            case let .updateBusTimetable(busType: busType, busTimetableInfo: busTimetableInfo):
-                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo)
+            case let .updateBusTimetable(busType, busTimetableInfo, busDirection):
+                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo, busDirection: busDirection)
             case let .updateShuttleBusRoutes(busRoutes: busRoutes):
                 self?.updateShuttleBusRoutes(busRoutes: busRoutes)
             case let .updateEmergencyNotice(notice):
@@ -251,11 +261,17 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
+    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo, busDirection: BusDirection) {
+        busStopLabel.isHidden = false
+        busStopImageView.isHidden = false
         expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
+        let busDirection = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
+        busStopLabel.text = busDirection
     }
     
     private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {
+        busStopLabel.isHidden = true
+        busStopImageView.isHidden = true
         shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
     }
     
@@ -279,7 +295,7 @@ extension BusTimetableViewController {
         [timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView, expressOrCityTimetableTableView, shuttleTimetableTableView].forEach {
             contentView.addSubview($0)
         }
-        [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView].forEach {
+        [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView, busStopImageView, busStopLabel].forEach {
             timetableHeaderView.addSubview($0)
         }
         [busNoticeLabel, deleteNoticeButton].forEach {
@@ -379,6 +395,15 @@ extension BusTimetableViewController {
             $0.top.equalTo(busTimetableRouteView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+        busStopLabel.snp.makeConstraints {
+            $0.trailing.equalTo(busStopImageView.snp.leading).offset(-4)
+            $0.centerY.equalTo(typeOftimetableLabel)
+        }
+        busStopImageView.snp.makeConstraints {
+            $0.centerY.equalTo(typeOftimetableLabel)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.width.height.equalTo(18)
         }
     }
     

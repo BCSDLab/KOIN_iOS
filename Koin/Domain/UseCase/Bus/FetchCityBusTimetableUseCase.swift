@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchCityBusTimetableUseCase {
-    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error>
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), Error>
 }
 
 final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
@@ -18,17 +18,20 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<BusTimetableInfo, Error> {
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), Error> {
         var busCourses: [CityBusCourseInfo] = []
+        let busDirection: BusDirection
         if firstFilterIdx == 0 {
+            busDirection = .from
             busCourses = setFromCityBusCourses()
         }
         else {
+            busDirection = .to
             busCourses = setToCityBusCourses()
         }
         let requestModel = FetchCityBusTimetableRequest(busNumber: busCourses[secondFilterIdx].busNumber.rawValue, direction: busCourses[secondFilterIdx].busNode.rawValue)
         return busRepository.fetchCityBusTimetableList(requestModel: requestModel).map {
-            $0.toDomain()
+            ($0.toDomain(), busDirection)
         }.eraseToAnyPublisher()
     }
     

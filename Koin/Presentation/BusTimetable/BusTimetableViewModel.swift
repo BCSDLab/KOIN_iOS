@@ -16,7 +16,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
 
     enum Output {
         case updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?)
-        case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
+        case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo, busDirection: BusDirection)
         case updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO)
         case updateEmergencyNotice(notice: BusNoticeDTO)
     }
@@ -87,16 +87,16 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { [weak self] timetable in
-                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+            }, receiveValue: { [weak self] timetable, busDirection in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable, busDirection: busDirection))
             }).store(in: &subscriptions)
         default:
             fetchCityTimetableUseCase.execute(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { [weak self] timetable in
-                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+            }, receiveValue: { [weak self] timetable, busDirection in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable, busDirection: busDirection))
             }).store(in: &subscriptions)
         }
     }

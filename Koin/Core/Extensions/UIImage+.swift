@@ -115,6 +115,7 @@ enum ImageAsset: String {
     case qrCode
     case incorrectInfo
     case swap
+    case busStop
 }
 
 enum SFSymbols: String {
