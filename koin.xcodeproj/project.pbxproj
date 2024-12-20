@@ -159,7 +159,8 @@
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87F2D0FE86100346018 /* TimeInterval+.swift */; };
 		83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */; };
-		83EBB88A2D154A1F00346018 /* BusTimetableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */; };
+		83EBB88A2D154A1F00346018 /* BusTimetableTableViewFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8892D154A1F00346018 /* BusTimetableTableViewFooterView.swift */; };
+		83EBB88C2D15576400346018 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB88B2D15576400346018 /* OneBusTimetableTableViewFooter.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -711,7 +712,8 @@
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		83EBB87F2D0FE86100346018 /* TimeInterval+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+.swift"; sourceTree = "<group>"; };
 		83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewFooter.swift; sourceTree = "<group>"; };
-		83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableFooterView.swift; sourceTree = "<group>"; };
+		83EBB8892D154A1F00346018 /* BusTimetableTableViewFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableTableViewFooterView.swift; sourceTree = "<group>"; };
+		83EBB88B2D15576400346018 /* OneBusTimetableTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneBusTimetableTableViewFooter.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		94BB6F36D5FE039EC639909C /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1376,7 +1378,7 @@
 				8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteView */,
 				83E770B42CFB5A1C00EB3F84 /* ShuttleTimetableTableView */,
 				8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */,
-				83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */,
+				83EBB8892D154A1F00346018 /* BusTimetableTableViewFooterView.swift */,
 				837BFA552BB7E4B6001FCBD4 /* BusTimetableViewController.swift */,
 				834E1CDB2BBCE3B0003D4271 /* BusTimetableViewModel.swift */,
 			);
@@ -1463,6 +1465,7 @@
 			children = (
 				83E770DC2D019DF900EB3F84 /* OneBusTimetableTableView.swift */,
 				83E770DE2D019E0C00EB3F84 /* OneBusTimetableTableViewCell.swift */,
+				83EBB88B2D15576400346018 /* OneBusTimetableTableViewFooter.swift */,
 			);
 			path = OneBusTimetableTableView;
 			sourceTree = "<group>";
@@ -3219,6 +3222,7 @@
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
 				83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */,
 				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
+				83EBB88C2D15576400346018 /* OneBusTimetableTableViewFooter.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */,
@@ -3581,7 +3585,7 @@
 				D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */,
 				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
-				83EBB88A2D154A1F00346018 /* BusTimetableFooterView.swift in Sources */,
+				83EBB88A2D154A1F00346018 /* BusTimetableTableViewFooterView.swift in Sources */,
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,

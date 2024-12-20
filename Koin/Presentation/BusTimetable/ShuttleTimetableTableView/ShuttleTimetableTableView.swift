@@ -30,7 +30,7 @@ final class ShuttleTimetableTableView: UITableView {
     
     private func commonInit() {
         register(ShuttleTimetableTableViewCell.self, forCellReuseIdentifier: ShuttleTimetableTableViewCell.identifier)
-        register(BusTimetableFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableFooterView.identifier)
+        register(BusTimetableTableViewFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableTableViewFooterView.identifier)
         delegate = self
         dataSource = self
         separatorStyle = .none
@@ -87,7 +87,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             return view
         }
         else {
-            guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableFooterView.identifier) as? BusTimetableFooterView else { return UIView() }
+            guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableTableViewFooterView.identifier) as? BusTimetableTableViewFooterView else { return UIView() }
             
             view.configure(updatedDate: "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.from) ~ \(busInfo.semesterInfo.to))의\n시간표가 제공됩니다.")
             view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in

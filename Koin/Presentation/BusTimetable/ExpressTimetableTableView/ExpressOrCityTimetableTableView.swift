@@ -34,7 +34,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
         showsVerticalScrollIndicator = false
         isScrollEnabled = false
         backgroundColor = .systemBackground
-        register(BusTimetableFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableFooterView.identifier)
+        register(BusTimetableTableViewFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableTableViewFooterView.identifier)
     }
     
     func updateBusInfo(busInfo: BusTimetableInfo) {
@@ -84,7 +84,7 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableFooterView.identifier) as? BusTimetableFooterView else { return UIView() }
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableTableViewFooterView.identifier) as? BusTimetableTableViewFooterView else { return UIView() }
         
         view.configure(updatedDate: "업데이트 날짜: \(busInfo.updatedAt)")
         view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in

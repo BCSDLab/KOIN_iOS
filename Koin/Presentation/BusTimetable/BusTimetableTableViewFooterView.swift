@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class BusTimetableFooterView: UITableViewHeaderFooterView {
+final class BusTimetableTableViewFooterView: UITableViewHeaderFooterView {
     // MARK: - Properties
     var subscriptions = Set<AnyCancellable>()
     let tapIncorrenctBusInfoButtonPublisher = PassthroughSubject<Void, Never>()
@@ -63,7 +63,7 @@ final class BusTimetableFooterView: UITableViewHeaderFooterView {
     }
 }
 
-extension BusTimetableFooterView {
+extension BusTimetableTableViewFooterView {
     private func setUpLayouts() {
         [updatedDateLabel, incorrectBusInfoButton].forEach {
             contentView.addSubview($0)
