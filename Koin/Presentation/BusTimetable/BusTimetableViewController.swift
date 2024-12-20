@@ -265,7 +265,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         busStopLabel.isHidden = false
         busStopImageView.isHidden = false
         expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
-        let busDirection = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
+        let busDirection = busDirection == .from ? "천안 터미널 승차 → 코리아텍 하차" : "코리아텍 승차 → 천안 터미널 하차"
         busStopLabel.text = busDirection
     }
     
@@ -295,7 +295,7 @@ extension BusTimetableViewController {
         [timetableHeaderView, shadowView, selectedUnderlineView, busTypeSegmentControl, busTimetableRouteView, expressOrCityTimetableTableView, shuttleTimetableTableView].forEach {
             contentView.addSubview($0)
         }
-        [typeOftimetableLabel, incorrectBusInfoButton, busNoticeWrappedView, busStopImageView, busStopLabel].forEach {
+        [typeOftimetableLabel, busNoticeWrappedView, busStopImageView, busStopLabel].forEach {
             timetableHeaderView.addSubview($0)
         }
         [busNoticeLabel, deleteNoticeButton].forEach {
@@ -341,14 +341,10 @@ extension BusTimetableViewController {
             $0.leading.trailing.equalTo(24)
             $0.height.equalTo(32)
         }
-        incorrectBusInfoButton.snp.makeConstraints {
-            $0.leading.equalTo(typeOftimetableLabel)
-            $0.top.equalTo(typeOftimetableLabel.snp.bottom).offset(8)
-        }
         busNoticeWrappedView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(incorrectBusInfoButton.snp.bottom).offset(8)
+            $0.top.equalTo(busStopLabel.snp.bottom).offset(8)
             $0.height.equalTo(56)
         }
         busNoticeLabel.snp.makeConstraints {
@@ -397,13 +393,14 @@ extension BusTimetableViewController {
             $0.bottom.equalToSuperview()
         }
         busStopLabel.snp.makeConstraints {
-            $0.trailing.equalTo(busStopImageView.snp.leading).offset(-4)
-            $0.centerY.equalTo(typeOftimetableLabel)
+            $0.leading.equalTo(busStopImageView.snp.trailing).offset(4)
+            $0.centerY.equalTo(busStopImageView)
         }
         busStopImageView.snp.makeConstraints {
-            $0.centerY.equalTo(typeOftimetableLabel)
-            $0.trailing.equalToSuperview().inset(24)
-            $0.width.height.equalTo(18)
+            $0.leading.equalTo(typeOftimetableLabel)
+            $0.top.equalTo(typeOftimetableLabel.snp.bottom).offset(8)
+            $0.height.equalTo(18)
+            $0.width.equalTo(15)
         }
     }
     
