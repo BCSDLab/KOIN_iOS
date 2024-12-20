@@ -14,6 +14,7 @@ final class ShuttleTimetableTableView: UITableView {
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<(String, String), Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
+    let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
     
     // MARK: - Initialization
@@ -29,6 +30,7 @@ final class ShuttleTimetableTableView: UITableView {
     
     private func commonInit() {
         register(ShuttleTimetableTableViewCell.self, forCellReuseIdentifier: ShuttleTimetableTableViewCell.identifier)
+        register(BusTimetableFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableFooterView.identifier)
         delegate = self
         dataSource = self
         separatorStyle = .none
@@ -85,16 +87,12 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             return view
         }
         else {
-            let view = UIView()
-            let label = UILabel()
-            label.text = "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.from) ~ \(busInfo.semesterInfo.to))의\n시간표가 제공됩니다."
-            label.font = .appFont(.pretendardRegular, size: 14)
-            label.textAlignment = .left
-            label.textColor = .appColor(.neutral500)
-            label.numberOfLines = 0
-            label.frame = .init(x: 23, y: 8, width: tableView.frame.width, height: 44)
-            view.addSubview(label)
-            view.frame = .init(x: 0, y: 0, width: tableView.frame.width, height: 60)
+            guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableFooterView.identifier) as? BusTimetableFooterView else { return UIView() }
+            
+            view.configure(updatedDate: "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.from) ~ \(busInfo.semesterInfo.to))의\n시간표가 제공됩니다.")
+            view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in
+                self?.tapIncorrectButtonPublisher.send()
+            }.store(in: &view.subscriptions)
             return view
         }
     }

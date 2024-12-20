@@ -159,6 +159,7 @@
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87F2D0FE86100346018 /* TimeInterval+.swift */; };
 		83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */; };
+		83EBB88A2D154A1F00346018 /* BusTimetableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -710,6 +711,7 @@
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		83EBB87F2D0FE86100346018 /* TimeInterval+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+.swift"; sourceTree = "<group>"; };
 		83EBB8832D0FF89000346018 /* BusSearchResultTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchResultTableViewFooter.swift; sourceTree = "<group>"; };
+		83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableFooterView.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		94BB6F36D5FE039EC639909C /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1374,6 +1376,7 @@
 				8316DCE02CDF8A56009AF9A4 /* BusTimetableRouteView */,
 				83E770B42CFB5A1C00EB3F84 /* ShuttleTimetableTableView */,
 				8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */,
+				83EBB8892D154A1F00346018 /* BusTimetableFooterView.swift */,
 				837BFA552BB7E4B6001FCBD4 /* BusTimetableViewController.swift */,
 				834E1CDB2BBCE3B0003D4271 /* BusTimetableViewModel.swift */,
 			);
@@ -2078,12 +2081,10 @@
 				D208A7C02CAB9A38007040E7 /* ForceUpdate */,
 				D2F13E532BD0AD3A00172A9D /* Noti */,
 				D22421732C8A45F400E8B480 /* ChangeMyProfile */,
-
 				837BFA402BB70A77001FCBD4 /* BusTimetable */,
 				83E770D12D01805900EB3F84 /* BusTimetableData */,
 				83EBB85A2D0FD68700346018 /* BusSearch */,
 				83EBB86C2D0FDD1A00346018 /* BusSearchResult */,
-				D2908CA42BB5EB5F0008F908 /* Timetable */,
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
 				0F74C4F52BA8562D00EF4F58 /* Register */,
 				D2D380EE2BA7197B009AD5A9 /* Login */,
@@ -3580,6 +3581,7 @@
 				D22C54682C692518000826DA /* ShopReviewReportViewController.swift in Sources */,
 				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
+				83EBB88A2D154A1F00346018 /* BusTimetableFooterView.swift in Sources */,
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
@@ -3595,7 +3597,6 @@
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
-
 				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
@@ -3630,7 +3631,6 @@
 				83EBB87C2D0FE02900346018 /* BusSearchDatePickerViewController.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
-
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
@@ -3662,7 +3662,6 @@
 				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
-
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
 				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
@@ -3690,7 +3689,6 @@
 				0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */,
 				D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
-				D2908D3C2BBCDA300008F908 /* AddClassView.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,

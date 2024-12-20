@@ -30,19 +30,6 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         $0.text = "셔틀버스 시간표"
     }
     
-    private let incorrectBusInfoButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .incorrectInfo)
-        let title = AttributedString("정보가 정확하지 않나요?", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardRegular, size: 12),
-            .foregroundColor: UIColor.appColor(.neutral500)
-        ]))
-        configuration.attributedTitle = title
-        configuration.imagePadding = 4
-        configuration.contentInsets = .init(top: 5, leading: 0, bottom: 5, trailing: 0)
-        $0.configuration = configuration
-    }
-    
     private let busNoticeWrappedView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.info100)
         $0.layer.cornerRadius = 8
@@ -113,7 +100,6 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         configureView()
         busTypeSegmentControl.selectedSegmentIndex = 0
         busTypeSegmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
-        incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
         deleteNoticeButton.addTarget(self, action: #selector(tapDeleteNoticeInfoButton), for: .touchUpInside)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapNoticeInfoButton))
         busNoticeWrappedView.addGestureRecognizer(tapGesture)
@@ -182,9 +168,17 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
         }.store(in: &subscriptions)
+        
+        shuttleTimetableTableView.tapIncorrectButtonPublisher.sink { [weak self] in
+            self?.tapIncorrentInfoButton()
+        }.store(in: &subscriptions)
+        
+        expressOrCityTimetableTableView.tapIncorrectButtonPublisher.sink { [weak self] in
+            self?.tapIncorrentInfoButton()
+        }.store(in: &subscriptions)
     }
     
-    @objc private func tapIncorrentInfoButton() {
+    private func tapIncorrentInfoButton() {
         if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)

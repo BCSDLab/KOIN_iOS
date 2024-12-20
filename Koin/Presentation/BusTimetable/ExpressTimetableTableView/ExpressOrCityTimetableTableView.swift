@@ -12,6 +12,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var busInfo: BusTimetableInfo = .init(arrivalInfos: [], updatedAt: "")
+    let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
@@ -33,6 +34,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
         showsVerticalScrollIndicator = false
         isScrollEnabled = false
         backgroundColor = .systemBackground
+        register(BusTimetableFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableFooterView.identifier)
     }
     
     func updateBusInfo(busInfo: BusTimetableInfo) {
@@ -82,15 +84,12 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        let label = UILabel()
-        label.text = "업데이트 날짜: \(busInfo.updatedAt)"
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
-        label.textColor = .appColor(.neutral500)
-        label.textAlignment = .left
-        label.frame = .init(x: 24, y: 8, width: tableView.frame.width, height: 38)
-        view.addSubview(label)
-        view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 38)
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableFooterView.identifier) as? BusTimetableFooterView else { return UIView() }
+        
+        view.configure(updatedDate: "업데이트 날짜: \(busInfo.updatedAt)")
+        view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in
+            self?.tapIncorrectButtonPublisher.send()
+        }.store(in: &view.subscriptions)
         return view
     }
     
