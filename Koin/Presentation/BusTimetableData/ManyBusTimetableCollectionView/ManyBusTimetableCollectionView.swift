@@ -15,6 +15,7 @@ final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDa
     private var subscriptions = Set<AnyCancellable>()
     private var busTimeData: [RouteInfo] = []
     private var maxTableWidth: CGFloat = 0
+    let contentWidthPublisher = PassthroughSubject<CGFloat, Never>()
   
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -36,13 +37,18 @@ final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDa
         register(ManyBusTimetableCollectionViewCell.self, forCellWithReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier)
         register(ManyBusTimetableCollectionViewHeaderCell.self, forCellWithReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier)
         isScrollEnabled = true
-        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
         contentInset = .zero
     }
     
     func configure(busInfo: [RouteInfo]) {
         self.busTimeData = busInfo
         reloadData()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentWidthPublisher.send(self.contentSize.width)
     }
 }
 

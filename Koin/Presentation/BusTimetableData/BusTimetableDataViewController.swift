@@ -88,6 +88,10 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
         $0.backgroundColor = UIColor.appColor(.primary500)
     }
     
+    private let headerColorView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
+    
     // MARK: - Initialization
     init(viewModel: BusTimetableDataViewModel) {
         self.viewModel = viewModel
@@ -132,8 +136,24 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
                 $0.height.equalTo(height + 100)
             }
         }.store(in: &subscriptions)
+        
+        manyBusTimetableDataCollectionView.contentWidthPublisher
+            .sink { [weak self] width in
+                guard let self = self else { return }
+                let headerWidth = UIScreen.main.bounds.width - width - self.manyBusTimetableDataTableView.bounds.width
+                if headerWidth > 0 {
+                    self.headerColorView.snp.updateConstraints {
+                        $0.width.equalTo(headerWidth)
+                    }
+                }
+                else {
+                    self.headerColorView.snp.updateConstraints {
+                        $0.width.equalTo(0)
+                    }
+                }
+            }.store(in: &subscriptions)
     }
-  }
+}
 
 extension BusTimetableDataViewController {
     @objc private func changeSegmentControl(sender: UISegmentedControl) {
@@ -174,30 +194,30 @@ extension BusTimetableDataViewController {
         shuttleRouteTypeLabel.text = timetable.routeType.rawValue
         shuttleRouteTypeLabel.backgroundColor = timetable.routeType.returnRouteColor()
         busTimetablePlaceLabel.text = timetable.routeName
-        if shuttleTimetableType == .manyRoute && timetable.routeType != .weekday {
-            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
-                $0.isHidden = true
-            }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
-                $0.isHidden = false
-            }
-            manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
-            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
-        }
-        else {
+        if timetable.routeType == .weekday && timetable.routeInfo.count > 1 {
             manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
             [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
                 $0.isHidden = false
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView].forEach {
                 $0.isHidden = true
             }
-            if shuttleTimetableType == .dropOffSchool && timetable.routeInfo.count > 1 {
+            if shuttleTimetableType == .dropOffSchool {
                 oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo[1].arrivalTime)
             }
             else {
                 oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo.first?.arrivalTime ?? [])
             }
+        }
+        else {
+            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
+                $0.isHidden = true
+            }
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView].forEach {
+                $0.isHidden = false
+            }
+            manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
+            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
         }
     }
 }
@@ -208,7 +228,7 @@ extension BusTimetableDataViewController {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
-        [busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView].forEach {
+        [busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -281,6 +301,12 @@ extension BusTimetableDataViewController {
             $0.height.equalTo(2)
             $0.top.equalTo(segmentControl.snp.bottom)
             $0.width.equalTo(segmentControl.snp.width).dividedBy(segmentControl.numberOfSegments)
+        }
+        headerColorView.snp.remakeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.width.equalTo(0)
+            $0.top.equalTo(self.manyBusTimetableDataCollectionView)
+            $0.height.equalTo(52)
         }
     }
     
