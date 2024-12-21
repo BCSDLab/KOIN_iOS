@@ -143,5 +143,6 @@ extension BusSearchResultTableViewHeader {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapDepartTimeButton))
         departTimeButton.addGestureRecognizer(tapGesture)
         busTypeFilterButton.addTarget(self, action: #selector(tapDepartBusTypeButton), for: .touchUpInside)
+        contentView.backgroundColor = .systemBackground
     }
 }

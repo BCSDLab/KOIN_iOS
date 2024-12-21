@@ -35,6 +35,7 @@ final class BusSearchResultTableView: UITableView {
         dataSource = self
         separatorStyle = .none
         backgroundColor = .systemBackground
+        sectionHeaderTopPadding = 0
     }
     
     func setBusSearchTime(departTime: String) {
@@ -90,7 +91,7 @@ extension BusSearchResultTableView: UITableViewDataSource {
 
 extension BusSearchResultTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 66
+        return 70
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

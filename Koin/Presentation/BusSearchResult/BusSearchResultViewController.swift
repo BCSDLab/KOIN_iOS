@@ -18,7 +18,7 @@ final class BusSearchResultViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let tableView = BusSearchResultTableView(frame: .zero, style: .grouped)
+    private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
     
     private var busSearchDatePickerViewController = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
     
