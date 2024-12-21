@@ -308,6 +308,7 @@ extension ServiceSelectViewController {
         let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
         let viewController = BusTimetableViewController(viewModel: viewModel)
         viewController.title = "버스 시간표"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스 시간표"))
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -315,6 +316,7 @@ extension ServiceSelectViewController {
         let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
         let viewController = BusSearchViewController(viewModel: viewModel)
         viewController.title = "교통편 조회하기"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "교통편 조회하기"))
         navigationController?.pushViewController(viewController, animated: true)
     }
     
