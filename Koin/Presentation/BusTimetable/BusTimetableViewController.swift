@@ -120,12 +120,14 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
             switch output {
             case let .updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute):
                 self?.updateBusRoute(busType: busType, firstBusRoute: firstBusRoute, secondBusRoute: secondBusRoute)
-            case let .updateBusTimetable(busType, busTimetableInfo, busDirection):
-                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo, busDirection: busDirection)
+            case let .updateBusTimetable(busType, busTimetableInfo):
+                self?.updateBusTimetable(busType: busType, timetableInfo: busTimetableInfo)
             case let .updateShuttleBusRoutes(busRoutes: busRoutes):
                 self?.updateShuttleBusRoutes(busRoutes: busRoutes)
             case let .updateEmergencyNotice(notice):
                 self?.updateEmergencyNotice(notice: notice)
+            case let .updateStopLabel(busStop):
+                self?.updateBusStopLabel(busStop: busStop)
             }
         }.store(in: &subscriptions)
         
@@ -256,12 +258,14 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo, busDirection: BusDirection) {
+    private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
         busStopLabel.isHidden = false
         busStopImageView.isHidden = false
         expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
-        let busDirection = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
-        busStopLabel.text = busDirection
+    }
+    
+    private func updateBusStopLabel(busStop: String) {
+        busStopLabel.text = busStop
     }
     
     private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {

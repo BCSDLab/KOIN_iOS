@@ -16,9 +16,10 @@ final class BusTimetableViewModel: ViewModelProtocol {
 
     enum Output {
         case updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?)
-        case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo, busDirection: BusDirection)
+        case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
         case updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO)
         case updateEmergencyNotice(notice: BusNoticeDTO)
+        case updateStopLabel(busStop: String)
     }
     
     // MARK: - properties
@@ -88,7 +89,9 @@ final class BusTimetableViewModel: ViewModelProtocol {
                     Log.make().error("\(error)")
                 }
             }, receiveValue: { [weak self] timetable, busDirection in
-                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable, busDirection: busDirection))
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+                let busStop = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
+                self?.outputSubject.send(.updateStopLabel(busStop: busStop))
             }).store(in: &subscriptions)
         default:
             fetchCityTimetableUseCase.execute(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(receiveCompletion: { completion in
@@ -96,7 +99,8 @@ final class BusTimetableViewModel: ViewModelProtocol {
                     Log.make().error("\(error)")
                 }
             }, receiveValue: { [weak self] timetable, busDirection in
-                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable, busDirection: busDirection))
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+                self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection[secondFilterIdx ?? 0].rawValue) 승차"))
             }).store(in: &subscriptions)
         }
     }
