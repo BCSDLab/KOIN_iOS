@@ -75,7 +75,13 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
-    private let busSelectButton: UIButton = {
+    private let busTimetableButton: UIButton = {
+        let button = UIButton()
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    private let busSearchButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
         return button
@@ -203,7 +209,7 @@ extension ServiceSelectViewController {
     
     private func setupButtonActions() {
         shopSelectButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
-        busSelectButton.addTarget(self, action: #selector(busSelectButtonTapped), for: .touchUpInside)
+        busTimetableButton.addTarget(self, action: #selector(busTimetableButtonTapped), for: .touchUpInside)
         diningSelectButton.addTarget(self, action: #selector(diningSelectButtonTapped), for: .touchUpInside)
         timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
@@ -213,6 +219,7 @@ extension ServiceSelectViewController {
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
         noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
         facilityInfoSelectButton.addTarget(self, action: #selector(facilityInfoSelectButtonTapped), for: .touchUpInside)
+        busSearchButton.addTarget(self, action: #selector(busSearchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func inquryButtonTapped() {
@@ -293,8 +300,19 @@ extension ServiceSelectViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
-    @objc func busSelectButtonTapped() {
-        
+    @objc func busTimetableButtonTapped() {
+        let repository = DefaultBusRepository(service: DefaultBusService())
+        let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
+        let viewController = BusTimetableViewController(viewModel: viewModel)
+        viewController.title = "버스 시간표"
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func busSearchButtonTapped() {
+        let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
+        let viewController = BusSearchViewController(viewModel: viewModel)
+        viewController.title = "교통편 조회하기"
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc func diningSelectButtonTapped() {
@@ -395,14 +413,14 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, inquryButton, noticeListButton, facilityInfoSelectButton, timetableSelectButton].forEach {
+        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busTimetableButton, busSearchButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, inquryButton, noticeListButton, facilityInfoSelectButton, timetableSelectButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        let kindOfButton = [noticeListButton, busTimetableButton, busSearchButton, shopSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
+        let buttonName = ["공지사항", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
         for idx in 0..<buttonName.count {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
@@ -464,19 +482,25 @@ extension ServiceSelectViewController {
             make.height.equalTo(58)
         }
         shopSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(busSearchButton.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(58)
+        }
+        busTimetableButton.snp.makeConstraints { make in
             make.top.equalTo(noticeListButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
-        busSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(shopSelectButton.snp.bottom)
+        busSearchButton.snp.makeConstraints { make in
+            make.top.equalTo(busTimetableButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
         }
         diningSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(busSelectButton.snp.bottom)
+            make.top.equalTo(shopSelectButton.snp.bottom)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(58)
