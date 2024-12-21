@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F12BA837DF00EF4F58 /* BusDTO.swift */; };
 		0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F62BA8563E00EF4F58 /* RegisterViewController.swift */; };
 		0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */; };
@@ -103,7 +102,6 @@
 		83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D772C4F6FF000278ABD /* BusDirection.swift */; };
 		83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D7A2C4F8E6100278ABD /* FetchBusInformationListRequest.swift */; };
 		83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */; };
-		83DD0D802C4F922900278ABD /* FetchBusInformationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D7F2C4F922900278ABD /* FetchBusInformationListUseCase.swift */; };
 		83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D812C4FA6F300278ABD /* BusAPI.swift */; };
 		83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D832C4FA7FF00278ABD /* DefaultBusRepository.swift */; };
 		83DD0D862C4FA84900278ABD /* BusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D852C4FA84900278ABD /* BusService.swift */; };
@@ -435,7 +433,6 @@
 		D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */; };
 		D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A513402C59FE860064941A /* ShareDiningMenu.swift */; };
 		D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A513422C5B43180064941A /* Bundle+APIKey.swift */; };
-		D2A8F8B22C4946580090C7A4 /* BusInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B12C4946580090C7A4 /* BusInformation.swift */; };
 		D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */; };
 		D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B72C4A63AB0090C7A4 /* DiningNoticeViewModel.swift */; };
 		D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */; };
@@ -557,7 +554,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0F74C4F12BA837DF00EF4F58 /* BusDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDTO.swift; sourceTree = "<group>"; };
 		0F74C4F62BA8563E00EF4F58 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainWorker.swift; sourceTree = "<group>"; };
@@ -657,7 +653,6 @@
 		83DD0D772C4F6FF000278ABD /* BusDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDirection.swift; sourceTree = "<group>"; };
 		83DD0D7A2C4F8E6100278ABD /* FetchBusInformationListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBusInformationListRequest.swift; sourceTree = "<group>"; };
 		83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRepository.swift; sourceTree = "<group>"; };
-		83DD0D7F2C4F922900278ABD /* FetchBusInformationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBusInformationListUseCase.swift; sourceTree = "<group>"; };
 		83DD0D812C4FA6F300278ABD /* BusAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAPI.swift; sourceTree = "<group>"; };
 		83DD0D832C4FA7FF00278ABD /* DefaultBusRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBusRepository.swift; sourceTree = "<group>"; };
 		83DD0D852C4FA84900278ABD /* BusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusService.swift; sourceTree = "<group>"; };
@@ -994,7 +989,6 @@
 		D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordRequest.swift; sourceTree = "<group>"; };
 		D2A513402C59FE860064941A /* ShareDiningMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareDiningMenu.swift; sourceTree = "<group>"; };
 		D2A513422C5B43180064941A /* Bundle+APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Bundle+APIKey.swift"; path = "Koin/Core/Bundle+APIKey.swift"; sourceTree = SOURCE_ROOT; };
-		D2A8F8B12C4946580090C7A4 /* BusInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformation.swift; sourceTree = "<group>"; };
 		D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		D2A8F8B72C4A63AB0090C7A4 /* DiningNoticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNoticeViewModel.swift; sourceTree = "<group>"; };
 		D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCoopShopListUseCase.swift; sourceTree = "<group>"; };
@@ -1427,7 +1421,6 @@
 		83DD0D7E2C4F921600278ABD /* Bus */ = {
 			isa = PBXGroup;
 			children = (
-				83DD0D7F2C4F922900278ABD /* FetchBusInformationListUseCase.swift */,
 				83DD0D892C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift */,
 				83DD0DB62C53777800278ABD /* SearchBusInfoUseCase.swift */,
 				83DD0DBE2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift */,
@@ -1906,7 +1899,6 @@
 		D23479DC2BDB713E00FA91BD /* Bus */ = {
 			isa = PBXGroup;
 			children = (
-				0F74C4F12BA837DF00EF4F58 /* BusDTO.swift */,
 				8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */,
 				834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift */,
 				83E770F32D04A21500EB3F84 /* ShuttleRouteDTO.swift */,
@@ -2589,7 +2581,6 @@
 				83DD0D752C4F6FDE00278ABD /* BusPlace.swift */,
 				83DD0D732C4F6FD000278ABD /* BusType.swift */,
 				83E770B92CFB5BB500EB3F84 /* ShuttleRouteType.swift */,
-				D2A8F8B12C4946580090C7A4 /* BusInformation.swift */,
 				83DD0DB82C5378E600278ABD /* SearchBusInfoResult.swift */,
 				83DD0DBA2C551E5100278ABD /* BusTimetableInfo.swift */,
 				83DD0DC52C554D3F00278ABD /* BusCourseInfo.swift */,
@@ -3646,9 +3637,7 @@
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,
 				D2908C932BB580480008F908 /* LogoView.swift in Sources */,
-				83DD0D802C4F922900278ABD /* FetchBusInformationListUseCase.swift in Sources */,
 				D27DD09D2BA608310081FD36 /* DiningCollectionView.swift in Sources */,
-				D2A8F8B22C4946580090C7A4 /* BusInformation.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */,
 				D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
@@ -3694,7 +3683,6 @@
 				D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */,
 				D2F13E572BD0AD7000172A9D /* NotiViewModel.swift in Sources */,
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
-				0F74C4F22BA837DF00EF4F58 /* BusDTO.swift in Sources */,
 				D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,

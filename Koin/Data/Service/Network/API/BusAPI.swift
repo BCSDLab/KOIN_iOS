@@ -8,7 +8,6 @@
 import Alamofire
 
 enum BusAPI {
-    case fetchBusInformationList(FetchBusInformationListRequest)
     case searchBusInformation(SearchBusInfoRequest)
     case fetchBusTimetableList(FetchBusTimetableRequest)
     case fetchCityBusTimetableList(FetchCityBusTimetableRequest)
@@ -25,7 +24,6 @@ extension BusAPI: Router, URLRequestConvertible {
     
     public var path: String {
         switch self {
-        case .fetchBusInformationList: return "/bus"
         case .searchBusInformation: return "/bus/route"
         case .fetchBusTimetableList: return "/bus/timetable/v2"
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
@@ -50,8 +48,6 @@ extension BusAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchBusInformationList(let request):
-            return try? request.toDictionary()
         case .searchBusInformation(let request):
             return try? request.toDictionary()
         case .fetchBusTimetableList(let request):

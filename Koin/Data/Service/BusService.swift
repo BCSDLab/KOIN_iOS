@@ -9,7 +9,6 @@ import Alamofire
 import Combine
 
 protocol BusService {
-    func fetchBusInformationList(requestModel: FetchBusInformationListRequest) -> AnyPublisher<BusDTO, Error>
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error>
     func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
@@ -23,10 +22,6 @@ final class DefaultBusService: BusService {
     
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error> {
         return request(.fetchBusTimetableList(requestModel))
-    }
-    
-    func fetchBusInformationList(requestModel: FetchBusInformationListRequest) -> AnyPublisher<BusDTO, Error> {
-        return request(.fetchBusInformationList(requestModel))
     }
     
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error> {

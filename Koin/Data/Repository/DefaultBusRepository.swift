@@ -14,11 +14,7 @@ final class DefaultBusRepository: BusRepository {
     init(service: BusService) {
         self.service = service
     }
-    
-    func fetchBusInformationList(requestModel: FetchBusInformationListRequest) -> AnyPublisher<BusDTO, Error> {
-        return service.fetchBusInformationList(requestModel: requestModel)
-    }
-    
+
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error> {
         return service.searchBusInformation(requestModel: requestModel)
     }

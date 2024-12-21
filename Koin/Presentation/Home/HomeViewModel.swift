@@ -39,7 +39,6 @@ final class HomeViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let dateProvider: DateProvider
-    private let fetchBusInformationListUseCase: FetchBusInformationListUseCase
     private let checkVersionUseCase: CheckVersionUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
@@ -52,14 +51,12 @@ final class HomeViewModel: ViewModelProtocol {
     init(fetchDiningListUseCase: FetchDiningListUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
-         fetchBusInformationListUseCase: FetchBusInformationListUseCase,
          fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase, assignAbTestUseCase: AssignAbTestUseCase, fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
-        self.fetchBusInformationListUseCase = fetchBusInformationListUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.dateProvider = dateProvider
