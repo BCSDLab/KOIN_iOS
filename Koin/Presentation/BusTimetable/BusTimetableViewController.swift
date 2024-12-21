@@ -259,7 +259,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         busStopLabel.isHidden = false
         busStopImageView.isHidden = false
         expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
-        let busDirection = busDirection == .from ? "천안 터미널 승차 → 코리아텍 하차" : "코리아텍 승차 → 천안 터미널 하차"
+        let busDirection = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
         busStopLabel.text = busDirection
     }
     
@@ -302,13 +302,13 @@ extension BusTimetableViewController {
             if isDeleted {
                 self?.busNoticeWrappedView.isHidden = true
                 self?.timetableHeaderView.snp.updateConstraints {
-                    $0.height.equalTo(75)
+                    $0.height.equalTo(48)
                 }
             }
             else {
                 self?.busNoticeWrappedView.isHidden = false
                 self?.timetableHeaderView.snp.updateConstraints {
-                    $0.height.equalTo(139)
+                    $0.height.equalTo(120)
                 }
             }
         }
@@ -387,12 +387,12 @@ extension BusTimetableViewController {
             $0.bottom.equalToSuperview()
         }
         busStopLabel.snp.makeConstraints {
-            $0.leading.equalTo(busStopImageView.snp.trailing).offset(4)
+            $0.trailing.equalTo(busStopImageView.snp.leading).offset(-4)
             $0.centerY.equalTo(busStopImageView)
         }
         busStopImageView.snp.makeConstraints {
-            $0.leading.equalTo(typeOftimetableLabel)
-            $0.top.equalTo(typeOftimetableLabel.snp.bottom).offset(8)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.centerY.equalTo(typeOftimetableLabel)
             $0.height.equalTo(18)
             $0.width.equalTo(15)
         }
