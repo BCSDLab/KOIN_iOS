@@ -62,6 +62,7 @@ extension BusView {
         [busTimetableButton, busSearchButton].forEach {
             $0.backgroundColor = .appColor(.neutral50)
             $0.isUserInteractionEnabled = true
+            $0.layer.cornerRadius = 8
         }
         
         [busTimetableLabel, busSearchLabel].forEach {
