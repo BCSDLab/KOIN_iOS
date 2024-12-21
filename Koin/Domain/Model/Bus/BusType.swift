@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum BusType: String, Decodable, CaseIterable {
     case shuttleBus = "SHUTTLE"
@@ -36,14 +35,14 @@ enum BusType: String, Decodable, CaseIterable {
         }
     }
     
-    func returnBusTypeColor() -> UIColor {
+    func returnBusTypeColor() -> String {
         switch self {
         case .shuttleBus:
-            return UIColor.appColor(.pastelOrange)
+            return "D7FBEB"
         case .expressBus:
-            return UIColor.appColor(.pastelBlue)
+            return "D7E6FB"
         default:
-            return UIColor.appColor(.pastelGreen)
+            return "FBEBD7"
         }
     }
 }

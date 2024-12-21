@@ -48,7 +48,7 @@ final class BusSearchResultTableViewCell: UITableViewCell {
 
     func configure(searchModel: ScheduleInformation) {
         busTypeLabel.text = String(searchModel.busType.koreanDescription.prefix(2))
-        busTypeLabel.backgroundColor = searchModel.busType.returnBusTypeColor()
+        busTypeLabel.backgroundColor = UIColor.setColor(searchModel.busType.returnBusTypeColor())
         busTimeLabel.text = searchModel.departTime.formatDateToHHMM(isHH: false)
         if let remainTime = searchModel.remainTime {
             let remainTimeValue = remainTime.timeDifference()

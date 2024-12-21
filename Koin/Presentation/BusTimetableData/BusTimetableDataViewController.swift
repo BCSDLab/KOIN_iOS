@@ -25,7 +25,6 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
         $0.font = .appFont(.pretendardRegular, size: 11)
         $0.textAlignment = .center
         $0.textColor = .appColor(.neutral0)
-        $0.backgroundColor = .appColor(.fluorescentOrange)
     }
     
     private let busTimetablePlaceLabel = UILabel().then {
@@ -205,7 +204,7 @@ extension BusTimetableDataViewController {
     
     private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO, shuttleTimetableType: ShuttleTimetableType) {
         shuttleRouteTypeLabel.text = timetable.routeType.rawValue
-        shuttleRouteTypeLabel.backgroundColor = timetable.routeType.returnRouteColor()
+        shuttleRouteTypeLabel.backgroundColor = UIColor.setColor(timetable.routeType.returnRouteColor())
         busTimetablePlaceLabel.text = timetable.routeName
         subBusTimetablePlaceLabel.text = timetable.subName
         if timetable.routeType == .weekday && timetable.routeInfo.count > 1 {

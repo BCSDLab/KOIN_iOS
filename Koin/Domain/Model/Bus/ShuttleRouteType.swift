@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum ShuttleRouteType: String, Decodable, CaseIterable {
     case overall = "전체"
@@ -20,14 +19,14 @@ enum ShuttleRouteType: String, Decodable, CaseIterable {
         self = ShuttleRouteType(rawValue: rawValue ?? "") ?? .circular
     }
     
-    func returnRouteColor() -> UIColor {
+    func returnRouteColor() -> String {
         switch self {
         case .circular:
-            return UIColor.appColor(.fluorescentGreen)
+            return "4ED927"
         case .weekday:
-            return UIColor.appColor(.fluorescentBlue)
+            return "FFB443"
         default:
-            return UIColor.appColor(.fluorescentOrange)
+            return "34ADFF"
         }
     }
 }

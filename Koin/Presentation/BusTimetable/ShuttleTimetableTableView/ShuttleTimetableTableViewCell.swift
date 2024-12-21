@@ -18,7 +18,6 @@ final class ShuttleTimetableTableViewCell: UITableViewCell {
         $0.font = .appFont(.pretendardRegular, size: 11)
         $0.textAlignment = .center
         $0.textColor = .appColor(.neutral0)
-        $0.backgroundColor = .appColor(.fluorescentOrange)
     }
     
     private let shuttleBusRouteLabel = UILabel().then {
@@ -51,7 +50,7 @@ final class ShuttleTimetableTableViewCell: UITableViewCell {
     func configure(routeType: ShuttleRouteType, route: String, subRoute: String?) {
         shuttleBusRouteLabel.text = route
         shuttleRouteTypeLabel.text = routeType.rawValue
-        shuttleRouteTypeLabel.backgroundColor = routeType.returnRouteColor()
+        shuttleRouteTypeLabel.backgroundColor = UIColor.setColor(routeType.returnRouteColor())
         if let subRoute = subRoute {
             busRouteSubLabel.isHidden = false
             busRouteSubLabel.text = subRoute

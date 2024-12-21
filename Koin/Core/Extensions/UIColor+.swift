@@ -18,9 +18,6 @@ enum SceneColorAsset {
     case bus1, bus2, bus3
     case yellow
     case gray
-    case orange100
-    case pastelGreen, pastelBlue, pastelOrange
-    case fluorescentGreen, fluorescentOrange, fluorescentBlue
 }
 
 enum TimetableColorAsset {
@@ -28,6 +25,10 @@ enum TimetableColorAsset {
     case body1, body2, body3, body4, body5, body6, body7, body8, body9, body10, body11, body12, body13, body14, body15
 }
 extension UIColor {
+    static func setColor(_ hexCode: String) -> UIColor {
+        return UIColor(hexCode: hexCode)
+    }
+    
     static func timetableColor(_name: TimetableColorAsset) -> UIColor {
         switch _name {
         case .header1: return UIColor(hexCode: "890000")
@@ -138,19 +139,11 @@ extension UIColor {
         case .info600: return UIColor(hexCode: "3B82F6")
         case .info700: return UIColor(hexCode: "3A70E2")
             
-        case .orange100: return UIColor(hexCode: "FBEBD7")
-            
         case .bus1: return UIColor(hexCode: "F7941E")
         case .bus2: return UIColor(hexCode: "7C9FAE")
         case .bus3: return UIColor(hexCode: "4DB297")
         case .yellow: return UIColor(hexCode: "#F4CE83")
         case .gray: return UIColor(hexCode: "8E8E8E")
-        case .pastelGreen: return UIColor(hexCode: "#D7FBEB")
-        case .pastelBlue: return UIColor(hexCode: "#D7E6FB")
-        case .pastelOrange: return UIColor(hexCode: "#FBEBD7")
-        case .fluorescentGreen: return UIColor(hexCode: "#4ED92C")
-        case .fluorescentOrange: return UIColor(hexCode: "#FFB443")
-        case .fluorescentBlue: return UIColor(hexCode: "#34ADFF")
         }
     }
     static func randomLightColor() -> UIColor {
