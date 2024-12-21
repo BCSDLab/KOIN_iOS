@@ -79,7 +79,7 @@ extension BusAreaSelectedViewController {
     
     private func setUpView(buttonState: BusAreaButtonState) {
         let attributeContainer: [NSAttributedString.Key: Any] = [.font: UIFont.appFont(.pretendardMedium, size: 15), .foregroundColor: UIColor.appColor(.neutral0)]
-        var confirmButtonTitle: String = ""
+        let confirmButtonTitle: String
         if buttonState == .allSelected {
             
             confirmButtonTitle = "조회하기"
