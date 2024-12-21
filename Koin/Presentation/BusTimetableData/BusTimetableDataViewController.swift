@@ -82,6 +82,7 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardRegular, size: 16)], for: .normal)
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
         $0.layer.masksToBounds = false
+        $0.selectedSegmentIndex = 0
     }
     
     private let shadowView = UIView().then {
@@ -112,12 +113,8 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        scrollView.isHidden = false
         segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
         incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
-        [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
-            $0.isHidden = true
-        }
         bind()
         inputSubject.send(.getBusTimetable(.manyRoute))
     }
@@ -187,6 +184,29 @@ extension BusTimetableDataViewController {
         }
     }
     
+    private func configureSwipeGestures() {
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeftGesture.direction = .left
+        oneBusTimetableDataTableView.addGestureRecognizer(swipeLeftGesture)
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRightGesture.direction = .right
+        oneBusTimetableDataTableView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let currentSegmentIndex = segmentControl.selectedSegmentIndex
+        if gesture.direction == .left {
+            if currentSegmentIndex < segmentControl.numberOfSegments - 1 {
+                segmentControl.selectedSegmentIndex = currentSegmentIndex + 1
+            }
+        } else if gesture.direction == .right {
+            if currentSegmentIndex > 0 {
+                segmentControl.selectedSegmentIndex = currentSegmentIndex - 1
+            }
+        }
+        changeSegmentControl(sender: segmentControl)
+    }
+    
     private func moveUnderLineView() {
         let newXPosition = (segmentControl.frame.width / CGFloat(segmentControl.numberOfSegments)) * CGFloat(segmentControl.selectedSegmentIndex)
         selectedUnderlineView.snp.updateConstraints {
@@ -212,7 +232,7 @@ extension BusTimetableDataViewController {
             [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
                 $0.isHidden = false
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView].forEach {
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView, scrollView].forEach {
                 $0.isHidden = true
             }
             if shuttleTimetableType == .dropOffSchool {
@@ -226,7 +246,7 @@ extension BusTimetableDataViewController {
             [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
                 $0.isHidden = true
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView].forEach {
+            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView, scrollView].forEach {
                 $0.isHidden = false
             }
             manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
@@ -332,6 +352,7 @@ extension BusTimetableDataViewController {
         setUpLayouts()
         setUpConstraints()
         view.backgroundColor = .systemBackground
+        configureSwipeGestures()
     }
 }
 

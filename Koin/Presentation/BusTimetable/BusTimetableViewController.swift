@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
+final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
@@ -185,6 +185,44 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+    }
+    
+    private func configureSwipeGestures() {
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeftGesture.direction = .left
+        shuttleTimetableTableView.addGestureRecognizer(swipeLeftGesture)
+        
+        let swipeLeftGestureExpress = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeftGestureExpress.direction = .left
+        expressOrCityTimetableTableView.addGestureRecognizer(swipeLeftGestureExpress)
+        swipeLeftGesture.delegate = self
+        
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRightGesture.direction = .right
+        swipeRightGesture.delegate = self
+        expressOrCityTimetableTableView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let currentSegmentIndex = busTypeSegmentControl.selectedSegmentIndex
+        if gesture.direction == .left {
+            if currentSegmentIndex < busTypeSegmentControl.numberOfSegments - 1 {
+                busTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex + 1
+            }
+        } else if gesture.direction == .right {
+            if currentSegmentIndex > 0 {
+                busTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex - 1
+            }
+        }
+        changeSegmentControl(sender: busTypeSegmentControl)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let location = touch.location(in: self.view)
+        if timetableHeaderView.frame.contains(location) {
+            return false
+        }
+        return true
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
@@ -405,5 +443,6 @@ extension BusTimetableViewController {
         setUpLayouts()
         setUpConstraints()
         view.backgroundColor = .systemBackground
+        configureSwipeGestures()
     }
 }
