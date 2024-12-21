@@ -27,17 +27,9 @@ final class BusTimetableRouteCollectionViewCell: UICollectionViewCell {
     
     func configure(isSelected: Bool, route: String) {
         routeLabel.text = route
-        
-        if isSelected {
-            routeLabel.font = .appFont(.pretendardBold, size: 14)
-            routeLabel.textColor = .appColor(.neutral0)
-            contentView.backgroundColor = .appColor(.primary500)
-        }
-        else {
-            routeLabel.font = .appFont(.pretendardMedium, size: 14)
-            routeLabel.textColor = .appColor(.neutral500)
-            contentView.backgroundColor = .clear
-        }
+        routeLabel.font = isSelected ? .appFont(.pretendardBold, size: 14) : .appFont(.pretendardMedium, size: 14)
+        routeLabel.textColor = isSelected ? .appColor(.neutral0) : .appColor(.neutral500)
+        contentView.backgroundColor = isSelected ? .appColor(.primary500) : .clear
     }
 }
 
@@ -50,9 +42,8 @@ extension BusTimetableRouteCollectionViewCell {
     
     private func setUpConstraints() {
         routeLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerY.centerX.equalToSuperview()
             $0.height.equalTo(34)
-            $0.centerX.equalToSuperview()
         }
     }
     
