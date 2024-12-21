@@ -58,8 +58,9 @@ extension BusSchedule {
         
         let calendar = Calendar.current
         let isToday = calendar.isDateInToday(parsedDate)
+        let isNotPassed = Date() <= parsedDate
         
-        let timeInterval = isToday ? parsedDate.timeIntervalSinceNow : nil
+        let timeInterval = (isToday && isNotPassed) ? parsedDate.timeIntervalSinceNow : nil
     
         let busNumber = busType == .cityBus ? busName : nil
         return ScheduleInformation(busType: busType, departTime: parsedDate, remainTime: timeInterval, busName: busNumber)
