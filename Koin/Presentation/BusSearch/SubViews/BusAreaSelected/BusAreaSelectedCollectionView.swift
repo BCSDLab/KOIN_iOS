@@ -15,7 +15,7 @@ final class BusAreaSelectedCollectionView: UICollectionView, UICollectionViewDat
     let buttonStatePublisher = PassthroughSubject<BusAreaButtonState, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var busAreaLists: [(BusPlace, Bool)] = []
-    private var buttonState: BusAreaButtonState = .departureSelect
+    private var buttonState: BusAreaButtonType = .departure
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -38,11 +38,11 @@ final class BusAreaSelectedCollectionView: UICollectionView, UICollectionViewDat
         contentInset = .zero
     }
     
-    func configure(busAreaLists: [(BusPlace, Bool)], buttonState: BusAreaButtonState) {
+    func configure(busAreaLists: [(BusPlace, Bool)], buttonState: BusAreaButtonType) {
         self.busAreaLists = busAreaLists
         self.buttonState = buttonState
-        let buttonPublisher = buttonState == .departureSelect ? departureBusAreaPublisher : arrivalBusAreaPublisher
-        let otherPublisher = buttonState == .departureSelect ? arrivalBusAreaPublisher : departureBusAreaPublisher
+        let buttonPublisher = buttonState == .departure ? departureBusAreaPublisher : arrivalBusAreaPublisher
+        let otherPublisher = buttonState == .departure ? arrivalBusAreaPublisher : departureBusAreaPublisher
         if buttonPublisher.value == nil {
             let value: BusPlace = otherPublisher.value == .koreatech ? .station : .koreatech
             buttonPublisher.send(value)
@@ -70,7 +70,7 @@ extension BusAreaSelectedCollectionView {
         }
         let item = busAreaLists[indexPath.row]
         cell.configure(busPlace: item.0.koreanDescription, isSelected: item.1)
-        let disableBusPlace: BusPlace? = buttonState == .departureSelect ? arrivalBusAreaPublisher.value : departureBusAreaPublisher.value
+        let disableBusPlace: BusPlace? = buttonState == .departure ? arrivalBusAreaPublisher.value : departureBusAreaPublisher.value
         if let busPlace = disableBusPlace, busPlace == busAreaLists[indexPath.row].0 {
             cell.disableCell()
         }
@@ -82,13 +82,13 @@ extension BusAreaSelectedCollectionView {
         for (index, _) in busAreaLists.enumerated() {
             busAreaLists[index].1 = (index == selectedIndex)
         }
-        let publisher = buttonState == .departureSelect ? departureBusAreaPublisher : arrivalBusAreaPublisher
+        let publisher = buttonState == .departure ? departureBusAreaPublisher : arrivalBusAreaPublisher
         publisher.send(busAreaLists[indexPath.row].0)
         reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        let area: BusPlace? = buttonState == .departureSelect ? arrivalBusAreaPublisher.value : departureBusAreaPublisher.value
+        let area: BusPlace? = buttonState == .departure ? arrivalBusAreaPublisher.value : departureBusAreaPublisher.value
         let isEnabled = busAreaLists[indexPath.row].0 != area
         return isEnabled
     }

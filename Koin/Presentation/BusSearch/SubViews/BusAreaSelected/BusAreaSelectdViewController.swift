@@ -69,7 +69,7 @@ extension BusAreaSelectedViewController {
             busRouteType = .arrival
         }
         setUpView(buttonState: self.buttonState)
-        busAreaCollectionView.configure(busAreaLists: busAreaLists, buttonState: buttonState)
+        busAreaCollectionView.configure(busAreaLists: busAreaLists, buttonState: busRouteType)
     }
     
     func swap(departure: BusPlace, arrival: BusPlace) {
@@ -85,7 +85,7 @@ extension BusAreaSelectedViewController {
             confirmButtonTitle = "조회하기"
         }
         else {
-            confirmButtonTitle = busRouteType == .arrival ? "도착지 선택하기" : "출발지 선택하기"
+            confirmButtonTitle = busRouteType == .arrival ? "출발지 선택하기" : "도착지 선택하기"
         }
         busRouteDescriptionlabel.text = busRouteType == .arrival ? "목적지가 어디인가요?" : "어디서 출발하시나요?"
         confirmButton.setAttributedTitle(NSAttributedString(string: confirmButtonTitle, attributes: attributeContainer), for: .normal)
@@ -111,7 +111,7 @@ extension BusAreaSelectedViewController {
             arrivalBusAreaPublisher.send(arrival)
         }
         let busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
-        busAreaCollectionView.configure(busAreaLists: busAreaList, buttonState: buttonState)
+        busAreaCollectionView.configure(busAreaLists: busAreaList, buttonState: busRouteType)
         setUpView(buttonState: .allSelected)
     }
 }
