@@ -71,7 +71,7 @@ final class BusTimetableRouteView: UIView {
         secondBusRouteGuideLabel.isHidden = !isCityBus
         secondBusTimetableRouteCollectionView.isHidden = !isCityBus
       
-        firstBusRouteGuideLabel.text = isCityBus ? "운행" : (isExpressBus ? "기점" : "")
+        firstBusRouteGuideLabel.text = "운행"
         secondBusRouteGuideLabel.text = isCityBus ? "노선" : ""
       
         DispatchQueue.main.async { [weak self] in

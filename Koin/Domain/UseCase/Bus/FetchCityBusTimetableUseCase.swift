@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchCityBusTimetableUseCase {
-    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, [CityBusDirection]), Error>
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, CityBusDirection), Error>
 }
 
 final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
@@ -18,21 +18,18 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, [CityBusDirection]), Error> {
+    func execute(firstFilterIdx: Int, secondFilterIdx: Int) -> AnyPublisher<(BusTimetableInfo, CityBusDirection), Error> {
         var busCourses: [CityBusCourseInfo] = []
-        var cityDirections: [CityBusDirection] = []
         if firstFilterIdx == 0 {
-            busCourses = setFromCityBusCourses()
-        }
-        else {
             busCourses = setToCityBusCourses()
         }
-        for course in busCourses {
-            cityDirections.append(course.busNode)
+        else {
+            busCourses = setFromCityBusCourses()
         }
+       
         let requestModel = FetchCityBusTimetableRequest(busNumber: busCourses[secondFilterIdx].busNumber.rawValue, direction: busCourses[secondFilterIdx].busNode.rawValue)
         return busRepository.fetchCityBusTimetableList(requestModel: requestModel).map {
-            ($0.toDomain(), cityDirections)
+            ($0.toDomain(), $0.busInfo.departNode ?? .byungChun)
         }.eraseToAnyPublisher()
     }
     
@@ -40,7 +37,7 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
         var cityBusInfos: [CityBusCourseInfo] = []
         let busCourseText = "병천방면"
         for busNumber in BusNumber.allCases {
-            var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .byungChun)
+            let cityBusInfo: CityBusCourseInfo
             switch busNumber {
             case .fourHundred:
                 cityBusInfo = CityBusCourseInfo(busNumber: .fourHundred, busCourse: busCourseText, busNode: .byungChun)
@@ -58,7 +55,7 @@ final class DefaultFetchCityBusTimetableUseCase: FetchCityBusTimetableUseCase {
         var cityBusInfos: [CityBusCourseInfo] = []
         let busCourseText = "천안방면"
         for busNumber in BusNumber.allCases {
-            var cityBusInfo: CityBusCourseInfo = .init(busNumber: .fourHundred, busCourse: busCourseText, busNode: .terminal)
+            let cityBusInfo: CityBusCourseInfo
             switch busNumber {
             case .fourHundred:
                 cityBusInfo = CityBusCourseInfo(busNumber: .fourHundred, busCourse: busCourseText, busNode: .terminal)

@@ -30,8 +30,8 @@ final class DefaultFetchExpressTimetableUseCase: FetchExpressTimetableUseCase {
     }
     
     private func setBusFilter() -> [BusCourseInfo] {
-        let fromCourse = BusCourseInfo(busCourse: "병천방면", busType: .expressBus, direction: .from, region: "천안")
-        let toCourse = BusCourseInfo(busCourse: "천안방면", busType: .expressBus, direction: .to, region: "천안")
+        let fromCourse = BusCourseInfo(busCourse: "병천방면", busType: .expressBus, direction: .to, region: "천안")
+        let toCourse = BusCourseInfo(busCourse: "천안방면", busType: .expressBus, direction: .from, region: "천안")
         return [fromCourse, toCourse]
     }
 }

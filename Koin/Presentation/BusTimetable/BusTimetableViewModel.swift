@@ -100,7 +100,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 }
             }, receiveValue: { [weak self] timetable, busDirection in
                 self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
-                self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection[secondFilterIdx ?? 0].rawValue) 승차"))
+                self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection.rawValue) 승차"))
             }).store(in: &subscriptions)
         }
     }
