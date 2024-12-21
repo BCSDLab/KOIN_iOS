@@ -186,6 +186,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
+        UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
     
@@ -274,9 +275,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
-        if noticeId != notice.id || noticeId == nil {
-            UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
-        } else {
+        if noticeId == notice.id || noticeId != nil {
             updateLayoutsByNotice(isDeleted: true)
         }
     }
@@ -338,7 +337,7 @@ extension BusTimetableViewController {
         busNoticeWrappedView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(busStopLabel.snp.bottom).offset(8)
+            $0.top.equalTo(typeOftimetableLabel.snp.bottom).offset(8)
             $0.height.equalTo(56)
         }
         busNoticeLabel.snp.makeConstraints {

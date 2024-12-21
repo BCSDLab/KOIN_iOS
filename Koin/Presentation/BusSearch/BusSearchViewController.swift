@@ -95,6 +95,8 @@ final class BusSearchViewController: UIViewController {
         busInfoSearchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
         swapAreaButton.addTarget(self, action: #selector(swapDepartureAndArrival), for: .touchUpInside)
         deleteNoticeButton.addTarget(self, action: #selector(tapDeleteNoticeInfoButton), for: .touchUpInside)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapNoticeInfoButton))
+        busNoticeWrappedView.addGestureRecognizer(tapGesture)
         bind()
         inputSubject.send(.fetchBusNotice)
     }
@@ -147,12 +149,20 @@ extension BusSearchViewController {
         navigationController?.pushViewController(busSearchResultViewController, animated: true)
     }
     
+    @objc private func tapNoticeInfoButton() {
+        let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag)
+        let viewController = NoticeDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let buttonState: BusAreaButtonState = sender == departAreaSelectedButton ? .departureSelect : .arrivalSelect
         inputSubject.send(.selectBusArea(sender.tag, buttonState))
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
+        UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
     
@@ -209,9 +219,7 @@ extension BusSearchViewController {
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
-        if noticeId != notice.id || noticeId == nil {
-            UserDefaults.standard.set(notice.id, forKey: "busNoticeId")
-        } else {
+        if noticeId == notice.id || noticeId != nil {
             updateLayoutsByNotice(isDeleted: true)
         }
     }
