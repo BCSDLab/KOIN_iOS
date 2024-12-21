@@ -15,7 +15,8 @@ final class ShuttleTimetableTableView: UITableView {
     let moveDetailTimetablePublisher = PassthroughSubject<(String, String), Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
-    private var busInfo: ShuttleRouteDTO = .init(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
+    private var busInfo: [RouteRegion] = []
+    private var semesterInfo: SemesterInfo = SemesterInfo(name: "", from: "", to: "")
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -41,7 +42,8 @@ final class ShuttleTimetableTableView: UITableView {
     }
     
     func updateShuttleBusInfo(busInfo: ShuttleRouteDTO) {
-        self.busInfo = busInfo
+        self.busInfo = busInfo.routeRegions
+        self.semesterInfo = busInfo.semesterInfo
         reloadData()
     }
     
@@ -53,17 +55,17 @@ final class ShuttleTimetableTableView: UITableView {
 
 extension ShuttleTimetableTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return busInfo.routeRegions.count
+        return busInfo.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo.routeRegions[section].routes.count
+        return busInfo[section].routes.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let label = UILabel()
-        label.text = busInfo.routeRegions[section].region
+        label.text = busInfo[section].region
         label.font = .appFont(.pretendardBold, size: 18)
         label.textColor = .appColor(.neutral800)
         view.addSubview(label)
@@ -75,7 +77,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section != busInfo.routeRegions.count - 1 {
+        if section != busInfo.count - 1 {
             let view = UIView()
             let coloredView = UIView()
             view.backgroundColor = .systemBackground
@@ -89,7 +91,7 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
         else {
             guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableTableViewFooterView.identifier) as? BusTimetableTableViewFooterView else { return UIView() }
             
-            view.configure(updatedDate: "\(busInfo.semesterInfo.name)(\(busInfo.semesterInfo.from) ~ \(busInfo.semesterInfo.to))의\n시간표가 제공됩니다.")
+            view.configure(updatedDate: "\(semesterInfo.name)(\(semesterInfo.from) ~ \(semesterInfo.to))의\n시간표가 제공됩니다.")
             view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in
                 self?.tapIncorrectButtonPublisher.send()
             }.store(in: &view.subscriptions)
@@ -105,20 +107,20 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let routeInfo = busInfo.routeRegions[section].routes[indexPath.row]
+        let routeInfo = busInfo[section].routes[indexPath.row]
         cell.configure(routeType: routeInfo.type, route: routeInfo.routeName, subRoute: routeInfo.subName)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = busInfo.routeRegions[indexPath.section].routes[indexPath.row]
+        let item = busInfo[indexPath.section].routes[indexPath.row]
         moveDetailTimetablePublisher.send((item.id, item.routeName))
     }
 }
 
 extension ShuttleTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let routeInfo = busInfo.routeRegions[indexPath.section].routes[indexPath.row]
+        let routeInfo = busInfo[indexPath.section].routes[indexPath.row]
         if routeInfo.subName != nil {
             return 57
         }
@@ -132,7 +134,7 @@ extension ShuttleTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section != busInfo.routeRegions.count - 1 {
+        if section != busInfo.count - 1 {
             return 14
         }
         else {

@@ -11,7 +11,8 @@ import UIKit
 final class ExpressOrCityTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var busInfo: BusTimetableInfo = .init(arrivalInfos: [], updatedAt: "")
+    private var busInfo: [BusArrivalInfo] = []
+    private var updatedAt: String = ""
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
@@ -38,7 +39,8 @@ final class ExpressOrCityTimetableTableView: UITableView {
     }
     
     func updateBusInfo(busInfo: BusTimetableInfo) {
-        self.busInfo = busInfo
+        self.busInfo = busInfo.arrivalInfos
+        self.updatedAt = busInfo.updatedAt
         reloadData()
     }
     
@@ -50,7 +52,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
 
 extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo.arrivalInfos.count
+        return busInfo.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,7 +61,7 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let arrivalInfo = busInfo.arrivalInfos[indexPath.row]
+        let arrivalInfo = busInfo[indexPath.row]
         cell.configure(morningBusInfo: arrivalInfo.leftNode ?? "", secondBusInfo: arrivalInfo.rightNode ?? "")
         return cell
     }
@@ -86,7 +88,7 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusTimetableTableViewFooterView.identifier) as? BusTimetableTableViewFooterView else { return UIView() }
         
-        view.configure(updatedDate: "업데이트 날짜: \(busInfo.updatedAt)")
+        view.configure(updatedDate: "업데이트 날짜: \(updatedAt)")
         view.tapIncorrenctBusInfoButtonPublisher.sink { [weak self] in
             self?.tapIncorrectButtonPublisher.send()
         }.store(in: &view.subscriptions)

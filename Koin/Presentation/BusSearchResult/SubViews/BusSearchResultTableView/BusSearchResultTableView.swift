@@ -15,6 +15,7 @@ final class BusSearchResultTableView: UITableView {
     let tapDepartBusTypeButtonPublisher = PassthroughSubject<BusType, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var busSearchResult: SearchBusInfoResult = .init(depart: .koreatech, arrival: .terminal, departDate: Date(), departTime: Date(), schedule: [])
+    private var busSearchSchedule: [ScheduleInformation] = []
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -45,6 +46,7 @@ final class BusSearchResultTableView: UITableView {
     
     func setBusSearchResult(busSearchResult: SearchBusInfoResult) {
         self.busSearchResult = busSearchResult
+        self.busSearchSchedule = busSearchResult.schedule
         reloadData()
     }
     
@@ -67,13 +69,13 @@ final class BusSearchResultTableView: UITableView {
 
 extension BusSearchResultTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busSearchResult.schedule.count
+        return busSearchSchedule.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BusSearchResultTableViewCell.identifier, for: indexPath) as? BusSearchResultTableViewCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        cell.configure(searchModel: busSearchResult.schedule[indexPath.row])
+        cell.configure(searchModel: busSearchSchedule[indexPath.row])
         return cell
     }
     
