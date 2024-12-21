@@ -111,18 +111,27 @@ final class BusSearchViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateBusArea(buttonState, busPlace, busRouteType):
-                self?.updateSelectedBusArea(buttonState: buttonState, busPlace: busPlace, busRouteType: busRouteType)
+            case let .updateBusArea(buttonState, busPlace):
+                self?.updateSelectedBusArea(buttonState: buttonState, busPlace: busPlace)
             case let .updateEmergencyNotice(notice):
                 self?.updateEmergencyNotice(notice: notice)
             }
         }.store(in: &subscriptions)
         
-        busAreaViewController.busAreaPublisher.sink { [weak self] departureArea, arrivalArea in
+        busAreaViewController.departureBusAreaPublisher.sink { [weak self] departureArea in
             guard let self = self else { return }
             changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
-            changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
-            manageSearchButton(isActivated: true)
+            if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
+                manageSearchButton(isActivated: true)
+            }
+        }.store(in: &subscriptions)
+        
+        busAreaViewController.arrivalBusAreaPublisher.sink { [weak self] arrivedArea in
+            guard let self = self else { return }
+            changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivedArea)
+            if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
+                manageSearchButton(isActivated: true)
+            }
         }.store(in: &subscriptions)
     }
 }
@@ -139,8 +148,8 @@ extension BusSearchViewController {
     }
     
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
-        let busRouteType = sender == departAreaSelectedButton ? 0 : 1
-        inputSubject.send(.selectBusArea(departAreaSelectedButton.tag, arrivedAreaSelectedButton.tag, busRouteType))
+        let buttonState: BusAreaButtonState = sender == departAreaSelectedButton ? .departureSelect : .arrivalSelect
+        inputSubject.send(.selectBusArea(sender.tag, buttonState))
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
@@ -154,9 +163,10 @@ extension BusSearchViewController {
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
         changeBusAreaButton(sender: arrivedAreaSelectedButton, title: departure)
+        busAreaViewController.swap(departure: departure, arrival: arrival)
     }
     
-    private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?, busRouteType: Int) {
+    private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?) {
         var busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
         for (index, value) in busAreaList.enumerated() {
             if value.0 == busPlace  {
@@ -166,8 +176,8 @@ extension BusSearchViewController {
                 busAreaList[0].1 = true
             }
         }
-        
-        busAreaViewController.configure(busRouteType: busRouteType, busAreaLists: busAreaList, buttonState: buttonState)
+
+        busAreaViewController.configure(busAreaLists: busAreaList, buttonState: buttonState)
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
         present(bottomSheet, animated: true)
     }

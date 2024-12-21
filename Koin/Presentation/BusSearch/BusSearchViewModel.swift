@@ -8,20 +8,24 @@
 import Combine
 
 enum BusAreaButtonState {
-    case allSelected
-    case departureSelected
-    case arrivalSelected
-    case notSelected
+    case allSelected // 출발지, 도착지 모두 다 선택된 상태
+    case departureSelect // 출발지 선택하는 상태
+    case arrivalSelect // 도착지 선택하는 상태
+}
+
+enum BusAreaButtonType {
+    case departure
+    case arrival
 }
 
 final class BusSearchViewModel: ViewModelProtocol {
     enum Input {
-        case selectBusArea(Int, Int, Int)
+        case selectBusArea(Int, BusAreaButtonState)
         case fetchBusNotice
     }
     
     enum Output {
-        case updateBusArea(BusAreaButtonState, BusPlace?, Int)
+        case updateBusArea(BusAreaButtonState, BusPlace?)
         case updateEmergencyNotice(notice: BusNoticeDTO)
     }
     
@@ -38,8 +42,8 @@ final class BusSearchViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .selectBusArea(departAreaIdx, arrivedAreaIdx, busRouteType):
-                self?.selectBusInfo(departAreaIdx: departAreaIdx, arrivalAreaIdx: arrivedAreaIdx, busRouteType: busRouteType)
+            case let .selectBusArea(busAreaIdx, busRouteType):
+                self?.selectBusInfo(busAreaIdx: busAreaIdx, busRouteType: busRouteType)
             case .fetchBusNotice:
                 self?.getEmergencyNotice()
             }
@@ -49,9 +53,9 @@ final class BusSearchViewModel: ViewModelProtocol {
 }
 
 extension BusSearchViewModel {
-    private func selectBusInfo(departAreaIdx: Int, arrivalAreaIdx: Int, busRouteType: Int) {
-        let busAreaInfo = selectBusAreaUseCase.execute(departedAreaIdx: departAreaIdx, arrivalAreaIdx: arrivalAreaIdx, busRouteType: busRouteType)
-        outputSubject.send(.updateBusArea(busAreaInfo.0, busAreaInfo.1, busRouteType))
+    private func selectBusInfo(busAreaIdx: Int, busRouteType: BusAreaButtonState) {
+        let busAreaInfo = selectBusAreaUseCase.execute(busAreaIdx: busAreaIdx, busRouteType: busRouteType)
+        outputSubject.send(.updateBusArea(busAreaInfo.0, busAreaInfo.1))
     }
     
     private func getEmergencyNotice() {
