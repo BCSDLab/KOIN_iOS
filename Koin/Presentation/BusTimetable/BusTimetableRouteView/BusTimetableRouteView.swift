@@ -13,6 +13,8 @@ final class BusTimetableRouteView: UIView {
     // MARK: - properties
     let busRouteContentHeightPublisher = PassthroughSubject<CGFloat, Never>()
     let busFilterIdxPublisher = CurrentValueSubject<(Int, Int?), Never>((0, nil))
+    let firstFilterPublisher = PassthroughSubject<String, Never>()
+    let secondFilterPublisher = PassthroughSubject<String, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -47,18 +49,20 @@ final class BusTimetableRouteView: UIView {
     private func commonInit() {
         configureView()
         
-        firstBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index in
+        firstBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index, value in
             if let secondFilterIdx = self?.busFilterIdxPublisher.value.1 {
                 self?.busFilterIdxPublisher.send((index, secondFilterIdx))
             }
             else {
                 self?.busFilterIdxPublisher.send((index, nil))
             }
+            self?.firstFilterPublisher.send(value)
         }.store(in: &subscriptions)
         
-        secondBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index in
+        secondBusTimetableRouteCollectionView.filterIdxPublisher.sink { [weak self] index, value in
             guard let self = self else { return }
             self.busFilterIdxPublisher.send((self.busFilterIdxPublisher.value.0, index))
+            self.secondFilterPublisher.send(value)
         }.store(in: &subscriptions)
     }
     

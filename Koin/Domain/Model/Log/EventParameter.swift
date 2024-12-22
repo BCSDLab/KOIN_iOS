@@ -97,6 +97,7 @@ enum EventParameter {
             case dsBusDirection = "ds_bus_direction"
             case cityBusRoute = "city_bus_route"
             case cityBusDirection = "city_bus_direction"
+            case timetableBusTypeTab = "timetable_bus_type_tab"
             
             case shuttleTicket = "shuttle_ticket"
             case mainBusTimetable = "main_bus_timetable"

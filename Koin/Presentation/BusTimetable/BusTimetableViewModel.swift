@@ -12,6 +12,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         case getBusRoute(BusType)
         case getBusTimetable(BusType, Int, Int?)
         case getEmergencyNotice
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
@@ -32,8 +33,9 @@ final class BusTimetableViewModel: ViewModelProtocol {
     private let getShuttleFilterUseCase: GetShuttleBusFilterUseCase
     private let fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase
     private let fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
-    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFilterUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase, getShuttleFilterUseCase: GetShuttleBusFilterUseCase, fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase, fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase) {
+    init(fetchExpressTimetableUseCase: FetchExpressTimetableUseCase, getExpressFiltersUseCase: GetExpressFilterUseCase, getCityFiltersUseCase: GetCityFiltersUseCase, fetchCityTimetableUseCase: FetchCityBusTimetableUseCase, getShuttleFilterUseCase: GetShuttleBusFilterUseCase, fetchShuttleRoutesUseCase: FetchShuttleBusRoutesUseCase, fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchExpressTimetableUseCase = fetchExpressTimetableUseCase
         self.getExpressFiltersUseCase = getExpressFiltersUseCase
         self.getCityFiltersUseCase = getCityFiltersUseCase
@@ -41,6 +43,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         self.getShuttleFilterUseCase = getShuttleFilterUseCase
         self.fetchShuttleRoutesUseCase = fetchShuttleRoutesUseCase
         self.fetchEmergencyNoticeUseCase = fetchEmergencyNoticeUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -52,6 +55,8 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 self?.getBusTimetable(busType: busType, firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx)
             case .getEmergencyNotice:
                 self?.getEmergencyNotice()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -113,5 +118,9 @@ final class BusTimetableViewModel: ViewModelProtocol {
         }, receiveValue: { [weak self] notice in
             self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
