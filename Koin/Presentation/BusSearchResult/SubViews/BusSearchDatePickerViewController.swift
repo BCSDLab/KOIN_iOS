@@ -13,6 +13,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
     private let pickerView = KoinPickerView()
     private var subscriptions: Set<AnyCancellable> = []
     let pickerSelectedItemsPublisher = CurrentValueSubject<[String], Never>([])
+    let changePickerDate = PassthroughSubject<Bool?, Never>()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
         
         loginButtonPublisher.sink { [weak self] in
             self?.pickerSelectedItemsPublisher.send(self?.pickerView.selectedItemPublisher.value ?? [])
+            self?.changePickerDate.send(self?.pickerView.changeSelectedItemPublisher.value)
         }.store(in: &subscriptions)
         configureView()
         

@@ -109,6 +109,7 @@ enum EventParameter {
             case arrivalLocation = "arrival_location"
             
             case switchToDeparture = "switch_to_departure"
+            case switchToArrival = "switch_to_arrival"
             case departureArrivalConfirm = "departure_arrival_confirm"
             case swapDestionation = "swap_destination"
             case searchBus = "search_bus"

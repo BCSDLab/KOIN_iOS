@@ -313,7 +313,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func busSearchButtonTapped() {
-        let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
+        let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
         let viewController = BusSearchViewController(viewModel: viewModel)
         viewController.title = "교통편 조회하기"
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "교통편 조회하기"))

@@ -14,6 +14,9 @@ final class BusAreaSelectedViewController: UIViewController {
     let departureBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let arrivalBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let dismissWithoutConfirmPublisher = PassthroughSubject<((BusPlace?, BusPlace?), Any?), Never>()
+    let dismissWithoutConfirmPublisher = PassthroughSubject<(BusPlace?, BusPlace?), Never>()
+    let switchBusAreaPublisher = PassthroughSubject<(String, BusAreaButtonType), Never>()
+    let confirmPublisher = PassthroughSubject<Void, Never>()
     private var buttonState: BusAreaButtonState = .departureSelect
     private var busRouteType: BusAreaButtonType = .departure
     private var subscriptions = Set<AnyCancellable>()
@@ -124,11 +127,13 @@ extension BusAreaSelectedViewController {
             arrivalBusAreaPublisher.send(arrival)
         }
         if buttonState == .allSelected {
+            confirmPublisher.send()
             dismissView()
         }
         else {
             buttonState = .allSelected
             busRouteType = busRouteType == .arrival ? .departure : .arrival
+            switchBusAreaPublisher.send((confirmButton.titleLabel?.text ?? "", busRouteType))
         }
         let busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
         busAreaCollectionView.configure(busAreaLists: busAreaList, buttonState: busRouteType)

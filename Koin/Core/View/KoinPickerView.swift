@@ -15,6 +15,7 @@ final class KoinPickerView: UIView, UIPickerViewDelegate, UIPickerViewDataSource
     private var items: [[String]] = [[]]
     private var selectedItem: [String] = []
     let selectedItemPublisher = CurrentValueSubject<[String], Never>([])
+    let changeSelectedItemPublisher = CurrentValueSubject<Bool?, Never>(.init())
     private var font: UIFont
     private var selectedColor: UIColor
     private var deselectedColor: UIColor
@@ -107,6 +108,9 @@ extension KoinPickerView {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedItem[component] = items[component][row]
         selectedItemPublisher.send(selectedItem)
+        if changeSelectedItemPublisher.value == nil {
+            changeSelectedItemPublisher.send(true)
+        }
         pickerView.reloadAllComponents()
     }
     
