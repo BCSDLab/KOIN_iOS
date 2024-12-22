@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
-
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -53,7 +52,6 @@ extension SceneDelegate {
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchBusInformationListUseCase: DefaultFetchBusInformationListUseCase(busRepository: DefaultBusRepository(service: DefaultBusService())),
             fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
             dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()

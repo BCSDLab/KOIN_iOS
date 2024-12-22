@@ -75,7 +75,13 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         return button
     }()
     
-    private let busSelectButton: UIButton = {
+    private let busTimetableButton: UIButton = {
+        let button = UIButton()
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    private let busSearchButton: UIButton = {
         let button = UIButton()
         button.contentHorizontalAlignment = .left
         return button
@@ -122,7 +128,10 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
         $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 16)
     }
-
+    
+    private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
     
     // MARK: - Initialization
     
@@ -203,7 +212,7 @@ extension ServiceSelectViewController {
     
     private func setupButtonActions() {
         shopSelectButton.addTarget(self, action: #selector(shopSelectButtonTapped), for: .touchUpInside)
-        busSelectButton.addTarget(self, action: #selector(busSelectButtonTapped), for: .touchUpInside)
+        busTimetableButton.addTarget(self, action: #selector(busTimetableButtonTapped), for: .touchUpInside)
         diningSelectButton.addTarget(self, action: #selector(diningSelectButtonTapped), for: .touchUpInside)
         timetableSelectButton.addTarget(self, action: #selector(timetableSelectButtonTapped), for: .touchUpInside)
         landSelectButton.addTarget(self, action: #selector(landSelectButtonTapped), for: .touchUpInside)
@@ -213,6 +222,7 @@ extension ServiceSelectViewController {
         inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
         noticeListButton.addTarget(self, action: #selector(noticeListButtonTapped), for: .touchUpInside)
         facilityInfoSelectButton.addTarget(self, action: #selector(facilityInfoSelectButtonTapped), for: .touchUpInside)
+        busSearchButton.addTarget(self, action: #selector(busSearchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func inquryButtonTapped() {
@@ -293,12 +303,21 @@ extension ServiceSelectViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
-    @objc func busSelectButtonTapped() {
-        let busDetailViewController = BusDetailViewController(selectedPage: (0, .shuttleBus))
-        busDetailViewController.title = "버스/교통"
-        navigationController?.pushViewController(busDetailViewController, animated: true)
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스"))
+    @objc func busTimetableButtonTapped() {
+        let repository = DefaultBusRepository(service: DefaultBusService())
+        let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+        let viewController = BusTimetableViewController(viewModel: viewModel)
+        viewController.title = "버스 시간표"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "버스 시간표"))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func busSearchButtonTapped() {
+        let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+        let viewController = BusSearchViewController(viewModel: viewModel)
+        viewController.title = "교통편 조회하기"
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "교통편 조회하기"))
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc func diningSelectButtonTapped() {
@@ -399,14 +418,18 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func setUpLayOuts() {
-        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busSelectButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, inquryButton, noticeListButton, facilityInfoSelectButton, timetableSelectButton].forEach {
+        [scrollView, inquryButton].forEach {
             view.addSubview($0)
+        }
+        scrollView.addSubview(contentView)
+        [nicknameLabel, greetingLabel, servicePaddingLabel, serviceGuideLabel, shopSelectButton, busTimetableButton, busSearchButton, diningSelectButton, landSelectButton, businessSelectButton, logOutButton, makeLoginDescription, noticeListButton, facilityInfoSelectButton, timetableSelectButton].forEach {
+            contentView.addSubview($0)
         }
     }
     
     private func setUpDetailLayout() {
-        let kindOfButton = [noticeListButton, shopSelectButton, busSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "주변 상점", "버스/교통", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        let kindOfButton = [noticeListButton, busTimetableButton, busSearchButton, shopSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
+        let buttonName = ["공지사항", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
         for idx in 0..<buttonName.count {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)
@@ -431,88 +454,120 @@ extension ServiceSelectViewController {
     }
     
     private func setUpConstraints() {
-        nicknameLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(24)
-        }
-        makeLoginDescription.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(24)
-        }
-        greetingLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(nicknameLabel.snp.bottom)
-            make.leading.equalTo(nicknameLabel.snp.trailing)
-        }
-        logOutButton.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(33.5)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(17)
-            make.width.equalTo(60)
-        }
-        servicePaddingLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(140)
-            make.leading.equalTo(view.snp.leading)
-            make.width.equalTo(24)
-            make.height.equalTo(33)
-        }
-        serviceGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(servicePaddingLabel)
-            make.leading.equalTo(servicePaddingLabel.snp.trailing)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(33)
-        }
-        noticeListButton.snp.makeConstraints { make in
-            make.top.equalTo(serviceGuideLabel.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
-        shopSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(noticeListButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
-        busSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(shopSelectButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
-        diningSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(busSelectButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
-        timetableSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(diningSelectButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
-        facilityInfoSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(timetableSelectButton.snp.bottom)
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(58)
+            make.bottom.equalTo(inquryButton.snp.top).offset(-10)
         }
-        landSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(facilityInfoSelectButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(750)
         }
-        businessSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(landSelectButton.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(58)
-        }
+        
         inquryButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
             make.bottom.equalTo(view.snp.bottom).offset(-30)
             make.width.equalTo(56)
             make.height.equalTo(26)
+        }
+        
+        nicknameLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(30)
+            make.leading.equalTo(contentView.snp.leading).offset(24)
+        }
+        
+        makeLoginDescription.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(30)
+            make.leading.equalTo(contentView.snp.leading).offset(24)
+        }
+        
+        greetingLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(nicknameLabel.snp.bottom)
+            make.leading.equalTo(nicknameLabel.snp.trailing)
+        }
+        
+        logOutButton.snp.makeConstraints { make in
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(33.5)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-24)
+            make.height.equalTo(17)
+            make.width.equalTo(60)
+        }
+        
+        servicePaddingLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(140)
+            make.leading.equalTo(contentView.snp.leading)
+            make.width.equalTo(24)
+            make.height.equalTo(33)
+        }
+        
+        serviceGuideLabel.snp.makeConstraints { make in
+            make.top.equalTo(servicePaddingLabel)
+            make.leading.equalTo(servicePaddingLabel.snp.trailing)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(33)
+        }
+        
+        noticeListButton.snp.makeConstraints { make in
+            make.top.equalTo(serviceGuideLabel.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        shopSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(busSearchButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        busTimetableButton.snp.makeConstraints { make in
+            make.top.equalTo(noticeListButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        busSearchButton.snp.makeConstraints { make in
+            make.top.equalTo(busTimetableButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        diningSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(shopSelectButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        timetableSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(diningSelectButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
+        }
+        
+        facilityInfoSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(timetableSelectButton.snp.bottom)
+            make.leading.trailing.equalTo(contentView)
+            make.height.equalTo(58)
+        }
+        
+        landSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(facilityInfoSelectButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+        }
+        
+        businessSelectButton.snp.makeConstraints { make in
+            make.top.equalTo(landSelectButton.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(58)
         }
     }
     

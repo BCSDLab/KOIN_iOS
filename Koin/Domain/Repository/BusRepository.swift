@@ -8,10 +8,10 @@
 import Combine
 
 protocol BusRepository {
-    func fetchBusInformationList(requestModel: FetchBusInformationListRequest) -> AnyPublisher<BusDTO, Error>
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error>
-    func fetchShuttleBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ShuttleBusTimetableDTO, Error>
     func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
-    func getBusCourse() -> AnyPublisher<BusCourses, Error>
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
     func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error>
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error>
 }

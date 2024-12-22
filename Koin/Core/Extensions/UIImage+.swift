@@ -112,6 +112,10 @@ enum ImageAsset: String {
     case checkFill
     case checkEmpty
     case callBlue
+    case qrCode
+    case incorrectInfo
+    case swap
+    case busStop
 }
 
 enum SFSymbols: String {
