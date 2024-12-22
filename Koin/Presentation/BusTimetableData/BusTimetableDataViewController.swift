@@ -134,23 +134,30 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
         }.store(in: &subscriptions)
         
         manyBusTimetableDataTableView.contentHeightPublisher.sink { [weak self] height in
-            self?.contentView.snp.updateConstraints {
-                $0.height.equalTo(height + 30)
+            DispatchQueue.main.async {
+                self?.contentView.snp.updateConstraints {
+                    $0.height.equalTo(height + 30)
+                }
+                self?.busTimetableSeparateView.snp.updateConstraints {
+                    $0.height.equalTo(height - 20)
+                }
             }
         }.store(in: &subscriptions)
         
         manyBusTimetableDataCollectionView.contentWidthPublisher
             .sink { [weak self] width in
-                guard let self = self else { return }
-                let headerWidth = UIScreen.main.bounds.width - width - self.manyBusTimetableDataTableView.bounds.width
-                if headerWidth > 0 {
-                    self.headerColorView.snp.updateConstraints {
-                        $0.width.equalTo(headerWidth)
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    let headerWidth = UIScreen.main.bounds.width - width - self.manyBusTimetableDataTableView.bounds.width
+                    if headerWidth > 0 {
+                        self.headerColorView.snp.updateConstraints {
+                            $0.width.equalTo(headerWidth)
+                        }
                     }
-                }
-                else {
-                    self.headerColorView.snp.updateConstraints {
-                        $0.width.equalTo(0)
+                    else {
+                        self.headerColorView.snp.updateConstraints {
+                            $0.width.equalTo(0)
+                        }
                     }
                 }
             }.store(in: &subscriptions)
@@ -316,7 +323,8 @@ extension BusTimetableDataViewController {
         busTimetableSeparateView.snp.makeConstraints {
             $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
             $0.width.equalTo(0.5)
-            $0.top.bottom.equalTo(manyBusTimetableDataTableView).inset(10)
+            $0.top.equalTo(manyBusTimetableDataTableView).inset(10)
+            $0.height.equalTo(300)
         }
         segmentControl.snp.makeConstraints {
             $0.top.equalTo(subBusTimetablePlaceLabel.snp.bottom).offset(16)
@@ -342,7 +350,7 @@ extension BusTimetableDataViewController {
             $0.height.equalTo(52)
         }
         incorrectBusInfoButton.snp.makeConstraints {
-            $0.top.equalTo(manyBusTimetableDataTableView.snp.bottom).offset(25)
+            $0.bottom.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(20)
         }
