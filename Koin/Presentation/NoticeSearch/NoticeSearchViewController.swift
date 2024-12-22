@@ -248,7 +248,7 @@ extension NoticeSearchViewController {
         textField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.height.equalTo(40)
         }
         
