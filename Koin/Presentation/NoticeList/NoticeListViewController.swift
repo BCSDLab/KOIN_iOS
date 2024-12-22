@@ -47,14 +47,14 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let settingButton = UIBarButtonItem(
-            image: .appImage(symbol: .magnifyingGlass) , style: .plain, target: self, action: #selector(searchButtonTapped))
-        settingButton.tintColor = UIColor.appColor(.neutral800)
         configureView()
         bind()
         inputSubject.send(.changeBoard(.all))
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
+        
+        let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
+        navigationItem.rightBarButtonItem = rightBarButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
