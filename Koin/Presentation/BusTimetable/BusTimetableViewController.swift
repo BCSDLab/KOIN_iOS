@@ -250,7 +250,6 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
             DispatchQueue.main.async { [weak self] in
                 self?.shuttleTimetableTableView.isHidden = true
                 self?.expressOrCityTimetableTableView.isHidden = false
-                self?.updateLayoutsByNotice(isDeleted: true)
             }
         }
     }
