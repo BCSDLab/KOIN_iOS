@@ -482,8 +482,8 @@ extension ServiceSelectViewController {
         }
         
         greetingLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(contentView.snp.bottom) // Change to contentView
-            make.leading.equalTo(contentView.snp.leading)
+            make.bottom.equalTo(nicknameLabel.snp.bottom)
+            make.leading.equalTo(nicknameLabel.snp.trailing)
         }
         
         logOutButton.snp.makeConstraints { make in
@@ -509,63 +509,62 @@ extension ServiceSelectViewController {
         
         noticeListButton.snp.makeConstraints { make in
             make.top.equalTo(serviceGuideLabel.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         shopSelectButton.snp.makeConstraints { make in
             make.top.equalTo(busSearchButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         busTimetableButton.snp.makeConstraints { make in
             make.top.equalTo(noticeListButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         busSearchButton.snp.makeConstraints { make in
             make.top.equalTo(busTimetableButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         diningSelectButton.snp.makeConstraints { make in
             make.top.equalTo(shopSelectButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         timetableSelectButton.snp.makeConstraints { make in
             make.top.equalTo(diningSelectButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
         
         facilityInfoSelectButton.snp.makeConstraints { make in
             make.top.equalTo(timetableSelectButton.snp.bottom)
-            make.leading.trailing.equalTo(contentView) // Changed to contentView
+            make.leading.trailing.equalTo(contentView)
             make.height.equalTo(58)
         }
         
         landSelectButton.snp.makeConstraints { make in
             make.top.equalTo(facilityInfoSelectButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
-            make.height.equalTo(58)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
         }
         
         businessSelectButton.snp.makeConstraints { make in
             make.top.equalTo(landSelectButton.snp.bottom)
-            make.leading.equalTo(contentView.snp.leading) // Changed to contentView
-            make.trailing.equalTo(contentView.snp.trailing) // Changed to contentView
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
             make.height.equalTo(58)
         }
     }
