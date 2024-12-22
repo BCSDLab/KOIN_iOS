@@ -14,7 +14,6 @@ final class BusAreaSelectedViewController: UIViewController {
     let departureBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let arrivalBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let dismissWithoutConfirmPublisher = PassthroughSubject<((BusPlace?, BusPlace?), Any?), Never>()
-    let dismissWithoutConfirmPublisher = PassthroughSubject<(BusPlace?, BusPlace?), Never>()
     let switchBusAreaPublisher = PassthroughSubject<(String, BusAreaButtonType), Never>()
     let confirmPublisher = PassthroughSubject<Void, Never>()
     private var buttonState: BusAreaButtonState = .departureSelect

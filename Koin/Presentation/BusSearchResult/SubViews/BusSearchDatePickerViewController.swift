@@ -43,6 +43,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
     }
     
     func setPickerItems(items: [[String]], selectedItems: [String]) {
+        pickerView.changeSelectedItemPublisher.send(nil)
         pickerView.setPickerData(items: items, selectedItem: selectedItems)
     }
     
