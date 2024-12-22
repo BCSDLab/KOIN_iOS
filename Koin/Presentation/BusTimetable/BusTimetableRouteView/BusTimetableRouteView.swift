@@ -82,6 +82,12 @@ final class BusTimetableRouteView: UIView {
         }
       
         busRouteContentHeightPublisher.send(isCityBus ? 104 : 62)
+        if isCityBus {
+            busFilterIdxPublisher.send((0, 0))
+        }
+        else {
+            busFilterIdxPublisher.send((0, nil))
+        }
         
         firstBusTimetableRouteCollectionView.configure(routeList: firstRouteList)
         secondBusTimetableRouteCollectionView.configure(routeList: secondRouteList ?? [])
