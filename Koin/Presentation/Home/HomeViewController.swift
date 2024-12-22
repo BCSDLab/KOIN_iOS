@@ -294,15 +294,17 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         busView.moveBusSearchPublisher.sink { [weak self] in
-            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusSearch, .click, "가장 빠른 버스 조회하기"))
+            let viewModel = BusSearchViewModel(selectBusAreaUseCase: DefaultSelectDepartAndArrivalUseCase(), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: DefaultBusRepository(service: DefaultBusService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
             let viewController = BusSearchViewController(viewModel: viewModel)
             viewController.title = "교통편 조회하기"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
         busView.moveBusTimetablePublisher.sink {[weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainBusTimetable, .click, "버스 시간표 바로가기"))
             let repository = DefaultBusRepository(service: DefaultBusService())
-            let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository))
+            let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
             let viewController = BusTimetableViewController(viewModel: viewModel)
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
@@ -313,6 +315,7 @@ final class HomeViewController: UIViewController {
 extension HomeViewController {
     
     @objc private func tapBusQrCode() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))
         if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }

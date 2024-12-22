@@ -110,7 +110,7 @@ extension ExpressOrCityTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 38
+        return 60
     }
 }
 

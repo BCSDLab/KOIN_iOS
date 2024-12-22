@@ -11,6 +11,7 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     enum Input {
         case getDatePickerData
         case getSearchedResult(String?, BusType?)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateDatePickerData(([[String]], [String]))
@@ -24,10 +25,12 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     private var departBusTime: String = ""
     private let fetchDatePickerDataUseCase: FetchKoinPickerDataUseCase
     private let fetchSearchedResultUseCase: SearchBusInfoUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
-    init(fetchDatePickerDataUseCase: FetchKoinPickerDataUseCase, busPlaces: (BusPlace, BusPlace), fetchSearchedResultUseCase: SearchBusInfoUseCase) {
+    init(fetchDatePickerDataUseCase: FetchKoinPickerDataUseCase, busPlaces: (BusPlace, BusPlace), fetchSearchedResultUseCase: SearchBusInfoUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchDatePickerDataUseCase = fetchDatePickerDataUseCase
         self.fetchSearchedResultUseCase = fetchSearchedResultUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.busPlaces = busPlaces
     }
     
@@ -38,6 +41,8 @@ final class BusSearchResultViewModel: ViewModelProtocol {
                 self?.getDatePickerData()
             case let .getSearchedResult(departDate, busType):
                 self?.getSearchedResult(departDate: departDate, busType: busType)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -71,5 +76,9 @@ extension BusSearchResultViewModel {
             let output = departDate != nil ? (departDate, searchedResult) : (nil, searchedResult)
             self?.outputSubject.send(.udpatesSearchedResult(output.0, output.1))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

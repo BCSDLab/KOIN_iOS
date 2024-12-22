@@ -22,6 +22,7 @@ final class BusSearchViewModel: ViewModelProtocol {
     enum Input {
         case selectBusArea(Int, BusAreaButtonState)
         case fetchBusNotice
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
@@ -33,10 +34,12 @@ final class BusSearchViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let selectBusAreaUseCase: SelectDepartAndArrivalUseCase
     private let fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
-    init(selectBusAreaUseCase: SelectDepartAndArrivalUseCase, fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase) {
+    init(selectBusAreaUseCase: SelectDepartAndArrivalUseCase, fetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.selectBusAreaUseCase = selectBusAreaUseCase
         self.fetchEmergencyNoticeUseCase = fetchEmergencyNoticeUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -46,6 +49,8 @@ final class BusSearchViewModel: ViewModelProtocol {
                 self?.selectBusInfo(busAreaIdx: busAreaIdx, busRouteType: busRouteType)
             case .fetchBusNotice:
                 self?.getEmergencyNotice()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -66,5 +71,9 @@ extension BusSearchViewModel {
         }, receiveValue: { [weak self] notice in
             self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
         }).store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

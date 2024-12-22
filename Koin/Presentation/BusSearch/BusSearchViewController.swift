@@ -138,6 +138,7 @@ final class BusSearchViewController: UIViewController {
             if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
                 manageSearchButton(isActivated: true)
             }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureLocationConfirm, .click, departureArea.koreanDescription))
         }.store(in: &subscriptions)
         
         busAreaViewController.arrivalBusAreaPublisher.sink { [weak self] arrivedArea in
@@ -146,6 +147,7 @@ final class BusSearchViewController: UIViewController {
             if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
                 manageSearchButton(isActivated: true)
             }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalLocationConfirm, .click, arrivedArea.koreanDescription))
         }.store(in: &subscriptions)
     }
 }
@@ -159,16 +161,18 @@ extension BusSearchViewController {
     }
 
     @objc private func tapSearchButton(sender: UIButton) {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchBus, .click, "조회하기"))
         let repository = DefaultBusRepository(service: DefaultBusService())
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
-        let viewModel = BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase(), busPlaces: (departure, arrival), fetchSearchedResultUseCase: DefaultSearchBusInfoUseCase(busRepository: repository))
+        let viewModel = BusSearchResultViewModel(fetchDatePickerDataUseCase: DefaultFetchKoinPickerDataUseCase(), busPlaces: (departure, arrival), fetchSearchedResultUseCase: DefaultSearchBusInfoUseCase(busRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
         let busSearchResultViewController = BusSearchResultViewController(viewModel: viewModel)
         busSearchResultViewController.title = "\(departure.koreanDescription) → \(arrival.koreanDescription)"
         navigationController?.pushViewController(busSearchResultViewController, animated: true)
     }
     
     @objc private func tapNoticeInfoButton() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncement, .click, "교통편 조회하기"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag)
         let viewController = NoticeDataViewController(viewModel: viewModel)
@@ -177,10 +181,17 @@ extension BusSearchViewController {
     
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let buttonState: BusAreaButtonState = sender == departAreaSelectedButton ? .departureSelect : .arrivalSelect
+        if sender == departAreaSelectedButton {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureBox, .click, "출발지 선택"))
+        }
+        else {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalBox, .click, "도착지 선택"))
+        }
         inputSubject.send(.selectBusArea(sender.tag, buttonState))
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncementClose, .click, "교통편 조회하기"))
         UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
@@ -188,6 +199,7 @@ extension BusSearchViewController {
     @objc private func swapDepartureAndArrival(sender: UIButton) {
         guard departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 else { return }
         
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.swapDestionation, .click, "스왑 버튼"))
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
