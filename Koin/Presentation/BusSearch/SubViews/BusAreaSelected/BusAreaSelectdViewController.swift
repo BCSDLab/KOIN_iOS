@@ -13,7 +13,7 @@ final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
     let departureBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let arrivalBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
-    let dismissWithoutConfirmPublisher = PassthroughSubject<(BusPlace?, BusPlace?), Never>()
+    let dismissWithoutConfirmPublisher = PassthroughSubject<((BusPlace?, BusPlace?), Any?), Never>()
     private var buttonState: BusAreaButtonState = .departureSelect
     private var busRouteType: BusAreaButtonType = .departure
     private var subscriptions = Set<AnyCancellable>()
@@ -56,33 +56,41 @@ final class BusAreaSelectedViewController: UIViewController {
         configureView()
         confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
         
-        dismissWithoutConfirmPublisher.sink { [weak self] departure, arrival in
+        dismissWithoutConfirmPublisher.sink { [weak self] busPlace, currentBusPlace in
+            let departure = busPlace.0
+            let arrival = busPlace.1
             if departure != self?.busAreaCollectionView.departureBusAreaPublisher.value {
-                self?.busAreaCollectionView.departureBusAreaPublisher.send(nil)
+                self?.busAreaCollectionView.departureBusAreaPublisher.send(departure)
             }
             
             if arrival != self?.busAreaCollectionView.arrivalBusAreaPublisher.value {
-                self?.busAreaCollectionView.arrivalBusAreaPublisher.send(nil)
+                self?.busAreaCollectionView.arrivalBusAreaPublisher.send(arrival)
             }
+            
+            if (departure != nil && self?.busRouteType == .arrival) || (departure == nil && self?.busRouteType == .departure) {
+                self?.busRouteType = departure != nil ? .departure : .arrival
+                self?.buttonState = departure != nil ? .departureSelect : .arrivalSelect
+            }
+        
         }.store(in: &subscriptions)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: NSNotification.Name("DismissBusAreaSelectedView"), object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("DismissBusAreaSelectedView"), object: busRouteType, userInfo: nil)
     }
 }
 
 extension BusAreaSelectedViewController {
     func configure(busAreaLists: [(BusPlace, Bool)], buttonState: BusAreaButtonState) {
-        if busAreaCollectionView.departureBusAreaPublisher.value != nil && busAreaCollectionView.arrivalBusAreaPublisher.value != nil {
-            self.buttonState = .allSelected
-        }
         if buttonState == .departureSelect {
             busRouteType = .departure
         }
         else {
             busRouteType = .arrival
+        }
+        if (busAreaCollectionView.departureBusAreaPublisher.value != nil && busRouteType == .arrival) || (busAreaCollectionView.arrivalBusAreaPublisher.value != nil && busRouteType == .departure) {
+            self.buttonState = .allSelected
         }
         setUpView(buttonState: self.buttonState)
         busAreaCollectionView.configure(busAreaLists: busAreaLists, buttonState: busRouteType)
@@ -108,19 +116,19 @@ extension BusAreaSelectedViewController {
     }
     
     @objc private func tapConfirmButton() {
+        if let departure = busAreaCollectionView.departureBusAreaPublisher.value, busRouteType == .departure {
+            departureBusAreaPublisher.send(departure)
+        }
+        
+        if let arrival = busAreaCollectionView.arrivalBusAreaPublisher.value, busRouteType == .arrival {
+            arrivalBusAreaPublisher.send(arrival)
+        }
         if buttonState == .allSelected {
             dismissView()
         }
         else {
             buttonState = .allSelected
             busRouteType = busRouteType == .arrival ? .departure : .arrival
-        }
-        if let departure = busAreaCollectionView.departureBusAreaPublisher.value {
-            departureBusAreaPublisher.send(departure)
-        }
-        
-        if let arrival = busAreaCollectionView.arrivalBusAreaPublisher.value {
-            arrivalBusAreaPublisher.send(arrival)
         }
         let busAreaList: [(BusPlace, Bool)] = [(.koreatech, false), (.station, false), (.terminal, false)]
         busAreaCollectionView.configure(busAreaLists: busAreaList, buttonState: busRouteType)

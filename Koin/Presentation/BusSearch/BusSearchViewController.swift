@@ -154,7 +154,8 @@ extension BusSearchViewController {
     @objc func didDismissDetailNotification(_ notification: Notification) {
         let departure = departAreaSelectedButton.tag != 0 ? BusPlace.allCases[departAreaSelectedButton.tag - 1] : nil
         let arrival = arrivedAreaSelectedButton.tag != 0 ? BusPlace.allCases[arrivedAreaSelectedButton.tag - 1] : nil
-        busAreaViewController.dismissWithoutConfirmPublisher.send((departure, arrival))
+        
+        busAreaViewController.dismissWithoutConfirmPublisher.send(((departure, arrival), notification.object))
     }
 
     @objc private func tapSearchButton(sender: UIButton) {
