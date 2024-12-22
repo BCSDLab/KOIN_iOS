@@ -8,29 +8,15 @@
 import Combine
 
 protocol SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace)
+    func execute(busAreaIdx: Int, busRouteType: BusAreaButtonState) -> (BusAreaButtonState, BusPlace?)
 }
 
 final class DefaultSelectDepartAndArrivalUseCase: SelectDepartAndArrivalUseCase {
-    func selectBusPlaceOptions(selectedBusPlace: SelectedBusPlaceStatus) -> (BusPlace, BusPlace){
-        let lastDepartedPlace = selectedBusPlace.lastDepartedPlace
-        let lastArrivedPlace = selectedBusPlace.lastArrivedPlace
-        let nowArrivedPlace = selectedBusPlace.nowArrivedPlace
-        let nowDepartedPlace = selectedBusPlace.nowDepartedPlace
-        
-        if nowDepartedPlace != nowArrivedPlace {
-            return (nowDepartedPlace, nowArrivedPlace)
+    func execute(busAreaIdx: Int, busRouteType: BusAreaButtonState) -> (BusAreaButtonState, BusPlace?) {
+        let buttonState: BusAreaButtonState = busRouteType == .departureSelect ? .departureSelect : .arrivalSelect
+        if busAreaIdx == 0 {
+            return (buttonState, nil)
         }
-        else {
-            if let lastDepartedPlace = lastDepartedPlace {
-                return (nowDepartedPlace, lastDepartedPlace)
-            }
-            
-            if let lastArrivedPlace = lastArrivedPlace {
-                return (lastArrivedPlace, nowArrivedPlace)
-            }
-            
-            return (nowDepartedPlace, nowArrivedPlace)
-        }
+        return (buttonState, BusPlace.allCases[busAreaIdx - 1])
     }
 }

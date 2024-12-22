@@ -55,6 +55,8 @@ class LoginModalViewController: UIViewController {
         return view
     }()
     
+    private var contentViewInContainer: UIView?
+    
     init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor) {
         super.init(nibName: nil, bundle: nil)
         self.containerWidth = width
@@ -75,6 +77,9 @@ class LoginModalViewController: UIViewController {
         configureView()
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc func closeButtonTapped() {
@@ -87,12 +92,23 @@ class LoginModalViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func updateLoginButton(buttonColor: UIColor) {
-        loginButton.backgroundColor = buttonColor
+    @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        if !containerView.frame.contains(location) {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
-    func updateCloseButton(buttonColor: UIColor) {
+    func updateLoginButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
+        loginButton.backgroundColor = buttonColor
+        loginButton.layer.borderWidth = borderWidth
+        loginButton.setTitle(title, for: .normal)
+    }
+    
+    func updateCloseButton(buttonColor: UIColor = .systemBackground, borderWidth: CGFloat, title: String) {
         closeButton.backgroundColor = buttonColor
+        closeButton.layer.borderWidth = borderWidth
+        closeButton.setTitle(title, for: .normal)
     }
     
     func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center) {
@@ -118,6 +134,31 @@ class LoginModalViewController: UIViewController {
         
         subMessageLabel.attributedText = attributedString
     }
+    
+    func setContentViewInContainer(view: UIView, frame: CGRect) {
+        self.contentViewInContainer = view
+        self.contentViewInContainer?.frame = frame
+        
+        guard let contentViewInContainer = contentViewInContainer else { return }
+        containerView.addSubview(contentViewInContainer)
+        contentViewInContainer.snp.makeConstraints { make in
+            make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(contentViewInContainer.frame.height)
+        }
+        closeButton.snp.remakeConstraints { make in
+            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
+            make.trailing.equalTo(containerView.snp.centerX).offset(-2)
+            make.width.equalTo(114.5)
+            make.height.equalTo(48)
+        }
+        loginButton.snp.remakeConstraints { make in
+            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
+            make.leading.equalTo(containerView.snp.centerX).offset(2)
+            make.width.equalTo(114.5)
+            make.height.equalTo(48)
+        }
+    }
 }
 
 extension LoginModalViewController {
@@ -140,11 +181,11 @@ extension LoginModalViewController {
         }
         messageLabel.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.top).offset(24)
-            make.centerX.equalTo(containerView.snp.centerX)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
         subMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(messageLabel.snp.bottom).offset(paddingBetweenLabels)
-            make.centerX.equalTo(containerView.snp.centerX)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
         closeButton.snp.makeConstraints { make in
             make.top.equalTo(subMessageLabel.snp.bottom).offset(24)

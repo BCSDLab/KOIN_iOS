@@ -8,11 +8,12 @@
 import Alamofire
 
 enum BusAPI {
-    case fetchBusInformationList(FetchBusInformationListRequest)
     case searchBusInformation(SearchBusInfoRequest)
     case fetchBusTimetableList(FetchBusTimetableRequest)
-    case getBusCourse
     case fetchCityBusTimetableList(FetchCityBusTimetableRequest)
+    case fetchShuttleBusTimetableRoute
+    case fetchShuttleBusTimetableList(String)
+    case fetchEmergencyNotice
 }
 
 extension BusAPI: Router, URLRequestConvertible {
@@ -23,57 +24,47 @@ extension BusAPI: Router, URLRequestConvertible {
     
     public var path: String {
         switch self {
-        case .fetchBusInformationList: return "/bus"
-        case .searchBusInformation: return "/bus/search"
+        case .searchBusInformation: return "/bus/route"
         case .fetchBusTimetableList: return "/bus/timetable/v2"
-        case .getBusCourse: return "/bus/courses"
         case .fetchCityBusTimetableList: return "/bus/timetable/city"
+        case .fetchShuttleBusTimetableRoute: return "/bus/courses/shuttle"
+        case let .fetchShuttleBusTimetableList(id): return "/bus/timetable/shuttle/\(id)"
+        case .fetchEmergencyNotice: return "/bus/notice"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchBusInformationList: return .get
-        case .searchBusInformation: return .get
-        case .fetchBusTimetableList: return .get
-        case .getBusCourse: return .get
-        case .fetchCityBusTimetableList: return .get
+        default: return .get
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchBusInformationList: return [:]
-        case .searchBusInformation: return [:]
-        case .fetchBusTimetableList: return [:]
-        case .getBusCourse: return [:]
-        case .fetchCityBusTimetableList: return [:]
+        default: return [:]
         }
     }
     
     
     public var parameters: Any? {
         switch self {
-        case .fetchBusInformationList(let request):
-            return try? request.toDictionary()
         case .searchBusInformation(let request):
             return try? request.toDictionary()
         case .fetchBusTimetableList(let request):
             return try? request.toDictionary()
-        case .getBusCourse:
+        case .fetchShuttleBusTimetableRoute, .fetchEmergencyNotice:
             return nil
         case .fetchCityBusTimetableList(let request):
             return try? request.toDictionary()
+        case .fetchShuttleBusTimetableList(let id):
+            return try? id.toDictionary()
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchBusInformationList: return URLEncoding.default
-        case .searchBusInformation: return URLEncoding.default
-        case .fetchBusTimetableList: return URLEncoding.default
-        case .getBusCourse: return nil
-        case .fetchCityBusTimetableList: return URLEncoding.default
+        case .fetchShuttleBusTimetableRoute, .fetchEmergencyNotice: return nil
+        default: return URLEncoding.default
         }
     }
  

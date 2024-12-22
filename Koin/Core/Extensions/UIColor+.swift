@@ -25,6 +25,10 @@ enum TimetableColorAsset {
     case body1, body2, body3, body4, body5, body6, body7, body8, body9, body10, body11, body12, body13, body14, body15
 }
 extension UIColor {
+    static func setColor(_ hexCode: String) -> UIColor {
+        return UIColor(hexCode: hexCode)
+    }
+    
     static func timetableColor(_name: TimetableColorAsset) -> UIColor {
         switch _name {
         case .header1: return UIColor(hexCode: "890000")
