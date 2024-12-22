@@ -132,22 +132,13 @@ final class BusSearchViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        busAreaViewController.switchBusAreaPublisher.sink { [weak self] logValue, buttonState in
-            if buttonState == .departure {
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.switchToDeparture, .click, logValue))
-            }
-            else {
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.switchToArrival, .click, logValue))
-            }
-        }.store(in: &subscriptions)
-        
         busAreaViewController.departureBusAreaPublisher.sink { [weak self] departureArea in
             guard let self = self else { return }
             changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
             if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
                 manageSearchButton(isActivated: true)
             }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureLocation, .click, departureArea.koreanDescription))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureLocationConfirm, .click, departureArea.koreanDescription))
         }.store(in: &subscriptions)
         
         busAreaViewController.arrivalBusAreaPublisher.sink { [weak self] arrivedArea in
@@ -156,11 +147,7 @@ final class BusSearchViewController: UIViewController {
             if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
                 manageSearchButton(isActivated: true)
             }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalLocation, .click, arrivedArea.koreanDescription))
-        }.store(in: &subscriptions)
-        
-        busAreaViewController.confirmPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureArrivalConfirm, .click, "확인하기"))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalLocationConfirm, .click, arrivedArea.koreanDescription))
         }.store(in: &subscriptions)
     }
 }
@@ -174,7 +161,7 @@ extension BusSearchViewController {
     }
 
     @objc private func tapSearchButton(sender: UIButton) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureArrivalConfirm, .click, "조회하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchBus, .click, "조회하기"))
         let repository = DefaultBusRepository(service: DefaultBusService())
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
