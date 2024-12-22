@@ -252,13 +252,13 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncementClose, .click, "버스 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncementClose, .click, "\(currentBusType().koreanDescription) 시간표"))
         UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
     
     @objc private func tapNoticeInfoButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncement, .click, "버스 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncement, .click, "\(currentBusType().koreanDescription) 시간표"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag)
         let viewController = NoticeDataViewController(viewModel: viewModel)
@@ -280,7 +280,6 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
             DispatchQueue.main.async { [weak self] in
                 self?.shuttleTimetableTableView.isHidden = true
                 self?.expressOrCityTimetableTableView.isHidden = false
-                self?.updateLayoutsByNotice(isDeleted: true)
             }
             logValue = "대성"
         default:
