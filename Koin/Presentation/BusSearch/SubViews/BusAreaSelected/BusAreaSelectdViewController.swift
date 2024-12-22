@@ -126,6 +126,7 @@ extension BusAreaSelectedViewController {
         if let arrival = busAreaCollectionView.arrivalBusAreaPublisher.value, busRouteType == .arrival {
             arrivalBusAreaPublisher.send(arrival)
         }
+
         if buttonState == .allSelected {
             confirmPublisher.send()
             dismissView()

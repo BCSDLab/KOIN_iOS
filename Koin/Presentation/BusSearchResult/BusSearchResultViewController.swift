@@ -74,7 +74,8 @@ final class BusSearchResultViewController: UIViewController {
         }.store(in: &subscriptions)
         
         busSearchDatePickerViewController.changePickerDate.sink { [weak self] isChanged in
-            
+            let logValue = isChanged != nil ? "Y" : "N"
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureTimeSettingDone, .click, logValue))
         }.store(in: &subscriptions)
         
         tableView.tapDepartTimeButtonPublisher

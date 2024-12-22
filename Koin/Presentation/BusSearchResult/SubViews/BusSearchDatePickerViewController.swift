@@ -22,6 +22,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
         loginButtonPublisher.sink { [weak self] in
             self?.pickerSelectedItemsPublisher.send(self?.pickerView.selectedItemPublisher.value ?? [])
             self?.changePickerDate.send(self?.pickerView.changeSelectedItemPublisher.value)
+            self?.pickerView.changeSelectedItemPublisher.send(nil)
         }.store(in: &subscriptions)
         configureView()
         
@@ -37,6 +38,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
             let pickerSelectedItems = ["오늘", amPm, String(displayHour), String(format: "%02d", minute)]
             self?.pickerView.setSelectedData(selectedItem: pickerSelectedItems)
             self?.pickerSelectedItemsPublisher.send(pickerSelectedItems)
+            self?.pickerView.changeSelectedItemPublisher.send(nil)
         }.store(in: &subscriptions)
     }
     
