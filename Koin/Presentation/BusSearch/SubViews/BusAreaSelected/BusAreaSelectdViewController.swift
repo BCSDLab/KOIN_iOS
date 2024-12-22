@@ -13,6 +13,7 @@ final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
     let departureBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
     let arrivalBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
+    let dismissWithoutConfirmPublisher = PassthroughSubject<(BusPlace?, BusPlace?), Never>()
     private var buttonState: BusAreaButtonState = .departureSelect
     private var busRouteType: BusAreaButtonType = .departure
     private var subscriptions = Set<AnyCancellable>()
@@ -54,6 +55,21 @@ final class BusAreaSelectedViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
+        
+        dismissWithoutConfirmPublisher.sink { [weak self] departure, arrival in
+            if departure != self?.busAreaCollectionView.departureBusAreaPublisher.value {
+                self?.busAreaCollectionView.departureBusAreaPublisher.send(nil)
+            }
+            
+            if arrival != self?.busAreaCollectionView.arrivalBusAreaPublisher.value {
+                self?.busAreaCollectionView.arrivalBusAreaPublisher.send(nil)
+            }
+        }.store(in: &subscriptions)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.post(name: NSNotification.Name("DismissBusAreaSelectedView"), object: nil, userInfo: nil)
     }
 }
 
@@ -92,10 +108,6 @@ extension BusAreaSelectedViewController {
     }
     
     @objc private func tapConfirmButton() {
-        changeButtonState()
-    }
-    
-    private func changeButtonState() {
         if buttonState == .allSelected {
             dismissView()
         }

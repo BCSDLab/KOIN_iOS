@@ -99,11 +99,23 @@ final class BusSearchViewController: UIViewController {
         busNoticeWrappedView.addGestureRecognizer(tapGesture)
         bind()
         inputSubject.send(.fetchBusNotice)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.didDismissDetailNotification(_:)),
+            name: NSNotification.Name("DismissBusAreaSelectedView"),
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("DismissBusAreaSelectedView"), object: nil)
     }
     
     
@@ -139,6 +151,12 @@ final class BusSearchViewController: UIViewController {
 }
 
 extension BusSearchViewController {
+    @objc func didDismissDetailNotification(_ notification: Notification) {
+        let departure = departAreaSelectedButton.tag != 0 ? BusPlace.allCases[departAreaSelectedButton.tag - 1] : nil
+        let arrival = arrivedAreaSelectedButton.tag != 0 ? BusPlace.allCases[arrivedAreaSelectedButton.tag - 1] : nil
+        busAreaViewController.dismissWithoutConfirmPublisher.send((departure, arrival))
+    }
+
     @objc private func tapSearchButton(sender: UIButton) {
         let repository = DefaultBusRepository(service: DefaultBusService())
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
@@ -189,6 +207,8 @@ extension BusSearchViewController {
 
         busAreaViewController.configure(busAreaLists: busAreaList, buttonState: buttonState)
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
+        bottomSheet.modalPresentationStyle = .overFullScreen
+        bottomSheet.modalTransitionStyle = .crossDissolve
         present(bottomSheet, animated: true)
     }
     
