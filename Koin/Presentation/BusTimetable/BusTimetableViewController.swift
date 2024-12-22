@@ -142,7 +142,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
         shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id, routeType, routeName in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.areaSpecificRoute, .click, "\(routeType.prefix(2))_\(routeName)"))
             let busRepository = DefaultBusRepository(service: DefaultBusService())
-            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), shuttleRouteId: id))
+            let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), shuttleRouteId: id))
             viewController.title = "\(routeName) 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
