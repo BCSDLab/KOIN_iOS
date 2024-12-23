@@ -50,6 +50,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         navigationItem.rightBarButtonItem = deleteButton
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        inputSubject.send(.getSemesterInfo)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +74,8 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
                 self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
             case let .udpatesSearchedResult(departTime, busSearchedResult):
                 self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
+            case let .updateSemesterInfo(semesterInfo):
+                self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
         }.store(in: &subscriptions)
         
@@ -123,6 +126,10 @@ extension BusSearchResultViewController {
             tableView.setBusSearchTime(departTime: "\(time)")
         }
         tableView.setBusSearchResult(busSearchResult: departInfo)
+    }
+    
+    private func updateSemesterInfo(semesterInfo: SemesterInfo) {
+        busSearchDatePickerViewController.updateSubMessageLabel(title: "\(semesterInfo.name)(\(semesterInfo.from) ~ \(semesterInfo.to))의\n시간표가 제공됩니다.")
     }
 }
 
