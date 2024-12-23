@@ -107,7 +107,8 @@ extension KoinPickerView {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 2 && items[component][row] == "12" {
-            selectedItem[component] = "0"
+            let hour = selectedItem[2] == "오전" ? "0" : "12"
+            selectedItem[component] = hour
         }
         selectedItem[component] = items[component][row]
         selectedItemPublisher.send(selectedItem)
