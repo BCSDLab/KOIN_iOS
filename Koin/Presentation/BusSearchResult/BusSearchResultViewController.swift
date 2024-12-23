@@ -49,13 +49,13 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(tapRightBarButton))
         navigationItem.rightBarButtonItem = deleteButton
         
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         inputSubject.send(.getSemesterInfo)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
