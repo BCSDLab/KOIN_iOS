@@ -48,6 +48,9 @@ final class BusSearchResultTableView: UITableView {
         self.busSearchResult = busSearchResult
         self.busSearchSchedule = busSearchResult.schedule
         reloadData()
+        if busSearchResult.schedule.count > 0 {
+            scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        }
     }
     
     private func showDropDown() {
