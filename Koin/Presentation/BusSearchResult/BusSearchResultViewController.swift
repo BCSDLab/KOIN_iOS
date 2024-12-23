@@ -41,7 +41,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         configureView()
         bind()
         inputSubject.send(.getDatePickerData)
-        inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
+        getTodayData()
         let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
        navigationItem.leftBarButtonItem = backButton
         
@@ -119,6 +119,21 @@ extension BusSearchResultViewController {
     @objc private func tapRightBarButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultClose, .click, "뒤로가기"))
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func getTodayData() {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: currentDate)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "h:mm"
+    
+        let amPm = hour < 12 ? "오전" : "오후"
+        let formattedTime = formatter.string(from: currentDate)
+       
+        let today = "오늘 \(amPm) \(formattedTime)"
+        inputSubject.send(.getSearchedResult(today, .noValue))
     }
     
     private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
