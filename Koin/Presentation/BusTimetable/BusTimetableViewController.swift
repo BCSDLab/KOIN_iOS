@@ -334,9 +334,11 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
     }
     
     private func updateBusTimetable(busType: BusType, timetableInfo: BusTimetableInfo) {
-        busStopLabel.isHidden = false
-        busStopImageView.isHidden = false
-        expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
+        DispatchQueue.main.async { [weak self] in
+            self?.busStopLabel.isHidden = false
+            self?.busStopImageView.isHidden = false
+            self?.expressOrCityTimetableTableView.updateBusInfo(busInfo: timetableInfo)
+        }
     }
     
     private func updateBusStopLabel(busStop: String) {
@@ -344,9 +346,11 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
     }
     
     private func updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO) {
-        busStopLabel.isHidden = true
-        busStopImageView.isHidden = true
-        shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
+        DispatchQueue.main.async { [weak self] in
+            self?.busStopLabel.isHidden = true
+            self?.busStopImageView.isHidden = true
+            self?.shuttleTimetableTableView.updateShuttleBusInfo(busInfo: busRoutes)
+        }
     }
     
     private func updateEmergencyNotice(notice: BusNoticeDTO) {

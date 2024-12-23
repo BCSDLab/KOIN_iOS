@@ -78,7 +78,7 @@ extension BusView {
         }
         
         [busSearchImageView, busTimetableImageView].forEach {
-            $0.image = .appImage(asset: .arrowRight)
+            $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
         }
     }
     
