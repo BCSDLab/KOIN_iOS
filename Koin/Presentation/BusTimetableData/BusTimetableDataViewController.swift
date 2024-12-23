@@ -316,7 +316,7 @@ extension BusTimetableDataViewController {
         manyBusTimetableDataTableView.snp.makeConstraints {
             $0.leading.bottom.equalToSuperview()
             $0.width.equalTo(152)
-            $0.top.equalTo(busTimetableBorderView.snp.bottom).offset(1)
+            $0.top.equalTo(busTimetableBorderView.snp.bottom)
         }
         manyBusTimetableDataCollectionView.snp.makeConstraints {
             $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
@@ -327,7 +327,7 @@ extension BusTimetableDataViewController {
         busTimetableSeparateView.snp.makeConstraints {
             $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
             $0.width.equalTo(0.5)
-            $0.top.equalTo(manyBusTimetableDataTableView).inset(10)
+            $0.top.equalTo(manyBusTimetableDataTableView)
             $0.height.equalTo(300)
         }
         segmentControl.snp.makeConstraints {

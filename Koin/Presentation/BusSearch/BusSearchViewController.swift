@@ -23,12 +23,6 @@ final class BusSearchViewController: UIViewController {
         $0.text = "목적지까지 가장 빠른 교통편을 알려드릴게요."
     }
     
-    private let searchSubDescriptionLabel = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textColor = .appColor(.neutral600)
-        $0.text = "학기 중 시간표와 다를 수 있습니다."
-    }
-    
     private let busNoticeWrappedView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.info100)
         $0.layer.cornerRadius = 8
@@ -279,11 +273,12 @@ extension BusSearchViewController {
             value.configuration = configuration
             value.backgroundColor = .appColor(.neutral100)
             value.addTarget(self, action: #selector(tapBusAreaSelectedButtons), for: .touchUpInside)
+            value.layer.cornerRadius = 4
         }
     }
     
     private func setUpLayOuts() {
-        [searchMainDescriptionLabel, searchSubDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton, busNoticeWrappedView].forEach {
+        [searchMainDescriptionLabel, departGuideLabel, arriveGuideLabel, departAreaSelectedButton, swapAreaButton, arrivedAreaSelectedButton, busInfoSearchButton, busNoticeWrappedView].forEach {
             view.addSubview($0)
         }
         
@@ -316,14 +311,10 @@ extension BusSearchViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(busNoticeWrappedView.snp.bottom).offset(18)
         }
-        searchSubDescriptionLabel.snp.makeConstraints {
-            $0.leading.equalTo(searchMainDescriptionLabel)
-            $0.top.equalTo(searchMainDescriptionLabel.snp.bottom).offset(4)
-        }
         departGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(127)
-            $0.top.equalTo(searchSubDescriptionLabel.snp.bottom).offset(46)
+            $0.top.equalTo(searchMainDescriptionLabel.snp.bottom).offset(65)
         }
         arriveGuideLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)

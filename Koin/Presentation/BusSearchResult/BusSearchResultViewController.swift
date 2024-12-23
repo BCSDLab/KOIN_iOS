@@ -10,7 +10,7 @@ import DropDown
 import SnapKit
 import UIKit
 
-final class BusSearchResultViewController: UIViewController {
+final class BusSearchResultViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
@@ -42,16 +42,23 @@ final class BusSearchResultViewController: UIViewController {
         bind()
         inputSubject.send(.getDatePickerData)
         inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
-        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(tapLeftBarButton))
-        navigationItem.leftBarButtonItem = backButton
+        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
+       navigationItem.leftBarButtonItem = backButton
+        
         
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(tapRightBarButton))
         navigationItem.rightBarButtonItem = deleteButton
+        
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(false)
     }
     
     

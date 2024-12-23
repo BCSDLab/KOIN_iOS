@@ -83,7 +83,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
 
 extension BusSearchResultTableViewHeader {
     private func setUpDepartTimeButton() {
-        let imageView = UIImageView(image: .appImage(asset: .arrowDown))
+        let imageView = UIImageView(image: .appImage(asset: .arrowDown)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal))
         [imageView, departGuideLabel, departTimeLabel].forEach {
             departTimeButton.addSubview($0)
         }
@@ -108,7 +108,7 @@ extension BusSearchResultTableViewHeader {
     private func setUpBusTypeFilterButton(busType: String) {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString(busType, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardMedium, size: 14), .foregroundColor: UIColor.appColor(.neutral800)]))
-        configuration.image = .appImage(asset: .arrowDown)
+        configuration.image = .appImage(asset: .arrowDown)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
         configuration.imagePadding = 4
         configuration.contentInsets = .init(top: 9, leading: 16, bottom: 9, trailing: 16)
         configuration.imagePlacement = .trailing
@@ -125,7 +125,7 @@ extension BusSearchResultTableViewHeader {
         departTimeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.centerY.equalToSuperview()
-            $0.width.equalTo(173)
+            $0.width.lessThanOrEqualTo(183)
             $0.height.equalTo(42)
         }
         busTypeFilterButton.snp.makeConstraints {
