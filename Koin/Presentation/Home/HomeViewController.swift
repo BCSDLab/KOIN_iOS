@@ -181,6 +181,7 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
+        configureTapGesture()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
@@ -379,6 +380,11 @@ extension HomeViewController {
         let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
         swipeRightGesture.direction = .right
         menuBackgroundView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    private func configureTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(menuViewTapped))
+        menuBackgroundView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
