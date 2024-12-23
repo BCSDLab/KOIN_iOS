@@ -111,7 +111,8 @@ class LoginModalViewController: UIViewController {
         closeButton.setTitle(title, for: .normal)
     }
     
-    func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center) {
+    func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center, title: String? = nil) {
+        if let title = title { titleText = title }
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
         paragraphStyle.alignment = alignment
@@ -123,7 +124,8 @@ class LoginModalViewController: UIViewController {
         messageLabel.attributedText = attributedString
     }
     
-    func updateSubMessageLabel(font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center) {
+    func updateSubMessageLabel(font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center, title: String? = nil) {
+        if let title = title { subTitleText = title }
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         paragraphStyle.alignment = alignment

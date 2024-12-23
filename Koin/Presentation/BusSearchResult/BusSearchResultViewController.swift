@@ -10,7 +10,7 @@ import DropDown
 import SnapKit
 import UIKit
 
-final class BusSearchResultViewController: UIViewController {
+final class BusSearchResultViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
@@ -41,17 +41,25 @@ final class BusSearchResultViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.getDatePickerData)
-        inputSubject.send(.getSearchedResult("오늘 \(Date().formatDateToHHMM(isHH: false))", .noValue))
-        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(tapLeftBarButton))
-        navigationItem.leftBarButtonItem = backButton
+        getTodayData()
+        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
+       navigationItem.leftBarButtonItem = backButton
+        
         
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(tapRightBarButton))
         navigationItem.rightBarButtonItem = deleteButton
+        
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        inputSubject.send(.getSemesterInfo)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(false)
     }
     
     
@@ -66,6 +74,8 @@ final class BusSearchResultViewController: UIViewController {
                 self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
             case let .udpatesSearchedResult(departTime, busSearchedResult):
                 self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
+            case let .updateSemesterInfo(semesterInfo):
+                self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
         }.store(in: &subscriptions)
         
@@ -111,11 +121,30 @@ extension BusSearchResultViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    private func getTodayData() {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: currentDate)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "h:mm"
+    
+        let amPm = hour < 12 ? "오전" : "오후"
+        let formattedTime = formatter.string(from: currentDate)
+       
+        let today = "오늘 \(amPm) \(formattedTime)"
+        inputSubject.send(.getSearchedResult(today, .noValue))
+    }
+    
     private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
         if let time = departTime {
             tableView.setBusSearchTime(departTime: "\(time)")
         }
         tableView.setBusSearchResult(busSearchResult: departInfo)
+    }
+    
+    private func updateSemesterInfo(semesterInfo: SemesterInfo) {
+        busSearchDatePickerViewController.updateSubMessageLabel(title: "\(semesterInfo.name)(\(semesterInfo.from) ~ \(semesterInfo.to))의\n시간표가 제공됩니다.")
     }
 }
 
