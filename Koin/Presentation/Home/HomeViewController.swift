@@ -191,7 +191,6 @@ final class HomeViewController: UIViewController {
         print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
-        inputSubject.send(.getAbTestResult("c_keyword_ banner_v1"))
         scrollView.delegate = self
     }
     
@@ -421,7 +420,7 @@ extension HomeViewController {
     
     private func putImage(data: ShopCategoryDTO) {
         var categories = data.shopCategories
-        let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://stage-static.koreatech.in/upload/SHOPS/2024/12/12/fc8da75a-a3ca-48ed-8a16-023394f8315a/shopBenefit.svg")
+        let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://ifh.cc/g/M4raFL.png")
            categories.insert(newCategory, at: 0)
         categoryCollectionView.updateCategories(categories)
     }

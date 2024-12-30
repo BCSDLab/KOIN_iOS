@@ -134,7 +134,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         return collectionView
     }()
     
-    private let submitReviewButton = UIButton().then {
+    private let submitReviewButton = DebouncedButton().then {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.setTitle("작성하기", for: .normal)
         $0.backgroundColor = UIColor.appColor(.neutral200)
@@ -166,7 +166,9 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         inputSubject.send(.updateShopName)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        submitReviewButton.addTarget(self, action: #selector(submitReviewButtonTapped), for: .touchUpInside)
+        submitReviewButton.throttle(interval: .seconds(3)) { [weak self] in
+            self?.submitReviewButtonTapped()
+        }
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
     }
@@ -265,7 +267,7 @@ extension ShopReviewViewController {
         present(picker, animated: true, completion: nil)
     }
     
-    @objc private func submitReviewButtonTapped() {
+    private func submitReviewButtonTapped() {
         let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem)
         inputSubject.send(.writeReview(requestModel))
     }
