@@ -405,6 +405,7 @@
 		D283A4EE2CED088900C238BA /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D283A4ED2CED088900C238BA /* SelectTimeView.swift */; };
 		D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */; };
 		D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289873D2D21B30D00AA7285 /* DebouncedButton.swift */; };
+		D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -962,6 +963,7 @@
 		D283A4ED2CED088900C238BA /* SelectTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTimeView.swift; sourceTree = "<group>"; };
 		D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterFlowLayout.swift; sourceTree = "<group>"; };
 		D289873D2D21B30D00AA7285 /* DebouncedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedButton.swift; sourceTree = "<group>"; };
+		D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestTokenResponse.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -1637,6 +1639,7 @@
 			isa = PBXGroup;
 			children = (
 				D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */,
+				D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */,
 			);
 			path = AbTest;
 			sourceTree = "<group>";
@@ -3349,6 +3352,7 @@
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D2DCB2992CE5EA48005CABEE /* RelatedShopCollectionViewCell.swift in Sources */,
 				83EBB86E2D0FDD3800346018 /* BusSearchResultViewController.swift in Sources */,
+				D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
 				83E770DF2D019E0C00EB3F84 /* OneBusTimetableTableViewCell.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
