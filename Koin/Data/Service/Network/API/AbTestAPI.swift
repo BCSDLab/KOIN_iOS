@@ -9,6 +9,7 @@ import Alamofire
 
 enum AbTestAPI {
     case assignAbTest(AssignAbTestRequest)
+    case assignAbTestToken
 }
 
 extension AbTestAPI: Router, URLRequestConvertible {
@@ -20,36 +21,46 @@ extension AbTestAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .assignAbTest: return "/abtest/assign"
+        case .assignAbTestToken: return "/abtest/assign/token"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .assignAbTest: return .post
+        case .assignAbTest, .assignAbTestToken: return .post
         }
     }
     
     public var headers: [String: String] {
-        var defaultHeaders = ["Content-Type": "application/json"]
-        if let accessHistoryId = KeyChainWorker.shared.read(key: .accessHistoryId) {
-            defaultHeaders["access_history_id"] = accessHistoryId
+        switch self {
+        case .assignAbTest:
+            var defaultHeaders = ["Content-Type": "application/json"]
+            if let accessHistoryId = KeyChainWorker.shared.read(key: .accessHistoryId) {
+                defaultHeaders["access_history_id"] = accessHistoryId
+            }
+            if let token = KeyChainWorker.shared.read(key: .access) {
+                defaultHeaders["Authorization"] = "Bearer \(token)"
+            }
+            return defaultHeaders
+        case .assignAbTestToken:
+            return [:]
         }
-        if let token = KeyChainWorker.shared.read(key: .access) {
-            defaultHeaders ["Authorization"] = "Bearer \(token)"
-        }
-        return defaultHeaders
     }
     
     public var parameters: Any? {
         switch self {
         case .assignAbTest(let request):
             return try? request.toDictionary()
+        case .assignAbTestToken:
+            return nil
         }
     }
     public var encoding: ParameterEncoding? {
         switch self {
         case .assignAbTest: return JSONEncoding.default
+        case .assignAbTestToken: return nil
         }
     }
+    
     
 }

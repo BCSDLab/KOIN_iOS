@@ -178,6 +178,9 @@ extension HomeViewModel {
         }, receiveValue: { [weak self] abTestResult in
             print(abTestResult)
             self?.outputSubject.send(.setAbTestResult(abTestResult))
+            if abTestTitle == "c_main_dining_v1" {
+                self?.getAbTestResult(abTestTitle: "c_keyword_ banner_v1")
+            }
         }).store(in: &subscriptions)
     }
 }
