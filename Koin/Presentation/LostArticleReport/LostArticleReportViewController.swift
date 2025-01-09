@@ -87,7 +87,10 @@ final class LostArticleReportViewController: UIViewController {
         $0.text = "품목을 선택해주세요."
     }
     
-    private let categoryView = UIView().then { _ in
+    private let categoryStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .fill
+        $0.distribution = .equalSpacing
     }
     
     private let dateLabel = UILabel().then {
@@ -194,7 +197,7 @@ extension LostArticleReportViewController {
         
         view.addSubview(scrollView)
         
-        [mainMessageLabel, messageImageView, subMessageLabel, separateView1, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, addItemButton, separateView2, writeButton].forEach {
+        [mainMessageLabel, messageImageView, subMessageLabel, separateView1, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, addItemButton, separateView2, writeButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -257,13 +260,14 @@ extension LostArticleReportViewController {
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.height.equalTo(19)
         }
-        categoryView.snp.makeConstraints { make in
+        categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(categoryMessageLabel.snp.bottom).offset(12)
             make.leading.equalTo(view.snp.leading).offset(29.5)
+            make.trailing.equalTo(view.snp.trailing).offset(-29.5)
             make.height.equalTo(38)
         }
         dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(categoryView.snp.bottom).offset(16)
+            make.top.equalTo(categoryStackView.snp.bottom).offset(16)
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.height.equalTo(22)
         }
@@ -331,10 +335,53 @@ extension LostArticleReportViewController {
         }
     }
     
+    private func setUpStackView() {
+        let items = ["카드", "신분증", "지갑", "전자제품", "그 외"]
+        let widths = [49, 61, 49, 73, 52]
+        
+        let buttons: [UIButton] = zip(items, widths).enumerated().map { index, element in
+            let (title, width) = element
+            let button = UIButton(type: .system)
+            var configuration = UIButton.Configuration.filled()
+            configuration.title = title
+            configuration.baseForegroundColor = UIColor.appColor(.primary500)
+            configuration.baseBackgroundColor = UIColor.appColor(.neutral0)
+            configuration.cornerStyle = .medium
+            button.configuration = configuration
+            
+            let attributedTitle = AttributedString(title, attributes: AttributeContainer([
+                .font: UIFont.appFont(.pretendardMedium, size: 14)
+            ]))
+            button.configuration?.attributedTitle = attributedTitle
+            
+            button.layer.borderWidth = 1
+            button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            button.layer.cornerRadius = 14
+            button.clipsToBounds = true
+            button.titleLabel?.numberOfLines = 1
+            button.titleLabel?.textAlignment = .center
+            button.tag = index
+            button.widthAnchor.constraint(equalToConstant: CGFloat(width)).isActive = true
+            return button
+        }
+        
+        buttons.forEach { button in
+            categoryStackView.addArrangedSubview(button)
+        }
+        
+        categoryStackView.axis = .horizontal
+        categoryStackView.alignment = .fill
+        categoryStackView.distribution = .equalSpacing
+        categoryStackView.spacing = 8
+    }
+    
+    
+    
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
         setUpAttributes()
+        setUpStackView()
         self.view.backgroundColor = .systemBackground
     }
 }
