@@ -406,6 +406,8 @@
 		D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */; };
 		D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289873D2D21B30D00AA7285 /* DebouncedButton.swift */; };
 		D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */; };
+		D28987582D2FF25C00AA7285 /* LostArticleReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */; };
+		D289875A2D2FF2FF00AA7285 /* LostArticleReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -964,6 +966,8 @@
 		D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterFlowLayout.swift; sourceTree = "<group>"; };
 		D289873D2D21B30D00AA7285 /* DebouncedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedButton.swift; sourceTree = "<group>"; };
 		D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestTokenResponse.swift; sourceTree = "<group>"; };
+		D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleReportViewController.swift; sourceTree = "<group>"; };
+		D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleReportViewModel.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -2070,6 +2074,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D28987562D2FF23800AA7285 /* LostArticleReport */,
 				D21572742CEE76C40061E725 /* FrameList */,
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
@@ -2461,6 +2466,15 @@
 				D283A4E72CECE7F700C238BA /* AddDirectFooterView.swift */,
 			);
 			path = AddDirectCollectionView;
+			sourceTree = "<group>";
+		};
+		D28987562D2FF23800AA7285 /* LostArticleReport */ = {
+			isa = PBXGroup;
+			children = (
+				D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */,
+				D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */,
+			);
+			path = LostArticleReport;
 			sourceTree = "<group>";
 		};
 		D29F21C82C4E14F300994554 /* Timetable */ = {
@@ -3230,6 +3244,7 @@
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
 				833D9C572C735F6B00982145 /* HotNoticeArticlesTableView.swift in Sources */,
 				837BFA562BB7E4B6001FCBD4 /* BusTimetableViewController.swift in Sources */,
+				D289875A2D2FF2FF00AA7285 /* LostArticleReportViewModel.swift in Sources */,
 				D2FCBE9C2D02C2D20097A388 /* SelectDeptModalViewController.swift in Sources */,
 				D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */,
 				D27DD0D62BA6085E0081FD36 /* LandViewModel.swift in Sources */,
@@ -3416,6 +3431,7 @@
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
+				D28987582D2FF25C00AA7285 /* LostArticleReportViewController.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */,
