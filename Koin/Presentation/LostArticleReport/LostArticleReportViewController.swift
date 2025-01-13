@@ -22,6 +22,8 @@ final class LostArticleReportViewController: UIViewController {
     private let scrollView = UIScrollView().then { _ in
     }
     
+    private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
+    
     private let mainMessageLabel = UILabel().then {
         $0.text = "주인을 찾아요"
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
@@ -99,6 +101,8 @@ final class LostArticleReportViewController: UIViewController {
     
     private let dateButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 8
+        $0.layer.masksToBounds = true
     }
     
     private let locationLabel = UILabel().then {
@@ -107,6 +111,15 @@ final class LostArticleReportViewController: UIViewController {
     
     private let locationTextField = UITextField().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "습득 장소를 입력해주세요.",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
+        )
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+        $0.leftViewMode = .always
+        $0.layer.cornerRadius = 8
+        $0.layer.masksToBounds = true
     }
     
     private let contentLabel = UILabel().then {
@@ -117,8 +130,14 @@ final class LostArticleReportViewController: UIViewController {
         $0.text = "0/1000"
     }
     
-    private let contentTextView = UITextView().then {
+    private lazy var contentTextView = UITextView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 0, right: 0)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.layer.cornerRadius = 8
+        $0.layer.masksToBounds = true
+        $0.text = textViewPlaceHolder
     }
     
     private let addItemButton = UIButton().then {
@@ -164,6 +183,7 @@ final class LostArticleReportViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
+        contentTextView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -180,14 +200,28 @@ final class LostArticleReportViewController: UIViewController {
             switch output {
                 
             }
+            
+            
         }.store(in: &subscriptions)
         
     }
     
 }
 
-extension LostArticleReportViewController {
-    
+extension LostArticleReportViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
+            textView.text = ""
+            textView.textColor = UIColor.appColor(.neutral800)
+        }
+    }
+
+       func textViewDidEndEditing(_ textView: UITextView) {
+           if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+               textView.text = textViewPlaceHolder
+               textView.textColor = UIColor.appColor(.neutral500)
+           }
+       }
     
 }
 
@@ -242,6 +276,11 @@ extension LostArticleReportViewController {
         pictureMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(pictureLabel.snp.bottom)
             make.leading.equalTo(itemCountLabel.snp.leading)
+            make.height.equalTo(19)
+        }
+        pictureCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(pictureLabel.snp.bottom)
+            make.trailing.equalTo(addPictureButton.snp.trailing)
             make.height.equalTo(19)
         }
         addPictureButton.snp.makeConstraints { make in
@@ -374,9 +413,7 @@ extension LostArticleReportViewController {
         categoryStackView.distribution = .equalSpacing
         categoryStackView.spacing = 8
     }
-    
-    
-    
+
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
