@@ -50,6 +50,14 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.gray)
     }
     
+    private let imageUploadCollectionView: LostArticleImageCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = LostArticleImageCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.appColor(.neutral100)
+        return collectionView
+    }()
+    
     private let addPictureButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .picture)
@@ -163,6 +171,16 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
     @objc private func addImageButtonTapped() {
         addImageButtonPublisher.send()
+        
+        // TODO: 높이 해결
+        //        imageUploadCollectionView.snp.updateConstraints { make in
+        //            make.height.equalTo(123)
+        //        }
+        //        self.setNeedsLayout()
+        //           self.layoutIfNeeded()
+        //
+        //           // Notify collection view to recalculate layout
+        //           (self.superview as? UICollectionView)?.performBatchUpdates(nil)
     }
     @objc private func deleteCellButtonTapped() {
         deleteButtonPublisher.send()
@@ -179,8 +197,8 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
         sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
         sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
-
-
+    
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
@@ -200,7 +218,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
 
 extension AddLostArticleCollectionViewCell {
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -238,8 +256,13 @@ extension AddLostArticleCollectionViewCell {
             make.trailing.equalTo(addPictureButton.snp.trailing)
             make.height.equalTo(19)
         }
-        addPictureButton.snp.makeConstraints { make in
+        imageUploadCollectionView.snp.makeConstraints { make in
             make.top.equalTo(pictureMessageLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(addPictureButton)
+            make.height.equalTo(123)
+        }
+        addPictureButton.snp.makeConstraints { make in
+            make.top.equalTo(imageUploadCollectionView.snp.bottom).offset(16)
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing).offset(-24)
             make.height.equalTo(38)
@@ -330,9 +353,9 @@ extension AddLostArticleCollectionViewCell {
             "습득일자가 입력되지 않았습니다.",
             "습득장소가 입력되지 않았습니다."
         ]
-
+        
         let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
-
+        
         labels.enumerated().forEach { index, label in
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage.appImage(asset: .warningOrange)
@@ -350,13 +373,13 @@ extension AddLostArticleCollectionViewCell {
             attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
             label.attributedText = attributedString
         }
-
+        
     }
     
     private func setUpStackView() {
         let items = ["카드", "신분증", "지갑", "전자제품", "그 외"]
         let widths = [49, 61, 49, 73, 52]
-
+        
         let buttons: [UIButton] = zip(items, widths).enumerated().map { index, element in
             let (title, width) = element
             let button = UIButton(type: .system)
@@ -366,12 +389,12 @@ extension AddLostArticleCollectionViewCell {
             configuration.baseBackgroundColor = UIColor.appColor(.neutral0)
             configuration.cornerStyle = .medium
             button.configuration = configuration
-
+            
             let attributedTitle = AttributedString(title, attributes: AttributeContainer([
                 .font: UIFont.appFont(.pretendardMedium, size: 14)
             ]))
             button.configuration?.attributedTitle = attributedTitle
-
+            
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.appColor(.primary500).cgColor
             button.layer.cornerRadius = 14
@@ -381,20 +404,20 @@ extension AddLostArticleCollectionViewCell {
             button.tag = index
             button.widthAnchor.constraint(equalToConstant: CGFloat(width)).isActive = true
             button.addTarget(self, action: #selector(stackButtonTapped(_:)), for: .touchUpInside)
-
+            
             return button
         }
-
+        
         buttons.forEach { button in
             categoryStackView.addArrangedSubview(button)
         }
-
+        
         categoryStackView.axis = .horizontal
         categoryStackView.alignment = .fill
         categoryStackView.distribution = .equalSpacing
         categoryStackView.spacing = 8
     }
-
+    
     private func configureView() {
         setUpLayouts()
         setUpConstraints()

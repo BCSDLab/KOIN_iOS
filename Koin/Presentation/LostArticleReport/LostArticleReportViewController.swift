@@ -139,7 +139,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
     private func addImageButtonTapped() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
-        configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
+        configuration.selectionLimit = 1 
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
