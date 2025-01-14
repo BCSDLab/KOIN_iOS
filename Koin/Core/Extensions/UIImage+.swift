@@ -120,6 +120,7 @@ enum ImageAsset: String {
     case addCircle
     case picture
     case trashcanBlue
+    case warningOrange
 }
 
 enum SFSymbols: String {

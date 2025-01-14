@@ -66,6 +66,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.text = "품목"
     }
     
+    private let categoryWarningLabel = UILabel().then {
+        $0.isHidden = true
+    }
+    
     private let categoryMessageLabel = UILabel().then {
         $0.text = "품목을 선택해주세요."
     }
@@ -80,6 +84,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.text = "습득 일자"
     }
     
+    private let dateWarningLabel = UILabel().then {
+        $0.isHidden = true
+    }
+    
     private let dateButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
@@ -88,6 +96,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     private let locationLabel = UILabel().then {
         $0.text = "습득 장소"
+    }
+    
+    private let locationWarningLabel = UILabel().then {
+        $0.isHidden = true
     }
     
     private let locationTextField = UITextField().then {
@@ -167,7 +179,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
 
 extension AddLostArticleCollectionViewCell {
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -216,6 +228,11 @@ extension AddLostArticleCollectionViewCell {
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.height.equalTo(22)
         }
+        categoryWarningLabel.snp.makeConstraints { make in
+            make.top.equalTo(addPictureButton.snp.bottom).offset(24)
+            make.trailing.equalTo(addPictureButton.snp.trailing)
+            make.height.equalTo(22)
+        }
         categoryMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom)
             make.leading.equalTo(itemCountLabel.snp.leading)
@@ -232,6 +249,11 @@ extension AddLostArticleCollectionViewCell {
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.height.equalTo(22)
         }
+        dateWarningLabel.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.top)
+            make.trailing.equalTo(addPictureButton.snp.trailing)
+            make.height.equalTo(22)
+        }
         dateButton.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom).offset(8)
             make.leading.equalTo(itemCountLabel.snp.leading)
@@ -241,6 +263,11 @@ extension AddLostArticleCollectionViewCell {
         locationLabel.snp.makeConstraints { make in
             make.top.equalTo(dateButton.snp.bottom).offset(16)
             make.leading.equalTo(itemCountLabel.snp.leading)
+            make.height.equalTo(22)
+        }
+        locationWarningLabel.snp.makeConstraints { make in
+            make.top.equalTo(locationLabel.snp.top)
+            make.trailing.equalTo(addPictureButton.snp.trailing)
             make.height.equalTo(22)
         }
         locationTextField.snp.makeConstraints { make in
@@ -277,6 +304,32 @@ extension AddLostArticleCollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
         }
+        let texts = [
+            "품목이 선택되지 않았습니다.",
+            "습득일자가 입력되지 않았습니다.",
+            "습득장소가 입력되지 않았습니다."
+        ]
+
+        let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
+
+        labels.enumerated().forEach { index, label in
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage.appImage(asset: .warningOrange)
+            imageAttachment.bounds = CGRect(x: 0, y: -4, width: 16, height: 16)
+            let spacingAttachment = NSTextAttachment()
+            spacingAttachment.bounds = CGRect(x: 0, y: 0, width: 6, height: 1)
+            let attributedString = NSMutableAttributedString()
+            attributedString.append(NSAttributedString(attachment: imageAttachment))
+            attributedString.append(NSAttributedString(attachment: spacingAttachment))
+            let text = texts[index]
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.appFont(.pretendardRegular, size: 12),
+                .foregroundColor: UIColor.appColor(.sub500)
+            ]
+            attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
+            label.attributedText = attributedString
+        }
+
     }
     
     private func setUpStackView() {
