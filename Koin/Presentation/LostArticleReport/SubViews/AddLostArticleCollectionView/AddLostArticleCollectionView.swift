@@ -13,6 +13,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     private var footerCancellables = Set<AnyCancellable>()
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
+    let dateButtonPublisher = PassthroughSubject<Void, Never>()
     private var somethings: [(Int, [String])] = [] {
         didSet {
             reloadData()
@@ -102,6 +103,9 @@ extension AddLostArticleCollectionView {
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
+        }.store(in: &cell.cancellables)
+        cell.dateButtonPublisher.sink { [weak self] _ in
+            self?.dateButtonPublisher.send()
         }.store(in: &cell.cancellables)
         return cell
     }

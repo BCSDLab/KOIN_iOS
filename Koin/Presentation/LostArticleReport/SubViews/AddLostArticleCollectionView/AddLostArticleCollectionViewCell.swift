@@ -6,7 +6,6 @@
 //
 
 import Combine
-import PhotosUI
 import UIKit
 
 final class AddLostArticleCollectionViewCell: UICollectionViewCell {
@@ -15,6 +14,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
+    let dateButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -150,7 +150,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         contentTextView.delegate = self
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
-        
+        dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
             self?.addPictureButton.isEnabled = count < 3
             self?.pictureCountLabel.text = "\(count)/10"
@@ -178,6 +178,53 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
 }
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
+    @objc private func dateButtonTapped(button: UIButton) {
+        //     dateButtonPublisher.send()
+        if let existingDropdown = self.viewWithTag(999) {
+            existingDropdown.removeFromSuperview()
+            return
+        }
+        
+        // 드롭다운 뷰 생성
+        let dropdownView = DatePickerDropdownView()
+        dropdownView.tag = 999
+        dropdownView.backgroundColor = UIColor.appColor(.neutral100)
+        dropdownView.layer.cornerRadius = 12
+        dropdownView.clipsToBounds = true
+        dropdownView.layer.borderWidth = 1
+        dropdownView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        
+        // 드롭다운에서 날짜 변경 시 호출
+        dropdownView.onDateSelected = { [weak self] selectedDate in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy년 M월 d일"
+            let formattedDate = formatter.string(from: selectedDate)
+            button.setTitle(formattedDate, for: .normal)
+            button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            dropdownView.removeFromSuperview() // 날짜 선택 시 드롭다운 닫기
+        }
+        
+        // 뷰컨트롤러에 추가
+        self.addSubview(dropdownView)
+        dropdownView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 드롭다운 위치 지정
+        NSLayoutConstraint.activate([
+            dropdownView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            dropdownView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            dropdownView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 8),
+            dropdownView.heightAnchor.constraint(equalToConstant: 114)
+        ])
+        
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropdown))
+        self.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false
+        dropdownView.tag = 999
+    }
+    @objc private func dismissDropdown() {
+        self.viewWithTag(999)?.removeFromSuperview()
+    }
     
     @objc private func addImageButtonTapped() {
         addImageButtonPublisher.send()
