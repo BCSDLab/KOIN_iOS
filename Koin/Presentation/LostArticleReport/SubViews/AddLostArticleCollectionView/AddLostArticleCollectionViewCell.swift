@@ -12,6 +12,7 @@ import UIKit
 final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     var cancellables = Set<AnyCancellable>()
+    private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     
@@ -149,6 +150,11 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         contentTextView.delegate = self
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
+        
+        imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
+            self?.addPictureButton.isEnabled = count < 3
+            self?.pictureCountLabel.text = "\(count)/10"
+        }.store(in: &cancellable)
     }
     
     required init?(coder: NSCoder) {
