@@ -57,7 +57,7 @@ extension AddLostArticleCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostArticleCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(text: "")
+        dummyCell.configure(text: "", index: 0, isSingle: true)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -91,13 +91,11 @@ extension AddLostArticleCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostArticleCollectionViewCell.identifier, for: indexPath) as? AddLostArticleCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row]))
+        cell.configure(text: String(somethings[indexPath.row]), index: indexPath.row, isSingle: somethings.count < 2)
         
-//        cell.deleteButtonPublisher.sink { [weak self] _ in
-//            
-//            self?.somethings.remove(at: indexPath.row)
-//            self?.reloadData()
-//        }.store(in: &cell.cancellables)
+        cell.deleteButtonPublisher.sink { [weak self] _ in
+            self?.somethings.remove(at: indexPath.row)
+        }.store(in: &cell.cancellables)
         return cell
     }
 }

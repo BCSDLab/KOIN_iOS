@@ -11,6 +11,7 @@ import UIKit
 final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     var cancellables = Set<AnyCancellable>()
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -25,6 +26,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 12
+    }
+    
+    private let deleteCellButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .trashcanBlue), for: .normal)
     }
     
     private let pictureLabel = UILabel().then {
@@ -120,37 +125,49 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         configureView()
         contentTextView.delegate = self
+        deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(text: String) {
-        
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    
+    func configure(text: String, index: Int, isSingle: Bool) {
+        itemCountLabel.text = "습득물 \(index + 1)"
+        deleteCellButton.isHidden = isSingle
     }
 }
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
+    @objc private func deleteCellButtonTapped() {
+        deleteButtonPublisher.send()
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
         }
     }
-
-       func textViewDidEndEditing(_ textView: UITextView) {
-           if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-               textView.text = textViewPlaceHolder
-               textView.textColor = UIColor.appColor(.neutral500)
-           }
-       }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = textViewPlaceHolder
+            textView.textColor = UIColor.appColor(.neutral500)
+        }
+    }
     
 }
 
 extension AddLostArticleCollectionViewCell {
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton].forEach {
             contentView.addSubview($0)
         }
     }
@@ -167,6 +184,11 @@ extension AddLostArticleCollectionViewCell {
             make.leading.equalTo(contentView.snp.leading).offset(24)
             make.width.equalTo(70)
             make.height.equalTo(30)
+        }
+        deleteCellButton.snp.makeConstraints { make in
+            make.leading.equalTo(itemCountLabel.snp.trailing).offset(10)
+            make.centerY.equalTo(itemCountLabel.snp.centerY)
+            make.width.height.equalTo(20)
         }
         pictureLabel.snp.makeConstraints { make in
             make.top.equalTo(itemCountLabel.snp.bottom).offset(16)
