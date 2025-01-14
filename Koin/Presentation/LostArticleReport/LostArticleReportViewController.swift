@@ -6,8 +6,8 @@
 //
 
 import Combine
+import PhotosUI
 import UIKit
-
 
 final class LostArticleReportViewController: UIViewController {
     
@@ -88,10 +88,9 @@ final class LostArticleReportViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-                
+            case let .showToast(message):
+                self?.showToast(message: message, success: true)
             }
-            
-            
         }.store(in: &subscriptions)
     
         // TODO: 수정
@@ -105,11 +104,47 @@ final class LostArticleReportViewController: UIViewController {
                 make.height.equalTo(self.addLostArticleCollectionView.calculateDynamicHeight())
             }
         }.store(in: &subscriptions)
+        
+        addLostArticleCollectionView.uploadImageButtonPublisher.sink { [weak self] in
+            self?.addImageButtonTapped()
+            
+        }.store(in: &subscriptions)
     }
     
 }
 
-extension LostArticleReportViewController: UITextViewDelegate {
+extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    if let selectedImage = image as? UIImage {
+                        self?.handleSelectedImage(image: selectedImage)
+                    }
+                }
+            }
+        }
+    }
+    private func handleSelectedImage(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        inputSubject.send(.uploadFile([imageData]))
+        
+    }
+    private func addImageButtonTapped() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
 }
 
 extension LostArticleReportViewController {

@@ -6,12 +6,14 @@
 //
 
 import Combine
+import PhotosUI
 import UIKit
 
 final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     var cancellables = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -138,6 +140,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         configureView()
         contentTextView.delegate = self
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
+        addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -157,6 +160,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
 }
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
+    
+    @objc private func addImageButtonTapped() {
+        addImageButtonPublisher.send()
+    }
     @objc private func deleteCellButtonTapped() {
         deleteButtonPublisher.send()
     }

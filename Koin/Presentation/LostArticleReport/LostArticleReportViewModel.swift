@@ -6,26 +6,28 @@
 //
 
 import Combine
+import Foundation
 
 final class LostArticleReportViewModel: ViewModelProtocol {
     
     // MARK: - Input
     
     enum Input {
-      
+        case uploadFile([Data])
     }
     
     // MARK: - Output
     
     enum Output {
-      
+        case showToast(String)
     }
     
     // MARK: - Properties
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-
+    private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
+    
     // MARK: - Initialization
     
     init() {
@@ -34,6 +36,8 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
+            case let .uploadFile(files):
+                self?.uploadFiles(files: files)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -42,6 +46,15 @@ final class LostArticleReportViewModel: ViewModelProtocol {
 }
 
 extension LostArticleReportViewModel {
-    
+    private func uploadFiles(files: [Data]) {
+        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+            if case let .failure(error) = completion {               
+                self?.outputSubject.send(.showToast(error.message))
+            }
+        } receiveValue: { [weak self] response in
+            print(response)
+        }.store(in: &subscriptions)
+        
+    }
     
 }
