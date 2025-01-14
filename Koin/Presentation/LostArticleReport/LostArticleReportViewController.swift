@@ -90,6 +90,8 @@ final class LostArticleReportViewController: UIViewController {
             switch output {
             case let .showToast(message):
                 self?.showToast(message: message, success: true)
+            case let .addImageUrl(url, index):
+                self?.addLostArticleCollectionView.addImageUrl(url: url, index: index)
             }
         }.store(in: &subscriptions)
     
@@ -105,9 +107,9 @@ final class LostArticleReportViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        addLostArticleCollectionView.uploadImageButtonPublisher.sink { [weak self] in
+        addLostArticleCollectionView.uploadImageButtonPublisher.sink { [weak self] index in
+            self?.viewModel.selectedIndex = index
             self?.addImageButtonTapped()
-            
         }.store(in: &subscriptions)
     }
     

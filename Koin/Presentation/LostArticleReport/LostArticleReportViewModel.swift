@@ -20,12 +20,15 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     
     enum Output {
         case showToast(String)
+        case addImageUrl(String, Int)
     }
     
     // MARK: - Properties
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    
+    var selectedIndex = 0
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     
     // MARK: - Initialization
@@ -52,7 +55,7 @@ extension LostArticleReportViewModel {
                 self?.outputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] response in
-            print(response)
+            self?.outputSubject.send(.addImageUrl(response.fileUrls.first ?? "", self?.selectedIndex ?? 0))
         }.store(in: &subscriptions)
         
     }

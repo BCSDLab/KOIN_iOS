@@ -12,10 +12,9 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     
     private var footerCancellables = Set<AnyCancellable>()
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
-    let uploadImageButtonPublisher = PassthroughSubject<Void, Never>()
-    private var somethings: [Int] = [] {
+    let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
+    private var somethings: [(Int, [String])] = [] {
         didSet {
-            
             reloadData()
             collectionViewLayout.invalidateLayout()
             heightChangedPublisher.send()
@@ -43,11 +42,15 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
         register(AddLostArticleFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostArticleFooterView.identifier)
         dataSource = self
         delegate = self
-        somethings.append(1)
+        somethings.append((0, []))
         
     }
     
     func setUpSomethings() {
+    }
+    
+    func addImageUrl(url: String, index: Int) {
+        somethings[index].1.append(url)
     }
 
 }
@@ -81,7 +84,7 @@ extension AddLostArticleCollectionView {
             }
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
-                self?.somethings.append(1)
+                self?.somethings.append((1, []))
             }.store(in: &footerCancellables)
             return footerView
         }
@@ -92,14 +95,13 @@ extension AddLostArticleCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostArticleCollectionViewCell.identifier, for: indexPath) as? AddLostArticleCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row]), index: indexPath.row, isSingle: somethings.count < 2)
-        
+        cell.configure(text: String(somethings[indexPath.row].0), index: indexPath.row, isSingle: somethings.count < 2)
+        cell.setImage(url: somethings[indexPath.row].1)
         cell.deleteButtonPublisher.sink { [weak self] _ in
             self?.somethings.remove(at: indexPath.row)
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
-            self?.uploadImageButtonPublisher.send()
-            
+            self?.uploadImageButtonPublisher.send(indexPath.row)
         }.store(in: &cell.cancellables)
         return cell
     }

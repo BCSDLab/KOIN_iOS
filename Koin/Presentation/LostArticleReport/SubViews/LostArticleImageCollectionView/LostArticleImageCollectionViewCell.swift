@@ -59,14 +59,15 @@ extension LostArticleImageCollectionViewCell {
     
     private func setUpConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).offset(8)
+            make.top.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.leading.equalTo(contentView.snp.leading)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-5)
-            make.bottom.equalTo(contentView.snp.bottom).offset(8)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.bottom.equalToSuperview()
         }
         cancelButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
-            make.trailing.equalTo(contentView.snp.trailing)
+            make.centerY.equalTo(contentView.snp.top)
+            make.centerX.equalTo(contentView.snp.trailing)
             make.width.equalTo(16)
             make.height.equalTo(16)
         }

@@ -30,7 +30,8 @@ final class LostArticleImageCollectionView: UICollectionView, UICollectionViewDa
     private func commonInit() {
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-        contentInset = .zero
+        contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        register(LostArticleImageCollectionViewCell.self, forCellWithReuseIdentifier: LostArticleImageCollectionViewCell.identifier)
         register(LostArticleImageCollectionViewCell.self, forCellWithReuseIdentifier: LostArticleImageCollectionViewCell.identifier)
         dataSource = self
         delegate = self
@@ -66,6 +67,9 @@ extension LostArticleImageCollectionView {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = Int((collectionView.bounds.width - 38) / 3)
         return CGSize(width: width, height: Int(collectionView.bounds.height) - 16)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
 }
 

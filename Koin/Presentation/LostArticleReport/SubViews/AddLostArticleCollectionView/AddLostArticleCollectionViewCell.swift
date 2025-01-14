@@ -52,7 +52,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     private let imageUploadCollectionView: LostArticleImageCollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         let collectionView = LostArticleImageCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.appColor(.neutral100)
         return collectionView
@@ -164,6 +164,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     func configure(text: String, index: Int, isSingle: Bool) {
         itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
+    }
+    
+    func setImage(url: [String]) {
+        imageUploadCollectionView.updateImageUrls(url)
     }
 }
 
