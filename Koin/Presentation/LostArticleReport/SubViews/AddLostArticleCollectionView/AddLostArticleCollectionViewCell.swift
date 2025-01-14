@@ -161,6 +161,20 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
         deleteButtonPublisher.send()
     }
     
+    @objc private func stackButtonTapped(_ sender: UIButton) {
+        categoryStackView.arrangedSubviews.forEach { view in
+            guard let button = view as? UIButton else { return }
+            button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+            button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+            button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+        }
+        sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+        sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+        sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
+    }
+
+
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
@@ -335,7 +349,7 @@ extension AddLostArticleCollectionViewCell {
     private func setUpStackView() {
         let items = ["카드", "신분증", "지갑", "전자제품", "그 외"]
         let widths = [49, 61, 49, 73, 52]
-        
+
         let buttons: [UIButton] = zip(items, widths).enumerated().map { index, element in
             let (title, width) = element
             let button = UIButton(type: .system)
@@ -345,12 +359,12 @@ extension AddLostArticleCollectionViewCell {
             configuration.baseBackgroundColor = UIColor.appColor(.neutral0)
             configuration.cornerStyle = .medium
             button.configuration = configuration
-            
+
             let attributedTitle = AttributedString(title, attributes: AttributeContainer([
                 .font: UIFont.appFont(.pretendardMedium, size: 14)
             ]))
             button.configuration?.attributedTitle = attributedTitle
-            
+
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.appColor(.primary500).cgColor
             button.layer.cornerRadius = 14
@@ -359,18 +373,21 @@ extension AddLostArticleCollectionViewCell {
             button.titleLabel?.textAlignment = .center
             button.tag = index
             button.widthAnchor.constraint(equalToConstant: CGFloat(width)).isActive = true
+            button.addTarget(self, action: #selector(stackButtonTapped(_:)), for: .touchUpInside)
+
             return button
         }
-        
+
         buttons.forEach { button in
             categoryStackView.addArrangedSubview(button)
         }
-        
+
         categoryStackView.axis = .horizontal
         categoryStackView.alignment = .fill
         categoryStackView.distribution = .equalSpacing
         categoryStackView.spacing = 8
     }
+
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
