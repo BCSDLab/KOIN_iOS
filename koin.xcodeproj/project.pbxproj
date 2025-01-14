@@ -444,6 +444,9 @@
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
+		D2B7EBA92D35370000EE46B0 /* AddLostArticleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */; };
+		D2B7EBAC2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */; };
+		D2B7EBAF2D3538F100EE46B0 /* AddLostArticleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -1004,6 +1007,9 @@
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
+		D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleCollectionView.swift; sourceTree = "<group>"; };
+		D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleFooterView.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -2471,6 +2477,7 @@
 		D28987562D2FF23800AA7285 /* LostArticleReport */ = {
 			isa = PBXGroup;
 			children = (
+				D2B7EBAD2D35372E00EE46B0 /* SubViews */,
 				D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */,
 				D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */,
 			);
@@ -2620,6 +2627,24 @@
 				D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		D2B7EBAA2D35370600EE46B0 /* AddLostArticleCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */,
+				D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */,
+				D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */,
+			);
+			path = AddLostArticleCollectionView;
+			sourceTree = "<group>";
+		};
+		D2B7EBAD2D35372E00EE46B0 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D2B7EBAA2D35370600EE46B0 /* AddLostArticleCollectionView */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D2CA2DCE2C1CAC4B0036F02C /* Shop */ = {
@@ -3343,6 +3368,7 @@
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
+				D2B7EBA92D35370000EE46B0 /* AddLostArticleCollectionView.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				83E770E42D035B4900EB3F84 /* ManyBusTimetableTableView.swift in Sources */,
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
@@ -3369,6 +3395,7 @@
 				83EBB86E2D0FDD3800346018 /* BusSearchResultViewController.swift in Sources */,
 				D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
+				D2B7EBAF2D3538F100EE46B0 /* AddLostArticleFooterView.swift in Sources */,
 				83E770DF2D019E0C00EB3F84 /* OneBusTimetableTableViewCell.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */,
@@ -3614,6 +3641,7 @@
 				D215726F2CEE28D70061E725 /* LectureData.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
+				D2B7EBAC2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
