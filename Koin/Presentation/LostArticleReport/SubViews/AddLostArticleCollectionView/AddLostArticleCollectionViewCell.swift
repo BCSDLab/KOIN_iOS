@@ -207,7 +207,13 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
         sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
         sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
-    
+    func textViewDidChange(_ textView: UITextView) {
+        let maxCharacters = 1000
+        if textView.text.count > maxCharacters {
+            textView.text = String(textView.text.prefix(maxCharacters))
+        }
+        contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
+    }
     
     
     func textViewDidBeginEditing(_ textView: UITextView) {
