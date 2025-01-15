@@ -130,7 +130,9 @@ final class LostArticleReportViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
-        writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
+        writeButton.throttle(interval: .seconds(3)) { [weak self] in
+            self?.writeButtonTapped()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -197,7 +199,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
         
         return allCellData
     }
-    @objc private func writeButtonTapped() {
+    private func writeButtonTapped() {
         var isAllValid = true
         for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)
