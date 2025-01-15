@@ -7,6 +7,10 @@
 
 // MARK: - Article
 
+struct PostLostArticleRequestWrapper: Encodable {
+    let articles: [PostLostArticleRequest]
+}
+
 struct PostLostArticleRequest: Codable {
     let category, location, foundDate: String
     let content: String?

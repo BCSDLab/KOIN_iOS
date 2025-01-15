@@ -20,7 +20,7 @@ protocol NoticeListService {
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
-    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<[LostArticleDetailDTO], ErrorResponse>
+    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func fetchLostItemList(page: Int, limit: Int) -> AnyPublisher<LostArticleDTO, Error>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
@@ -31,9 +31,9 @@ final class DefaultNoticeService: NoticeListService {
     let networkService = NetworkService()
     let coreDataService = CoreDataService.shared
     
-    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<[LostArticleDetailDTO], ErrorResponse> {
+    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))
-            .catch { [weak self] error -> AnyPublisher<[LostArticleDetailDTO], ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()

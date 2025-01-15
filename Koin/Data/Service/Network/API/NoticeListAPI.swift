@@ -43,7 +43,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .postLostItem: return "/articles/lost-item"
         case .fetchLostItemList: return "/articles/lost-item"
         case .fetchLostItem(let id): return "/articles/lost-item/\(id)"
-        case .deleteLostItem(let id ): return "/articles/lost-item/\(id)"
+        case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
         }
     }
     
@@ -91,7 +91,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .deleteNotificationKeyword(let request):
             return try? request.toDictionary()
         case .postLostItem(let request):
-            return try? request.toDictionary()
+            return try? PostLostArticleRequestWrapper(articles: request).toDictionary()
         case .fetchLostItemList(let page, let limit):
             return ["page": page, "limit": limit]
         case .fetchLostItem:
