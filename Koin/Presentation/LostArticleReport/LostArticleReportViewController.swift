@@ -208,7 +208,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
         }
         if isAllValid {
             let allCellData = collectAllCellData()
-            print(allCellData)
+            
         }
     }
     

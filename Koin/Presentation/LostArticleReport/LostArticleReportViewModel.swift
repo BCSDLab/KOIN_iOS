@@ -31,6 +31,7 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     var selectedIndex = 0
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     
+    
     // MARK: - Initialization
     
     init() {

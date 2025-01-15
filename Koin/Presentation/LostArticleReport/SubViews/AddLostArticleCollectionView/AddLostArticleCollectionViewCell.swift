@@ -187,6 +187,8 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
             : "" 
 
         let foundDate = dateButton.titleLabel?.text ?? ""
+        let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
+        
 
         let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
             ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -194,12 +196,27 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         return PostLostArticleRequest(
             category: category,
             location: location,
-            foundDate: foundDate,
+            foundDate: formattedFoundDate,
             content: content,
             images: imageUploadCollectionView.imageUrls,
             registeredAt: "2025-01-10",
             updatedAt: "2025-01-10"
         )
+    }
+    func convertToISODate(from koreanDate: String) -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
+        inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
+        outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
+
+        if let date = inputFormatter.date(from: koreanDate) {
+            return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
+        } else {
+            return nil
+        }
     }
 
 }

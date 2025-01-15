@@ -452,6 +452,7 @@
 		D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */; };
 		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */; };
 		D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */; };
+		D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -1020,6 +1021,7 @@
 		D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDTO.swift; sourceTree = "<group>"; };
 		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDTO.swift; sourceTree = "<group>"; };
 		D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostArticleRequest.swift; sourceTree = "<group>"; };
+		D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -1262,6 +1264,7 @@
 				83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */,
 				8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */,
 				83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */,
+				D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -3500,6 +3503,7 @@
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDTO.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
+				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
