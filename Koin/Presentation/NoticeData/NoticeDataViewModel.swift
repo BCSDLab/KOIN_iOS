@@ -17,6 +17,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case fetchLostItem(Int)
         case deleteLostItem
+        case checkAuth
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
@@ -24,6 +25,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case updatePopularArticles([NoticeArticleDTO])
         case updateActivityIndictor(Bool, String?, URL?)
         case showToast(String)
+        case showAuth(UserTypeResponse)
     }
     
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
@@ -32,7 +34,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchLostItemUseCase = DefaultFetchLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-    
+    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private(set) var noticeId: Int = 0
@@ -64,6 +66,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.fetchLostItem(id: id)
             case .deleteLostItem:
                 self?.deleteLostItem()
+            case .checkAuth:
+                self?.checkAuth()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -71,6 +75,18 @@ final class NoticeDataViewModel: ViewModelProtocol {
 }
 
 extension NoticeDataViewModel {
+    
+    func checkAuth() {
+        
+        checkAuthUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showAuth(response))
+        }).store(in: &subscriptions)
+        
+    }
     
     private func deleteLostItem() {
         deleteLostItemUseCase.execute(id: noticeId).sink(receiveCompletion: { completion in

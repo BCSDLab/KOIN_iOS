@@ -157,6 +157,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 4
         $0.contentHorizontalAlignment = .center
+        $0.isHidden = true
     }
     
     
@@ -192,6 +193,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         if viewModel.boardId == 14 {
             lostItemConfigureView()
             inputSubject.send(.fetchLostItem(viewModel.noticeId))
+            inputSubject.send(.checkAuth)
         } else {
             commonConfigureView()
             inputSubject.send(.getNoticeData)
@@ -220,6 +222,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             case let .showToast(message):
                 self?.showToast(message: message)
                 self?.navigationController?.popViewController(animated: true)
+            case let .showAuth(userType):
+                self?.deleteButton.isHidden = userType.userType != .council
             }
         }.store(in: &subscriptions)
         
@@ -257,7 +261,6 @@ extension NoticeDataViewController {
         let imageUrls = item.image?.map { $0.imageUrl } ?? []
         imageCollectionView.setImageUrls(urls: imageUrls)
         contentLabel.text = item.content
-  //      deleteButton.isHidden
         if imageUrls.isEmpty {
             imageCollectionView.snp.updateConstraints { make in
                 make.height.equalTo(0)

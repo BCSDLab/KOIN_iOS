@@ -459,6 +459,8 @@
 		D2B7EBD52D38197200EE46B0 /* ImageScrollCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD42D38197200EE46B0 /* ImageScrollCollectionView.swift */; };
 		D2B7EBD72D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD62D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift */; };
 		D2B7EBD82D381FC400EE46B0 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C512C73451000982145 /* NoticeDataViewController.swift */; };
+		D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */; };
+		D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -1033,6 +1035,8 @@
 		D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBD42D38197200EE46B0 /* ImageScrollCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollCollectionView.swift; sourceTree = "<group>"; };
 		D2B7EBD62D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTypeResponse.swift; sourceTree = "<group>"; };
+		D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAuthUseCase.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -2601,6 +2605,7 @@
 				D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */,
 				D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */,
 				D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */,
+				D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2656,6 +2661,7 @@
 				D20AB9402C550746006BC684 /* RevokeUseCase.swift */,
 				D20AB9422C550751006BC684 /* ModifyUseCase.swift */,
 				D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */,
+				D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3378,6 +3384,7 @@
 				833D9C242C6B565400982145 /* NoticeKeywordCollectionView.swift in Sources */,
 				83E770E62D035B5500EB3F84 /* ManyBusTimetableTableViewCell.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
+				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2D380E92BA714AC009AD5A9 /* ServiceSelectViewModel.swift in Sources */,
@@ -3414,6 +3421,7 @@
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
+				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
