@@ -24,6 +24,25 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.separatorStyle = .singleLine
     }
     
+    private let writeButton = UIButton().then {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .pencil)
+        var text = AttributedString("글쓰기")
+        text.font = UIFont.appFont(.pretendardMedium, size: 16)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 0
+        configuration.imagePlacement = .leading
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        $0.backgroundColor = UIColor.appColor(.neutral50)
+        $0.configuration = configuration
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 18
+        $0.contentHorizontalAlignment = .center
+        $0.isHidden = true
+        $0.layer.borderWidth = 1.0
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+    }
+    
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
@@ -55,6 +74,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         
         let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButton
+        
+        writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,6 +104,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         tabBarCollectionView.selectTabPublisher.sink { [weak self] boardType in
             self?.inputSubject.send(.changeBoard(boardType))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeTab, .click, "\(boardType.displayName)"))
+            self?.writeButton.isHidden = boardType.rawValue != 14
         }.store(in: &subscriptions)
         
         noticeTableView.isScrolledPublisher.sink { [weak self] in
@@ -131,6 +153,11 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
 }
 
 extension NoticeListViewController {
+    @objc private func writeButtonTapped() {
+        let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel())
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc private func searchButtonTapped() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearch, .click, "검색"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
@@ -217,7 +244,7 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [tabBarCollectionView, noticeTableView, noticeToolTipImageView].forEach {
+        [tabBarCollectionView, noticeTableView, noticeToolTipImageView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -241,6 +268,13 @@ extension NoticeListViewController {
             $0.height.equalTo(44)
             $0.width.equalTo(248)
             $0.trailing.equalToSuperview().inset(46)
+        }
+        
+        writeButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.snp.bottom).offset(-63)
+            make.trailing.equalTo(view.snp.trailing).offset(-21)
+            make.width.equalTo(94)
+            make.height.equalTo(42)
         }
     }
     

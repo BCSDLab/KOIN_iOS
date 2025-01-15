@@ -217,8 +217,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName, downloadedPath: downloadedPath)
             case let .updateLostItem(lostItem):
                 self?.updateLostItem(lostItem)
-            case .showToast(_):
-                <#code#>
+            case let .showToast(message):
+                self?.showToast(message: message)
+                self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -257,6 +258,11 @@ extension NoticeDataViewController {
         imageCollectionView.setImageUrls(urls: imageUrls)
         contentLabel.text = item.content
   //      deleteButton.isHidden
+        if imageUrls.isEmpty {
+            imageCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+        }
         imageCollectionView.isHidden = imageUrls.isEmpty
         pageControl.currentPage = 0
         pageControl.numberOfPages = imageUrls.count
