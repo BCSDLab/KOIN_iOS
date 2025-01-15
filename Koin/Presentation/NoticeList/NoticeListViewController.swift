@@ -68,10 +68,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.changeBoard(.all))
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
-        
+        inputSubject.send(.checkAuth)
         let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButton
         
@@ -81,6 +80,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
+        inputSubject.send(.changeBoard(viewModel.noticeListType))
         configureNavigationBar(style: .empty)
     }
     
@@ -104,7 +104,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         tabBarCollectionView.selectTabPublisher.sink { [weak self] boardType in
             self?.inputSubject.send(.changeBoard(boardType))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeTab, .click, "\(boardType.displayName)"))
-            self?.writeButton.isHidden = boardType.rawValue != 14
+            self?.writeButton.isHidden = (boardType.rawValue != 14 || self?.viewModel.auth != .council)
         }.store(in: &subscriptions)
         
         noticeTableView.isScrolledPublisher.sink { [weak self] in

@@ -148,10 +148,12 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         configureView()
         contentTextView.delegate = self
+        configureTapGestureToDismissKeyboard()
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
+        locationTextField.delegate = self
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
             self?.addPictureButton.isEnabled = count < 3
             self?.pictureCountLabel.text = "\(count)/10"
@@ -352,7 +354,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
 }
 
-extension AddLostArticleCollectionViewCell {
+extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
     private func setUpLayouts() {
         [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
             contentView.addSubview($0)
@@ -560,4 +562,21 @@ extension AddLostArticleCollectionViewCell {
         setUpAttributes()
         setUpStackView()
     }
+    private func configureTapGestureToDismissKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        contentView.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func dismissKeyboard() {
+        contentView.endEditing(true) // 키보드 숨김
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder() // 키보드 숨김
+            return true
+        }
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+            textView.resignFirstResponder() // 키보드 숨김
+            return true
+        }
 }
