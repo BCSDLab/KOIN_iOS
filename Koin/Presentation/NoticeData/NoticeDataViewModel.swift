@@ -29,15 +29,17 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var noticeId: Int = 0
-    var previousNoticeId: Int?
-    var nextNoticeId: Int?
+    private var boardId: Int = 0
+    private(set) var previousNoticeId: Int?
+    private(set) var nextNoticeId: Int?
     
-    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int) {
+    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int, boardId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.downloadNoticeAttachmentUseCase = downloadNoticeAttachmentUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.noticeId = noticeId
+        self.boardId = boardId
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {

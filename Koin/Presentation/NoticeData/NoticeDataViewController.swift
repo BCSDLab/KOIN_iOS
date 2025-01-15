@@ -146,8 +146,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             }
         }.store(in: &subscriptions)
         
-        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle in
-            self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle, boardId in
+            self?.navigateToOtherNoticeDataPage(noticeId: noticeId, boardId: boardId)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNotice, .click, "\(noticeTitle)"))
         }.store(in: &subscriptions)
         
@@ -184,14 +184,14 @@ extension NoticeDataViewController {
     }
     
     
-    private func navigateToOtherNoticeDataPage(noticeId: Int) {
+    private func navigateToOtherNoticeDataPage(noticeId: Int, boardId: Int) {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
         let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
         let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId, boardId: boardId)
         let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(noticeDataVc, animated: true)
     }

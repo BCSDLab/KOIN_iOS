@@ -93,16 +93,16 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.changePage(page))
         }.store(in: &subscriptions)
         
-        noticeTableView.tapNoticePublisher.sink { [weak self] noticeId in
-            let noticeListService = DefaultNoticeService()
-            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
-            let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
-            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
-            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
+        noticeTableView.tapNoticePublisher.sink { [weak self] item in
+                let noticeListService = DefaultNoticeService()
+                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+                let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+                let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
+                let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: item.0, boardId: item.1)
+                let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+                self?.navigationController?.pushViewController(noticeDataVc, animated: true)
         }.store(in: &subscriptions)
         
         noticeTableView.keywordAddBtnTapPublisher
