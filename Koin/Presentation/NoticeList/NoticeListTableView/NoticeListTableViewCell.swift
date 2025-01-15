@@ -55,7 +55,9 @@ final class NoticeListTableViewCell: UITableViewCell {
     }
     
     func configure(articleModel: NoticeArticleDTO) {
-        boardTitleLabel.text = "\(NoticeListType(rawValue: articleModel.boardId)?.displayName ?? "")공지"
+        let displayName = NoticeListType(rawValue: articleModel.boardId)?.displayName ?? ""
+        boardTitleLabel.text = displayName == "분실물" ? displayName : "\(displayName)공지"
+
         noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title)
         
         noticeTitleLabel.lineBreakMode = .byTruncatingTail
