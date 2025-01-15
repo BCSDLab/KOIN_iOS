@@ -149,6 +149,8 @@ final class LostArticleReportViewController: UIViewController {
                 self?.showToast(message: message, success: true)
             case let .addImageUrl(url, index):
                 self?.addLostArticleCollectionView.addImageUrl(url: url, index: index)
+            case let .popViewController(id):
+                self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -208,7 +210,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
         }
         if isAllValid {
             let allCellData = collectAllCellData()
-            
+            inputSubject.send(.postLostItem(allCellData))
         }
     }
     
