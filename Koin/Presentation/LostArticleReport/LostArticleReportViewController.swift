@@ -44,21 +44,21 @@ final class DatePickerDropdownView: UIView {
         ])
         
         DispatchQueue.main.async {
-                   self.updatePickerTextColor()
-               }
+            self.updatePickerTextColor()
+        }
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
     }
     
     private func updatePickerTextColor() {
-           for subview in datePicker.subviews {
-               for nestedSubview in subview.subviews {
-                   if let pickerLabel = nestedSubview as? UILabel {
-                       pickerLabel.textColor = UIColor.systemBlue // 글씨를 파란색으로
-                       pickerLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold) // 원하는 폰트 설정
-                   }
-               }
-           }
-       }
+        for subview in datePicker.subviews {
+            for nestedSubview in subview.subviews {
+                if let pickerLabel = nestedSubview as? UILabel {
+                    pickerLabel.textColor = UIColor.systemBlue // 글씨를 파란색으로
+                    pickerLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold) // 원하는 폰트 설정
+                }
+            }
+        }
+    }
     
     @objc private func dateChanged() {
         onDateSelected?(datePicker.date)
@@ -130,6 +130,7 @@ final class LostArticleReportViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -150,7 +151,7 @@ final class LostArticleReportViewController: UIViewController {
                 self?.addLostArticleCollectionView.addImageUrl(url: url, index: index)
             }
         }.store(in: &subscriptions)
-    
+        
         // TODO: 수정
         addLostArticleCollectionView.snp.updateConstraints { make in
             make.height.equalTo(addLostArticleCollectionView.calculateDynamicHeight())
@@ -169,14 +170,47 @@ final class LostArticleReportViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addLostArticleCollectionView.dateButtonPublisher.sink { [weak self] index in
-           // self?.showDatePicker()
+            // self?.showDatePicker()
         }.store(in: &subscriptions)
-
+        
     }
     
 }
 
 extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
+    
+    func collectAllCellData() -> [PostLostArticleRequest] {
+        var allCellData: [PostLostArticleRequest] = []
+
+        for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(item: index, section: 0)
+            
+            guard let cell = addLostArticleCollectionView.cellForItem(at: indexPath) as? AddLostArticleCollectionViewCell else {
+                continue
+            }
+            
+            let cellData = cell.getCellData()
+            allCellData.append(cellData)
+        }
+        
+        return allCellData
+    }
+    @objc private func writeButtonTapped() {
+        var isAllValid = true
+        for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(item: index, section: 0)
+            if let articleCell = addLostArticleCollectionView.cellForItem(at: indexPath) as? AddLostArticleCollectionViewCell {
+                let isValid = articleCell.validateInputs()
+                if !isValid {
+                    isAllValid = false
+                }
+            }
+        }
+        if isAllValid {
+            let allCellData = collectAllCellData()
+            print(allCellData)
+        }
+    }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
@@ -203,7 +237,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
     private func addImageButtonTapped() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
-        configuration.selectionLimit = 1 
+        configuration.selectionLimit = 1
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
@@ -263,7 +297,7 @@ extension LostArticleReportViewController {
             make.bottom.equalTo(view.snp.bottom).offset(-50)
         }
     }
-
+    
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()

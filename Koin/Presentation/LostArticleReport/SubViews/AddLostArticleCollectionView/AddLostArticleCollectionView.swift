@@ -14,7 +14,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
-    private var somethings: [(Int, [String])] = [] {
+    private var articles: [PostLostArticleRequest] = [] {
         didSet {
             reloadData()
             collectionViewLayout.invalidateLayout()
@@ -43,15 +43,12 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
         register(AddLostArticleFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostArticleFooterView.identifier)
         dataSource = self
         delegate = self
-        somethings.append((0, []))
-        
+        articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
     }
     
-    func setUpSomethings() {
-    }
     
     func addImageUrl(url: String, index: Int) {
-        somethings[index].1.append(url)
+        articles[index].images?.append(url)
     }
 
 }
@@ -62,7 +59,7 @@ extension AddLostArticleCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostArticleCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(text: "", index: 0, isSingle: true)
+        dummyCell.configure(index: 0, isSingle: true)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -71,11 +68,11 @@ extension AddLostArticleCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return somethings.count
+        return articles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return somethings.count >= 3 ? .zero : CGSize(width: collectionView.bounds.width, height: 70)
+        return articles.count >= 10 ? .zero : CGSize(width: collectionView.bounds.width, height: 70)
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
@@ -85,7 +82,7 @@ extension AddLostArticleCollectionView {
             }
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
-                self?.somethings.append((1, []))
+                self?.articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
             }.store(in: &footerCancellables)
             return footerView
         }
@@ -96,10 +93,10 @@ extension AddLostArticleCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostArticleCollectionViewCell.identifier, for: indexPath) as? AddLostArticleCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(text: String(somethings[indexPath.row].0), index: indexPath.row, isSingle: somethings.count < 2)
-        cell.setImage(url: somethings[indexPath.row].1)
+        cell.configure(index: indexPath.row, isSingle: articles.count < 2)
+        cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
-            self?.somethings.remove(at: indexPath.row)
+            self?.articles.remove(at: indexPath.row)
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)

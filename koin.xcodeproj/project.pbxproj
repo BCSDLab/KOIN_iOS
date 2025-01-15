@@ -451,7 +451,7 @@
 		D2B7EBC22D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC12D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift */; };
 		D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */; };
 		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */; };
-		D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostArticleResponse.swift */; };
+		D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -1019,7 +1019,7 @@
 		D2B7EBC12D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDTO.swift; sourceTree = "<group>"; };
 		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDTO.swift; sourceTree = "<group>"; };
-		D2B7EBC92D37C81B00EE46B0 /* PostLostArticleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostArticleResponse.swift; sourceTree = "<group>"; };
+		D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostArticleRequest.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -1230,7 +1230,7 @@
 				833D9C272C6B58ED00982145 /* NoticeKeywordDTO.swift */,
 				D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */,
 				D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */,
-				D2B7EBC92D37C81B00EE46B0 /* PostLostArticleResponse.swift */,
+				D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -3571,7 +3571,7 @@
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
-				D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleResponse.swift in Sources */,
+				D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleRequest.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
 				D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,

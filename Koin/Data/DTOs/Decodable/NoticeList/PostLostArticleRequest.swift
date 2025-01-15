@@ -7,10 +7,10 @@
 
 // MARK: - Article
 
-struct PostLostArticleResponse: Codable {
+struct PostLostArticleRequest: Codable {
     let category, location, foundDate: String
     let content: String?
-    let images: [String]?
+    var images: [String]?
     let registeredAt, updatedAt: String
 
     enum CodingKeys: String, CodingKey {

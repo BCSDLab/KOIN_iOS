@@ -151,6 +151,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
+        locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
             self?.addPictureButton.isEnabled = count < 3
             self?.pictureCountLabel.text = "\(count)/10"
@@ -167,7 +168,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    func configure(text: String, index: Int, isSingle: Bool) {
+    func configure(index: Int, isSingle: Bool) {
         itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
     }
@@ -175,10 +176,64 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
     }
+    
+    func getCellData() -> PostLostArticleRequest {
+        let category = categoryStackView.arrangedSubviews
+            .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
+            .first ?? "카드"
+
+        let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+            ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            : "" 
+
+        let foundDate = dateButton.titleLabel?.text ?? ""
+
+        let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
+            ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            : ""
+        return PostLostArticleRequest(
+            category: category,
+            location: location,
+            foundDate: foundDate,
+            content: content,
+            images: imageUploadCollectionView.imageUrls,
+            registeredAt: "2025-01-10",
+            updatedAt: "2025-01-10"
+        )
+    }
+
 }
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
+    
+    @objc private func locationTextFieldDidChange(_ textField: UITextField) {
+        if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
+            locationWarningLabel.isHidden = true
+        }
+    }
+    
+    
+    func validateInputs() -> Bool {
+        var isValid = true
+        if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            locationWarningLabel.isHidden = false
+            isValid = false
+        }
+        
+        if dateButton.title(for: .normal)?.isEmpty ?? true {
+            dateWarningLabel.isHidden = false
+            isValid = false
+        }
+        
+        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
+        if selectedCategory == nil {
+            categoryWarningLabel.isHidden = false
+            isValid = false
+        }
+        return isValid
+    }
     @objc private func dateButtonTapped(button: UIButton) {
+        dateWarningLabel.isHidden = true
         //     dateButtonPublisher.send()
         if let existingDropdown = self.viewWithTag(999) {
             existingDropdown.removeFromSuperview()
@@ -244,6 +299,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
+        categoryWarningLabel.isHidden = true
         categoryStackView.arrangedSubviews.forEach { view in
             guard let button = view as? UIButton else { return }
             button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
