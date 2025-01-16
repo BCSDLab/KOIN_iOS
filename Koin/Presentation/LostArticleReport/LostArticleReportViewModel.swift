@@ -72,7 +72,7 @@ extension LostArticleReportViewModel {
                 self?.outputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.addImageUrl(response.fileUrls.first ?? "", self?.selectedIndex ?? 0))
+            self?.outputSubject.send(.addImageUrl(response.fileUrls.first ?? "", self?.selectedIndex ?? 0))            
         }.store(in: &subscriptions)
         
     }

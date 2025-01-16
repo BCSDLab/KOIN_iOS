@@ -16,13 +16,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     
-    private var articles: [PostLostArticleRequest] = [] {
-        didSet {
-            reloadData()
-            collectionViewLayout.invalidateLayout()
-            heightChangedPublisher.send()
-        }
-    }
+    private var articles: [PostLostArticleRequest] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flowLayout = UICollectionViewFlowLayout()
@@ -51,6 +45,8 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     
     func addImageUrl(url: String, index: Int) {
         articles[index].images?.append(url)
+        reloadData()
+        collectionViewLayout.invalidateLayout()
     }
 
 }
@@ -61,7 +57,7 @@ extension AddLostArticleCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostArticleCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true)
+        dummyCell.configure(index: 0, isSingle: true, model: PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""))
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -85,6 +81,9 @@ extension AddLostArticleCollectionView {
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
                 self?.articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+                self?.reloadData()
+                self?.collectionViewLayout.invalidateLayout()
+                self?.heightChangedPublisher.send()
             }.store(in: &footerCancellables)
             return footerView
         }
@@ -95,10 +94,13 @@ extension AddLostArticleCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostArticleCollectionViewCell.identifier, for: indexPath) as? AddLostArticleCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(index: indexPath.row, isSingle: articles.count < 2)
+        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row])
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
             self?.articles.remove(at: indexPath.row)
+            self?.reloadData()
+            self?.collectionViewLayout.invalidateLayout()
+            self?.heightChangedPublisher.send()
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
@@ -109,7 +111,18 @@ extension AddLostArticleCollectionView {
         cell.textViewFocusPublisher.sink { [weak self] value in
             self?.textViewFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
-
+        cell.datePublisher.sink { [weak self] value in
+            self?.articles[indexPath.row].foundDate = value
+        }.store(in: &cell.cancellables)
+        cell.categoryPublisher.sink { [weak self] value in
+            self?.articles[indexPath.row].category = value
+        }.store(in: &cell.cancellables)
+        cell.locationPublisher.sink { [weak self] value in
+            self?.articles[indexPath.row].location = value
+        }.store(in: &cell.cancellables)
+        cell.contentPublisher.sink { [weak self] value in
+            self?.articles[indexPath.row].content = value
+        }.store(in: &cell.cancellables)
         return cell
     }
 }

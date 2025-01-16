@@ -12,8 +12,8 @@ struct PostLostArticleRequestWrapper: Encodable {
 }
 
 struct PostLostArticleRequest: Codable {
-    let category, location, foundDate: String
-    let content: String?
+    var category, location, foundDate: String
+    var content: String?
     var images: [String]?
     let registeredAt, updatedAt: String
 

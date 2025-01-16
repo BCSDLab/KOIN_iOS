@@ -16,6 +16,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let datePublisher = PassthroughSubject<String, Never>()
+    let categoryPublisher = PassthroughSubject<String, Never>()
+    let locationPublisher = PassthroughSubject<String, Never>()
+    let contentPublisher = PassthroughSubject<String, Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -160,7 +164,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
         locationTextField.delegate = self
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
-            self?.addPictureButton.isEnabled = count < 3
+            self?.addPictureButton.isEnabled = count < 10
             self?.pictureCountLabel.text = "\(count)/10"
         }.store(in: &cancellable)
     }
@@ -175,7 +179,12 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    func configure(index: Int, isSingle: Bool) {
+    func configure(index: Int, isSingle: Bool, model: PostLostArticleRequest) {
+//        categoryLabel.text = model.category
+//        dateLabel.text = model.foundDate
+        locationTextField.text = model.location
+        dateButton.setTitle(model.foundDate, for: .normal)
+        contentTextView.text = model.category
         itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
     }
@@ -230,10 +239,12 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
+    
     @objc private func locationTextFieldDidChange(_ textField: UITextField) {
         if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             locationWarningLabel.isHidden = true
         }
+        locationPublisher.send(textField.text ?? "")
     }
     
     
@@ -279,6 +290,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
             formatter.dateFormat = "yyyy년 M월 d일"
             let formattedDate = formatter.string(from: selectedDate)
             button.setTitle(formattedDate, for: .normal)
+            self?.datePublisher.send(formattedDate)
             button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
             dropdownView.removeFromSuperview() // 날짜 선택 시 드롭다운 닫기
         }
@@ -324,6 +336,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
         categoryWarningLabel.isHidden = true
+        categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
             guard let button = view as? UIButton else { return }
             button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
@@ -340,8 +353,8 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
             textView.text = String(textView.text.prefix(maxCharacters))
         }
         contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
+        contentPublisher.send(textView.text)
     }
-    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
@@ -566,7 +579,9 @@ extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
             
             return button
         }
-        
+        categoryStackView.subviews.forEach {
+            $0.removeFromSuperview()
+        }
         buttons.forEach { button in
             categoryStackView.addArrangedSubview(button)
         }
