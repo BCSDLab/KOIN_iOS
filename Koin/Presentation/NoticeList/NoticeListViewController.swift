@@ -116,15 +116,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         }.store(in: &subscriptions)
         
         noticeTableView.tapNoticePublisher.sink { [weak self] item in
-                let noticeListService = DefaultNoticeService()
-                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-                let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
-                let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
-                let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: item.0, boardId: item.1)
-                let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
-                self?.navigationController?.pushViewController(noticeDataVc, animated: true)
+            self?.navigateToNoticeData(noticeId: item.0, boardId: item.1)
         }.store(in: &subscriptions)
         
         noticeTableView.keywordAddBtnTapPublisher
@@ -153,8 +145,21 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
 }
 
 extension NoticeListViewController {
+    
+    func navigateToNoticeData(noticeId: Int, boardId: Int) {
+        let noticeListService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+        let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+        let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId, boardId: boardId)
+        let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+       navigationController?.pushViewController(noticeDataVc, animated: true)
+    }
     @objc private func writeButtonTapped() {
         let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel())
+        viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
     }
     

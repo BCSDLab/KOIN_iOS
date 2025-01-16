@@ -73,6 +73,8 @@ final class LostArticleReportViewController: UIViewController {
     private let viewModel: LostArticleReportViewModel
     private let inputSubject: PassthroughSubject<LostArticleReportViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    weak var delegate: NoticeListViewController?
+    
     
     // MARK: - UI Components
     
@@ -152,7 +154,8 @@ final class LostArticleReportViewController: UIViewController {
             case let .addImageUrl(url, index):
                 self?.addLostArticleCollectionView.addImageUrl(url: url, index: index)
             case let .popViewController(id):
-                self?.navigationController?.popViewController(animated: true)
+                self?.navigationController?.popViewController(animated: false)
+                self?.delegate?.navigateToNoticeData(noticeId: id, boardId: 14)
             }
         }.store(in: &subscriptions)
         
