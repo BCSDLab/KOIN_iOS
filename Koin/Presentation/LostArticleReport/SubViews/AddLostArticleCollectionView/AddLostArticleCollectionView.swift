@@ -14,6 +14,8 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
+    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    
     private var articles: [PostLostArticleRequest] = [] {
         didSet {
             reloadData()
@@ -104,6 +106,10 @@ extension AddLostArticleCollectionView {
         cell.dateButtonPublisher.sink { [weak self] _ in
             self?.dateButtonPublisher.send()
         }.store(in: &cell.cancellables)
+        cell.textViewFocusPublisher.sink { [weak self] value in
+            self?.textViewFocusPublisher.send(value)
+        }.store(in: &cell.cancellables)
+
         return cell
     }
 }

@@ -124,6 +124,12 @@ final class LostArticleReportViewController: UIViewController {
             // self?.showDatePicker()
         }.store(in: &subscriptions)
         
+        addLostArticleCollectionView.textViewFocusPublisher
+            .sink { [weak self] yOffset in
+                UIView.animate(withDuration: 0.3) {
+                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
+                }
+            }.store(in: &subscriptions)
     }
     
 }
@@ -132,7 +138,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
     
     func collectAllCellData() -> [PostLostArticleRequest] {
         var allCellData: [PostLostArticleRequest] = []
-
+        
         for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)
             

@@ -15,6 +15,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
+    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -187,18 +188,18 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         let category = categoryStackView.arrangedSubviews
             .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
             .first ?? "카드"
-
+        
         let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-            ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-            : "" 
-
+        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        : ""
+        
         let foundDate = dateButton.titleLabel?.text ?? ""
         let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
         
-
+        
         let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
-            ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-            : ""
+        ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        : ""
         return PostLostArticleRequest(
             category: category,
             location: location,
@@ -213,18 +214,18 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         let inputFormatter = DateFormatter()
         inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
         inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-
+        
         let outputFormatter = DateFormatter()
         outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
         outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
-
+        
         if let date = inputFormatter.date(from: koreanDate) {
             return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
         } else {
             return nil
         }
     }
-
+    
 }
 
 extension AddLostArticleCollectionViewCell: UITextViewDelegate {
@@ -343,6 +344,16 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
     
     func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        guard let collectionView = self.superview as? UICollectionView,
+              let rootView = collectionView.superview else { return }
+        
+        // 텍스트뷰의 절대적인 Y 좌표 계산
+        let absoluteFrame = textView.convert(textView.bounds, to: rootView)
+        
+        // 텍스트뷰의 Y 좌표값 전송
+        
+        textViewFocusPublisher.send(absoluteFrame.origin.y)
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
@@ -576,17 +587,17 @@ extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         contentView.addGestureRecognizer(tapGesture)
     }
-
+    
     @objc private func dismissKeyboard() {
         contentView.endEditing(true) // 키보드 숨김
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder() // 키보드 숨김
-            return true
-        }
+        textField.resignFirstResponder() // 키보드 숨김
+        return true
+    }
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-            textView.resignFirstResponder() // 키보드 숨김
-            return true
-        }
+        textView.resignFirstResponder() // 키보드 숨김
+        return true
+    }
 }
