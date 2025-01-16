@@ -180,13 +180,38 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(index: Int, isSingle: Bool, model: PostLostArticleRequest) {
-//        categoryLabel.text = model.category
-//        dateLabel.text = model.foundDate
         locationTextField.text = model.location
         dateButton.setTitle(model.foundDate, for: .normal)
-        contentTextView.text = model.category
+        contentTextView.text = model.content
         itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
+        
+        let category = model.category
+           var isCategorySelected = false
+           
+           for view in categoryStackView.arrangedSubviews {
+               guard let button = view as? UIButton else { continue }
+               if button.configuration?.title == category {
+                   button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+                   button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+                   button.layer.borderColor = UIColor.appColor(.primary600).cgColor
+                   isCategorySelected = true
+               } else {
+                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+               }
+           }
+           
+           if !isCategorySelected {
+               categoryStackView.arrangedSubviews.forEach { view in
+                   guard let button = view as? UIButton else { return }
+                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+               }
+           }
+
     }
     
     func setImage(url: [String]) {
