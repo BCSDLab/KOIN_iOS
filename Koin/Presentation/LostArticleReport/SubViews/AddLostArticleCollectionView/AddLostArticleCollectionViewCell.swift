@@ -99,6 +99,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.isHidden = true
     }
     
+    private let chevronImage = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .chevronDown)
+        $0.isUserInteractionEnabled = false
+    }
     private let dateButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
@@ -359,6 +363,7 @@ extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
         [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
             contentView.addSubview($0)
         }
+        dateButton.addSubview(chevronImage)
     }
     
     private func setUpConstraints() {
@@ -441,6 +446,11 @@ extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.height.equalTo(40)
             make.trailing.equalTo(contentView.snp.trailing).offset(-24)
+        }
+        chevronImage.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(24)
         }
         locationLabel.snp.makeConstraints { make in
             make.top.equalTo(dateButton.snp.bottom).offset(16)

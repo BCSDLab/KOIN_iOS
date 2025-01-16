@@ -49,8 +49,8 @@ final class DatePickerDropdownView: UIView {
         for subview in datePicker.subviews {
             for nestedSubview in subview.subviews {
                 if let pickerLabel = nestedSubview as? UILabel {
-                    pickerLabel.textColor = UIColor.systemBlue // 글씨를 파란색으로
-                    pickerLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold) // 원하는 폰트 설정
+                    pickerLabel.textColor = .blue
+                    pickerLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
                 }
             }
         }
