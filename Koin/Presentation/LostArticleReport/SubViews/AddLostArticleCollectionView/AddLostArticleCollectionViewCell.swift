@@ -112,6 +112,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
+        $0.setTitle("습득 장소를 입력해주세요.", for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.contentHorizontalAlignment = .left
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
     
     private let locationLabel = UILabel().then {
@@ -181,13 +185,25 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
     func configure(index: Int, isSingle: Bool, model: PostLostArticleRequest) {
         locationTextField.text = model.location
-        dateButton.setTitle(model.foundDate, for: .normal)
-        contentTextView.text = model.content
+        if model.foundDate.isEmpty {
+            dateButton.setTitle("습득 장소를 입력해주세요", for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+        } else {
+            dateButton.setTitle(model.foundDate, for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        }
+        if let content = model.content, content.isEmpty {
+            contentTextView.textColor = UIColor.appColor(.neutral500)
+            contentTextView.text = textViewPlaceHolder
+        } else {
+            contentTextView.textColor = UIColor.appColor(.neutral800)
+            contentTextView.text = model.content
+        }
         itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
         
         let category = model.category
-           var isCategorySelected = false
+        var isCategorySelected = false
            
            for view in categoryStackView.arrangedSubviews {
                guard let button = view as? UIButton else { continue }
@@ -315,6 +331,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
             formatter.dateFormat = "yyyy년 M월 d일"
             let formattedDate = formatter.string(from: selectedDate)
             button.setTitle(formattedDate, for: .normal)
+            self?.dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
             self?.datePublisher.send(formattedDate)
             button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
             dropdownView.removeFromSuperview() // 날짜 선택 시 드롭다운 닫기
