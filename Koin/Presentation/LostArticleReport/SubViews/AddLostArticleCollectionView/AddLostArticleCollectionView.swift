@@ -41,6 +41,9 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
         dataSource = self
         delegate = self
         articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+           tapGesture.cancelsTouchesInView = false  // Allows taps to pass through to collection view cells
+           addGestureRecognizer(tapGesture)
     }
     
     
@@ -48,6 +51,10 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
         articles[index].images?.append(url)
         reloadData()
         collectionViewLayout.invalidateLayout()
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.endEditing(true)
     }
 
 }

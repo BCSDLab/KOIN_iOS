@@ -105,13 +105,13 @@ final class LostArticleReportViewController: UIViewController {
         
         // TODO: 수정
         addLostArticleCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(addLostArticleCollectionView.calculateDynamicHeight())
+            make.height.equalTo(addLostArticleCollectionView.calculateDynamicHeight() + 300)
         }
         
         addLostArticleCollectionView.heightChangedPublisher.sink { [weak self] in
             guard let self = self else { return }
             self.addLostArticleCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(self.addLostArticleCollectionView.calculateDynamicHeight())
+                make.height.equalTo(self.addLostArticleCollectionView.calculateDynamicHeight() + 300)
             }
         }.store(in: &subscriptions)
         
