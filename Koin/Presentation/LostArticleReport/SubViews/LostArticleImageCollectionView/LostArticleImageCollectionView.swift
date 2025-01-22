@@ -10,10 +10,10 @@ import UIKit
 
 final class LostArticleImageCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let imageCountPublisher = PassthroughSubject<Int, Never>()
+    let imageCountPublisher = PassthroughSubject<[String], Never>()
     private(set) var imageUrls: [String] = [] {
         didSet {
-            imageCountPublisher.send(imageUrls.count)
+            imageCountPublisher.send(imageUrls)
         }
     }
     
@@ -66,10 +66,10 @@ extension LostArticleImageCollectionView {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = Int((collectionView.bounds.width - 38) / 3)
-        return CGSize(width: width, height: Int(collectionView.bounds.height) - 16)
+        return CGSize(width: width, height: Int(collectionView.bounds.height) - 10)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 4
     }
 }
 

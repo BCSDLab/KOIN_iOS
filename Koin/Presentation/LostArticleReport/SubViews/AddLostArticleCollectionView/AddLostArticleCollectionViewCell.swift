@@ -20,6 +20,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     let categoryPublisher = PassthroughSubject<String, Never>()
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
+    let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     
     private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
     
@@ -167,9 +168,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
         locationTextField.delegate = self
-        imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
-            self?.addPictureButton.isEnabled = count < 10
-            self?.pictureCountLabel.text = "\(count)/10"
+        imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
+            self?.addPictureButton.isEnabled = urls.count < 10
+            self?.pictureCountLabel.text = "\(urls.count)/10"
+            self?.imageUrlsPublisher.send(urls)
         }.store(in: &cancellable)
     }
     

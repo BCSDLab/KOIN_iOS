@@ -126,6 +126,9 @@ extension AddLostArticleCollectionView {
         cell.contentPublisher.sink { [weak self] value in
             self?.articles[indexPath.row].content = value
         }.store(in: &cell.cancellables)
+        cell.imageUrlsPublisher.sink { [weak self] urls in
+            self?.articles[indexPath.row].images = urls
+        }.store(in: &cell.cancellables)
         return cell
     }
 }
