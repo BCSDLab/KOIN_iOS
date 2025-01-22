@@ -15,6 +15,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
     private var articles: [PostLostArticleRequest] = []
     
@@ -84,6 +85,7 @@ extension AddLostArticleCollectionView {
                 self?.reloadData()
                 self?.collectionViewLayout.invalidateLayout()
                 self?.heightChangedPublisher.send()
+                self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
             }.store(in: &footerCancellables)
             return footerView
         }
@@ -116,6 +118,7 @@ extension AddLostArticleCollectionView {
         }.store(in: &cell.cancellables)
         cell.categoryPublisher.sink { [weak self] value in
             self?.articles[indexPath.row].category = value
+            self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserCategory, .click, value))
         }.store(in: &cell.cancellables)
         cell.locationPublisher.sink { [weak self] value in
             self?.articles[indexPath.row].location = value

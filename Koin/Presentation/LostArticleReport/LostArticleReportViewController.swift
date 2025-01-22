@@ -130,6 +130,11 @@ final class LostArticleReportViewController: UIViewController {
                     self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
                 }
             }.store(in: &subscriptions)
+        
+        addLostArticleCollectionView.logPublisher.sink { [weak self] value in
+            self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
+        }.store(in: &subscriptions)
+
     }
     
 }
@@ -166,6 +171,7 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
         if isAllValid {
             let allCellData = collectAllCellData()
             inputSubject.send(.postLostItem(allCellData))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWriteConfirm, .click, "작성완료"))
         }
     }
     

@@ -188,6 +188,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         bind()
         deleteButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.inputSubject.send(.deleteLostItem)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, .click, "삭제"))
         }
         inputSubject.send(.getPopularNotices)
         if viewModel.boardId == 14 {

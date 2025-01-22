@@ -323,7 +323,7 @@ extension HomeViewController {
     
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
-           navigateToNoticeList()
+            navigateToNoticeList()
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.appMainNoticeDetail, .click, "더보기"))
         }
         else if sender == goDiningPageButton {
@@ -421,7 +421,7 @@ extension HomeViewController {
     private func putImage(data: ShopCategoryDTO) {
         var categories = data.shopCategories
         let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://ifh.cc/g/M4raFL.png")
-           categories.insert(newCategory, at: 0)
+        categories.insert(newCategory, at: 0)
         categoryCollectionView.updateCategories(categories)
     }
     

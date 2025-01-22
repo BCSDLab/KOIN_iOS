@@ -15,6 +15,7 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     enum Input {
         case uploadFile([Data])
         case postLostItem([PostLostArticleRequest])
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -33,6 +34,7 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     var selectedIndex = 0
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     
     // MARK: - Initialization
     
@@ -46,6 +48,8 @@ final class LostArticleReportViewModel: ViewModelProtocol {
                 self?.uploadFiles(files: files)
             case let .postLostItem(request):
                 self?.postLostItem(request: request)
+            case let .logEvent(label, category, value):
+                self?.logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -54,6 +58,10 @@ final class LostArticleReportViewModel: ViewModelProtocol {
 }
 
 extension LostArticleReportViewModel {
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
     
     private func postLostItem(request: [PostLostArticleRequest]) {
         postLostItemUseCase.execute(request: request).sink { [weak self] completion in

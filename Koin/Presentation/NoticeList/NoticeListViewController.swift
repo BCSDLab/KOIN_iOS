@@ -160,6 +160,7 @@ extension NoticeListViewController {
     @objc private func writeButtonTapped() {
         let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel())
         viewController.delegate = self
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
         navigationController?.pushViewController(viewController, animated: true)
     }
     
