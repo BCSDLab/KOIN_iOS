@@ -37,6 +37,15 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.textColor = .appColor(.neutral800)
     }
     
+    private let categoryLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
+    
     private let nickNameLabel = UILabel()
     
     private let createdDateLabel = UILabel()
@@ -263,8 +272,12 @@ extension NoticeDataViewController {
     }
     
     private func updateLostItem(_ item: LostArticleDetailDTO) {
+        
         titleGuideLabel.text = NoticeListType(rawValue: item.boardId)?.displayName
-        titleLabel.setLineHeight(lineHeight: 1.3, text: item.category)
+        categoryLabel.text = item.category
+        titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
+       
+        
         nickNameLabel.text = item.author
         createdDateLabel.text = item.registeredAt
         let imageUrls = item.image?.map { $0.imageUrl } ?? []
@@ -579,7 +592,7 @@ extension NoticeDataViewController {
         [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2].forEach {
             contentView.addSubview($0)
         }
-        [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label].forEach {
+        [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, categoryLabel].forEach {
             titleWrappedView.addSubview($0)
         }
         [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
@@ -601,14 +614,20 @@ extension NoticeDataViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalToSuperview()
         }
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
+            make.leading.equalTo(titleGuideLabel)
+            make.width.equalTo(65)
+            make.height.equalTo(22)
+        }
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleGuideLabel.snp.bottom)
-            $0.leading.equalTo(titleGuideLabel)
+            $0.centerY.equalTo(categoryLabel)
+            $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(24)
         }
         createdDateLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(titleLabel)
+            $0.leading.equalTo(categoryLabel)
             $0.height.equalTo(19)
         }
         separatorDotLabel.snp.makeConstraints {
@@ -622,11 +641,6 @@ extension NoticeDataViewController {
             $0.top.equalTo(createdDateLabel)
             $0.bottom.equalToSuperview().inset(12)
             $0.height.equalTo(19)
-        }
-        separatorDot2Label.snp.makeConstraints {
-            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(3)
-            $0.top.equalTo(nickNameLabel)
-            $0.width.equalTo(7)
         }
         separateView1.snp.makeConstraints { make in
             make.top.equalTo(titleWrappedView.snp.bottom)
