@@ -462,6 +462,7 @@
 		D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */; };
 		D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */; };
 		D2B7EBDE2D38AF1500EE46B0 /* DatePickerDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDD2D38AF1500EE46B0 /* DatePickerDropdownView.swift */; };
+		D2B7EC0E2D415B3900EE46B0 /* DeleteArticleModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EC0D2D415B3900EE46B0 /* DeleteArticleModalViewController.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
@@ -1039,6 +1040,7 @@
 		D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTypeResponse.swift; sourceTree = "<group>"; };
 		D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAuthUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBDD2D38AF1500EE46B0 /* DatePickerDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerDropdownView.swift; sourceTree = "<group>"; };
+		D2B7EC0D2D415B3900EE46B0 /* DeleteArticleModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteArticleModalViewController.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
@@ -1292,9 +1294,7 @@
 		833D9C502C7344F400982145 /* NoticeData */ = {
 			isa = PBXGroup;
 			children = (
-				D2B7EBD32D38195B00EE46B0 /* ImageScrollCollectionView */,
-				83455FC02C96E14700CEB7A4 /* NoticeAttachmentsTableView */,
-				833D9C552C735F4500982145 /* HotNoticeArticlesTableView */,
+				D2B7EC0C2D415AA700EE46B0 /* SubViews */,
 				833D9C512C73451000982145 /* NoticeDataViewController.swift */,
 				833D9C532C73451B00982145 /* NoticeDataViewModel.swift */,
 			);
@@ -2706,6 +2706,17 @@
 			path = ImageScrollCollectionView;
 			sourceTree = "<group>";
 		};
+		D2B7EC0C2D415AA700EE46B0 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C552C735F4500982145 /* HotNoticeArticlesTableView */,
+				83455FC02C96E14700CEB7A4 /* NoticeAttachmentsTableView */,
+				D2B7EBD32D38195B00EE46B0 /* ImageScrollCollectionView */,
+				D2B7EC0D2D415B3900EE46B0 /* DeleteArticleModalViewController.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		D2CA2DCE2C1CAC4B0036F02C /* Shop */ = {
 			isa = PBXGroup;
 			children = (
@@ -3632,6 +3643,7 @@
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
+				D2B7EC0E2D415B3900EE46B0 /* DeleteArticleModalViewController.swift in Sources */,
 				83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */,
 				D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */,
 				833D9C0E2C6B24EF00982145 /* TabBarCollectionView.swift in Sources */,
@@ -4048,7 +4060,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 368;
+				CURRENT_PROJECT_VERSION = 378;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4065,7 +4077,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.1;
+				MARKETING_VERSION = 4.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -4083,7 +4095,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 368;
+				CURRENT_PROJECT_VERSION = 378;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4100,7 +4112,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.1;
+				MARKETING_VERSION = 4.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

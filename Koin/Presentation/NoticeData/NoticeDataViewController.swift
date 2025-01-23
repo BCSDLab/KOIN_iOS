@@ -20,6 +20,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     
     // MARK: - UI Components
     
+    private let deleteArticleModalViewController = DeleteArticleModalViewController(width: 301, height: 128)
+    
     private let titleWrappedView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -187,8 +189,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         contentTextView.delegate = self
         bind()
         deleteButton.throttle(interval: .seconds(3)) { [weak self] in
-            self?.inputSubject.send(.deleteLostItem)
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, .click, "삭제"))
+            guard let self = self else { return }
+            self.present(self.deleteArticleModalViewController, animated: false)
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, .click, "삭제"))
         }
         inputSubject.send(.getPopularNotices)
         if viewModel.boardId == 14 {
@@ -245,6 +248,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             }
             
         }.store(in: &subscriptions)
+        
+        deleteArticleModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
+            self?.inputSubject.send(.deleteLostItem)
+        }).store(in: &subscriptions)
     }
 }
 
