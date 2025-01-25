@@ -27,12 +27,13 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         service.fetchLostItem(id: id)
     }
     
-    func fetchLostItemList(page: Int, limit: Int) -> AnyPublisher<LostArticleDTO, Error> {
-        service.fetchLostItemList(page: page, limit: limit)
-    }
     
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return service.fetchNoticeArticles(requestModel: requestModel)
+    }
+    
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
+        return service.fetchLostItemList(requestModel: requestModel)
     }
     
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {

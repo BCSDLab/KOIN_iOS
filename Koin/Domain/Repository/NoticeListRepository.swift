@@ -21,7 +21,7 @@ protocol NoticeListRepository {
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
     func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
-    func fetchLostItemList(page: Int, limit: Int) -> AnyPublisher<LostArticleDTO, Error>
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     

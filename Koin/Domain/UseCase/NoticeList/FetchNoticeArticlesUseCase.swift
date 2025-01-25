@@ -22,21 +22,21 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     }
     
     func execute(boardId: Int?, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error> {
-        let request: AnyPublisher<NoticeListDTO, Error>
+        let response: AnyPublisher<NoticeListDTO, Error>
         
         if let keyWord = keyWord { // 키워드로 검색해서 찾을 경우
             let searchRequest = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
-            request = noticeListRepository.searchNoticeArticle(requestModel: searchRequest)
+            response = noticeListRepository.searchNoticeArticle(requestModel: searchRequest)
         } else if let boardId = boardId { //키워드 없는 공지사항 목록을 원할 경우
             let fetchRequest = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
-            request = noticeListRepository.fetchNoticeArticles(requestModel: fetchRequest)
+            response = noticeListRepository.fetchNoticeArticles(requestModel: fetchRequest)
         } else { // boardId는 꼭 필요하기 때문에 없다면 빈 배열을 반환
-            request = Just(NoticeListDTO(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0))
+            response = Just(NoticeListDTO(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
         
-        return request
+        return response
             .map { [weak self] articles in
                 let newArticles: NoticeListDTO = articles.toDomain()
                 let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)

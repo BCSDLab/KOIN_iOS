@@ -21,7 +21,7 @@ protocol NoticeListService {
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
     func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
-    func fetchLostItemList(page: Int, limit: Int) -> AnyPublisher<LostArticleDTO, Error>
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
 }
@@ -46,8 +46,8 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchLostItemList(page: Int, limit: Int) -> AnyPublisher<LostArticleDTO, Error> {
-        return request(.fetchLostItemList(page, limit))
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
+        return request(.fetchLostItemList(requestModel))
     }
     
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error> {
