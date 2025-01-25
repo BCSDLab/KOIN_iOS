@@ -24,6 +24,15 @@ final class NoticeListTableViewCell: UITableViewCell {
         $0.numberOfLines = 2
     }
     
+    private let categoryLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
+    
     private let nickNameLabel = UILabel()
     
     private let createdDateLabel = UILabel()
@@ -57,8 +66,7 @@ final class NoticeListTableViewCell: UITableViewCell {
     func configure(articleModel: NoticeArticleDTO) {
         let displayName = NoticeListType(rawValue: articleModel.boardId)?.displayName ?? ""
         boardTitleLabel.text = displayName == "분실물" ? displayName : "\(displayName)공지"
-
-        noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title)
+        
         
         noticeTitleLabel.lineBreakMode = .byTruncatingTail
         nickNameLabel.text = articleModel.author
@@ -74,6 +82,39 @@ final class NoticeListTableViewCell: UITableViewCell {
             }
             hitLabel.text = "\(articleModel.hit.formattedWithComma)"
         }
+        
+        if articleModel.boardId == 14 {
+            categoryLabel.isHidden = false
+            [separatorDot2Label, eyeImageView, hitLabel].forEach {
+                $0.isHidden = true
+            }
+            let components = articleModel.title.components(separatedBy: " | ")
+            if components.count == 3 {
+                let category = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                let title = "\(components[1]) | \(components[2])".trimmingCharacters(in: .whitespacesAndNewlines)
+                categoryLabel.text = category
+                noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: title)
+            }
+            categoryLabel.snp.remakeConstraints {
+                $0.top.equalTo(noticeTitleLabel)
+                $0.leading.equalTo(boardTitleLabel)
+                $0.width.equalTo(65)
+                $0.height.equalTo(22)
+            }
+            noticeTitleLabel.snp.remakeConstraints {
+                $0.top.equalTo(boardTitleLabel.snp.bottom)
+                $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
+                $0.trailing.equalToSuperview().inset(24)
+            }
+        } else {
+            noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title)
+            categoryLabel.isHidden = true
+            noticeTitleLabel.snp.remakeConstraints {
+                $0.top.equalTo(boardTitleLabel.snp.bottom)
+                $0.leading.equalTo(boardTitleLabel.snp.leading)
+                $0.trailing.equalToSuperview().inset(24)
+            }
+        }
     }
     
 }
@@ -88,7 +129,7 @@ extension NoticeListTableViewCell {
     }
     
     private func setUpLayouts() {
-        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
+        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -98,13 +139,17 @@ extension NoticeListTableViewCell {
             $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(24)
         }
-        
+        categoryLabel.snp.makeConstraints {
+            $0.top.equalTo(noticeTitleLabel)
+            $0.leading.equalTo(boardTitleLabel)
+            $0.width.equalTo(65)
+            $0.height.equalTo(22)
+        }
         noticeTitleLabel.snp.makeConstraints {
             $0.top.equalTo(boardTitleLabel.snp.bottom)
-            $0.leading.equalTo(boardTitleLabel)
+            $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(24)
         }
-        
         nickNameLabel.snp.makeConstraints {
             $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(boardTitleLabel)
@@ -116,7 +161,7 @@ extension NoticeListTableViewCell {
             $0.width.equalTo(7)
         }
         
-    createdDateLabel.snp.makeConstraints {
+        createdDateLabel.snp.makeConstraints {
             $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
             $0.top.equalTo(nickNameLabel)
             $0.bottom.equalToSuperview().inset(12)
