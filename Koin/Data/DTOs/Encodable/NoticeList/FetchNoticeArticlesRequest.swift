@@ -8,7 +8,7 @@
 import Foundation
 
 struct FetchNoticeArticlesRequest: Encodable {
-    let boardId: Int
+    let boardId: Int?
     let page: Int?
     let limit: Int?
 }

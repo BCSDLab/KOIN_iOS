@@ -9,6 +9,7 @@ import Foundation
 
 enum NoticeListType: Int, Decodable, CaseIterable {
     case all = 4
+    case lostItem = 14
     case general = 5
     case scholarship = 6
     case university = 7
@@ -16,12 +17,14 @@ enum NoticeListType: Int, Decodable, CaseIterable {
     case ipp = 12
     case student = 13
     case koin = 9
-
+    
     
     var displayName: String {
         switch self {
         case .all:
             return "전체공지"
+        case .lostItem:
+            return "분실물"
         case .general:
             return "일반"
         case .scholarship:
@@ -36,6 +39,20 @@ enum NoticeListType: Int, Decodable, CaseIterable {
             return "학생생활"
         case .koin:
             return "코인"
+        }
+    }
+    
+    var index: Int {
+        switch self {
+        case .all: return 0
+        case .lostItem: return 1
+        case .general: return 2
+        case .scholarship: return 3
+        case .university: return 4
+        case .job: return 5
+        case .ipp: return 6
+        case .student: return 7
+        case .koin: return 8
         }
     }
     

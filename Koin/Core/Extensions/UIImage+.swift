@@ -116,6 +116,15 @@ enum ImageAsset: String {
     case incorrectInfo
     case swap
     case busStop
+    case findPerson
+    case addCircle
+    case picture
+    case trashcanBlue
+    case warningOrange
+    case cancelBlue
+    case trashcanSmall
+    case pencil
+    case chevronDown
 }
 
 enum SFSymbols: String {

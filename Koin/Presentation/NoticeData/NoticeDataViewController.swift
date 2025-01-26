@@ -17,8 +17,10 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let inputSubject: PassthroughSubject<NoticeDataViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var noticeUrl = ""
- 
+    
     // MARK: - UI Components
+    
+    private let deleteArticleModalViewController = DeleteArticleModalViewController(width: 301, height: 128)
     
     private let titleWrappedView = UIView().then {
         $0.backgroundColor = .white
@@ -33,6 +35,15 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.font = .appFont(.pretendardMedium, size: 16)
         $0.numberOfLines = 0
         $0.textColor = .appColor(.neutral800)
+    }
+    
+    private let categoryLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
     private let nickNameLabel = UILabel()
@@ -66,7 +77,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     }
     
     private let urlRedirectButton = UIButton()
-        
+    
     private let popularNoticeGuideLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = .appColor(.neutral800)
@@ -78,7 +89,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let scrollView = UIScrollView()
     
     private let contentView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral100)
+        $0.backgroundColor = .white
     }
     
     private let contentTextView = UITextView().then {
@@ -95,7 +106,72 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.textColor = .appColor(.neutral800)
         $0.text = "첨부파일"
     }
-
+    
+    private let separateView1 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
+    
+    private let separateView2 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
+    private let imageCollectionView: ImageScrollCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let collectionView = ImageScrollCollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = UIColor.appColor(.neutral300)
+        pageControl.currentPageIndicatorTintColor = UIColor.appColor(.primary400)
+        pageControl.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        return pageControl
+    }()
+    private let contentLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 6
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let councilLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 6
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.numberOfLines = 3
+        let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n학생회관 320호 총학생회 사무실로 방문해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
+        let attributedString = NSMutableAttributedString(string: text)
+        let range = (text as NSString).range(of: "학생회관 320호 총학생회 사무실")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral700), range: range)
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
+        $0.attributedText = attributedString
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 12
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+    }
+    
+    private let deleteButton = DebouncedButton().then {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .trashcanSmall)
+        var text = AttributedString("삭제")
+        text.font = UIFont.appFont(.pretendardMedium, size: 12)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 0
+        configuration.imagePlacement = .trailing
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.configuration = configuration
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.contentHorizontalAlignment = .center
+        $0.isHidden = true
+    }
+    
+    
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
     
     // MARK: - Initialization
@@ -121,9 +197,20 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         contentTextView.isEditable = false
         contentTextView.delegate = self
         bind()
-        inputSubject.send(.getNoticeData)
+        deleteButton.throttle(interval: .seconds(3)) { [weak self] in
+            guard let self = self else { return }
+            self.present(self.deleteArticleModalViewController, animated: false)
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, .click, "삭제"))
+        }
         inputSubject.send(.getPopularNotices)
-        configureView()
+        if viewModel.boardId == 14 {
+            lostItemConfigureView()
+            inputSubject.send(.fetchLostItem(viewModel.noticeId))
+            inputSubject.send(.checkAuth)
+        } else {
+            commonConfigureView()
+            inputSubject.send(.getNoticeData)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -143,28 +230,75 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updatePopularArticle(notices: notices)
             case let .updateActivityIndictor(isStarted, fileName, downloadedPath):
                 self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName, downloadedPath: downloadedPath)
+            case let .updateLostItem(lostItem):
+                self?.updateLostItem(lostItem)
+            case let .showToast(message):
+                self?.showToast(message: message)
+                self?.navigationController?.popViewController(animated: true)
+            case let .showAuth(userType):
+                self?.deleteButton.isHidden = userType.userType != .council
             }
         }.store(in: &subscriptions)
         
-        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle in
-            self?.navigateToOtherNoticeDataPage(noticeId: noticeId)
+        hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle, boardId in
+            self?.navigateToOtherNoticeDataPage(noticeId: noticeId, boardId: boardId)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularNotice, .click, "\(noticeTitle)"))
         }.store(in: &subscriptions)
         
         noticeAttachmentsTableView.tapDownloadButtonPublisher
             .sink { [weak self] url, title in
-            self?.inputSubject.send(.downloadFile(url, title))
+                self?.inputSubject.send(.downloadFile(url, title))
+            }.store(in: &subscriptions)
+        
+        imageCollectionView.currentPagePublisher.sink { [weak self] index in
+            guard let self = self else { return }
+            if index < self.pageControl.numberOfPages {
+                self.pageControl.currentPage = index
+            }
+            
         }.store(in: &subscriptions)
+        
+        deleteArticleModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
+            self?.inputSubject.send(.deleteLostItem)
+        }).store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
+    
+    @objc private func deleteButtonTapped() {
+        inputSubject.send(.deleteLostItem)
+    }
+    
+    private func updateLostItem(_ item: LostArticleDetailDTO) {
+        
+        titleGuideLabel.text = NoticeListType(rawValue: item.boardId)?.displayName
+        categoryLabel.text = item.category
+        titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
+       
+        
+        nickNameLabel.text = item.author
+        createdDateLabel.text = item.registeredAt
+        let imageUrls = item.image?.map { $0.imageUrl } ?? []
+        imageCollectionView.setImageUrls(urls: imageUrls)
+        contentLabel.text = item.content
+        if imageUrls.isEmpty {
+            imageCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+        }
+        imageCollectionView.isHidden = imageUrls.isEmpty
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = imageUrls.count
+        councilLabel.isHidden = item.author != "총학생회"
+    }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeOriginalShortcut, .click, "\(urlRedirectButton.currentTitle ?? "")"))
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-     }
+    }
     
     @objc private func tapInventoryButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.inventory, .click, "목록"))
@@ -184,14 +318,14 @@ extension NoticeDataViewController {
     }
     
     
-    private func navigateToOtherNoticeDataPage(noticeId: Int) {
+    private func navigateToOtherNoticeDataPage(noticeId: Int, boardId: Int) {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
         let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
         let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId, boardId: boardId)
         let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(noticeDataVc, animated: true)
     }
@@ -208,15 +342,15 @@ extension NoticeDataViewController {
             $0.height.equalTo(contentTextViewHeight)
         }
         /*
-        if let prevId = noticeData.prevId {
-            previousButton.isHidden = false
-            viewModel.previousNoticeId = prevId
-        }
-        
-        if let nextId = noticeData.nextId {
-            nextButton.isHidden = false
-            viewModel.nextNoticeId = nextId
-        }*/
+         if let prevId = noticeData.prevId {
+         previousButton.isHidden = false
+         viewModel.previousNoticeId = prevId
+         }
+         
+         if let nextId = noticeData.nextId {
+         nextButton.isHidden = false
+         viewModel.nextNoticeId = nextId
+         }*/
         
         if noticeData.hit == 0 {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
@@ -319,7 +453,6 @@ extension NoticeDataViewController {
         [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
-    
         [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
             titleWrappedView.addSubview($0)
         }
@@ -335,91 +468,75 @@ extension NoticeDataViewController {
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalTo(scrollView)
         }
-        
         titleWrappedView.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview()
         }
-        
-        
         titleGuideLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalToSuperview()
         }
-        
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(titleGuideLabel.snp.bottom)
             $0.leading.equalTo(titleGuideLabel)
             $0.trailing.equalToSuperview().inset(24)
         }
-        
         createdDateLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
             $0.height.equalTo(19)
         }
-        
         separatorDotLabel.snp.makeConstraints {
             $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
             $0.top.equalTo(createdDateLabel)
             $0.width.equalTo(7)
             $0.height.equalTo(19)
         }
-        
         nickNameLabel.snp.makeConstraints {
             $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
             $0.top.equalTo(createdDateLabel)
             $0.bottom.equalToSuperview().inset(12)
             $0.height.equalTo(19)
         }
-        
         separatorDot2Label.snp.makeConstraints {
             $0.leading.equalTo(nickNameLabel.snp.trailing).offset(3)
             $0.top.equalTo(nickNameLabel)
             $0.width.equalTo(7)
         }
-        
         eyeImageView.snp.makeConstraints {
             $0.leading.equalTo(separatorDot2Label.snp.trailing).offset(2)
             $0.centerY.equalTo(nickNameLabel)
             $0.width.equalTo(16)
             $0.height.equalTo(13)
         }
-        
         hitLabel.snp.makeConstraints {
             $0.leading.equalTo(eyeImageView.snp.trailing)
             $0.top.equalTo(nickNameLabel)
             $0.height.equalTo(19)
         }
-        
         contentWrappedView.snp.makeConstraints {
             $0.top.equalTo(titleWrappedView.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
         }
-        
         contentTextView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(100)
         }
-        
         attachmentGuideLabel.snp.makeConstraints {
             $0.top.equalTo(contentTextView.snp.bottom).offset(14)
             $0.leading.equalTo(contentTextView)
             $0.height.equalTo(26)
         }
-        
         noticeAttachmentsTableView.snp.makeConstraints {
             $0.top.equalTo(attachmentGuideLabel.snp.bottom).offset(14)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(100)
         }
-        
         if attachmentGuideLabel.isHidden {
             inventoryButton.snp.makeConstraints {
                 $0.top.equalTo(contentTextView.snp.bottom).offset(22)
@@ -437,7 +554,6 @@ extension NoticeDataViewController {
                 $0.bottom.equalToSuperview().inset(16)
             }
         }
-        
         urlRedirectButton.snp.makeConstraints {
             $0.top.equalTo(inventoryButton)
             $0.height.equalTo(31)
@@ -449,21 +565,19 @@ extension NoticeDataViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-        
         popularNoticeGuideLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
             $0.leading.equalToSuperview().offset(24)
         }
-        
         hotNoticeArticlesTableView.snp.makeConstraints {
             $0.top.equalTo(popularNoticeGuideLabel.snp.bottom).offset(14)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(184)
-            $0.bottom.equalToSuperview().inset(129) 
+            $0.bottom.equalToSuperview().inset(129)
         }
     }
-
-    private func configureView() {
+    
+    private func commonConfigureView() {
         setUpLabels()
         setUpButtons()
         setUpLayOuts()
@@ -471,5 +585,126 @@ extension NoticeDataViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
-
+extension NoticeDataViewController {
+    private func setUpLostItemLayouts() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2].forEach {
+            contentView.addSubview($0)
+        }
+        [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, categoryLabel].forEach {
+            titleWrappedView.addSubview($0)
+        }
+        [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
+            popularNoticeWrappedView.addSubview($0)
+        }
+    }
+    private func setUpLostItemConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalTo(scrollView)
+        }
+        titleWrappedView.snp.makeConstraints {
+            $0.leading.top.trailing.equalToSuperview()
+        }
+        titleGuideLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalToSuperview()
+        }
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
+            make.leading.equalTo(titleGuideLabel)
+            make.width.equalTo(65)
+            make.height.equalTo(22)
+        }
+        titleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(categoryLabel)
+            $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
+            $0.trailing.equalToSuperview().inset(24)
+        }
+        createdDateLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(categoryLabel)
+            $0.height.equalTo(19)
+        }
+        separatorDotLabel.snp.makeConstraints {
+            $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
+            $0.top.equalTo(createdDateLabel)
+            $0.width.equalTo(7)
+            $0.height.equalTo(19)
+        }
+        nickNameLabel.snp.makeConstraints {
+            $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
+            $0.top.equalTo(createdDateLabel)
+            $0.bottom.equalToSuperview().inset(12)
+            $0.height.equalTo(19)
+        }
+        separateView1.snp.makeConstraints { make in
+            make.top.equalTo(titleWrappedView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(6)
+        }
+        imageCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(separateView1.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(278)
+        }
+        pageControl.snp.makeConstraints { make in
+            make.top.equalTo(imageCollectionView.snp.bottom)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(30)
+        }
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(pageControl.snp.bottom).offset(8)
+            make.leading.trailing.equalTo(imageCollectionView)
+        }
+        councilLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(40)
+            make.leading.trailing.equalTo(imageCollectionView)
+            make.height.equalTo(89)
+        }
+        inventoryButton.snp.makeConstraints { make in
+            make.top.equalTo(councilLabel.snp.bottom).offset(40)
+            make.leading.equalTo(imageCollectionView)
+            make.width.equalTo(45)
+            make.height.equalTo(31)
+        }
+        deleteButton.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton)
+            make.trailing.equalTo(imageCollectionView.snp.trailing)
+            make.width.equalTo(61)
+            make.height.equalTo(31)
+        }
+        separateView2.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(6)
+        }
+        popularNoticeWrappedView.snp.makeConstraints {
+            $0.top.equalTo(separateView2.snp.bottom).offset(6)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        popularNoticeGuideLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(14)
+            $0.leading.equalToSuperview().offset(24)
+        }
+        hotNoticeArticlesTableView.snp.makeConstraints {
+            $0.top.equalTo(popularNoticeGuideLabel.snp.bottom).offset(14)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(184)
+            $0.bottom.equalToSuperview().inset(129)
+        }
+    }
+    private func lostItemConfigureView() {
+        setUpLabels()
+        setUpButtons()
+        setUpLostItemLayouts()
+        setUpLostItemConstraints()
+        self.view.backgroundColor = .white
+    }
+}
