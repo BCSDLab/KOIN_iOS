@@ -96,13 +96,13 @@ final class NoticeListTableViewCell: UITableViewCell {
                 noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: title)
             }
             categoryLabel.snp.remakeConstraints {
-                $0.top.equalTo(noticeTitleLabel)
+                $0.top.equalTo(boardTitleLabel.snp.bottom)
                 $0.leading.equalTo(boardTitleLabel)
                 $0.width.equalTo(65)
                 $0.height.equalTo(22)
             }
             noticeTitleLabel.snp.remakeConstraints {
-                $0.top.equalTo(boardTitleLabel.snp.bottom)
+                $0.top.equalTo(boardTitleLabel.snp.bottom).offset(-2)
                 $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
                 $0.trailing.equalToSuperview().inset(24)
             }
@@ -140,13 +140,13 @@ extension NoticeListTableViewCell {
             $0.leading.equalToSuperview().offset(24)
         }
         categoryLabel.snp.makeConstraints {
-            $0.top.equalTo(noticeTitleLabel)
+            $0.top.equalTo(boardTitleLabel.snp.bottom)
             $0.leading.equalTo(boardTitleLabel)
             $0.width.equalTo(65)
             $0.height.equalTo(22)
         }
         noticeTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(boardTitleLabel.snp.bottom)
+            $0.top.equalTo(boardTitleLabel.snp.bottom).offset(-2)
             $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(24)
         }
