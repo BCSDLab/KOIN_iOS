@@ -18,7 +18,8 @@ struct PostLostArticleRequest: Codable {
     let registeredAt, updatedAt: String
 
     enum CodingKeys: String, CodingKey {
-        case category, location
+        case category
+        case location = "found_place"
         case foundDate = "found_date"
         case content, images
         case registeredAt = "registered_at"
