@@ -12,7 +12,7 @@ final class HotNoticeArticlesTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var popularNoticeArticles: [NoticeArticleDTO] = []
-    let tapHotArticlePublisher = PassthroughSubject<(Int, String), Never>()
+    let tapHotArticlePublisher = PassthroughSubject<(Int, String, Int), Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -54,7 +54,7 @@ extension HotNoticeArticlesTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tapHotArticlePublisher.send((popularNoticeArticles[indexPath.row].id, popularNoticeArticles[indexPath.row].title))
+        tapHotArticlePublisher.send((popularNoticeArticles[indexPath.row].id, popularNoticeArticles[indexPath.row].title, popularNoticeArticles[indexPath.row].boardId))
     }
 }
 

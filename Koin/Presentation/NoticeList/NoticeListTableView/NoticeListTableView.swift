@@ -13,7 +13,7 @@ final class NoticeListTableView: UITableView {
     private var noticeArticleList: [NoticeArticleDTO] = []
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
-    let tapNoticePublisher = PassthroughSubject<Int, Never>()
+    let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
@@ -147,7 +147,7 @@ extension NoticeListTableView: UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            tapNoticePublisher.send(noticeArticleList[indexPath.row].id)
+            tapNoticePublisher.send((noticeArticleList[indexPath.row].id, noticeArticleList[indexPath.row].boardId))
         }
     }
 }

@@ -260,7 +260,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
     @objc private func tapNoticeInfoButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncement, .click, "\(currentBusType().koreanDescription) 시간표"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
-        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag)
+        let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag, boardId: -1)
         let viewController = NoticeDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

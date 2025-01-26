@@ -94,7 +94,7 @@ final class NotificationHandler {
             fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository),
             downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-            noticeId: intId
+            noticeId: intId, boardId: -1
         )
         let vc = NoticeDataViewController(viewModel: viewModel)
         rootViewController?.pushViewController(vc, animated: true)

@@ -15,6 +15,7 @@ final class NoticeListViewModel: ViewModelProtocol {
         case changePage(Int)
         case getUserKeywordList(NoticeKeywordDTO? = nil)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case checkAuth
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
@@ -27,7 +28,9 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private var noticeListType: NoticeListType = .all {
+    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private(set) var auth: UserType = .student
+    private(set) var noticeListType: NoticeListType = .all {
         didSet {
             getNoticeInfo(page: 1)
         }
@@ -55,6 +58,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.getUserKeywordList(keyword: keyword)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case .checkAuth:
+                self?.checkAuth()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -62,6 +67,18 @@ final class NoticeListViewModel: ViewModelProtocol {
 }
 
 extension NoticeListViewModel {
+    
+    func checkAuth() {
+        
+        checkAuthUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] response in
+            self?.auth = response.userType
+        }).store(in: &subscriptions)
+        
+    }
     private func changeBoard(noticeListType: NoticeListType) {
         self.noticeListType = noticeListType
     }

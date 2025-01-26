@@ -7,12 +7,17 @@
 
 import Combine
 
-final class DefaultUserRepository: UserRepository {    
+final class DefaultUserRepository: UserRepository {
+    
     
     private let service: UserService
     
     init(service: UserService) {
         self.service = service
+    }
+    
+    func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse> {
+        service.checkAuth()
     }
     
     func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse> {

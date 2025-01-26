@@ -276,7 +276,7 @@ final class HomeViewController: UIViewController {
             let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository)
             let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticedataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId)
+            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticedataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId, boardId: -1)
             let viewController = NoticeDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
@@ -323,7 +323,7 @@ extension HomeViewController {
     
     @objc private func tapGoOtherPageButton(sender: UIButton) {
         if sender == goNoticePageButton {
-           navigateToNoticeList()
+            navigateToNoticeList()
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.appMainNoticeDetail, .click, "더보기"))
         }
         else if sender == goDiningPageButton {
@@ -421,7 +421,7 @@ extension HomeViewController {
     private func putImage(data: ShopCategoryDTO) {
         var categories = data.shopCategories
         let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://ifh.cc/g/M4raFL.png")
-           categories.insert(newCategory, at: 0)
+        categories.insert(newCategory, at: 0)
         categoryCollectionView.updateCategories(categories)
     }
     

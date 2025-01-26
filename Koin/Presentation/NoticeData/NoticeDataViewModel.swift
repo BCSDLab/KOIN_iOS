@@ -15,29 +15,40 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case getPopularNotices
         case downloadFile(String, String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case fetchLostItem(Int)
+        case deleteLostItem
+        case checkAuth
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
+        case updateLostItem(LostArticleDetailDTO)
         case updatePopularArticles([NoticeArticleDTO])
         case updateActivityIndictor(Bool, String?, URL?)
+        case showToast(String)
+        case showAuth(UserTypeResponse)
     }
     
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchLostItemUseCase = DefaultFetchLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    private var noticeId: Int = 0
-    var previousNoticeId: Int?
-    var nextNoticeId: Int?
+    private(set) var noticeId: Int = 0
+    private(set) var boardId: Int = 0
+    private(set) var previousNoticeId: Int?
+    private(set) var nextNoticeId: Int?
     
-    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int) {
+    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int, boardId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.downloadNoticeAttachmentUseCase = downloadNoticeAttachmentUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.noticeId = noticeId
+        self.boardId = boardId
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -51,6 +62,12 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.downloadFile(downloadUrl: downloadUrl, fileName: fileName)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .fetchLostItem(id):
+                self?.fetchLostItem(id: id)
+            case .deleteLostItem:
+                self?.deleteLostItem()
+            case .checkAuth:
+                self?.checkAuth()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -58,6 +75,37 @@ final class NoticeDataViewModel: ViewModelProtocol {
 }
 
 extension NoticeDataViewModel {
+    
+    func checkAuth() {
+        
+        checkAuthUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showAuth(response))
+        }).store(in: &subscriptions)
+        
+    }
+    
+    private func deleteLostItem() {
+        deleteLostItemUseCase.execute(id: noticeId).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showToast("글이 삭제되었습니다."))
+        }).store(in: &subscriptions)
+    }
+    private func fetchLostItem(id: Int) {
+        fetchLostItemUseCase.execute(id: id).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateLostItem(response))
+        }).store(in: &subscriptions)
+    }
     private func getNoticeData() {
         outputSubject.send(.updateActivityIndictor(true, nil, nil))
         let request = FetchNoticeDataRequest(noticeId: noticeId)

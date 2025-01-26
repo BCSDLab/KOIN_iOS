@@ -16,6 +16,7 @@ enum UserAPI {
     case modify(UserPutRequest)
     case refreshToken(RefreshTokenRequest)
     case revoke
+    case checkAuth
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -34,13 +35,14 @@ extension UserAPI: Router, URLRequestConvertible {
         case .checkPassword: return "/user/check/password"
         case .revoke: return "/user"
         case .refreshToken: return "/user/refresh"
+        case .checkAuth: return "/user/auth"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .refreshToken: return .post
-        case .checkDuplicatedNickname, .fetchUserData: return .get
+        case .checkDuplicatedNickname, .fetchUserData, .checkAuth: return .get
         case .modify: return .put
         case .revoke: return .delete
         }
@@ -52,11 +54,11 @@ extension UserAPI: Router, URLRequestConvertible {
         switch self {
         case .findPassword, .register, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken:
             baseHeaders["Content-Type"] = "application/json"
-        case .fetchUserData, .revoke:
+        case .fetchUserData, .revoke, .checkAuth:
             break
         }
         switch self {
-        case .fetchUserData, .revoke, .modify, .checkPassword :
+        case .fetchUserData, .revoke, .modify, .checkPassword, .checkAuth :
             if let token = KeyChainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -87,13 +89,15 @@ extension UserAPI: Router, URLRequestConvertible {
             return nil
         case .refreshToken(let request):
             return try? JSONEncoder().encode(request)
+        case .checkAuth:
+            return nil
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .modify: return JSONEncoding.default
-        case .checkDuplicatedNickname, .fetchUserData: return URLEncoding.default
+        case .checkDuplicatedNickname, .fetchUserData, .checkAuth: return URLEncoding.default
         case .revoke, .refreshToken: return nil
         }
     }
