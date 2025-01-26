@@ -42,7 +42,6 @@ final class DatePickerDropdownView: UIView {
         DispatchQueue.main.async {
             self.updatePickerTextColor()
         }
-        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
     }
     
     private func updatePickerTextColor() {
@@ -56,7 +55,9 @@ final class DatePickerDropdownView: UIView {
         }
     }
     
-    @objc private func dateChanged() {
-        onDateSelected?(datePicker.date)
+    
+    func confirmSelection() {
+        
+        onDateSelected?(datePicker.date)  // 현재 보이는 날짜로 설정
     }
 }

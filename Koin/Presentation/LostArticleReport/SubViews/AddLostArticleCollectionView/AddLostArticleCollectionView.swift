@@ -54,6 +54,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
     }
     
     @objc private func dismissKeyboard() {
+        
         self.endEditing(true)
     }
 

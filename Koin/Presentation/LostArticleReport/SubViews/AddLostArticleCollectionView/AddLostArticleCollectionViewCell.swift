@@ -648,7 +648,12 @@ extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
     }
     
     @objc private func dismissKeyboard() {
-        contentView.endEditing(true) // 키보드 숨김
+        contentView.endEditing(true)  // 키보드 숨기기
+
+        if let dropdownView = self.viewWithTag(999) as? DatePickerDropdownView {
+            dropdownView.confirmSelection()  // 현재 보이는 시간 반영
+            dropdownView.removeFromSuperview()  // 드롭다운 닫기
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
