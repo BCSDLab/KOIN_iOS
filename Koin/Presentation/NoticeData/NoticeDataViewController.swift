@@ -175,6 +175,27 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.isHidden = true
     }
     
+    private let chatButton = UIButton().then {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .chat)
+        var text = AttributedString("쪽지 보내기")
+        text.font = UIFont.appFont(.pretendardMedium, size: 12)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 4
+        configuration.baseBackgroundColor = UIColor.appColor(.neutral300)
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        $0.configuration = configuration
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+    }
+    
+    private let reportButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .siren), for: .normal)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+    }
     
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
     
@@ -288,7 +309,7 @@ extension NoticeDataViewController {
         titleGuideLabel.text = NoticeListType(rawValue: item.boardId)?.displayName
         categoryLabel.text = item.category
         titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
-       
+        
         
         nickNameLabel.text = item.author
         createdDateLabel.text = item.registeredAt
@@ -601,7 +622,7 @@ extension NoticeDataViewController {
     private func setUpLostItemLayouts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2].forEach {
+        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2, chatButton, reportButton].forEach {
             contentView.addSubview($0)
         }
         [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, categoryLabel].forEach {
@@ -690,6 +711,18 @@ extension NoticeDataViewController {
             make.trailing.equalTo(imageCollectionView.snp.trailing)
             make.width.equalTo(61)
             make.height.equalTo(31)
+        }
+        reportButton.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton)
+            make.trailing.equalTo(imageCollectionView.snp.trailing)
+            make.width.equalTo(40)
+            make.height.equalTo(32)
+        }
+        chatButton.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton)
+            make.trailing.equalTo(reportButton.snp.leading).offset(-8)
+            make.width.equalTo(105)
+            make.height.equalTo(32)
         }
         separateView2.snp.makeConstraints { make in
             make.top.equalTo(inventoryButton.snp.bottom).offset(16)
