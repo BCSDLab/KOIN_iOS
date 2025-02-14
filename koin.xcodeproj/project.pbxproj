@@ -535,6 +535,8 @@
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */; };
 		D2FCBEAA2D0AF4700097A388 /* CategoryFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */; };
+		D2FFA96C2D5F1B2200EF8E56 /* NoticeKeywordCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */; };
+		D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1114,6 +1116,8 @@
 		D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFramesUseCase.swift; sourceTree = "<group>"; };
 		D2FCBEA72D0AE54D0097A388 /* ShopDataViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataViewControllerB.swift; sourceTree = "<group>"; };
 		D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFooterView.swift; sourceTree = "<group>"; };
+		D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordCollectionHeaderView.swift; sourceTree = "<group>"; };
+		D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Navigate.swift"; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1214,6 +1218,7 @@
 		833D9C0A2C6B246F00982145 /* NoticeKeywordCollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */,
 				83A2617F2C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift */,
 				833D9C232C6B565300982145 /* NoticeKeywordCollectionView.swift */,
 			);
@@ -2353,6 +2358,7 @@
 		D27DD0712BA608310081FD36 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */,
 				D224216F2C8A3E5B00E8B480 /* UITableView+.swift */,
 				D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */,
 				83DD0DD12C568F6100278ABD /* UITableViewHeaderFooterView.swift */,
@@ -3400,6 +3406,7 @@
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
+				D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2D380E92BA714AC009AD5A9 /* ServiceSelectViewModel.swift in Sources */,
 				833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */,
@@ -3595,6 +3602,7 @@
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				83EBB8762D0FDD7700346018 /* BusSearchResultTableViewCell.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
+				D2FFA96C2D5F1B2200EF8E56 /* NoticeKeywordCollectionHeaderView.swift in Sources */,
 				D2F4FD592CBE089D008C91D8 /* ShopCollectionViewCell.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,

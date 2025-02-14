@@ -136,6 +136,10 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
+    private let sendChatModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 8, title: "쪽지를 보내려면 로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+    
+    private let postLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 8, title: "게시글을 신고 하려면 로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+    
     private let councilLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         let paragraphStyle = NSMutableParagraphStyle()
@@ -211,6 +215,14 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             commonConfigureView()
             inputSubject.send(.getNoticeData)
         }
+        
+        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
+        
+        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
     }
     
     override func viewWillAppear(_ animated: Bool) {

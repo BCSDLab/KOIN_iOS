@@ -281,12 +281,6 @@ extension ReviewListViewController {
             navigationController?.pushViewController(shopReviewReportViewController, animated: true)
         }
     
-    private func navigateToLogin() {
-        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-                loginViewController.title = "로그인"
-                navigationController?.pushViewController(loginViewController, animated: true)
-    }
-    
     private func navigateToWriteReview() {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)

@@ -267,12 +267,6 @@ extension DiningViewController {
         }
     }
     
-    private func navigateToLogin() {
-        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-        loginViewController.title = "로그인"
-        navigationController?.pushViewController(loginViewController, animated: true)
-    }
-    
     private func navigateToNoti() {
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
