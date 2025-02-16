@@ -154,8 +154,6 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
             let cellData = cell.getCellData()
             allCellData.append(cellData)
         }
-        print(KeyChainWorker.shared.read(key: .access))
-        print(allCellData)
         return allCellData
     }
     private func writeButtonTapped() {

@@ -40,7 +40,7 @@ final class AddLostArticleCollectionView: UICollectionView, UICollectionViewData
         register(AddLostArticleFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostArticleFooterView.identifier)
         dataSource = self
         delegate = self
-        articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+        articles.append(PostLostArticleRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
            tapGesture.cancelsTouchesInView = false  // Allows taps to pass through to collection view cells
            addGestureRecognizer(tapGesture)
@@ -66,7 +66,7 @@ extension AddLostArticleCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostArticleCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""))
+        dummyCell.configure(index: 0, isSingle: true, model: PostLostArticleRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""))
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -89,7 +89,7 @@ extension AddLostArticleCollectionView {
             }
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
-                self?.articles.append(PostLostArticleRequest(category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+                self?.articles.append(PostLostArticleRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
                 self?.reloadData()
                 self?.collectionViewLayout.invalidateLayout()
                 self?.heightChangedPublisher.send()

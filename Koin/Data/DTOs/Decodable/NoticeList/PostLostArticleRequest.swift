@@ -11,13 +11,25 @@ struct PostLostArticleRequestWrapper: Encodable {
     let articles: [PostLostArticleRequest]
 }
 
+enum LostItemType: String, Codable {
+    case lost = "LOST"
+    case found = "FOUND"
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = LostItemType(rawValue: rawValue) ?? .lost
+    }
+}
+
 struct PostLostArticleRequest: Codable {
+    var type: LostItemType?
     var category, location, foundDate: String
     var content: String?
     var images: [String]?
     let registeredAt, updatedAt: String
 
     enum CodingKeys: String, CodingKey {
+        case type = "type"
         case category
         case location = "found_place"
         case foundDate = "found_date"

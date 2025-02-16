@@ -35,10 +35,12 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+    private let type: LostItemType
     
     // MARK: - Initialization
     
-    init() {
+    init(type: LostItemType) {
+        self.type = type
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -64,14 +66,21 @@ extension LostArticleReportViewModel {
     }
     
     private func postLostItem(request: [PostLostArticleRequest]) {
-        postLostItemUseCase.execute(request: request).sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                self?.outputSubject.send(.showToast(error.message))
-            }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showToast("게시글 작성이 완료되었습니다."))
-            self?.outputSubject.send(.popViewController(response.id))
-        }.store(in: &subscriptions)
+        let updatedRequests = request.map { request in
+              var updatedRequest = request
+              updatedRequest.type = self.type 
+              return updatedRequest
+          }
+          
+          postLostItemUseCase.execute(request: updatedRequests)
+              .sink { [weak self] completion in
+                  if case let .failure(error) = completion {
+                      self?.outputSubject.send(.showToast(error.message))
+                  }
+              } receiveValue: { [weak self] response in
+                  self?.outputSubject.send(.showToast("게시글 작성이 완료되었습니다."))
+                  self?.outputSubject.send(.popViewController(response.id))
+              }.store(in: &subscriptions)
     }
     
     private func uploadFiles(files: [Data]) {

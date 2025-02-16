@@ -255,8 +255,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     // MARK: - Bind
     
     private func bind() {
-        KeyChainWorker.shared.delete(key: .access)
-        KeyChainWorker.shared.delete(key: .refresh)
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {

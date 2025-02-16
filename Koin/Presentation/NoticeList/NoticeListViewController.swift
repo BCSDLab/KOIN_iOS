@@ -159,6 +159,20 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         postLostItemLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
+        
+        writeTypeModalViewController.findButtonPublisher.sink { [weak self] in
+            let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel(type: .lost))
+            viewController.delegate = self
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        writeTypeModalViewController.lostButtonPublisher.sink { [weak self] in
+            let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel(type: .found))
+            viewController.delegate = self
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
