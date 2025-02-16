@@ -22,7 +22,7 @@ protocol NoticeListService {
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
     func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
+    func fetchLostItem(id: Int, retry: Bool) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 
@@ -49,9 +49,22 @@ final class DefaultNoticeService: NoticeListService {
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return request(.fetchLostItemList(requestModel))
     }
-    
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error> {
-        return request(.fetchLostItem(id))
+    func fetchLostItem(id: Int, retry: Bool = false) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id))
+            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" && !retry {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id)) }
+                        .catch { refreshError -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+                            return self.fetchLostItem(id: id, retry: true)
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse> {

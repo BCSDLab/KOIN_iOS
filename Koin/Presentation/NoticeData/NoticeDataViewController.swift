@@ -362,7 +362,7 @@ extension NoticeDataViewController {
         councilLabel.isHidden = item.isCouncil == false
         deleteButton.isHidden = item.isMine == false
         chatButton.isHidden = item.isCouncil == true || item.isMine == true
-        reportButton.isHidden = item.isCouncil == true
+        reportButton.isHidden = item.isCouncil == true || item.isMine == true
     }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {

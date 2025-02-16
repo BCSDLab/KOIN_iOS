@@ -23,8 +23,8 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         service.postLostItem(request: request)
     }
     
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error> {
-        service.fetchLostItem(id: id)
+    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+        service.fetchLostItem(id: id, retry: false)
     }
     
     

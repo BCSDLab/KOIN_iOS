@@ -60,12 +60,9 @@ extension NoticeListAPI: Router, URLRequestConvertible {
     
     public var headers: [String: String] {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItem, .fetchLostItemList:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItemList:
             return [:]
-        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword,
-                .postLostItem,
-                .deleteLostItem
-            :
+        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword, .postLostItem, .deleteLostItem, .fetchLostItem:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
