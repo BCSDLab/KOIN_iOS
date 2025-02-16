@@ -537,6 +537,7 @@
 		D2FCBEAA2D0AF4700097A388 /* CategoryFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */; };
 		D2FFA96C2D5F1B2200EF8E56 /* NoticeKeywordCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */; };
 		D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */; };
+		D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1118,6 +1119,7 @@
 		D2FCBEA92D0AF4700097A388 /* CategoryFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFooterView.swift; sourceTree = "<group>"; };
 		D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordCollectionHeaderView.swift; sourceTree = "<group>"; };
 		D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Navigate.swift"; sourceTree = "<group>"; };
+		D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckLoginUseCase.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2661,6 +2663,7 @@
 		D2A8F8B62C4A5DC00090C7A4 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */,
 				D29F21C62C4DF15200994554 /* FindPasswordUseCase.swift */,
 				D29F21D42C4E1A8300994554 /* RegisterUseCase.swift */,
 				D29F21D82C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift */,
@@ -3541,6 +3544,7 @@
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
+				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D28987582D2FF25C00AA7285 /* LostArticleReportViewController.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,

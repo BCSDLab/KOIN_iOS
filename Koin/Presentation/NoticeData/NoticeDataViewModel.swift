@@ -18,6 +18,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case fetchLostItem(Int)
         case deleteLostItem
         case checkAuth
+        case checkLogin
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
@@ -26,6 +27,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case updateActivityIndictor(Bool, String?, URL?)
         case showToast(String)
         case showAuth(UserTypeResponse)
+        case updateButton
     }
     
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
@@ -35,12 +37,23 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let fetchLostItemUseCase = DefaultFetchLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private(set) var noticeId: Int = 0
     private(set) var boardId: Int = 0
     private(set) var previousNoticeId: Int?
     private(set) var nextNoticeId: Int?
+    private(set) var isLogined: Bool = false {
+        didSet {
+            outputSubject.send(.updateButton)
+        }
+    }
+    private(set) var isCouncil: Bool = false {
+        didSet {
+            outputSubject.send(.updateButton)
+        }
+    }
     
     init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int, boardId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
@@ -68,6 +81,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.deleteLostItem()
             case .checkAuth:
                 self?.checkAuth()
+            case .checkLogin:
+                self?.checkLogin()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -76,6 +91,11 @@ final class NoticeDataViewModel: ViewModelProtocol {
 
 extension NoticeDataViewModel {
     
+    private func checkLogin() {
+        checkLoginUseCase.execute().sink { [weak self] in
+            self?.isLogined = $0
+        }.store(in: &subscriptions)
+    }
     func checkAuth() {
         
         checkAuthUseCase.execute().sink(receiveCompletion: { completion in
@@ -104,6 +124,7 @@ extension NoticeDataViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateLostItem(response))
+            self?.isCouncil = response.author == "총학생회"
         }).store(in: &subscriptions)
     }
     private func getNoticeData() {

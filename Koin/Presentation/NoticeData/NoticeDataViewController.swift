@@ -188,6 +188,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.backgroundColor = UIColor.appColor(.neutral300)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
+        $0.isHidden = true
     }
     
     private let reportButton = UIButton().then {
@@ -195,6 +196,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.backgroundColor = UIColor.appColor(.neutral300)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
+        $0.isHidden = true
     }
     
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
@@ -231,19 +233,10 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         if viewModel.boardId == 14 {
             lostItemConfigureView()
             inputSubject.send(.fetchLostItem(viewModel.noticeId))
-            inputSubject.send(.checkAuth)
         } else {
             commonConfigureView()
             inputSubject.send(.getNoticeData)
         }
-        
-        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
-            self?.navigateToLogin()
-        }.store(in: &subscriptions)
-        
-        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
-            self?.navigateToLogin()
-        }.store(in: &subscriptions)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -270,6 +263,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.navigationController?.popViewController(animated: true)
             case let .showAuth(userType):
                 self?.deleteButton.isHidden = userType.userType != .council
+            case .updateButton:
+                self?.updateButton()
             }
         }.store(in: &subscriptions)
         
@@ -295,11 +290,22 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
             self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
+        
+        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
+        
+        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
     
+    private func updateButton() {
+        view
+    }
     @objc private func deleteButtonTapped() {
         inputSubject.send(.deleteLostItem)
     }
@@ -325,6 +331,9 @@ extension NoticeDataViewController {
         pageControl.currentPage = 0
         pageControl.numberOfPages = imageUrls.count
         councilLabel.isHidden = item.author != "총학생회"
+        deleteButton.isHidden = item.isMine == false
+        chatButton.isHidden = item.author == "총학생회" || item.isMine == true
+        reportButton.isHidden = item.isMine == true
     }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
