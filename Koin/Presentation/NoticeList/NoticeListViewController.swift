@@ -38,9 +38,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 18
         $0.contentHorizontalAlignment = .center
-        $0.isHidden = true
         $0.layer.borderWidth = 1.0
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.isHidden = true
     }
     
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
@@ -50,7 +50,15 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
     
-    private let postLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 8, title: "게시글을 작성하려면 로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+    private let postLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private let writeTypeModalViewController = WriteTypeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
     
     // MARK: - Initialization
     
@@ -93,14 +101,18 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-                self?.writeButton.isHidden = (self?.viewModel.noticeListType != .lostItem || self?.viewModel.auth != .council)
+                self?.writeButton.isHidden = self?.viewModel.noticeListType != .lostItem
             case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
                 self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
             case let .isLogined(isLogined):
                 self?.checkAndShowToolTip(isLogined: isLogined)
+            case let .showIsLogined(isLogined):
+                if isLogined { strongSelf.present(strongSelf.writeTypeModalViewController, animated: true) }
+                else { strongSelf.present(strongSelf.postLostItemLoginModalViewController, animated: true) }
             }
         }.store(in: &subscriptions)
         
@@ -143,6 +155,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
             self?.noticeToolTipImageView.isHidden = true
         }
+        
+        postLostItemLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
     }
 }
 
@@ -160,10 +176,7 @@ extension NoticeListViewController {
        navigationController?.pushViewController(noticeDataVc, animated: true)
     }
     @objc private func writeButtonTapped() {
-        let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel())
-        viewController.delegate = self
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
-        navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.checkLogin)
     }
     
     @objc private func searchButtonTapped() {

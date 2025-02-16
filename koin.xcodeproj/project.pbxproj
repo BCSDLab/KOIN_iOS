@@ -542,6 +542,7 @@
 		D2FFA9782D61F7B200EF8E56 /* ReportLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9772D61F7B200EF8E56 /* ReportLostItemViewModel.swift */; };
 		D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */; };
 		D2FFA97D2D62013200EF8E56 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */; };
+		D2FFA9812D62072A00EF8E56 /* WriteTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1128,6 +1129,7 @@
 		D2FFA9772D61F7B200EF8E56 /* ReportLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewModel.swift; sourceTree = "<group>"; };
 		D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteTypeModalViewController.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1196,9 +1198,7 @@
 		833D9C072C6B243400982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C0A2C6B246F00982145 /* NoticeKeywordCollectionView */,
-				833D9C092C6B246600982145 /* NoticeListTableView */,
-				833D9C082C6B244900982145 /* TabBar */,
+				D2FFA97F2D62065400EF8E56 /* SubViews */,
 				833D9C2A2C6C679700982145 /* NoticeListViewController.swift */,
 				833D9C2C2C6C692000982145 /* NoticeListViewModel.swift */,
 			);
@@ -3099,6 +3099,17 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
+		D2FFA97F2D62065400EF8E56 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				833D9C082C6B244900982145 /* TabBar */,
+				833D9C092C6B246600982145 /* NoticeListTableView */,
+				833D9C0A2C6B246F00982145 /* NoticeKeywordCollectionView */,
+				D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -3778,6 +3789,7 @@
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
+				D2FFA9812D62072A00EF8E56 /* WriteTypeModalViewController.swift in Sources */,
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
