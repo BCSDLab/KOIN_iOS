@@ -136,9 +136,15 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
-    private let sendChatModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 8, title: "쪽지를 보내려면 로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+    private let sendChatLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
     
-    private let postLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 8, title: "게시글을 신고 하려면 로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+    private let reportLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 신고 하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
     
     private let councilLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
@@ -220,6 +226,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
         urlRedirectButton.addTarget(self, action: #selector(tapUrlRedirectButton), for: .touchUpInside)
+        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
@@ -247,6 +255,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     // MARK: - Bind
     
     private func bind() {
+        KeyChainWorker.shared.delete(key: .access)
+        KeyChainWorker.shared.delete(key: .refresh)
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
@@ -263,8 +273,10 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.navigationController?.popViewController(animated: true)
             case let .showAuth(userType):
                 self?.deleteButton.isHidden = userType.userType != .council
-            case .updateButton:
-                self?.updateButton()
+            case let .showLoginModal(checkType):
+                self?.showLoginModal(checkType)
+            case let .navigateToScene(checkType):
+                self?.navigateToScene(checkType)
             }
         }.store(in: &subscriptions)
         
@@ -291,21 +303,40 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
         
-        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+        reportLostItemLoginModalViewController.loginButtonPublisher.sink { [weak self] _ in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
-        sendChatModalViewController.loginButtonPublisher.sink { [weak self] _ in
+        sendChatLoginModalViewController.loginButtonPublisher.sink { [weak self] _ in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
-    
-    private func updateButton() {
-        view
+ 
+    private func showLoginModal(_ checkType: NoticeDataViewModel.CheckType) {
+        switch checkType {
+        case .report: present(reportLostItemLoginModalViewController, animated: false)
+        case .chat: present(sendChatLoginModalViewController, animated: false)
+        }
     }
+    
+    private func navigateToScene(_ checkType: NoticeDataViewModel.CheckType) {
+        switch checkType {
+        case .report: navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel()), animated: true)
+        case .chat: navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel()), animated: true)
+        }
+    }
+    
+    @objc private func chatButtonTapped() {
+        inputSubject.send(.checkLogin(.chat))
+    }
+    
+    @objc private func reportButtonTapped() {
+        inputSubject.send(.checkLogin(.report))
+    }
+    
     @objc private func deleteButtonTapped() {
         inputSubject.send(.deleteLostItem)
     }
@@ -330,10 +361,10 @@ extension NoticeDataViewController {
         imageCollectionView.isHidden = imageUrls.isEmpty
         pageControl.currentPage = 0
         pageControl.numberOfPages = imageUrls.count
-        councilLabel.isHidden = item.author != "총학생회"
+        councilLabel.isHidden = item.isCouncil == false
         deleteButton.isHidden = item.isMine == false
-        chatButton.isHidden = item.author == "총학생회" || item.isMine == true
-        reportButton.isHidden = item.isMine == true
+        chatButton.isHidden = item.isCouncil == true || item.isMine == true
+        reportButton.isHidden = item.isCouncil == true
     }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {

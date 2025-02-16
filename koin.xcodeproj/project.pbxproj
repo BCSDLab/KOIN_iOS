@@ -538,6 +538,10 @@
 		D2FFA96C2D5F1B2200EF8E56 /* NoticeKeywordCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */; };
 		D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */; };
 		D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */; };
+		D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9752D61F7A600EF8E56 /* ReportLostItemViewController.swift */; };
+		D2FFA9782D61F7B200EF8E56 /* ReportLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9772D61F7B200EF8E56 /* ReportLostItemViewModel.swift */; };
+		D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */; };
+		D2FFA97D2D62013200EF8E56 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1120,6 +1124,10 @@
 		D2FFA96B2D5F1B1400EF8E56 /* NoticeKeywordCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordCollectionHeaderView.swift; sourceTree = "<group>"; };
 		D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Navigate.swift"; sourceTree = "<group>"; };
 		D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckLoginUseCase.swift; sourceTree = "<group>"; };
+		D2FFA9752D61F7A600EF8E56 /* ReportLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewController.swift; sourceTree = "<group>"; };
+		D2FFA9772D61F7B200EF8E56 /* ReportLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewModel.swift; sourceTree = "<group>"; };
+		D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2124,6 +2132,8 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D2FFA9792D6200F100EF8E56 /* Chat */,
+				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
 				D28987562D2FF23800AA7285 /* LostArticleReport */,
 				D21572742CEE76C40061E725 /* FrameList */,
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
@@ -3071,6 +3081,24 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		D2FFA9742D61F78200EF8E56 /* ReportLostItem */ = {
+			isa = PBXGroup;
+			children = (
+				D2FFA9772D61F7B200EF8E56 /* ReportLostItemViewModel.swift */,
+				D2FFA9752D61F7A600EF8E56 /* ReportLostItemViewController.swift */,
+			);
+			path = ReportLostItem;
+			sourceTree = "<group>";
+		};
+		D2FFA9792D6200F100EF8E56 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */,
+				D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -3512,6 +3540,7 @@
 				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
 				0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */,
 				D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */,
+				D2FFA97D2D62013200EF8E56 /* ChatViewController.swift in Sources */,
 				835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
 				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
@@ -3685,6 +3714,7 @@
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
 				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
+				D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
@@ -3735,6 +3765,7 @@
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
 				D29F21CE2C4E162600994554 /* TimetableService.swift in Sources */,
 				D215726F2CEE28D70061E725 /* LectureData.swift in Sources */,
+				D2FFA9782D61F7B200EF8E56 /* ReportLostItemViewModel.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				D2B7EBAC2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift in Sources */,
@@ -3824,6 +3855,7 @@
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
+				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,
