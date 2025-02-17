@@ -220,7 +220,8 @@ extension ReportLostItemViewController {
                 reports.append(report)
             }
         }
-        if checkButton.isSelected, let etcText = etcReportTextView.text {
+        if checkButton.isSelected, var etcText = etcReportTextView.text {
+            if etcText == textViewPlaceHolder { etcText = "" }
             let report = ReportLostItem(title: "기타", content: etcText)
             reports.append(report)
         }
