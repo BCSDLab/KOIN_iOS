@@ -58,6 +58,18 @@ final class NoticeListTableViewCell: UITableViewCell {
         $0.isHidden = true
     }
     
+    private let reportedLabel = UILabel().then {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage.appImage(asset: .blind)
+        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 24, height: 24)
+
+        let attributedString = NSMutableAttributedString(attachment: imageAttachment)
+        let text = NSAttributedString(string: " 신고에 의해 숨김 처리 되었습니다.", attributes: [.font: UIFont.appFont(.pretendardMedium, size: 15)])
+        attributedString.append(text)
+        $0.attributedText = attributedString
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
     //MARK: -Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -109,8 +121,15 @@ final class NoticeListTableViewCell: UITableViewCell {
                 $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
                 $0.trailing.equalToSuperview().inset(24)
             }
-            
+            let isReported = articleModel.isReported ?? false
+            reportedLabel.isHidden = !isReported
+            contentLabel.isHidden = isReported
+            categoryLabel.isHidden = isReported
+            noticeTitleLabel.isHidden = isReported
         } else {
+            reportedLabel.isHidden = true
+            contentLabel.isHidden = false
+            noticeTitleLabel.isHidden = false
             noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title ?? "")
             categoryLabel.isHidden = true
             noticeTitleLabel.snp.remakeConstraints {
@@ -118,8 +137,8 @@ final class NoticeListTableViewCell: UITableViewCell {
                 $0.leading.equalTo(boardTitleLabel.snp.leading)
                 $0.trailing.equalToSuperview().inset(24)
             }
+            contentLabel.isHidden = true
         }
-        contentLabel.isHidden = articleModel.boardId != 14
         contentLabel.text = articleModel.content
         nickNameLabel.snp.remakeConstraints {
             if articleModel.boardId == 14 { $0.top.equalTo(contentLabel.snp.bottom).offset(4) }
@@ -141,7 +160,7 @@ extension NoticeListTableViewCell {
     }
     
     private func setUpLayouts() {
-        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel, contentLabel].forEach {
+        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel, contentLabel, reportedLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -200,6 +219,10 @@ extension NoticeListTableViewCell {
             make.top.equalTo(noticeTitleLabel.snp.bottom).offset(4)
             make.leading.equalTo(categoryLabel)
             make.trailing.equalTo(self.snp.trailing).offset(-30)
+        }
+        reportedLabel.snp.makeConstraints { make in
+            make.top.equalTo(boardTitleLabel.snp.bottom).offset(4)
+            make.leading.equalTo(categoryLabel)
         }
     }
     

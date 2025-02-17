@@ -128,6 +128,7 @@ enum ImageAsset: String {
     case chat
     case siren
     case lostItem
+    case blind
 }
 
 enum SFSymbols: String {

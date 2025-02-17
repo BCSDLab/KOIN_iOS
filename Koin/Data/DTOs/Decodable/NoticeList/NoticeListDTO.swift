@@ -37,6 +37,7 @@ struct NoticeArticleDTO: Decodable {
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String
+    let isReported: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -49,6 +50,7 @@ struct NoticeArticleDTO: Decodable {
         case nextId = "next_id"
         case updatedAt = "updated_at"
         case registeredAt = "registered_at"
+        case isReported = "is_reported"
     }
 }
 
@@ -97,13 +99,13 @@ extension NoticeArticleDTO {
             category: category,
             foundPlace: foundPlace,
             foundDate: foundDate,
-            content: boardId == 14 ? content : modifyFontInHtml(html: content ?? ""), 
+            content: boardId == 14 ? content : modifyFontInHtml(html: content ?? ""),
             updatedAt: updatedAt,
             url: url,
             attachments: attachments ?? [],
             prevId: prevId,
             nextId: nextId,
-            registeredAt: newDate
+            registeredAt: newDate, isReported: isReported
         )
     }
 
