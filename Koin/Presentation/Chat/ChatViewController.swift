@@ -19,7 +19,9 @@ final class ChatViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView = UIScrollView().then { _ in
+    private let blockModalViewController = ModalViewController(width: 301, height: 179, paddingBetweenLabels: 12, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray), rightButtonText: "차단하기").then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
     }
     
     
@@ -27,6 +29,9 @@ final class ChatViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = viewModel.articleTitle
+        
+        let rightButton = UIBarButtonItem(image: UIImage.appImage(asset: .threeCircle), style: .plain, target: self, action: #selector(rightButtonTapped))
+        navigationItem.rightBarButtonItem = rightButton
     }
     
     @available(*, unavailable)
@@ -59,11 +64,17 @@ final class ChatViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        
+        blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
+            self?.inputSubject.send(.blockUser)
+        }.store(in: &subscriptions)
     }
 }
 
 extension ChatViewController{
-    
+    @objc private func rightButtonTapped() {
+        present(blockModalViewController, animated: true)
+    }
   
 }
 
@@ -72,10 +83,6 @@ extension ChatViewController {
     private func setUpLayOuts() {
         [].forEach {
             view.addSubview($0)
-        }
-        
-        [].forEach {
-            scrollView.addSubview($0)
         }
     }
     

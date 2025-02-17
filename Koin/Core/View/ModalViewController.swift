@@ -8,9 +8,9 @@
 import Combine
 import UIKit
 
-class LoginModalViewController: UIViewController {
-    let loginButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+class ModalViewController: UIViewController {
+    let rightButtonPublisher = PassthroughSubject<Void, Never>()
+    let leftButtonPublisher = PassthroughSubject<Void, Never>()
     var containerWidth: CGFloat = 0
     var containerHeight: CGFloat = 0
     var paddingBetweenLabels: CGFloat = 0
@@ -38,9 +38,8 @@ class LoginModalViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    private let loginButton = UIButton().then {
+    private let rightButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitle("로그인하기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.layer.cornerRadius = 4
@@ -57,7 +56,7 @@ class LoginModalViewController: UIViewController {
     
     private var contentViewInContainer: UIView?
     
-    init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor) {
+    init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor, rightButtonText: String = "로그인하기") {
         super.init(nibName: nil, bundle: nil)
         self.containerWidth = width
         self.containerHeight = height
@@ -66,6 +65,7 @@ class LoginModalViewController: UIViewController {
         self.subTitleText = subTitle
         self.titleColor = titleColor
         self.subTitleColor = subTitleColor
+        self.rightButton.setTitle(rightButtonText, for: .normal)
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +75,7 @@ class LoginModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
@@ -83,12 +83,12 @@ class LoginModalViewController: UIViewController {
     }
     
     @objc func closeButtonTapped() {
-        cancelButtonPublisher.send()
+        leftButtonPublisher.send()
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func loginButtonTapped() {
-        loginButtonPublisher.send()
+    @objc func rightButtonTapped() {
+        rightButtonPublisher.send()
         dismiss(animated: true, completion: nil)
     }
     
@@ -99,10 +99,10 @@ class LoginModalViewController: UIViewController {
         }
     }
     
-    func updateLoginButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
-        loginButton.backgroundColor = buttonColor
-        loginButton.layer.borderWidth = borderWidth
-        loginButton.setTitle(title, for: .normal)
+    func updaterightButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
+        rightButton.backgroundColor = buttonColor
+        rightButton.layer.borderWidth = borderWidth
+        rightButton.setTitle(title, for: .normal)
     }
     
     func updateCloseButton(buttonColor: UIColor = .systemBackground, borderWidth: CGFloat, title: String) {
@@ -154,7 +154,7 @@ class LoginModalViewController: UIViewController {
             make.width.equalTo(114.5)
             make.height.equalTo(48)
         }
-        loginButton.snp.remakeConstraints { make in
+        rightButton.snp.remakeConstraints { make in
             make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
             make.leading.equalTo(containerView.snp.centerX).offset(2)
             make.width.equalTo(114.5)
@@ -163,13 +163,13 @@ class LoginModalViewController: UIViewController {
     }
 }
 
-extension LoginModalViewController {
+extension ModalViewController {
     
     private func setUpLayOuts() {
         [containerView].forEach {
             view.addSubview($0)
         }
-        [messageLabel, subMessageLabel, closeButton, loginButton].forEach {
+        [messageLabel, subMessageLabel, closeButton, rightButton].forEach {
             containerView.addSubview($0)
         }
     }
@@ -195,7 +195,7 @@ extension LoginModalViewController {
             make.width.equalTo(114.5)
             make.height.equalTo(48)
         }
-        loginButton.snp.makeConstraints { make in
+        rightButton.snp.makeConstraints { make in
             make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
             make.leading.equalTo(containerView.snp.centerX).offset(2)
             make.width.equalTo(114.5)

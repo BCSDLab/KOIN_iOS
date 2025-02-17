@@ -130,6 +130,7 @@ enum ImageAsset: String {
     case lostItem
     case blind
     case basicPicture
+    case threeCircle
 }
 
 enum SFSymbols: String {

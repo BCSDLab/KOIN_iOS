@@ -14,6 +14,7 @@ final class ChatViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchChatDetail
+        case blockUser
     }
     
     // MARK: - Output
@@ -46,6 +47,8 @@ final class ChatViewModel: ViewModelProtocol {
             switch input {
             case .fetchChatDetail:
                 self?.fetchChatDetail()
+            case .blockUser:
+                self?.blockUser()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -54,6 +57,10 @@ final class ChatViewModel: ViewModelProtocol {
 }
 
 extension ChatViewModel {
+    
+    private func blockUser() {
+        
+    }
     private func fetchChatDetail() {
         fetchChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { completion in
             if case let .failure(error) = completion {

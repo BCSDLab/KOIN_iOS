@@ -137,12 +137,12 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.numberOfLines = 0
     }
     
-    private let sendChatLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+    private let sendChatLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
     
-    private let reportLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 신고 하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+    private let reportLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 신고 하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
@@ -302,11 +302,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
         
-        reportLostItemLoginModalViewController.loginButtonPublisher.sink { [weak self] _ in
+        reportLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
-        sendChatLoginModalViewController.loginButtonPublisher.sink { [weak self] _ in
+        sendChatLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
     }

@@ -73,7 +73,7 @@
 		835B4BE22CB0237900937B66 /* FacilityInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835B4BE12CB0237900937B66 /* FacilityInfoViewController.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */; };
-		835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */; };
+		835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* ModalViewController.swift */; };
 		835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */; };
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
@@ -665,7 +665,7 @@
 		835B4BE12CB0237900937B66 /* FacilityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityInfoViewController.swift; sourceTree = "<group>"; };
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
-		835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModalViewController.swift; sourceTree = "<group>"; };
+		835C991D2C7F1256002E02D3 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
@@ -2800,7 +2800,7 @@
 		D2D380E42BA6EAE7009AD5A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				835C991D2C7F1256002E02D3 /* LoginModalViewController.swift */,
+				835C991D2C7F1256002E02D3 /* ModalViewController.swift */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 				D23582A02BC30B9300D615DD /* ZoomingView.swift */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
@@ -3910,7 +3910,7 @@
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,
 				D2908C932BB580480008F908 /* LogoView.swift in Sources */,
 				D27DD09D2BA608310081FD36 /* DiningCollectionView.swift in Sources */,
-				835C991E2C7F1256002E02D3 /* LoginModalViewController.swift in Sources */,
+				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
 				D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */,

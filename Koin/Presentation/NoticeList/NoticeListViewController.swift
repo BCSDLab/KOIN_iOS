@@ -50,7 +50,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
     
-    private let postLostItemLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
+    private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
@@ -155,7 +155,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.noticeToolTipImageView.isHidden = true
         }
         
-        postLostItemLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        postLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
