@@ -74,7 +74,7 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    private let reportButton = UIButton().then {
+    private let reportButton = DebouncedButton().then {
         $0.setTitle("신고하기", for: .normal)
         $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
         $0.isEnabled = false
@@ -107,7 +107,9 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         hideKeyboardWhenTappedAround()
         etcReportTextView.delegate = self
         checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
-        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
+        reportButton.throttle(interval: .seconds(3)) { [weak self] in
+            self?.reportReview()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -209,7 +211,7 @@ extension ReportLostItemViewController {
         
         updateReportButtonState()
     }
-    @objc private func reportButtonTapped() {
+    private func reportReview() {
         var reports: [ReportLostItem] = []
         let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
         
