@@ -11,6 +11,18 @@ import UIKit
 // TODO: NS Cache는 앱이 실행되는 동안에만 캐싱. 앱이 종료되면 메모리에서 해제
 // URL 캐시, KingFisher,FileManager등을 통해서 구현해볼것
 extension UIImageView {
+    
+    func loadImagewithSpinner(from urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        self.kf.indicatorType = .activity
+        self.kf.setImage(
+            with: url,
+            options: [
+                .transition(.fade(0.2)), // 부드러운 페이드 효과
+                .cacheOriginalImage      // 원본 이미지를 캐싱
+            ]
+        )
+    }
     func loadImage(from urlString: String) {
         guard let url = URL(string: urlString) else { return }
         

@@ -42,7 +42,7 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(imageUrl: String) {
-        imageView.loadImage(from: imageUrl)
+        imageView.loadImageWithSpinner(from: imageUrl)
     }
     
     @objc private func cancelButtonTapped() {
