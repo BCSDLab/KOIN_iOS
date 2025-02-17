@@ -108,6 +108,7 @@ final class PostLostItemViewController: UIViewController {
                 self?.addLostItemCollectionView.addImageUrl(url: url, index: index)
             case let .popViewController(id):
                 self?.navigationController?.popViewController(animated: false)
+                self?.delegate?.fetchLostItems()
                 self?.delegate?.navigateToNoticeData(noticeId: id, boardId: 14)
             }
         }.store(in: &subscriptions)

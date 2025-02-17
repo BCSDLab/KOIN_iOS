@@ -83,14 +83,13 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         inputSubject.send(.checkAuth)
         let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButton
-        
+        inputSubject.send(.changeBoard(viewModel.noticeListType))
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
-        inputSubject.send(.changeBoard(viewModel.noticeListType))
         configureNavigationBar(style: .empty)
     }
     
@@ -178,6 +177,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
 
 extension NoticeListViewController {
     
+    func fetchLostItems() {
+        inputSubject.send(.changeBoard(viewModel.noticeListType))
+    }
     func navigateToNoticeData(noticeId: Int, boardId: Int) {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
