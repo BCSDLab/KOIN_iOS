@@ -484,6 +484,8 @@
 		D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */; };
 		D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */; };
 		D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */; };
+		D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625A2D63A45300C60864 /* ChatListTableViewController.swift */; };
+		D2D4625D2D63A46800C60864 /* ChatListTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625C2D63A46800C60864 /* ChatListTableViewModel.swift */; };
 		D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0CF2C28285600C85A85 /* LandRepository.swift */; };
 		D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */; };
 		D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */; };
@@ -1073,6 +1075,8 @@
 		D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confirmable.swift; sourceTree = "<group>"; };
 		D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordConfirmer.swift; sourceTree = "<group>"; };
 		D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordRequest.swift; sourceTree = "<group>"; };
+		D2D4625A2D63A45300C60864 /* ChatListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewController.swift; sourceTree = "<group>"; };
+		D2D4625C2D63A46800C60864 /* ChatListTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewModel.swift; sourceTree = "<group>"; };
 		D2D7C0CF2C28285600C85A85 /* LandRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRepository.swift; sourceTree = "<group>"; };
 		D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailUseCase.swift; sourceTree = "<group>"; };
@@ -2138,6 +2142,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D2D462552D639E1900C60864 /* ChatList */,
 				D2FFA9792D6200F100EF8E56 /* Chat */,
 				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
 				D28987562D2FF23800AA7285 /* PostLostItem */,
@@ -2841,6 +2846,15 @@
 			path = UserInputConfirmer;
 			sourceTree = "<group>";
 		};
+		D2D462552D639E1900C60864 /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				D2D4625C2D63A46800C60864 /* ChatListTableViewModel.swift */,
+				D2D4625A2D63A45300C60864 /* ChatListTableViewController.swift */,
+			);
+			path = ChatList;
+			sourceTree = "<group>";
+		};
 		D2D7C0D12C28293200C85A85 /* Land */ = {
 			isa = PBXGroup;
 			children = (
@@ -3412,6 +3426,7 @@
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
 				D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */,
+				D2D4625D2D63A46800C60864 /* ChatListTableViewModel.swift in Sources */,
 				D27DD0A82BA608310081FD36 /* ShopDataViewControllerA.swift in Sources */,
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
@@ -3589,6 +3604,7 @@
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
+				D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D28987582D2FF25C00AA7285 /* PostLostItemViewController.swift in Sources */,
