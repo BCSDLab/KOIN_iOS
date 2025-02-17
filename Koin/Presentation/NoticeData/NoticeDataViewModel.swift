@@ -28,7 +28,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case showToast(String)
         case showAuth(UserTypeResponse)
         case showLoginModal(CheckType)
-        case navigateToScene(CheckType)
+        case navigateToScene(CheckType, Int)
     }
     
     enum CheckType {
@@ -91,7 +91,7 @@ extension NoticeDataViewModel {
         checkLoginUseCase.execute().sink { [weak self] isLogined in
             print(isLogined)
             if isLogined {
-                self?.outputSubject.send(.navigateToScene(checkType))
+                self?.outputSubject.send(.navigateToScene(checkType, self?.noticeId ?? 0))
             } else {
                 self?.outputSubject.send(.showLoginModal(checkType))
             }

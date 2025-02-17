@@ -542,6 +542,8 @@
 		D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */; };
 		D2FFA97D2D62013200EF8E56 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */; };
 		D2FFA9812D62072A00EF8E56 /* WriteTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */; };
+		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
+		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1128,6 +1130,8 @@
 		D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteTypeModalViewController.swift; sourceTree = "<group>"; };
+		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
+		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1276,6 +1280,7 @@
 				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
 				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
 				835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */,
+				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -1299,6 +1304,7 @@
 				D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */,
 				D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */,
 				D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */,
+				D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -3592,6 +3598,7 @@
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
+				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
 				D2FCBEA22D07FCB00097A388 /* DeleteFrameModalViewController.swift in Sources */,
 				D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */,
@@ -3876,6 +3883,7 @@
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
+				D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */,
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,

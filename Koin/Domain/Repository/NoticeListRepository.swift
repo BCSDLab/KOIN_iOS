@@ -24,5 +24,5 @@ protocol NoticeListRepository {
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
-    
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }

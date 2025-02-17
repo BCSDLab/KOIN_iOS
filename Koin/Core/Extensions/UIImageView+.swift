@@ -12,7 +12,7 @@ import UIKit
 // URL 캐시, KingFisher,FileManager등을 통해서 구현해볼것
 extension UIImageView {
     
-    func loadImagewithSpinner(from urlString: String) {
+    func loadImageWithSpinner(from urlString: String) {
         guard let url = URL(string: urlString) else { return }
         self.kf.indicatorType = .activity
         self.kf.setImage(

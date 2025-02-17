@@ -15,6 +15,10 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         self.service = service
     }
     
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.reportLostItemArticle(id: id, request: request)
+    }
+    
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         service.deleteLostItem(id: id)
     }

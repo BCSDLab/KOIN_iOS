@@ -273,8 +273,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.deleteButton.isHidden = userType.userType != .council
             case let .showLoginModal(checkType):
                 self?.showLoginModal(checkType)
-            case let .navigateToScene(checkType):
-                self?.navigateToScene(checkType)
+            case let .navigateToScene(checkType, noticeId):
+                self?.navigateToScene(checkType, noticeId)
             }
         }.store(in: &subscriptions)
         
@@ -320,9 +320,9 @@ extension NoticeDataViewController {
         }
     }
     
-    private func navigateToScene(_ checkType: NoticeDataViewModel.CheckType) {
+    private func navigateToScene(_ checkType: NoticeDataViewModel.CheckType, _ noticeId: Int) {
         switch checkType {
-        case .report: navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel()), animated: true)
+        case .report: navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
         case .chat: navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel()), animated: true)
         }
     }

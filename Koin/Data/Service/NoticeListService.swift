@@ -24,12 +24,28 @@ protocol NoticeListService {
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func fetchLostItem(id: Int, retry: Bool) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultNoticeService: NoticeListService {
-    
+        
     let networkService = NetworkService()
     let coreDataService = CoreDataService.shared
+    
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: NoticeListAPI.reportLostItem(id, request))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: NoticeListAPI.reportLostItem(id, request)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))

@@ -21,6 +21,7 @@ enum NoticeListAPI {
     case fetchLostItemList(FetchNoticeArticlesRequest)
     case fetchLostItem(Int)
     case deleteLostItem(Int)
+    case reportLostItem(Int, ReportLostItemRequest)
 }
 
 extension NoticeListAPI: Router, URLRequestConvertible {
@@ -44,6 +45,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .fetchLostItemList: return "/articles/lost-item"
         case .fetchLostItem(let id): return "/articles/lost-item/\(id)"
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
+        case .reportLostItem(let id, _): return "/articles/lost-item/\(id)/reports"
         }
     }
     
@@ -51,7 +53,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItem, .fetchLostItemList:
             return .get
-        case .createNotificationKeyword, .postLostItem:
+        case .createNotificationKeyword, .postLostItem, .reportLostItem:
             return .post
         case .deleteNotificationKeyword, .deleteLostItem:
             return .delete
@@ -62,7 +64,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItemList:
             return [:]
-        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword, .postLostItem, .deleteLostItem, .fetchLostItem:
+        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword, .postLostItem, .deleteLostItem, .fetchLostItem, .reportLostItem:
             if let token = KeyChainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
@@ -95,6 +97,8 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return nil
         case .deleteLostItem:
             return nil
+        case .reportLostItem(_,let request):
+            return try? request.toDictionary()
         }
     }
     
@@ -104,7 +108,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return URLEncoding.default
         case .fetchNoticeData, .fetchRecommendedSearchWord: 
             return URLEncoding.queryString
-        case .createNotificationKeyword, .deleteNotificationKeyword, .postLostItem: return JSONEncoding.default
+        case .createNotificationKeyword, .deleteNotificationKeyword, .postLostItem, .reportLostItem: return JSONEncoding.default
         }
     }
 }
