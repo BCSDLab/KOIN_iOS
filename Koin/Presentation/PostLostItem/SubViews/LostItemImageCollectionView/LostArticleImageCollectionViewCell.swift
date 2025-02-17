@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class LostArticleImageCollectionViewCell: UICollectionViewCell {
+final class LostItemImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
@@ -50,7 +50,7 @@ final class LostArticleImageCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension LostArticleImageCollectionViewCell {
+extension LostItemImageCollectionViewCell {
     private func setUpLayouts() {
         [imageView, cancelButton].forEach {
             contentView.addSubview($0)

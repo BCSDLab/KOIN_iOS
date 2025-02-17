@@ -1,5 +1,5 @@
 //
-//  AddLostArticleFooterView.swift
+//  AddLostItemFooterView.swift
 //  koin
 //
 //  Created by 김나훈 on 1/13/25.
@@ -8,9 +8,9 @@
 import Combine
 import UIKit
 
-final class AddLostArticleFooterView: UICollectionReusableView {
+final class AddLostItemFooterView: UICollectionReusableView {
     
-    static let identifier = "AddLostArticleFooterView"
+    static let identifier = "AddLostItemFooterView"
     let addItemButtonPublisher = PassthroughSubject<Void, Never>()
     
     private let addItemButton = UIButton().then {
@@ -38,13 +38,13 @@ final class AddLostArticleFooterView: UICollectionReusableView {
     }
 }
 
-extension AddLostArticleFooterView {
+extension AddLostItemFooterView {
     @objc private func addItemButtonTapped() {
         addItemButtonPublisher.send()
     }
     
 }
-extension AddLostArticleFooterView {
+extension AddLostItemFooterView {
     private func setupViews() {
         self.backgroundColor = .systemBackground
         

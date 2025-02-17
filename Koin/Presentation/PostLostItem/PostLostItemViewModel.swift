@@ -1,5 +1,5 @@
 //
-//  LostArticleReportViewModel.swift
+//  PostLostItemViewModel.swift
 //  koin
 //
 //  Created by 김나훈 on 1/9/25.
@@ -8,13 +8,13 @@
 import Combine
 import Foundation
 
-final class LostArticleReportViewModel: ViewModelProtocol {
+final class PostLostItemViewModel: ViewModelProtocol {
     
     // MARK: - Input
     
     enum Input {
         case uploadFile([Data])
-        case postLostItem([PostLostArticleRequest])
+        case postLostItem([PostLostItemRequest])
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -59,13 +59,13 @@ final class LostArticleReportViewModel: ViewModelProtocol {
     
 }
 
-extension LostArticleReportViewModel {
+extension PostLostItemViewModel {
     
     private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     
-    private func postLostItem(request: [PostLostArticleRequest]) {
+    private func postLostItem(request: [PostLostItemRequest]) {
         let updatedRequests = request.map { request in
               var updatedRequest = request
               updatedRequest.type = self.type 

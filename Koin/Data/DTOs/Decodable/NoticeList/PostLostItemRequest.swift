@@ -1,5 +1,5 @@
 //
-//  PostLostArticleResponse.swift
+//  PostLostItemResponse.swift
 //  koin
 //
 //  Created by 김나훈 on 1/15/25.
@@ -7,8 +7,8 @@
 
 // MARK: - Article
 
-struct PostLostArticleRequestWrapper: Encodable {
-    let articles: [PostLostArticleRequest]
+struct PostLostItemRequestWrapper: Encodable {
+    let articles: [PostLostItemRequest]
 }
 
 enum LostItemType: String, Codable {
@@ -21,7 +21,7 @@ enum LostItemType: String, Codable {
     }
 }
 
-struct PostLostArticleRequest: Codable {
+struct PostLostItemRequest: Codable {
     var type: LostItemType?
     var category, location, foundDate: String
     var content: String?

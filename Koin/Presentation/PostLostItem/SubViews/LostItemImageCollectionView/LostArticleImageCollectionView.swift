@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class LostArticleImageCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class LostItemImageCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let imageCountPublisher = PassthroughSubject<[String], Never>()
     private(set) var imageUrls: [String] = [] {
@@ -31,8 +31,7 @@ final class LostArticleImageCollectionView: UICollectionView, UICollectionViewDa
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
-        register(LostArticleImageCollectionViewCell.self, forCellWithReuseIdentifier: LostArticleImageCollectionViewCell.identifier)
-        register(LostArticleImageCollectionViewCell.self, forCellWithReuseIdentifier: LostArticleImageCollectionViewCell.identifier)
+        register(LostItemImageCollectionViewCell.self, forCellWithReuseIdentifier: LostItemImageCollectionViewCell.identifier)
         dataSource = self
         delegate = self
     }
@@ -48,10 +47,10 @@ final class LostArticleImageCollectionView: UICollectionView, UICollectionViewDa
     }
 }
 
-extension LostArticleImageCollectionView {
+extension LostItemImageCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LostArticleImageCollectionViewCell.identifier, for: indexPath) as? LostArticleImageCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LostItemImageCollectionViewCell.identifier, for: indexPath) as? LostItemImageCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(imageUrl: imageUrls[indexPath.row])

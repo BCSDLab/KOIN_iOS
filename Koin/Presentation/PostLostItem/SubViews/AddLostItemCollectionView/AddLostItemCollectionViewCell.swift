@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class AddLostArticleCollectionViewCell: UICollectionViewCell {
+final class AddLostItemCollectionViewCell: UICollectionViewCell {
     
     var cancellables = Set<AnyCancellable>()
     private var cancellable = Set<AnyCancellable>()
@@ -57,10 +57,10 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.gray)
     }
     
-    private let imageUploadCollectionView: LostArticleImageCollectionView = {
+    private let imageUploadCollectionView: LostItemImageCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        let collectionView = LostArticleImageCollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = LostItemImageCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.appColor(.neutral100)
         return collectionView
     }()
@@ -185,7 +185,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    func configure(index: Int, isSingle: Bool, model: PostLostArticleRequest) {
+    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest) {
         locationTextField.text = model.location
         if model.foundDate.isEmpty {
             dateButton.setTitle("습득 장소를 입력해주세요", for: .normal)
@@ -236,7 +236,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         imageUploadCollectionView.updateImageUrls(url)
     }
     
-    func getCellData() -> PostLostArticleRequest {
+    func getCellData() -> PostLostItemRequest {
         let category = categoryStackView.arrangedSubviews
             .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
             .first ?? "카드"
@@ -252,7 +252,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
         let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
         ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         : ""
-        return PostLostArticleRequest(
+        return PostLostItemRequest(
             category: category,
             location: location,
             foundDate: formattedFoundDate,
@@ -280,7 +280,7 @@ final class AddLostArticleCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension AddLostArticleCollectionViewCell: UITextViewDelegate {
+extension AddLostItemCollectionViewCell: UITextViewDelegate {
     
     
     @objc private func locationTextFieldDidChange(_ textField: UITextField) {
@@ -426,7 +426,7 @@ extension AddLostArticleCollectionViewCell: UITextViewDelegate {
     
 }
 
-extension AddLostArticleCollectionViewCell: UITextFieldDelegate {
+extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     private func setUpLayouts() {
         [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
             contentView.addSubview($0)

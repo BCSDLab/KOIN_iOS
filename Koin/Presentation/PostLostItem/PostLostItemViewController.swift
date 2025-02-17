@@ -9,13 +9,13 @@ import Combine
 import PhotosUI
 import UIKit
 
-final class LostArticleReportViewController: UIViewController {
+final class PostLostItemViewController: UIViewController {
     
     // MARK: - Properties
     
     
-    private let viewModel: LostArticleReportViewModel
-    private let inputSubject: PassthroughSubject<LostArticleReportViewModel.Input, Never> = .init()
+    private let viewModel: PostLostItemViewModel
+    private let inputSubject: PassthroughSubject<PostLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     weak var delegate: NoticeListViewController?
     
@@ -40,10 +40,10 @@ final class LostArticleReportViewController: UIViewController {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
-    private let addLostArticleCollectionView: AddLostArticleCollectionView = {
+    private let addLostItemCollectionView: AddLostItemCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let collectionView = AddLostArticleCollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = AddLostItemCollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
     
@@ -59,7 +59,7 @@ final class LostArticleReportViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    init(viewModel: LostArticleReportViewModel) {
+    init(viewModel: PostLostItemViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "습득물 신고"
@@ -96,7 +96,7 @@ final class LostArticleReportViewController: UIViewController {
             case let .showToast(message):
                 self?.showToast(message: message, success: true)
             case let .addImageUrl(url, index):
-                self?.addLostArticleCollectionView.addImageUrl(url: url, index: index)
+                self?.addLostItemCollectionView.addImageUrl(url: url, index: index)
             case let .popViewController(id):
                 self?.navigationController?.popViewController(animated: false)
                 self?.delegate?.navigateToNoticeData(noticeId: id, boardId: 14)
@@ -104,34 +104,34 @@ final class LostArticleReportViewController: UIViewController {
         }.store(in: &subscriptions)
         
         // TODO: 수정
-        addLostArticleCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(addLostArticleCollectionView.calculateDynamicHeight() + 300)
+        addLostItemCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(addLostItemCollectionView.calculateDynamicHeight() + 300)
         }
         
-        addLostArticleCollectionView.heightChangedPublisher.sink { [weak self] in
+        addLostItemCollectionView.heightChangedPublisher.sink { [weak self] in
             guard let self = self else { return }
-            self.addLostArticleCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(self.addLostArticleCollectionView.calculateDynamicHeight() + 300)
+            self.addLostItemCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(self.addLostItemCollectionView.calculateDynamicHeight() + 300)
             }
         }.store(in: &subscriptions)
         
-        addLostArticleCollectionView.uploadImageButtonPublisher.sink { [weak self] index in
+        addLostItemCollectionView.uploadImageButtonPublisher.sink { [weak self] index in
             self?.viewModel.selectedIndex = index
             self?.addImageButtonTapped()
         }.store(in: &subscriptions)
         
-        addLostArticleCollectionView.dateButtonPublisher.sink { [weak self] index in
+        addLostItemCollectionView.dateButtonPublisher.sink { [weak self] index in
             // self?.showDatePicker()
         }.store(in: &subscriptions)
         
-        addLostArticleCollectionView.textViewFocusPublisher
+        addLostItemCollectionView.textViewFocusPublisher
             .sink { [weak self] yOffset in
                 UIView.animate(withDuration: 0.3) {
                     self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
                 }
             }.store(in: &subscriptions)
         
-        addLostArticleCollectionView.logPublisher.sink { [weak self] value in
+        addLostItemCollectionView.logPublisher.sink { [weak self] value in
             self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
         }.store(in: &subscriptions)
 
@@ -139,15 +139,15 @@ final class LostArticleReportViewController: UIViewController {
     
 }
 
-extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
+extension PostLostItemViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
     
-    func collectAllCellData() -> [PostLostArticleRequest] {
-        var allCellData: [PostLostArticleRequest] = []
+    func collectAllCellData() -> [PostLostItemRequest] {
+        var allCellData: [PostLostItemRequest] = []
         
-        for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
+        for index in 0..<addLostItemCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)
             
-            guard let cell = addLostArticleCollectionView.cellForItem(at: indexPath) as? AddLostArticleCollectionViewCell else {
+            guard let cell = addLostItemCollectionView.cellForItem(at: indexPath) as? AddLostItemCollectionViewCell else {
                 continue
             }
             
@@ -158,9 +158,9 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
     }
     private func writeButtonTapped() {
         var isAllValid = true
-        for index in 0..<addLostArticleCollectionView.numberOfItems(inSection: 0) {
+        for index in 0..<addLostItemCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)
-            if let articleCell = addLostArticleCollectionView.cellForItem(at: indexPath) as? AddLostArticleCollectionViewCell {
+            if let articleCell = addLostItemCollectionView.cellForItem(at: indexPath) as? AddLostItemCollectionViewCell {
                 let isValid = articleCell.validateInputs()
                 if !isValid {
                     isAllValid = false
@@ -207,14 +207,14 @@ extension LostArticleReportViewController: UITextViewDelegate, PHPickerViewContr
     }
 }
 
-extension LostArticleReportViewController {
+extension PostLostItemViewController {
     
     private func setUpLayOuts() {
         [scrollView, writeButton, separateView].forEach {
             view.addSubview($0)
         }
         
-        [mainMessageLabel, messageImageView, subMessageLabel, addLostArticleCollectionView].forEach {
+        [mainMessageLabel, messageImageView, subMessageLabel, addLostItemCollectionView].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -240,7 +240,7 @@ extension LostArticleReportViewController {
             make.leading.equalTo(mainMessageLabel.snp.leading)
             make.height.equalTo(19)
         }
-        addLostArticleCollectionView.snp.makeConstraints { make in
+        addLostItemCollectionView.snp.makeConstraints { make in
             make.top.equalTo(subMessageLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.width.equalTo(view.snp.width)

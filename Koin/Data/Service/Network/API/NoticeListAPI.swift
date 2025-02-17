@@ -17,7 +17,7 @@ enum NoticeListAPI {
     case fetchNotificationKeyword
     case fetchRecommendedSearchWord(FetchRecommendedSearchWordRequest)
     case fetchRecommendedKeyword
-    case postLostItem([PostLostArticleRequest])
+    case postLostItem([PostLostItemRequest])
     case fetchLostItemList(FetchNoticeArticlesRequest)
     case fetchLostItem(Int)
     case deleteLostItem(Int)
@@ -88,7 +88,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .deleteNotificationKeyword(let request):
             return try? request.toDictionary()
         case .postLostItem(let request):
-            return try? PostLostArticleRequestWrapper(articles: request).toDictionary()
+            return try? PostLostItemRequestWrapper(articles: request).toDictionary()
         case .fetchLostItemList(let request):
             return try? request.toDictionary()
         case .fetchLostItem:

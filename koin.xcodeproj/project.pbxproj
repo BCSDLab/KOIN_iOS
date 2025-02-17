@@ -406,8 +406,8 @@
 		D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */; };
 		D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289873D2D21B30D00AA7285 /* DebouncedButton.swift */; };
 		D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */; };
-		D28987582D2FF25C00AA7285 /* LostArticleReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */; };
-		D289875A2D2FF2FF00AA7285 /* LostArticleReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */; };
+		D28987582D2FF25C00AA7285 /* PostLostItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987572D2FF25C00AA7285 /* PostLostItemViewController.swift */; };
+		D289875A2D2FF2FF00AA7285 /* PostLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987592D2FF2FF00AA7285 /* PostLostItemViewModel.swift */; };
 		D2908C932BB580480008F908 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908C922BB580480008F908 /* LogoView.swift */; };
 		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
 		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
@@ -444,14 +444,14 @@
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
-		D2B7EBA92D35370000EE46B0 /* AddLostArticleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */; };
-		D2B7EBAC2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */; };
-		D2B7EBAF2D3538F100EE46B0 /* AddLostArticleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */; };
+		D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */; };
+		D2B7EBAC2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */; };
+		D2B7EBAF2D3538F100EE46B0 /* AddLostItemFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */; };
 		D2B7EBC02D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBBF2D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift */; };
 		D2B7EBC22D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC12D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift */; };
 		D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */; };
 		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */; };
-		D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */; };
+		D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */; };
 		D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */; };
 		D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */; };
 		D2B7EBD22D37E3D700EE46B0 /* DeleteLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */; };
@@ -992,8 +992,8 @@
 		D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterFlowLayout.swift; sourceTree = "<group>"; };
 		D289873D2D21B30D00AA7285 /* DebouncedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedButton.swift; sourceTree = "<group>"; };
 		D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestTokenResponse.swift; sourceTree = "<group>"; };
-		D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleReportViewController.swift; sourceTree = "<group>"; };
-		D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleReportViewModel.swift; sourceTree = "<group>"; };
+		D28987572D2FF25C00AA7285 /* PostLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewController.swift; sourceTree = "<group>"; };
+		D28987592D2FF2FF00AA7285 /* PostLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewModel.swift; sourceTree = "<group>"; };
 		D2908C922BB580480008F908 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
 		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
@@ -1030,14 +1030,14 @@
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
-		D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleCollectionView.swift; sourceTree = "<group>"; };
-		D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleCollectionViewCell.swift; sourceTree = "<group>"; };
-		D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostArticleFooterView.swift; sourceTree = "<group>"; };
+		D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionView.swift; sourceTree = "<group>"; };
+		D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemFooterView.swift; sourceTree = "<group>"; };
 		D2B7EBBF2D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleImageCollectionView.swift; sourceTree = "<group>"; };
 		D2B7EBC12D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDTO.swift; sourceTree = "<group>"; };
 		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDTO.swift; sourceTree = "<group>"; };
-		D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostArticleRequest.swift; sourceTree = "<group>"; };
+		D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemRequest.swift; sourceTree = "<group>"; };
 		D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
@@ -1264,7 +1264,7 @@
 				833D9C272C6B58ED00982145 /* NoticeKeywordDTO.swift */,
 				D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */,
 				D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */,
-				D2B7EBC92D37C81B00EE46B0 /* PostLostArticleRequest.swift */,
+				D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -2131,7 +2131,7 @@
 			children = (
 				D2FFA9792D6200F100EF8E56 /* Chat */,
 				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
-				D28987562D2FF23800AA7285 /* LostArticleReport */,
+				D28987562D2FF23800AA7285 /* PostLostItem */,
 				D21572742CEE76C40061E725 /* FrameList */,
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
@@ -2526,14 +2526,14 @@
 			path = AddDirectCollectionView;
 			sourceTree = "<group>";
 		};
-		D28987562D2FF23800AA7285 /* LostArticleReport */ = {
+		D28987562D2FF23800AA7285 /* PostLostItem */ = {
 			isa = PBXGroup;
 			children = (
 				D2B7EBAD2D35372E00EE46B0 /* SubViews */,
-				D28987592D2FF2FF00AA7285 /* LostArticleReportViewModel.swift */,
-				D28987572D2FF25C00AA7285 /* LostArticleReportViewController.swift */,
+				D28987592D2FF2FF00AA7285 /* PostLostItemViewModel.swift */,
+				D28987572D2FF25C00AA7285 /* PostLostItemViewController.swift */,
 			);
-			path = LostArticleReport;
+			path = PostLostItem;
 			sourceTree = "<group>";
 		};
 		D29F21C82C4E14F300994554 /* Timetable */ = {
@@ -2684,33 +2684,33 @@
 			path = User;
 			sourceTree = "<group>";
 		};
-		D2B7EBAA2D35370600EE46B0 /* AddLostArticleCollectionView */ = {
+		D2B7EBAA2D35370600EE46B0 /* AddLostItemCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				D2B7EBA82D35370000EE46B0 /* AddLostArticleCollectionView.swift */,
-				D2B7EBAB2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift */,
-				D2B7EBAE2D3538F100EE46B0 /* AddLostArticleFooterView.swift */,
+				D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */,
+				D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */,
+				D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */,
 			);
-			path = AddLostArticleCollectionView;
+			path = AddLostItemCollectionView;
 			sourceTree = "<group>";
 		};
 		D2B7EBAD2D35372E00EE46B0 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				D2B7EBBE2D36BCB500EE46B0 /* LostArticleImageCollectionView */,
-				D2B7EBAA2D35370600EE46B0 /* AddLostArticleCollectionView */,
+				D2B7EBBE2D36BCB500EE46B0 /* LostItemImageCollectionView */,
+				D2B7EBAA2D35370600EE46B0 /* AddLostItemCollectionView */,
 				D2B7EBDD2D38AF1500EE46B0 /* DatePickerDropdownView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
 		};
-		D2B7EBBE2D36BCB500EE46B0 /* LostArticleImageCollectionView */ = {
+		D2B7EBBE2D36BCB500EE46B0 /* LostItemImageCollectionView */ = {
 			isa = PBXGroup;
 			children = (
 				D2B7EBBF2D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift */,
 				D2B7EBC12D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift */,
 			);
-			path = LostArticleImageCollectionView;
+			path = LostItemImageCollectionView;
 			sourceTree = "<group>";
 		};
 		D2B7EBD32D38195B00EE46B0 /* ImageScrollCollectionView */ = {
@@ -3385,7 +3385,7 @@
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
 				833D9C572C735F6B00982145 /* HotNoticeArticlesTableView.swift in Sources */,
 				837BFA562BB7E4B6001FCBD4 /* BusTimetableViewController.swift in Sources */,
-				D289875A2D2FF2FF00AA7285 /* LostArticleReportViewModel.swift in Sources */,
+				D289875A2D2FF2FF00AA7285 /* PostLostItemViewModel.swift in Sources */,
 				D2FCBE9C2D02C2D20097A388 /* SelectDeptModalViewController.swift in Sources */,
 				D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */,
 				D27DD0D62BA6085E0081FD36 /* LandViewModel.swift in Sources */,
@@ -3489,7 +3489,7 @@
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
-				D2B7EBA92D35370000EE46B0 /* AddLostArticleCollectionView.swift in Sources */,
+				D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				83E770E42D035B4900EB3F84 /* ManyBusTimetableTableView.swift in Sources */,
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
@@ -3517,7 +3517,7 @@
 				D2B7EBD52D38197200EE46B0 /* ImageScrollCollectionView.swift in Sources */,
 				D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */,
 				D22C545F2C68C7EB000826DA /* ScoreChartCollectionView.swift in Sources */,
-				D2B7EBAF2D3538F100EE46B0 /* AddLostArticleFooterView.swift in Sources */,
+				D2B7EBAF2D3538F100EE46B0 /* AddLostItemFooterView.swift in Sources */,
 				83E770DF2D019E0C00EB3F84 /* OneBusTimetableTableViewCell.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */,
@@ -3582,7 +3582,7 @@
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
-				D28987582D2FF25C00AA7285 /* LostArticleReportViewController.swift in Sources */,
+				D28987582D2FF25C00AA7285 /* PostLostItemViewController.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */,
@@ -3673,7 +3673,7 @@
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
-				D2B7EBCA2D37C81B00EE46B0 /* PostLostArticleRequest.swift in Sources */,
+				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
 				D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
@@ -3775,7 +3775,7 @@
 				D2FFA9782D61F7B200EF8E56 /* ReportLostItemViewModel.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
-				D2B7EBAC2D35371E00EE46B0 /* AddLostArticleCollectionViewCell.swift in Sources */,
+				D2B7EBAC2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
