@@ -17,7 +17,7 @@ final class DefaultAbTestService: AbTestService {
     private let networkService = NetworkService()
     
     func assignAbTest(requestModel: AssignAbTestRequest, retry: Bool = false) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
-           if KeyChainWorker.shared.read(key: .accessHistoryId) == nil {
+           if KeychainWorker.shared.read(key: .accessHistoryId) == nil {
                return self.assignAbTestToken()
                    .flatMap { _ in
                        self.assignAbTest(requestModel: requestModel) 
@@ -29,8 +29,8 @@ final class DefaultAbTestService: AbTestService {
            return networkService.requestWithResponse(api: AbTestAPI.assignAbTest(requestModel))
                .handleEvents(receiveOutput: { response in
                    // KeyChain에 값 저장
-                   KeyChainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
-                   KeyChainWorker.shared.create(key: .variableName, token: response.variableName.rawValue)
+                   KeychainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
+                   KeychainWorker.shared.create(key: .variableName, token: response.variableName.rawValue)
                })
                .catch { error -> AnyPublisher<AssignAbTestResponse, ErrorResponse> in
 
@@ -51,7 +51,7 @@ final class DefaultAbTestService: AbTestService {
        private func assignAbTestToken() -> AnyPublisher<Void, ErrorResponse> {
            return networkService.requestWithResponse(api: AbTestAPI.assignAbTestToken)
                .handleEvents(receiveOutput: { (response: AssignAbTestTokenResponse) in
-                   KeyChainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
+                   KeychainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
                })
                .map { _ in () }
                .eraseToAnyPublisher()

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F62BA8563E00EF4F58 /* RegisterViewController.swift */; };
 		0F74C4F92BA8564600EF4F58 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */; };
-		0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */; };
+		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
 		1F730D7E4552FB5BAE1356CB /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DAEFEEBA48B6A14C9B564B /* Pods_NotificationService.framework */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
@@ -486,6 +486,12 @@
 		D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */; };
 		D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625A2D63A45300C60864 /* ChatListTableViewController.swift */; };
 		D2D4625D2D63A46800C60864 /* ChatListTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625C2D63A46800C60864 /* ChatListTableViewModel.swift */; };
+		D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */; };
+		D2D462622D63B90100C60864 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462612D63B90100C60864 /* ChatRepository.swift */; };
+		D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */; };
+		D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462692D63BA5200C60864 /* ChatService.swift */; };
+		D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626B2D63BAC600C60864 /* ChatAPI.swift */; };
+		D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */; };
 		D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0CF2C28285600C85A85 /* LandRepository.swift */; };
 		D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */; };
 		D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */; };
@@ -591,7 +597,7 @@
 /* Begin PBXFileReference section */
 		0F74C4F62BA8563E00EF4F58 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
-		0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainWorker.swift; sourceTree = "<group>"; };
+		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		22293661865FA988A23B96CF /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		57DAEFEEBA48B6A14C9B564B /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
@@ -1077,6 +1083,12 @@
 		D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordRequest.swift; sourceTree = "<group>"; };
 		D2D4625A2D63A45300C60864 /* ChatListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewController.swift; sourceTree = "<group>"; };
 		D2D4625C2D63A46800C60864 /* ChatListTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewModel.swift; sourceTree = "<group>"; };
+		D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomDTO.swift; sourceTree = "<group>"; };
+		D2D462612D63B90100C60864 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
+		D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomUseCase.swift; sourceTree = "<group>"; };
+		D2D462692D63BA5200C60864 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		D2D4626B2D63BAC600C60864 /* ChatAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPI.swift; sourceTree = "<group>"; };
+		D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatRepository.swift; sourceTree = "<group>"; };
 		D2D7C0CF2C28285600C85A85 /* LandRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRepository.swift; sourceTree = "<group>"; };
 		D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailUseCase.swift; sourceTree = "<group>"; };
@@ -2422,6 +2434,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				D2D4625E2D63A78000C60864 /* Chat */,
 				833D9C202C6B4F4C00982145 /* NoticeList */,
 				D29F21EE2C4F611F00994554 /* Noti */,
 				D29F21ED2C4F610400994554 /* User */,
@@ -2474,7 +2487,7 @@
 			children = (
 				D2D422732BB2A9C800A8AF04 /* UserInputConfirmer */,
 				D27DD0852BA608310081FD36 /* ImageCacher.swift */,
-				0FCD163C2BA80EAA00C23A2F /* KeyChainWorker.swift */,
+				0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */,
 				D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */,
 				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
 			);
@@ -2855,6 +2868,22 @@
 			path = ChatList;
 			sourceTree = "<group>";
 		};
+		D2D4625E2D63A78000C60864 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		D2D462642D63B97600C60864 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		D2D7C0D12C28293200C85A85 /* Land */ = {
 			isa = PBXGroup;
 			children = (
@@ -2943,6 +2972,7 @@
 		D2FB23482BFD45180098BA2B /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				D2D462642D63B97600C60864 /* Chat */,
 				833D9C3F2C705F0E00982145 /* NoticeList */,
 				D208A7C72CABB467007040E7 /* Core */,
 				D20AB9502C5534DD006BC684 /* Noti */,
@@ -2984,6 +3014,7 @@
 				D2D7C0CF2C28285600C85A85 /* LandRepository.swift */,
 				D20AB94D2C553427006BC684 /* NotiRepository.swift */,
 				83DD0D7C2C4F91AD00278ABD /* BusRepository.swift */,
+				D2D462612D63B90100C60864 /* ChatRepository.swift */,
 				833D9C382C7058C200982145 /* NoticeListRepository.swift */,
 				D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */,
 				D208A7C52CABB426007040E7 /* CoreRepository.swift */,
@@ -3005,6 +3036,7 @@
 				833D9C482C7068CB00982145 /* DefaultNoticeListRepository.swift */,
 				D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */,
 				D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */,
+				D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -3056,6 +3088,7 @@
 				833D9C462C7067AE00982145 /* NoticeListAPI.swift */,
 				D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */,
 				D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */,
+				D2D4626B2D63BAC600C60864 /* ChatAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -3081,6 +3114,7 @@
 		D2FB23722C04305A0098BA2B /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D2D462692D63BA5200C60864 /* ChatService.swift */,
 				83E770F72D05864800EB3F84 /* MockNetworkService.swift */,
 				D20AB9462C552E68006BC684 /* NetworkService.swift */,
 				D20AB9572C553621006BC684 /* NotiService.swift */,
@@ -3476,6 +3510,7 @@
 				D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */,
 				D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */,
 				D27DD0F02BA60D000081FD36 /* LandViewController.swift in Sources */,
+				D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */,
 				D22C546D2C699780000826DA /* ImageDropDownCell.swift in Sources */,
 				D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
@@ -3607,6 +3642,7 @@
 				D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
+				D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */,
 				D28987582D2FF25C00AA7285 /* PostLostItemViewController.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
@@ -3702,7 +3738,7 @@
 				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
 				D2FCBEA02D07F7630097A388 /* DeleteSemesterModalViewController.swift in Sources */,
-				0FCD163D2BA80EAA00C23A2F /* KeyChainWorker.swift in Sources */,
+				0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
 				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,
 				D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */,
@@ -3822,6 +3858,7 @@
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
+				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
@@ -3846,6 +3883,7 @@
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
+				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
@@ -3866,6 +3904,7 @@
 				83E770E92D03636C00EB3F84 /* ManyBusTimetableCollectionView.swift in Sources */,
 				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
+				D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */,
 				D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
@@ -3875,6 +3914,7 @@
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
+				D2D462622D63B90100C60864 /* ChatRepository.swift in Sources */,
 				D2DCB2872CDF4A89005CABEE /* TimetableCollectionView.swift in Sources */,
 				83E770FC2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift in Sources */,
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,

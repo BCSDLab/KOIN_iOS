@@ -15,7 +15,7 @@ final class DefaultCoreRepository: CoreRepository {
         self.service = service
     }
     
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, any Error> {
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
         return service.fetchVersion()
     }
     

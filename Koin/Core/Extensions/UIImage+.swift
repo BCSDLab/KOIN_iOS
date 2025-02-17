@@ -129,6 +129,7 @@ enum ImageAsset: String {
     case siren
     case lostItem
     case blind
+    case basicPicture
 }
 
 enum SFSymbols: String {

@@ -125,7 +125,6 @@ extension NoticeDataViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateLostItem(response))
-            print(response)
         }).store(in: &subscriptions)
     }
     private func getNoticeData() {

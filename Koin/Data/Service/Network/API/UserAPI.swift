@@ -61,7 +61,7 @@ extension UserAPI: Router, URLRequestConvertible {
         }
         switch self {
         case .fetchUserData, .revoke, .modify, .checkPassword, .checkAuth :
-            if let token = KeyChainWorker.shared.read(key: .access) {
+            if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
         default: break
@@ -94,7 +94,7 @@ extension UserAPI: Router, URLRequestConvertible {
         case .checkAuth:
             return nil
         case .checkLogin:
-            return ["accessToken": KeyChainWorker.shared.read(key: .access) ?? ""]
+            return ["accessToken": KeychainWorker.shared.read(key: .access) ?? ""]
         }
     }
     

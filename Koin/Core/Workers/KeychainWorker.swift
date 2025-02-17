@@ -1,5 +1,5 @@
 //
-//  KeyChainWorker.swift
+//  KeychainWorker.swift
 //  koin
 //
 //  Created by p on 3/18/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class KeyChainWorker {
+final class KeychainWorker {
     
     enum TokenType: String {
         case access
@@ -17,7 +17,7 @@ final class KeyChainWorker {
         case variableName
         case shareVariableName
     }
-    static let shared = KeyChainWorker()
+    static let shared = KeychainWorker()
     
     private init() { }
     
