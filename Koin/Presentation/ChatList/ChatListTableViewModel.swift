@@ -26,7 +26,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private(set) var chatList: [ChatRoomDTO] = [] {
+    private(set) var chatList: [ChatRoomItem] = [] {
         didSet {
             outputSubject.send(.showChatRoom)
         }

@@ -61,7 +61,8 @@ final class ChatListTableViewController: UITableViewController {
 
 extension ChatListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = ChatViewController(viewModel: ChatViewModel())
+        let chat = viewModel.chatList[indexPath.row]
+        let viewController = ChatViewController(viewModel: ChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
         navigationController?.pushViewController(viewController, animated: true)
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -124,7 +125,7 @@ extension ChatListTableViewController {
         }
         titleLabel.text = chat.articleTitle
         contentLabel.text = chat.recentMessageContent
-        recentTimeLabel.text = chat.lastMessageAt
+        recentTimeLabel.text = "\(chat.hour) \(chat.minute)"
         unreadMessageLabel.text = String(chat.unreadMessageCount)
         unreadMessageLabel.isHidden = chat.unreadMessageCount == 0
         

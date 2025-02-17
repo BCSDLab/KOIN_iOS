@@ -492,6 +492,9 @@
 		D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462692D63BA5200C60864 /* ChatService.swift */; };
 		D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626B2D63BAC600C60864 /* ChatAPI.swift */; };
 		D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */; };
+		D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */; };
+		D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */; };
+		D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */; };
 		D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0CF2C28285600C85A85 /* LandRepository.swift */; };
 		D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */; };
 		D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */; };
@@ -1089,6 +1092,9 @@
 		D2D462692D63BA5200C60864 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		D2D4626B2D63BAC600C60864 /* ChatAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPI.swift; sourceTree = "<group>"; };
 		D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatRepository.swift; sourceTree = "<group>"; };
+		D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomItem.swift; sourceTree = "<group>"; };
+		D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailDTO.swift; sourceTree = "<group>"; };
+		D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatDetailUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0CF2C28285600C85A85 /* LandRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRepository.swift; sourceTree = "<group>"; };
 		D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailUseCase.swift; sourceTree = "<group>"; };
@@ -2872,6 +2878,7 @@
 			isa = PBXGroup;
 			children = (
 				D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */,
+				D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2880,6 +2887,15 @@
 			isa = PBXGroup;
 			children = (
 				D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */,
+				D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		D2D4626F2D63C58900C60864 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2991,6 +3007,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D2D4626F2D63C58900C60864 /* Chat */,
 				D215726D2CEE28C30061E725 /* Timetable */,
 				833D9C102C6B269000982145 /* NoticeList */,
 				D29F21EF2C4FD22900994554 /* Land */,
@@ -3734,6 +3751,7 @@
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
+				D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */,
 				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
 				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				D2F4FD582CBE089D008C91D8 /* ShopCollectionView.swift in Sources */,
@@ -3840,6 +3858,7 @@
 				D2B7EBAC2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift in Sources */,
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
+				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
@@ -3859,6 +3878,7 @@
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
+				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,

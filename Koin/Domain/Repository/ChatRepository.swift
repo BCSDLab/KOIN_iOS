@@ -9,4 +9,5 @@ import Combine
 
 protocol ChatRepository {
     func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse>
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse>
 }

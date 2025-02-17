@@ -324,7 +324,7 @@ extension NoticeDataViewController {
     private func navigateToScene(_ checkType: NoticeDataViewModel.CheckType, _ noticeId: Int) {
         switch checkType {
         case .report: navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
-        case .chat: navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel()), animated: true)
+        case .chat: navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel(articleId: 0, chatRoomId: 0, articleTitle: "")), animated: true)
         }
     }
     

@@ -26,7 +26,7 @@ final class ChatViewController: UIViewController {
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "채팅"
+        navigationItem.title = viewModel.articleTitle
     }
     
     @available(*, unavailable)
@@ -40,6 +40,7 @@ final class ChatViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        inputSubject.send(.fetchChatDetail)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +55,7 @@ final class ChatViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
+            case .showChatList: print(1)
             }
         }.store(in: &subscriptions)
         
