@@ -134,6 +134,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         $0.textColor = UIColor.appColor(.neutral800)
+        $0.numberOfLines = 0
     }
     
     private let sendChatLoginModalViewController = LoginModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
@@ -341,14 +342,14 @@ extension NoticeDataViewController {
     
     private func updateLostItem(_ item: LostArticleDetailDTO) {
         
-        titleGuideLabel.text = NoticeListType(rawValue: item.boardId)?.displayName
+        titleGuideLabel.text = "\(item.type?.description ?? "")물"
         categoryLabel.text = item.category
         titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
         
         
         nickNameLabel.text = item.author
         createdDateLabel.text = item.registeredAt
-        let imageUrls = item.image?.map { $0.imageUrl } ?? []
+        let imageUrls = item.images?.map { $0.imageUrl } ?? []
         imageCollectionView.setImageUrls(urls: imageUrls)
         contentLabel.text = item.content
         if imageUrls.isEmpty {

@@ -97,7 +97,7 @@ extension NoticeArticleDTO {
             category: category,
             foundPlace: foundPlace,
             foundDate: foundDate,
-            content: modifyFontInHtml(html: content ?? ""), 
+            content: boardId == 14 ? content : modifyFontInHtml(html: content ?? ""), 
             updatedAt: updatedAt,
             url: url,
             attachments: attachments ?? [],

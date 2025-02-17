@@ -9,11 +9,11 @@ import Foundation
 
 struct LostArticleDetailDTO: Decodable {
     let id, boardId: Int
-    let type: String?
+    let type: LostItemType?
     let category, foundPlace, foundDate: String
     let content: String?
     let author: String
-    let image: [Image]?
+    let images: [Image]?
     let isCouncil: Bool?
     let isMine: Bool?
     let prevId, nextId: Int?
@@ -26,7 +26,7 @@ struct LostArticleDetailDTO: Decodable {
         case type
         case foundPlace = "found_place"
         case foundDate = "found_date"
-        case content, author, image
+        case content, author, images
         case prevId = "prev_id"
         case nextId = "next_id"
         case registeredAt = "registered_at"

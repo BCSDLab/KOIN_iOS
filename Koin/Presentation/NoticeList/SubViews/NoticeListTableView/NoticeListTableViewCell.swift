@@ -52,6 +52,12 @@ final class NoticeListTableViewCell: UITableViewCell {
     
     private let hitLabel = UILabel()
     
+    private let contentLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.isHidden = true
+    }
+    
     //MARK: -Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,9 +70,11 @@ final class NoticeListTableViewCell: UITableViewCell {
     }
     
     func configure(articleModel: NoticeArticleDTO) {
-        let displayName = NoticeListType(rawValue: articleModel.boardId)?.displayName ?? ""
-        boardTitleLabel.text = displayName == "분실물" ? displayName : "\(displayName)공지"
-        
+        if let type = articleModel.type {
+            boardTitleLabel.text = "\(type.description)물"
+        } else {
+            boardTitleLabel.text = NoticeListType(rawValue: articleModel.boardId)?.displayName
+        }
         
         noticeTitleLabel.lineBreakMode = .byTruncatingTail
         nickNameLabel.text = articleModel.author
@@ -88,17 +96,12 @@ final class NoticeListTableViewCell: UITableViewCell {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = true
             }
-            let components = (articleModel.title ?? "").components(separatedBy: " | ")
-            if components.count == 3 {
-                let category = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                let title = "\(components[1]) | \(components[2])".trimmingCharacters(in: .whitespacesAndNewlines)
-                categoryLabel.text = category
-                noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: title)
-            }
+            categoryLabel.text = articleModel.category
+            noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: "\(articleModel.foundPlace ?? "") | \(articleModel.foundDate ?? "")")
             categoryLabel.snp.remakeConstraints {
                 $0.top.equalTo(boardTitleLabel.snp.bottom)
                 $0.leading.equalTo(boardTitleLabel)
-                $0.width.equalTo(65)
+                $0.width.equalTo(categoryLabel.intrinsicContentSize.width + 20)
                 $0.height.equalTo(22)
             }
             noticeTitleLabel.snp.remakeConstraints {
@@ -106,6 +109,7 @@ final class NoticeListTableViewCell: UITableViewCell {
                 $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
                 $0.trailing.equalToSuperview().inset(24)
             }
+            
         } else {
             noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title ?? "")
             categoryLabel.isHidden = true
@@ -115,6 +119,14 @@ final class NoticeListTableViewCell: UITableViewCell {
                 $0.trailing.equalToSuperview().inset(24)
             }
         }
+        contentLabel.isHidden = articleModel.boardId != 14
+        contentLabel.text = articleModel.content
+        nickNameLabel.snp.remakeConstraints {
+            if articleModel.boardId == 14 { $0.top.equalTo(contentLabel.snp.bottom).offset(4) }
+            else { $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(4) }
+            $0.leading.equalTo(boardTitleLabel)
+        }
+        
     }
     
 }
@@ -129,7 +141,7 @@ extension NoticeListTableViewCell {
     }
     
     private func setUpLayouts() {
-        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel].forEach {
+        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel, contentLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -183,6 +195,11 @@ extension NoticeListTableViewCell {
         hitLabel.snp.makeConstraints {
             $0.leading.equalTo(eyeImageView.snp.trailing)
             $0.top.equalTo(nickNameLabel)
+        }
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(noticeTitleLabel.snp.bottom).offset(4)
+            make.leading.equalTo(categoryLabel)
+            make.trailing.equalTo(self.snp.trailing).offset(-30)
         }
     }
     

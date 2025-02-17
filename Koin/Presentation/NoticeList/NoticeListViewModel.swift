@@ -101,7 +101,6 @@ extension NoticeListViewModel {
             }
         }, receiveValue: { [weak self] articleInfo in
             guard let self = self else { return }
-            print(articleInfo)
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
         }).store(in: &subscriptions)
     }
