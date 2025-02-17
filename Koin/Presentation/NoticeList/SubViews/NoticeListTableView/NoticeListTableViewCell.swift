@@ -80,7 +80,7 @@ final class NoticeListTableViewCell: UITableViewCell {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = false
             }
-            hitLabel.text = "\(articleModel.hit.formattedWithComma)"
+            hitLabel.text = "\(articleModel.hit?.formattedWithComma ?? "")"
         }
         
         if articleModel.boardId == 14 {

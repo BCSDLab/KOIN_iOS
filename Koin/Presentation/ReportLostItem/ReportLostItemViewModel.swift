@@ -50,8 +50,6 @@ final class ReportLostItemViewModel: ViewModelProtocol {
 
 extension ReportLostItemViewModel {
     private func reportLostItemArticle(request: ReportLostItemRequest) {
-        print(request)
-        print(lostItemId)
         defaultReportLostItemUseCase.execute(id: lostItemId, request: request).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message, false))

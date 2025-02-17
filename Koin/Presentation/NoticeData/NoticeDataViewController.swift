@@ -432,7 +432,7 @@ extension NoticeDataViewController {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = false
             }
-            hitLabel.text = "\(noticeData.hit.formattedWithComma)"
+            hitLabel.text = "\(noticeData.hit?.formattedWithComma ?? "")"
         }
         if !noticeData.attachments.isEmpty {
             noticeAttachmentsTableView.updateNoticeAttachments(attachments: noticeData.attachments)

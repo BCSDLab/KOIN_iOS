@@ -24,7 +24,11 @@ struct NoticeListDTO: Decodable {
 struct NoticeArticleDTO: Decodable {
     let id, boardId: Int
     let title, author: String
-    let hit: Int
+    let hit: Int?
+    let type: LostItemType?
+    let category: String?
+    let foundPlace: String?
+    let foundDate: String?
     let content: String?
     let updatedAt: String
     let url: String?
@@ -37,6 +41,9 @@ struct NoticeArticleDTO: Decodable {
         case id
         case boardId = "board_id"
         case title, author, hit, content, attachments, url
+        case type, category
+        case foundPlace = "found_place"
+        case foundDate = "found_date"
         case prevId = "prev_id"
         case nextId = "next_id"
         case updatedAt = "updated_at"
@@ -78,8 +85,27 @@ extension NoticeArticleDTO {
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
         let newTitle = title.replacingOccurrences(of: "\n", with: "")
-        return NoticeArticleDTO(id: id, boardId: boardId, title: newTitle, author: author, hit: hit, content: modifyFontInHtml(html: content ?? ""), updatedAt: updatedAt, url: url, attachments: attachments ?? [], prevId: prevId, nextId: nextId, registeredAt: newDate)
+
+        return NoticeArticleDTO(
+            id: id,
+            boardId: boardId,
+            title: newTitle,
+            author: author,
+            hit: hit,
+            type: type,
+            category: category,
+            foundPlace: foundPlace,
+            foundDate: foundDate,
+            content: modifyFontInHtml(html: content ?? ""), 
+            updatedAt: updatedAt,
+            url: url,
+            attachments: attachments ?? [],
+            prevId: prevId,
+            nextId: nextId,
+            registeredAt: newDate
+        )
     }
+
     
     private func modifyFontInHtml(html: String) -> String? {
         do {

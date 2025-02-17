@@ -12,7 +12,7 @@ struct NoticeDataInfo {
     let boardId: Int
     let content: String
     let author: String
-    let hit: Int
+    let hit: Int?
     let prevId: Int?
     let nextId: Int?
     let attachments: [NoticeAttachmentDTO]
