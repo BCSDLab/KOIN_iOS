@@ -23,14 +23,15 @@ struct NoticeListDTO: Decodable {
 
 struct NoticeArticleDTO: Decodable {
     let id, boardId: Int
-    let title, author: String
+    let title: String?
+    let author: String
     let hit: Int?
     let type: LostItemType?
     let category: String?
     let foundPlace: String?
     let foundDate: String?
     let content: String?
-    let updatedAt: String
+    let updatedAt: String?
     let url: String?
     let attachments: [NoticeAttachmentDTO]?
     let prevId: Int?
@@ -76,7 +77,7 @@ extension NoticeListDTO {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        return NoticeDataInfo(title: title, boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
+        return NoticeDataInfo(title: title ?? "", boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
@@ -84,7 +85,7 @@ extension NoticeArticleDTO {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
-        let newTitle = title.replacingOccurrences(of: "\n", with: "")
+        let newTitle = title?.replacingOccurrences(of: "\n", with: "")
 
         return NoticeArticleDTO(
             id: id,

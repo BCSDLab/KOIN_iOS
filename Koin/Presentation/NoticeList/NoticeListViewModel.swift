@@ -95,12 +95,13 @@ extension NoticeListViewModel {
     }
     
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page).sink(receiveCompletion: { completion in
+        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: nil).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] articleInfo in
             guard let self = self else { return }
+            print(articleInfo)
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
         }).store(in: &subscriptions)
     }

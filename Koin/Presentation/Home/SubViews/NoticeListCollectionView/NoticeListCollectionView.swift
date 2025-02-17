@@ -142,7 +142,7 @@ extension NoticeListCollectionView {
             }
             let newIndex = bannerCount == 5 ? indexPath.row - 1 : indexPath.row
             let noticeArticleTitle = popularNoticeList[newIndex]
-            cell.configure(title: noticeArticleTitle.title)
+            cell.configure(title: noticeArticleTitle.title ?? "")
             return cell
         }
     }
@@ -152,10 +152,10 @@ extension NoticeListCollectionView {
             moveKeywordManagePagePublisher.send(keywordNoticePhrase.1)
         }
         else if keywordNoticePhrase != nil {
-            tapNoticeListPublisher.send((popularNoticeList[indexPath.row - 1].id, popularNoticeList[indexPath.row - 1].title))
+            tapNoticeListPublisher.send((popularNoticeList[indexPath.row - 1].id, popularNoticeList[indexPath.row - 1].title ?? ""))
         }
         else {
-            tapNoticeListPublisher.send((popularNoticeList[indexPath.row].id, popularNoticeList[indexPath.row].title))
+            tapNoticeListPublisher.send((popularNoticeList[indexPath.row].id, popularNoticeList[indexPath.row].title ?? ""))
         }
     }
 }

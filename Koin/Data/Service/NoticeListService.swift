@@ -11,6 +11,7 @@ import Combine
 protocol NoticeListService {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error>
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
     func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse>
@@ -31,6 +32,25 @@ final class DefaultNoticeService: NoticeListService {
         
     let networkService = NetworkService()
     let coreDataService = CoreDataService.shared
+    
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel))
+            .catch { [weak self] error -> AnyPublisher<NoticeListDTO, Error> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" && !retry {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel)) }
+                        .catch { refreshError -> AnyPublisher<NoticeListDTO, Error> in
+                            return self.fetchLostItemArticles(requestModel: requestModel, retry: true)
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
     
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: NoticeListAPI.reportLostItem(id, request))

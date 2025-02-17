@@ -544,6 +544,7 @@
 		D2FFA9812D62072A00EF8E56 /* WriteTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */; };
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
+		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
 		DAA7F7D2FD9FB753779BE62F /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BB6F36D5FE039EC639909C /* Pods_koin.framework */; };
 /* End PBXBuildFile section */
 
@@ -1132,6 +1133,7 @@
 		D2FFA9802D62072A00EF8E56 /* WriteTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteTypeModalViewController.swift; sourceTree = "<group>"; };
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
+		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
 		D539BAFC0DB899E4A8902AF0 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1281,6 +1283,7 @@
 				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
 				835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */,
 				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
+				D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -3827,6 +3830,7 @@
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
+				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,

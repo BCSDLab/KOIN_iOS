@@ -88,7 +88,7 @@ final class NoticeListTableViewCell: UITableViewCell {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = true
             }
-            let components = articleModel.title.components(separatedBy: " | ")
+            let components = (articleModel.title ?? "").components(separatedBy: " | ")
             if components.count == 3 {
                 let category = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
                 let title = "\(components[1]) | \(components[2])".trimmingCharacters(in: .whitespacesAndNewlines)
@@ -107,7 +107,7 @@ final class NoticeListTableViewCell: UITableViewCell {
                 $0.trailing.equalToSuperview().inset(24)
             }
         } else {
-            noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title)
+            noticeTitleLabel.setLineHeight(lineHeight: 1.3, text: articleModel.title ?? "")
             categoryLabel.isHidden = true
             noticeTitleLabel.snp.remakeConstraints {
                 $0.top.equalTo(boardTitleLabel.snp.bottom)
