@@ -22,7 +22,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     
-    private let textViewPlaceHolder = "물품이나 습득 장소에 대한 추가 설명이 있다면 작성해주세요."
+    private var textViewPlaceHolder = ""
     
     private let separateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
@@ -46,7 +46,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     private let pictureMessageLabel = UILabel().then {
-        $0.text = "습득물 사진을 업로드해주세요."
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.gray)
     }
@@ -97,8 +96,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.distribution = .equalSpacing
     }
     
-    private let dateLabel = UILabel().then {
-        $0.text = "습득 일자"
+    private let dateLabel = UILabel().then { _ in
     }
     
     private let dateWarningLabel = UILabel().then {
@@ -113,14 +111,12 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
-        $0.setTitle("습득 장소를 입력해주세요.", for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
         $0.contentHorizontalAlignment = .left
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
     
-    private let locationLabel = UILabel().then {
-        $0.text = "습득 장소"
+    private let locationLabel = UILabel().then { _ in
     }
     
     private let locationWarningLabel = UILabel().then {
@@ -130,10 +126,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     private let locationTextField = UITextField().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.attributedPlaceholder = NSAttributedString(
-            string: "습득 장소를 입력해주세요.",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
-        )
         $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
         $0.leftViewMode = .always
         $0.layer.cornerRadius = 8
@@ -185,10 +177,21 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest) {
+    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
+        textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
+        dateLabel.text = "\(type.description) 일자"
+        dateButton.setTitle("\(type.description) 장소를 입력해주세요.", for: .normal)
+        pictureMessageLabel.text = "\(type.description)물 사진을 업로드해주세요."
+        locationLabel.text = "\(type.description) 장소"
+        locationTextField.attributedPlaceholder = NSAttributedString(
+            string: "\(type.description) 장소를 입력해주세요.",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
+        )
+        itemCountLabel.text = "\(type.description)물 \(index + 1)"
+        
         locationTextField.text = model.location
         if model.foundDate.isEmpty {
-            dateButton.setTitle("습득 장소를 입력해주세요", for: .normal)
+            dateButton.setTitle("\(type.description) 장소를 입력해주세요", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
         } else {
             dateButton.setTitle(model.foundDate, for: .normal)
@@ -201,7 +204,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             contentTextView.textColor = UIColor.appColor(.neutral800)
             contentTextView.text = model.content
         }
-        itemCountLabel.text = "습득물 \(index + 1)"
         deleteCellButton.isHidden = isSingle
         
         let category = model.category

@@ -16,7 +16,7 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
-    
+    private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -46,7 +46,10 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
            addGestureRecognizer(tapGesture)
     }
     
-    
+    func setType(type: LostItemType) {
+        self.type = type
+        reloadData()
+    }
     func addImageUrl(url: String, index: Int) {
         articles[index].images?.append(url)
         reloadData()
@@ -66,7 +69,7 @@ extension AddLostItemCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""))
+        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -104,7 +107,7 @@ extension AddLostItemCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostItemCollectionViewCell.identifier, for: indexPath) as? AddLostItemCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row])
+        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type)
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
             self?.articles.remove(at: indexPath.row)

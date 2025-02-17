@@ -35,7 +35,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-    private let type: LostItemType
+    let type: LostItemType
     
     // MARK: - Initialization
     

@@ -11,7 +11,7 @@ struct PostLostItemRequestWrapper: Encodable {
     let articles: [PostLostItemRequest]
 }
 
-enum LostItemType: String, Codable {
+enum LostItemType: String, Codable, CustomStringConvertible {
     case lost = "LOST"
     case found = "FOUND"
     init(from decoder: Decoder) throws {
@@ -19,6 +19,13 @@ enum LostItemType: String, Codable {
         let rawValue = try container.decode(String.self)
         self = LostItemType(rawValue: rawValue) ?? .lost
     }
+    var description: String {
+        switch self {
+        case .lost: return "분실"
+        case .found: return "습득"
+        }
+    }
+    
 }
 
 struct PostLostItemRequest: Codable {

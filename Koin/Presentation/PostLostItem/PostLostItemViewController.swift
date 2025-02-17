@@ -26,16 +26,13 @@ final class PostLostItemViewController: UIViewController {
     }
     
     private let mainMessageLabel = UILabel().then {
-        $0.text = "주인을 찾아요"
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
     }
     
-    private let messageImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .findPerson)
+    private let messageImageView = UIImageView().then { _ in
     }
     
     private let subMessageLabel = UILabel().then {
-        $0.text = "습득한 물건을 자세히 설명해주세요!"
         $0.font = UIFont.appFont(.pretendardMedium, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
     }
@@ -62,7 +59,6 @@ final class PostLostItemViewController: UIViewController {
     init(viewModel: PostLostItemViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "습득물 신고"
     }
     
     @available(*, unavailable)
@@ -79,6 +75,19 @@ final class PostLostItemViewController: UIViewController {
         writeButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.writeButtonTapped()
         }
+        switch viewModel.type {
+        case .found:
+            mainMessageLabel.text = "주인을 찾아요"
+            messageImageView.image = UIImage.appImage(asset: .findPerson)
+            subMessageLabel.text = "습득한 물건을 자세히 설명해주세요!"
+            navigationItem.title = "습득물 신고"
+        case .lost:
+            mainMessageLabel.text = "잃어버렸어요"
+            messageImageView.image = UIImage.appImage(asset: .lostItem)
+            subMessageLabel.text = "분실한 물건을 자세히 설명해주세요!"
+            navigationItem.title = "분실물 신고"
+        }
+        addLostItemCollectionView.setType(type: viewModel.type)
     }
     
     override func viewWillAppear(_ animated: Bool) {
