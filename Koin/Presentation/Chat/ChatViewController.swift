@@ -61,6 +61,9 @@ final class ChatViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case .showChatList: print(1)
+            case .showToast(let message, let success):
+                self?.showToast(message: message)
+                if success { self?.navigationController?.popViewController(animated: true) }
             }
         }.store(in: &subscriptions)
         

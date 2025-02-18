@@ -10,6 +10,7 @@ import Alamofire
 enum ChatAPI {
     case fetchChatRoom
     case fetchChatDetail(Int, Int)
+    case blockUser(Int, Int)
 }
 
 extension ChatAPI: Router, URLRequestConvertible {
@@ -22,18 +23,20 @@ extension ChatAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchChatRoom: return "/chatroom/lost-item"
         case .fetchChatDetail(let articleId, let chatRoomId): return "/chatroom/lost-item/\(articleId)/\(chatRoomId)/messages"
+        case .blockUser(let articleId, let chatRoomId): return "/chatroom/lost-item/\(articleId)/\(chatRoomId)/block"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .fetchChatRoom, .fetchChatDetail: return .get
+        case .blockUser: return .post
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchChatRoom, .fetchChatDetail:
+        case .fetchChatRoom, .fetchChatDetail, .blockUser:
             if let token = KeychainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
@@ -45,8 +48,8 @@ extension ChatAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchChatRoom: return nil
-        case .fetchChatDetail: return nil
+        case .fetchChatRoom, .fetchChatDetail: return nil
+        case .blockUser: return nil
         }
     }
     
@@ -54,6 +57,7 @@ extension ChatAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchChatRoom: return URLEncoding.default
         case .fetchChatDetail: return nil
+        case .blockUser: return nil
         }
     }
 }

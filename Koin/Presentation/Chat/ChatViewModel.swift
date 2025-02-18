@@ -21,6 +21,7 @@ final class ChatViewModel: ViewModelProtocol {
     
     enum Output {
         case showChatList
+        case showToast(String, Bool)
     }
     
     // MARK: - Properties
@@ -29,6 +30,7 @@ final class ChatViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatDetailUseCase = DefaultFetchChatDetailUseCase(chatRepository: chatRepository)
+    private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
     private let articleId: Int
     private let chatRoomId: Int
     let articleTitle: String
@@ -59,7 +61,13 @@ final class ChatViewModel: ViewModelProtocol {
 extension ChatViewModel {
     
     private func blockUser() {
-        
+        blockUserUserCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToast(error.message, false))
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showToast("사용자가 차단되었습니다.", true))
+        }.store(in: &subscriptions)
     }
     private func fetchChatDetail() {
         fetchChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { completion in

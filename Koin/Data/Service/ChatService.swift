@@ -11,11 +11,27 @@ import Combine
 protocol ChatService {
     func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse>
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse>
+    func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultChatService: ChatService {
     
     private let networkService = NetworkService()
+    
+    func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: ChatAPI.blockUser(articleId, chatRoomId))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: ChatAPI.blockUser(articleId, chatRoomId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse> {
         return networkService.requestWithResponse(api: ChatAPI.fetchChatDetail(articleId, chatRoomId))

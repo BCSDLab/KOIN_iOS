@@ -15,6 +15,10 @@ final class DefaultChatRepository: ChatRepository {
         self.service = service
     }
     
+    func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.blockUser(articleId: articleId, chatRoomId: chatRoomId)
+    }
+    
     func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse> {
         service.fetchChatRoom()
     }
