@@ -1,35 +1,33 @@
 //
-//  NoticeListTableViewKeyWordCell.swift
+//  NoticeListHeaderView.swift
 //  koin
 //
-//  Created by JOOMINKYUNG on 8/18/24.
+//  Created by 김나훈 on 2/18/25.
 //
 
 import Combine
-import SnapKit
-import Then
 import UIKit
 
-final class NoticeListTableViewKeyWordCell: UITableViewCell {
+final class NoticeListHeaderView: UITableViewHeaderFooterView {
+    
     // MARK: - Properties
     
-    static let id = "NoticeListTableViewKeyWordCellIdentifier"
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     var subscriptions = Set<AnyCancellable>()
     
-    // MARK: - UIComponents
+    // MARK: - UI Components
     
-    private let noticeKeywordCollectionView = NoticeKeywordCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
-        flowLayout?.scrollDirection = .horizontal
-    }
-   
+    private let noticeKeywordCollectionView: NoticeKeywordCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        return NoticeKeywordCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+    }()
     // MARK: - Initialization
- 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         configureView()
         noticeKeywordCollectionView.keywordAddBtnTapPublisher.sink { [weak self] in
             self?.keywordAddBtnTapPublisher.send()
@@ -52,19 +50,26 @@ final class NoticeListTableViewKeyWordCell: UITableViewCell {
         configureView()
     }
     
+    
+}
+
+extension NoticeListHeaderView {
     func updateKeyWordsList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
         noticeKeywordCollectionView.updateUserKeywordList(keywordList: keywordList, keywordIdx: keywordIdx)
     }
 }
 
-extension NoticeListTableViewKeyWordCell {
+extension NoticeListHeaderView {
+    
     private func setUpLayouts() {
         contentView.addSubview(noticeKeywordCollectionView)
     }
     
     private func setUpConstraints() {
         noticeKeywordCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(34)
         }
     }
     

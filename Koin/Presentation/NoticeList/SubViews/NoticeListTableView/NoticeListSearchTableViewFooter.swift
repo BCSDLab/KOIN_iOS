@@ -15,8 +15,6 @@ final class NoticeSearchTableViewFooter: UITableViewHeaderFooterView {
     let tapBtnPublisher = PassthroughSubject<Void, Never>()
     var subscriptions = Set<AnyCancellable>()
     
-    static let id = "NoticeSearhTableViewFooter"
-    
     // MARK: - UIComponents
     private let listLoadButton = UIButton().then {
         $0.setTitle("게시물 5개 더보기", for: .normal)
