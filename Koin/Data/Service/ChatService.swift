@@ -12,9 +12,24 @@ protocol ChatService {
     func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse>
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse>
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse>
 }
 
 final class DefaultChatService: ChatService {
+    func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> {
+        return networkService.requestWithResponse(api: ChatAPI.createChatRoom(articleId))
+            .catch { [weak self] error -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: ChatAPI.createChatRoom(articleId)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     private let networkService = NetworkService()
     
@@ -63,7 +78,7 @@ final class DefaultChatService: ChatService {
             .eraseToAnyPublisher()
     }
     
-
+    
     private func request<T: Decodable>(_ api: LandAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)

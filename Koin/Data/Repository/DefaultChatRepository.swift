@@ -15,6 +15,10 @@ final class DefaultChatRepository: ChatRepository {
         self.service = service
     }
     
+    func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> {
+        service.createChatRoom(articleId: articleId)
+    }
+    
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse> {
         service.blockUser(articleId: articleId, chatRoomId: chatRoomId)
     }

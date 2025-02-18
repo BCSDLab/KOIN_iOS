@@ -496,6 +496,8 @@
 		D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */; };
 		D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */; };
 		D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */; };
+		D2D4627C2D6482AA00C60864 /* CreateChatRoomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */; };
+		D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */; };
 		D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0CF2C28285600C85A85 /* LandRepository.swift */; };
 		D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */; };
 		D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */; };
@@ -1097,6 +1099,8 @@
 		D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailDTO.swift; sourceTree = "<group>"; };
 		D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatDetailUseCase.swift; sourceTree = "<group>"; };
 		D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserUseCase.swift; sourceTree = "<group>"; };
+		D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatRoomResponse.swift; sourceTree = "<group>"; };
+		D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatRoomUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0CF2C28285600C85A85 /* LandRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRepository.swift; sourceTree = "<group>"; };
 		D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailUseCase.swift; sourceTree = "<group>"; };
@@ -2881,6 +2885,7 @@
 			children = (
 				D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */,
 				D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */,
+				D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2891,6 +2896,7 @@
 				D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */,
 				D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */,
 				D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */,
+				D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -3454,6 +3460,7 @@
 				83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */,
 				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
 				83EBB88C2D15576400346018 /* OneBusTimetableTableViewFooter.swift in Sources */,
+				D2D4627C2D6482AA00C60864 /* CreateChatRoomResponse.swift in Sources */,
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				D2B7EBD72D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift in Sources */,
@@ -3928,6 +3935,7 @@
 				83E770E92D03636C00EB3F84 /* ManyBusTimetableCollectionView.swift in Sources */,
 				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
+				D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */,
 				D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */,
 				D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */,
 				D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */,
