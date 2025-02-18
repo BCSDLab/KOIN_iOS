@@ -213,7 +213,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeDataViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "공지사항"
+        navigationItem.title = "게시판"
     }
     
     @available(*, unavailable)

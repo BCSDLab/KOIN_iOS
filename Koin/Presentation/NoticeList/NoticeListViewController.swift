@@ -70,7 +70,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "공지사항"
+        navigationItem.title = "게시판"
     }
     
     required init?(coder: NSCoder) {
