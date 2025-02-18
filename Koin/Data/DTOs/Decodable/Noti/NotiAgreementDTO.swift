@@ -45,12 +45,14 @@ enum SubscribeType: String, Codable {
     case diningImageUpload = "DINING_IMAGE_UPLOAD"
     case articleKeyWord = "ARTICLE_KEYWORD"
     case reviewPrompt = "REVIEW_PROMPT"
+    case lostItemChat = "LOST_ITEM_CHAT"
+    case unknown = "UNKNOWN"
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = SubscribeType(rawValue: rawValue) ?? .shopEvent
-    }
+           let container = try decoder.singleValueContainer()
+           let rawValue = try container.decode(String.self)
+           self = SubscribeType(rawValue: rawValue) ?? .unknown 
+       }
 }
 
 enum DetailSubscribeType: String, Codable, CaseIterable {

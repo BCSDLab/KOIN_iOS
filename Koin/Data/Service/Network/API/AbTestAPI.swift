@@ -35,10 +35,10 @@ extension AbTestAPI: Router, URLRequestConvertible {
         switch self {
         case .assignAbTest:
             var defaultHeaders = ["Content-Type": "application/json"]
-            if let accessHistoryId = KeyChainWorker.shared.read(key: .accessHistoryId) {
+            if let accessHistoryId = KeychainWorker.shared.read(key: .accessHistoryId) {
                 defaultHeaders["access_history_id"] = accessHistoryId
             }
-            if let token = KeyChainWorker.shared.read(key: .access) {
+            if let token = KeychainWorker.shared.read(key: .access) {
                 defaultHeaders["Authorization"] = "Bearer \(token)"
             }
             return defaultHeaders

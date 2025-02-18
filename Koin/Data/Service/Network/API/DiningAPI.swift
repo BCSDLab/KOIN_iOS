@@ -40,7 +40,7 @@ extension DiningAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCoopShopList: return [:]
         case .diningLike, .fetchDiningList: 
-            if let token = KeyChainWorker.shared.read(key: .access) {
+            if let token = KeychainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
             } else {

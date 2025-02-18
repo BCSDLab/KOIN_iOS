@@ -73,7 +73,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits, .searchShop: break
         default:
-            if let token = KeyChainWorker.shared.read(key: .access) {
+            if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             } 
         }

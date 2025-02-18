@@ -54,7 +54,7 @@ extension HotNoticeArticlesTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tapHotArticlePublisher.send((popularNoticeArticles[indexPath.row].id, popularNoticeArticles[indexPath.row].title, popularNoticeArticles[indexPath.row].boardId))
+        tapHotArticlePublisher.send((popularNoticeArticles[indexPath.row].id, popularNoticeArticles[indexPath.row].title ?? "", popularNoticeArticles[indexPath.row].boardId))
     }
 }
 

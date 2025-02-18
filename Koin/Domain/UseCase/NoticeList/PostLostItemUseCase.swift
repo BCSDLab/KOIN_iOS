@@ -8,7 +8,7 @@
 import Combine
 
 protocol PostLostItemUseCase {
-    func execute(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
+    func execute(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
 }
 
 final class DefaultPostLostItemUseCase: PostLostItemUseCase {
@@ -19,7 +19,7 @@ final class DefaultPostLostItemUseCase: PostLostItemUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+    func execute(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
         noticeListRepository.postLostItem(request: request)
     }
 }

@@ -17,6 +17,7 @@ enum UserAPI {
     case refreshToken(RefreshTokenRequest)
     case revoke
     case checkAuth
+    case checkLogin
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -36,13 +37,14 @@ extension UserAPI: Router, URLRequestConvertible {
         case .revoke: return "/user"
         case .refreshToken: return "/user/refresh"
         case .checkAuth: return "/user/auth"
+        case .checkLogin: return "/user/check/login"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .refreshToken: return .post
-        case .checkDuplicatedNickname, .fetchUserData, .checkAuth: return .get
+        case .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin: return .get
         case .modify: return .put
         case .revoke: return .delete
         }
@@ -54,12 +56,12 @@ extension UserAPI: Router, URLRequestConvertible {
         switch self {
         case .findPassword, .register, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken:
             baseHeaders["Content-Type"] = "application/json"
-        case .fetchUserData, .revoke, .checkAuth:
+        case .fetchUserData, .revoke, .checkAuth, .checkLogin:
             break
         }
         switch self {
         case .fetchUserData, .revoke, .modify, .checkPassword, .checkAuth :
-            if let token = KeyChainWorker.shared.read(key: .access) {
+            if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
         default: break
@@ -91,6 +93,8 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .checkAuth:
             return nil
+        case .checkLogin:
+            return ["accessToken": KeychainWorker.shared.read(key: .access) ?? ""]
         }
     }
     
@@ -98,6 +102,7 @@ extension UserAPI: Router, URLRequestConvertible {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .modify: return JSONEncoding.default
         case .checkDuplicatedNickname, .fetchUserData, .checkAuth: return URLEncoding.default
+        case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil
         }
     }

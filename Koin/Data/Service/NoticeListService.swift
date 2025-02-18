@@ -11,6 +11,7 @@ import Combine
 protocol NoticeListService {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error>
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
     func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse>
@@ -20,18 +21,53 @@ protocol NoticeListService {
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
-    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
+    func fetchLostItem(id: Int, retry: Bool) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultNoticeService: NoticeListService {
-    
+        
     let networkService = NetworkService()
     let coreDataService = CoreDataService.shared
     
-    func postLostItem(request: [PostLostArticleRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel))
+            .catch { [weak self] error -> AnyPublisher<NoticeListDTO, Error> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" && !retry {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel)) }
+                        .catch { refreshError -> AnyPublisher<NoticeListDTO, Error> in
+                            return self.fetchLostItemArticles(requestModel: requestModel, retry: true)
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: NoticeListAPI.reportLostItem(id, request))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: NoticeListAPI.reportLostItem(id, request)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))
             .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
@@ -49,9 +85,22 @@ final class DefaultNoticeService: NoticeListService {
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
         return request(.fetchLostItemList(requestModel))
     }
-    
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error> {
-        return request(.fetchLostItem(id))
+    func fetchLostItem(id: Int, retry: Bool = false) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id))
+            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" && !retry {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id)) }
+                        .catch { refreshError -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+                            return self.fetchLostItem(id: id, retry: true)
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse> {

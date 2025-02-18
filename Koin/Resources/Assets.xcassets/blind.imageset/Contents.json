@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "blind.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

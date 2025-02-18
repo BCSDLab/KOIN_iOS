@@ -22,19 +22,14 @@ final class NotiViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    private let scrollView = UIScrollView().then { _ in
+    }
     
-    private let stackView: UIView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 0
-        return stackView
-        
-    }()
+    private let stackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fillEqually
+        $0.spacing = 0
+    }
     
     private let soldOutWrapView: UIView = {
         let view = UIView()
@@ -50,6 +45,9 @@ final class NotiViewController: UIViewController {
         let view = UIView()
         return view
     }()
+    
+    private let chatWrappedView = UIView().then { _ in
+    }
     
     private let eventWrapView: UIView = {
         let view = UIView()
@@ -102,6 +100,33 @@ final class NotiViewController: UIViewController {
         label.attributedText = attributedString
         return label
     }()
+    
+    private let noticeGuideLabel: UILabel = {
+           let label = UILabel()
+           let paragraphStyle = NSMutableParagraphStyle()
+           paragraphStyle.firstLineHeadIndent = 24.0
+           let attributedString = NSAttributedString(string: "게시판", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+           label.attributedText = attributedString
+           return label
+    }()
+    
+    private let chatNotiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "쪽지 알림"
+        return label
+    }()
+    
+    private let chatSwitch: UISwitch = {
+        let uiSwitch = UISwitch()
+        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        return uiSwitch
+    }()
+    
+    private let chatDescriptionLabel: UILabel = {
+           let label = UILabel()
+           label.text = "쪽지가 도착하면 알림을 받습니다."
+           return label
+       }()
     
     private let keywordNotiLabel: UILabel = {
         let label = UILabel()
@@ -220,10 +245,9 @@ final class NotiViewController: UIViewController {
         setupTimeWrapView()
         configureView()
         inputSubject.send(.getNotiAgreementList)
-        soldOutSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
-        eventSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
-        reviewSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
-        diningImageUploadSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+        [soldOutSwitch, eventSwitch, reviewSwitch, diningImageUploadSwitch, chatSwitch].forEach {
+            $0.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+        }
         mealSwitches.forEach { switchControl in
             switchControl.addTarget(self, action: #selector(switchDetailValueChanged), for: .valueChanged)
         }
@@ -290,6 +314,7 @@ extension NotiViewController {
         case diningImageUploadSwitch: inputSubject.send(.switchChanged(.diningImageUpload, sender.isOn))
         case eventSwitch: inputSubject.send(.switchChanged(.shopEvent, sender.isOn))
         case reviewSwitch: inputSubject.send(.switchChanged(.reviewPrompt, sender.isOn))
+        case chatSwitch: inputSubject.send(.switchChanged(.lostItemChat, sender.isOn))
         default: break
         }
     }
@@ -315,7 +340,6 @@ extension NotiViewController {
     }
     
     private func changeSwitch(_ dto: NotiAgreementDTO) {
-        print(dto)
         dto.subscribes?.forEach { subscribe in
             switch subscribe.type {
             case .diningSoldOut:
@@ -330,6 +354,9 @@ extension NotiViewController {
                 diningImageUploadSwitch.isOn = subscribe.isPermit ?? false
             case .reviewPrompt:
                 reviewSwitch.isOn = subscribe.isPermit ?? false
+            case .lostItemChat:
+                chatSwitch.isOn = subscribe.isPermit ?? false
+            case .articleKeyWord: print("키워드는 여기 페이지 아님!")
             default:
                 print("none")
             }
@@ -356,42 +383,29 @@ extension NotiViewController {
     private func setUpLayOuts() {
         
         view.addSubview(scrollView)
-        
-        
-        
-        [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView].forEach {
+        [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView, diningImageUploadWrapView, shopGuideLabel, eventWrapView, reviewWrapView, noticeGuideLabel, chatWrappedView].forEach {
             scrollView.addSubview($0)
         }
-        
         mealViews.forEach {
             scrollView.addSubview($0)
         }
-        
-        [diningImageUploadWrapView].forEach {
-            scrollView.addSubview($0)
-        }
-        
-        [shopGuideLabel, eventWrapView, reviewWrapView].forEach {
-            scrollView.addSubview($0)
-        }
-        
         [soldOutNotiLabel, soldOutSwitch, soldOutDescriptionLabel].forEach {
             soldOutWrapView.addSubview($0)
         }
-        
         [keywordNotiLabel, keywordNotiDescriptionLabel, keywordNotiChevronImage].forEach {
             noticeKeywordWrappedView.addSubview($0)
         }
-        
         [diningImageUploadNotiLabel, diningImageUploadSwitch, diningImageUploadDescriptionLabel].forEach {
             diningImageUploadWrapView.addSubview($0)
         }
-        
         [eventNotiLabel, eventSwitch, eventDescriptionLabel].forEach {
             eventWrapView.addSubview($0)
         }
         [reviewNotiLabel, reviewSwitch, reviewDescriptionLabel].forEach {
             reviewWrapView.addSubview($0)
+        }
+        [chatNotiLabel, chatSwitch, chatDescriptionLabel].forEach {
+            chatWrappedView.addSubview($0)
         }
         
     }
@@ -467,10 +481,35 @@ extension NotiViewController {
             make.top.equalTo(diningImageUploadNotiLabel.snp.bottom).offset(8)
             make.height.equalTo(17)
         }
-        
+        noticeGuideLabel.snp.makeConstraints { make in
+            make.top.equalTo(diningImageUploadWrapView.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(33)
+        }
+        chatWrappedView.snp.makeConstraints { make in
+            make.top.equalTo(noticeKeywordWrappedView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(83)
+        }
+        chatNotiLabel.snp.makeConstraints { make in
+            make.leading.equalTo(24)
+            make.height.equalTo(26)
+            make.top.equalTo(16)
+        }
+        chatDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(24)
+            make.top.equalTo(chatNotiLabel.snp.bottom).offset(8)
+            make.height.equalTo(17)
+        }
+        chatSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
+        chatSwitch.snp.makeConstraints { make in
+            make.trailing.equalTo(view.snp.trailing).inset(21)
+            make.top.equalToSuperview().inset(15)
+        }
         noticeKeywordWrappedView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(diningImageUploadWrapView.snp.bottom)
+            make.top.equalTo(noticeGuideLabel.snp.bottom)
             make.height.equalTo(83)
         }
         
@@ -495,7 +534,7 @@ extension NotiViewController {
     
         shopGuideLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(noticeKeywordWrappedView.snp.bottom)
+            make.top.equalTo(chatWrappedView.snp.bottom)
             make.height.equalTo(33)
         }
         
@@ -548,26 +587,26 @@ extension NotiViewController {
     }
     
     private func setUpViewDetails() {
-        [diningGuideLabel, shopGuideLabel].forEach { label in
+        [diningGuideLabel, shopGuideLabel, noticeGuideLabel].forEach { label in
             label.backgroundColor = UIColor.appColor(.neutral50)
             label.textColor = UIColor.appColor(.neutral600)
             label.font = UIFont.appFont(.pretendardMedium, size: 14)
             label.contentMode = .center
         }
         
-        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel, reviewNotiLabel].forEach { label in
+        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel, reviewNotiLabel, chatNotiLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral800)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardMedium, size: 16)
         }
         
-        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel, reviewDescriptionLabel].forEach { label in
+        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel, reviewDescriptionLabel, chatDescriptionLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral500)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardRegular, size: 13)
         }
         
-        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView, reviewWrapView].forEach { view in
+        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView, reviewWrapView, chatWrappedView].forEach { view in
             view.backgroundColor = .systemBackground
             view.layer.borderWidth = 0.5
             view.layer.borderColor = UIColor.appColor(.neutral100).cgColor

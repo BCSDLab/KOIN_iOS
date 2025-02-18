@@ -85,7 +85,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
         $0.text = "추천 키워드"
     }
     
-    private let keywordLoginModalViewController = LoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "키워드 알림을 받으려면\n로그인이 필요해요.", subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
+    private let keywordLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "키워드 알림을 받으려면\n로그인이 필요해요.", subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
@@ -166,14 +166,14 @@ final class ManageNoticeKeywordViewController: UIViewController {
             self?.inputSubject.send(.addKeyword(keyword: keyword, isRecommended: true))
         }.store(in: &subscriptions)
         
-        keywordLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        keywordLoginModalViewController.rightButtonPublisher.sink { [weak self] in
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
             self?.navigationController?.pushViewController(loginViewController, animated: true)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "로그인하기"))
         }.store(in: &subscriptions)
         
-        keywordLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
+        keywordLoginModalViewController.leftButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
         }.store(in: &subscriptions)
     }

@@ -113,7 +113,7 @@ extension AppDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken else { return }
         
-        KeyChainWorker.shared.create(key: .fcm, token: fcmToken)
+        KeychainWorker.shared.create(key: .fcm, token: fcmToken)
         
         let dataDict: [String: String] = ["token": fcmToken]
         NotificationCenter.default.post(

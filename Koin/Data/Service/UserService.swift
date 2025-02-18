@@ -18,11 +18,35 @@ protocol UserService {
     func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
+    func checkLogin() -> AnyPublisher<Bool, Never>
 }
 
 final class DefaultUserService: UserService {
     private let networkService = NetworkService()
     
+    func checkLogin() -> AnyPublisher<Bool, Never> {
+        networkService.request(api: UserAPI.checkLogin)
+            .map { _ in true } 
+            .catch { [weak self] error -> AnyPublisher<Bool, Never> in
+                guard let self = self else {
+                    return Just(false).eraseToAnyPublisher()
+                }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.checkLogin) }
+                        .map { _ in true }
+                        .replaceError(with: false)
+                        .eraseToAnyPublisher()
+                } else {
+                    return Just(false).eraseToAnyPublisher()
+                }
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+
+
+
     
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.checkAuth)

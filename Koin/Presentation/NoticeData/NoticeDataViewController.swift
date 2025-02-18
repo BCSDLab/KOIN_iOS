@@ -134,6 +134,17 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         $0.textColor = UIColor.appColor(.neutral800)
+        $0.numberOfLines = 0
+    }
+    
+    private let sendChatLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private let reportLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 신고 하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
     }
     
     private let councilLabel = UILabel().then {
@@ -171,6 +182,29 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.isHidden = true
     }
     
+    private let chatButton = UIButton().then {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .chat)
+        var text = AttributedString("쪽지 보내기")
+        text.font = UIFont.appFont(.pretendardMedium, size: 12)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 4
+        configuration.baseBackgroundColor = UIColor.appColor(.neutral300)
+        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
+        $0.configuration = configuration
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.isHidden = true
+    }
+    
+    private let reportButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .siren), for: .normal)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.isHidden = true
+    }
     
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
     
@@ -179,7 +213,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeDataViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "공지사항"
+        navigationItem.title = "게시판"
     }
     
     @available(*, unavailable)
@@ -193,6 +227,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
         urlRedirectButton.addTarget(self, action: #selector(tapUrlRedirectButton), for: .touchUpInside)
+        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
@@ -206,7 +242,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         if viewModel.boardId == 14 {
             lostItemConfigureView()
             inputSubject.send(.fetchLostItem(viewModel.noticeId))
-            inputSubject.send(.checkAuth)
         } else {
             commonConfigureView()
             inputSubject.send(.getNoticeData)
@@ -234,9 +269,19 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateLostItem(lostItem)
             case let .showToast(message):
                 self?.showToast(message: message)
-                self?.navigationController?.popViewController(animated: true)
             case let .showAuth(userType):
                 self?.deleteButton.isHidden = userType.userType != .council
+            case let .showLoginModal(checkType):
+                self?.showLoginModal(checkType)
+            case let .navigateToScene(checkType, noticeId):
+                switch checkType {
+                case .report: self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
+                case .chat: self?.inputSubject.send(.createChatRoom)
+                }
+            case .popViewController:
+                self?.navigationController?.popViewController(animated: true)
+            case let .navigateToChat(articleId, chatRoomId, articleTitle):
+                self?.navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: articleTitle)), animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -262,10 +307,33 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
             self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
+        
+        reportLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
+        
+        sendChatLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
     }
 }
 
 extension NoticeDataViewController {
+ 
+    private func showLoginModal(_ checkType: NoticeDataViewModel.CheckType) {
+        switch checkType {
+        case .report: present(reportLostItemLoginModalViewController, animated: false)
+        case .chat: present(sendChatLoginModalViewController, animated: false)
+        }
+    }
+    
+    @objc private func chatButtonTapped() {
+        inputSubject.send(.checkLogin(.chat))
+    }
+    
+    @objc private func reportButtonTapped() {
+        inputSubject.send(.checkLogin(.report))
+    }
     
     @objc private func deleteButtonTapped() {
         inputSubject.send(.deleteLostItem)
@@ -273,14 +341,14 @@ extension NoticeDataViewController {
     
     private func updateLostItem(_ item: LostArticleDetailDTO) {
         
-        titleGuideLabel.text = NoticeListType(rawValue: item.boardId)?.displayName
+        titleGuideLabel.text = "\(item.type?.description ?? "")물"
         categoryLabel.text = item.category
         titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
-       
+        
         
         nickNameLabel.text = item.author
         createdDateLabel.text = item.registeredAt
-        let imageUrls = item.image?.map { $0.imageUrl } ?? []
+        let imageUrls = item.images?.map { $0.imageUrl } ?? []
         imageCollectionView.setImageUrls(urls: imageUrls)
         contentLabel.text = item.content
         if imageUrls.isEmpty {
@@ -291,7 +359,10 @@ extension NoticeDataViewController {
         imageCollectionView.isHidden = imageUrls.isEmpty
         pageControl.currentPage = 0
         pageControl.numberOfPages = imageUrls.count
-        councilLabel.isHidden = item.author != "총학생회"
+        councilLabel.isHidden = item.isCouncil == false
+        deleteButton.isHidden = item.isMine == false
+        chatButton.isHidden = item.isCouncil == true || item.isMine == true
+        reportButton.isHidden = item.isCouncil == true || item.isMine == true
     }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
@@ -361,7 +432,7 @@ extension NoticeDataViewController {
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = false
             }
-            hitLabel.text = "\(noticeData.hit.formattedWithComma)"
+            hitLabel.text = "\(noticeData.hit?.formattedWithComma ?? "")"
         }
         if !noticeData.attachments.isEmpty {
             noticeAttachmentsTableView.updateNoticeAttachments(attachments: noticeData.attachments)
@@ -589,7 +660,7 @@ extension NoticeDataViewController {
     private func setUpLostItemLayouts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2].forEach {
+        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2, chatButton, reportButton].forEach {
             contentView.addSubview($0)
         }
         [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, categoryLabel].forEach {
@@ -678,6 +749,18 @@ extension NoticeDataViewController {
             make.trailing.equalTo(imageCollectionView.snp.trailing)
             make.width.equalTo(61)
             make.height.equalTo(31)
+        }
+        reportButton.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton)
+            make.trailing.equalTo(imageCollectionView.snp.trailing)
+            make.width.equalTo(40)
+            make.height.equalTo(32)
+        }
+        chatButton.snp.makeConstraints { make in
+            make.top.equalTo(inventoryButton)
+            make.trailing.equalTo(reportButton.snp.leading).offset(-8)
+            make.width.equalTo(105)
+            make.height.equalTo(32)
         }
         separateView2.snp.makeConstraints { make in
             make.top.equalTo(inventoryButton.snp.bottom).offset(16)

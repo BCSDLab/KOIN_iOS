@@ -97,8 +97,8 @@ final class DiningViewController: UIViewController {
     }()
     
     private let diningNotiContentViewController = DiningNotiContentViewController()
-    private let diningLikeLoginModalViewController: LoginModalViewController = {
-        let viewController = LoginModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray))
+    private let diningLikeLoginModalViewController: ModalViewController = {
+        let viewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         return viewController
@@ -238,7 +238,7 @@ final class DiningViewController: UIViewController {
             self?.diningNotiContentViewController.dissmissView()
         }.store(in: &subscriptions)
         
-        diningLikeLoginModalViewController.loginButtonPublisher.sink { [weak self] in
+        diningLikeLoginModalViewController.rightButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
@@ -265,12 +265,6 @@ extension DiningViewController {
         if !hasShownImage {
             inputSubject.send(.fetchNotiList)
         }
-    }
-    
-    private func navigateToLogin() {
-        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-        loginViewController.title = "로그인"
-        navigationController?.pushViewController(loginViewController, animated: true)
     }
     
     private func navigateToNoti() {

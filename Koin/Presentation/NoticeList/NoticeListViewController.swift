@@ -38,9 +38,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 18
         $0.contentHorizontalAlignment = .center
-        $0.isHidden = true
         $0.layer.borderWidth = 1.0
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.isHidden = true
     }
     
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
@@ -50,12 +50,27 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
     
+    private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private let writeTypeModalViewController = WriteTypeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private let fetchTypeModalViewController = FetchTypeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "공지사항"
+        navigationItem.title = "게시판"
     }
     
     required init?(coder: NSCoder) {
@@ -73,14 +88,13 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         inputSubject.send(.checkAuth)
         let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButton
-        
+        inputSubject.send(.changeBoard(viewModel.noticeListType))
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
-        inputSubject.send(.changeBoard(viewModel.noticeListType))
         configureNavigationBar(style: .empty)
     }
     
@@ -91,14 +105,18 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-                self?.writeButton.isHidden = (self?.viewModel.noticeListType != .lostItem || self?.viewModel.auth != .council)
+                self?.writeButton.isHidden = self?.viewModel.noticeListType != .lostItem
             case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
                 self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
             case let .isLogined(isLogined):
                 self?.checkAndShowToolTip(isLogined: isLogined)
+            case let .showIsLogined(isLogined):
+                if isLogined { strongSelf.present(strongSelf.writeTypeModalViewController, animated: true) }
+                else { strongSelf.present(strongSelf.postLostItemLoginModalViewController, animated: true) }
             }
         }.store(in: &subscriptions)
         
@@ -141,11 +159,43 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
             self?.noticeToolTipImageView.isHidden = true
         }
+        
+        postLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] in
+            self?.navigateToLogin()
+        }.store(in: &subscriptions)
+        
+        writeTypeModalViewController.findButtonPublisher.sink { [weak self] in
+            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+            viewController.delegate = self
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        writeTypeModalViewController.lostButtonPublisher.sink { [weak self] in
+            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
+            viewController.delegate = self
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        noticeTableView.typeButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            present(fetchTypeModalViewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        fetchTypeModalViewController.typePublisher.sink { [weak self] type in
+            guard let self = self else { return }
+            viewModel.fetchType = type
+            inputSubject.send(.changeBoard(viewModel.noticeListType))
+        }.store(in: &subscriptions)
     }
 }
 
 extension NoticeListViewController {
     
+    func fetchLostItems() {
+        inputSubject.send(.changeBoard(viewModel.noticeListType))
+    }
     func navigateToNoticeData(noticeId: Int, boardId: Int) {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
@@ -158,10 +208,7 @@ extension NoticeListViewController {
        navigationController?.pushViewController(noticeDataVc, animated: true)
     }
     @objc private func writeButtonTapped() {
-        let viewController = LostArticleReportViewController(viewModel: LostArticleReportViewModel())
-        viewController.delegate = self
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
-        navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.checkLogin)
     }
     
     @objc private func searchButtonTapped() {
@@ -227,6 +274,9 @@ extension NoticeListViewController {
     }
     
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
+        fetchTypeModalViewController.setInset(inset: noticeTableView.frame.origin.y + 50)
+        fetchTypeModalViewController.setText(type: viewModel.fetchType)
+        noticeTableView.setType(type: viewModel.fetchType)
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
         if noticeListType.rawValue < 9 {

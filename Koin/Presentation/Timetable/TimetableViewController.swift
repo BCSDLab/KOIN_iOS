@@ -127,7 +127,7 @@ final class TimetableViewController: UIViewController {
         bind()
         configureView()
         inputSubject.send(.fetchMySemester)
-        print(KeyChainWorker.shared.read(key: .access))
+        print(KeychainWorker.shared.read(key: .access))
         semesterSelectButton.addTarget(self, action: #selector(modifySemesterButtonTapped), for: .touchUpInside)
         downloadImageButton.addTarget(self, action: #selector(downloadTimetableAsImage), for: .touchUpInside)
     }
