@@ -12,7 +12,7 @@ struct LostArticleDetailDTO: Decodable {
     let type: LostItemType?
     let category, foundPlace, foundDate: String
     let content: String?
-    let author: String
+    let author: String?
     let images: [Image]?
     let isCouncil: Bool?
     let isMine: Bool?

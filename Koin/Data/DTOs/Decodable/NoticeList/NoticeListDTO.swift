@@ -24,7 +24,7 @@ struct NoticeListDTO: Decodable {
 struct NoticeArticleDTO: Decodable {
     let id, boardId: Int
     let title: String?
-    let author: String
+    let author: String?
     let hit: Int?
     let type: LostItemType?
     let category: String?
@@ -79,7 +79,7 @@ extension NoticeListDTO {
 
 extension NoticeArticleDTO {
     func toDomain() -> NoticeDataInfo {
-        return NoticeDataInfo(title: title ?? "", boardId: boardId, content: content ?? "", author: author, hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
+        return NoticeDataInfo(title: title ?? "", boardId: boardId, content: content ?? "", author: author ?? "-", hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDTO {
