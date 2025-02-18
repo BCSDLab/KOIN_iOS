@@ -148,10 +148,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let settingButton = UIBarButtonItem(
-              image: UIImage.appImage(asset: .gear), style: .plain, target: self, action: #selector(settingButtonTapped))
-          settingButton.tintColor = UIColor.appColor(.neutral800)
-          navigationItem.rightBarButtonItem = settingButton
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+        let gearImage = UIImage(systemName: "gearshape", withConfiguration: symbolConfig)
+        let chatImage = UIImage(systemName: "text.bubble", withConfiguration: symbolConfig)
+        let settingButton = UIBarButtonItem(image: gearImage, style: .plain, target: self, action: #selector(settingButtonTapped))
+        let chatButton = UIBarButtonItem(image: chatImage, style: .plain, target: self, action: #selector(chatButtonTapped))
+        navigationItem.rightBarButtonItems = [settingButton, chatButton]
         configureView()
         setupButtonActions()
         bind()
@@ -234,6 +236,11 @@ extension ServiceSelectViewController {
     
     @objc private func settingButtonTapped() {
         let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc private func chatButtonTapped() {
+        let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
     }
     
