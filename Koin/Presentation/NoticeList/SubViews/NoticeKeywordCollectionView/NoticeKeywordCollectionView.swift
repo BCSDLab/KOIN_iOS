@@ -32,6 +32,7 @@ final class NoticeKeywordCollectionView: UICollectionView, UICollectionViewDataS
         register(NoticeKeywordCollectionViewCell.self, forCellWithReuseIdentifier: NoticeKeywordCollectionViewCell.identifier)
         dataSource = self
         delegate = self
+        isScrollEnabled = true
         showsHorizontalScrollIndicator = false
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }

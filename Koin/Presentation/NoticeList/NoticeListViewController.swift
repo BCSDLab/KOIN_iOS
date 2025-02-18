@@ -60,6 +60,11 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private let fetchTypeModalViewController = FetchTypeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: NoticeListViewModel) {
@@ -172,6 +177,17 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        noticeTableView.typeButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            present(fetchTypeModalViewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        fetchTypeModalViewController.typePublisher.sink { [weak self] type in
+            guard let self = self else { return }
+            viewModel.fetchType = type
+            inputSubject.send(.changeBoard(viewModel.noticeListType))
+        }.store(in: &subscriptions)
     }
 }
 
@@ -258,6 +274,9 @@ extension NoticeListViewController {
     }
     
     private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
+        fetchTypeModalViewController.setInset(inset: noticeTableView.frame.origin.y + 50)
+        fetchTypeModalViewController.setText(type: viewModel.fetchType)
+        noticeTableView.setType(type: viewModel.fetchType)
         tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
         noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
         if noticeListType.rawValue < 9 {

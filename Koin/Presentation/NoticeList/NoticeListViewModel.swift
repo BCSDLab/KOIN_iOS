@@ -33,6 +33,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
+    var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
             getNoticeInfo(page: 1)
@@ -54,7 +55,7 @@ final class NoticeListViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case let .changeBoard(noticeListType):
-                self?.changeBoard(noticeListType: noticeListType)
+                self?.noticeListType = noticeListType
             case let .changePage(page):
                 self?.getNoticeInfo(page: page)
             case let .getUserKeywordList(keyword):
@@ -90,12 +91,9 @@ extension NoticeListViewModel {
         }).store(in: &subscriptions)
         
     }
-    private func changeBoard(noticeListType: NoticeListType) {
-        self.noticeListType = noticeListType
-    }
     
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: nil).sink(receiveCompletion: { completion in
+        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: fetchType).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

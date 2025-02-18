@@ -10,7 +10,7 @@ import UIKit
 
 final class NoticeListTableView: UITableView {
     // MARK: - Properties
-    private var noticeArticleList: [NoticeArticleDTO] = []
+    private var noticeArticleList: [NoticeArticleDTO] = [] 
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
@@ -19,6 +19,7 @@ final class NoticeListTableView: UITableView {
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let isScrolledPublisher = PassthroughSubject<Void, Never>()
+    let typeButtonPublisher = PassthroughSubject<Void, Never>()
     private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
@@ -56,12 +57,17 @@ final class NoticeListTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
+    func setType(type: LostItemType?) {
+        headerView.setText(type: type)
+    }
+    
     func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
         isForSearch = false
         let indexSet = IndexSet(integer: 0)
         reloadSections(indexSet, with: .automatic)
+        headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
     func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isLastPage: Bool, isNewKeyword: Bool) {
@@ -75,6 +81,7 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
         let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
         scrollToRow(at: IndexPath, at: .bottom, animated: true)
+        headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
     func updateKeywordList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
@@ -127,6 +134,9 @@ extension NoticeListTableView: UITableViewDataSource {
         headerView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.manageKeyWordBtnTapPublisher.send()
         }.store(in: &headerCancellables)
+        headerView.typeButtonPublisher.sink { [weak self] in
+            self?.typeButtonPublisher.send()
+        }.store(in: &headerCancellables)
         return headerView
     }
     
@@ -173,7 +183,10 @@ extension NoticeListTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if noticeArticleList.first?.boardId == 14 {
+        if isForSearch {
+            return 0
+        }
+        else if noticeArticleList.first?.boardId == 14 {
             return 120
         } else {
             return 66
