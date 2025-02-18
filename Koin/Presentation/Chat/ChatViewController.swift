@@ -24,6 +24,10 @@ final class ChatViewController: UIViewController {
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private let blockCheckModalViewController = BlockCheckModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
     
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel
@@ -69,6 +73,11 @@ final class ChatViewController: UIViewController {
         
         
         blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
+            guard let self = self else { return }
+            present(blockCheckModalViewController, animated: true)
+        }.store(in: &subscriptions)
+        
+        blockCheckModalViewController.buttonPublihser.sink { [weak self] _ in
             self?.inputSubject.send(.blockUser)
         }.store(in: &subscriptions)
     }
@@ -76,7 +85,7 @@ final class ChatViewController: UIViewController {
 
 extension ChatViewController{
     @objc private func rightButtonTapped() {
-        present(blockModalViewController, animated: true)
+        present(blockCheckModalViewController, animated: true)
     }
   
 }

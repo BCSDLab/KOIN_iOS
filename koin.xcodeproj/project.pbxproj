@@ -498,6 +498,7 @@
 		D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */; };
 		D2D4627C2D6482AA00C60864 /* CreateChatRoomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */; };
 		D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */; };
+		D2D462822D64997800C60864 /* BlockCheckModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462812D64997800C60864 /* BlockCheckModalViewController.swift */; };
 		D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0CF2C28285600C85A85 /* LandRepository.swift */; };
 		D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */; };
 		D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */; };
@@ -1101,6 +1102,7 @@
 		D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserUseCase.swift; sourceTree = "<group>"; };
 		D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatRoomResponse.swift; sourceTree = "<group>"; };
 		D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatRoomUseCase.swift; sourceTree = "<group>"; };
+		D2D462812D64997800C60864 /* BlockCheckModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCheckModalViewController.swift; sourceTree = "<group>"; };
 		D2D7C0CF2C28285600C85A85 /* LandRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRepository.swift; sourceTree = "<group>"; };
 		D2D7C0D42C28298500C85A85 /* FetchLandListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListUseCase.swift; sourceTree = "<group>"; };
 		D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailUseCase.swift; sourceTree = "<group>"; };
@@ -3173,6 +3175,7 @@
 		D2FFA9792D6200F100EF8E56 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				D2D462812D64997800C60864 /* BlockCheckModalViewController.swift */,
 				D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */,
 				D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */,
 			);
@@ -3553,6 +3556,7 @@
 				D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				D27DD0A92BA608310081FD36 /* ShopGuideView.swift in Sources */,
+				D2D462822D64997800C60864 /* BlockCheckModalViewController.swift in Sources */,
 				833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */,
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,

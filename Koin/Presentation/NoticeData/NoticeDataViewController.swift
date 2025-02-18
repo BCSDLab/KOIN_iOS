@@ -269,13 +269,19 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateLostItem(lostItem)
             case let .showToast(message):
                 self?.showToast(message: message)
-                self?.navigationController?.popViewController(animated: true)
             case let .showAuth(userType):
                 self?.deleteButton.isHidden = userType.userType != .council
             case let .showLoginModal(checkType):
                 self?.showLoginModal(checkType)
             case let .navigateToScene(checkType, noticeId):
-                self?.navigateToScene(checkType, noticeId)
+                switch checkType {
+                case .report: self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
+                case .chat: self?.inputSubject.send(.createChatRoom)
+                }
+            case .popViewController:
+                self?.navigationController?.popViewController(animated: true)
+            case let .navigateToChat(articleId, chatRoomId, articleTitle):
+                self?.navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: articleTitle)), animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -318,13 +324,6 @@ extension NoticeDataViewController {
         switch checkType {
         case .report: present(reportLostItemLoginModalViewController, animated: false)
         case .chat: present(sendChatLoginModalViewController, animated: false)
-        }
-    }
-    
-    private func navigateToScene(_ checkType: NoticeDataViewModel.CheckType, _ noticeId: Int) {
-        switch checkType {
-        case .report: navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
-        case .chat: navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel(articleId: 0, chatRoomId: 0, articleTitle: "")), animated: true)
         }
     }
     
