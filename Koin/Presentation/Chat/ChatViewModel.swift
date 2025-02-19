@@ -13,6 +13,7 @@ final class ChatViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
+        case uploadFile([Data])
         case fetchChatDetail
         case blockUser
     }
@@ -20,8 +21,9 @@ final class ChatViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-        case showChatList
+        case showChatHistory([ChatMessage])
         case showToast(String, Bool)
+        case addImageUrl(String)
     }
     
     // MARK: - Properties
@@ -31,10 +33,11 @@ final class ChatViewModel: ViewModelProtocol {
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatDetailUseCase = DefaultFetchChatDetailUseCase(chatRepository: chatRepository)
     private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
+    private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     private let articleId: Int
     private let chatRoomId: Int
     let articleTitle: String
-    private(set) var chatDetails: [ChatDetailDTO] = []
     
     // MARK: - Initialization
     
@@ -48,9 +51,11 @@ final class ChatViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .fetchChatDetail:
-                self?.fetchChatDetail()
+                self?.fetchUserData()
             case .blockUser:
                 self?.blockUser()
+            case .uploadFile(let files):
+                self?.uploadFiles(files: files)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -60,6 +65,26 @@ final class ChatViewModel: ViewModelProtocol {
 
 extension ChatViewModel {
     
+    private func uploadFiles(files: [Data]) {
+        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToast(error.message, false))
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.addImageUrl(response.fileUrls.first ?? ""))
+        }.store(in: &subscriptions)
+        
+    }
+    private func fetchUserData() {
+        fetchUserDataUseCase.execute().sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToast(error.message, false))
+            }
+        } receiveValue: { [weak self] response in
+            self?.fetchChatDetail(userId: response.id)
+        }.store(in: &subscriptions)
+
+    }
     private func blockUser() {
         blockUserUserCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -69,16 +94,14 @@ extension ChatViewModel {
             self?.outputSubject.send(.showToast("사용자가 차단되었습니다.", true))
         }.store(in: &subscriptions)
     }
-    private func fetchChatDetail() {
-        fetchChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { completion in
+    private func fetchChatDetail(userId: Int) {
+        fetchChatDetailUseCase.execute(userId: userId, articleId: articleId, chatRoomId: chatRoomId).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.chatDetails = response
-            print(response)
+            self?.outputSubject.send(.showChatHistory(response))
         }.store(in: &subscriptions)
-
     }
     
 }

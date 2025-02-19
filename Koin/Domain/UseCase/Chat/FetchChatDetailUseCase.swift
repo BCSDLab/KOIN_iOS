@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchChatDetailUseCase {
-    func execute(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse>
+    func execute(userId: Int, articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatMessage], ErrorResponse>
 }
 final class DefaultFetchChatDetailUseCase: FetchChatDetailUseCase {
     
@@ -18,7 +18,11 @@ final class DefaultFetchChatDetailUseCase: FetchChatDetailUseCase {
         self.chatRepository = chatRepository
     }
     
-    func execute(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse> {
+    func execute(userId: Int, articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatMessage], ErrorResponse> {
         return chatRepository.fetchChatDetail(articleId: articleId, chatRoomId: chatRoomId)
+            .map { dtos in
+                dtos.map { $0.toDomain(currentUserId: userId) }
+            }
+            .eraseToAnyPublisher()
     }
 }

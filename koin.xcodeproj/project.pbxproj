@@ -444,6 +444,11 @@
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
 		D2B219282D64D69D00EAF5B1 /* FetchTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219272D64D69D00EAF5B1 /* FetchTypeModalViewController.swift */; };
+		D2B219312D665ACC00EAF5B1 /* ChatHistoryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219302D665ACC00EAF5B1 /* ChatHistoryTableView.swift */; };
+		D2B219332D665B1400EAF5B1 /* ChatTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219322D665B1400EAF5B1 /* ChatTextTableViewCell.swift */; };
+		D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219342D665B2900EAF5B1 /* ChatImageTableViewCell.swift */; };
+		D2B219392D665BFA00EAF5B1 /* ChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219382D665BFA00EAF5B1 /* ChatDateHeaderView.swift */; };
+		D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */; };
 		D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */; };
 		D2B7EBAC2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */; };
 		D2B7EBAF2D3538F100EE46B0 /* AddLostItemFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */; };
@@ -1048,6 +1053,11 @@
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
 		D2B219272D64D69D00EAF5B1 /* FetchTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchTypeModalViewController.swift; sourceTree = "<group>"; };
+		D2B219302D665ACC00EAF5B1 /* ChatHistoryTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryTableView.swift; sourceTree = "<group>"; };
+		D2B219322D665B1400EAF5B1 /* ChatTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTextTableViewCell.swift; sourceTree = "<group>"; };
+		D2B219342D665B2900EAF5B1 /* ChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImageTableViewCell.swift; sourceTree = "<group>"; };
+		D2B219382D665BFA00EAF5B1 /* ChatDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeaderView.swift; sourceTree = "<group>"; };
+		D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryData.swift; sourceTree = "<group>"; };
 		D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionView.swift; sourceTree = "<group>"; };
 		D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemFooterView.swift; sourceTree = "<group>"; };
@@ -2725,6 +2735,17 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		D2B2192F2D665A7B00EAF5B1 /* ChatHistoryTableView */ = {
+			isa = PBXGroup;
+			children = (
+				D2B219302D665ACC00EAF5B1 /* ChatHistoryTableView.swift */,
+				D2B219322D665B1400EAF5B1 /* ChatTextTableViewCell.swift */,
+				D2B219342D665B2900EAF5B1 /* ChatImageTableViewCell.swift */,
+				D2B219382D665BFA00EAF5B1 /* ChatDateHeaderView.swift */,
+			);
+			path = ChatHistoryTableView;
+			sourceTree = "<group>";
+		};
 		D2B7EBAA2D35370600EE46B0 /* AddLostItemCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2907,6 +2928,7 @@
 			isa = PBXGroup;
 			children = (
 				D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */,
+				D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -3175,6 +3197,7 @@
 		D2FFA9792D6200F100EF8E56 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				D2B2192F2D665A7B00EAF5B1 /* ChatHistoryTableView */,
 				D2D462812D64997800C60864 /* BlockCheckModalViewController.swift */,
 				D2FFA97A2D62012800EF8E56 /* ChatViewModel.swift */,
 				D2FFA97C2D62013200EF8E56 /* ChatViewController.swift */,
@@ -3484,6 +3507,7 @@
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
+				D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */,
 				D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */,
 				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
 				83E770B62CFB5A3B00EB3F84 /* ShuttleTimetableTableView.swift in Sources */,
@@ -3598,6 +3622,7 @@
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
+				D2B219312D665ACC00EAF5B1 /* ChatHistoryTableView.swift in Sources */,
 				83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */,
 				D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
@@ -3754,6 +3779,7 @@
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */,
+				D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
@@ -3794,6 +3820,7 @@
 				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
 				D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */,
 				83E770D62D0184DE00EB3F84 /* BusTimetableDataViewModel.swift in Sources */,
+				D2B219392D665BFA00EAF5B1 /* ChatDateHeaderView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
 				D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */,
@@ -3807,6 +3834,7 @@
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				8354BE312C79A0F1009D4D7A /* MyKeywordCollectionViewCell.swift in Sources */,
 				D2B7EBC02D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift in Sources */,
+				D2B219332D665B1400EAF5B1 /* ChatTextTableViewCell.swift in Sources */,
 				0F74C4F72BA8563E00EF4F58 /* RegisterViewController.swift in Sources */,
 				D22421722C8A427800E8B480 /* RevokeModalViewController.swift in Sources */,
 				83EBB8742D0FDD6B00346018 /* BusSearchResultTableView.swift in Sources */,

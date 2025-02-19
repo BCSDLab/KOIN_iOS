@@ -35,13 +35,12 @@ final class ChatListTableViewController: UITableViewController {
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.fetchChatRooms)
-      
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        inputSubject.send(.fetchChatRooms)
         configureNavigationBar(style: .empty)
     }
     

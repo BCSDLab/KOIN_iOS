@@ -6,9 +6,10 @@
 //
 
 import Combine
+import PhotosUI
 import UIKit
 
-final class ChatViewController: UIViewController, UITextViewDelegate {
+final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
     
     // MARK: - Properties
     private let viewModel: ChatViewModel
@@ -52,6 +53,9 @@ final class ChatViewController: UIViewController, UITextViewDelegate {
         $0.modalTransitionStyle = .crossDissolve
     }
     
+    private let chatHistoryTableView = ChatHistoryTableView().then { _ in
+    }
+    
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -81,6 +85,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
         textView.delegate = self
     }
     
@@ -95,10 +100,11 @@ final class ChatViewController: UIViewController, UITextViewDelegate {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case .showChatList: print(1)
+            case .showChatHistory(let chatHistory): self?.chatHistoryTableView.setChatHistory(item: chatHistory)
             case .showToast(let message, let success):
                 self?.showToast(message: message)
                 if success { self?.navigationController?.popViewController(animated: true) }
+            case .addImageUrl(let imageUrl): print(imageUrl)
             }
         }.store(in: &subscriptions)
         blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
@@ -113,6 +119,38 @@ final class ChatViewController: UIViewController, UITextViewDelegate {
 }
 
 extension ChatViewController{
+    @objc private func leftButtonTapped() {
+        presentImagePicker()
+    }
+
+    private func presentImagePicker() {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
+    
+    // ✅ 사용자가 사진을 선택했을 때 실행되는 함수
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    if let selectedImage = image as? UIImage {
+                        guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else { return }
+                        self?.inputSubject.send(.uploadFile([imageData]))
+                    }
+                }
+            }
+        }
+    }
+    
     @objc private func rightButtonTapped() {
         present(blockCheckModalViewController, animated: true)
     }
@@ -154,7 +192,7 @@ extension ChatViewController{
 extension ChatViewController {
     
     private func setUpLayOuts() {
-        [messageInputView].forEach {
+        [chatHistoryTableView, messageInputView].forEach {
             view.addSubview($0)
         }
         [leftButton, textView, sendButton].forEach {
@@ -163,6 +201,9 @@ extension ChatViewController {
     }
     
     private func setUpConstraints() {
+        chatHistoryTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         messageInputView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(8)
             make.height.greaterThanOrEqualTo(50)
