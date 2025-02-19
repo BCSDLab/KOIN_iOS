@@ -86,7 +86,9 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         textView.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,6 +121,33 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
 }
 
 extension ChatViewController{
+    @objc private func handleReceivedMessage(_ notification: Notification) {
+        if let userInfo = notification.userInfo as? [String: Any] {
+            guard let senderNickname = userInfo["user_nickname"] as? String,
+                  let content = userInfo["content"] as? String,
+                  let timestamp = userInfo["timestamp"] as? String,
+                  let isImage = userInfo["is_image"] as? Bool,
+                  let senderId = userInfo["user_id"] as? Int else {
+                return
+            }
+            let isMine = (senderId == viewModel.userId)
+            let newMessage = ChatMessage(
+                senderNickname: senderNickname,
+                content: content,
+                timestamp: timestamp,
+                isImage: isImage,
+                isMine: isMine
+            )
+            chatHistoryTableView.appendNewMessage(newMessage)
+        }
+    }
+
+    
+    @objc private func sendButtonTapped() {
+        WebSocketManager.shared.sendMessage(roomId: viewModel.chatRoomId, articleId: viewModel.articleId, message: textView.text, isImage: false)
+        textView.text = ""
+    }
+    
     @objc private func leftButtonTapped() {
         presentImagePicker()
     }

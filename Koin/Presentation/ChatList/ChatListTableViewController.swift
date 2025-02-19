@@ -29,6 +29,10 @@ final class ChatListTableViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -55,7 +59,6 @@ final class ChatListTableViewController: UITableViewController {
             guard let strongSelf = self else { return }
             switch output {
             case .showChatRoom:
-                print(self?.viewModel.chatList)
                 self?.tableView.reloadData()
                 WebSocketManager.shared.connect()
                 strongSelf.viewModel.chatList.forEach {
@@ -69,13 +72,8 @@ final class ChatListTableViewController: UITableViewController {
 extension ChatListTableViewController {
     
     @objc private func handleReceivedMessage(_ notification: Notification) {
-        print(12313)
-        
-            if let userInfo = notification.userInfo as? [String: Any] {
-                inputSubject.send(.fetchChatRooms)
-                
-            }
-        }
+        inputSubject.send(.fetchChatRooms)
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
@@ -93,7 +91,7 @@ extension ChatListTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.chatList.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
         let chat = viewModel.chatList[indexPath.row]

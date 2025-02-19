@@ -36,14 +36,36 @@ final class ChatHistoryTableView: UITableView {
     func setChatHistory(item: [ChatMessage]) {
         self.chatHistory = item
         reloadData()
+        scrollToBottom(animated: false)
     }
+    
+    func appendNewMessage(_ message: ChatMessage) {
+            chatHistory.append(message)
+            let newIndexPath = IndexPath(row: chatHistory.count - 1, section: 0)
+
+            performBatchUpdates({
+                insertRows(at: [newIndexPath], with: .bottom)
+            }) { [weak self] _ in
+                self?.scrollToBottom(animated: true)
+            }
+        }
 }
 
 extension ChatHistoryTableView: UITableViewDataSource {
+    
+    private func scrollToBottom(animated: Bool) {
+        guard !chatHistory.isEmpty else { return }
+        
+        let lastIndexPath = IndexPath(row: chatHistory.count - 1, section: 0)
+        DispatchQueue.main.async {
+            self.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatHistory.count
     }
-
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = chatHistory[indexPath.row]

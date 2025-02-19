@@ -35,9 +35,11 @@ final class ChatViewModel: ViewModelProtocol {
     private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
-    private let articleId: Int
-    private let chatRoomId: Int
+    let articleId: Int
+    let chatRoomId: Int
     let articleTitle: String
+    private(set) var userId = 0
+    
     
     // MARK: - Initialization
     
@@ -82,6 +84,8 @@ extension ChatViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.fetchChatDetail(userId: response.id)
+            WebSocketManager.shared.setUserId(id: response.id)
+            self?.userId = response.id
         }.store(in: &subscriptions)
 
     }

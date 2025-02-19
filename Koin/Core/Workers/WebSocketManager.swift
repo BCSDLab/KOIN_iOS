@@ -22,11 +22,11 @@ final class WebSocketManager: NSObject {
                                        .replacingOccurrences(of: "http://", with: "")
         return URL(string: "wss://\(baseUrl)/ws-stomp")!
     }()
+    
     private var userId: Int = 0
-    
-    // ✅ 여러 채팅방 관리 (roomId, articleId 배열)
-    private var subscriptions: [(roomId: Int, articleId: Int)] = []
-    
+    private var isConnected: Bool = false // ✅ 연결 상태 체크
+    private var subscriptions: Set<String> = [] // ✅ 중복 구독 방지 (Set 사용)
+
     override init() {
         super.init()
     }
@@ -36,8 +36,12 @@ final class WebSocketManager: NSObject {
     }
     
     // MARK: - WebSocket 연결
-    
     func connect() {
+        guard !isConnected else {
+            print("⚠️ WebSocket is already connected")
+            return
+        }
+        
         let request = URLRequest(url: socketURL)
         let headers = [
             "Authorization": KeychainWorker.shared.read(key: .access) ?? "",
@@ -52,24 +56,26 @@ final class WebSocketManager: NSObject {
     func subscribeToChat(roomId: Int, articleId: Int) {
         let destination = "/topic/chat/\(articleId)/\(roomId)"
         
-        // ✅ 중복 구독 방지
-        if !subscriptions.contains(where: { $0.roomId == roomId && $0.articleId == articleId }) {
-            subscriptions.append((roomId, articleId))
+        // ✅ 이미 구독한 경우 방지
+        guard !subscriptions.contains(destination) else {
+            print("⚠️ Already subscribed to: \(destination)")
+            return
         }
         
+        subscriptions.insert(destination)
         socketClient.subscribe(destination: destination)
         print("✅ Subscribed to: \(destination)")
     }
     
-    // MARK: - 메시지 보내기 (채팅 메시지 전송)
-    func sendMessage(roomId: Int, articleId: Int, message: String) {
+    // MARK: - 메시지 보내기
+    func sendMessage(roomId: Int, articleId: Int, message: String, isImage: Bool) {
         let destination = "/app/chat/\(articleId)/\(roomId)"
         let payload: [String: Any] = [
             "user_nickname": "익명_\(UUID().uuidString)",
             "user_id": userId,
             "content": message,
             "timestamp": ISO8601DateFormatter().string(from: Date()),
-            "is_image": false
+            "is_image": isImage
         ]
         
         do {
@@ -88,9 +94,15 @@ final class WebSocketManager: NSObject {
         }
     }
 
-    // MARK: - WebSocket 연결 해제 (재구독을 위해 기존 구독 정보 유지)
+    // MARK: - WebSocket 연결 해제
     func disconnect() {
+        guard isConnected else {
+            print("⚠️ WebSocket is already disconnected")
+            return
+        }
+        
         socketClient.disconnect()
+        isConnected = false
         print("🔴 WebSocket Disconnected")
     }
 }
@@ -100,28 +112,35 @@ extension WebSocketManager: StompClientLibDelegate {
     
     // ✅ STOMP 연결 성공 시 호출
     func stompClientDidConnect(client: StompClientLib!) {
-            print("✅ WebSocket Connected!")
-            
-            // ✅ 기존 구독 리스트를 기반으로 재구독
-            for (roomId, articleId) in subscriptions {
-                subscribeToChat(roomId: roomId, articleId: articleId)
-            }
+        isConnected = true
+        print("✅ WebSocket Connected!")
+        
+        // ✅ 기존 구독 리스트를 기반으로 자동 재구독
+        for destination in subscriptions {
+            socketClient.subscribe(destination: destination)
+            print("🔄 Re-subscribed to: \(destination)")
         }
+    }
     
+    // 🔴 연결이 끊어졌을 때 자동 재연결
     func stompClientDidDisconnect(client: StompClientLib!) {
-        connect()
-       }
+        isConnected = false
+        print("⚠️ WebSocket Disconnected! Reconnecting...")
+        
+        // 3초 후 재연결
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.connect()
+        }
+    }
     
     func stompClientDidReceiveMessage(client: StompClientLib!, jsonBody: AnyObject?, withHeader: [String : String]?, fromDestination: String) {
-           if let json = jsonBody as? [String: Any] {
-               print("📩 Received Message: \(json)")
-               
-               // ✅ 여러 화면에서 받을 수 있도록 NotificationCenter로 이벤트 전송
-               NotificationCenter.default.post(name: .chatMessageReceived, object: nil, userInfo: json)
-           } else {
-               print("⚠️ Received an unknown message format from \(fromDestination)")
-           }
-       }
+        if let json = jsonBody as? [String: Any] {
+            print("📩 Received Message: \(json)")
+            NotificationCenter.default.post(name: .chatMessageReceived, object: nil, userInfo: json)
+        } else {
+            print("⚠️ Received an unknown message format from \(fromDestination)")
+        }
+    }
     
     // ❌ STOMP 오류 발생 시 호출
     func stompClientDidReceiveError(client: StompClientLib!, error: NSError!) {
@@ -138,7 +157,7 @@ extension WebSocketManager: StompClientLibDelegate {
         print("⚠️ Server Error: \(description) | Details: \(message ?? "None")")
     }
     
-    // 🔄 서버에서 Ping 메시지 보냈을 때 호출
+    // 🔄 서버에서 Ping 메시지를 보냈을 때 호출
     func serverDidSendPing() {
         print("🔄 Received Ping from Server")
     }

@@ -17,6 +17,7 @@ final class ChatTextTableViewCell: UITableViewCell {
         $0.textAlignment = .left
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
+        $0.lineBreakMode = .byCharWrapping
     }
     
     // MARK: - Initialization
