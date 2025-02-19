@@ -202,7 +202,8 @@ extension ChatViewController {
     
     private func setUpConstraints() {
         chatHistoryTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(messageInputView.snp.top).offset(-16)
         }
         messageInputView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(8)

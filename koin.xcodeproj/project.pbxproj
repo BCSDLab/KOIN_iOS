@@ -449,6 +449,7 @@
 		D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219342D665B2900EAF5B1 /* ChatImageTableViewCell.swift */; };
 		D2B219392D665BFA00EAF5B1 /* ChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B219382D665BFA00EAF5B1 /* ChatDateHeaderView.swift */; };
 		D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */; };
+		D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */; };
 		D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */; };
 		D2B7EBAC2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */; };
 		D2B7EBAF2D3538F100EE46B0 /* AddLostItemFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */; };
@@ -1058,6 +1059,7 @@
 		D2B219342D665B2900EAF5B1 /* ChatImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImageTableViewCell.swift; sourceTree = "<group>"; };
 		D2B219382D665BFA00EAF5B1 /* ChatDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeaderView.swift; sourceTree = "<group>"; };
 		D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryData.swift; sourceTree = "<group>"; };
+		D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D2B7EBA82D35370000EE46B0 /* AddLostItemCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionView.swift; sourceTree = "<group>"; };
 		D2B7EBAB2D35371E00EE46B0 /* AddLostItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		D2B7EBAE2D3538F100EE46B0 /* AddLostItemFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemFooterView.swift; sourceTree = "<group>"; };
@@ -2514,6 +2516,7 @@
 				0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */,
 				D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */,
 				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
+				D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -3946,6 +3949,7 @@
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
+				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,

@@ -35,6 +35,8 @@ final class ChatListTableViewController: UITableViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        inputSubject.send(.fetchUserId)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
     }
     
@@ -50,15 +52,31 @@ final class ChatListTableViewController: UITableViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
-            case .showChatRoom: self?.tableView.reloadData()
+            case .showChatRoom:
+                print(self?.viewModel.chatList)
+                self?.tableView.reloadData()
+                WebSocketManager.shared.connect()
+                strongSelf.viewModel.chatList.forEach {
+                    WebSocketManager.shared.subscribeToChat(roomId: $0.chatRoomId, articleId: $0.articleId)
+                }
             }
         }.store(in: &subscriptions)
-        
     }
 }
 
 extension ChatListTableViewController {
+    
+    @objc private func handleReceivedMessage(_ notification: Notification) {
+        print(12313)
+        
+            if let userInfo = notification.userInfo as? [String: Any] {
+                inputSubject.send(.fetchChatRooms)
+                
+            }
+        }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
         let viewController = ChatViewController(viewModel: ChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
@@ -79,7 +97,7 @@ extension ChatListTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
         let chat = viewModel.chatList[indexPath.row]
-        
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         let thumbnailContainerView = UIView().then {
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true

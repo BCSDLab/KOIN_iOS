@@ -14,6 +14,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchChatRooms
+        case fetchUserId
     }
     
     // MARK: - Output
@@ -33,6 +34,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     }
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
+    private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     
     // MARK: - Initialization
     
@@ -44,6 +46,8 @@ final class ChatListTableViewModel: ViewModelProtocol {
             switch input {
             case .fetchChatRooms:
                 self?.fetchChatRooms()
+            case .fetchUserId:
+                self?.fetchUserData()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -52,6 +56,17 @@ final class ChatListTableViewModel: ViewModelProtocol {
 }
 
 extension ChatListTableViewModel {
+    
+    private func fetchUserData() {
+        fetchUserDataUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            WebSocketManager.shared.setUserId(id: response.id)
+        }.store(in: &subscriptions)
+
+    }
     private func fetchChatRooms() {
         fetchChatRoomUseCase.execute().sink { completion in
             if case let .failure(error) = completion {

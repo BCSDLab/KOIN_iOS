@@ -28,8 +28,8 @@ final class ChatHistoryTableView: UITableView {
         delegate = self
         dataSource = self
         separatorStyle = .none
+        register(ChatImageTableViewCell.self, forCellReuseIdentifier: ChatImageTableViewCell.identifier)
         register(ChatTextTableViewCell.self, forCellReuseIdentifier: ChatTextTableViewCell.identifier)
-        //   register(ChatImageTableViewCell.self, forCellReuseIdentifier: ChatImageTableViewCell.identifier)
         register(ChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatDateHeaderView.identifier)
     }
     
@@ -43,12 +43,10 @@ extension ChatHistoryTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatHistory.count
     }
-    
-    
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = chatHistory[indexPath.row]
-        
         if message.isImage {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatImageTableViewCell.identifier, for: indexPath) as? ChatImageTableViewCell else {
                 return UITableViewCell()
@@ -73,13 +71,5 @@ extension ChatHistoryTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
-    }
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView()
-        footerView.backgroundColor = .clear // 배경 투명하게 설정
-        return footerView
-    }
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 8 // 셀 간격 설정
     }
 }
