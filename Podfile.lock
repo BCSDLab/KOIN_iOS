@@ -143,6 +143,7 @@ PODS:
   - NMapsMap (3.18.1):
     - NMapsGeometry
   - PromisesObjC (2.4.0)
+  - ReachabilitySwift (5.2.4)
   - RxCocoa (6.7.1):
     - RxRelay (= 6.7.1)
     - RxSwift (= 6.7.1)
@@ -150,7 +151,12 @@ PODS:
     - RxSwift (= 6.7.1)
   - RxSwift (6.7.1)
   - SnapKit (5.7.1)
+  - SocketRocket (0.7.1)
+  - StompClientLib (1.4.1):
+    - SocketRocket
   - SwiftSoup (2.7.3)
+  - SwiftStomp (1.2.1):
+    - ReachabilitySwift (~> 5.2.1)
   - Then (3.0.0)
 
 DEPENDENCIES:
@@ -169,7 +175,9 @@ DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SnapKit
+  - StompClientLib
   - SwiftSoup
+  - SwiftStomp
   - Then
 
 SPEC REPOS:
@@ -195,11 +203,15 @@ SPEC REPOS:
     - NMapsGeometry
     - NMapsMap
     - PromisesObjC
+    - ReachabilitySwift
     - RxCocoa
     - RxRelay
     - RxSwift
     - SnapKit
+    - SocketRocket
+    - StompClientLib
     - SwiftSoup
+    - SwiftStomp
     - Then
 
 SPEC CHECKSUMS:
@@ -224,13 +236,17 @@ SPEC CHECKSUMS:
   NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
   NMapsMap: e879088eeee2d1e3b97f0a609076e1824dce2cad
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   RxCocoa: f5609cb4637587a7faa99c5d5787e3ad582b75a4
   RxRelay: 4151ba01152436b08271e08410135e099880eae5
   RxSwift: b9a93a26031785159e11abd40d1a55bcb8057e52
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  StompClientLib: ac40390e9660c574675f1c933bec81c8e2811a4f
   SwiftSoup: e3849c3293b1efee9cf892f91f6ae5c22bfeb5f7
+  SwiftStomp: 13fed4c82f587fb4b59a98fba1b05f205a0f6158
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 989412445a6ce8070024630755b36605467c0a2e
+PODFILE CHECKSUM: dee52faf77a45ef7761c23133ebb638884f12ccf
 
 COCOAPODS: 1.15.2

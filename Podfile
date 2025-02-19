@@ -29,6 +29,8 @@ pod 'KakaoSDKTemplate'
 pod 'SwiftSoup'
 pod 'RxSwift'
 pod 'RxCocoa'
+pod 'StompClientLib'
+pod 'SwiftStomp'
 end
 
 target 'NotificationService' do
