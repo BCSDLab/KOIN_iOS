@@ -30,9 +30,8 @@ final class ChatListTableViewController: UITableViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+         NotificationCenter.default.removeObserver(self)
+     }
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -72,8 +71,8 @@ final class ChatListTableViewController: UITableViewController {
 extension ChatListTableViewController {
     
     @objc private func handleReceivedMessage(_ notification: Notification) {
-        inputSubject.send(.fetchChatRooms)
-    }
+                inputSubject.send(.fetchChatRooms)
+        }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
@@ -91,7 +90,7 @@ extension ChatListTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.chatList.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
         let chat = viewModel.chatList[indexPath.row]
@@ -118,6 +117,7 @@ extension ChatListTableViewController {
         let recentTimeLabel = UILabel().then {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
             $0.textColor = UIColor.appColor(.neutral500)
+            $0.textAlignment = .right
         }
         let unreadMessageLabel = UILabel().then {
             $0.layer.cornerRadius = 12
@@ -127,25 +127,27 @@ extension ChatListTableViewController {
             $0.textAlignment = .center
             $0.font = UIFont.appFont(.pretendardMedium, size: 12)
         }
+        thumbnailContainerView.addSubview(thumbnailImageView)
         if let url = chat.lostItemImageUrl {
             thumbnailImageView.loadImageWithSpinner(from: url)
-            thumbnailImageView.snp.updateConstraints { make in
+            thumbnailImageView.snp.remakeConstraints { make in
+                make.centerY.centerX.equalToSuperview()
                 make.width.height.equalTo(48)
             }
         } else {
             thumbnailImageView.image = UIImage.appImage(asset: .basicPicture)
-            thumbnailImageView.snp.updateConstraints { make in
+            thumbnailImageView.snp.remakeConstraints { make in
+                make.centerY.centerX.equalToSuperview()
                 make.width.height.equalTo(32)
             }
         }
         titleLabel.text = chat.articleTitle
         contentLabel.text = chat.recentMessageContent
-        recentTimeLabel.text = "\(chat.hour) \(chat.minute)"
+        recentTimeLabel.text = chat.lastMessageAt.toChatDateInfo().showingText
         unreadMessageLabel.text = String(chat.unreadMessageCount)
         unreadMessageLabel.isHidden = chat.unreadMessageCount == 0
         
-        thumbnailContainerView.addSubview(thumbnailImageView)
-        [thumbnailContainerView, titleLabel, contentLabel, recentTimeLabel, unreadMessageLabel].forEach {
+        [thumbnailContainerView, recentTimeLabel, titleLabel, contentLabel, unreadMessageLabel].forEach {
             cell.contentView.addSubview($0)
         }
         thumbnailContainerView.snp.makeConstraints {
@@ -153,7 +155,7 @@ extension ChatListTableViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.width.height.equalTo(48)
         }
-        thumbnailImageView.snp.makeConstraints { make in
+        thumbnailImageView.snp.remakeConstraints { make in
             make.centerY.centerX.equalToSuperview()
             make.width.height.equalTo(32)
         }

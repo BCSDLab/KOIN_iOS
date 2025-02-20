@@ -12,13 +12,8 @@ struct ChatRoomItem {
     let recentMessageContent: String
     let lostItemImageUrl: String?
     let unreadMessageCount: Int
-    let lastMessageAt: Date
-    let year: Int
-    let month: Int
-    let day: Int
-    let hour: Int
-    let minute: Int
-    let second: Int
+    let lastMessageAt: String
+    let chatDateInfo: ChatDateInfo
     let articleId: Int
     let chatRoomId: Int
 }

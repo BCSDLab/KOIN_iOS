@@ -28,19 +28,12 @@ extension ChatRoomDTO {
     func toDomain() -> ChatRoomItem {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = formatter.date(from: lastMessageAt) ?? Date() // 변환 실패 시 현재 시간 사용
         return ChatRoomItem(
             articleTitle: articleTitle,
             recentMessageContent: recentMessageContent,
             lostItemImageUrl: lostItemImageUrl,
-            unreadMessageCount: unreadMessageCount,
-            lastMessageAt: date,
-            year: date.year,
-            month: date.month,
-            day: date.day,
-            hour: date.hour,
-            minute: date.minute,
-            second: date.second,
+            unreadMessageCount: unreadMessageCount, lastMessageAt: lastMessageAt,
+            chatDateInfo: lastMessageAt.toChatDateInfo(),
             articleId: articleId,
             chatRoomId: chatRoomId
         )
