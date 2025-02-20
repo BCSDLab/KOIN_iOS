@@ -12,6 +12,7 @@ final class ChatHistoryTableView: UITableView {
     
     // MARK: - Properties
     private var chatHistory: [ChatMessage] = []
+    let imageTapPublisher = PassthroughSubject<UIImage, Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -28,7 +29,7 @@ final class ChatHistoryTableView: UITableView {
         delegate = self
         dataSource = self
         separatorStyle = .none
-        register(ChatImageTableViewCell.self, forCellReuseIdentifier: ChatImageTableViewCell.identifier)
+        register(ChatImageTableViewCell.self, forCellReuseIdentifier: "ChatImageTableViewCell")
         register(ChatTextTableViewCell.self, forCellReuseIdentifier: ChatTextTableViewCell.identifier)
         register(ChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatDateHeaderView.identifier)
     }
@@ -70,10 +71,13 @@ extension ChatHistoryTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = chatHistory[indexPath.row]
         if message.isImage {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatImageTableViewCell.identifier, for: indexPath) as? ChatImageTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
+            cell.imageTapPublisher.sink { [weak self] image in
+                self?.imageTapPublisher.send(image)
+            }.store(in: &cell.cancellables)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatTextTableViewCell.identifier, for: indexPath) as? ChatTextTableViewCell else {

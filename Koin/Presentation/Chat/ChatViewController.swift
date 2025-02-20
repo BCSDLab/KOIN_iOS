@@ -101,12 +101,13 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
             switch output {
             case .showChatHistory(let chatHistory): self?.chatHistoryTableView.setChatHistory(item: chatHistory)
             case .showToast(let message, let success):
                 self?.showToast(message: message)
                 if success { self?.navigationController?.popViewController(animated: true) }
-            case .addImageUrl(let imageUrl): print(imageUrl)
+            case .addImageUrl(let imageUrl):  WebSocketManager.shared.sendMessage(roomId: strongSelf.viewModel.chatRoomId, articleId: strongSelf.viewModel.articleId, message: imageUrl, isImage: true)
             }
         }.store(in: &subscriptions)
         blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
@@ -116,6 +117,13 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         
         blockCheckModalViewController.buttonPublihser.sink { [weak self] _ in
             self?.inputSubject.send(.blockUser)
+        }.store(in: &subscriptions)
+        
+        chatHistoryTableView.imageTapPublisher.sink { [weak self] image in
+            let imageWidth: CGFloat = UIScreen.main.bounds.width
+            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageWidth)
+            zoomedImageViewController.setImage(image)
+            self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
     }
 }

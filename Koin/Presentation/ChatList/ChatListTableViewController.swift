@@ -142,7 +142,7 @@ extension ChatListTableViewController {
             }
         }
         titleLabel.text = chat.articleTitle
-        contentLabel.text = chat.recentMessageContent
+        contentLabel.text = "\(chat.recentMessageContent)"
         recentTimeLabel.text = chat.lastMessageAt.toChatDateInfo().showingText
         unreadMessageLabel.text = String(chat.unreadMessageCount)
         unreadMessageLabel.isHidden = chat.unreadMessageCount == 0
