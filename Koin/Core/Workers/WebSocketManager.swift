@@ -22,7 +22,13 @@ final class WebSocketManager: NSObject {
                                        .replacingOccurrences(of: "http://", with: "")
         return URL(string: "wss://\(baseUrl)/ws-stomp")!
     }()
-    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS" // 서버 기대 포맷
+        formatter.timeZone = TimeZone.current // ✅ 현재 기기 시간대 사용
+        formatter.locale = Locale(identifier: "en_US_POSIX") // ✅ 포맷 일관성 유지
+        return formatter
+    }()
     private var userId: Int = 0
     private var isConnected: Bool = false // ✅ 연결 상태 체크
     private var subscriptions: Set<String> = [] // ✅ 중복 구독 방지 (Set 사용)
@@ -74,7 +80,7 @@ final class WebSocketManager: NSObject {
             "user_nickname": "익명_\(UUID().uuidString)",
             "user_id": userId,
             "content": message,
-            "timestamp": ISO8601DateFormatter().string(from: Date()),
+            "timestamp": dateFormatter.string(from: Date()),
             "is_image": isImage
         ]
         

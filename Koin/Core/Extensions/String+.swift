@@ -58,17 +58,28 @@ extension String {
         if isToday {
             let period = hour < 12 ? "오전" : "오후"
             let formattedHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
-            showingText = "\(period) \(formattedHour)시 \(minute)분"
+            
+            // ✅ 한 자리 숫자를 두 자리로 변환
+            let hourString = String(format: "%02d", formattedHour)
+            let minuteString = String(format: "%02d", minute)
+
+            showingText = "\(period) \(hourString)시 \(minuteString)분"
         } else if isYesterday {
             showingText = "어제"
         } else {
             let currentYear = utcCalendar.component(.year, from: today)
+            
+            let monthString = String(format: "%02d", components.month ?? 0)
+            let dayString = String(format: "%02d", components.day ?? 0)
+
             if components.year == currentYear {
-                showingText = "\(components.month ?? 0)월 \(components.day ?? 0)일"
+                showingText = "\(monthString)월 \(dayString)일"
             } else {
-                showingText = "\(components.year ?? 0)년 \(components.month ?? 0)월 \(components.day ?? 0)일"
+                let yearString = String(format: "%04d", components.year ?? 0) // ✅ 4자리 연도 변환
+                showingText = "\(yearString)년 \(monthString)월 \(dayString)일"
             }
         }
+
         
         return ChatDateInfo(
             year: components.year ?? 0,

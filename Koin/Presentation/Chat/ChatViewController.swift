@@ -136,7 +136,7 @@ extension ChatViewController{
                 content: content,
                 timestamp: timestamp,
                 isImage: isImage,
-                isMine: isMine
+                isMine: isMine, chatDateInfo: timestamp.toChatDateInfo()
             )
             chatHistoryTableView.appendNewMessage(newMessage)
         }

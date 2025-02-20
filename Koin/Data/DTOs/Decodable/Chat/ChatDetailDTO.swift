@@ -27,7 +27,7 @@ extension ChatDetailDTO {
             content: content,
             timestamp: timestamp,
             isImage: isImage,
-            isMine: userId == currentUserId
+            isMine: userId == currentUserId, chatDateInfo: timestamp.toChatDateInfo()
         )
     }
 }

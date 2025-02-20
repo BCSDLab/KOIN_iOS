@@ -13,4 +13,5 @@ struct ChatMessage {
     let timestamp: String
     let isImage: Bool
     let isMine: Bool
+    let chatDateInfo: ChatDateInfo
 }

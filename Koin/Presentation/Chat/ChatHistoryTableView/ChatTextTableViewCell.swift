@@ -19,6 +19,12 @@ final class ChatTextTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 8
         $0.lineBreakMode = .byCharWrapping
     }
+    private let timestampLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textAlignment = .center
+    }
+
     
     // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -34,7 +40,7 @@ final class ChatTextTableViewCell: UITableViewCell {
     func configure(message: ChatMessage) {
         messageLabel.text = message.content
         messageLabel.backgroundColor = message.isMine ? UIColor.appColor(.neutral100) : UIColor.appColor(.info100)
-        
+        timestampLabel.text = String(format: "%02d:%02d", message.chatDateInfo.hour, message.chatDateInfo.minute)
         setUpConstraints(message: message)
     }
     
@@ -42,7 +48,7 @@ final class ChatTextTableViewCell: UITableViewCell {
 
 extension ChatTextTableViewCell {
     private func setUpLayouts() {
-        [messageLabel].forEach {
+        [messageLabel, timestampLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -60,7 +66,15 @@ extension ChatTextTableViewCell {
             $0.top.equalToSuperview().offset(4)
             $0.bottom.equalToSuperview().offset(-4)
         }
-   
+        timestampLabel.snp.remakeConstraints {
+               if message.isMine {
+                   $0.trailing.equalTo(messageLabel.snp.leading).offset(-8) // ⏰ 메시지 왼쪽 배치
+               } else {
+                   $0.leading.equalTo(messageLabel.snp.trailing).offset(8) // ⏰ 메시지 오른쪽 배치
+               }
+               $0.bottom.equalTo(messageLabel.snp.bottom) // 메시지 하단 정렬
+            $0.height.equalTo(19)
+           }
     }
     private func configureView() {
         setUpLayouts()
