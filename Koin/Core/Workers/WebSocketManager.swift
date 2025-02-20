@@ -30,6 +30,7 @@ final class WebSocketManager: NSObject {
         return formatter
     }()
     private var userId: Int = 0
+    private var userNickname: String = ""
     private var isConnected: Bool = false // ✅ 연결 상태 체크
     private var subscriptions: Set<String> = [] // ✅ 중복 구독 방지 (Set 사용)
 
@@ -37,8 +38,9 @@ final class WebSocketManager: NSObject {
         super.init()
     }
     
-    func setUserId(id: Int) {
+    func setUserId(id: Int, nickname: String) {
         self.userId = id
+        self.userNickname = nickname
     }
     
     // MARK: - WebSocket 연결
@@ -77,7 +79,7 @@ final class WebSocketManager: NSObject {
     func sendMessage(roomId: Int, articleId: Int, message: String, isImage: Bool) {
         let destination = "/app/chat/\(articleId)/\(roomId)"
         let payload: [String: Any] = [
-            "user_nickname": "익명_\(UUID().uuidString)",
+            "user_nickname": userNickname,
             "user_id": userId,
             "content": message,
             "timestamp": dateFormatter.string(from: Date()),

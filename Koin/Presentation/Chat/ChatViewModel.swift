@@ -84,7 +84,7 @@ extension ChatViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.fetchChatDetail(userId: response.id)
-            WebSocketManager.shared.setUserId(id: response.id)
+            WebSocketManager.shared.setUserId(id: response.id, nickname: response.nickname ?? response.anonymousNickname ?? "익명")
             self?.userId = response.id
         }.store(in: &subscriptions)
 

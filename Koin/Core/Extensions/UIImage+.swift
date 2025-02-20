@@ -132,6 +132,8 @@ enum ImageAsset: String {
     case basicPicture
     case threeCircle
     case block
+    case gallery
+    case send
 }
 
 enum SFSymbols: String {

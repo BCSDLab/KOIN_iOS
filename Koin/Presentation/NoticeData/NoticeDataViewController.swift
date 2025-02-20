@@ -344,8 +344,12 @@ extension NoticeDataViewController {
         titleGuideLabel.text = "\(item.type?.description ?? "")물"
         categoryLabel.text = item.category
         titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
-        
-        
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
+            make.leading.equalTo(titleGuideLabel)
+            make.width.equalTo(categoryLabel.intrinsicContentSize.width + 20)
+            make.height.equalTo(22)
+        }
         nickNameLabel.text = item.author
         createdDateLabel.text = item.registeredAt
         let imageUrls = item.images?.map { $0.imageUrl } ?? []

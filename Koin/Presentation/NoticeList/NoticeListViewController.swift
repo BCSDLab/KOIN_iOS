@@ -197,6 +197,16 @@ extension NoticeListViewController {
         inputSubject.send(.changeBoard(viewModel.noticeListType))
     }
     func navigateToNoticeData(noticeId: Int, boardId: Int) {
+    
+        guard let board = viewModel.noticeList.first(where: { $0.id == noticeId }) else {
+            return
+        }
+        
+        if board.isReported == true {
+            showToast(message: "신고된 게시글은 더 이상 볼 수 없습니다.")
+            return
+        }
+    
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
         let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)

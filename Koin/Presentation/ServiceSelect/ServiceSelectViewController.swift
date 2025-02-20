@@ -132,6 +132,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
+    private var chatButton: UIBarButtonItem?
     
     // MARK: - Initialization
     
@@ -240,6 +241,11 @@ extension ServiceSelectViewController {
     }
     
     @objc private func chatButtonTapped() {
+        
+        if !viewModel.isLogined {
+            showToast(message: "로그인이 필요한 기능입니다.")
+            return 
+        }
         let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
     }

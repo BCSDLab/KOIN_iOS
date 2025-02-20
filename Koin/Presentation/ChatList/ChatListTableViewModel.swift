@@ -63,9 +63,8 @@ extension ChatListTableViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            WebSocketManager.shared.setUserId(id: response.id)
+            WebSocketManager.shared.setUserId(id: response.id, nickname: response.nickname ?? response.anonymousNickname ?? "익명")
         }.store(in: &subscriptions)
-
     }
     private func fetchChatRooms() {
         fetchChatRoomUseCase.execute().sink { completion in

@@ -26,8 +26,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     }
     
     private let leftButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "paperclip"), for: .normal)
-        $0.tintColor = .darkGray
+        $0.setImage(UIImage.appImage(asset: .gallery), for: .normal)
     }
     
     private let textView = UITextView().then {
@@ -39,8 +38,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     }
     
     private let sendButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "arrow.up.circle.fill"), for: .normal)
-        $0.tintColor = .blue
+        $0.setImage(UIImage.appImage(asset: .send), for: .normal)
     }
     
     private let blockModalViewController = ModalViewController(width: 301, height: 179, paddingBetweenLabels: 12, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray), rightButtonText: "차단하기").then {
@@ -154,6 +152,10 @@ extension ChatViewController{
     @objc private func sendButtonTapped() {
         WebSocketManager.shared.sendMessage(roomId: viewModel.chatRoomId, articleId: viewModel.articleId, message: textView.text, isImage: false)
         textView.text = ""
+        textViewHeightConstraint.constant = 40
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     @objc private func leftButtonTapped() {
@@ -213,11 +215,14 @@ extension ChatViewController{
         let estimatedSize = textView.sizeThatFits(size)
         
         let maxHeight: CGFloat = 120
-        if estimatedSize.height <= maxHeight {
-            textViewHeightConstraint.constant = estimatedSize.height
-        } else {
+        let minHeight: CGFloat = 40
+        if estimatedSize.height >= maxHeight {
             textViewHeightConstraint.constant = maxHeight
             textView.isScrollEnabled = true
+        } else if estimatedSize.height <= minHeight{
+            textViewHeightConstraint.constant = minHeight
+        } else {
+            textViewHeightConstraint.constant = estimatedSize.height
         }
         
         UIView.animate(withDuration: 0.2) {
@@ -250,12 +255,12 @@ extension ChatViewController {
         leftButton.snp.makeConstraints { make in
             make.leading.equalTo(messageInputView).offset(8)
             make.centerY.equalTo(messageInputView)
-            make.size.equalTo(30)
+            make.size.equalTo(32)
         }
         sendButton.snp.makeConstraints { make in
             make.trailing.equalTo(messageInputView).offset(-8)
             make.centerY.equalTo(messageInputView)
-            make.size.equalTo(30)
+            make.size.equalTo(32)
         }
         textView.snp.makeConstraints { make in
             make.leading.equalTo(leftButton.snp.trailing).offset(8)

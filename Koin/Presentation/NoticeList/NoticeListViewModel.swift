@@ -33,6 +33,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
+    private(set) var noticeList: [NoticeArticleDTO] = []
     var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
@@ -100,6 +101,7 @@ extension NoticeListViewModel {
         }, receiveValue: { [weak self] articleInfo in
             guard let self = self else { return }
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
+            self.noticeList = articleInfo.articles
         }).store(in: &subscriptions)
     }
     

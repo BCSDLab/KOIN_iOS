@@ -61,7 +61,7 @@ final class NoticeListTableViewCell: UITableViewCell {
     private let reportedLabel = UILabel().then {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage.appImage(asset: .blind)
-        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 24, height: 24)
+        imageAttachment.bounds = CGRect(x: 0, y: -7, width: 24, height: 24)
 
         let attributedString = NSMutableAttributedString(attachment: imageAttachment)
         let text = NSAttributedString(string: " 신고에 의해 숨김 처리 되었습니다.", attributes: [.font: UIFont.appFont(.pretendardMedium, size: 15)])
