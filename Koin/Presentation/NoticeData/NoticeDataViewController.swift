@@ -21,7 +21,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     
     // MARK: - UI Components
     
-    private let deleteArticleModalViewController = DeleteArticleModalViewController(width: 301, height: 128)
+    private let deleteArticleModalViewController = DeleteArticleModalViewController(width: 301, height: 128).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+
     
     private let titleWrappedView = UIView().then {
         $0.backgroundColor = .white
@@ -316,11 +320,19 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         sendChatLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
             self?.navigateToLogin()
         }.store(in: &subscriptions)
+        
+        imageCollectionView.imageTapPublisher.sink { [weak self] image in
+            let imageWidth: CGFloat = UIScreen.main.bounds.width - 15
+            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageWidth)
+            zoomedImageViewController.setImage(image)
+            self?.present(zoomedImageViewController, animated: true, completion: nil)
+        }.store(in: &subscriptions)
+
     }
 }
 
 extension NoticeDataViewController {
- 
+    
     private func showLoginModal(_ checkType: NoticeDataViewModel.CheckType) {
         switch checkType {
         case .report: present(reportLostItemLoginModalViewController, animated: false)

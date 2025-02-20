@@ -11,16 +11,27 @@ import UIKit
 import Then
 
 final class ImageScrollCollectionViewCell: UICollectionViewCell {
-    // MARK: - UI Components
-    private let imageView = UIImageView().then { _ in
-    }
     
+    let imageTapPublisher = PassthroughSubject<UIImage, Never>()
+    var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - UI Components
+    private let imageView = UIImageView().then {
+        $0.isUserInteractionEnabled = true
+    }
+    private var subscribtions = Set<AnyCancellable>()
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        imageView.addGestureRecognizer(tapGesture)
     }
     
+    @objc private func imageTapped() {
+        guard let image = imageView.image else { return }
+        imageTapPublisher.send(image)
+    }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -28,7 +39,7 @@ final class ImageScrollCollectionViewCell: UICollectionViewCell {
     func configure(imageUrl: String) {
         imageView.loadImage(from: imageUrl)
     }
-
+    
 }
 
 extension ImageScrollCollectionViewCell {
