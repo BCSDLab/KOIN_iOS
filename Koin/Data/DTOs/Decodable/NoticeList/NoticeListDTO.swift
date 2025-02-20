@@ -37,7 +37,7 @@ struct NoticeArticleDTO: Decodable {
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String
-    let isReported: Bool?
+    var isReported: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id

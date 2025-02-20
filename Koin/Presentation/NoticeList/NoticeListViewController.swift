@@ -10,6 +10,8 @@ import SnapKit
 import Then
 import UIKit
 
+var fetch = false
+
 final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
     
@@ -96,6 +98,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
         configureNavigationBar(style: .empty)
+        if fetch {
+            inputSubject.send(.changeBoard(viewModel.noticeListType))
+            fetch = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -215,6 +221,7 @@ extension NoticeListViewController {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: noticeId, boardId: boardId)
         let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
+        noticeDataVc.delegate = self
        navigationController?.pushViewController(noticeDataVc, animated: true)
     }
     @objc private func writeButtonTapped() {

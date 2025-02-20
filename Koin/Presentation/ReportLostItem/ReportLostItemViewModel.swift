@@ -55,6 +55,7 @@ extension ReportLostItemViewModel {
                 self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
+            fetch = true
             self?.outputSubject.send(.showToast("게시글이 신고되었습니다.", true))
         }.store(in: &subscriptions)
     

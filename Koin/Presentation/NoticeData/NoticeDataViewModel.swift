@@ -135,6 +135,7 @@ extension NoticeDataViewModel {
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("글이 삭제되었습니다."))
             self?.outputSubject.send(.popViewController)
+            fetch = true
         }).store(in: &subscriptions)
     }
     private func fetchLostItem(id: Int) {

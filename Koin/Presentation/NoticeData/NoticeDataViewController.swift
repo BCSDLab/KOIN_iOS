@@ -17,6 +17,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let inputSubject: PassthroughSubject<NoticeDataViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var noticeUrl = ""
+    weak var delegate: NoticeListViewController?
     
     // MARK: - UI Components
     
@@ -365,8 +366,8 @@ extension NoticeDataViewController {
         pageControl.numberOfPages = imageUrls.count
         councilLabel.isHidden = item.isCouncil == false
         deleteButton.isHidden = item.isMine == false
-        chatButton.isHidden = item.isCouncil == true || item.isMine == true
-        reportButton.isHidden = item.isCouncil == true || item.isMine == true
+        chatButton.isHidden = /*item.isCouncil == true ||*/ item.isMine == true
+        reportButton.isHidden = /*item.isCouncil == true ||*/ item.isMine == true
     }
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
