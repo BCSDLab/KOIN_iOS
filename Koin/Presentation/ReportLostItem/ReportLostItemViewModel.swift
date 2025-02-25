@@ -14,6 +14,7 @@ final class ReportLostItemViewModel: ViewModelProtocol {
     
     enum Input {
         case reportLostItemArticle(ReportLostItemRequest)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -27,6 +28,7 @@ final class ReportLostItemViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let defaultReportLostItemUseCase: DefaultReportLostItemUseCase = DefaultReportLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     private let lostItemId: Int
     
     
@@ -41,6 +43,8 @@ final class ReportLostItemViewModel: ViewModelProtocol {
             switch input {
             case .reportLostItemArticle(let request):
                 self?.reportLostItemArticle(request: request)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -60,5 +64,7 @@ extension ReportLostItemViewModel {
         }.store(in: &subscriptions)
     
     }
-    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
 }

@@ -428,20 +428,16 @@ extension HomeViewController {
     private func setAbTestResult(result: AssignAbTestResponse) {
         if result.variableName == .mainDiningOriginal {
             goDiningPageButton.isHidden = true
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestDining, "더보기X"))
         }
         else if result.variableName == .mainDiningNew {
             goDiningPageButton.isHidden = false
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusDining, .abTestDining, "더보기O"))
         }
         else if result.variableName == .bannerNew {
             noticePageControl.numberOfPages = 5
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTestKeyword, "진입점O"))
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
             noticePageControl.numberOfPages = 4
-            inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.campusNotice, .abTestKeyword, "진입점X"))
             inputSubject.send(.getNoticeBanner(nil))
         }
     }

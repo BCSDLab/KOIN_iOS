@@ -180,7 +180,10 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         if isAllValid {
             let allCellData = collectAllCellData()
             inputSubject.send(.postLostItem(allCellData))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWriteConfirm, .click, "작성완료"))
+            switch viewModel.type {
+            case .lost: inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWriteConfirm, .click, "작성완료"))
+            case .found: inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWriteConfirm, .click, "작성완료"))
+            }
         }
     }
     

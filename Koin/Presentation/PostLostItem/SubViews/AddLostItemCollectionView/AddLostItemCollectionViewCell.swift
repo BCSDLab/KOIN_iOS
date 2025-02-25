@@ -595,8 +595,8 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     }
     
     private func setUpStackView() {
-        let items = ["카드", "신분증", "지갑", "전자제품", "그 외"]
-        let widths = [49, 61, 49, 73, 52]
+        let items = ["카드", "신분증", "지갑", "전자제품", "기타"]
+        let widths = [49, 61, 49, 73, 49]
         
         let buttons: [UIButton] = zip(items, widths).enumerated().map { index, element in
             let (title, width) = element

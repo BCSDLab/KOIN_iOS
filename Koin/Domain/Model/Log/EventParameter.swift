@@ -29,8 +29,6 @@ enum EventParameter {
         
         enum ABTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
-            case campusDining = "CAMPUS_dining_1"
-            case campusNotice = "CAMPUS_notice_1"
             case businessCall = "BUSINESS_call_1"
             var team: String {
                 return "AB_TEST"
@@ -150,6 +148,16 @@ enum EventParameter {
             case findUserDelete = "find_user_delete"
             case findUserDeleteConfirm = "find_user_delete_confirm"
             
+            case lostItemWrite = "lost_item_write"
+            case findUserWrite = "find_user_write"
+            case lostItemCategory = "lost_item_category"
+            case lostItemAddItem = "lost_item_add_item"
+            case lostItemWriteConfirm = "lost_item_write_confirm"
+            case itemMessageSend = "item_message_send"
+            case itemPostReport = "item_post_report"
+            case itemPostReportConfirm = "item_post_report_confirm"
+            case messageListSelect = "message_list_select"
+            case itemPostType = "item_post_type"
             var team: String {
                 return "CAMPUS"
             }

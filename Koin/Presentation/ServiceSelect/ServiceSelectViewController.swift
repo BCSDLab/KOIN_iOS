@@ -246,6 +246,7 @@ extension ServiceSelectViewController {
             showToast(message: "로그인이 필요한 기능입니다.")
             return 
         }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "쪽지"))
         let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
     }

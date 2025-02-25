@@ -15,6 +15,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     enum Input {
         case fetchChatRooms
         case fetchUserId
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -34,6 +35,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     }
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     
     // MARK: - Initialization
@@ -48,6 +50,8 @@ final class ChatListTableViewModel: ViewModelProtocol {
                 self?.fetchChatRooms()
             case .fetchUserId:
                 self?.fetchUserData()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -75,5 +79,8 @@ extension ChatListTableViewModel {
             self?.chatList = response
         }.store(in: &subscriptions)
 
+    }
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

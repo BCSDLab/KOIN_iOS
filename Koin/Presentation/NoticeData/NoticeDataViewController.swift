@@ -342,10 +342,12 @@ extension NoticeDataViewController {
     
     @objc private func chatButtonTapped() {
         inputSubject.send(.checkLogin(.chat))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemMessageSend, .click, "\(viewModel.type.description)물 쪽지 보내기"))
     }
     
     @objc private func reportButtonTapped() {
         inputSubject.send(.checkLogin(.report))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReport, .click, "신고하기"))
     }
     
     @objc private func deleteButtonTapped() {

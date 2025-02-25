@@ -54,6 +54,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private(set) var boardId: Int = 0
     private(set) var previousNoticeId: Int?
     private(set) var nextNoticeId: Int?
+    private(set) var type: LostItemType = .lost
     
     init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int, boardId: Int) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
@@ -144,6 +145,7 @@ extension NoticeDataViewModel {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] response in
+            self?.type = response.type ?? .lost
             self?.outputSubject.send(.updateLostItem(response))
         }).store(in: &subscriptions)
     }

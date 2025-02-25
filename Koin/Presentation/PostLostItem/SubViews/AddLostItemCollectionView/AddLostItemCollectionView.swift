@@ -92,11 +92,15 @@ extension AddLostItemCollectionView {
             }
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
+                guard let strongSelf = self else { return }
                 self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
                 self?.reloadData()
                 self?.collectionViewLayout.invalidateLayout()
                 self?.heightChangedPublisher.send()
-                self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
+                switch strongSelf.type {
+                case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
+                case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
+                }
             }.store(in: &footerCancellables)
             return footerView
         }
@@ -128,8 +132,12 @@ extension AddLostItemCollectionView {
             self?.articles[indexPath.row].foundDate = value
         }.store(in: &cell.cancellables)
         cell.categoryPublisher.sink { [weak self] value in
+            guard let strongSelf = self else { return }
             self?.articles[indexPath.row].category = value
-            self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserCategory, .click, value))
+            switch strongSelf.type {
+            case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserCategory, .click, value))
+            case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemCategory, .click, value))
+            }
         }.store(in: &cell.cancellables)
         cell.locationPublisher.sink { [weak self] value in
             self?.articles[indexPath.row].location = value
