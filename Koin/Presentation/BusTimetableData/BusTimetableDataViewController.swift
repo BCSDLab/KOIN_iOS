@@ -247,7 +247,7 @@ extension BusTimetableDataViewController {
                 $0.isHidden = true
             }
             if shuttleTimetableType == .dropOffSchool {
-                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo[1].arrivalTime)
+                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo.reversed(), routeInfo: timetable.routeInfo[1].arrivalTime)
             }
             else {
                 oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo.first?.arrivalTime ?? [])

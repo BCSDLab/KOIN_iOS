@@ -1476,10 +1476,10 @@
 				83DD0DB62C53777800278ABD /* SearchBusInfoUseCase.swift */,
 				83DD0DBE2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift */,
 				83DD0DC92C5651D900278ABD /* FetchExpressTimetableUseCase.swift */,
-				83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */,
 				83DD0DE52C57406600278ABD /* GetBusFiltersUseCase.swift */,
-				83E770FB2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift */,
+				83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */,
 				83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */,
+				83E770FB2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift */,
 				83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */,
 			);
 			path = Bus;
