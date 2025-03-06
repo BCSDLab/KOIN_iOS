@@ -14,7 +14,6 @@ final class ChatListTableViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchChatRooms
-        case fetchUserId
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -36,7 +35,6 @@ final class ChatListTableViewModel: ViewModelProtocol {
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-    private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     
     // MARK: - Initialization
     
@@ -48,8 +46,6 @@ final class ChatListTableViewModel: ViewModelProtocol {
             switch input {
             case .fetchChatRooms:
                 self?.fetchChatRooms()
-            case .fetchUserId:
-                self?.fetchUserData()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -60,16 +56,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
 }
 
 extension ChatListTableViewModel {
-    
-    private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            WebSocketManager.shared.setUserId(id: response.id, nickname: response.nickname ?? response.anonymousNickname ?? "익명")
-        }.store(in: &subscriptions)
-    }
+
     private func fetchChatRooms() {
         fetchChatRoomUseCase.execute().sink { completion in
             if case let .failure(error) = completion {

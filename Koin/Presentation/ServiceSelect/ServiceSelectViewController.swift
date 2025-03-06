@@ -443,7 +443,7 @@ extension ServiceSelectViewController {
     
     private func setUpDetailLayout() {
         let kindOfButton = [noticeListButton, busTimetableButton, busSearchButton, shopSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        let buttonName = ["게시판", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
         for idx in 0..<buttonName.count {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)

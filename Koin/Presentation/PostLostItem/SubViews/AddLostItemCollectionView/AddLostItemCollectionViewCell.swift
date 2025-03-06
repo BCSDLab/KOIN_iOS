@@ -21,6 +21,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
+    private var type: LostItemType = .lost
     
     private var textViewPlaceHolder = ""
     
@@ -180,18 +181,19 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
         dateLabel.text = "\(type.description) 일자"
-        dateButton.setTitle("\(type.description) 장소를 입력해주세요.", for: .normal)
+        self.type = type
         pictureMessageLabel.text = "\(type.description)물 사진을 업로드해주세요."
         locationLabel.text = "\(type.description) 장소"
         locationTextField.attributedPlaceholder = NSAttributedString(
             string: "\(type.description) 장소를 입력해주세요.",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
         )
+        setUpTexts(type)
         itemCountLabel.text = "\(type.description)물 \(index + 1)"
         
         locationTextField.text = model.location
         if model.foundDate.isEmpty {
-            dateButton.setTitle("\(type.description) 장소를 입력해주세요", for: .normal)
+            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
         } else {
             dateButton.setTitle(model.foundDate, for: .normal)
@@ -295,15 +297,18 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
     
     func validateInputs() -> Bool {
         var isValid = true
-        if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            locationWarningLabel.isHidden = false
-            isValid = false
-        }
+        if self.type != .lost {
+               if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                   locationWarningLabel.isHidden = false
+                   isValid = false
+               }
+           }
         
-        if dateButton.title(for: .normal)?.isEmpty ?? true {
+        if let title = dateButton.title(for: .normal), title.contains("장소") {
             dateWarningLabel.isHidden = false
             isValid = false
         }
+
         
         let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
         if selectedCategory == nil {
@@ -566,10 +571,14 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
         }
+        
+    }
+    
+    private func setUpTexts(_ type: LostItemType) {
         let texts = [
             "품목이 선택되지 않았습니다.",
-            "습득일자가 입력되지 않았습니다.",
-            "습득장소가 입력되지 않았습니다."
+            "\(type.description)일자가 입력되지 않았습니다.",
+            "\(type.description)장소가 입력되지 않았습니다."
         ]
         
         let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
@@ -591,9 +600,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
             label.attributedText = attributedString
         }
-        
     }
-    
     private func setUpStackView() {
         let items = ["카드", "신분증", "지갑", "전자제품", "기타"]
         let widths = [49, 61, 49, 73, 49]

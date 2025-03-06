@@ -11,7 +11,13 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - UI Components
     
-    private let dateLabel = UILabel().then { _ in
+    private let dateLabel = UILabel().then {
+        $0.layer.cornerRadius = 16
+        $0.layer.masksToBounds = true
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.textColor = UIColor.appColor(.primary600)
+        $0.textAlignment = .center
     }
     
     // MARK: - Initialization
@@ -29,8 +35,9 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
 }
 
 extension ChatDateHeaderView {
-    func configure(text: String) {
-    
+    func configure(date: ChatDateInfo) {
+        dateLabel.text = "\(date.year)년 \(date.month)월 \(date.day)일"
+        print(date)
     }
 }
 
@@ -42,9 +49,10 @@ extension ChatDateHeaderView {
     
     private func setUpConstraints() {
         dateLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(34)
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(27)
+            $0.width.equalTo(112)
         }
     }
     

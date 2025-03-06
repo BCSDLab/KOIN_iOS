@@ -38,7 +38,6 @@ final class ChatListTableViewController: UITableViewController {
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.fetchUserId)
         NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
     }
@@ -59,10 +58,6 @@ final class ChatListTableViewController: UITableViewController {
             switch output {
             case .showChatRoom:
                 self?.tableView.reloadData()
-                WebSocketManager.shared.connect()
-                strongSelf.viewModel.chatList.forEach {
-                    WebSocketManager.shared.subscribeToChat(roomId: $0.chatRoomId, articleId: $0.articleId)
-                }
             }
         }.store(in: &subscriptions)
     }

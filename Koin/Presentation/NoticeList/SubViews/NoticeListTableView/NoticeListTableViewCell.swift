@@ -103,7 +103,7 @@ final class NoticeListTableViewCell: UITableViewCell {
             hitLabel.text = "\(articleModel.hit?.formattedWithComma ?? "")"
         }
         
-        if articleModel.boardId == 14 {
+        if articleModel.boardId == 14 && articleModel.type != nil {
             categoryLabel.isHidden = false
             [separatorDot2Label, eyeImageView, hitLabel].forEach {
                 $0.isHidden = true
@@ -141,7 +141,7 @@ final class NoticeListTableViewCell: UITableViewCell {
         }
         contentLabel.text = articleModel.content
         nickNameLabel.snp.remakeConstraints {
-            if articleModel.boardId == 14 { $0.top.equalTo(contentLabel.snp.bottom).offset(4) }
+            if articleModel.boardId == 14 && articleModel.type != nil { $0.top.equalTo(contentLabel.snp.bottom).offset(4) }
             else { $0.top.equalTo(noticeTitleLabel.snp.bottom).offset(4) }
             $0.leading.equalTo(boardTitleLabel)
         }

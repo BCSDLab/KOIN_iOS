@@ -107,6 +107,7 @@ extension ChangeMyProfileViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("회원 정보 수정이 완료되었습니다.", true, .save))
             self?.userData = response
+            UserDataManager.shared.setUserData(userData: response)
         }.store(in: &subscriptions)
 
     }

@@ -29,8 +29,6 @@ final class WebSocketManager: NSObject {
         formatter.locale = Locale(identifier: "en_US_POSIX") // ✅ 포맷 일관성 유지
         return formatter
     }()
-    private var userId: Int = 0
-    private var userNickname: String = ""
     private var isConnected: Bool = false // ✅ 연결 상태 체크
     private var subscriptions: Set<String> = [] // ✅ 중복 구독 방지 (Set 사용)
 
@@ -38,10 +36,6 @@ final class WebSocketManager: NSObject {
         super.init()
     }
     
-    func setUserId(id: Int, nickname: String) {
-        self.userId = id
-        self.userNickname = nickname
-    }
     
     // MARK: - WebSocket 연결
     func connect() {
@@ -79,8 +73,8 @@ final class WebSocketManager: NSObject {
     func sendMessage(roomId: Int, articleId: Int, message: String, isImage: Bool) {
         let destination = "/app/chat/\(articleId)/\(roomId)"
         let payload: [String: Any] = [
-            "user_nickname": userNickname,
-            "user_id": userId,
+            "user_nickname": UserDataManager.shared.nickname,
+            "user_id": UserDataManager.shared.id,
             "content": message,
             "timestamp": dateFormatter.string(from: Date()),
             "is_image": isImage
@@ -174,6 +168,7 @@ extension WebSocketManager: StompClientLibDelegate {
     func stompClient(client: StompClientLib!, didReceiveMessageWithJSONBody jsonBody: AnyObject?, akaStringBody stringBody: String?, withHeader header: [String : String]?, withDestination destination: String) {
         if let json = jsonBody as? [String: Any] {
             NotificationCenter.default.post(name: .chatMessageReceived, object: nil, userInfo: json)
+            print(json)
         } else if let body = stringBody {
             print("📩 [Alternative] Received Text Message: \(body) from \(destination)")
         } else {

@@ -58,7 +58,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = viewModel.articleTitle
-        
         let rightButton = UIBarButtonItem(image: UIImage.appImage(asset: .threeCircle), style: .plain, target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
@@ -78,6 +77,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         super.viewDidLoad()
         configureView()
         bind()
+        inputSubject.send(.connectChat)
         inputSubject.send(.fetchChatDetail)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -136,7 +136,7 @@ extension ChatViewController{
                   let senderId = userInfo["user_id"] as? Int else {
                 return
             }
-            let isMine = (senderId == viewModel.userId)
+            let isMine = (senderId == UserDataManager.shared.id)
             let newMessage = ChatMessage(
                 senderNickname: senderNickname,
                 content: content,
@@ -150,10 +150,11 @@ extension ChatViewController{
 
     
     @objc private func sendButtonTapped() {
+        if textView.text.isEmpty { return }
         WebSocketManager.shared.sendMessage(roomId: viewModel.chatRoomId, articleId: viewModel.articleId, message: textView.text, isImage: false)
         textView.text = ""
         textViewHeightConstraint.constant = 40
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.1) {
             self.view.layoutIfNeeded()
         }
     }

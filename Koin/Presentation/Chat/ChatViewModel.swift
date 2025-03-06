@@ -16,6 +16,7 @@ final class ChatViewModel: ViewModelProtocol {
         case uploadFile([Data])
         case fetchChatDetail
         case blockUser
+        case connectChat
     }
     
     // MARK: - Output
@@ -38,7 +39,6 @@ final class ChatViewModel: ViewModelProtocol {
     let articleId: Int
     let chatRoomId: Int
     let articleTitle: String
-    private(set) var userId = 0
     
     
     // MARK: - Initialization
@@ -53,11 +53,13 @@ final class ChatViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .fetchChatDetail:
-                self?.fetchUserData()
+                self?.fetchChatDetail()
             case .blockUser:
                 self?.blockUser()
             case .uploadFile(let files):
                 self?.uploadFiles(files: files)
+            case .connectChat:
+                self?.connectChat()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -67,6 +69,10 @@ final class ChatViewModel: ViewModelProtocol {
 
 extension ChatViewModel {
     
+    private func connectChat() {
+        WebSocketManager.shared.connect()
+        WebSocketManager.shared.subscribeToChat(roomId: chatRoomId, articleId: articleId)
+    }
     private func uploadFiles(files: [Data]) {
         uploadFileUseCase.execute(files: files).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -77,18 +83,7 @@ extension ChatViewModel {
         }.store(in: &subscriptions)
         
     }
-    private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                self?.outputSubject.send(.showToast(error.message, false))
-            }
-        } receiveValue: { [weak self] response in
-            self?.fetchChatDetail(userId: response.id)
-            WebSocketManager.shared.setUserId(id: response.id, nickname: response.nickname ?? response.anonymousNickname ?? "익명")
-            self?.userId = response.id
-        }.store(in: &subscriptions)
 
-    }
     private func blockUser() {
         blockUserUserCase.execute(articleId: articleId, chatRoomId: chatRoomId).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -98,8 +93,8 @@ extension ChatViewModel {
             self?.outputSubject.send(.showToast("사용자가 차단되었습니다.", true))
         }.store(in: &subscriptions)
     }
-    private func fetchChatDetail(userId: Int) {
-        fetchChatDetailUseCase.execute(userId: userId, articleId: articleId, chatRoomId: chatRoomId).sink { completion in
+    private func fetchChatDetail() {
+        fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

@@ -23,6 +23,7 @@ final class WriteTypeModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        addTapGestureToDismiss()
         findButton.addTarget(self, action: #selector(findButtonTapped), for: .touchUpInside)
         lostButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
@@ -41,6 +42,23 @@ final class WriteTypeModalViewController: UIViewController {
     @objc private func writeButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
+    private func addTapGestureToDismiss() {
+           let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside))
+           tapGesture.cancelsTouchesInView = false
+           view.addGestureRecognizer(tapGesture)
+       }
+
+       /// ✅ 바깥 클릭 시 dismiss 처리
+       @objc private func handleTapOutside(_ sender: UITapGestureRecognizer) {
+           let location = sender.location(in: view)
+           
+           // 버튼들이 위치한 영역 제외하고 클릭된 경우 dismiss
+           if !findButton.frame.contains(location) &&
+               !lostButton.frame.contains(location) &&
+               !writeButton.frame.contains(location) {
+               dismiss(animated: true, completion: nil)
+           }
+       }
 }
 
 extension WriteTypeModalViewController {

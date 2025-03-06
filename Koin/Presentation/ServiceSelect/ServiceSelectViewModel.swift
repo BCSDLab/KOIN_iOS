@@ -65,6 +65,7 @@ extension ServiceSelectViewModel {
     private func logOut() {
         KeychainWorker.shared.delete(key: .access)
         KeychainWorker.shared.delete(key: .refresh)
+        UserDataManager.shared.resetUserData()
         isLogined = false
         outputSubject.send(.disappearProfile)
     }

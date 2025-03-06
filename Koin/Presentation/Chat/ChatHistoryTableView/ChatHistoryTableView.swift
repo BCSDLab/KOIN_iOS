@@ -11,11 +11,11 @@ import UIKit
 final class ChatHistoryTableView: UITableView {
     
     // MARK: - Properties
-    private var chatHistory: [ChatMessage] = []
+    private var chatSections: [(date: ChatDateInfo, messages: [ChatMessage])] = []
     let imageTapPublisher = PassthroughSubject<UIImage, Never>()
-    
+
     // MARK: - Initialization
-    override init(frame: CGRect, style: UITableView.Style) {
+    override init(frame: CGRect, style: UITableView.Style = .grouped) {
         super.init(frame: frame, style: style)
         commonInit()
     }
@@ -28,48 +28,91 @@ final class ChatHistoryTableView: UITableView {
     private func commonInit() {
         delegate = self
         dataSource = self
+        sectionHeaderTopPadding = 0
         separatorStyle = .none
         register(ChatImageTableViewCell.self, forCellReuseIdentifier: "ChatImageTableViewCell")
         register(ChatTextTableViewCell.self, forCellReuseIdentifier: ChatTextTableViewCell.identifier)
         register(ChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatDateHeaderView.identifier)
     }
-    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        for section in 0..<self.numberOfSections {
+            if let header = self.headerView(forSection: section) {
+                let sectionRect = self.rect(forSection: section)
+                var headerFrame = header.frame
+                headerFrame.origin.y = sectionRect.origin.y
+                header.frame = headerFrame
+            }
+        }
+    }
+
+    // MARK: - 데이터 세팅
     func setChatHistory(item: [ChatMessage]) {
-        self.chatHistory = item
+        chatSections = groupMessagesByDate(messages: item)
         reloadData()
         scrollToBottom(animated: false)
     }
-    
-    func appendNewMessage(_ message: ChatMessage) {
-            chatHistory.append(message)
-            let newIndexPath = IndexPath(row: chatHistory.count - 1, section: 0)
 
-            performBatchUpdates({
-                insertRows(at: [newIndexPath], with: .bottom)
-            }) { [weak self] _ in
-                self?.scrollToBottom(animated: true)
+    private func groupMessagesByDate(messages: [ChatMessage]) -> [(date: ChatDateInfo, messages: [ChatMessage])] {
+        var groupedMessages: [(date: ChatDateInfo, messages: [ChatMessage])] = []
+        
+        for message in messages {
+            if let lastSection = groupedMessages.last, lastSection.date.day == message.chatDateInfo.day {
+                // 같은 날짜(day)면 기존 섹션에 추가
+                groupedMessages[groupedMessages.count - 1].messages.append(message)
+            } else {
+                // 새로운 날짜(day)면 새 섹션 추가
+                groupedMessages.append((date: message.chatDateInfo, messages: [message]))
             }
         }
+        
+        return groupedMessages
+    }
+
+    func appendNewMessage(_ message: ChatMessage) {
+        if let lastSection = chatSections.last, lastSection.date.day == message.chatDateInfo.day {
+            // 같은 날짜(day)면 기존 섹션에 메시지 추가
+            chatSections[chatSections.count - 1].messages.append(message)
+        } else {
+            // 새로운 날짜(day)면 새 섹션 추가
+            chatSections.append((date: message.chatDateInfo, messages: [message]))
+        }
+        
+        DispatchQueue.main.async {
+            self.reloadData()
+            self.scrollToBottom(animated: true)
+        }
+    }
+
+
 }
 
+// MARK: - UITableViewDataSource
 extension ChatHistoryTableView: UITableViewDataSource {
     
     private func scrollToBottom(animated: Bool) {
-        guard !chatHistory.isEmpty else { return }
+        guard !chatSections.isEmpty else { return }
         
-        let lastIndexPath = IndexPath(row: chatHistory.count - 1, section: 0)
+        let lastSection = chatSections.count - 1
+        let lastRow = chatSections[lastSection].messages.count - 1
+        let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
+        
         DispatchQueue.main.async {
             self.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatHistory.count
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return chatSections.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return chatSections[section].messages.count
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = chatHistory[indexPath.row]
+        let message = chatSections[indexPath.section].messages[indexPath.row]
+        
         if message.isImage {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell else {
                 return UITableViewCell()
@@ -87,10 +130,23 @@ extension ChatHistoryTableView: UITableViewDataSource {
             return cell
         }
     }
-    
 }
 
+// MARK: - UITableViewDelegate (헤더)
 extension ChatHistoryTableView: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ChatDateHeaderView.identifier) as? ChatDateHeaderView else {
+            return nil
+        }
+        header.configure(date: chatSections[section].date)
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 51
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }

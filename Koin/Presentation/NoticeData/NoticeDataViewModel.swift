@@ -102,8 +102,6 @@ extension NoticeDataViewModel {
             }
         }, receiveValue: { [weak self] response in
             self?.outputSubject.send(.navigateToChat(response.articleId, response.chatRoomId, response.articleTitle))
-            WebSocketManager.shared.connect()
-            WebSocketManager.shared.subscribeToChat(roomId: response.chatRoomId, articleId: response.articleId)
         }).store(in: &subscriptions)
     }
     

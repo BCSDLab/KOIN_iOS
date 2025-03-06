@@ -57,7 +57,7 @@ final class HomeViewController: UIViewController {
     
     private let noticeLabel: UILabel = {
         let label = UILabel()
-        label.text = "공지사항"
+        label.text = "게시판"
         label.textColor = UIColor.appColor(.primary500)
         label.font = UIFont.appFont(.pretendardBold, size: 15)
         return label
@@ -180,15 +180,17 @@ final class HomeViewController: UIViewController {
         bind()
         inputSubject.send(.viewDidLoad)
         configureView()
+        print(KeychainWorker.shared.read(key: .fcm))
         configureSwipeGestures()
         configureTapGesture()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-        print(KeychainWorker.shared.read(key: .access) ?? "")
+   //     print(KeychainWorker.shared.read(key: .access) ?? "")
         
-        print("위가 엑세스 아래가 리프레시")
+     //   print("위가 엑세스 아래가 리프레시")
+     //   print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self

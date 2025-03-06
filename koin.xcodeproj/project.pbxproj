@@ -329,6 +329,7 @@
 		D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3C2C159350000813F9 /* DateProvider.swift */; };
 		D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */; };
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
+		D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D261BB972D79418600A67F06 /* UserDataManager.swift */; };
 		D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */; };
 		D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */; };
 		D26B2EC62CD65A2D00BEE07C /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */; };
@@ -939,6 +940,7 @@
 		D249CD3C2C159350000813F9 /* DateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
 		D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDiningTime.swift; sourceTree = "<group>"; };
 		D249CD402C15CBAA000813F9 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		D261BB972D79418600A67F06 /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewModel.swift; sourceTree = "<group>"; };
 		D26B2EC52CD65A2D00BEE07C /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
@@ -2519,6 +2521,7 @@
 				D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */,
 				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
 				D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */,
+				D261BB972D79418600A67F06 /* UserDataManager.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -3856,6 +3859,7 @@
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
+				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,

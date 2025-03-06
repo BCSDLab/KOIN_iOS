@@ -70,6 +70,7 @@ extension MyProfileViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("회원탈퇴가 완료되었습니다.", true))
+            UserDataManager.shared.resetUserData()
         }.store(in: &subscriptions)
     }
     
