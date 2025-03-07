@@ -9,7 +9,7 @@
 import Foundation
 
 struct UserDTO: Decodable {
-    let id: Int
+    let id: Int?
     let anonymousNickname: String?
     let email: String?
     let gender: Int?

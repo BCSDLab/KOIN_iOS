@@ -29,7 +29,9 @@ final class UserDataManager {
             gender = ""
         }
         nickname = userData.nickname ?? userData.anonymousNickname ?? ""
-        id = userData.id
+        if let id = userData.id {
+            self.id = id
+        }
         major = userData.major ?? ""
     }
     func resetUserData() {
