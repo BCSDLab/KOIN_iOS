@@ -68,6 +68,9 @@ final class BusSearchResultTableViewCell: UITableViewCell {
         if let busNumber = searchModel.busName {
             busNumberLabel.text = "\(busNumber)번"
         }
+        else {
+            busNumberLabel.text = ""
+        }
     }
    
 }

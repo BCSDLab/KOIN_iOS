@@ -21,7 +21,7 @@ struct CityBusTimetableDTO: Decodable {
 
 struct CityBusInfo: Decodable {
     let number: BusNumber?
-    let departNode, arrivalNode: CityBusDirection?
+    let departNode, arrivalNode: String?
 
     enum CodingKeys: String, CodingKey {
         case number
