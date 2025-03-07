@@ -368,7 +368,6 @@ extension TimetableViewController {
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
     private func updateTimetable(lectureData: [LectureData]) {
-        print(lectureData)
         
         let existingLectureViews = containerView.subviews.compactMap { $0 as? LectureView }
         let existingLectureInfos = Set(existingLectureViews.map { $0.info })
@@ -616,7 +615,7 @@ extension TimetableViewController {
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(646)
-            make.bottom.equalTo(scrollView.snp.bottom)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-500)
         }
         addClassCollectionView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.centerY)
