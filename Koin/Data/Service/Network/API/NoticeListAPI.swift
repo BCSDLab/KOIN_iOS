@@ -9,6 +9,7 @@ import Alamofire
 
 enum NoticeListAPI {
     case fetchNoticeArticles(FetchNoticeArticlesRequest)
+    case fetchLostItemArticles(FetchLostItemsRequest)
     case searchNoticeArticle(SearchNoticeArticleRequest)
     case fetchNoticeData(FetchNoticeDataRequest)
     case fetchHotNoticeArticles
@@ -17,10 +18,11 @@ enum NoticeListAPI {
     case fetchNotificationKeyword
     case fetchRecommendedSearchWord(FetchRecommendedSearchWordRequest)
     case fetchRecommendedKeyword
-    case postLostItem([PostLostArticleRequest])
+    case postLostItem([PostLostItemRequest])
     case fetchLostItemList(FetchNoticeArticlesRequest)
     case fetchLostItem(Int)
     case deleteLostItem(Int)
+    case reportLostItem(Int, ReportLostItemRequest)
 }
 
 extension NoticeListAPI: Router, URLRequestConvertible {
@@ -44,14 +46,16 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .fetchLostItemList: return "/articles/lost-item"
         case .fetchLostItem(let id): return "/articles/lost-item/\(id)"
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
+        case .reportLostItem(let id, _): return "/articles/lost-item/\(id)/reports"
+        case .fetchLostItemArticles: return "/articles/lost-item"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItem, .fetchLostItemList:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItem, .fetchLostItemList, .fetchLostItemArticles:
             return .get
-        case .createNotificationKeyword, .postLostItem:
+        case .createNotificationKeyword, .postLostItem, .reportLostItem:
             return .post
         case .deleteNotificationKeyword, .deleteLostItem:
             return .delete
@@ -60,13 +64,10 @@ extension NoticeListAPI: Router, URLRequestConvertible {
     
     public var headers: [String: String] {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItem, .fetchLostItemList:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchRecommendedKeyword, .fetchRecommendedSearchWord, .fetchLostItemList:
             return [:]
-        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword,
-                .postLostItem,
-                .deleteLostItem
-            :
-            if let token = KeyChainWorker.shared.read(key: .access) {
+        case .createNotificationKeyword, .deleteNotificationKeyword, .fetchNotificationKeyword, .postLostItem, .deleteLostItem, .fetchLostItem, .reportLostItem, .fetchLostItemArticles:
+            if let token = KeychainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
             } else {
@@ -80,6 +81,8 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles(let request):
             return try? request.toDictionary()
+        case .fetchLostItemArticles(let request):
+            return try? request.toDictionary()
         case .searchNoticeArticle(let request):
             return try? request.toDictionary()
         case .fetchRecommendedSearchWord(let requestModel):
@@ -91,23 +94,26 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .deleteNotificationKeyword(let request):
             return try? request.toDictionary()
         case .postLostItem(let request):
-            return try? PostLostArticleRequestWrapper(articles: request).toDictionary()
+            return try? PostLostItemRequestWrapper(articles: request).toDictionary()
         case .fetchLostItemList(let request):
             return try? request.toDictionary()
         case .fetchLostItem:
             return nil
         case .deleteLostItem:
             return nil
+        case .reportLostItem(_,let request):
+            return try? request.toDictionary()
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchNoticeArticles, .searchNoticeArticle, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchLostItemList, .fetchLostItem, .deleteLostItem:
+        case .fetchNoticeArticles, .searchNoticeArticle, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchLostItemList, .fetchLostItem, .deleteLostItem, .fetchLostItemArticles:
             return URLEncoding.default
-        case .fetchNoticeData, .fetchRecommendedSearchWord: 
+        case .fetchNoticeData, .fetchRecommendedSearchWord:
             return URLEncoding.queryString
-        case .createNotificationKeyword, .deleteNotificationKeyword, .postLostItem: return JSONEncoding.default
+        case .createNotificationKeyword, .deleteNotificationKeyword, .postLostItem, .reportLostItem: return JSONEncoding.default
         }
     }
+    
 }

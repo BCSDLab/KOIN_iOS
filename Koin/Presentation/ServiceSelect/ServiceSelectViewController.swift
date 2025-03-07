@@ -132,6 +132,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
+    private var chatButton: UIBarButtonItem?
     
     // MARK: - Initialization
     
@@ -148,10 +149,12 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let settingButton = UIBarButtonItem(
-              image: UIImage.appImage(asset: .gear), style: .plain, target: self, action: #selector(settingButtonTapped))
-          settingButton.tintColor = UIColor.appColor(.neutral800)
-          navigationItem.rightBarButtonItem = settingButton
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+        let gearImage = UIImage(systemName: "gearshape", withConfiguration: symbolConfig)
+        let chatImage = UIImage(systemName: "text.bubble", withConfiguration: symbolConfig)
+        let settingButton = UIBarButtonItem(image: gearImage, style: .plain, target: self, action: #selector(settingButtonTapped))
+        let chatButton = UIBarButtonItem(image: chatImage, style: .plain, target: self, action: #selector(chatButtonTapped))
+        navigationItem.rightBarButtonItems = [settingButton, chatButton]
         configureView()
         setupButtonActions()
         bind()
@@ -234,6 +237,17 @@ extension ServiceSelectViewController {
     
     @objc private func settingButtonTapped() {
         let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc private func chatButtonTapped() {
+        
+        if !viewModel.isLogined {
+            showToast(message: "로그인이 필요한 기능입니다.")
+            return 
+        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "쪽지"))
+        let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -429,7 +443,7 @@ extension ServiceSelectViewController {
     
     private func setUpDetailLayout() {
         let kindOfButton = [noticeListButton, busTimetableButton, busSearchButton, shopSelectButton, diningSelectButton, timetableSelectButton, facilityInfoSelectButton, landSelectButton, businessSelectButton]
-        let buttonName = ["공지사항", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
+        let buttonName = ["게시판", "버스 시간표", "교통편 조회하기", "주변 상점", "식단", "시간표", "교내 시설물 정보", "복덕방", "코인 for Business"]
         for idx in 0..<buttonName.count {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 16, leading: 24, bottom: 16, trailing: 24)

@@ -44,6 +44,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let assignAbTestUseCase: AssignAbTestUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
+    private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -71,6 +72,7 @@ final class HomeViewModel: ViewModelProtocol {
             case .viewDidLoad:
                 self?.getShopCategory()
                 self?.checkVersion()
+                self?.fetchUserData()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
             case .getDiningInfo:
@@ -91,7 +93,15 @@ final class HomeViewModel: ViewModelProtocol {
 }
 
 extension HomeViewModel {
-    
+    private func fetchUserData() {
+        fetchUserDataUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { response in
+            UserDataManager.shared.setUserData(userData: response)
+        }.store(in: &subscriptions)
+    }
     private func checkVersion() {
         checkVersionUseCase.execute().sink { completion in
             if case let .failure(error) = completion {

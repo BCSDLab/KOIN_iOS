@@ -50,8 +50,8 @@ extension LoginViewModel {
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
         } receiveValue: { [weak self] response in
-            KeyChainWorker.shared.create(key: .access, token: response.token)
-            KeyChainWorker.shared.create(key: .refresh, token: response.refreshToken)
+            KeychainWorker.shared.create(key: .access, token: response.token)
+            KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
             self?.outputSubject.send(.loginSuccess)
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
         }.store(in: &subscriptions)

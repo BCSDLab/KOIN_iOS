@@ -8,6 +8,7 @@
 import Foundation
 
 extension Date {
+    
     func isWeekend() -> Bool {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday], from: self)
@@ -104,5 +105,5 @@ extension Date {
         
         return dateArray
     }
-
+    
 }

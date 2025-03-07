@@ -45,7 +45,7 @@ extension UIViewController {
             window.addSubview(loginButton)
         }
         
-        let animator = UIViewPropertyAnimator(duration: 5.0, curve: .easeOut) {
+        let animator = UIViewPropertyAnimator(duration: 3.0, curve: .easeOut) {
             toastLabel.alpha = 0.1
             loginButton.alpha = 0.1
         }
@@ -110,7 +110,7 @@ extension UIViewController {
         
         window.addSubview(toastLabel)
         window.addSubview(button)
-        let animator = UIViewPropertyAnimator(duration: 5.0, curve: .easeOut) {
+        let animator = UIViewPropertyAnimator(duration: 3.0, curve: .easeOut) {
             toastLabel.alpha = 0.1
             button.alpha = 0.1
         }

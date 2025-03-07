@@ -17,7 +17,10 @@ final class GA4AnalyticsService: LogAnalyticsService {
         let parameters = [
             "event_label": label.rawValue,
             "event_category": category.rawValue,
-            "value": value
+            "value": value,
+            "user_id": UserDataManager.shared.userId,
+            "gender": UserDataManager.shared.gender,
+            "major": UserDataManager.shared.major
         ]
         Analytics.logEvent(label.team, parameters: parameters)
     }
@@ -26,7 +29,10 @@ final class GA4AnalyticsService: LogAnalyticsService {
         var defaultParameters = [
             "event_label": label.rawValue,
             "event_category": category.rawValue,
-            "value": value
+            "value": value,
+            "user_id": UserDataManager.shared.userId,
+            "gender": UserDataManager.shared.gender,
+            "major": UserDataManager.shared.major
         ]
         if let previousPage = previousPage {
             defaultParameters["previous_page"] = previousPage

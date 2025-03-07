@@ -323,6 +323,7 @@ extension TimetableViewModel {
     private func postLecture(lecture: LectureData) {
         let lectureRequest = LectureRequest(timetableFrameID: selectedFrameId ?? 0, timetableLecture: [TimetableLecture(lectureID: lecture.id, classTitle: lecture.name, classInfos: [ ClassInfo( classTime: lecture.classTime, classPlace: "")], professor: lecture.professor, grades: lecture.grades, memo: "메모메모")])
         
+        
         postLectureUseCase.execute(request: lectureRequest).sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")

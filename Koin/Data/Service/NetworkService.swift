@@ -78,15 +78,15 @@ class NetworkService {
     }
     
     func refreshToken() -> AnyPublisher<Void, ErrorResponse> {
-        return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeyChainWorker.shared.read(key: .refresh) ?? "")))
+        return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? "")))
             .map { (tokenDTO: TokenDTO) -> Void in
-                KeyChainWorker.shared.create(key: .access, token: tokenDTO.token)
-                KeyChainWorker.shared.create(key: .refresh, token: tokenDTO.refreshToken)
+                KeychainWorker.shared.create(key: .access, token: tokenDTO.token)
+                KeychainWorker.shared.create(key: .refresh, token: tokenDTO.refreshToken)
                 return ()
             }
             .catch { error -> AnyPublisher<Void, ErrorResponse> in
-                KeyChainWorker.shared.delete(key: .access)
-                KeyChainWorker.shared.delete(key: .refresh)
+                KeychainWorker.shared.delete(key: .access)
+                KeychainWorker.shared.delete(key: .refresh)
                 return Fail(error: ErrorResponse(code: "401", message: "로그인이 필요한 기능이에요.")).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()

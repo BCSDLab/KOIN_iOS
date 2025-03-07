@@ -79,7 +79,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
             }
         }.store(in: &subscriptions)
         
-        busSearchDatePickerViewController.cancelButtonPublisher.sink { [weak self] in
+        busSearchDatePickerViewController.leftButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
         }.store(in: &subscriptions)
         
