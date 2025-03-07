@@ -46,10 +46,11 @@ final class NoticeListViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeywordUseCase: FetchNotificationKeywordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeywordUseCase: FetchNotificationKeywordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeListType: NoticeListType = .all) {
         self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
         self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.noticeListType = noticeListType
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {

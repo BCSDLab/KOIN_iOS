@@ -180,7 +180,7 @@ final class HomeViewController: UIViewController {
         bind()
         inputSubject.send(.viewDidLoad)
         configureView()
-        print(KeychainWorker.shared.read(key: .fcm))
+        print(KeychainWorker.shared.read(key: .fcm) ?? "")
         configureSwipeGestures()
         configureTapGesture()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
