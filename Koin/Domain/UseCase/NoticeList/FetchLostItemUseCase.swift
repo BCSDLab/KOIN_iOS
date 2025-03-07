@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchLostItemUseCase {
-    func execute(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error>
+    func execute(id: Int) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
 }
 
 final class DefaultFetchLostItemUseCase: FetchLostItemUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchLostItemUseCase: FetchLostItemUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(id: Int) -> AnyPublisher<LostArticleDetailDTO, Error> {
+    func execute(id: Int) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
         noticeListRepository.fetchLostItem(id: id)
     }
 }

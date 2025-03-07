@@ -54,13 +54,14 @@ final class RegisterViewModel: ViewModelProtocol {
 extension RegisterViewModel {
     
     private func register(registerRequest: UserRegisterRequest, passwordMatch: String) {
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.completeSignUp, category: .click, value: "회원가입 완료")
         registerUseCase.execute(requestModel: registerRequest, passwordMatch: passwordMatch).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showHttpResult(error.message, .danger700))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.dissMissView)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.completeSignUp, category: .click, value: "회원가입 완료")
+            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.completeSignUp, category: .signup, value: "회원가입 완료 성공")
         }.store(in: &subscriptions)
 
     }

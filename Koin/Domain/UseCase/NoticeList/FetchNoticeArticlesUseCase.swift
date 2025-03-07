@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchNoticeArticlesUseCase {
-    func execute(boardId: Int?, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error>
+    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType?) -> AnyPublisher<NoticeArticlesInfo, Error>
 }
 
 final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
@@ -21,12 +21,16 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(boardId: Int?, keyWord: String?, page: Int) -> AnyPublisher<NoticeArticlesInfo, Error> {
+    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType? = nil) -> AnyPublisher<NoticeArticlesInfo, Error> {
         let response: AnyPublisher<NoticeListDTO, Error>
         
         if let keyWord = keyWord { // 키워드로 검색해서 찾을 경우
             let searchRequest = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
             response = noticeListRepository.searchNoticeArticle(requestModel: searchRequest)
+        }
+        else if boardId == 14 { // 분실물 board의 경우
+                let fetchRequest = FetchLostItemsRequest(type: type, page: page, limit: maxArticleListNumber)
+                response = noticeListRepository.fetchLostItemArticles(requestModel: fetchRequest)
         } else if let boardId = boardId { //키워드 없는 공지사항 목록을 원할 경우
             let fetchRequest = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
             response = noticeListRepository.fetchNoticeArticles(requestModel: fetchRequest)

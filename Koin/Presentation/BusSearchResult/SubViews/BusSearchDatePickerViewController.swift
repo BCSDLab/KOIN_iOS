@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class BusSearchDatePickerViewController: LoginModalViewController {
+final class BusSearchDatePickerViewController: ModalViewController {
    
     private let pickerView = KoinPickerView()
     private var subscriptions: Set<AnyCancellable> = []
@@ -19,14 +19,14 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
         super.viewDidLoad()
         setContentViewInContainer(view: pickerView, frame: .init(x: 0, y: 0, width: 301, height: 122))
         
-        loginButtonPublisher.sink { [weak self] in
+        rightButtonPublisher.sink { [weak self] in
             self?.pickerSelectedItemsPublisher.send(self?.pickerView.selectedItemPublisher.value ?? [])
             self?.changePickerDate.send(self?.pickerView.changeSelectedItemPublisher.value)
             self?.pickerView.changeSelectedItemPublisher.send(nil)
         }.store(in: &subscriptions)
         configureView()
         
-        cancelButtonPublisher.sink { [weak self] in
+        leftButtonPublisher.sink { [weak self] in
             let currentDate = Date()
             let calendar = Calendar.current
             let hour = calendar.component(.hour, from: currentDate)
@@ -50,7 +50,7 @@ final class BusSearchDatePickerViewController: LoginModalViewController {
     private func configureView() {
         updateMessageLabel(alignment: .left)
         updateSubMessageLabel(alignment: .left)
-        updateLoginButton(borderWidth: 0, title: "완료")
+        updaterightButton(borderWidth: 0, title: "완료")
         updateCloseButton(borderWidth: 0, title: "지금 출발")
     }
 }

@@ -16,11 +16,13 @@ final class NoticeListViewModel: ViewModelProtocol {
         case getUserKeywordList(NoticeKeywordDTO? = nil)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case checkAuth
+        case checkLogin
     }
     enum Output {
         case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
         case updateUserKeywordList([NoticeKeywordDTO], Int)
         case isLogined(Bool)
+        case showIsLogined(Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -29,7 +31,10 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
+    private(set) var noticeList: [NoticeArticleDTO] = []
+    var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
             getNoticeInfo(page: 1)
@@ -41,17 +46,18 @@ final class NoticeListViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeywordUseCase: FetchNotificationKeywordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+    init(fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase, fetchMyKeywordUseCase: FetchNotificationKeywordUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeListType: NoticeListType = .all) {
         self.fetchNoticeArticlesUseCase = fetchNoticeArticlesUseCase
         self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.noticeListType = noticeListType
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
             case let .changeBoard(noticeListType):
-                self?.changeBoard(noticeListType: noticeListType)
+                self?.noticeListType = noticeListType
             case let .changePage(page):
                 self?.getNoticeInfo(page: page)
             case let .getUserKeywordList(keyword):
@@ -60,6 +66,8 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case .checkAuth:
                 self?.checkAuth()
+            case .checkLogin:
+                self?.checkLogin()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -67,6 +75,12 @@ final class NoticeListViewModel: ViewModelProtocol {
 }
 
 extension NoticeListViewModel {
+    
+    private func checkLogin() {
+        checkLoginUseCase.execute().sink { [weak self] in
+            self?.outputSubject.send(.showIsLogined($0))
+        }.store(in: &subscriptions)
+    }
     
     func checkAuth() {
         
@@ -79,18 +93,16 @@ extension NoticeListViewModel {
         }).store(in: &subscriptions)
         
     }
-    private func changeBoard(noticeListType: NoticeListType) {
-        self.noticeListType = noticeListType
-    }
     
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page).sink(receiveCompletion: { completion in
+        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: fetchType).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] articleInfo in
             guard let self = self else { return }
             self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
+            self.noticeList = articleInfo.articles
         }).store(in: &subscriptions)
     }
     

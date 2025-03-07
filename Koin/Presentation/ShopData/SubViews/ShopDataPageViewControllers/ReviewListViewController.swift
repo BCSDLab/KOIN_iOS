@@ -108,7 +108,7 @@ final class ReviewListViewController: UIViewController {
         configureView()
         bind()
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
-        print(KeyChainWorker.shared.read(key: .access))
+        print(KeychainWorker.shared.read(key: .access))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -280,12 +280,6 @@ extension ReviewListViewController {
         self.shopReviewReportViewController = shopReviewReportViewController
             navigationController?.pushViewController(shopReviewReportViewController, animated: true)
         }
-    
-    private func navigateToLogin() {
-        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-                loginViewController.title = "로그인"
-                navigationController?.pushViewController(loginViewController, animated: true)
-    }
     
     private func navigateToWriteReview() {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())

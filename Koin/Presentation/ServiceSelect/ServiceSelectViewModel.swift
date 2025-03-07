@@ -23,7 +23,7 @@ final class ServiceSelectViewModel: ViewModelProtocol {
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private (set) var isLogined = false
+    private (set) var isLogined = false 
     
     init(fetchUserDataUseCase: FetchUserDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchUserDataUseCase = fetchUserDataUseCase
@@ -63,8 +63,9 @@ extension ServiceSelectViewModel {
     }
     
     private func logOut() {
-        KeyChainWorker.shared.delete(key: .access)
-        KeyChainWorker.shared.delete(key: .refresh)
+        KeychainWorker.shared.delete(key: .access)
+        KeychainWorker.shared.delete(key: .refresh)
+        UserDataManager.shared.resetUserData()
         isLogined = false
         outputSubject.send(.disappearProfile)
     }

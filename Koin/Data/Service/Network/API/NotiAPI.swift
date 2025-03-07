@@ -43,7 +43,7 @@ extension NotiAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
-        if let token = KeyChainWorker.shared.read(key: .access) {
+        if let token = KeychainWorker.shared.read(key: .access) {
             let headers = ["Authorization": "Bearer \(token)",
                            "Content-Type": "application/json" ]
             return headers
@@ -61,7 +61,7 @@ extension NotiAPI: Router, URLRequestConvertible {
         case .fetchNotiList:
             return nil
         case .sendDeviceToken:
-            return try? SendDeviceTokenRequest(deviceToken: KeyChainWorker.shared.read(key: .fcm) ?? "").toDictionary()
+            return try? SendDeviceTokenRequest(deviceToken: KeychainWorker.shared.read(key: .fcm) ?? "").toDictionary()
         }
     }
     

@@ -13,6 +13,7 @@ final class ImageScrollCollectionView: UICollectionView, UICollectionViewDataSou
     //MARK: - Properties
     private var imageUrls: [String] = []
     let currentPagePublisher = PassthroughSubject<Int, Never>()
+    let imageTapPublisher = PassthroughSubject<UIImage, Never>()
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -57,7 +58,9 @@ extension ImageScrollCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageScrollCollectionViewCell.identifier, for: indexPath) as? ImageScrollCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
+        cell.imageTapPublisher.sink { [weak self] image in
+            self?.imageTapPublisher.send(image)
+        }.store(in: &cell.cancellables)
         cell.configure(imageUrl: imageUrls[indexPath.row])
         return cell
     }
