@@ -59,11 +59,9 @@ extension LostItemImageCollectionViewCell {
     
     private func setUpConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
             make.centerY.equalToSuperview()
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing).offset(-8)
-            make.bottom.equalToSuperview()
         }
         cancelButton.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top)

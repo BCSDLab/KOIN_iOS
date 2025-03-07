@@ -359,7 +359,7 @@ extension NoticeDataViewController {
         titleGuideLabel.text = "\(item.type?.description ?? "")물"
         categoryLabel.text = item.category
         titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
-        categoryLabel.snp.makeConstraints { make in
+        categoryLabel.snp.remakeConstraints { make in
             make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
             make.leading.equalTo(titleGuideLabel)
             make.width.equalTo(categoryLabel.intrinsicContentSize.width + 20)

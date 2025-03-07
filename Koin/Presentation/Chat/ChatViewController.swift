@@ -69,6 +69,8 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        WebSocketManager.shared.disconnect()
+        print("disconnect")
     }
     
     // MARK: - Life Cycle
