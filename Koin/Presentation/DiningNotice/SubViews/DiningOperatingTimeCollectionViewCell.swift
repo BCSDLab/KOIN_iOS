@@ -12,32 +12,22 @@ import UIKit
 final class DiningOperatingTimeCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
+    private let timeLabel = UILabel().then { _ in
+    }
     
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let startTimeLabel = UILabel().then { _ in
+    }
     
-    private let startTimeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let endTimeLabel = UILabel().then { _ in
+    }
     
-    private let endTimeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral300)
-        return view
-    }()
+    private let separateView = UILabel().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -49,7 +39,6 @@ final class DiningOperatingTimeCollectionViewCell: UICollectionViewCell {
         startTimeLabel.text = open.openTime
         endTimeLabel.text = open.closeTime
     }
-    
 }
 
 extension DiningOperatingTimeCollectionViewCell {
@@ -84,6 +73,7 @@ extension DiningOperatingTimeCollectionViewCell {
             label.textAlignment = .center
         }
     }
+    
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
