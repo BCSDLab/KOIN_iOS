@@ -21,33 +21,30 @@ final class DiningViewController: UIViewController {
     // MARK: - UI Components
     
     private let dateCalendarCollectionView: CalendarCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = (UIScreen.main.bounds.width - (28 * 7 + 24 * 2)) / 6
-        flowLayout.itemSize = .init(width: 28, height: 52)
-        let collectionView = CalendarCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
-        return collectionView
+        let flowLayout = UICollectionViewFlowLayout().then {
+            $0.scrollDirection = .horizontal
+            $0.minimumLineSpacing = (UIScreen.main.bounds.width - (28 * 7 + 24 * 2)) / 6
+            $0.itemSize = .init(width: 28, height: 52)
+        }
+        
+        return CalendarCollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
+            $0.isScrollEnabled = false
+        }
     }()
     
-    private let diningTypeSegmentControl: UISegmentedControl = {
-        let segment = UISegmentedControl()
-        segment.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        segment.insertSegment(withTitle: "아침", at: 0, animated: true)
-        segment.insertSegment(withTitle: "점심", at: 1, animated: true)
-        segment.insertSegment(withTitle: "저녁", at: 2, animated: true)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .normal)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
-        return segment
-    }()
+    private let diningTypeSegmentControl = UISegmentedControl().then {
+        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        $0.insertSegment(withTitle: "아침", at: 0, animated: true)
+        $0.insertSegment(withTitle: "점심", at: 1, animated: true)
+        $0.insertSegment(withTitle: "저녁", at: 2, animated: true)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 16)], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
+    }
     
-    private lazy var underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.primary500)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var underlineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
     private let separateViewArray: [UIView] = {
         var viewArray: [UIView] = []
@@ -59,50 +56,43 @@ final class DiningViewController: UIViewController {
         return viewArray
     }()
     
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .fillEqually
-        stackView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
-        return stackView
-    }()
+    private let stackView = UIStackView().then {
+        $0.distribution = .fillEqually
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
+    }
     
     private let diningListCollectionView: DiningCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        let collectionView = DiningCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .appColor(.neutral200)
-        return collectionView
+        let flowLayout = UICollectionViewFlowLayout().then {
+            $0.scrollDirection = .vertical
+        }
+                
+        return DiningCollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
+            $0.backgroundColor = .appColor(.neutral200)
+        }
     }()
     
-    private let warningImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .warning)
-        return imageView
-    }()
+    private let warningImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .warning)
+    }
     
-    private lazy var tabBarView: UIView = {
-        let tabBarView = UIView()
-        tabBarView.backgroundColor = .clear
-        return tabBarView
-    }()
+    private lazy var tabBarView = UIView().then {
+        $0.backgroundColor = .clear
+    }
     
-    private let warningLabel: UILabel = {
-        let label = UILabel()
-        label.text = "식단이 표시되지 않아\n표시할 수 없습니다."
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral800)
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
+    private let warningLabel = UILabel().then {
+        $0.text = "식단이 표시되지 않아\n표시할 수 없습니다."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.numberOfLines = 0
+        $0.textAlignment = .center
+    }
     
     private let diningNotiContentViewController = DiningNotiContentViewController()
-    private let diningLikeLoginModalViewController: ModalViewController = {
-        let viewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray))
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        return viewController
-    }()
+    
+    private let diningLikeLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
     
     private func configureSwipeGestures() {
         let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
