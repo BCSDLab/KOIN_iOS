@@ -11,12 +11,10 @@ import UIKit
 class MenuSectionHeaderView: UICollectionReusableView {
     static let identifier = "MenuSectionHeaderView"
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .headline)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let titleLabel = UILabel().then {
+        $0.font = UIFont.preferredFont(forTextStyle: .headline)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
