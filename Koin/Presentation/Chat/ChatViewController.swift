@@ -10,7 +10,7 @@ import PhotosUI
 import UIKit
 
 final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
-    
+    //
     // MARK: - Properties
     private let viewModel: ChatViewModel
     private let inputSubject: PassthroughSubject<ChatViewModel.Input, Never> = .init()

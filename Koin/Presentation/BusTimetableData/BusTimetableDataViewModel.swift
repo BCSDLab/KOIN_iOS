@@ -56,6 +56,8 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
             }
         }, receiveValue: { [weak self] timetable in
             self?.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
+            print(timetable)
+            print(shuttleTimetableType)
         }).store(in: &subscriptions)
     }
     

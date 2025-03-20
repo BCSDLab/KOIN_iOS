@@ -22,6 +22,7 @@ final class LoginViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let loginUseCase: LoginUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchUserDataUseCase =  DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     
     init(loginUseCase: LoginUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.loginUseCase = loginUseCase
@@ -54,7 +55,18 @@ extension LoginViewModel {
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
             self?.outputSubject.send(.loginSuccess)
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
+            self?.setUserInfo()
         }.store(in: &subscriptions)
+    }
+    private func setUserInfo() {
+        fetchUserDataUseCase.execute().sink { [weak self] completion in
+            if case .failure(let error) = completion {
+                self?.outputSubject.send(.showErrorMessage(error.message))
+            }
+        } receiveValue: { userData in
+            UserDataManager.shared.setUserData(userData: userData)
+        }.store(in: &subscriptions)
+
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
