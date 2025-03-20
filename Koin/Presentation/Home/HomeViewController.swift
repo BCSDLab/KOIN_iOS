@@ -178,6 +178,8 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
+        print(KeychainWorker.shared.read(key: .access))
+        print(KeychainWorker.shared.read(key: .fcm))
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
