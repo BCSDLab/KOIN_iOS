@@ -14,12 +14,9 @@ final class MenuImageCollectionViewCell: UICollectionViewCell {
     let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
     
     // MARK: - UI Components
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    private let imageView = UIImageView().then {
+        $0.isUserInteractionEnabled = true
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,7 +45,6 @@ extension MenuImageCollectionViewCell: UIScrollViewDelegate {
 extension MenuImageCollectionViewCell {
     private func setUpLayouts() {
         [imageView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview($0)
         }
     }
