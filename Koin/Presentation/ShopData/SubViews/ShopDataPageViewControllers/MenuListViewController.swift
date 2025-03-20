@@ -14,25 +14,19 @@ final class MenuListViewController: UIViewController {
     let viewControllerHeightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - UI Components
+    let menuListCollectionView = MenuListCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+        $0.minimumLineSpacing = 0
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 88)
+        $0.scrollDirection = .vertical
+    }).then {
+        $0.isScrollEnabled = false
+    }
     
-    let menuListCollectionView: MenuListCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 88)
-        flowLayout.scrollDirection = .vertical
-        let collectionView = MenuListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
-    
-    let buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.alignment = .fill
-        return stackView
-    }()
-    
+    let buttonStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .equalSpacing
+        $0.alignment = .fill
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +42,7 @@ final class MenuListViewController: UIViewController {
         viewControllerHeightPublisher.send(buttonStackView.frame.height + 9 + menuListCollectionView.calculateDynamicHeight())
     }
 }
+
 extension MenuListViewController {
     private func setUpLayOuts() {
         [buttonStackView, menuListCollectionView].forEach {
@@ -80,8 +75,3 @@ extension MenuListViewController {
     }
     
 }
-
-extension MenuListViewController {
-    
-}
-
