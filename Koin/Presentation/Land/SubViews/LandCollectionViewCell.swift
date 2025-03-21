@@ -11,51 +11,41 @@ final class LandCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
-    private let landNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        label.backgroundColor = .systemBackground
-        label.textAlignment = .center
-        return label
-    }()
+    private let landNameLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+        $0.backgroundColor = .systemBackground
+        $0.textAlignment = .center
+    }
     
-    private let monthlyFeeGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "월세"
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral0)
-        label.backgroundColor = UIColor.appColor(.bus3)
-        label.layer.cornerRadius = 9
-        label.layer.masksToBounds = true
-        return label
-    }()
+    private let monthlyFeeGuideLabel = UILabel().then {
+        $0.text = "월세"
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.bus3)
+        $0.layer.cornerRadius = 9
+        $0.layer.masksToBounds = true
+    }
     
-    private let charterFeeGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "전세"
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral0)
-        label.backgroundColor = UIColor.appColor(.bus1)
-        label.layer.cornerRadius = 9
-        label.layer.masksToBounds = true
-        return label
-    }()
+    private let charterFeeGuideLabel = UILabel().then {
+        $0.text = "전세"
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.bus1)
+        $0.layer.cornerRadius = 9
+        $0.layer.masksToBounds = true
+    }
     
-    private let monthlyFeeLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let monthlyFeeLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let charterFeeLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let charterFeeLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
