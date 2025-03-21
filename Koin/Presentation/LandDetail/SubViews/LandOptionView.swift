@@ -7,35 +7,25 @@
 
 import UIKit
 
-
 final class LandOptionView: UIView {
     
     // MARK: - UI Components
     
-    private let optionGuideLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.text = "원룸옵션"
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return label
-    }()
+    private let optionGuideLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.text = "원룸옵션"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
    
-    private let optionCollectionView: LandOptionCollectionView = {
-
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        
-        flowLayout.itemSize = CGSize(width: 50, height: 50)
-      //  flowLayout.minimumLineSpacing = ( UIScreen.main.bounds.width - (240)) / 4
-        flowLayout.minimumInteritemSpacing = ( UIScreen.main.bounds.width - (240)) / 6
-  
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20) // 섹션 패딩 설정
-
-        let collectionView = LandOptionCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
-
+    private let optionCollectionView = LandOptionCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{
+        $0.scrollDirection = .vertical
+        $0.itemSize = CGSize(width: 50, height: 50)
+        $0.minimumInteritemSpacing = ( UIScreen.main.bounds.width - (240)) / 6
+        $0.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        }
+    ).then {
+        $0.isScrollEnabled = false
+    }
 
     // MARK: Init
     
