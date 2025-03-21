@@ -9,11 +9,9 @@ import UIKit
 
 final class MenuCollectionViewCell: UICollectionViewCell {
     
-    private let menuLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let menuLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
