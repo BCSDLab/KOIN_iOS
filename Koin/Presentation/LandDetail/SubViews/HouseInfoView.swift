@@ -11,19 +11,15 @@ final class HouseInfoView: UIView {
     
     // MARK: - UI Components
     
-    private let infoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.textColor = UIColor.appColor(.neutral400)
-        return label
-    }()
+    private let infoLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.textColor = UIColor.appColor(.neutral400)
+    }
     
-    private let detailLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.numberOfLines = 0
-        return label
-    }()
+    private let detailLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.numberOfLines = 0
+    }
     
     // MARK: Init
     
@@ -51,7 +47,6 @@ final class HouseInfoView: UIView {
 extension HouseInfoView {
     private func setUpLayOuts() {
         [infoLabel, detailLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview($0)
         }
     }
