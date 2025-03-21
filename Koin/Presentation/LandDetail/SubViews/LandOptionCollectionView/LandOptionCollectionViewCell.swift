@@ -10,19 +10,14 @@ import UIKit
 final class LandOptionCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
+    private let imageView = UIImageView().then { _ in
+    }
     
-    private let imageView: UIImageView = {
-       let imageView = UIImageView()
-        return imageView
-    }()
-    
-    private let descriptionLabel: UILabel = {
-       let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let descriptionLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

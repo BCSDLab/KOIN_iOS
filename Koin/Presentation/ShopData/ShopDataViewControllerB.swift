@@ -20,159 +20,118 @@ final class ShopDataViewControllerB: UIViewController {
     private var isReviewTabClicked = false
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView().then { _ in
+    }
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
-    
-    private let menuTitleImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    private let menuTitleImageView = UIImageView().then {
+        $0.isUserInteractionEnabled = true
+    }
     
     private var hiddenMenuTitleImageView: [UIImageView] = []
     
-    private let shopTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardBold, size: 20)
-        return label
-    }()
+    private let shopTitleLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 20)
+    }
     
-    private let stickyShopTitleLabel: UILabel = {
-        let label = UILabel()
-        label.isHidden = true
-        label.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        label.layer.borderWidth = 1.0
-        label.backgroundColor = UIColor.appColor(.neutral0)
-        label.font = UIFont.appFont(.pretendardBold, size: 20)
-        return label
-    }()
+    private let stickyShopTitleLabel = UILabel().then {
+        $0.isHidden = true
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 1.0
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.font = UIFont.appFont(.pretendardBold, size: 20)
+    }
     
-    private let phoneGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "전화번호")
-        return label
-    }()
+    private let phoneGuideLabel = GuideLabel(frame: .zero, text: "전화번호").then { _ in
+    }
     
-    private let timeGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "운영시간")
-        return label
-    }()
+    private let timeGuideLabel = GuideLabel(frame: .zero, text: "운영시간").then { _ in
+    }
     
-    private let addressGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "주소정보")
-        return label
-    }()
+    private let addressGuideLabel = GuideLabel(frame: .zero, text: "주소정보").then { _ in
+    }
     
-    private let deliveryGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "배달금액")
-        return label
-    }()
+    private let deliveryGuideLabel = GuideLabel(frame: .zero, text: "배달금액").then { _ in
+    }
     
-    private let accountGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "계좌번호")
-        label.isHidden = true
-        return label
-    }()
+    private let accountGuideLabel = GuideLabel(frame: .zero, text: "계좌번호").then {
+        $0.isHidden = true
+    }
     
-    private let etcGuideLabel: GuideLabel = {
-        let label = GuideLabel(frame: .zero, text: "기타정보")
-        return label
-    }()
+    private let etcGuideLabel = GuideLabel(frame: .zero, text: "기타정보").then { _ in
+    }
     
-    private let deliveryPossibilityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "# 배달 가능"
-        return label
-    }()
+    private let deliveryPossibilityLabel = UILabel().then {
+        $0.text = "# 배달 가능"
+    }
     
-    private let cardPossibilityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "# 카드 가능"
-        return label
-    }()
+    private let cardPossibilityLabel = UILabel().then {
+        $0.text = "# 카드 가능"
+    }
     
-    private let bankPossibilityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "# 계좌이체 가능"
-        return label
-    }()
+    private let bankPossibilityLabel = UILabel().then {
+        $0.text = "# 계좌이체 가능"
+    }
     
-    private let lastUpdateDayLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let lastUpdateDayLabel = UILabel().then { _ in
+    }
     
-    private let grayView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral100)
-        return view
-    }()
+    private let grayView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
     
-    private let menuImageCollectionView: MenuImageCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: 150, height: 150)
-        flowLayout.minimumLineSpacing = 10
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = MenuImageCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let menuImageCollectionView = MenuImageCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.itemSize = CGSize(width: 150, height: 150)
+            $0.minimumLineSpacing = 10
+            $0.scrollDirection = .horizontal
+        }
+    )
     
     private let categorySelectSegmentControl: UISegmentedControl = UISegmentedControl()
     
-    private lazy var underlineView: UIView = {
+    private lazy var underlineView = UIView().then {
         let width = UIScreen.main.bounds.width / CGFloat(categorySelectSegmentControl.numberOfSegments)
         let height = 2.0
         let xPosition = CGFloat(categorySelectSegmentControl.selectedSegmentIndex) * width
         let yPosition = categorySelectSegmentControl.frame.maxY + 37
-        let view = UIView(frame: CGRect(x: xPosition, y: yPosition, width: width, height: height))
-        view.backgroundColor = UIColor.appColor(.primary500)
-        return view
-    }()
+        $0.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
-    private let stickySelectSegmentControl: UISegmentedControl = {
-        let segment = UISegmentedControl()
-        segment.backgroundColor = UIColor.appColor(.neutral0)
-        segment.isHidden = true
-        return segment
-    }()
+    private let stickySelectSegmentControl = UISegmentedControl().then {
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.isHidden = true
+    }
     
-    private lazy var stickyUnderlineView: UIView = {
+    private lazy var stickyUnderlineView = UIView().then {
         let width = UIScreen.main.bounds.width / CGFloat(stickySelectSegmentControl.numberOfSegments)
         let height = 2.0
         let xPosition = CGFloat(stickySelectSegmentControl.selectedSegmentIndex) * width
         let yPosition = stickySelectSegmentControl.frame.maxY + 37
-        let view = UIView(frame: CGRect(x: xPosition, y: yPosition, width: width, height: height))
-        view.backgroundColor = UIColor.appColor(.primary500)
-        return view
-    }()
+        $0.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
-    private let emptyWhiteView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral0)
-        view.isHidden = true
-        return view
-    }()
+    private let emptyWhiteView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.isHidden = true
+    }
     
-    private let stickyButtonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.backgroundColor = UIColor.appColor(.neutral0)
-        stackView.axis = .horizontal
-        stackView.isHidden = true
-        stackView.distribution = .equalSpacing
-        stackView.alignment = .fill
-        return stackView
-    }()
+    private let stickyButtonStackView = UIStackView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.axis = .horizontal
+        $0.isHidden = true
+        $0.distribution = .equalSpacing
+        $0.alignment = .fill
+    }
     
-    private let callFloatingButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .call), for: .normal)
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 28
-        button.backgroundColor = UIColor.appColor(.primary500)
-        return button
-    }()
+    private let callFloatingButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .call), for: .normal)
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 28
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
     private let pageViewController = ShopDataPageViewController()
     
@@ -348,6 +307,7 @@ extension ShopDataViewControllerB: UIScrollViewDelegate {
             pageViewController.menuListViewController.buttonStackView.addArrangedSubview(button2)
         }
     }
+    
     private func configureButton(button: UIButton, title: String, width: CGFloat) {
         button.setTitle(title, for: .normal)
         button.layer.borderWidth = 1.0
@@ -423,6 +383,7 @@ extension ShopDataViewControllerB: UIScrollViewDelegate {
         }
     }
 }
+
 extension ShopDataViewControllerB {
     private func updateButtons(for stackView: UIStackView, with categories: [MenuCategory]) {
         var findFirstButton = false
@@ -606,7 +567,6 @@ extension ShopDataViewControllerB {
         }
         
     }
-    //
     
 }
 

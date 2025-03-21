@@ -13,31 +13,23 @@ final class GuideLabel: UIView {
     let copyButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
+    private let leftLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    private let leftLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.neutral500)
-        label.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return label
-    }()
+    let rightLabel = UILabel().then {
+        $0.numberOfLines = 0
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    let rightLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return label
-    }()
-    
-    private let copyButton: UIButton = {
-        let button = UIButton()
+    private let copyButton = UIButton().then {
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .default)
-        button.setImage(UIImage.appImage(asset: .copy), for: .normal)
-        button.isHidden = true
-        return button
-    }()
+        $0.setImage(UIImage.appImage(asset: .copy), for: .normal)
+        $0.isHidden = true
+    }
     
     // MARK: Init
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()

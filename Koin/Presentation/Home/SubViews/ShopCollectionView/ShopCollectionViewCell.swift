@@ -9,19 +9,15 @@ import UIKit
 
 final class ShopCollectionViewCell: UICollectionViewCell {
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let imageView = UIImageView().then {
+        $0.clipsToBounds = true
+    }
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.lineBreakMode = .byClipping
-        return label
-    }()
+    private let titleLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.lineBreakMode = .byClipping
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

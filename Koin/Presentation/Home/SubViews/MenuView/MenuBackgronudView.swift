@@ -11,15 +11,13 @@ final class MenuBackgroundView: UIView {
     
     // MARK: - UI Components
     
-    private let menuView: MenuView = {
-        let menuView = MenuView(frame: .zero)
-        menuView.clipsToBounds = true
-        menuView.layer.cornerRadius = 8
-        menuView.layer.borderWidth = 1.0
-        menuView.backgroundColor = .systemBackground
-        menuView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        return menuView
-    }()
+    private let menuView = MenuView(frame: .zero).then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+        $0.layer.borderWidth = 1.0
+        $0.backgroundColor = .systemBackground
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+    }
     
     // MARK: Init
     

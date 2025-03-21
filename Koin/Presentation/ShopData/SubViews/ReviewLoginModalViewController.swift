@@ -63,13 +63,11 @@ final class ReviewLoginModalViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 4
-        view.layer.masksToBounds = true
-        return view
-    }()
+    private let containerView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
+    }
     
     init(message: String) {
         self.message = message

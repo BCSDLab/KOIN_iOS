@@ -12,39 +12,38 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
-    private let weekLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 13)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let weekLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let dayLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 16)
-        return label
-    }()
+    private let dayLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
     
-    
-    private let todayCircleView: UIView = {
-        let circleView = UIView()
-        let underlineView = UIView()
-        let totalView = UIView()
-        circleView.layer.cornerRadius = 14
-        circleView.backgroundColor = UIColor.clear
-        circleView.layer.borderColor = UIColor.appColor(.primary500).cgColor
-        circleView.layer.borderWidth = 1
+    private let todayCircleView = UIView().then { totalView in
+        let circleView = UIView().then {
+            $0.layer.cornerRadius = 14
+            $0.backgroundColor = UIColor.clear
+            $0.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            $0.layer.borderWidth = 1
+        }
         
-        underlineView.backgroundColor = UIColor.appColor(.primary500)
-        underlineView.layer.cornerRadius = 4
+        let underlineView = UIView().then {
+            $0.backgroundColor = UIColor.appColor(.primary500)
+            $0.layer.cornerRadius = 4
+        }
+        
         [circleView, underlineView].forEach{
             totalView.addSubview($0)
         }
+        
         circleView.snp.makeConstraints {
             $0.width.height.equalTo(28)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(0)
         }
+        
         underlineView.snp.makeConstraints {
             $0.width.equalTo(15)
             $0.height.equalTo(2)
@@ -53,16 +52,12 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
         }
         
         totalView.backgroundColor = .clear
-        return totalView
-    }()
+    }
     
-    private let selectedCircleView: UIView = {
-        let circleView = UIView()
-        circleView.layer.cornerRadius = 14
-        circleView.backgroundColor = UIColor.appColor(.primary500)
-        
-        return circleView
-    }()
+    private let selectedCircleView = UIView().then {
+        $0.layer.cornerRadius = 14
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

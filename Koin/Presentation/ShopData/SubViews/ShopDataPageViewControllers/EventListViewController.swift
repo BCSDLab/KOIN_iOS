@@ -15,23 +15,21 @@ final class EventListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
+    private let eventListCollectionView = EventListCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.minimumLineSpacing = 0
+            $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 100)
+            $0.scrollDirection = .vertical
+        }
+    ).then {
+        $0.isScrollEnabled = false
+    }
     
-    private let eventListCollectionView: EventListCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 100)
-        flowLayout.scrollDirection = .vertical
-        let collectionView = EventListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
-    
-    private let ownerEventReadyImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .ownerReadyEvent)
-        imageView.isHidden = true
-        return imageView
-    }()
+    private let ownerEventReadyImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .ownerReadyEvent)
+        $0.isHidden = true
+    }
     
     // MARK: - Life Cycles
     override func viewDidLoad() {

@@ -11,76 +11,56 @@ import UIKit
 final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
-    
     private var subscriptions: Set<AnyCancellable> = []
     private let viewModel: DiningNoticeViewModel
     private let inputSubject: PassthroughSubject<DiningNoticeViewModel.Input, Never> = .init()
     
     // MARK: - UI Components
-
-    private let diningGuideLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let diningGuideLabel = UILabel().then { _ in
+    }
     
-    private let placeGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "위치"
-        return label
-    }()
+    private let placeGuideLabel = UILabel().then {
+        $0.text = "위치"
+    }
     
-    private let placeTextLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let placeTextLabel = UILabel().then { _ in
+    }
     
-    private let phoneGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "전화번호"
-        return label
-    }()
+    private let phoneGuideLabel = UILabel().then {
+        $0.text = "전화번호"
+    }
     
-    private let phoneTextLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let phoneTextLabel = UILabel().then { _ in
+    }
     
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral100)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
     
-    private let weekdayTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "평일 운영시간"
-        return label
-    }()
+    private let weekdayTimeLabel = UILabel().then {
+        $0.text = "평일 운영시간"
+    }
     
-    private let weekdayTimeCollectionView: DiningOperatingTimeCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0
-        let collectionView = DiningOperatingTimeCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let weekdayTimeCollectionView = DiningOperatingTimeCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.minimumLineSpacing = 0
+        }
+    )
     
-    private let weekendTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "주말 운영시간"
-        return label
-    }()
+    private let weekendTimeLabel = UILabel().then {
+        $0.text = "주말 운영시간"
+    }
     
-    private let weekendTimeCollectionView: DiningOperatingTimeCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 0
-        let collectionView = DiningOperatingTimeCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let weekendTimeCollectionView = DiningOperatingTimeCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.minimumLineSpacing = 0
+        }
+    )
     
-    private let updateDateLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let updateDateLabel = UILabel().then { _ in
+    }
     
     // MARK: - Initialization
     init(viewModel: DiningNoticeViewModel) {
@@ -92,8 +72,8 @@ final class DiningNoticeViewController: UIViewController, UIGestureRecognizerDel
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    // MARK: - Life Cycle
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()

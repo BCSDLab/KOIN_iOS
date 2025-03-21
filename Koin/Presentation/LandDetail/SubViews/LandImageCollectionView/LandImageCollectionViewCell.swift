@@ -11,11 +11,8 @@ import UIKit
 final class LandImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
-    
-    private let landImageView: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
-    }()
+    private let landImageView = UIImageView().then { _ in
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +31,6 @@ final class LandImageCollectionViewCell: UICollectionViewCell {
 extension LandImageCollectionViewCell {
     private func setUpLayouts() {
         [landImageView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
     }

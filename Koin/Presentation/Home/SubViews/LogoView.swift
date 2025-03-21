@@ -13,19 +13,15 @@ final class LogoView: UIView {
     
     // MARK: - UI Components
     
-    let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .logo)
-        return imageView
-    }()
+    let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .logo)
+    }
     
-    let lineButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(asset: .line3), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral0)
-        button.imageView?.contentMode = .scaleAspectFill
-        return button
-    }()
+    let lineButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .line3), for: .normal)
+        $0.tintColor = UIColor.appColor(.neutral0)
+        $0.imageView?.contentMode = .scaleAspectFill
+    }
     
     // MARK: Init
     

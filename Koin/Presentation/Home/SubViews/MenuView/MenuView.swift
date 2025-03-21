@@ -10,44 +10,36 @@ import UIKit
 
 final class MenuView: UIView {
 
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.tintColor = UIColor.black
-        label.font = UIFont.appFont(.pretendardMedium, size: 16)
-        return label
-    }()
+    private let timeLabel = UILabel().then {
+        $0.tintColor = UIColor.black
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
     
-    private let soldOutLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.layer.cornerRadius = 4
-        label.clipsToBounds = true
-        label.isHidden = true
-        label.text = "품절"
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.backgroundColor = UIColor.appColor(.warning200)
-        label.textColor = UIColor.appColor(.warning600)
-        return label
-    }()
+    private let soldOutLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.isHidden = true
+        $0.text = "품절"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.backgroundColor = UIColor.appColor(.warning200)
+        $0.textColor = UIColor.appColor(.warning600)
+    }
     
-    private let substitutionLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.layer.cornerRadius = 4
-        label.clipsToBounds = true
-        label.isHidden = true
-        label.text = "변경됨"
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.backgroundColor = UIColor.appColor(.neutral200)
-        label.textColor = UIColor.appColor(.neutral600)
-        return label
-    }()
+    private let substitutionLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.isHidden = true
+        $0.text = "변경됨"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
     
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral200)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+    }
     
     private let menuCollectionView: MenuCollectionView = {
         let menuCollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -59,23 +51,18 @@ final class MenuView: UIView {
         return menuCollectionView
     }()
     
-    private let warningImageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .warning)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    private let warningImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .warning)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
     
-    private let warningLabel: UILabel = {
-       let label = UILabel()
-        label.text = "식단이 표시되지 않아\n표시할 수 없습니다."
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral800)
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
+    private let warningLabel = UILabel().then {
+        $0.text = "식단이 표시되지 않아\n표시할 수 없습니다."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.numberOfLines = 0
+        $0.textAlignment = .center
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

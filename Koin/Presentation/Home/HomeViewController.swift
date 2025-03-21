@@ -21,145 +21,107 @@ final class HomeViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let wrapperView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private let wrapperView = UIView().then { _ in
+    }
     
-    private let grayColorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral50)
-        return view
-    }()
+    private let grayColorView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral50)
+    }
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.contentInsetAdjustmentBehavior = .never
-        return scrollView
-    }()
+    private let scrollView = UIScrollView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+    }
     
-    private let logoView: LogoView = {
-        let logoView = LogoView(frame: .zero)
-        return logoView
-    }()
+    private let logoView = LogoView(frame: .zero).then { _ in
+    }
     
-    private let tabBarView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
+    private let tabBarView = UIView().then {
+        $0.backgroundColor = .clear
+    }
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .logo)
-        return imageView
-    }()
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .logo)
+    }
     
-    private let noticeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "게시판"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let noticeLabel = UILabel().then {
+        $0.text = "게시판"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
     private let busView = BusView()
     
-    private let noticeListCollectionView: NoticeListCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width - 48
-        flowLayout.itemSize = CGSize(width: width, height: 175)
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 0
-        let collectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.decelerationRate = .fast
-        return collectionView
-    }()
+    private let noticeListCollectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout:  UICollectionViewFlowLayout().then{
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 175)
+        $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 0
+    }).then {
+        $0.decelerationRate = .fast
+    }
     
-    private let noticePageControl: UIPageControl = {
-        let pageControl = UIPageControl(frame: .zero)
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = 4
-        pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
-        pageControl.pageIndicatorTintColor = .appColor(.neutral300)
-        return pageControl
-    }()
+    private let noticePageControl = UIPageControl(frame: .zero).then {
+        $0.currentPage = 0
+        $0.numberOfPages = 4
+        $0.currentPageIndicatorTintColor = .appColor(.primary400)
+        $0.pageIndicatorTintColor = .appColor(.neutral300)
+    }
     
     private let goNoticePageButton = UIButton()
     
     private let goDiningPageButton = UIButton()
     
-    private let busLabel: UILabel = {
-        let label = UILabel()
-        label.text = "버스"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let busLabel = UILabel().then {
+        $0.text = "버스"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let busQrCodeButton: UIButton = {
+    private let busQrCodeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .qrCode)
         configuration.attributedTitle = AttributedString("셔틀 탑승권", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
         configuration.imagePadding = 3
         configuration.imagePlacement = .leading
-        let button = UIButton()
-        button.configuration = configuration
-        return button
-    }()
+        $0.configuration = configuration
+    }
     
-    private let shopLabel: UILabel = {
-        let label = UILabel()
-        label.text = "주변상점"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let shopLabel = UILabel().then {
+        $0.text = "주변상점"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let categoryCollectionView: CategoryCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then { _ in
+    }
     
-    private let menuLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let menuLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let diningTooltipImageView: CancelableImageView = {
-        let imageView = CancelableImageView(frame: .zero)
-        imageView.isHidden = true
-        return imageView
-    }()
+    private let diningTooltipImageView = CancelableImageView(frame: .zero).then {
+        $0.isHidden = true
+    }
     
-    private let cornerSegmentControl: UISegmentedControl = {
-        let segment = UISegmentedControl()
-        segment.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        segment.insertSegment(withTitle: "A코너", at: 0, animated: true)
-        segment.insertSegment(withTitle: "B코너", at: 1, animated: true)
-        segment.insertSegment(withTitle: "C코너", at: 2, animated: true)
-        segment.insertSegment(withTitle: "능수관", at: 3, animated: true)
-        segment.selectedSegmentIndex = 0
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .normal)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .selected)
-        return segment
-    }()
+    private let cornerSegmentControl = UISegmentedControl().then {
+        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        $0.insertSegment(withTitle: "A코너", at: 0, animated: true)
+        $0.insertSegment(withTitle: "B코너", at: 1, animated: true)
+        $0.insertSegment(withTitle: "C코너", at: 2, animated: true)
+        $0.insertSegment(withTitle: "능수관", at: 3, animated: true)
+        $0.selectedSegmentIndex = 0
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .selected)
+    }
     
-    private lazy var underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.primary500)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var underlineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
     
-    private let menuBackgroundView: MenuBackgroundView = {
-        let menuBackgroundView = MenuBackgroundView(frame: .zero)
-        return menuBackgroundView
-    }()
+    private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
+    }
     
     // MARK: - Initialization
     

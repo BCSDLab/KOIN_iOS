@@ -10,14 +10,12 @@ import UIKit
 final class DiningCollectionFooterView: UICollectionReusableView {
     static let identifier = "DiningCollectionFooterView"
 
-    private let noticeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "식단 정보는 운영 상황 따라 변동될 수 있습니다."
-        label.numberOfLines = 2
-        label.textColor = UIColor.appColor(.neutral400)
-        label.font = UIFont.appFont(.pretendardMedium, size: 13)
-        return label
-    }()
+    private let noticeLabel = UILabel().then {
+        $0.text = "식단 정보는 운영 상황 따라 변동될 수 있습니다."
+        $0.numberOfLines = 2
+        $0.textColor = UIColor.appColor(.neutral400)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 13)
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

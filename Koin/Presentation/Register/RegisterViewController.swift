@@ -5,7 +5,6 @@
 //  Created by 김나훈 on 3/18/24.
 //
 
-
 import Combine
 import DropDown
 import UIKit
@@ -18,226 +17,164 @@ final class RegisterViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView().then { _ in
+    }
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    private let fakeLabel = UILabel().then { _ in
+    }
     
-    private let fakeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
+    private let logoView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .koinLogo)
+    }
     
-    private let logoView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .koinLogo)
-        return imageView
-    }()
+    private let emailTextField = UITextField().then {
+        $0.autocapitalizationType = .none
+        $0.placeholder = "아우누리 아이디를 입력해주세요 (필수)"
+    }
     
-    private let emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.autocapitalizationType = .none
-        textField.placeholder = "아우누리 아이디를 입력해주세요 (필수)"
-        return textField
-    }()
+    private let emailGuideLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 11)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.text = "@koreatech.ac.kr은 입력하지 않으셔도 됩니다."
+    }
     
-    private let emailGuideLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 11)
-        label.textColor = UIColor.appColor(.neutral500)
-        label.text = "@koreatech.ac.kr은 입력하지 않으셔도 됩니다."
-        return label
-    }()
+    private let passwordTextField = UITextField().then {
+        $0.isSecureTextEntry = true
+        $0.placeholder = "비밀번호 (필수)"
+    }
     
-    private let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.isSecureTextEntry = true
-        textField.placeholder = "비밀번호 (필수)"
-        return textField
-    }()
+    private let passwordGuideLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 11)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.text = "비밀번호는 특수문자, 숫자를 포함해 6자 이내 18자 이하여야 합니다."
+        $0.numberOfLines = 0
+    }
     
-    private let passwordGuideLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 11)
-        label.textColor = UIColor.appColor(.neutral500)
-        label.text = "비밀번호는 특수문자, 숫자를 포함해 6자 이내 18자 이하여야 합니다."
-        label.numberOfLines = 0
-        return label
-    }()
+    private let passwordConfirmTextField = UITextField().then {
+        $0.isSecureTextEntry = true
+        $0.placeholder = "비밀번호 확인 (필수)"
+    }
     
-    private let passwordConfirmTextField: UITextField = {
-        let textField = UITextField()
-        textField.isSecureTextEntry = true
-        textField.placeholder = "비밀번호 확인 (필수)"
-        return textField
-    }()
+    private let nameTextField = UITextField().then {
+        $0.placeholder = "이름 (선택)"
+    }
     
-    private let nameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "이름 (선택)"
-        return textField
-    }()
+    private let nicknameTextField = UITextField().then {
+        $0.isSelected = false
+        $0.placeholder = "닉네임 (선택)"
+    }
     
-    private let nicknameTextField: UITextField = {
-        let textField = UITextField()
-        textField.isSelected = false
-        textField.placeholder = "닉네임 (선택)"
-        return textField
-    }()
+    private let checkButton = UIButton().then {
+        $0.setTitle("중복확인", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
-    private let checkButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("중복확인", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
-        button.backgroundColor = UIColor.appColor(.primary500)
-        return button
-    }()
+    private let classNumberTextField = UITextField().then {
+        $0.placeholder = "학번 (선택)"
+    }
     
-    private let classNumberTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "학번 (선택)"
-        return textField
-    }()
+    private let phoneNumberTextField = UITextField().then {
+        $0.keyboardType = .numberPad
+        $0.placeholder = "전화번호 (Ex.01012345678) (선택)"
+    }
     
-    private let phoneNumberTextField: UITextField = {
-        let textField = UITextField()
-        textField.keyboardType = .numberPad
-        textField.placeholder = "전화번호 (Ex.01012345678) (선택)"
-        return textField
-    }()
+    private let deptButton = UIButton().then { _ in
+    }
     
-    private let deptButton: UIButton = {
-       let button = UIButton()
-        return button
-    }()
-    
-    private let genderButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
+    private let genderButton = UIButton().then { _ in
+    }
 
-    private let genderDropDown: DropDown = {
-       let dropDown = DropDown()
-        dropDown.backgroundColor = .systemBackground
-        return dropDown
-    }()
+    private let genderDropDown = DropDown().then {
+        $0.backgroundColor = .systemBackground
+    }
     
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral400)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral400)
+    }
     
-    private let agreementCheckbox1: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(symbol: .square), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral500)
-        return button
-    }()
+    private let agreementCheckbox1 = UIButton().then {
+        $0.setImage(UIImage.appImage(symbol: .square), for: .normal)
+        $0.tintColor = UIColor.appColor(.neutral500)
+    }
     
-    private let agreementCheckbox2: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(symbol: .square), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral500)
-        return button
-    }()
+    private let agreementCheckbox2 = UIButton().then {
+        $0.setImage(UIImage.appImage(symbol: .square), for: .normal)
+        $0.tintColor = UIColor.appColor(.neutral500)
+    }
     
-    private let agreementCheckbox3: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.appImage(symbol: .square), for: .normal)
-        button.tintColor = UIColor.appColor(.neutral500)
-        return button
-    }()
+    private let agreementCheckbox3 = UIButton().then {
+        $0.setImage(UIImage.appImage(symbol: .square), for: .normal)
+        $0.tintColor = UIColor.appColor(.neutral500)
+    }
     
-    private let agreementLabel1: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.text = "아래 이용약관에 모두 동의합니다."
-        return label
-    }()
+    private let agreementLabel1 = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.text = "아래 이용약관에 모두 동의합니다."
+    }
     
-    private let agreementLabel2: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.text = "개인정보 이용약관에 동의합니다."
-        return label
-    }()
+    private let agreementLabel2 = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.text = "개인정보 이용약관에 동의합니다."
+    }
     
-    private let agreementLabel3: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.text = "코인 이용약관에 동의합니다."
-        return label
-    }()
+    private let agreementLabel3 = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.text = "코인 이용약관에 동의합니다."
+    }
     
-    private let registerButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("회원가입", for: .normal)
-        button.backgroundColor = UIColor.appColor(.primary500)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return button
-    }()
+    private let registerButton = UIButton().then {
+        $0.setTitle("회원가입", for: .normal)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
     
-    private let agreementText1: UILabel = {
-        let label = UILabel()
-        label.text = "개인정보 이용약관"
-        label.font = UIFont.appFont(.pretendardMedium, size: 15)
-        return label
-    }()
+    private let agreementText1 = UILabel().then {
+        $0.text = "개인정보 이용약관"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+    }
     
-    private let agreementText2: UILabel = {
-        let label = UILabel()
-        label.text = "코인 이용약관"
-        label.font = UIFont.appFont(.pretendardMedium, size: 15)
-        return label
-    }()
+    private let agreementText2 = UILabel().then {
+        $0.text = "코인 이용약관"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+    }
     
-    private let agreementTextView1: UITextView = {
-        let textView = UITextView()
-        textView.text = AgreementText.personalInformation.description
-        textView.textColor = UIColor.appColor(.neutral800)
-        textView.font = UIFont.systemFont(ofSize: 13)
-        textView.layer.borderColor = UIColor.gray.cgColor
-        textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 5.0
-        textView.isEditable = false
-        textView.isScrollEnabled = true
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-        return textView
-    }()
+    private let agreementTextView1 = UITextView().then {
+        $0.text = AgreementText.personalInformation.description
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.systemFont(ofSize: 13)
+        $0.layer.borderColor = UIColor.gray.cgColor
+        $0.layer.borderWidth = 1.0
+        $0.layer.cornerRadius = 5.0
+        $0.isEditable = false
+        $0.isScrollEnabled = true
+        $0.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+    }
     
-    private let agreementTextView2: UITextView = {
-        let textView = UITextView()
-        textView.text = AgreementText.koin.description
-        textView.textColor = UIColor.appColor(.neutral800)
-        textView.font = UIFont.systemFont(ofSize: 13)
-        textView.layer.borderColor = UIColor.gray.cgColor
-        textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 5.0
-        textView.isEditable = false
-        textView.isScrollEnabled = true
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-        return textView
-    }()
+    private let agreementTextView2 = UITextView().then {
+        $0.text = AgreementText.koin.description
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.systemFont(ofSize: 13)
+        $0.layer.borderColor = UIColor.gray.cgColor
+        $0.layer.borderWidth = 1.0
+        $0.layer.cornerRadius = 5.0
+        $0.isEditable = false
+        $0.isScrollEnabled = true
+        $0.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+    }
     
-    private let responseLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = UIFont.appFont(.pretendardMedium, size: 13)
-        return label
-    }()
+    private let responseLabel = UILabel().then {
+        $0.numberOfLines = 0
+        $0.font = UIFont.appFont(.pretendardMedium, size: 13)
+    }
     
-    private let deptDropDown: DropDown = {
-        let dropDown = DropDown()
-        dropDown.backgroundColor = .systemBackground
-        return dropDown
-    }()
+    private let deptDropDown = DropDown().then {
+        $0.backgroundColor = .systemBackground
+    }
     
     // MARK: - Initialization
-    
     init(viewModel: RegisterViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -249,7 +186,6 @@ final class RegisterViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "회원가입"
@@ -274,6 +210,7 @@ final class RegisterViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .fill)
     }
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in

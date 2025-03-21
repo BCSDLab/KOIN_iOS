@@ -18,110 +18,78 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     
     // MARK: - UI Components
     
-    private let logoImageview: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .mainLogo)
-        return imageView
-    }()
+    private let logoImageview = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .mainLogo)
+    }
     
-    private let nicknameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "익명"
-        label.textColor = UIColor.appColor(.primary600)
-        label.font = UIFont.appFont(.pretendardBold, size: 16)
-        return label
-    }()
+    private let nicknameLabel = UILabel().then {
+        $0.text = "익명"
+        $0.textColor = UIColor.appColor(.primary600)
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+    }
     
-    private let makeLoginDescription: UILabel = {
-        let label = UILabel()
-        label.text = "로그인 후 더 많은 기능을 이용하세요."
-        label.textColor = UIColor.appColor(.neutral600)
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return label
-    }()
+    private let makeLoginDescription = UILabel().then {
+        $0.text = "로그인 후 더 많은 기능을 이용하세요."
+        $0.textColor = UIColor.appColor(.neutral600)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
     
-    private let greetingLabel: UILabel = {
-        let label = UILabel()
-        label.text = " 님, 안녕하세요!"
-        label.textColor = UIColor.appColor(.neutral600)
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return label
-    }()
+    private let greetingLabel = UILabel().then {
+        $0.text = " 님, 안녕하세요!"
+        $0.textColor = UIColor.appColor(.neutral600)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
     
-    private let logOutButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let logOutButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let servicePaddingLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = UIColor.appColor(.neutral50)
-        return label
-    }()
+    private let servicePaddingLabel = UILabel().then {
+        $0.backgroundColor = UIColor.appColor(.neutral50)
+    }
     
-    private let serviceGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "서비스"
-        label.backgroundColor = UIColor.appColor(.neutral50)
-        label.textColor = UIColor.appColor(.neutral600)
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return label
-    }()
+    private let serviceGuideLabel = UILabel().then {
+        $0.text = "서비스"
+        $0.backgroundColor = UIColor.appColor(.neutral50)
+        $0.textColor = UIColor.appColor(.neutral600)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
     
-    private let shopSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let shopSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let busTimetableButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let busTimetableButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
+
+    private let busSearchButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let busSearchButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let diningSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let diningSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let facilityInfoSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let facilityInfoSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let timetableSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let timetableSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let noticeListButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let noticeListButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let landSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
-    private let landSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
-    private let businessSelectButton: UIButton = {
-        let button = UIButton()
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
+    private let businessSelectButton = UIButton().then {
+        $0.contentHorizontalAlignment = .left
+    }
     
     private let inquryButton = UIButton().then {
         $0.setTitle("문의하기", for: .normal)

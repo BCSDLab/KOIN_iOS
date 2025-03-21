@@ -10,21 +10,15 @@ import UIKit
 final class PossibilityLabel: UIView {
     
     // MARK: - UI Components
-
-    private let innerLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.neutral0)
-        label.font = UIFont.appFont(.pretendardMedium, size: 13)
-        return label
-    }()
+    private let innerLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 13)
+    }
     
-    private let outerImageView: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
-    }()
+    private let outerImageView = UIImageView().then { _ in
+    }
     
     // MARK: Init
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -41,11 +35,8 @@ final class PossibilityLabel: UIView {
 }
  
 // MARK: UI Settings
-
 extension PossibilityLabel {
     private func setUpLayOuts() {
-        innerLabel.translatesAutoresizingMaskIntoConstraints = false
-        outerImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(outerImageView)
         addSubview(innerLabel)
     }
@@ -66,4 +57,3 @@ extension PossibilityLabel {
         setUpConstraints()
     }
 }
-
