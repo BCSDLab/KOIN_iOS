@@ -18,58 +18,46 @@ final class FindPasswordViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .koinLogo)
-        return imageView
-    }()
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .koinLogo)
+    }
     
-    private let emailGuideLabel: UILabel = {
-       let label = UILabel()
-        label.text = "@koreatech.ac.kr은 입력하지 않으셔도 됩니다."
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral400)
-        return label
-    }()
+    private let emailGuideLabel = UILabel().then {
+        $0.text = "@koreatech.ac.kr은 입력하지 않으셔도 됩니다."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral400)
+    }
     
-    private let emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.autocapitalizationType = .none
-        textField.font = UIFont.appFont(.pretendardRegular, size: 13)
-        textField.layer.borderWidth = 1.0
-        textField.layer.borderColor = UIColor.appColor(.neutral500).cgColor
-        textField.layer.cornerRadius = 2.0
-        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textField.frame.height))
-        textField.leftView = leftPaddingView
-        textField.placeholder = "아우누리 아이디를 입력하세요"
-        textField.leftViewMode = .always
-        return textField
-    }()
+    private let emailTextField = UITextField().then {
+        $0.autocapitalizationType = .none
+        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.layer.borderWidth = 1.0
+        $0.layer.borderColor = UIColor.appColor(.neutral500).cgColor
+        $0.layer.cornerRadius = 2.0
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: $0.frame.height))
+        $0.leftView = leftPaddingView
+        $0.placeholder = "아우누리 아이디를 입력하세요"
+        $0.leftViewMode = .always
+    }
     
-    private let findButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("비밀번호 찾기", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.backgroundColor = UIColor.appColor(.primary500)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        return button
-    }()
+    private let findButton = UIButton().then {
+        $0.setTitle("비밀번호 찾기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
+    }
     
-    private let serviceLabel: UILabel = {
-        let label = UILabel()
-        label.text = "학교메일로 비밀번호 초기화 메일이 발송됩니다."
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral400)
-        return label
-    }()
+    private let serviceLabel = UILabel().then {
+        $0.text = "학교메일로 비밀번호 초기화 메일이 발송됩니다."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral400)
+    }
     
-    private let responseLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
-        label.textColor = .red
-        label.numberOfLines = 0
-        return label
-    }()
+    private let responseLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = .red
+        $0.numberOfLines = 0
+    }
     
     // MARK: - Initialization
     
