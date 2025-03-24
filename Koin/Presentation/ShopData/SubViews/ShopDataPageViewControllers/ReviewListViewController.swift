@@ -204,6 +204,7 @@ final class ReviewListViewController: UIViewController {
         
         reviewWriteLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteLogin, .click, self?.viewModel.shopName ?? ""))
+            self?.inputSubject.send(.checkLogin(nil, source: .reviewWrite))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
@@ -225,6 +226,7 @@ final class ReviewListViewController: UIViewController {
         reviewReportLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReportLogin, .click, self?.viewModel.shopName ?? ""))
+            self?.inputSubject.send(.checkLogin(nil, source: .reviewReport))
         }.store(in: &cancellables)
         
         reviewReportLoginModalViewController.cancelButtonPublisher.sink { [weak self] in
@@ -253,7 +255,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewListCollectionView.reportButtonPublisher.sink { [weak self] parameter in
-            self?.inputSubject.send(.checkLogin(parameter))
+            self?.inputSubject.send(.checkLogin(parameter, source: .reviewReport))
         }.store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher.sink { [weak self] image in
@@ -272,7 +274,7 @@ final class ReviewListViewController: UIViewController {
 extension ReviewListViewController {
     
     @objc private func writeReviewButtonTapped() {
-        inputSubject.send(.checkLogin(nil))
+        inputSubject.send(.checkLogin(nil, source: .reviewWrite))
     }
     
     private func navigateToReportReview(parameter: (Int, Int)) {

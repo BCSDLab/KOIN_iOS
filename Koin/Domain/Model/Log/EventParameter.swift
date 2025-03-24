@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol EventLabelType {
     var rawValue: String { get }
     var team: String { get }
@@ -69,6 +68,7 @@ enum EventParameter {
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            case loginPrompt = "login_prompt"
             var team: String {
                 return "BUSINESS"
             }
