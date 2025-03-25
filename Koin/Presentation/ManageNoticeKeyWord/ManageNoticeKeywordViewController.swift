@@ -170,7 +170,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
             self?.navigationController?.pushViewController(loginViewController, animated: true)
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "로그인하기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
         }.store(in: &subscriptions)
         
         keywordLoginModalViewController.leftButtonPublisher.sink { [weak self] in

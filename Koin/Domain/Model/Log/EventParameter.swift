@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol EventLabelType {
     var rawValue: String { get }
     var team: String { get }
@@ -60,15 +59,15 @@ enum EventParameter {
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
             case shopDetailViewReviewDeleteDone = "shop_detail_view_review_delete_done"
             case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
-            case shopDetailViewReviewWriteLogin = "shop_detail_view_review_write_login"
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
-            case shopDetailViewReviewReportLogin = "shop_detail_view_review_report_login"
             case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
             case mainShopBenefit = "main_shop_benefit"
             case benefitShopCategories = "benefit_shop_categories"
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            
+            case loginPrompt = "login_prompt"
             var team: String {
                 return "BUSINESS"
             }
@@ -158,6 +157,9 @@ enum EventParameter {
             case itemPostReportConfirm = "item_post_report_confirm"
             case messageListSelect = "message_list_select"
             case itemPostType = "item_post_type"
+            
+            case loginPrompt = "login_prompt"
+
             var team: String {
                 return "CAMPUS"
             }
