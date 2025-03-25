@@ -12,35 +12,26 @@ final class MenuListCollectionViewCell: UICollectionViewCell {
     var onTap: ((UIImage?) -> Void)?
     
     // MARK: - UI Components
+    private let menuImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.isUserInteractionEnabled = true
+    }
     
-    private let menuImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 5
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    private let menuTitleLabel = UILabel().then {
+        $0.numberOfLines = 2
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
     
-    private let menuTitleLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.font = UIFont.appFont(.pretendardMedium, size: 16)
-        return label
-    }()
+    private let priceLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.text = "-"
+        $0.textColor = UIColor.appColor(.primary500)
+    }
     
-    private let priceLabel: UILabel = {
-       let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
-        label.text = "-"
-        label.textColor = UIColor.appColor(.primary500)
-        return label
-    }()
-    
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral200)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

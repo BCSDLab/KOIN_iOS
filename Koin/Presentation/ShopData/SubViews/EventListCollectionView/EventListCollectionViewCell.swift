@@ -13,46 +13,33 @@ final class EventListCollectionViewCell: UICollectionViewCell {
     var isExpanded = false
     
     // MARK: - UI Components
+    private let imageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.isUserInteractionEnabled = true
+    }
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 5
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    private let titleLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 16)
-        return label
-    }()
+    private let descriptionLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.numberOfLines = 2
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.numberOfLines = 2
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let dateLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let viewAllButton = UIButton().then { _ in
+    }
     
-    private let viewAllButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
-    
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral200)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

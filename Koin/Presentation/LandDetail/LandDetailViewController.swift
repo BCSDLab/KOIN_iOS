@@ -18,185 +18,125 @@ final class LandDetailViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    private let scrollView = UIScrollView().then { _ in
+    }
     
-    private let landNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 20)
-        label.textAlignment = .center
-        return label
-    }()
+    private let landNameLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 20)
+        $0.textAlignment = .center
+    }
     
-    private let infoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 15)
-        label.text = "원룸 정보"
-        return label
-    }()
+    private let infoLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.text = "원룸 정보"
+    }
     
-    private let infoView1: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "월세")
-        return view
-    }()
+    private let infoView1 = HouseInfoView(frame: .zero, text: "월세").then { _ in
+    }
     
-    private let infoView2: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "방 종류")
-        return view
-    }()
+    private let infoView2 = HouseInfoView(frame: .zero, text: "방 종류").then { _ in
+    }
     
-    private let infoView3: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "전세")
-        return view
-    }()
+    private let infoView3 = HouseInfoView(frame: .zero, text: "전세").then { _ in
+    }
     
-    private let infoView4: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "보증금")
-        return view
-    }()
+    private let infoView4 = HouseInfoView(frame: .zero, text: "보증금").then { _ in
+    }
     
-    private let infoView5: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "층수")
-        return view
-    }()
+    private let infoView5 = HouseInfoView(frame: .zero, text: "층수").then { _ in
+    }
     
-    private let infoView6: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "관리비")
-        return view
-    }()
+    private let infoView6 = HouseInfoView(frame: .zero, text: "관리비").then { _ in
+    }
     
-    private let infoView7: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "방 크기")
-        return view
-    }()
+    private let infoView7 = HouseInfoView(frame: .zero, text: "방 크기").then { _ in
+    }
     
-    private let infoView8: HouseInfoView = {
-        let view = HouseInfoView(frame: .zero, text: "연락처")
-        return view
-    }()
+    private let infoView8 = HouseInfoView(frame: .zero, text: "연락처").then { _ in
+    }
     
-    private let nonImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .nonImage)
-        return imageView
-    }()
+    private let nonImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .nonImage)
+    }
     
-    private let imageCollectionView: LandImageCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = LandImageCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
+    private let imageCollectionView = LandImageCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then { $0.scrollDirection = .horizontal }).then {
+        $0.isScrollEnabled = false
+    }
     
-    private let indexLabel: UILabel = {
-        let label = UILabel()
-        label.layer.cornerRadius = 9
-        label.layer.masksToBounds = true
-        label.textAlignment = .center
-        label.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
-        label.textColor = UIColor.appColor(.neutral0)
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let indexLabel = UILabel().then {
+        $0.layer.cornerRadius = 9
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
     
-    private let prevButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = UIColor.appColor(.neutral0)
-        button.setImage(UIImage.appImage(symbol: .chevronLeft), for: .normal)
-        return button
-    }()
+    private let prevButton = UIButton().then {
+        $0.tintColor = UIColor.appColor(.neutral0)
+        $0.setImage(UIImage.appImage(symbol: .chevronLeft), for: .normal)
+    }
     
-    private let nextButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = UIColor.appColor(.neutral0)
-        button.setImage(UIImage.appImage(symbol: .chevronRight), for: .normal)
-        return button
-    }()
+    private let nextButton = UIButton().then {
+        $0.tintColor = UIColor.appColor(.neutral0)
+        $0.setImage(UIImage.appImage(symbol: .chevronRight), for: .normal)
+    }
     
-    private let landOptionView: LandOptionView = {
-        let view = LandOptionView()
-        return view
-    }()
+    private let landOptionView = LandOptionView().then { _ in
+    }
     
-    private let stackView1: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private let stackView1 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+    }
     
-    private let stackView2: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private let stackView2 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+    }
     
-    private let stackView3: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private let stackView3 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+    }
     
-    private let stackView4: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private let stackView4 = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+    }
     
-    private let separateLine1: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.primary500)
-        return view
-    }()
+    private let separateLine1 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
-    private let separateLine2: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.bus2)
-        return view
-    }()
+    private let separateLine2 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.bus2)
+    }
     
-    private let separateLine3: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.bus2)
-        return view
-    }()
+    private let separateLine3 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.bus2)
+    }
     
-    private let separateLine4: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.bus2)
-        return view
-    }()
+    private let separateLine4 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.bus2)
+    }
     
-    private let separateLine5: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.primary500)
-        return view
-    }()
+    private let separateLine5 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+    }
     
-    private let locationGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "원룸 위치"
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        return label
-    }()
+    private let locationGuideLabel = UILabel().then {
+        $0.text = "원룸 위치"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
     
-    private let locationLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 13)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let locationLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let mapView: NMFMapView = {
-        let mapView = NMFMapView()
-        return mapView
-    }()
+    private let mapView = NMFMapView().then { _ in
+    }
     
     // MARK: - Initialization
     

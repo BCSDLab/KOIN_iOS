@@ -5,7 +5,6 @@
 //  Created by 김나훈 on 3/17/24.
 //
 
-
 import Combine
 import SafariServices
 import UIKit
@@ -18,100 +17,74 @@ final class LoginViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .koinLogo)
+    }
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .koinLogo)
-        return imageView
-    }()
+    private let emailTextField = UITextField().then {
+        $0.placeholder = "KOREATECH 이메일"
+        $0.autocapitalizationType = .none
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    private let emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "KOREATECH 이메일"
-        textField.autocapitalizationType = .none
-        textField.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return textField
-    }()
+    private let emailGuideLabel = UILabel().then {
+        $0.text = "@ koreatech.ac.kr"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    private let emailGuideLabel: UILabel = {
-        let label = UILabel()
-        label.text = "@ koreatech.ac.kr"
-        label.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return label
-    }()
+    private let separateView1 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral500)
+    }
     
-    private let separateView1: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral500)
-        return view
-    }()
+    private let emailWarningLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.textColor = .red
+    }
     
-    private let emailWarningLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 13)
-        label.textColor = .red
-        return label
-    }()
+    private let passwordTextField = UITextField().then {
+        $0.placeholder = "비밀번호"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.isSecureTextEntry = true
+    }
     
-    private let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "비밀번호"
-        textField.font = UIFont.appFont(.pretendardRegular, size: 15)
-        textField.isSecureTextEntry = true
-        return textField
-    }()
+    private let separateView2 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral500)
+    }
     
-    private let separateView2: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral500)
-        return view
-    }()
+    private let passwordWarningLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
+        $0.numberOfLines = 2
+        $0.textColor = .red
+    }
     
-    private let passwordWarningLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 13)
-        label.numberOfLines = 2
-        label.textColor = .red
-        return label
-    }()
+    private let loginButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.sub500)
+        $0.setTitle("로그인", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    private let loginButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.appColor(.sub500)
-        button.setTitle("로그인", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return button
-    }()
+    private let registerButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.setTitle("회원가입", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+    }
     
-    private let registerButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.appColor(.primary500)
-        button.setTitle("회원가입", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
-        return button
-    }()
+    private let findIdButton = UIButton().then {
+        $0.setTitle("아이디 찾기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+    }
     
-    private let findIdButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("아이디 찾기", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
-        return button
-    }()
-    
-    private let findPasswordButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("비밀번호 찾기", for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
-        return button
-    }()
+    private let findPasswordButton = UIButton().then {
+        $0.setTitle("비밀번호 찾기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+    }
     
     
     // MARK: - Initialization
-    
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -123,7 +96,6 @@ final class LoginViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "로그인"
@@ -159,7 +131,6 @@ final class LoginViewController: UIViewController {
 
 extension LoginViewController {
 
-    
     @objc private func findIdButtonTapped() {
         if let url = URL(string: "https://portal.koreatech.ac.kr/kut/page/findUser.jsp") {
             let safariViewController = SFSafariViewController(url: url)
