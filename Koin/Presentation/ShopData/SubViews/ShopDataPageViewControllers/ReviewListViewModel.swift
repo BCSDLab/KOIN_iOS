@@ -21,22 +21,18 @@ final class ReviewListViewModel: ViewModelProtocol {
     var fetchLock: Bool = false
     
     enum Input {
-        case checkLogin((Int, Int)?, source: LoginSource)
+        case checkLogin((Int, Int)?)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateLoginStatus(Bool, (Int, Int)?)
     }
-    enum LoginSource {
-        case reviewWrite
-        case reviewReport
-    }
  
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .checkLogin(parameter, source):
-                self?.checkLogin(parameter: parameter, source: source)
+            case let .checkLogin(parameter):
+                self?.checkLogin(parameter: parameter)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -47,19 +43,13 @@ final class ReviewListViewModel: ViewModelProtocol {
 }
 
 extension ReviewListViewModel {
-    private func checkLogin(parameter: (Int, Int)?, source: LoginSource) {
+    private func checkLogin(parameter: (Int, Int)?) {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case .failure = completion {
                 self?.outputSubject.send(.updateLoginStatus(false, parameter))
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateLoginStatus(true, parameter))
-            switch source {
-                case .reviewWrite:
-                    self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.loginPrompt, category: .click, value: "리뷰 작성 팝업")
-                case .reviewReport:
-                    self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.loginPrompt, category: .click, value: "리뷰 신고 팝업")
-            }
         }.store(in: &subscriptions)
     }
     
