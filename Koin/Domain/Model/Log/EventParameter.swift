@@ -68,6 +68,7 @@ enum EventParameter {
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            
             case loginPrompt = "login_prompt"
             var team: String {
                 return "BUSINESS"
@@ -158,6 +159,9 @@ enum EventParameter {
             case itemPostReportConfirm = "item_post_report_confirm"
             case messageListSelect = "message_list_select"
             case itemPostType = "item_post_type"
+            
+            case loginPrompt = "login_prompt"
+
             var team: String {
                 return "CAMPUS"
             }
