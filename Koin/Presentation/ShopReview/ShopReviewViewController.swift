@@ -268,11 +268,13 @@ extension ShopReviewViewController {
     }
     
     private func submitReviewButtonTapped() {
-        let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem)
+        let requestModel: WriteReviewRequest = .init( rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem.map { $0.title }
+        )
         inputSubject.send(.writeReview(requestModel))
     }
     
 }
+
 extension ShopReviewViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
@@ -289,6 +291,7 @@ extension ShopReviewViewController: PHPickerViewControllerDelegate {
             }
         }
     }
+    
     private func handleSelectedImage(image: UIImage) {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             return
