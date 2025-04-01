@@ -19,4 +19,8 @@ final class DefaultCoreRepository: CoreRepository {
         return service.fetchVersion()
     }
     
+    func fetBanner() -> AnyPublisher<BannerDTO, Error> {
+        return service.fetchBanner()
+    }
+    
 }

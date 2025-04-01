@@ -124,10 +124,7 @@ final class HomeViewController: UIViewController {
     }
     
     private let bannerViewControllerA = BannerViewControllerA()
-    private let bannerViewControllerB = BannerViewControllerB().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
+    private let bannerViewControllerB = BannerViewControllerB()
     
     // MARK: - Initialization
     
@@ -148,6 +145,7 @@ final class HomeViewController: UIViewController {
         bind()
         print(KeychainWorker.shared.read(key: .access))
         print(KeychainWorker.shared.read(key: .fcm))
+        print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
@@ -156,14 +154,10 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-   //     print(KeychainWorker.shared.read(key: .access) ?? "")
-        
-     //   print("위가 엑세스 아래가 리프레시")
-     //   print("위가 엑세스 아래가 리프레시")
+        checkAndShowBanner()
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self
-        self.present(bannerViewControllerB, animated: true)
     }
     
     @objc private func appWillEnterForeground() {
@@ -216,6 +210,8 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .updateBanner(let banner, let abTestResult):
+                self?.showBanner(banner: banner, abTestResult: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -285,6 +281,31 @@ final class HomeViewController: UIViewController {
 }
 
 extension HomeViewController {
+    
+    private func showBanner(banner: BannerDTO, abTestResult: AssignAbTestResponse) {
+        if banner.count == 0 { return }
+        let viewController: UIViewController
+        if abTestResult.variableName == .bottomBanner {
+            bannerViewControllerA.setBanners(banners: banner.banners)
+            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+        } else {
+            bannerViewControllerB.setBanners(banners: banner.banners)
+            viewController = bannerViewControllerB
+        }
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
+    }
+    
+    private func checkAndShowBanner() {
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
+            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+               Date() < thresholdDate {
+                return
+            }
+        }
+        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+    }
     
     @objc private func tapBusQrCode() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))

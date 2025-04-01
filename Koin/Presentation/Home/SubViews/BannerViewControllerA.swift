@@ -24,7 +24,14 @@ final class BannerViewControllerA: UIViewController {
         $0.setTitle("닫기", for: .normal)
     }
     
-    private let collectionView = UIView()
+    private let collectionView: BannerCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 0
+        let collectionView = BannerCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
     
     private let countLabel = UILabel()
     
@@ -38,11 +45,16 @@ final class BannerViewControllerA: UIViewController {
         noShowButton.addTarget(self, action: #selector(noShowButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
+    
+    func setBanners(banners: [Banner]) {
+        collectionView.setBanners(banners)
+    }
 
 }
 
 extension BannerViewControllerA {
     @objc private func noShowButtonTapped() {
+        UserDefaults.standard.set(Date(), forKey: "noShowBanner")
         dismiss(animated: true)
     }
     @objc private func closeButtonTapped() {
