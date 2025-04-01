@@ -277,11 +277,80 @@ final class HomeViewController: UIViewController {
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
+        
+        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    private func handleBannerTap(_ banner: Banner) {
     
+        if let version = banner.version {
+            // 현재 앱 버전
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            
+            let isOld = isVersion(currentVersion, lowerThan: version)
+            
+            if isOld {
+                if let appStoreURL = URL(string: "https://apps.apple.com/kr/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622") {
+                    UIApplication.shared.open(appStoreURL)
+                }
+                return
+            }
+        }
+        
+        if let redirect = banner.redirectLink {
+            // redirect 로직
+            if redirect == "shop" {
+                dismiss(animated: true)
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                
+                let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+                let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+                let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+                let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+                let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+                
+                let viewModel = ShopViewModel(
+                    fetchShopListUseCase: fetchShopListUseCase,
+                    fetchEventListUseCase: fetchEventListUseCase,
+                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                    fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                    fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                    selectedId: 0
+                )
+                let shopViewController = ShopViewControllerA(viewModel: viewModel)
+                navigationController?.pushViewController(shopViewController, animated: true)
+            } else if redirect == "dining" {
+                dismiss(animated: true)
+                navigatetoDining()
+            }
+        }
+    }
+    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> Bool {
+        let currentComponents = currentVersion.split(separator: ".").compactMap { Int($0) }
+        let requiredComponents = requiredVersion.split(separator: ".").compactMap { Int($0) }
+
+        for i in 0..<max(currentComponents.count, requiredComponents.count) {
+            let current = i < currentComponents.count ? currentComponents[i] : 0
+            let required = i < requiredComponents.count ? requiredComponents[i] : 0
+            if current < required { return true }
+            if current > required { return false }
+        }
+
+        return false
+    }
     private func showBanner(banner: BannerDTO, abTestResult: AssignAbTestResponse) {
         if banner.count == 0 { return }
         let viewController: UIViewController

@@ -11,6 +11,8 @@ import UIKit
 final class BannerViewControllerA: UIViewController {
     
     // MARK: - properties
+    private var subscriptions: Set<AnyCancellable> = []
+    let bannerTapPublisher = PassthroughSubject<Banner, Never>()
     
     private let whiteView = UIView().then {
         $0.backgroundColor = .white
@@ -42,14 +44,43 @@ final class BannerViewControllerA: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        bind()
         noShowButton.addTarget(self, action: #selector(noShowButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
     
     func setBanners(banners: [Banner]) {
         collectionView.setBanners(banners)
+        setCountLabel(index: 0, totalCount: banners.count)
     }
 
+    private func bind() {
+        collectionView.scrollPublisher.sink { [weak self] item in
+            self?.setCountLabel(index: item.0, totalCount: item.1)
+        }.store(in: &subscriptions)
+        
+        collectionView.tapPublisher.sink { [weak self] item in
+            self?.bannerTapPublisher.send(item)
+        }.store(in: &subscriptions)
+    }
+    
+    private func setCountLabel(index: Int, totalCount: Int) {
+        let current = index + 1
+        let total = totalCount
+
+        let text = "\(current)/\(total)"
+        let attributedString = NSMutableAttributedString(string: text)
+
+
+        if let slashRange = text.range(of: "/") {
+            let slashLocation = text.distance(from: text.startIndex, to: slashRange.lowerBound)
+
+            attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: slashLocation))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral400), range: NSRange(location: slashLocation, length: text.count - slashLocation))
+        }
+
+        countLabel.attributedText = attributedString
+    }
 }
 
 extension BannerViewControllerA {
@@ -93,7 +124,7 @@ extension BannerViewControllerA {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(closeButton.snp.bottom).offset(13)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(293)
+            $0.bottom.equalToSuperview().offset(-48)
         }
         countLabel.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.top).offset(8)
@@ -110,6 +141,11 @@ extension BannerViewControllerA {
         closeButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         whiteView.layer.masksToBounds = true
         whiteView.layer.cornerRadius = 8
+        countLabel.backgroundColor = .black.withAlphaComponent(0.5)
+        countLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
+        countLabel.textAlignment = .center
+        countLabel.layer.cornerRadius = 8
+        countLabel.layer.masksToBounds = true
     }
 
     
