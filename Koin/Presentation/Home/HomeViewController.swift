@@ -123,6 +123,12 @@ final class HomeViewController: UIViewController {
     private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
     }
     
+    private let bannerViewControllerA = BannerViewControllerA()
+    private let bannerViewControllerB = BannerViewControllerB().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: HomeViewModel) {
@@ -157,6 +163,7 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self
+        self.present(bannerViewControllerB, animated: true)
     }
     
     @objc private func appWillEnterForeground() {
