@@ -20,6 +20,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case getAbTestResult(String)
+        case getBannerAbTest(String)
     }
     
     // MARK: - Output
@@ -30,6 +31,7 @@ final class HomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
+        case updateBanner(BannerDTO, AssignAbTestResponse)
     }
     
     // MARK: - Properties
@@ -45,6 +47,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let assignAbTestUseCase: AssignAbTestUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -85,6 +88,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getNoticeBanners(date: date)
             case let .getAbTestResult(abTestTitle):
                 self?.getAbTestResult(abTestTitle: abTestTitle)
+            case .getBannerAbTest(let request):
+                self?.getBannerAbTest(request: request)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -93,6 +98,28 @@ final class HomeViewModel: ViewModelProtocol {
 }
 
 extension HomeViewModel {
+    
+    private func fetchBanner(abTestResult: AssignAbTestResponse) {
+        fetchBannerUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateBanner(response, abTestResult))
+        }.store(in: &subscriptions)
+    }
+    
+    private func getBannerAbTest(request: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
+            .sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            self?.fetchBanner(abTestResult: abTestResult)
+        }).store(in: &subscriptions)
+    }
+                
     private func fetchUserData() {
         fetchUserDataUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
