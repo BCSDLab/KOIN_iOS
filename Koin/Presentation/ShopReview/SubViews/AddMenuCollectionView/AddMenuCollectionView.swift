@@ -8,12 +8,20 @@
 import Combine
 import UIKit
 
-final class AddMenuCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class AddMenuCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout {
+        
+    struct MenuItem: Hashable {
+        let id = UUID()
+        var title: String
+    }
     
+    private enum Section: CaseIterable { case main }
+
     let menuItemCountPublisher = PassthroughSubject<Int, Never>()
-    private(set) var menuItem: [String] = []
-    
-    
+    var menuItem: [String] { return menuItemInternal.map { $0.title } }
+    private var menuItemInternal: [MenuItem] = []
+    private var diffableDataSource: UICollectionViewDiffableDataSource<Section, MenuItem>!
+
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
@@ -29,56 +37,61 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDataSource,
         showsVerticalScrollIndicator = false
         contentInset = .zero
         register(AddMenuCollectionViewCell.self, forCellWithReuseIdentifier: AddMenuCollectionViewCell.identifier)
-        dataSource = self
+        configureDataSource()
         delegate = self
     }
     
     func addMenuItem() {
-        menuItem.append("")
+        menuItemInternal.append(MenuItem(title: ""))
         menuItemCountPublisher.send(menuItem.count)
-        reloadData()
+        applySnapshot()
     }
     
     func setMenuItem(item: [String]) {
-        menuItem = item
+        menuItemInternal = item.map { MenuItem(title: $0) }
         menuItemCountPublisher.send(menuItem.count)
-        reloadData()
+        applySnapshot()
     }
     
+    private func configureDataSource() {
+        diffableDataSource = UICollectionViewDiffableDataSource<Section, MenuItem>(collectionView: self) { [weak self] collectionView, indexPath, item in
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddMenuCollectionViewCell.identifier, for: indexPath) as? AddMenuCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(text: item.title)
+
+            cell.cancelButtonPublisher.sink { [weak self] in
+                guard let self = self else { return }
+                if let index = self.menuItemInternal.firstIndex(where: { $0.id == item.id }) {
+                    self.menuItemInternal.remove(at: index)
+                    self.menuItemCountPublisher.send(self.menuItemInternal.count)
+                    self.applySnapshot()
+                }
+            }.store(in: &cell.cancellables)
+            
+            cell.textPublisher.sink { [weak self] text in
+                guard let self = self else { return }
+                if let index = self.menuItemInternal.firstIndex(where: { $0.id == item.id }) {
+                    self.menuItemInternal[index].title = text
+                }
+            }.store(in: &cell.cancellables)
+
+            return cell
+        }
+        self.dataSource = diffableDataSource
+    }
+    
+    private func applySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, MenuItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(menuItemInternal)
+        diffableDataSource.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 extension AddMenuCollectionView {
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddMenuCollectionViewCell.identifier, for: indexPath) as? AddMenuCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        cell.configure(text: menuItem[indexPath.row])
-        
-        cell.cancelButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.menuItem.remove(at: indexPath.row)
-            self.menuItemCountPublisher.send(self.menuItem.count)
-            self.reloadData()
-        }.store(in: &cell.cancellables)
-        
-        cell.textPublisher.sink { [weak self] text in
-            self?.menuItem[indexPath.row] = text
-        }.store(in: &cell.cancellables)
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return menuItem.count
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: Int(collectionView.bounds.width), height: 46)
     }
-    
 }
-
-
-
-
