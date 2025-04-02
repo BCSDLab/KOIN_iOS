@@ -268,11 +268,9 @@ extension ShopReviewViewController {
     }
     
     private func submitReviewButtonTapped() {
-        let requestModel: WriteReviewRequest = .init( rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem.map { $0.title }
-        )
+        let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem)
         inputSubject.send(.writeReview(requestModel))
     }
-    
 }
 
 extension ShopReviewViewController: PHPickerViewControllerDelegate {

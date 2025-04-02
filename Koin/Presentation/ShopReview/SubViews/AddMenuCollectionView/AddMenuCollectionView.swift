@@ -18,7 +18,8 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDelegateFlo
     private enum Section: CaseIterable { case main }
 
     let menuItemCountPublisher = PassthroughSubject<Int, Never>()
-    private(set) var menuItem: [MenuItem] = []
+    var menuItem: [String] { return menuItemInternal.map { $0.title } }
+    private var menuItemInternal: [MenuItem] = []
     private var diffableDataSource: UICollectionViewDiffableDataSource<Section, MenuItem>!
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -41,13 +42,13 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDelegateFlo
     }
     
     func addMenuItem() {
-        menuItem.append(MenuItem(title: ""))
+        menuItemInternal.append(MenuItem(title: ""))
         menuItemCountPublisher.send(menuItem.count)
         applySnapshot()
     }
     
     func setMenuItem(item: [String]) {
-        menuItem = item.map { MenuItem(title: $0) }
+        menuItemInternal = item.map { MenuItem(title: $0) }
         menuItemCountPublisher.send(menuItem.count)
         applySnapshot()
     }
@@ -62,17 +63,17 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDelegateFlo
 
             cell.cancelButtonPublisher.sink { [weak self] in
                 guard let self = self else { return }
-                if let index = self.menuItem.firstIndex(where: { $0.id == item.id }) {
-                    self.menuItem.remove(at: index)
-                    self.menuItemCountPublisher.send(self.menuItem.count)
+                if let index = self.menuItemInternal.firstIndex(where: { $0.id == item.id }) {
+                    self.menuItemInternal.remove(at: index)
+                    self.menuItemCountPublisher.send(self.menuItemInternal.count)
                     self.applySnapshot()
                 }
             }.store(in: &cell.cancellables)
             
             cell.textPublisher.sink { [weak self] text in
                 guard let self = self else { return }
-                if let index = self.menuItem.firstIndex(where: { $0.id == item.id }) {
-                    self.menuItem[index].title = text
+                if let index = self.menuItemInternal.firstIndex(where: { $0.id == item.id }) {
+                    self.menuItemInternal[index].title = text
                 }
             }.store(in: &cell.cancellables)
 
@@ -84,7 +85,7 @@ final class AddMenuCollectionView: UICollectionView, UICollectionViewDelegateFlo
     private func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, MenuItem>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(menuItem)
+        snapshot.appendItems(menuItemInternal)
         diffableDataSource.apply(snapshot, animatingDifferences: true)
     }
 }
