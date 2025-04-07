@@ -167,6 +167,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         }
         
         postLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "게시글 작성 팝업"))
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         

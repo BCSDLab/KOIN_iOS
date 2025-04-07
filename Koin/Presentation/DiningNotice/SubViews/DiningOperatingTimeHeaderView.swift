@@ -10,35 +10,25 @@ import UIKit
 final class DiningOperatingTimeHeaderView: UICollectionReusableView {
     static let identifier = "DiningOperatingTimeHeaderView"
     
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "시간"
-        return label
-    }()
+    private let timeLabel = UILabel().then {
+        $0.text = "시간"
+    }
     
-    private let startTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "시작시간"
-        return label
-    }()
+    private let startTimeLabel = UILabel().then {
+        $0.text = "시작시간"
+    }
     
-    private let endTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "마감시간"
-        return label
-    }()
+    private let endTimeLabel = UILabel().then {
+        $0.text = "마감시간"
+    }
     
-    private let separateView1: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral400)
-        return view
-    }()
+    private let separateView1 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral400)
+    }
     
-    private let separateView2: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral400)
-        return view
-    }()
+    private let separateView2 = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral400)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -44,17 +44,34 @@ struct RouteInfo: Decodable {
 
 extension ShuttleBusTimetableDTO {
     func toDomain() -> ShuttleBusTimetableDTO {
-        return ShuttleBusTimetableDTO(id: id, region: region, routeName: routeName, routeType: routeType, subName: subName, nodeInfo: nodeInfo, routeInfo: routeInfo.map { $0.toDomain() })
+        let hasGoSchool = routeInfo.contains { $0.name == "등교" }
+        let hasDropOffSchool = routeInfo.contains { $0.name == "하교" }
+
+        let updatedRouteInfo = routeInfo.map { route in
+            if route.name == "하교" && hasGoSchool && hasDropOffSchool {
+                return route.toDomain() // ✅ 등교 & 하교 둘 다 있으면 reverse
+            } else {
+                return route // ✅ 하교만 있는 경우 그대로 유지
+            }
+        }
+
+        return ShuttleBusTimetableDTO(
+            id: id,
+            region: region,
+            routeName: routeName,
+            routeType: routeType,
+            subName: subName,
+            nodeInfo: nodeInfo,
+            routeInfo: updatedRouteInfo
+        )
     }
 }
 
 extension RouteInfo {
     func toDomain() -> RouteInfo {
-        if name == "하교" {
-            return RouteInfo(name: name, arrivalTime: arrivalTime.reversed())
-        }
-        else {
-            return self
-        }
+        return RouteInfo(
+            name: name,
+            arrivalTime: name == "하교" ? arrivalTime.reversed() : arrivalTime
+        )
     }
 }

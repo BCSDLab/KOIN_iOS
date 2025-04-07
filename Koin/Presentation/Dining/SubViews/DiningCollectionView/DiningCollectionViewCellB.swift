@@ -20,107 +20,80 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
     static let reuseIdentifier = "diningCollectionViewCellB"
     
     // MARK: - UI Components
-    private let wrappedView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        return view
-    }()
+    private let wrappedView = UIView().then {
+        $0.backgroundColor = UIColor.clear
+    }
     
-    private let diningPlaceLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.neutral800)
-        label.font = UIFont.appFont(.pretendardBold, size: 18)
-        return label
-    }()
+    private let diningPlaceLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+    }
     
-    private let diningInfoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.neutral500)
-        return label
-    }()
+    private let diningInfoLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
     
-    private let soldOutLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.layer.cornerRadius = 4
-        label.clipsToBounds = true
-        label.text = "품절"
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        label.backgroundColor = UIColor.appColor(.warning200)
-        label.textColor = UIColor.appColor(.warning600)
-        return label
-    }()
+    private let soldOutLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.text = "품절"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.backgroundColor = UIColor.appColor(.warning200)
+        $0.textColor = UIColor.appColor(.warning600)
+    }
     
-    private let substitutionLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.layer.cornerRadius = 4
-        label.clipsToBounds = true
-        label.text = "변경됨"
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
-        label.backgroundColor = UIColor.appColor(.neutral200)
-        label.textColor = UIColor.appColor(.neutral600)
-        return label
-    }()
+    private let substitutionLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.text = "변경됨"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
     
-    private let menuImageView: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
-    }()
+    private let menuImageView = UIImageView().then { _ in
+    }
     
-    private let menuImageBackground: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 8
-        view.clipsToBounds = true
-        return view
-    }()
+    private let menuImageBackground = UIView().then {
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+    }
     
-    private let leftMenuListLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .appColor(.neutral800)
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
-        label.numberOfLines = 0
-        return label
-    }()
+    private let leftMenuListLabel = UILabel().then {
+        $0.textColor = .appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.numberOfLines = 0
+    }
     
-    private let rightMenuListLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .appColor(.neutral800)
-        label.font = UIFont.appFont(.pretendardRegular, size: 14)
-        label.numberOfLines = 0
-        return label
-    }()
+    private let rightMenuListLabel = UILabel().then {
+        $0.textColor = .appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.numberOfLines = 0
+    }
     
-    private let separateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral100)
-        return view
-    }()
+    private let separateView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
     
-    private let cellSpacingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral100)
-        return view
-    }()
+    private let cellSpacingView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+    }
     
-    private let nonMealImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .noMeal)
-        return imageView
-    }()
+    private let nonMealImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .noMeal)
+    }
     
-    private let nonMealText: UILabel = {
-        let label = UILabel()
-        label.text = "품절된 메뉴입니다."
-        label.textColor = UIColor.appColor(.neutral0)
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let nonMealText = UILabel().then {
+        $0.text = "품절된 메뉴입니다."
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
     
-    private let shareButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemBackground
+    private let shareButton = UIButton().then {
+        $0.backgroundColor = .systemBackground
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .share)
         var attributedTitle = AttributedString(stringLiteral: "카카오톡으로 식단 공유하기")
@@ -128,10 +101,9 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
         configuration.attributedTitle = attributedTitle
         configuration.imagePadding = 4
         configuration.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        button.configuration = configuration
-        button.tintColor = UIColor.appColor(.neutral600)
-        return button
-    }()
+        $0.configuration = configuration
+        $0.tintColor = UIColor.appColor(.neutral600)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

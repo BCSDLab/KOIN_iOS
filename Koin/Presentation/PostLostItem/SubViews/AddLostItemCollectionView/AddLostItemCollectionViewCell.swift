@@ -389,14 +389,17 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
-            guard let button = view as? UIButton else { return }
-            button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-            button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-            button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-        }
-        sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
-        sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-        sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
+               guard let button = view as? UIButton else { return }
+               button.isSelected = false
+               button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+               button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+               button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+           }
+
+           sender.isSelected = true
+           sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+           sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+           sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
     func textViewDidChange(_ textView: UITextView) {
         let maxCharacters = 1000

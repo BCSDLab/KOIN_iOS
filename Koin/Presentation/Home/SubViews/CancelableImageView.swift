@@ -8,11 +8,9 @@
 import UIKit
 
 final class CancelableImageView: UIView {
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
+    private let imageView = UIImageView().then {
+        $0.isUserInteractionEnabled = true
+    }
     
     private var xButtonWidth: CGFloat = 30
     private var xButtonHeight: CGFloat = 30

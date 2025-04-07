@@ -22,7 +22,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
+        
+        if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
+                   let incomingURL = userActivity.webpageURL {
+                    handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
+                } else if let urlContext = connectionOptions.urlContexts.first {
+                    handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
+                }
     }
+    private func handleIncomingDeepLink(url: URL, navigationController: UINavigationController) {
+            // URL 경로가 "/articles/lost-item"인 경우에 처리
+            if url.path == "/articles/lost-item" {
+                let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
+                let viewController = NoticeListViewController(viewModel: NoticeListViewModel(
+                    fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository),
+                    fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository),
+                    logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+                    noticeListType: .lostItem
+                ))
+                navigationController.pushViewController(viewController, animated: false)
+            }
+            // 다른 딥링크 처리 로직을 추가할 수 있습니다.
+        }
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
                let incomingURL = userActivity.webpageURL else { return }
