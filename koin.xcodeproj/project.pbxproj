@@ -315,6 +315,7 @@
 		D23944A22C3CFAA500048F45 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A12C3CFAA500048F45 /* ScoreView.swift */; };
 		D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */; };
 		D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */; };
+		D23DDE6B2D83E9D500603996 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23DDE6A2D83E9D500603996 /* ToastManager.swift */; };
 		D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD222C12DB73000813F9 /* DiningRepository.swift */; };
 		D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */; };
 		D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD272C12DCCC000813F9 /* DiningService.swift */; };
@@ -926,6 +927,7 @@
 		D23944A12C3CFAA500048F45 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		D23944A42C3D17B300048F45 /* ReviewImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionView.swift; sourceTree = "<group>"; };
 		D23944A62C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		D23DDE6A2D83E9D500603996 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		D249CD222C12DB73000813F9 /* DiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRepository.swift; sourceTree = "<group>"; };
 		D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCase.swift; sourceTree = "<group>"; };
 		D249CD272C12DCCC000813F9 /* DiningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningService.swift; sourceTree = "<group>"; };
@@ -2525,6 +2527,7 @@
 				D224217F2C8ADE6200E8B480 /* PasswordValidator.swift */,
 				D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */,
 				D261BB972D79418600A67F06 /* UserDataManager.swift */,
+				D23DDE6A2D83E9D500603996 /* ToastManager.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -3735,6 +3738,7 @@
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
+				D23DDE6B2D83E9D500603996 /* ToastManager.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
