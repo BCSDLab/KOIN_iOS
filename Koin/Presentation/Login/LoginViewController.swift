@@ -101,6 +101,13 @@ final class LoginViewController: UIViewController {
         $0.configuration = configuration
     }
     
+    private let copyrightLabel = UILabel().then {
+        $0.text = "Copyright @ BCSD Lab All rights reserved."
+        $0.textColor = UIColor.appColor(.neutral700)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textAlignment = .center
+    }
+    
     // MARK: - Initialization
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -187,7 +194,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImage, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImage, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton, copyrightLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -265,6 +272,11 @@ extension LoginViewController {
             make.leading.equalTo(findIdButton.snp.trailing).offset(14)
             make.width.equalTo(100)
             make.height.equalTo(20)
+        }
+        copyrightLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-32)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(18)
         }
     }
     
