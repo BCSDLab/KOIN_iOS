@@ -42,6 +42,10 @@ final class LoginViewController: UIViewController {
         $0.isSecureTextEntry = true
     }
     
+    private let changeSecureButton = UIButton().then { button in
+        button.setImage(UIImage.appImage(asset: .visibility), for: .normal)
+    }
+    
     private let separateView2 = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
@@ -99,6 +103,7 @@ final class LoginViewController: UIViewController {
         configureView()
         bind()
         hideKeyboardWhenTappedAround()
+        changeSecureButton.addTarget(self, action: #selector(changeSecureButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         findIdButton.addTarget(self, action: #selector(findIdButtonTapped), for: .touchUpInside)
@@ -127,6 +132,10 @@ final class LoginViewController: UIViewController {
 }
 
 extension LoginViewController {
+    @objc private func changeSecureButtonTapped() {
+        passwordTextField.isSecureTextEntry.toggle()
+        changeSecureButton.setImage(passwordTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
+    }
 
     @objc private func findIdButtonTapped() {
         if let url = URL(string: "https://portal.koreatech.ac.kr/kut/page/findUser.jsp") {
@@ -163,7 +172,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -196,6 +205,11 @@ extension LoginViewController {
             make.leading.equalTo(idTextField.snp.leading)
             make.trailing.equalTo(idTextField.snp.trailing)
             make.height.equalTo(40)
+        }
+        changeSecureButton.snp.makeConstraints { make in
+            make.centerY.equalTo(passwordTextField.snp.centerY)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
+            make.width.height.equalTo(20)
         }
         separateView2.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom)
