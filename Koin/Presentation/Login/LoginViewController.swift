@@ -31,7 +31,7 @@ final class LoginViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral500)
     }
     
-    private let emailWarningLabel = UILabel().then {
+    private let idWarningLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
         $0.textColor = .red
     }
@@ -141,7 +141,7 @@ extension LoginViewController {
     
     
     @objc func loginButtonTapped() {
-        emailWarningLabel.text = ""
+        idWarningLabel.text = ""
         passwordWarningLabel.text = ""
         inputSubject.send(.login(idTextField.text ?? "", passwordTextField.text ?? ""))
     }
@@ -161,7 +161,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, idTextField, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -184,13 +184,13 @@ extension LoginViewController {
             make.trailing.equalTo(view.snp.trailing).offset(-30)
             make.height.equalTo(1)
         }
-        emailWarningLabel.snp.makeConstraints { make in
+        idWarningLabel.snp.makeConstraints { make in
             make.top.equalTo(separateView1.snp.bottom).offset(10)
             make.leading.equalTo(view.snp.leading).offset(30)
             make.height.equalTo(20)
         }
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailWarningLabel.snp.bottom).offset(10)
+            make.top.equalTo(idWarningLabel.snp.bottom).offset(10)
             make.leading.equalTo(view.snp.leading).offset(30)
             make.trailing.equalTo(view.snp.trailing).offset(-30)
             make.height.equalTo(20)
