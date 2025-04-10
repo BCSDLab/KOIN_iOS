@@ -8,6 +8,9 @@
 import UIKit
 
 final class ShopInfoCollectionViewCell: UICollectionViewCell {
+    private var benefitTimer: Timer?
+    private var benefitDetails: [String] = []
+    private var currentIndex: Int = 0
     
     private let eventLabel = UILabel().then {
         let attributedString = NSMutableAttributedString(string: "이벤트 ")
@@ -68,6 +71,12 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        stopBenefitRotation()
+        benefitLabel.text = nil
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -91,11 +100,39 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         }
         
         if let detail = info.benefitDetail {
-            benefitLabel.text = info.benefitDetail
+            benefitLabel.text = detail
+            stopBenefitRotation()
         } else {
-            benefitLabel.text = info.benefitDetails.first
+            benefitDetails = info.benefitDetails
+            benefitLabel.text = benefitDetails.first
         }
+        
         benefitLabel.isHidden = info.isOpen ? false : true
+    }
+    
+    func startBenefitRotation() {
+        guard benefitDetails.count > 1 else { return }
+
+        stopBenefitRotation()
+        currentIndex = 0
+
+        benefitTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            guard let self = self, !self.benefitDetails.isEmpty else { return }
+            self.currentIndex = (self.currentIndex + 1) % self.benefitDetails.count
+            let nextText = self.benefitDetails[self.currentIndex]
+            self.animateBenefitChange(to: nextText)
+        }
+    }
+
+    func stopBenefitRotation() {
+        benefitTimer?.invalidate()
+        benefitTimer = nil
+    }
+    
+    private func animateBenefitChange(to newText: String) {
+        UIView.transition(with: benefitLabel, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+            self.benefitLabel.text = newText
+        }, completion: nil)
     }
 }
 

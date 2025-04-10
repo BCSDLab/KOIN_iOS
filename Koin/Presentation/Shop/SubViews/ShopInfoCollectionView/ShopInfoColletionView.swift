@@ -69,7 +69,6 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
 }
 
 extension ShopInfoCollectionView {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
             return isHeaderHidden ? CGSize.zero : CGSize(width: collectionView.bounds.width, height: 25)
         }
@@ -103,8 +102,19 @@ extension ShopInfoCollectionView {
         cell.configure(info: shopItem)
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.makeAnalyticsForClickStoreList(shops[indexPath.row].name)
         cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let shopCell = cell as? ShopInfoCollectionViewCell else { return }
+        shopCell.startBenefitRotation()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let shopCell = cell as? ShopInfoCollectionViewCell else { return }
+        shopCell.stopBenefitRotation()
     }
 }

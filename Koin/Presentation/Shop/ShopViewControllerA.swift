@@ -154,9 +154,13 @@ final class ShopViewControllerA: UIViewController {
             searchTextField.resignFirstResponder() // 키보드 내리기
         }
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         eventShopCollectionView.stopAutoScroll()
+        for cell in shopCollectionView.visibleCells {
+            (cell as? ShopInfoCollectionViewCell)?.stopBenefitRotation()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
