@@ -56,6 +56,11 @@ final class LoginViewController: UIViewController {
         $0.textColor = UIColor.appColor(.sub500)
     }
     
+    private let warningImage = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .warningOrange)
+        $0.isHidden = true
+    }
+    
     private let loginButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.sub500)
         $0.setTitle("로그인", for: .normal)
@@ -96,7 +101,6 @@ final class LoginViewController: UIViewController {
         $0.configuration = configuration
     }
     
-    
     // MARK: - Initialization
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -134,12 +138,12 @@ final class LoginViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showErrorMessage(message):
+                self?.warningImage.isHidden = false
                 self?.passwordWarningLabel.text = message
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
-        
     }
 }
 
@@ -162,7 +166,6 @@ extension LoginViewController {
         navigationController?.pushViewController(findPasswordViewController, animated: true)
     }
     
-    
     @objc func loginButtonTapped() {
         idWarningLabel.text = ""
         passwordWarningLabel.text = ""
@@ -184,7 +187,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImage, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -208,8 +211,8 @@ extension LoginViewController {
             make.height.equalTo(1)
         }
         idWarningLabel.snp.makeConstraints { make in
-            make.top.equalTo(separateView1.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
+            make.top.equalTo(separateView1.snp.bottom)
+            make.leading.equalTo(idTextField.snp.leading)
             make.height.equalTo(20)
         }
         passwordTextField.snp.makeConstraints { make in
@@ -229,10 +232,14 @@ extension LoginViewController {
             make.trailing.equalTo(passwordTextField.snp.trailing)
             make.height.equalTo(1)
         }
+        warningImage.snp.makeConstraints { make in
+            make.centerY.equalTo(passwordWarningLabel.snp.centerY)
+            make.leading.equalTo(separateView2.snp.leading)
+            make.width.height.equalTo(16)
+        }
         passwordWarningLabel.snp.makeConstraints { make in
-            make.top.equalTo(separateView2.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(separateView2.snp.bottom)
+            make.leading.equalTo(warningImage.snp.trailing).offset(4)
             make.height.greaterThanOrEqualTo(20)
         }
         loginButton.snp.makeConstraints { make in
