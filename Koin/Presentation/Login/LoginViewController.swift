@@ -24,32 +24,32 @@ final class LoginViewController: UIViewController {
     private let idTextField = UITextField().then {
         $0.placeholder = "아이디(Koreatech ID/전화번호)"
         $0.autocapitalizationType = .none
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 16)
     }
     
     private let separateView1 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     private let idWarningLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
-        $0.textColor = .red
+        $0.textColor = UIColor.appColor(.sub500)
     }
     
     private let passwordTextField = UITextField().then {
         $0.placeholder = "비밀번호"
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 16)
         $0.isSecureTextEntry = true
     }
     
     private let separateView2 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     private let passwordWarningLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
         $0.numberOfLines = 2
-        $0.textColor = .red
+        $0.textColor = UIColor.appColor(.sub500)
     }
     
     private let loginButton = UIButton().then {
@@ -57,6 +57,7 @@ final class LoginViewController: UIViewController {
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
     }
     
     private let registerButton = UIButton().then {
@@ -64,6 +65,7 @@ final class LoginViewController: UIViewController {
         $0.setTitle("회원가입", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
     }
     
     private let findIdButton = UIButton().then {
