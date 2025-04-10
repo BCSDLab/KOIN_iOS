@@ -227,6 +227,12 @@
 		D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
+		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
+		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
+		D20CFC042DA7FF3400ADEF3B /* AgreementFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormView.swift */; };
+		D20CFC062DA800CE00ADEF3B /* CertificationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */; };
+		D20CFC082DA8031F00ADEF3B /* SelectTypeFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */; };
+		D20CFC0A2DA8032D00ADEF3B /* EnterFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
@@ -838,6 +844,12 @@
 		D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiContentViewController.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
+		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
+		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
+		D20CFC032DA7FF3400ADEF3B /* AgreementFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormView.swift; sourceTree = "<group>"; };
+		D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormView.swift; sourceTree = "<group>"; };
+		D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormView.swift; sourceTree = "<group>"; };
+		D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormView.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
@@ -1222,8 +1234,11 @@
 		0F74C4F52BA8562D00EF4F58 /* Register */ = {
 			isa = PBXGroup;
 			children = (
+				D20CFC002DA7F71D00ADEF3B /* SubViews */,
+				D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */,
 				0F74C4F82BA8564600EF4F58 /* RegisterViewModel.swift */,
 				0F74C4F62BA8563E00EF4F58 /* RegisterViewController.swift */,
+				D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1816,6 +1831,25 @@
 			);
 			name = Noti;
 			path = "ㅜㅐ샤";
+			sourceTree = "<group>";
+		};
+		D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D20CFC002DA7F71D00ADEF3B /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D20CFC032DA7FF3400ADEF3B /* AgreementFormView.swift */,
+				D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */,
+				D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */,
+				D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		D215726D2CEE28C30061E725 /* Timetable */ = {
@@ -3492,6 +3526,7 @@
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
+				D20CFC062DA800CE00ADEF3B /* CertificationFormView.swift in Sources */,
 				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
@@ -3575,6 +3610,7 @@
 				D2D380E92BA714AC009AD5A9 /* ServiceSelectViewModel.swift in Sources */,
 				D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */,
 				833D9C2D2C6C692000982145 /* NoticeListViewModel.swift in Sources */,
+				D20CFC0A2DA8032D00ADEF3B /* EnterFormView.swift in Sources */,
 				D23944A52C3D17B300048F45 /* ReviewImageCollectionView.swift in Sources */,
 				D27DD08D2BA608310081FD36 /* LandCollectionView.swift in Sources */,
 				D27DD0F02BA60D000081FD36 /* LandViewController.swift in Sources */,
@@ -3687,6 +3723,7 @@
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
+				D20CFC042DA7FF3400ADEF3B /* AgreementFormView.swift in Sources */,
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				83EBB88E2D16B41F00346018 /* BusAreaSelectedCollectionView.swift in Sources */,
@@ -3884,6 +3921,7 @@
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
+				D20CFC082DA8031F00ADEF3B /* SelectTypeFormView.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */,
@@ -3928,9 +3966,11 @@
 				D23944672C38544700048F45 /* ShopDataPageViewController.swift in Sources */,
 				D27DD0EA2BA60CB60081FD36 /* LandDetailViewModel.swift in Sources */,
 				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */,
 				D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */,
 				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
+				D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
