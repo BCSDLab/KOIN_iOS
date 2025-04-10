@@ -21,8 +21,8 @@ final class LoginViewController: UIViewController {
         $0.image = UIImage.appImage(asset: .koinLogo)
     }
     
-    private let emailTextField = UITextField().then {
-        $0.placeholder = "KOREATECH 이메일"
+    private let idTextField = UITextField().then {
+        $0.placeholder = "아이디(Koreatech ID/전화번호)"
         $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 15)
     }
@@ -101,7 +101,7 @@ final class LoginViewController: UIViewController {
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         findIdButton.addTarget(self, action: #selector(findIdButtonTapped), for: .touchUpInside)
         findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
-        emailTextField.delegate = self
+        idTextField.delegate = self
         passwordTextField.delegate = self
     }
     
@@ -143,7 +143,7 @@ extension LoginViewController {
     @objc func loginButtonTapped() {
         emailWarningLabel.text = ""
         passwordWarningLabel.text = ""
-        inputSubject.send(.login(emailTextField.text ?? "", passwordTextField.text ?? ""))
+        inputSubject.send(.login(idTextField.text ?? "", passwordTextField.text ?? ""))
     }
     
     @objc func registerButtonTapped() {
@@ -161,7 +161,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, emailTextField, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -172,14 +172,14 @@ extension LoginViewController {
             make.height.equalTo(50)
             make.width.equalTo(80)
         }
-        emailTextField.snp.makeConstraints { make in
+        idTextField.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp.bottom).offset(70)
             make.leading.equalTo(view.snp.leading).offset(30)
             make.trailing.equalTo(view.snp.centerX)
             make.height.equalTo(20)
         }
         separateView1.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(5)
+            make.top.equalTo(idTextField.snp.bottom).offset(5)
             make.leading.equalTo(view.snp.leading).offset(30)
             make.trailing.equalTo(view.snp.trailing).offset(-30)
             make.height.equalTo(1)
