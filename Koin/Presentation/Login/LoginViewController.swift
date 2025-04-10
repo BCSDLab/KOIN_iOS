@@ -27,11 +27,6 @@ final class LoginViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardRegular, size: 15)
     }
     
-    private let emailGuideLabel = UILabel().then {
-        $0.text = "@ koreatech.ac.kr"
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
-    }
-    
     private let separateView1 = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral500)
     }
@@ -166,7 +161,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, emailTextField, emailGuideLabel, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, emailTextField, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -183,14 +178,8 @@ extension LoginViewController {
             make.trailing.equalTo(view.snp.centerX)
             make.height.equalTo(20)
         }
-        emailGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.top)
-            make.leading.equalTo(view.snp.centerX)
-            make.height.equalTo(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-        }
         separateView1.snp.makeConstraints { make in
-            make.top.equalTo(emailGuideLabel.snp.bottom).offset(5)
+            make.top.equalTo(emailTextField.snp.bottom).offset(5)
             make.leading.equalTo(view.snp.leading).offset(30)
             make.trailing.equalTo(view.snp.trailing).offset(-30)
             make.height.equalTo(1)
