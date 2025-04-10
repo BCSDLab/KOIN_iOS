@@ -167,21 +167,21 @@ extension LoginViewController {
     }
     private func setUpConstraints() {
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.height.equalTo(50)
-            make.width.equalTo(80)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            make.leading.equalTo(view.snp.leading).offset(40)
+            make.height.equalTo(60)
+            make.width.equalTo(107)
         }
         idTextField.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(70)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.centerX)
-            make.height.equalTo(20)
+            make.top.equalTo(logoImageView.snp.bottom).offset(32)
+            make.leading.equalTo(view.snp.leading).offset(48)
+            make.trailing.equalTo(view.snp.trailing).offset(-48)
+            make.height.equalTo(40)
         }
         separateView1.snp.makeConstraints { make in
-            make.top.equalTo(idTextField.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(idTextField.snp.bottom)
+            make.leading.equalTo(idTextField.snp.leading)
+            make.trailing.equalTo(idTextField.snp.trailing)
             make.height.equalTo(1)
         }
         idWarningLabel.snp.makeConstraints { make in
@@ -190,15 +190,15 @@ extension LoginViewController {
             make.height.equalTo(20)
         }
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(idWarningLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(20)
+            make.top.equalTo(idTextField.snp.bottom).offset(16)
+            make.leading.equalTo(idTextField.snp.leading)
+            make.trailing.equalTo(idTextField.snp.trailing)
+            make.height.equalTo(40)
         }
         separateView2.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(passwordTextField.snp.bottom)
+            make.leading.equalTo(passwordTextField.snp.leading)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
             make.height.equalTo(1)
         }
         passwordWarningLabel.snp.makeConstraints { make in
@@ -208,30 +208,29 @@ extension LoginViewController {
             make.height.greaterThanOrEqualTo(20)
         }
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(passwordWarningLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(50)
+            make.top.equalTo(separateView2.snp.bottom).offset(48)
+            make.leading.equalTo(separateView2.snp.leading)
+            make.trailing.equalTo(separateView2.snp.trailing)
+            make.height.equalTo(44)
         }
         registerButton.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(50)
+            make.top.equalTo(loginButton.snp.bottom).offset(24)
+            make.leading.equalTo(loginButton.snp.leading)
+            make.trailing.equalTo(loginButton.snp.trailing)
+            make.height.equalTo(44)
         }
         findIdButton.snp.makeConstraints { make in
-            make.top.equalTo(registerButton.snp.bottom).offset(10)
-            make.trailing.equalTo(view.snp.centerX).offset(-5)
-            make.width.equalTo(70)
-            make.height.equalTo(15)
+            make.top.equalTo(registerButton.snp.bottom).offset(33)
+            make.leading.equalTo(registerButton.snp.leading).offset(8)
+            make.width.equalTo(84)
+            make.height.equalTo(20)
         }
         findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(findIdButton.snp.top)
-            make.leading.equalTo(view.snp.centerX)
-            make.width.equalTo(90)
-            make.height.equalTo(15)
+            make.leading.equalTo(findIdButton.snp.trailing).offset(14)
+            make.width.equalTo(100)
+            make.height.equalTo(20)
         }
- 
     }
     
     private func configureView() {
