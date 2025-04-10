@@ -73,15 +73,27 @@ final class LoginViewController: UIViewController {
     }
     
     private let findIdButton = UIButton().then {
-        $0.setTitle("아이디 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .findID)
+        var text = AttributedString("아이디 찾기")
+        text.font = UIFont.appFont(.pretendardRegular, size: 13)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 1
+        configuration.baseForegroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = .clear
+        $0.configuration = configuration
     }
     
     private let findPasswordButton = UIButton().then {
-        $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .findPassword)
+        var text = AttributedString("비밀번호 찾기")
+        text.font = UIFont.appFont(.pretendardRegular, size: 13)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 1
+        configuration.baseForegroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = .clear
+        $0.configuration = configuration
     }
     
     
