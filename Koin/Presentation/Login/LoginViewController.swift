@@ -262,15 +262,15 @@ extension LoginViewController {
             make.height.equalTo(44)
         }
         findIdButton.snp.makeConstraints { make in
-            make.top.equalTo(registerButton.snp.bottom).offset(33)
-            make.leading.equalTo(registerButton.snp.leading).offset(8)
-            make.width.equalTo(84)
+            make.top.equalTo(registerButton.snp.bottom).offset(32)
+            make.trailing.equalTo(view.snp.centerX).offset(-5)
+            make.width.greaterThanOrEqualTo(84)
             make.height.equalTo(20)
         }
         findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(findIdButton.snp.top)
-            make.leading.equalTo(findIdButton.snp.trailing).offset(14)
-            make.width.equalTo(100)
+            make.leading.equalTo(view.snp.centerX)
+            make.width.greaterThanOrEqualTo(100)
             make.height.equalTo(20)
         }
         copyrightLabel.snp.makeConstraints { make in
