@@ -2533,6 +2533,8 @@
 		D27DD07E2BA608310081FD36 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
+				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
 				836242352BD9522400845499 /* FirebaseLog.swift */,
 				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
@@ -3094,7 +3096,6 @@
 				D2A8F8B02C4946480090C7A4 /* Bus */,
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
-				D2FB236F2C0412860098BA2B /* Log */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3196,15 +3197,6 @@
 				D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */,
 			);
 			path = Analytics;
-			sourceTree = "<group>";
-		};
-		D2FB236F2C0412860098BA2B /* Log */ = {
-			isa = PBXGroup;
-			children = (
-				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
-				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
-			);
-			path = Log;
 			sourceTree = "<group>";
 		};
 		D2FB23722C04305A0098BA2B /* Service */ = {
