@@ -136,7 +136,6 @@ enum ImageAsset: String {
     case send
     case findID
     case findPassword
-    case explore
 }
 
 enum SFSymbols: String {
