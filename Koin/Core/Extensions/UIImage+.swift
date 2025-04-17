@@ -147,6 +147,7 @@ enum SFSymbols: String {
     case chevronUp = "chevron.up"
     case phone
     case magnifyingGlass = "magnifyingglass"
+    case checkmarkCircle = "checkmark.circle"
 }
 
 extension UIImage {
