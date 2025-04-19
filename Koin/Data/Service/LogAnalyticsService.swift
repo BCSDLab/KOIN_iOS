@@ -10,9 +10,24 @@ import FirebaseAnalytics
 protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
+    func logEvent(name: String, label: String, value: String, category: String)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
+    func logEvent(name: String, label: String, value: String, category: String) {
+        let parameters = [
+            "event_name": name,
+            "event_label": label,
+            "event_category": category,
+            "value": value,
+            "user_id": UserDataManager.shared.userId,
+            "gender": UserDataManager.shared.gender,
+            "major": UserDataManager.shared.major
+        ]
+        print(parameters)
+        Analytics.logEvent("", parameters: parameters)
+    }
+    
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         let parameters = [
             "event_label": label.rawValue,

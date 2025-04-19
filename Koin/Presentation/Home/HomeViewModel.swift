@@ -17,6 +17,7 @@ final class HomeViewModel: ViewModelProtocol {
         case categorySelected(DiningPlace)
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case getAbTestResult(String)
@@ -38,7 +39,7 @@ final class HomeViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private let fetchDiningListUseCase: FetchDiningListUseCase
-    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let dateProvider: DateProvider
     private let checkVersionUseCase: CheckVersionUseCase
@@ -90,6 +91,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getAbTestResult(abTestTitle: abTestTitle)
             case .getBannerAbTest(let request):
                 self?.getBannerAbTest(request: request)
+            case let .logEventDirect(name, label, value, category):
+                self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
