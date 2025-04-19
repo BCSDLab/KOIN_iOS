@@ -13,7 +13,7 @@ final class BannerViewControllerA: UIViewController {
     // MARK: - properties
     private var subscriptions: Set<AnyCancellable> = []
     let bannerTapPublisher = PassthroughSubject<Banner, Never>()
-    
+    private let viewModel: HomeViewModel
     private let whiteView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -26,20 +26,26 @@ final class BannerViewControllerA: UIViewController {
         $0.setTitle("닫기", for: .normal)
     }
     
-    private let collectionView: BannerCollectionView = {
+    private lazy var collectionView: BannerCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 0
-        let collectionView = BannerCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        let collectionView = BannerCollectionView(frame: .zero, collectionViewLayout: flowLayout, viewModel: viewModel)
         return collectionView
     }()
     
     private let countLabel = UILabel()
     
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    // MARK: - UI Components
-   
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,10 +91,12 @@ final class BannerViewControllerA: UIViewController {
 
 extension BannerViewControllerA {
     @objc private func noShowButtonTapped() {
+        viewModel.logAnalyticsEventUseCase.logEvent(name: "CAMPUS", label: "main_modal_hide_7d", value: collectionView.showingBanner, category: "click")
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
         dismiss(animated: true)
     }
     @objc private func closeButtonTapped() {
+        viewModel.logAnalyticsEventUseCase.logEvent(name: "CAMPUS", label: "main_modal_close", value: collectionView.showingBanner, category: "click")
         dismiss(animated: true)
     }
 }

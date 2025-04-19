@@ -123,8 +123,8 @@ final class HomeViewController: UIViewController {
     private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
     }
     
-    private let bannerViewControllerA = BannerViewControllerA()
-    private let bannerViewControllerB = BannerViewControllerB()
+    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
+    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
     
     // MARK: - Initialization
     
@@ -290,7 +290,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController {
     private func handleBannerTap(_ banner: Banner) {
-    
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
         if let version = banner.version {
             // 현재 앱 버전
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -357,9 +357,13 @@ extension HomeViewController {
         if abTestResult.variableName == .bottomBanner {
             bannerViewControllerA.setBanners(banners: banner.banners)
             viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         } else {
             bannerViewControllerB.setBanners(banners: banner.banners)
             viewController = bannerViewControllerB
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         }
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve

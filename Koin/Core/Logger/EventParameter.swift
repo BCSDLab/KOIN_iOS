@@ -195,6 +195,7 @@ enum EventParameter {
         case scroll
         case swipe
         case signup
+        case entry
         case abTestBenefit = "a/b test 로깅(3차 스프린트, 혜택페이지)"
         case abTestDining = "a/b test 로깅(식단 메인 진입점)"
         case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"
