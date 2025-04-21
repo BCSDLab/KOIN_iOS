@@ -98,8 +98,10 @@ final class RegisterFormViewController: UIViewController {
         bind()
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         hideKeyboardWhenTappedAround()
+        
+        certificationView.goToLoginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)    // 본인 인증의 로그인하기 버튼
+
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -131,6 +133,11 @@ final class RegisterFormViewController: UIViewController {
                 }
             }.store(in: &subscriptions)
     }
+    
+    @objc private func loginButtonTapped() {
+        self.navigationController?.popViewController(animated: true)
+    }
+
 }
 
 extension RegisterFormViewController {

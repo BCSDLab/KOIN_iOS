@@ -106,6 +106,12 @@ final class CertificationFormView: UIView {
         $0.textColor = UIColor.appColor(.sub500)
     }
     
+    let goToLoginButton = UIButton().then {
+        $0.setTitle("로그인 하기", for: .normal)
+        $0.setTitleColor(.appColor(.primary500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
+    
     // MARK: Init
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
@@ -152,7 +158,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton].forEach {
             self.addSubview($0)
         }
     }
@@ -232,6 +238,13 @@ extension CertificationFormView {
             make.centerY.equalTo(warningImageView.snp.centerY)
             make.leading.equalTo(warningImageView.snp.trailing).offset(4)
             make.height.greaterThanOrEqualTo(19)
+        }
+        
+        goToLoginButton.snp.makeConstraints { make in
+            make.centerY.equalTo(warningLabel.snp.centerY)
+            make.leading.equalTo(warningLabel.snp.trailing).offset(8)
+            make.height.greaterThanOrEqualTo(19)
+            make.width.greaterThanOrEqualTo(55)
         }
     }
     
