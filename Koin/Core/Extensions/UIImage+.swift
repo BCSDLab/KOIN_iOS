@@ -136,6 +136,10 @@ enum ImageAsset: String {
     case send
     case checkEmptyCircle
     case checkFilledCircle
+    case cancelNeutral500
+    case circlePrimary500
+    case circleCheckedPrimary500
+    
 }
 
 enum SFSymbols: String {
