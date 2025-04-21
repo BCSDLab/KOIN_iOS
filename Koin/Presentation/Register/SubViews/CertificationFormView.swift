@@ -112,6 +112,18 @@ final class CertificationFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     
+    private let phoneNotFoundLabel = UILabel().then {
+        $0.text = "해당 전화번호로 가입하신 적 없으신가요?"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
+    private let contactButton = UIButton().then {
+        $0.setTitle("문의하기", for: .normal)
+        $0.setTitleColor(.appColor(.primary500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
+    
     // MARK: Init
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
@@ -158,7 +170,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
             self.addSubview($0)
         }
     }
@@ -245,6 +257,19 @@ extension CertificationFormView {
             make.leading.equalTo(warningLabel.snp.trailing).offset(8)
             make.height.greaterThanOrEqualTo(19)
             make.width.greaterThanOrEqualTo(55)
+        }
+        
+        phoneNotFoundLabel.snp.makeConstraints {
+            $0.top.equalTo(warningLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(warningImageView.snp.leading)
+            $0.height.equalTo(19)
+        }
+        
+        contactButton.snp.makeConstraints {
+            $0.centerY.equalTo(phoneNotFoundLabel.snp.centerY)
+            $0.leading.equalTo(phoneNotFoundLabel.snp.trailing).offset(8)
+            $0.height.greaterThanOrEqualTo(19)
+            $0.width.greaterThanOrEqualTo(42)
         }
     }
     
