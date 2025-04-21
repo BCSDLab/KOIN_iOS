@@ -93,7 +93,18 @@ final class CertificationFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
     }
+    
+    // FIXME: - API 연동 후 수정
+    private let warningImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .warningOrange)
+//        $0.isHidden = true
+    }
 
+    private let warningLabel = UILabel().then {
+        $0.text = "테스트테스트테스트테스트테스트테스트"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.sub500)
+    }
     
     // MARK: Init
     init(viewModel: RegisterFormViewModel) {
@@ -141,7 +152,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -209,6 +220,18 @@ extension CertificationFormView {
             $0.leading.equalTo(phoneNumberTextField.snp.trailing).offset(16)
             $0.trailing.equalTo(phoneNumberLabel.snp.trailing)
             $0.height.equalTo(32)
+        }
+        
+        warningImageView.snp.makeConstraints {
+            $0.top.equalTo(seperateView2.snp.bottom).offset(9.5)
+            $0.leading.equalTo(seperateView2.snp.leading).offset(4)
+            $0.width.height.equalTo(16)
+        }
+        
+        warningLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(warningImageView.snp.centerY)
+            make.leading.equalTo(warningImageView.snp.trailing).offset(4)
+            make.height.greaterThanOrEqualTo(19)
         }
     }
     
