@@ -155,6 +155,12 @@ final class CertificationFormView: UIView {
         $0.layer.cornerRadius = 4
     }
     
+    private let verificationHelpLabel = UILabel().then {
+        $0.text = "인증번호 발송이 안 되시나요?"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
     // MARK: Init
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
@@ -201,7 +207,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton, verificationHelpLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -329,6 +335,12 @@ extension CertificationFormView {
             $0.leading.equalTo(seperateView3.snp.trailing).offset(16)
             $0.trailing.equalTo(sendVerificationButton.snp.trailing)
             $0.height.equalTo(32)
+        }
+        
+        verificationHelpLabel.snp.makeConstraints {
+            $0.top.equalTo(seperateView3.snp.bottom).offset(8)
+            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
+            $0.height.equalTo(19)
         }
     }
     
