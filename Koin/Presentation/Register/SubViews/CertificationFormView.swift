@@ -86,6 +86,7 @@ final class CertificationFormView: UIView {
         $0.backgroundColor = .appColor(.neutral300)
     }
     
+    // /user/verification/sms/send
     private let sendVerificationButton = UIButton().then {
         $0.backgroundColor = .appColor(.neutral300)
         $0.setTitle("인증번호 발송", for: .normal)
@@ -104,24 +105,54 @@ final class CertificationFormView: UIView {
         $0.text = "테스트테스트테스트테스트테스트테스트"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.sub500)
+//        $0.isHidden = true
     }
     
     let goToLoginButton = UIButton().then {
         $0.setTitle("로그인 하기", for: .normal)
         $0.setTitleColor(.appColor(.primary500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.isHidden = true
     }
     
     private let phoneNotFoundLabel = UILabel().then {
         $0.text = "해당 전화번호로 가입하신 적 없으신가요?"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
+        $0.isHidden = true
     }
     
     private let contactButton = UIButton().then {
         $0.setTitle("문의하기", for: .normal)
         $0.setTitleColor(.appColor(.primary500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.isHidden = true
+    }
+    
+    private let verificationTextField = UITextField().then {
+        $0.attributedPlaceholder = NSAttributedString(string: "인증번호를 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
+        $0.autocapitalizationType = .none
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    }
+    
+    private let timerLabel = UILabel().then {
+        $0.text = "03:00"
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textAlignment = .center
+    }
+    
+    private let seperateView3 = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
+    
+    // /user/verification/sms/verify
+    private let verificationButton = UIButton().then {
+        $0.backgroundColor = .appColor(.neutral300)
+        $0.setTitle("인증번호 확인", for: .normal)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.layer.cornerRadius = 4
     }
     
     // MARK: Init
@@ -170,7 +201,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton].forEach {
             self.addSubview($0)
         }
     }
@@ -270,6 +301,34 @@ extension CertificationFormView {
             $0.leading.equalTo(phoneNotFoundLabel.snp.trailing).offset(8)
             $0.height.greaterThanOrEqualTo(19)
             $0.width.greaterThanOrEqualTo(42)
+        }
+        
+        verificationTextField.snp.makeConstraints {
+            $0.top.equalTo(warningLabel.snp.bottom).offset(24)
+            $0.leading.equalTo(phoneNumberTextField.snp.leading)
+            $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
+            $0.height.equalTo(40)
+        }
+        
+        timerLabel.snp.makeConstraints {
+            $0.centerY.equalTo(verificationTextField.snp.centerY)
+            $0.trailing.equalTo(seperateView3.snp.trailing).offset(4)
+            $0.width.greaterThanOrEqualTo(39)
+            $0.height.equalTo(22)
+        }
+        
+        seperateView3.snp.makeConstraints {
+            $0.top.equalTo(verificationTextField.snp.bottom)
+            $0.leading.equalTo(phoneNumberTextField.snp.leading)
+            $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
+            $0.height.equalTo(1)
+        }
+        
+        verificationButton.snp.makeConstraints {
+            $0.centerY.equalTo(verificationTextField.snp.centerY)
+            $0.leading.equalTo(seperateView3.snp.trailing).offset(16)
+            $0.trailing.equalTo(sendVerificationButton.snp.trailing)
+            $0.height.equalTo(32)
         }
     }
     
