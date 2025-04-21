@@ -246,17 +246,17 @@ extension CertificationFormView {
             $0.width.height.equalTo(16)
         }
         
-        warningLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(warningImageView.snp.centerY)
-            make.leading.equalTo(warningImageView.snp.trailing).offset(4)
-            make.height.greaterThanOrEqualTo(19)
+        warningLabel.snp.makeConstraints {
+            $0.centerY.equalTo(warningImageView.snp.centerY)
+            $0.leading.equalTo(warningImageView.snp.trailing).offset(4)
+            $0.height.greaterThanOrEqualTo(19)
         }
         
-        goToLoginButton.snp.makeConstraints { make in
-            make.centerY.equalTo(warningLabel.snp.centerY)
-            make.leading.equalTo(warningLabel.snp.trailing).offset(8)
-            make.height.greaterThanOrEqualTo(19)
-            make.width.greaterThanOrEqualTo(55)
+        goToLoginButton.snp.makeConstraints {
+            $0.centerY.equalTo(warningLabel.snp.centerY)
+            $0.leading.equalTo(warningLabel.snp.trailing).offset(8)
+            $0.height.greaterThanOrEqualTo(19)
+            $0.width.greaterThanOrEqualTo(55)
         }
         
         phoneNotFoundLabel.snp.makeConstraints {
