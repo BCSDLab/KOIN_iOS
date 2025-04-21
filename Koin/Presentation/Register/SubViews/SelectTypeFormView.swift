@@ -13,13 +13,28 @@ final class SelectTypeFormView: UIView {
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
     
-    // MARK: - UI Components    
+    // MARK: - UI Components
     private let logoImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .koinLogo)
     }
     
-    // MARK: Init
+    private let studentButton = UIButton().then {
+        $0.backgroundColor = .appColor(.sub500)
+        $0.setTitle("한국기술교육대학교 학생", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.layer.cornerRadius = 8
+    }
     
+    private let outsiderButton = UIButton().then {
+        $0.backgroundColor = .appColor(.primary500)
+        $0.setTitle("외부인", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.layer.cornerRadius = 8
+    }
+    
+    // MARK: Init
      init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
@@ -40,7 +55,7 @@ extension SelectTypeFormView {
 
 extension SelectTypeFormView {
     private func setUpLayOuts() {
-        [logoImageView].forEach {
+        [logoImageView, studentButton, outsiderButton].forEach {
             self.addSubview($0)
         }
     }
@@ -51,6 +66,20 @@ extension SelectTypeFormView {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(96)
             $0.height.equalTo(56)
+        }
+        
+        studentButton.snp.makeConstraints {
+            $0.top.equalTo(logoImageView.snp.bottom).offset(80)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.height.equalTo(48)
+        }
+        
+        outsiderButton.snp.makeConstraints {
+            $0.top.equalTo(studentButton.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.height.equalTo(48)
         }
     }
     
