@@ -134,6 +134,8 @@ enum ImageAsset: String {
     case block
     case gallery
     case send
+    case checkEmptyCircle
+    case checkFilledCircle
 }
 
 enum SFSymbols: String {
@@ -147,7 +149,6 @@ enum SFSymbols: String {
     case chevronUp = "chevron.up"
     case phone
     case magnifyingGlass = "magnifyingglass"
-    case checkmarkCircle = "checkmark.circle"
 }
 
 extension UIImage {
