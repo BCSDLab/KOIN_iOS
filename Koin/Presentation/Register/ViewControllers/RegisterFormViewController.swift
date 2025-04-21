@@ -57,9 +57,9 @@ final class RegisterFormViewController: UIViewController {
            ])
     }
     
-    
     private let nextButton = UIButton().then {
         $0.setTitle("다음", for: .normal)
+        $0.layer.cornerRadius = 8
         $0.backgroundColor = UIColor.appColor(.primary500)
     }
     
