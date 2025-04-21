@@ -62,8 +62,41 @@ final class CertificationFormView: UIView {
         $0.addTarget(self, action: #selector(maleButtonTapped), for: .touchUpInside)
     }
     
+    private let phoneNumberLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+        $0.textColor = .black
+        $0.text = "휴대전화 번호를 입력해 주세요."
+    }
+    
+    private let phoneNumberTextField = UITextField().then {
+        $0.attributedPlaceholder = NSAttributedString(string: "- 없이 번호를 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
+        $0.autocapitalizationType = .none
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+
+        $0.clearButtonMode = .never
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
+        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        clearButton.tintColor = .red
+        $0.rightView = clearButton
+        $0.rightViewMode = .whileEditing
+    }
+    
+    private let seperateView2 = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
+    
+    private let sendVerificationButton = UIButton().then {
+        $0.backgroundColor = .appColor(.neutral300)
+        $0.setTitle("인증번호 발송", for: .normal)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.layer.cornerRadius = 4
+    }
+
+    
     // MARK: Init
-     init(viewModel: RegisterFormViewModel) {
+    init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
@@ -76,6 +109,7 @@ final class CertificationFormView: UIView {
     
     @objc private func clearTextField() {   // 입력 없이 터치만 해도 clear 버튼이 생겨서 안 이쁘다
         nameTextField.text = ""
+        phoneNumberTextField.text = ""
     }
 
 }
@@ -102,14 +136,12 @@ extension CertificationFormView {
         // 선택된 성별을 ViewModel에 저장할 때 여기서 처리하기
         // viewModel.selectedGender = isFemale ? .female : .male
     }
-
-   
 }
 
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton].forEach {
             self.addSubview($0)
         }
     }
@@ -149,6 +181,34 @@ extension CertificationFormView {
             $0.leading.equalTo(femaleButton.snp.trailing).offset(32)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
+        }
+        
+        phoneNumberLabel.snp.makeConstraints {
+            $0.top.equalTo(femaleButton.snp.bottom).offset(64)
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview().offset(-8)
+            $0.height.equalTo(29)
+        }
+        
+        phoneNumberTextField.snp.makeConstraints {
+            $0.top.equalTo(phoneNumberLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(phoneNumberLabel.snp.leading)
+            $0.trailing.equalTo(phoneNumberLabel.snp.trailing).offset(-102)
+            $0.height.equalTo(40)
+        }
+        
+        seperateView2.snp.makeConstraints {
+            $0.top.equalTo(phoneNumberTextField.snp.bottom)
+            $0.leading.equalTo(phoneNumberTextField.snp.leading)
+            $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
+            $0.height.equalTo(1)
+        }
+        
+        sendVerificationButton.snp.makeConstraints {
+            $0.centerY.equalTo(phoneNumberTextField.snp.centerY)
+            $0.leading.equalTo(phoneNumberTextField.snp.trailing).offset(16)
+            $0.trailing.equalTo(phoneNumberLabel.snp.trailing)
+            $0.height.equalTo(32)
         }
     }
     
