@@ -22,7 +22,7 @@ final class AgreementFormView: UIView {
     }()
     
     private let agreementAllCheckbox = UIButton().then {
-        $0.setImage(UIImage.appImage(symbol: .checkmarkCircle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
     }
     
@@ -34,7 +34,7 @@ final class AgreementFormView: UIView {
     
     // MARK: 개인정보 이용약관
     private let agreementCheckbox1 = UIButton().then {
-        $0.setImage(UIImage.appImage(symbol: .checkmarkCircle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
     }
     
@@ -57,7 +57,7 @@ final class AgreementFormView: UIView {
     
     // MARK: 코인 이용약관
     private let agreementCheckbox2 = UIButton().then {
-        $0.setImage(UIImage.appImage(symbol: .checkmarkCircle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
     }
     
@@ -81,7 +81,7 @@ final class AgreementFormView: UIView {
     
     // MARK: 마케팅수신 동의약관
     private let agreementCheckbox3 = UIButton().then {
-        $0.setImage(UIImage.appImage(symbol: .checkmarkCircle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
     }
     
@@ -117,6 +117,42 @@ final class AgreementFormView: UIView {
 }
 
 extension AgreementFormView {
+    @objc private func allAgreementTapped(_ sender: UIButton) {
+        agreementAllCheckbox.isSelected = !agreementAllCheckbox.isSelected
+        let newState = agreementAllCheckbox.isSelected
+        
+        updateCheckboxImage(checkbox: agreementAllCheckbox, isSelected: newState)
+        
+        [agreementCheckbox1, agreementCheckbox2, agreementCheckbox3].forEach { checkbox in
+            checkbox.isSelected = newState
+            updateCheckboxImage(checkbox: checkbox, isSelected: newState)
+        }
+    }
+    
+    @objc private func individualAgreementTapped(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
+        
+        let areBothSelected = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected && agreementCheckbox3.isSelected
+        agreementAllCheckbox.isSelected = areBothSelected
+        updateCheckboxImage(checkbox: agreementAllCheckbox, isSelected: areBothSelected)
+    }
+
+    private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
+        if isSelected {
+            checkbox.setImage(UIImage.appImage(asset: .checkFilledCircle), for: .normal)
+        } else {
+            checkbox.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
+        }
+    }
+
+    private func setUpButtonTargets() {
+        agreementCheckbox1.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
+        agreementCheckbox2.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
+        agreementCheckbox3.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
+        agreementAllCheckbox.addTarget(self, action: #selector(allAgreementTapped), for: .touchUpInside)
+    }
+    
     @objc private func checkButtonTapped() {
         // viewModel.checkList[index].toggle() ?? <- 이런식.
         
@@ -205,5 +241,6 @@ extension AgreementFormView {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+        setUpButtonTargets()
     }
 }
