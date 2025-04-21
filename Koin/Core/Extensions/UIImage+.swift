@@ -134,7 +134,7 @@ enum ImageAsset: String {
     case block
     case gallery
     case send
-    case findID
+    case findId
     case findPassword
 }
 

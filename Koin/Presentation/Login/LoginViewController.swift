@@ -56,7 +56,7 @@ final class LoginViewController: UIViewController {
         $0.textColor = UIColor.appColor(.sub500)
     }
     
-    private let warningImage = UIImageView().then {
+    private let warningImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .warningOrange)
         $0.isHidden = true
     }
@@ -79,7 +79,7 @@ final class LoginViewController: UIViewController {
     
     private let findIdButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .findID)
+        configuration.image = UIImage.appImage(asset: .findId)
         var text = AttributedString("아이디 찾기")
         text.font = UIFont.appFont(.pretendardRegular, size: 13)
         configuration.attributedTitle = text
@@ -145,7 +145,7 @@ final class LoginViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showErrorMessage(message):
-                self?.warningImage.isHidden = false
+                self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
@@ -194,7 +194,7 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImage, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton, copyrightLabel].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImageView, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton, copyrightLabel].forEach {
             view.addSubview($0)
         }
     }
@@ -239,14 +239,14 @@ extension LoginViewController {
             make.trailing.equalTo(passwordTextField.snp.trailing)
             make.height.equalTo(1)
         }
-        warningImage.snp.makeConstraints { make in
+        warningImageView.snp.makeConstraints { make in
             make.centerY.equalTo(passwordWarningLabel.snp.centerY)
             make.leading.equalTo(separateView2.snp.leading)
             make.width.height.equalTo(16)
         }
         passwordWarningLabel.snp.makeConstraints { make in
             make.top.equalTo(separateView2.snp.bottom)
-            make.leading.equalTo(warningImage.snp.trailing).offset(4)
+            make.leading.equalTo(warningImageView.snp.trailing).offset(4)
             make.height.greaterThanOrEqualTo(20)
         }
         loginButton.snp.makeConstraints { make in
