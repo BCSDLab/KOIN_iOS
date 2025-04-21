@@ -6,14 +6,17 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SelectTypeFormView: UIView {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
     
-    // MARK: - UI Components
-    
+    // MARK: - UI Components    
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .koinLogo)
+    }
     
     // MARK: Init
     
@@ -37,18 +40,22 @@ extension SelectTypeFormView {
 
 extension SelectTypeFormView {
     private func setUpLayOuts() {
-        [].forEach {
+        [logoImageView].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        
+        logoImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(84)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(96)
+            $0.height.equalTo(56)
+        }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.backgroundColor = .yellow
     }
 }
