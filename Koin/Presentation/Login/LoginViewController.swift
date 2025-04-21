@@ -174,6 +174,7 @@ extension LoginViewController {
     }
     
     @objc func loginButtonTapped() {
+        warningImageView.isHidden = true
         idWarningLabel.text = ""
         passwordWarningLabel.text = ""
         inputSubject.send(.login(idTextField.text ?? "", passwordTextField.text ?? ""))
