@@ -68,6 +68,16 @@ final class EnterFormView: UIView {
         $0.backgroundColor = .appColor(.neutral300)
     }
     
+    private let correctImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .checkGreenCircle)
+    }
+    
+    private let correctLabel: UILabel = UILabel().then {
+        $0.text = "비밀번호가 일치합니다."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.success700)
+    }
+    
     // MARK: Init
      init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
@@ -99,7 +109,7 @@ extension EnterFormView {
 
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, seperateView1, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3].forEach {
+        [idLabel, idTextField, seperateView1, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctImageView, correctLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -169,6 +179,17 @@ extension EnterFormView {
             $0.leading.equalTo(passwordLabel.snp.leading)
             $0.trailing.equalTo(idTextField.snp.trailing)
             $0.height.equalTo(1)
+        }
+        
+        correctImageView.snp.makeConstraints {
+            $0.top.equalTo(seperateView3.snp.bottom).offset(10)
+            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
+            $0.width.height.equalTo(16)
+        }
+        
+        correctLabel.snp.makeConstraints {
+            $0.centerY.equalTo(correctImageView.snp.centerY)
+            $0.leading.equalTo(correctImageView.snp.trailing).offset(8)
         }
         
     }
