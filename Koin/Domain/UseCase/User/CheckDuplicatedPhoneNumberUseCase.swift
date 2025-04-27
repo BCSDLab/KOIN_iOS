@@ -8,7 +8,7 @@
 import Combine
 
 protocol CheckDuplicatedPhoneNumberUseCase {
-    func execute(phoneNumber: String) -> AnyPublisher<Void, ErrorResponse>
+    func execute(phone: String) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultCheckDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase {
@@ -19,8 +19,8 @@ final class DefaultCheckDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumber
         self.userRepository = userRepository
     }
     
-    func execute(phoneNumber: String) -> AnyPublisher<Void, ErrorResponse> {
-        return userRepository.checkDuplicatedNickname(requestModel: CheckDuplicatedPhoneNumberUseCase(phoneNumber: phoneNumber))
+    func execute(phone: String) -> AnyPublisher<Void, ErrorResponse> {
+        return userRepository.checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest(phone: phone))
     }
     
 }
