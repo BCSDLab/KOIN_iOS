@@ -11,6 +11,7 @@ import Combine
 protocol UserService {
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse>
     func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse>
     func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse>
@@ -22,6 +23,7 @@ protocol UserService {
 }
 
 final class DefaultUserService: UserService {
+    
     private let networkService = NetworkService()
     
     func checkLogin() -> AnyPublisher<Bool, Never> {
@@ -45,9 +47,6 @@ final class DefaultUserService: UserService {
             .eraseToAnyPublisher()
     }
 
-
-
-    
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.checkAuth)
             .catch { [weak self] error -> AnyPublisher<UserTypeResponse, ErrorResponse> in
@@ -62,12 +61,17 @@ final class DefaultUserService: UserService {
             }
             .eraseToAnyPublisher()
     }
+    
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.findPassword(requestModel))
     }
     
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.register(requestModel))
+    }
+    
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedPhoneNumber(requestModel))
     }
     
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
