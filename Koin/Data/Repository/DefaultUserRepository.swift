@@ -9,7 +9,6 @@ import Combine
 
 final class DefaultUserRepository: UserRepository {
     
-    
     private let service: UserService
     
     init(service: UserService) {
@@ -43,6 +42,10 @@ final class DefaultUserRepository: UserRepository {
     
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.findPassword(requestModel: requestModel)
+    }
+    
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkDuplicatedPhoneNumber(requestModel: requestModel)
     }
     
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
