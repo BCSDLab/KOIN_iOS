@@ -12,6 +12,7 @@ final class AgreementFormView: UIView {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    var onRequiredAgreementsChanged: ((Bool) -> Void)?
     
     // MARK: - UI Components
     private let seperateView: UIView = {
@@ -127,16 +128,23 @@ extension AgreementFormView {
             checkbox.isSelected = newState
             updateCheckboxImage(checkbox: checkbox, isSelected: newState)
         }
+        
+        let requiredAgreementsChecked = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected
+        onRequiredAgreementsChanged?(requiredAgreementsChecked)
     }
     
     @objc private func individualAgreementTapped(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
         
-        let areBothSelected = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected && agreementCheckbox3.isSelected
-        agreementAllCheckbox.isSelected = areBothSelected
-        updateCheckboxImage(checkbox: agreementAllCheckbox, isSelected: areBothSelected)
+        let areAllSelected = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected && agreementCheckbox3.isSelected
+        agreementAllCheckbox.isSelected = areAllSelected
+        updateCheckboxImage(checkbox: agreementAllCheckbox, isSelected: areAllSelected)
+
+        let requiredAgreementsChecked = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected
+        onRequiredAgreementsChanged?(requiredAgreementsChecked)
     }
+
 
     private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
         if isSelected {
@@ -151,12 +159,6 @@ extension AgreementFormView {
         agreementCheckbox2.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
         agreementCheckbox3.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
         agreementAllCheckbox.addTarget(self, action: #selector(allAgreementTapped), for: .touchUpInside)
-    }
-    
-    @objc private func checkButtonTapped() {
-        // viewModel.checkList[index].toggle() ?? <- 이런식.
-        
-        // TODO:  여기서 이거 버튼 눌러서 3개 viewmodel의 checklist[] 배열 @Published로 된거 true로 바꾸고, 그거 모두 true면 viewcontroller의 nextbutton의 enable 상태를 바꿔주시면 됩니다.
     }
 }
 

@@ -30,13 +30,14 @@ final class RegisterFormViewController: UIViewController {
             case .enterForm: return 4
             }
         }
+        
         func next() -> CurrentStep? {
-               let all = Self.allCases
-               if let index = all.firstIndex(of: self), index + 1 < all.count {
-                   return all[index + 1]
-               }
-               return nil
-           }
+            let all = Self.allCases
+            if let index = all.firstIndex(of: self), index + 1 < all.count {
+                return all[index + 1]
+            }
+            return nil
+        }
     }
     
     // MARK: - UI Components
@@ -46,21 +47,25 @@ final class RegisterFormViewController: UIViewController {
     private let stepTextLabel = UILabel()
     
     private let stepLabel = UILabel()
+    
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
         $0.progressTintColor = UIColor.appColor(.primary500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.5
-           NSLayoutConstraint.activate([
-               $0.heightAnchor.constraint(equalToConstant: 3)
-           ])
+           
+        NSLayoutConstraint.activate([
+            $0.heightAnchor.constraint(equalToConstant: 3)
+        ])
     }
     
     private let nextButton = UIButton().then {
         $0.setTitle("다음", for: .normal)
         $0.layer.cornerRadius = 8
-        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
     }
     
     private lazy var agreementView = AgreementFormView(viewModel: viewModel).then {
@@ -100,7 +105,6 @@ final class RegisterFormViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         
         certificationView.goToLoginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)    // 본인 인증의 로그인하기 버튼
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -132,6 +136,18 @@ final class RegisterFormViewController: UIViewController {
                     self.enterFormView.isHidden = false
                 }
             }.store(in: &subscriptions)
+        
+        agreementView.onRequiredAgreementsChanged = { [weak self] isEnabled in
+            guard let self = self else { return }
+            self.nextButton.isEnabled = isEnabled
+            if isEnabled {
+                self.nextButton.backgroundColor = UIColor.appColor(.primary500)
+                self.nextButton.setTitleColor(.white, for: .normal)
+            } else {
+                self.nextButton.backgroundColor = UIColor.appColor(.neutral300)
+                self.nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+            }
+        }
     }
     
     @objc private func loginButtonTapped() {
@@ -188,9 +204,6 @@ extension RegisterFormViewController {
             $0.height.equalTo(50)
             $0.horizontalEdges.equalToSuperview().inset(32)
         }
-        
-        
-        
         agreementView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1000)
@@ -212,13 +225,13 @@ extension RegisterFormViewController {
             $0.width.equalTo(progressView)
         }
     }
+    
     private func setUpComponents() {
         [stepTextLabel, stepLabel].forEach {
             $0.textColor = UIColor.appColor(.primary500)
             $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         }
     }
-    
     
     private func configureView() {
         setUpLayOuts()
