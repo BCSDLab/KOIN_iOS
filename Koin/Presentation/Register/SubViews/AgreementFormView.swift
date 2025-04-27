@@ -143,8 +143,11 @@ extension AgreementFormView {
 
         let requiredAgreementsChecked = agreementCheckbox1.isSelected && agreementCheckbox2.isSelected
         onRequiredAgreementsChanged?(requiredAgreementsChecked)
+        
+        if sender == agreementCheckbox3 && sender.isSelected {
+            requestPushNotificationPermission()
+        }
     }
-
 
     private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
         if isSelected {
@@ -159,6 +162,21 @@ extension AgreementFormView {
         agreementCheckbox2.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
         agreementCheckbox3.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
         agreementAllCheckbox.addTarget(self, action: #selector(allAgreementTapped), for: .touchUpInside)
+    }
+    
+    private func requestPushNotificationPermission() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("푸시 권한 요청 실패: \(error.localizedDescription)")
+                return
+            }
+            if granted {
+                print("사용자 푸시 알림 권한 허용")
+            } else {
+                print("사용자 푸시 알림 권한 거부")
+            }
+        }
     }
 }
 
