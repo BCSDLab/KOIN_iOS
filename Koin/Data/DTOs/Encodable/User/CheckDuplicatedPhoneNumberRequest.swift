@@ -6,5 +6,5 @@
 //
 
 struct CheckDuplicatedPhoneNumberRequest: Encodable {
-    let phoneNumber: String
+    let phone: String
 }
