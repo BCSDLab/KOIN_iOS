@@ -14,6 +14,7 @@ protocol UserRepository {
     func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse>
     func logout() -> AnyPublisher<String, Error>
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedEmail(email: String) -> AnyPublisher<String, Error>
     func revoke() -> AnyPublisher<Void, ErrorResponse>
