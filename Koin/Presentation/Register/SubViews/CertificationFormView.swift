@@ -202,20 +202,33 @@ extension CertificationFormView {
     @objc private func clearTextField() {   // 입력 없이 터치만 해도 clear 버튼이 생겨서 안 이쁘다
         nameTextField.text = nil
         phoneNumberTextField.text = nil
+        sendVerificationButton.isEnabled = false
+        sendVerificationButton.backgroundColor = .appColor(.neutral300)
+        sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
     }
     
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        inputSubject.send(.checkDuplicatedPhoneNumber(text))
         
-        if phoneNumberTextField.text?.isEmpty ?? true {
+        let filteredText = text.filter { $0.isNumber }
+        
+        if filteredText.count > 11 {
+            textField.text = String(filteredText.prefix(11))
+        } else {
+            textField.text = filteredText
+        }
+        
+        if textField.text?.isEmpty ?? true {
             warningImageView.isHidden = true
             phoneNumberDuplicatedReponseLabel.isHidden = true
             sendVerificationButton.isEnabled = false
             sendVerificationButton.backgroundColor = .appColor(.neutral300)
             sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
         }
+        
+        inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
     }
+
     
     private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
         warningImageView.isHidden = false
