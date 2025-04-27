@@ -131,6 +131,7 @@ final class CertificationFormView: UIView {
         $0.setTitleColor(.appColor(.primary500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.isHidden = true
+        $0.addTarget(self, action: #selector(contactButtonButtonTapped), for: .touchUpInside)
     }
     
     private let verificationTextField = UITextField().then {
@@ -205,6 +206,9 @@ extension CertificationFormView {
         sendVerificationButton.isEnabled = false
         sendVerificationButton.backgroundColor = .appColor(.neutral300)
         sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+        goToLoginButton.isHidden = true
+        phoneNotFoundLabel.isHidden = true
+        contactButton.isHidden = true
     }
     
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
@@ -235,6 +239,24 @@ extension CertificationFormView {
         phoneNumberDuplicatedReponseLabel.isHidden = false
         phoneNumberDuplicatedReponseLabel.text = message
         phoneNumberDuplicatedReponseLabel.textColor = UIColor.appColor(color)
+        
+        if message == "이미 존재하는 전화번호입니다." {
+            goToLoginButton.isHidden = false
+            phoneNotFoundLabel.isHidden = false
+            contactButton.isHidden = false
+        } else {
+            goToLoginButton.isHidden = true
+            phoneNotFoundLabel.isHidden = true
+            contactButton.isHidden = true
+        }
+    }
+    
+    // MARK: - 이거 오픈채팅 링크 외부에 공개되면 안 되나??
+    @objc private func contactButtonButtonTapped() {
+        guard let url = URL(string: "https://open.kakao.com/o/sgiYx4Qg") else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     @objc private func sendVerificationButtonTapped() {
