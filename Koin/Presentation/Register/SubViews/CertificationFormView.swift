@@ -71,7 +71,6 @@ final class CertificationFormView: UIView {
         $0.text = "휴대전화 번호를 입력해 주세요."
     }
     
-    // /user/check/phone 전화번호 중복 검사
     private let phoneNumberTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "- 없이 번호를 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.autocapitalizationType = .none
@@ -108,10 +107,8 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
 
-    private let warningLabel = UILabel().then {
-        $0.text = "올바른 전화번호 양식이 아닙니다. 다시 입력해 주세요."
+    private let phoneNumberDuplicatedReponseLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.sub500)
         $0.isHidden = true
     }
     
@@ -173,6 +170,7 @@ final class CertificationFormView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
+        bind()
     }
     
     @available(*, unavailable)
@@ -180,31 +178,50 @@ final class CertificationFormView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func clearTextField() {   // 입력 없이 터치만 해도 clear 버튼이 생겨서 안 이쁘다
-        nameTextField.text = ""
-        phoneNumberTextField.text = ""
+    // FIXME: -
+    private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
+            
+            switch output {
+            case let .showHttpResult(message, labelColor):
+                self?.showHttpResult(message, labelColor)
+            case .changeSendVerificationButtonStatus:
+                self?.warningImageView.isHidden = true
+                self?.phoneNumberDuplicatedReponseLabel.isHidden = true
+                self?.sendVerificationButton.isEnabled = true
+                self?.sendVerificationButton.backgroundColor = .appColor(.primary500)
+                self?.sendVerificationButton.setTitleColor(.white, for: .normal)
+            }
+        }.store(in: &subscriptions)
     }
-
 }
 
 extension CertificationFormView {
+    @objc private func clearTextField() {   // 입력 없이 터치만 해도 clear 버튼이 생겨서 안 이쁘다
+        nameTextField.text = nil
+        phoneNumberTextField.text = nil
+    }
+    
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        
         inputSubject.send(.checkDuplicatedPhoneNumber(text))
         
-//        if input.isValidPhoneNumber() {
-//            warningImageView.isHidden = true
-//            warningLabel.isHidden = true
-//            
-//            sendVerificationButton.isEnabled = true
-//            sendVerificationButton.backgroundColor = .appColor(.primary500)
-//            sendVerificationButton.setTitleColor(.white, for: .normal)
-//            
-//        } else {
-//            warningImageView.isHidden = false
-//            warningLabel.isHidden = false
-//        }
+        if phoneNumberTextField.text?.isEmpty ?? true {
+            warningImageView.isHidden = true
+            phoneNumberDuplicatedReponseLabel.isHidden = true
+            sendVerificationButton.isEnabled = false
+            sendVerificationButton.backgroundColor = .appColor(.neutral300)
+            sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+        }
+    }
+    
+    private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
+        warningImageView.isHidden = false
+        phoneNumberDuplicatedReponseLabel.isHidden = false
+        phoneNumberDuplicatedReponseLabel.text = message
+        phoneNumberDuplicatedReponseLabel.textColor = UIColor.appColor(color)
     }
     
     @objc private func sendVerificationButtonTapped() {
@@ -237,7 +254,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, warningLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton, verificationHelpLabel].forEach {
+        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, phoneNumberDuplicatedReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton, verificationHelpLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -313,21 +330,21 @@ extension CertificationFormView {
             $0.width.height.equalTo(16)
         }
         
-        warningLabel.snp.makeConstraints {
+        phoneNumberDuplicatedReponseLabel.snp.makeConstraints {
             $0.centerY.equalTo(warningImageView.snp.centerY)
             $0.leading.equalTo(warningImageView.snp.trailing).offset(4)
             $0.height.greaterThanOrEqualTo(19)
         }
         
         goToLoginButton.snp.makeConstraints {
-            $0.centerY.equalTo(warningLabel.snp.centerY)
-            $0.leading.equalTo(warningLabel.snp.trailing).offset(8)
+            $0.centerY.equalTo(phoneNumberDuplicatedReponseLabel.snp.centerY)
+            $0.leading.equalTo(phoneNumberDuplicatedReponseLabel.snp.trailing).offset(8)
             $0.height.greaterThanOrEqualTo(19)
             $0.width.greaterThanOrEqualTo(55)
         }
         
         phoneNotFoundLabel.snp.makeConstraints {
-            $0.top.equalTo(warningLabel.snp.bottom).offset(8)
+            $0.top.equalTo(phoneNumberDuplicatedReponseLabel.snp.bottom).offset(8)
             $0.leading.equalTo(warningImageView.snp.leading)
             $0.height.equalTo(19)
         }
@@ -340,7 +357,7 @@ extension CertificationFormView {
         }
         
         verificationTextField.snp.makeConstraints {
-            $0.top.equalTo(warningLabel.snp.bottom).offset(24)
+            $0.top.equalTo(phoneNumberDuplicatedReponseLabel.snp.bottom).offset(24)
             $0.leading.equalTo(phoneNumberTextField.snp.leading)
             $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
             $0.height.equalTo(40)
