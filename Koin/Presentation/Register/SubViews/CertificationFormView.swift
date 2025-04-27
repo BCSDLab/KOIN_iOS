@@ -7,11 +7,14 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class CertificationFormView: UIView {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let nameAndGenderLabel = UILabel().then {
@@ -68,6 +71,7 @@ final class CertificationFormView: UIView {
         $0.text = "휴대전화 번호를 입력해 주세요."
     }
     
+    // /user/check/phone 전화번호 중복 검사
     private let phoneNumberTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "- 없이 번호를 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.autocapitalizationType = .none
@@ -77,9 +81,10 @@ final class CertificationFormView: UIView {
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        clearButton.tintColor = .red
         $0.rightView = clearButton
         $0.rightViewMode = .whileEditing
+        
+        $0.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let seperateView2 = UIView().then {
@@ -93,19 +98,21 @@ final class CertificationFormView: UIView {
         $0.setTitleColor(.appColor(.neutral600), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
+        $0.isEnabled = false
+        $0.addTarget(self, action: #selector(sendVerificationButtonTapped), for: .touchUpInside)
     }
-    
+
     // FIXME: - API 연동 후 수정
     private let warningImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .warningOrange)
-//        $0.isHidden = true
+        $0.isHidden = true
     }
 
     private let warningLabel = UILabel().then {
-        $0.text = "테스트테스트테스트테스트테스트테스트"
+        $0.text = "올바른 전화번호 양식이 아닙니다. 다시 입력해 주세요."
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.sub500)
-//        $0.isHidden = true
+        $0.isHidden = true
     }
     
     let goToLoginButton = UIButton().then {
@@ -181,6 +188,29 @@ final class CertificationFormView: UIView {
 }
 
 extension CertificationFormView {
+    @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        inputSubject.send(.checkDuplicatedPhoneNumber(text))
+        
+//        if input.isValidPhoneNumber() {
+//            warningImageView.isHidden = true
+//            warningLabel.isHidden = true
+//            
+//            sendVerificationButton.isEnabled = true
+//            sendVerificationButton.backgroundColor = .appColor(.primary500)
+//            sendVerificationButton.setTitleColor(.white, for: .normal)
+//            
+//        } else {
+//            warningImageView.isHidden = false
+//            warningLabel.isHidden = false
+//        }
+    }
+    
+    @objc private func sendVerificationButtonTapped() {
+        print("인증번호 발송 버튼 눌림")
+    }
+    
     @objc private func femaleButtonTapped() {
         updateGenderSelection(isFemale: true)
     }
