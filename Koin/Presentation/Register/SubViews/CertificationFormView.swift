@@ -154,7 +154,7 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    // /user/verification/sms/verify
+    // /user/sms/verify
     private let verificationButton = UIButton().then {
         $0.backgroundColor = .appColor(.neutral300)
         $0.setTitle("인증번호 확인", for: .normal)
@@ -162,6 +162,7 @@ final class CertificationFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isHidden = true
+        $0.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
     }
     
     private let verificationHelpLabel = UILabel().then {
@@ -205,6 +206,9 @@ final class CertificationFormView: UIView {
                 self?.seperateView3.isHidden = false
                 self?.verificationButton.isHidden = false
                 self?.verificationHelpLabel.isHidden = false
+            case .correctVerificationCode:
+                self?.verificationHelpLabel.textColor = .appColor(.success700)
+                self?.verificationHelpLabel.text = "인증번호가 일치합니다."
             }
         }.store(in: &subscriptions)
     }
@@ -357,6 +361,15 @@ extension CertificationFormView {
         }
         attributedString.addAttribute(.font, value: UIFont.appFont(.pretendardRegular, size: 12), range: NSRange(location: 0, length: attributedString.length))
         return attributedString
+    }
+    
+    @objc private func verificationButtonTapped() {
+        if let verificationText = verificationTextField.text, let phoneNumber = phoneNumberTextField.text {
+            print("📮 [View] 보내는 전화번호 및 인증번호: \(phoneNumber), \(verificationText)")
+            inputSubject.send(.checkVerificationCode(phoneNumber, verificationText))
+        } else {
+            print("❌ [View] 인증번호 비어 있음")
+        }
     }
     
     @objc private func femaleButtonTapped() {

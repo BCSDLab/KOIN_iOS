@@ -73,4 +73,7 @@ final class DefaultUserRepository: UserRepository {
         service.sendVerificationCode(requestModel: requestModel)
     }
     
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkVerificationCode(requestModel: requestModel)
+    }
 }

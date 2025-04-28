@@ -8,7 +8,7 @@
 import Combine
 
 protocol CheckVerificationCodeUsecase {
-    func execute(phoneNumber: String, certificationCode: String) -> AnyPublisher<Void, ErrorResponse>
+    func execute(phoneNumber: String, verificationCode: String) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultCheckVerificationCodeUsecase: CheckVerificationCodeUsecase {
@@ -19,8 +19,8 @@ final class DefaultCheckVerificationCodeUsecase: CheckVerificationCodeUsecase {
         self.userRepository = userRepository
     }
     
-    func execute(phoneNumber: String, certificationCode: String) -> AnyPublisher<Void, ErrorResponse> {
-        return userRepository.checkVerificationCode(requestModel: CheckVerificationCodeRequest(phoneNumber: phoneNumber, certificationCode: certificationCode))
+    func execute(phoneNumber: String, verificationCode: String) -> AnyPublisher<Void, ErrorResponse> {
+        return userRepository.checkVerificationCode(requestModel: CheckVerificationCodeRequest(phoneNumber: phoneNumber, verificationCode: verificationCode))
     }
     
 }

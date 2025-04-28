@@ -21,6 +21,7 @@ protocol UserService {
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
     func checkLogin() -> AnyPublisher<Bool, Never>
     func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
@@ -145,5 +146,9 @@ final class DefaultUserService: UserService {
     
     func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.sendVerificationCode(requestModel))
+    }
+    
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.checkVerificationCode(requestModel))
     }
 }
