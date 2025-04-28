@@ -581,6 +581,7 @@
 		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
 		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
 		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
+		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1204,6 +1205,7 @@
 		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
+		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2791,6 +2793,7 @@
 				D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */,
 				D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */,
 				D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */,
+				D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3750,6 +3753,7 @@
 				83EBB8602D0FD6F100346018 /* BusSearchViewModel.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				83E770F82D05864800EB3F84 /* MockNetworkService.swift in Sources */,
+				D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */,
