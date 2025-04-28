@@ -582,6 +582,7 @@
 		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
 		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
 		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
+		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1206,6 +1207,7 @@
 		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
 		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
+		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2680,6 +2682,7 @@
 				D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */,
 				D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */,
 				D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */,
+				D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3740,6 +3743,7 @@
 				D27DD0A42BA608310081FD36 /* PossibilityLabel.swift in Sources */,
 				D22421772C8A462600E8B480 /* ChangeMyProfileViewModel.swift in Sources */,
 				833D9C522C73451000982145 /* NoticeDataViewController.swift in Sources */,
+				D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
