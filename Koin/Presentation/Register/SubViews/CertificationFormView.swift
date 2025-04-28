@@ -17,7 +17,16 @@ final class CertificationFormView: UIView {
     private var subscriptions: Set<AnyCancellable> = []
     private var timer: Timer?
     private var remainingSeconds: Int = 180
+    var onVerificationStatusChanged: ((Bool) -> Void)?
     
+    override var isHidden: Bool {
+        didSet {
+            if isHidden == false {
+                self.onVerificationStatusChanged?(false)
+            }
+        }
+    }
+
     // MARK: - UI Components
     private let nameAndGenderLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
@@ -190,14 +199,12 @@ final class CertificationFormView: UIView {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
-            
             switch output {
             case let .showHttpResult(message, labelColor):
-                guard let self = self else { return }
-                if let verificationCode = self.verificationTextField.text, !verificationCode.isEmpty {
-                    self.showVerificationHelpResult(message, labelColor)
+                if let verificationCode = self?.verificationTextField.text, !verificationCode.isEmpty {
+                    self?.showVerificationHelpResult(message, labelColor)
                 } else {
-                    self.showHttpResult(message, labelColor)
+                    self?.showHttpResult(message, labelColor)
                 }
             case .changeSendVerificationButtonStatus:
                 self?.warningImageView.isHidden = true
@@ -208,9 +215,11 @@ final class CertificationFormView: UIView {
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
+                self?.verificationHelpLabel.isHidden = false
                 self?.verificationHelpLabel.textColor = .appColor(.success700)
                 self?.verificationHelpLabel.text = "인증번호가 일치합니다."
                 self?.contactButton.isHidden = true
+                self?.onVerificationStatusChanged?(true)
             }
         }.store(in: &subscriptions)
     }

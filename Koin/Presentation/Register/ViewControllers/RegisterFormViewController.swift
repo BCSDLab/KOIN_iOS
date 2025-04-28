@@ -148,6 +148,19 @@ final class RegisterFormViewController: UIViewController {
                 self.nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
             }
         }
+        
+        certificationView.onVerificationStatusChanged = { [weak self] isVerified in
+            guard let self = self else { return }
+            self.nextButton.isEnabled = isVerified
+            if isVerified {
+                self.nextButton.backgroundColor = UIColor.appColor(.primary500)
+                self.nextButton.setTitleColor(.white, for: .normal)
+            } else {
+                self.nextButton.backgroundColor = UIColor.appColor(.neutral300)
+                self.nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+            }
+        }
+
     }
     
     @objc private func loginButtonTapped() {
