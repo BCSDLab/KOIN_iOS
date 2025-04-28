@@ -12,22 +12,26 @@ final class RegisterFormViewModel: ViewModelProtocol {
     enum Input {
         case checkDuplicatedPhoneNumber(String)
         case sendVerificationCode(String)
+        case checkVerificationCode(String, String)
     }
     
     enum Output {
         case showHttpResult(String, SceneColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
+        case correctVerificationCode
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
+    private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
+        self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -37,6 +41,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.checkDuplicatedPhoneNumber(phone: phone)
             case let .sendVerificationCode(phoneNumber):
                 self?.sendVerificationCode(phoneNumber: phoneNumber)
+            case let .checkVerificationCode(phoneNumber, verificationCode):
+                self?.checkVerificationCode(phoneNumber: phoneNumber, verificationCode: verificationCode)
             }
         }.store(in: &subscriptions)
         
@@ -76,5 +82,24 @@ extension RegisterFormViewModel {
                 self?.outputSubject.send(.sendVerificationCodeSuccess(response: response))
             }
             .store(in: &subscriptions)
+    }
+    
+    private func checkVerificationCode(phoneNumber: String, verificationCode: String) {
+        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                if let code = Int(error.code) {
+                    if code == 400 {
+                        self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+                    } else if code == 404 {
+                        self?.outputSubject.send(.showHttpResult(error.message, .danger700))
+                    }
+                } else {
+                    self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+                }
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.outputSubject.send(.correctVerificationCode)
+        }
+        .store(in: &subscriptions)
     }
 }
