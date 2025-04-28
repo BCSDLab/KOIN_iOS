@@ -90,7 +90,6 @@ final class CertificationFormView: UIView {
         $0.backgroundColor = .appColor(.neutral300)
     }
     
-    // /user/verification/sms/send
     private let sendVerificationButton = UIButton().then {
         $0.backgroundColor = .appColor(.neutral300)
         $0.setTitle("인증번호 발송", for: .normal)
@@ -101,7 +100,6 @@ final class CertificationFormView: UIView {
         $0.addTarget(self, action: #selector(sendVerificationButtonTapped), for: .touchUpInside)
     }
 
-    // FIXME: - API 연동 후 수정
     private let warningImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .warningOrange)
         $0.isHidden = true
@@ -138,6 +136,7 @@ final class CertificationFormView: UIView {
         $0.attributedPlaceholder = NSAttributedString(string: "인증번호를 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
     }
     
     private let timerLabel = UILabel().then {
@@ -145,10 +144,12 @@ final class CertificationFormView: UIView {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .center
+        $0.isHidden = true
     }
     
     private let seperateView3 = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
+        $0.isHidden = true
     }
     
     // /user/verification/sms/verify
@@ -158,12 +159,14 @@ final class CertificationFormView: UIView {
         $0.setTitleColor(.appColor(.neutral600), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
+        $0.isHidden = true
     }
     
     private let verificationHelpLabel = UILabel().then {
         $0.text = "인증번호 발송이 안 되시나요?"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
+        $0.isHidden = true
     }
     
     // MARK: Init
@@ -194,6 +197,12 @@ final class CertificationFormView: UIView {
                 self?.sendVerificationButton.isEnabled = true
                 self?.sendVerificationButton.backgroundColor = .appColor(.primary500)
                 self?.sendVerificationButton.setTitleColor(.white, for: .normal)
+            case .sendVerificationCodeSuccess:
+                self?.verificationTextField.isHidden = false
+                self?.timerLabel.isHidden = false
+                self?.seperateView3.isHidden = false
+                self?.verificationButton.isHidden = false
+                self?.verificationHelpLabel.isHidden = false
             }
         }.store(in: &subscriptions)
     }
@@ -251,7 +260,6 @@ extension CertificationFormView {
         }
     }
     
-    // MARK: - 이거 오픈채팅 링크 외부에 공개되면 안 되나??
     @objc private func contactButtonButtonTapped() {
         guard let url = URL(string: "https://open.kakao.com/o/sgiYx4Qg") else { return }
         if UIApplication.shared.canOpenURL(url) {
@@ -260,7 +268,18 @@ extension CertificationFormView {
     }
     
     @objc private func sendVerificationButtonTapped() {
-        print("인증번호 발송 버튼 눌림")
+        print("📮 [View] 인증번호 발송 버튼 눌림")
+        verificationTextField.isHidden = false
+        timerLabel.isHidden = false
+        seperateView3.isHidden = false
+        verificationButton.isHidden = false
+        
+        if let phoneNumber = phoneNumberTextField.text {
+            print("📮 [View] 보내는 전화번호: \(phoneNumber)")
+            inputSubject.send(.sendVerificationCode(phoneNumber))
+        } else {
+            print("❌ [View] 전화번호가 비어 있음")
+        }
     }
     
     @objc private func femaleButtonTapped() {

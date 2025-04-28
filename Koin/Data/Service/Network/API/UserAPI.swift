@@ -4,6 +4,7 @@
 //
 //  Created by 김나훈 on 7/22/24.
 //
+
 import Alamofire
 
 enum UserAPI {
@@ -19,6 +20,7 @@ enum UserAPI {
     case revoke
     case checkAuth
     case checkLogin
+    case sendVerificationCode(SendVerificationCodeRequest)
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -40,12 +42,13 @@ extension UserAPI: Router, URLRequestConvertible {
         case .refreshToken: return "/user/refresh"
         case .checkAuth: return "/user/auth"
         case .checkLogin: return "/user/check/login"
+        case .sendVerificationCode: return "/user/verification/sms/send"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .refreshToken: return .post
+        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin: return .get
         case .modify: return .put
         case .revoke: return .delete
@@ -56,7 +59,7 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchUserData, .revoke, .checkAuth, .checkLogin:
             break
@@ -99,12 +102,14 @@ extension UserAPI: Router, URLRequestConvertible {
             return nil
         case .checkLogin:
             return ["accessToken": KeychainWorker.shared.read(key: .access) ?? ""]
+        case .sendVerificationCode(let request):
+            return try? JSONEncoder().encode(request)
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modify: return JSONEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode: return JSONEncoding.default
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil

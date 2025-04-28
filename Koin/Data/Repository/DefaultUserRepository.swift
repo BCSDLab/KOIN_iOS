@@ -64,7 +64,13 @@ final class DefaultUserRepository: UserRepository {
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkPassword(requestModel: requestModel)
     }
+    
     func checkLogin() -> AnyPublisher<Bool, Never> {
         service.checkLogin()
     }
+    
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
+        service.sendVerificationCode(requestModel: requestModel)
+    }
+    
 }

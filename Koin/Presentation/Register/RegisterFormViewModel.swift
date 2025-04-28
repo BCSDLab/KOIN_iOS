@@ -11,18 +11,23 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     enum Input {
         case checkDuplicatedPhoneNumber(String)
+        case sendVerificationCode(String)
     }
+    
     enum Output {
-        case showHttpResult(String, SceneColorAsset)    // 400: 올바르지 않음, 409: 이미 있는 전화번호
+        case showHttpResult(String, SceneColorAsset)
         case changeSendVerificationButtonStatus
+        case sendVerificationCodeSuccess
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
+    private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
+        self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -30,6 +35,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
             switch input {
             case let .checkDuplicatedPhoneNumber(phone):
                 self?.checkDuplicatedPhoneNumber(phone: phone)
+            case let .sendVerificationCode(phoneNumber):
+                self?.sendVerificationCode(phoneNumber: phoneNumber)
             }
         }.store(in: &subscriptions)
         
@@ -56,5 +63,18 @@ extension RegisterFormViewModel {
         }
         .store(in: &subscriptions)
     }
-
+    
+    private func sendVerificationCode(phoneNumber: String) {
+        sendVerificationCodeUseCase.execute(request: SendVerificationCodeRequest(phoneNumber: phoneNumber))
+            .sink { [weak self] completion in
+                guard let self else { return }
+                if case let .failure(error) = completion {
+                    self.outputSubject.send(.showHttpResult(error.message, .sub500))
+                }
+            } receiveValue: { [weak self] response in
+                print("✅ [ViewModel] 인증번호 발송 성공. 응답 데이터: \(response)")
+                self?.outputSubject.send(.sendVerificationCodeSuccess)
+            }
+            .store(in: &subscriptions)
+    }
 }

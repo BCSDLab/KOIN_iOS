@@ -8,7 +8,7 @@
 import Combine
 
 protocol SendVerificationCodeUsecase {
-    func execute(phoneNumber: String) -> AnyPublisher<Void, ErrorResponse>
+    func execute(request: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
 }
 
 final class DefaultSendVerificationCodeUseCase: SendVerificationCodeUsecase {
@@ -19,8 +19,8 @@ final class DefaultSendVerificationCodeUseCase: SendVerificationCodeUsecase {
         self.userRepository = userRepository
     }
     
-    func execute(phoneNumber: String) -> AnyPublisher<Void, ErrorResponse> {
-        return userRepository.sendVerificationCode(requestModel: SendVerificationCodeRequest(phoneNumber: phoneNumber))
+    func execute(request: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
+        return userRepository.sendVerificationCode(requestModel: request)
     }
     
 }
