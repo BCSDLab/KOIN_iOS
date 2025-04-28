@@ -17,7 +17,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
     enum Output {
         case showHttpResult(String, SceneColorAsset)
         case changeSendVerificationButtonStatus
-        case sendVerificationCodeSuccess
+        case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -73,7 +73,7 @@ extension RegisterFormViewModel {
                 }
             } receiveValue: { [weak self] response in
                 print("✅ [ViewModel] 인증번호 발송 성공. 응답 데이터: \(response)")
-                self?.outputSubject.send(.sendVerificationCodeSuccess)
+                self?.outputSubject.send(.sendVerificationCodeSuccess(response: response))
             }
             .store(in: &subscriptions)
     }
