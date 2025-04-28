@@ -26,10 +26,9 @@ final class CertificationFormView: UIView {
     }
     
     private let nameTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "실명을 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
+        $0.attributedPlaceholder = NSAttributedString(string: "2~5 자리로 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-
         $0.clearButtonMode = .never
         let clearButton = UIButton(type: .custom) // 커스텀 버튼
         clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
@@ -37,6 +36,7 @@ final class CertificationFormView: UIView {
         clearButton.tintColor = .red
         $0.rightView = clearButton
         $0.rightViewMode = .whileEditing
+        $0.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let seperateView1 = UIView().then {
@@ -71,6 +71,7 @@ final class CertificationFormView: UIView {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = .black
         $0.text = "휴대전화 번호를 입력해 주세요."
+        $0.isHidden = true
     }
     
     private let phoneNumberTextField = UITextField().then {
@@ -86,10 +87,12 @@ final class CertificationFormView: UIView {
         $0.rightViewMode = .whileEditing
         
         $0.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
+        $0.isHidden = true
     }
     
     private let seperateView2 = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
+        $0.isHidden = true
     }
     
     private let sendVerificationButton = UIButton().then {
@@ -100,6 +103,7 @@ final class CertificationFormView: UIView {
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(sendVerificationButtonTapped), for: .touchUpInside)
+        $0.isHidden = true
     }
 
     private let warningImageView = UIImageView().then {
@@ -154,7 +158,6 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    // /user/sms/verify
     private let verificationButton = UIButton().then {
         $0.backgroundColor = .appColor(.neutral300)
         $0.setTitle("인증번호 확인", for: .normal)
@@ -215,12 +218,10 @@ final class CertificationFormView: UIView {
 }
 
 extension CertificationFormView {
-    // 이름 텍스트 필드 지우기
     @objc private func clearNameTextField() {
         nameTextField.text = nil
     }
     
-    // 휴대전화 번호 텍스트 필드 지우기
     @objc private func clearPhoneNumberTextField() {
         phoneNumberTextField.text = nil
         sendVerificationButton.isEnabled = false
@@ -229,6 +230,16 @@ extension CertificationFormView {
         goToLoginButton.isHidden = true
         phoneNotFoundLabel.isHidden = true
         contactButton.isHidden = true
+        warningImageView.isHidden = true
+        phoneNumberReponseLabel.isHidden = true
+    }
+    
+    @objc private func nameTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        if text.count > 5 {
+            textField.text = String(text.prefix(5))
+        }
+        updatePhoneNumberSectionVisibility()
     }
     
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
@@ -251,6 +262,30 @@ extension CertificationFormView {
         }
         
         inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
+    }
+    
+    private func updatePhoneNumberSectionVisibility() {
+        let nameCount = nameTextField.text?.count ?? 0
+        let isNameValid = (2...5).contains(nameCount)
+        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) ||
+                                (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
+        
+        let shouldShowPhoneFields = isNameValid && isGenderSelected
+        
+        phoneNumberLabel.isHidden = !shouldShowPhoneFields
+        phoneNumberTextField.isHidden = !shouldShowPhoneFields
+        seperateView2.isHidden = !shouldShowPhoneFields
+        sendVerificationButton.isHidden = !shouldShowPhoneFields
+    }
+    
+    @objc private func femaleButtonTapped() {
+        updateGenderSelection(isFemale: true)
+        updatePhoneNumberSectionVisibility()
+    }
+
+    @objc private func maleButtonTapped() {
+        updateGenderSelection(isFemale: false)
+        updatePhoneNumberSectionVisibility()
     }
     
     private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
@@ -370,14 +405,6 @@ extension CertificationFormView {
         } else {
             print("❌ [View] 인증번호 비어 있음")
         }
-    }
-    
-    @objc private func femaleButtonTapped() {
-        updateGenderSelection(isFemale: true)
-    }
-
-    @objc private func maleButtonTapped() {
-        updateGenderSelection(isFemale: false)
     }
 
     private func updateGenderSelection(isFemale: Bool) {

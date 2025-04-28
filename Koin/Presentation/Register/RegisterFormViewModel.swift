@@ -54,15 +54,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedPhoneNumber(phone: String) {
         checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                if let code = Int(error.code) {
-                    if code == 400 {
-                        self?.outputSubject.send(.showHttpResult("올바른 전화번호 양식이 아닙니다. 다시 입력해 주세요.", .sub500))
-                    } else if code == 409 {
-                        self?.outputSubject.send(.showHttpResult("이미 존재하는 전화번호입니다.", .danger700))
-                    }
-                } else {
-                    self?.outputSubject.send(.showHttpResult(error.message, .sub500))
-                }
+                self?.outputSubject.send(.showHttpResult(error.message, .sub500))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.changeSendVerificationButtonStatus)
