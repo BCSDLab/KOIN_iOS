@@ -21,4 +21,5 @@ protocol UserRepository {
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
     func checkLogin() -> AnyPublisher<Bool, Never>
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
 }
