@@ -579,6 +579,8 @@
 		D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */; };
 		D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */; };
 		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
+		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
+		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1200,6 +1202,8 @@
 		D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberUseCase.swift; sourceTree = "<group>"; };
 		D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberRequest.swift; sourceTree = "<group>"; };
 		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
+		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
+		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2673,6 +2677,7 @@
 				D29F21F72C5085B900994554 /* RefreshTokenRequest.swift */,
 				D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */,
 				D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */,
+				D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2726,6 +2731,7 @@
 				D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */,
 				D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */,
 				D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */,
+				D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -4053,6 +4059,7 @@
 				83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
+				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
@@ -4079,6 +4086,7 @@
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
+				D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */,
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				D2DCB29B2CE5EA71005CABEE /* RelatedShopHeaderView.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
