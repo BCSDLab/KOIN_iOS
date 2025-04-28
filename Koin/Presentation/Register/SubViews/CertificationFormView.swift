@@ -78,14 +78,12 @@ final class CertificationFormView: UIView {
         $0.attributedPlaceholder = NSAttributedString(string: "- 없이 번호를 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-
         $0.clearButtonMode = .never
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
         clearButton.addTarget(self, action: #selector(clearPhoneNumberTextField), for: .touchUpInside)
         $0.rightView = clearButton
         $0.rightViewMode = .whileEditing
-        
         $0.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
         $0.isHidden = true
     }
@@ -143,6 +141,7 @@ final class CertificationFormView: UIView {
         $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isHidden = true
+        $0.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let timerLabel = UILabel().then {
@@ -165,13 +164,12 @@ final class CertificationFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isHidden = true
+        $0.isEnabled = false
         $0.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
     }
     
     private let verificationHelpLabel = UILabel().then {
-        $0.text = "인증번호 발송이 안 되시나요?"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral500)
         $0.isHidden = true
     }
     
@@ -195,7 +193,12 @@ final class CertificationFormView: UIView {
             
             switch output {
             case let .showHttpResult(message, labelColor):
-                self?.showHttpResult(message, labelColor)
+                guard let self = self else { return }
+                if let verificationCode = self.verificationTextField.text, !verificationCode.isEmpty {
+                    self.showVerificationHelpResult(message, labelColor)
+                } else {
+                    self.showHttpResult(message, labelColor)
+                }
             case .changeSendVerificationButtonStatus:
                 self?.warningImageView.isHidden = true
                 self?.phoneNumberReponseLabel.isHidden = true
@@ -204,14 +207,10 @@ final class CertificationFormView: UIView {
                 self?.sendVerificationButton.setTitleColor(.white, for: .normal)
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
-                self?.verificationTextField.isHidden = false
-                self?.timerLabel.isHidden = false
-                self?.seperateView3.isHidden = false
-                self?.verificationButton.isHidden = false
-                self?.verificationHelpLabel.isHidden = false
             case .correctVerificationCode:
                 self?.verificationHelpLabel.textColor = .appColor(.success700)
                 self?.verificationHelpLabel.text = "인증번호가 일치합니다."
+                self?.contactButton.isHidden = true
             }
         }.store(in: &subscriptions)
     }
@@ -264,6 +263,23 @@ extension CertificationFormView {
         inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
     }
     
+    @objc private func verificationTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        let filteredText = text.filter { $0.isNumber }
+        if filteredText.count > 6 {
+            textField.text = String(filteredText.prefix(6))
+        } else {
+            textField.text = filteredText
+        }
+        changeVerificationButtonStatus(textField.text ?? "")
+    }
+    
+    private func showVerificationHelpResult(_ message: String, _ color: SceneColorAsset) {
+        verificationHelpLabel.isHidden = false
+        verificationHelpLabel.text = message
+        verificationHelpLabel.textColor = UIColor.appColor(color)
+    }
+    
     private func updatePhoneNumberSectionVisibility() {
         let nameCount = nameTextField.text?.count ?? 0
         let isNameValid = (2...5).contains(nameCount)
@@ -276,6 +292,18 @@ extension CertificationFormView {
         phoneNumberTextField.isHidden = !shouldShowPhoneFields
         seperateView2.isHidden = !shouldShowPhoneFields
         sendVerificationButton.isHidden = !shouldShowPhoneFields
+    }
+    
+    private func changeVerificationButtonStatus(_ text: String) {
+        if text.count == 6 {
+            verificationButton.isEnabled = true
+            verificationButton.backgroundColor = .appColor(.primary500)
+            verificationButton.setTitleColor(.white, for: .normal)
+        } else {
+            verificationButton.isEnabled = false
+            verificationButton.backgroundColor = .appColor(.neutral300)
+            verificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+        }
     }
     
     @objc private func femaleButtonTapped() {
@@ -317,12 +345,14 @@ extension CertificationFormView {
         remainingSeconds = 180
         startTimer()
 
-        verificationTextField.isHidden = false
-        timerLabel.isHidden = false
-        seperateView3.isHidden = false
-        verificationButton.isHidden = false
+        verificationTextField.isHidden = true
+        timerLabel.isHidden = true
+        seperateView3.isHidden = true
+        verificationButton.isHidden = true
         
         sendVerificationButton.setTitle("인증번호 재발송", for: .normal)
+        verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
+        verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
         
         if let phoneNumber = phoneNumberTextField.text {
             print("📮 [View] 보내는 전화번호: \(phoneNumber)")
@@ -334,7 +364,7 @@ extension CertificationFormView {
     
     private func startTimer() {
         timerLabel.text = formatTime(remainingSeconds)
-        verificationHelpLabel.isHidden = true // 처음엔 숨기기
+        verificationHelpLabel.isHidden = true
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
@@ -371,16 +401,26 @@ extension CertificationFormView {
             totalCount: response.totalCount
         )
         
-        if (response.currentCount > 1) {
+        verificationTextField.text = ""
+        verificationButton.isEnabled = false
+        verificationButton.backgroundColor = .appColor(.neutral300)
+        verificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+        
+        if response.currentCount >= 2 {
             verificationHelpLabel.isHidden = false
-            
-            contactButton.snp.makeConstraints {
+            contactButton.isHidden = false
+            contactButton.snp.remakeConstraints {
                 $0.centerY.equalTo(verificationHelpLabel.snp.centerY)
                 $0.leading.equalTo(verificationHelpLabel.snp.trailing).offset(8)
                 $0.height.greaterThanOrEqualTo(19)
                 $0.width.greaterThanOrEqualTo(42)
             }
+        } else {
+            verificationHelpLabel.isHidden = true
+            contactButton.isHidden = true
         }
+        
+        verificationTextField.becomeFirstResponder()    // 인증번호 발송 성공 직후 키보드 올리기
     }
     
     private func makeVerificationMessage(remainingCount: Int, totalCount: Int) -> NSAttributedString {
@@ -403,7 +443,7 @@ extension CertificationFormView {
             print("📮 [View] 보내는 전화번호 및 인증번호: \(phoneNumber), \(verificationText)")
             inputSubject.send(.checkVerificationCode(phoneNumber, verificationText))
         } else {
-            print("❌ [View] 인증번호 비어 있음")
+            print("인증번호 비어 있음")
         }
     }
 
