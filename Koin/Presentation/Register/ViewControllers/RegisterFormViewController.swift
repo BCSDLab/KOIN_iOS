@@ -131,9 +131,11 @@ final class RegisterFormViewController: UIViewController {
                 case .selectType:
                     self.certificationView.isHidden = true
                     self.selectTypeView.isHidden = false
+                    self.nextButton.isHidden = true
                 case .enterForm:
                     self.selectTypeView.isHidden = true
                     self.enterFormView.isHidden = false
+                    self.nextButton.isHidden = false
                 }
             }.store(in: &subscriptions)
         
@@ -171,11 +173,13 @@ final class RegisterFormViewController: UIViewController {
 
 extension RegisterFormViewController {
     @objc private func nextButtonTapped() {
+        if currentStep == .selectType {
+            return
+        }
+        
         if let nextStep = currentStep.next() {
-               currentStep = nextStep
-           } else {
-            
-           }
+            currentStep = nextStep
+        }
         // TODO: 여기부분에 마지막 부분이면 추가 처리.
         // 학생, 외부인 분기 처리 추가 필요.
     }
