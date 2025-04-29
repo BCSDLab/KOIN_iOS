@@ -26,8 +26,8 @@ final class EnterFormView: UIView {
     
     private let idTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "아이디", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
-        $0.autocapitalizationType = .none
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.autocapitalizationType = .none
     }
     
     private let passwordLabel = UILabel().then {
@@ -90,6 +90,19 @@ final class EnterFormView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(for userType: SelectTypeFormView.UserType?) {
+        switch userType {
+        case .student:
+            idLabel.textColor = .red
+        case .general:
+            idLabel.textColor = .blue
+        case .none:
+            break
+        }
+    }
+}
+
+extension EnterFormView {
     @objc private func changeSecureButtonTapped1() {
         passwordTextField1.isSecureTextEntry.toggle()
         changeSecureButton1.setImage(passwordTextField1.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
@@ -101,12 +114,7 @@ final class EnterFormView: UIView {
     }
 }
 
-extension EnterFormView {
-   
-}
-
 // MARK: UI Settings
-
 extension EnterFormView {
     private func setUpLayOuts() {
         [idLabel, idTextField, seperateView1, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctImageView, correctLabel].forEach {

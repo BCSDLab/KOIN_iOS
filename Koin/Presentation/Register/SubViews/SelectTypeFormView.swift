@@ -12,6 +12,12 @@ final class SelectTypeFormView: UIView {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    var onUserTypeSelected: ((UserType) -> Void)?
+
+    enum UserType {
+        case student
+        case general
+    }
     
     // MARK: - UI Components
     private let logoImageView = UIImageView().then {
@@ -24,14 +30,16 @@ final class SelectTypeFormView: UIView {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
+        $0.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
     }
     
-    private let outsiderButton = UIButton().then {
+    private let generalButton = UIButton().then {
         $0.backgroundColor = .appColor(.primary500)
         $0.setTitle("외부인", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
+        $0.addTarget(self, action: #selector(outsiderButtonTapped), for: .touchUpInside)
     }
     
     // MARK: Init
@@ -48,14 +56,19 @@ final class SelectTypeFormView: UIView {
 }
 
 extension SelectTypeFormView {
-   
+    @objc private func studentButtonTapped() {
+        onUserTypeSelected?(.student)
+    }
+
+    @objc private func outsiderButtonTapped() {
+        onUserTypeSelected?(.general)
+    }
 }
 
 // MARK: UI Settings
-
 extension SelectTypeFormView {
     private func setUpLayOuts() {
-        [logoImageView, studentButton, outsiderButton].forEach {
+        [logoImageView, studentButton, generalButton].forEach {
             self.addSubview($0)
         }
     }
@@ -75,7 +88,7 @@ extension SelectTypeFormView {
             $0.height.equalTo(48)
         }
         
-        outsiderButton.snp.makeConstraints {
+        generalButton.snp.makeConstraints {
             $0.top.equalTo(studentButton.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)

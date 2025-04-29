@@ -15,7 +15,8 @@ final class RegisterFormViewController: UIViewController {
     private let inputSubject: PassthroughSubject<RegisterViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     @Published private var currentStep: CurrentStep = .agreement
-    
+    private var userType: SelectTypeFormView.UserType? = nil
+
     enum CurrentStep: String, CaseIterable {
         case agreement = "약관 동의"
         case certification = "본인 인증"
@@ -135,43 +136,40 @@ final class RegisterFormViewController: UIViewController {
                 case .enterForm:
                     self.selectTypeView.isHidden = true
                     self.enterFormView.isHidden = false
+                    self.enterFormView.configure(for: self.userType)
                     self.nextButton.isHidden = false
                 }
             }.store(in: &subscriptions)
         
         agreementView.onRequiredAgreementsChanged = { [weak self] isEnabled in
             guard let self = self else { return }
-            self.nextButton.isEnabled = isEnabled
-            if isEnabled {
-                self.nextButton.backgroundColor = UIColor.appColor(.primary500)
-                self.nextButton.setTitleColor(.white, for: .normal)
-            } else {
-                self.nextButton.backgroundColor = UIColor.appColor(.neutral300)
-                self.nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-            }
+            self.updateNextButtonState(enabled: isEnabled)
         }
-        
+
         certificationView.onVerificationStatusChanged = { [weak self] isVerified in
             guard let self = self else { return }
-            self.nextButton.isEnabled = isVerified
-            if isVerified {
-                self.nextButton.backgroundColor = UIColor.appColor(.primary500)
-                self.nextButton.setTitleColor(.white, for: .normal)
-            } else {
-                self.nextButton.backgroundColor = UIColor.appColor(.neutral300)
-                self.nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-            }
+            self.updateNextButtonState(enabled: isVerified)
         }
 
+        selectTypeView.onUserTypeSelected = { [weak self] selectedType in
+            guard let self = self else { return }
+            self.userType = selectedType
+            self.currentStep = .enterForm
+        }
     }
     
-    @objc private func loginButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
+    private func updateNextButtonState(enabled: Bool) {
+        self.nextButton.isEnabled = enabled
+        self.nextButton.backgroundColor = enabled ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
+        self.nextButton.setTitleColor(enabled ? .white : UIColor.appColor(.neutral600), for: .normal)
     }
-
 }
 
 extension RegisterFormViewController {
+    @objc private func loginButtonTapped() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @objc private func nextButtonTapped() {
         if currentStep == .selectType {
             return
@@ -183,15 +181,14 @@ extension RegisterFormViewController {
         // TODO: 여기부분에 마지막 부분이면 추가 처리.
         // 학생, 외부인 분기 처리 추가 필요.
     }
-    
 }
 
 extension RegisterFormViewController {
-    
     private func setUpLayOuts() {
         [stepTextLabel, stepLabel, progressView, scrollView, nextButton].forEach {
             view.addSubview($0)
         }
+        
         [agreementView, certificationView, selectTypeView, enterFormView].forEach {
             scrollView.addSubview($0)
         }
@@ -202,40 +199,48 @@ extension RegisterFormViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.leading.equalToSuperview().offset(24)
         }
+        
         stepLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.trailing.equalToSuperview().offset(-24)
         }
+        
         progressView.snp.makeConstraints {
             $0.top.equalTo(stepTextLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.height.equalTo(3)
         }
+        
         scrollView.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalTo(nextButton.snp.top).offset(-32)
         }
+        
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
             $0.height.equalTo(50)
             $0.horizontalEdges.equalToSuperview().inset(32)
         }
+        
         agreementView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1000)
             $0.width.equalTo(progressView)
         }
+        
         certificationView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1000)
             $0.width.equalTo(progressView)
         }
+        
         selectTypeView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1000)
             $0.width.equalTo(progressView)
         }
+        
         enterFormView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1000)
