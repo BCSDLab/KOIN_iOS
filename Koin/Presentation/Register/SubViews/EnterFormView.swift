@@ -25,9 +25,9 @@ final class EnterFormView: UIView {
     }
 
     private let idTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "최대 13자리까지 입력 가능합니다.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "최대 13자리까지 입력 가능합니다.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.autocapitalizationType = .none
         $0.addTarget(self, action: #selector(idTextFieldDidChange(_:)), for: .editingChanged)
     }
     
@@ -46,8 +46,7 @@ final class EnterFormView: UIView {
             image: UIImage.appImage(asset: .checkGreenCircle),
             text: "사용 가능한 아이디 입니다.",
             font: UIFont.appFont(.pretendardRegular, size: 12),
-            textColor: .appColor(.success700),
-            spacing: 4
+            textColor: .appColor(.success700)
         )
         $0.isHidden = true
     }
@@ -59,12 +58,10 @@ final class EnterFormView: UIView {
     }
     
     private let passwordTextField1 = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 13)])
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.autocapitalizationType = .none
         $0.isSecureTextEntry = true
-        $0.autocorrectionType = .no
-        $0.spellCheckingType = .no
         $0.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
     }
     
@@ -78,9 +75,9 @@ final class EnterFormView: UIView {
     }
     
     private let passwordTextField2 = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "비밀번호를 다시 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 13)])
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "비밀번호를 다시 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.autocapitalizationType = .none
         $0.isSecureTextEntry = true
         $0.isHidden = true
         $0.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
@@ -97,13 +94,12 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let correctPasswordLabel: UILabel = UILabel().then {
+    private let correctPasswordLabel = UILabel().then {
         $0.setImageText(
             image: UIImage.appImage(asset: .checkGreenCircle),
             text: "비밀번호가 일치합니다.",
             font: UIFont.appFont(.pretendardRegular, size: 12),
-            textColor: .appColor(.success700),
-            spacing: 4
+            textColor: .appColor(.success700)
         )
         $0.isHidden = true
     }

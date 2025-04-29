@@ -35,16 +35,10 @@ final class CertificationFormView: UIView {
     }
     
     private let nameTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "2~5 자리로 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
-        $0.autocapitalizationType = .none
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "2~5 자리로 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearNameTextField))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.clearButtonMode = .never
-        let clearButton = UIButton(type: .custom) // 커스텀 버튼
-        clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
-        clearButton.addTarget(self, action: #selector(clearNameTextField), for: .touchUpInside)
-        clearButton.tintColor = .red
-        $0.rightView = clearButton
-        $0.rightViewMode = .whileEditing
         $0.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
     }
     
@@ -84,15 +78,10 @@ final class CertificationFormView: UIView {
     }
     
     private let phoneNumberTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "- 없이 번호를 입력해 주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
-        $0.autocapitalizationType = .none
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "- 없이 번호를 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearPhoneNumberTextField))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.clearButtonMode = .never
-        let clearButton = UIButton(type: .custom)
-        clearButton.setImage(UIImage.appImage(asset: .cancelNeutral500), for: .normal)
-        clearButton.addTarget(self, action: #selector(clearPhoneNumberTextField), for: .touchUpInside)
-        $0.rightView = clearButton
-        $0.rightViewMode = .whileEditing
         $0.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
         $0.isHidden = true
     }
@@ -146,8 +135,8 @@ final class CertificationFormView: UIView {
     }
     
     private let verificationTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "인증번호를 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
-        $0.autocapitalizationType = .none
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "인증번호를 입력해주세요.", textColor: UIColor.appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isHidden = true
         $0.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
@@ -178,7 +167,6 @@ final class CertificationFormView: UIView {
     }
     
     private let verificationHelpLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.isHidden = true
     }
     
@@ -216,8 +204,14 @@ final class CertificationFormView: UIView {
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
                 self?.verificationHelpLabel.isHidden = false
-                self?.verificationHelpLabel.textColor = .appColor(.success700)
-                self?.verificationHelpLabel.text = "인증번호가 일치합니다."
+//                self?.verificationHelpLabel.textColor = .appColor(.success700)
+//                self?.verificationHelpLabel.text = "인증번호가 일치합니다."
+                self?.verificationHelpLabel.setImageText(
+                    image: UIImage.appImage(asset: .checkGreenCircle),
+                    text: "인증번호가 일치합니다.",
+                    font: UIFont.appFont(.pretendardRegular, size: 12),
+                    textColor: UIColor.appColor(.success700)
+                )
                 self?.contactButton.isHidden = true
                 self?.onVerificationStatusChanged?(true)
             }

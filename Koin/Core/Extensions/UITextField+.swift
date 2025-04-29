@@ -8,6 +8,32 @@
 import UIKit
 
 extension UITextField {
+    // 기본 텍스트 필드 설정
+    func configureDefaultTextField() {
+        self.autocorrectionType = .no
+        self.spellCheckingType = .no
+        self.autocapitalizationType = .none
+        self.clearsOnBeginEditing = false
+    }
+    
+    // 텍스트 필드에 placeholder 설정
+    func setCustomPlaceholder(text: String, textColor: UIColor, font: UIFont) {
+        self.clearButtonMode = .never
+        self.attributedPlaceholder = NSAttributedString(string: text, attributes: [
+            .foregroundColor: textColor,
+            .font: font
+        ])
+    }
+    
+    // 텍스트 필드 오른쪽 버튼 추가
+    func setRightButton(image: UIImage?, target: Any?, action: Selector) {
+        let rightButton = UIButton(type: .custom)
+        rightButton.setImage(image, for: .normal)
+        rightButton.addTarget(target, action: action, for: .touchUpInside)
+        self.rightView = rightButton
+        self.rightViewMode = .whileEditing
+    }
+    
     // 아이디 정규식
     func isValidIDFormat() -> Bool {
         guard let text = self.text else { return false }
