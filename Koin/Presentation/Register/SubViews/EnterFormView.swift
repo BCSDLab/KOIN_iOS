@@ -13,21 +13,32 @@ final class EnterFormView: UIView {
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
     
-    // MARK: - UI Components 16
+    // MARK: - UI Components
     private let idLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = .black
-        $0.text = "아이디 (전화번호)"
+        $0.text = "사용하실 아이디를 입력해 주세요."
     }
     
     private let seperateView1 = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
-    
+
     private let idTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "아이디", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
+        $0.attributedPlaceholder = NSAttributedString(string: "최대 13자리까지 입력 가능합니다.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 14)])
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.autocapitalizationType = .none
+        $0.addTarget(self, action: #selector(idTextFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    private let checkIdDuplicateButton = UIButton().then {
+        $0.backgroundColor = .appColor(.neutral300)
+        $0.setTitle("중복 확인", for: .normal)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.layer.cornerRadius = 4
+        $0.isEnabled = false
+        $0.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
     }
     
     private let passwordLabel = UILabel().then {
@@ -36,6 +47,7 @@ final class EnterFormView: UIView {
         $0.text = "사용하실 비밀번호를 입력해 주세요."
     }
     
+    // 6~8자
     private let passwordTextField1 = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 13)])
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
@@ -70,12 +82,14 @@ final class EnterFormView: UIView {
     
     private let correctImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .checkGreenCircle)
+        $0.isHidden = true
     }
     
     private let correctLabel: UILabel = UILabel().then {
         $0.text = "비밀번호가 일치합니다."
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.success700)
+        $0.isHidden = true
     }
     
     // MARK: Init
@@ -90,10 +104,11 @@ final class EnterFormView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // FIXME: - 학생 완료하면 외부인 해야함
     func configure(for userType: SelectTypeFormView.UserType?) {
         switch userType {
         case .student:
-            idLabel.textColor = .red
+            idLabel.textColor = .black
         case .general:
             idLabel.textColor = .blue
         case .none:
@@ -103,6 +118,33 @@ final class EnterFormView: UIView {
 }
 
 extension EnterFormView {
+    @objc private func idTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789_.-")
+        
+        let filteredText = text.lowercased().filter {
+            guard let scalar = $0.unicodeScalars.first else { return false }
+            return allowedCharacterSet.contains(scalar)
+        }
+        
+        let trimmedText = String(filteredText.prefix(13))
+        textField.text = trimmedText
+        
+        let isValid = textField.isValidIDFormat()
+        
+        // 버튼 상태 확장 메서드
+        checkIdDuplicateButton.updateState(
+            isEnabled: isValid,
+            enabledColor: .appColor(.primary500),
+            disabledColor: .appColor(.neutral300)
+        )
+    }
+    
+    @objc private func checkDuplicateButtonTapped() {
+//        inputSubject.send(.sendVerificationCode(phoneNumber))
+    }
+    
     @objc private func changeSecureButtonTapped1() {
         passwordTextField1.isSecureTextEntry.toggle()
         changeSecureButton1.setImage(passwordTextField1.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
@@ -117,7 +159,7 @@ extension EnterFormView {
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, seperateView1, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctImageView, correctLabel].forEach {
+        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctImageView, correctLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -132,7 +174,7 @@ extension EnterFormView {
         idTextField.snp.makeConstraints {
             $0.top.equalTo(idLabel.snp.bottom).offset(12)
             $0.leading.equalTo(idLabel.snp.leading).offset(4)
-            $0.trailing.equalToSuperview().offset(-8)
+            $0.trailing.equalTo(checkIdDuplicateButton.snp.leading).offset(-16)
             $0.height.equalTo(40)
         }
         
@@ -141,6 +183,13 @@ extension EnterFormView {
             $0.leading.equalTo(idLabel.snp.leading)
             $0.trailing.equalTo(idTextField.snp.trailing)
             $0.height.equalTo(1)
+        }
+        
+        checkIdDuplicateButton.snp.makeConstraints {
+            $0.centerY.equalTo(idTextField.snp.centerY)
+            $0.trailing.equalToSuperview().offset(-8)
+            $0.height.equalTo(32)
+            $0.width.lessThanOrEqualTo(86)
         }
         
         passwordLabel.snp.makeConstraints {
@@ -152,7 +201,7 @@ extension EnterFormView {
         passwordTextField1.snp.makeConstraints {
             $0.top.equalTo(passwordLabel.snp.bottom).offset(12)
             $0.leading.equalTo(passwordLabel.snp.leading).offset(4)
-            $0.trailing.equalToSuperview().offset(-40)
+            $0.trailing.equalTo(checkIdDuplicateButton.snp.trailing)
             $0.height.equalTo(40)
         }
         
@@ -172,7 +221,7 @@ extension EnterFormView {
         passwordTextField2.snp.makeConstraints {
             $0.top.equalTo(seperateView2.snp.bottom).offset(12)
             $0.leading.equalTo(passwordLabel.snp.leading).offset(4)
-            $0.trailing.equalToSuperview().offset(-40)
+            $0.trailing.equalTo(checkIdDuplicateButton.snp.trailing)
             $0.height.equalTo(40)
         }
         
