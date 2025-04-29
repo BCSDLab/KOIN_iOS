@@ -576,7 +576,7 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
-		D85939712DC0FF6F00CE4CB2 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939702DC0FF6F00CE4CB2 /* UITextField.swift */; };
+		D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */; };
 		D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939722DC1037200CE4CB2 /* UIButton+.swift */; };
 		D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */; };
 		D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */; };
@@ -1203,7 +1203,7 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
-		D85939702DC0FF6F00CE4CB2 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		D85939722DC1037200CE4CB2 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberUseCase.swift; sourceTree = "<group>"; };
 		D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberRequest.swift; sourceTree = "<group>"; };
@@ -2503,7 +2503,7 @@
 				8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */,
 				D2FCBE8F2CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift */,
 				83EBB87F2D0FE86100346018 /* TimeInterval+.swift */,
-				D85939702DC0FF6F00CE4CB2 /* UITextField.swift */,
+				D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */,
 				D85939722DC1037200CE4CB2 /* UIButton+.swift */,
 			);
 			path = Extensions;
@@ -4073,7 +4073,7 @@
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
-				D85939712DC0FF6F00CE4CB2 /* UITextField.swift in Sources */,
+				D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,

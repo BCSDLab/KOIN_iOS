@@ -41,18 +41,31 @@ final class EnterFormView: UIView {
         $0.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
     }
     
+    private let checkIdResponseLabel: UILabel = UILabel().then {
+        $0.setImageText(
+            image: UIImage.appImage(asset: .checkGreenCircle),
+            text: "사용 가능한 아이디 입니다.",
+            font: UIFont.appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.success700),
+            spacing: 4
+        )
+        $0.isHidden = true
+    }
+    
     private let passwordLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = .black
         $0.text = "사용하실 비밀번호를 입력해 주세요."
     }
     
-    // 6~8자
     private let passwordTextField1 = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", attributes: [.foregroundColor: UIColor.appColor(.neutral400), .font: UIFont.appFont(.pretendardRegular, size: 13)])
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.autocapitalizationType = .none
         $0.isSecureTextEntry = true
+        $0.autocorrectionType = .no
+        $0.spellCheckingType = .no
+        $0.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
     }
     
     private let changeSecureButton1 = UIButton().then { button in
@@ -69,26 +82,29 @@ final class EnterFormView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.autocapitalizationType = .none
         $0.isSecureTextEntry = true
+        $0.isHidden = true
+        $0.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
     }
     
-    private let changeSecureButton2 = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .visibility), for: .normal)
-        button.addTarget(self, action: #selector(changeSecureButtonTapped2), for: .touchUpInside)
+    private let changeSecureButton2 = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .visibility), for: .normal)
+        $0.addTarget(self, action: #selector(changeSecureButtonTapped2), for: .touchUpInside)
+        $0.isHidden = true
     }
-    
+
     private let seperateView3 = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
-    }
-    
-    private let correctImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .checkGreenCircle)
         $0.isHidden = true
     }
     
-    private let correctLabel: UILabel = UILabel().then {
-        $0.text = "비밀번호가 일치합니다."
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = .appColor(.success700)
+    private let correctPasswordLabel: UILabel = UILabel().then {
+        $0.setImageText(
+            image: UIImage.appImage(asset: .checkGreenCircle),
+            text: "비밀번호가 일치합니다.",
+            font: UIFont.appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.success700),
+            spacing: 4
+        )
         $0.isHidden = true
     }
     
@@ -133,7 +149,6 @@ extension EnterFormView {
         
         let isValid = textField.isValidIDFormat()
         
-        // 버튼 상태 확장 메서드
         checkIdDuplicateButton.updateState(
             isEnabled: isValid,
             enabledColor: .appColor(.primary500),
@@ -141,7 +156,22 @@ extension EnterFormView {
         )
     }
     
+    @objc private func passwordTextField1DidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        let isValid = textField.isValidPasswordFormat()
+        [passwordTextField2, changeSecureButton2, seperateView3].forEach { $0.isHidden = !isValid }
+    }
+    
+    @objc private func passwordTextField2DidChange(_ textField: UITextField) {
+        guard let firstText = passwordTextField1.text, let secondText = passwordTextField2.text else { return }
+        
+        if firstText == secondText {
+            correctPasswordLabel.isHidden = false
+        }
+    }
+    
     @objc private func checkDuplicateButtonTapped() {
+        checkIdResponseLabel.isHidden = false
 //        inputSubject.send(.sendVerificationCode(phoneNumber))
     }
     
@@ -159,7 +189,7 @@ extension EnterFormView {
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctImageView, correctLabel].forEach {
+        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctPasswordLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -192,6 +222,12 @@ extension EnterFormView {
             $0.width.lessThanOrEqualTo(86)
         }
         
+        checkIdResponseLabel.snp.makeConstraints {
+            $0.top.equalTo(seperateView1.snp.bottom)
+            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
+            $0.height.equalTo(16)
+        }
+        
         passwordLabel.snp.makeConstraints {
             $0.top.equalTo(seperateView1.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(8)
@@ -214,7 +250,7 @@ extension EnterFormView {
         seperateView2.snp.makeConstraints {
             $0.top.equalTo(passwordTextField1.snp.bottom)
             $0.leading.equalTo(passwordLabel.snp.leading)
-            $0.trailing.equalTo(idTextField.snp.trailing)
+            $0.trailing.equalTo(changeSecureButton1.snp.trailing)
             $0.height.equalTo(1)
         }
         
@@ -234,19 +270,14 @@ extension EnterFormView {
         seperateView3.snp.makeConstraints {
             $0.top.equalTo(passwordTextField2.snp.bottom)
             $0.leading.equalTo(passwordLabel.snp.leading)
-            $0.trailing.equalTo(idTextField.snp.trailing)
+            $0.trailing.equalTo(changeSecureButton2.snp.trailing)
             $0.height.equalTo(1)
         }
         
-        correctImageView.snp.makeConstraints {
-            $0.top.equalTo(seperateView3.snp.bottom).offset(10)
+        correctPasswordLabel.snp.makeConstraints {
+            $0.top.equalTo(seperateView3.snp.bottom)
             $0.leading.equalTo(seperateView3.snp.leading).offset(4)
-            $0.width.height.equalTo(16)
-        }
-        
-        correctLabel.snp.makeConstraints {
-            $0.centerY.equalTo(correctImageView.snp.centerY)
-            $0.leading.equalTo(correctImageView.snp.trailing).offset(8)
+            $0.height.equalTo(16)
         }
         
     }
