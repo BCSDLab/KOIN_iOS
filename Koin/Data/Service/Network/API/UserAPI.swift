@@ -22,6 +22,7 @@ enum UserAPI {
     case checkLogin
     case sendVerificationCode(SendVerificationCodeRequest)
     case checkVerificationCode(CheckVerificationCodeRequest)
+    case checkDuplicatedId(CheckDuplicatedIdRequest)
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -43,15 +44,16 @@ extension UserAPI: Router, URLRequestConvertible {
         case .refreshToken: return "/user/refresh"
         case .checkAuth: return "/user/auth"
         case .checkLogin: return "/user/check/login"
-        case .sendVerificationCode: return "/user/verification/sms/send"
-        case .checkVerificationCode: return "/user/verification/sms/verify"
+        case .sendVerificationCode: return "/users/verification/sms/send"
+        case .checkVerificationCode: return "/users/verification/sms/verify"
+        case .checkDuplicatedId: return "/user/check/id"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode: return .post
-        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin: return .get
+        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin, .checkDuplicatedId: return .get
         case .modify: return .put
         case .revoke: return .delete
         }
@@ -61,7 +63,7 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchUserData, .revoke, .checkAuth, .checkLogin:
             break
@@ -106,13 +108,15 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .checkVerificationCode(let request):
             return try? JSONEncoder().encode(request)
+        case .checkDuplicatedId(let request):
+            return try? request.toDictionary()
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode: return JSONEncoding.default
-        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth: return URLEncoding.default
+        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkDuplicatedId: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil
         }

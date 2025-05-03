@@ -7,11 +7,14 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class EnterFormView: UIView {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let idLabel = UILabel().then {
@@ -26,7 +29,7 @@ final class EnterFormView: UIView {
 
     private let idTextField = UITextField().then {
         $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "최대 13자리까지 입력 가능합니다.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
+        $0.setCustomPlaceholder(text: "5~13자리로 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.addTarget(self, action: #selector(idTextFieldDidChange(_:)), for: .editingChanged)
     }
@@ -106,14 +109,44 @@ final class EnterFormView: UIView {
     
     // MARK: Init
      init(viewModel: RegisterFormViewModel) {
-        self.viewModel = viewModel
-        super.init(frame: .zero)
-        configureView()
+         self.viewModel = viewModel
+         super.init(frame: .zero)
+         configureView()
+         bind()
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let strongSelf = self else { return }
+            switch output {
+            case let .showHttpResult(message, labelColor):
+                self?.checkIdResponseLabel.setImageText(
+                    image: UIImage.appImage(asset: .warningOrange),
+                        text: message,
+                        font: UIFont.appFont(.pretendardRegular, size: 12),
+                        textColor: .appColor(labelColor)
+                    )
+            case .successCheckDuplicatedId:
+                self?.checkIdResponseLabel.setImageText(
+                        image: UIImage.appImage(asset: .checkGreenCircle),
+                        text: "사용 가능한 아이디 입니다.",
+                        font: UIFont.appFont(.pretendardRegular, size: 12),
+                        textColor: .appColor(.success700)
+                    )
+            case .changeSendVerificationButtonStatus:
+                break
+            case .sendVerificationCodeSuccess(response: let response):
+                break
+            case .correctVerificationCode:
+                break
+            }
+        }.store(in: &subscriptions)
     }
     
     // FIXME: - 학생 완료하면 외부인 해야함
@@ -131,20 +164,19 @@ final class EnterFormView: UIView {
 
 extension EnterFormView {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
+        guard let input = textField.text else { return }
+
         let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789_.-")
-        
-        let filteredText = text.lowercased().filter {
+        let filtered = input.lowercased().filter {
             guard let scalar = $0.unicodeScalars.first else { return false }
             return allowedCharacterSet.contains(scalar)
         }
-        
-        let trimmedText = String(filteredText.prefix(13))
-        textField.text = trimmedText
-        
-        let isValid = textField.isValidIDFormat()
-        
+
+        let trimmed = String(filtered.prefix(13))
+        textField.text = trimmed
+
+        let isValid = textField.isValidIdFormat()
+
         checkIdDuplicateButton.updateState(
             isEnabled: isValid,
             enabledColor: .appColor(.primary500),
@@ -167,8 +199,9 @@ extension EnterFormView {
     }
     
     @objc private func checkDuplicateButtonTapped() {
+        guard let loginId = idTextField.text else { return }
         checkIdResponseLabel.isHidden = false
-//        inputSubject.send(.sendVerificationCode(phoneNumber))
+        inputSubject.send(.checkDuplicatedId(loginId))
     }
     
     @objc private func changeSecureButtonTapped1() {
@@ -219,7 +252,7 @@ extension EnterFormView {
         }
         
         checkIdResponseLabel.snp.makeConstraints {
-            $0.top.equalTo(seperateView1.snp.bottom)
+            $0.top.equalTo(seperateView1.snp.bottom).offset(8)
             $0.leading.equalTo(seperateView3.snp.leading).offset(4)
             $0.height.equalTo(16)
         }

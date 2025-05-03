@@ -156,8 +156,22 @@ extension LoginViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
 //         let registerViewController = RegisterViewController(viewModel: RegisterViewModel(fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: timetableRepositoy), registerUseCase: DefaultRegisterUseCase(userRepository: userRepository), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: logRepoository)))
-        let registerViewController = RegisterFormViewController(viewModel: RegisterFormViewModel(checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(userRepository: userRepository), sendVerificationCodeUseCase: DefaultSendVerificationCodeUseCase(userRepository: userRepository), checkVerificationCodeUseCase: DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
-                                                                                                ))
+        let registerViewController = RegisterFormViewController(
+            viewModel: RegisterFormViewModel(
+                checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
+                    userRepository: userRepository
+                ),
+                sendVerificationCodeUseCase: DefaultSendVerificationCodeUseCase(
+                    userRepository: userRepository
+                ),
+                checkVerificationCodeUseCase: DefaultCheckVerificationCodeUsecase(
+                    userRepository: userRepository
+                ),
+                checkDuplicatedIdUseCase: DefaultCheckDuplicatedIdUsecase (
+                    userRepository: userRepository
+                )
+            )
+        )
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         

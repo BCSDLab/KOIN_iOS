@@ -214,6 +214,8 @@ final class CertificationFormView: UIView {
                 )
                 self?.contactButton.isHidden = true
                 self?.onVerificationStatusChanged?(true)
+            case .successCheckDuplicatedId:
+                break
             }
         }.store(in: &subscriptions)
     }
@@ -279,8 +281,14 @@ extension CertificationFormView {
     
     private func showVerificationHelpResult(_ message: String, _ color: SceneColorAsset) {
         verificationHelpLabel.isHidden = false
-        verificationHelpLabel.text = message
-        verificationHelpLabel.textColor = UIColor.appColor(color)
+        verificationHelpLabel.setImageText(
+            image: UIImage.appImage(asset: .warningOrange),
+            text: message,
+            font: UIFont.appFont(.pretendardRegular, size: 12),
+            textColor: UIColor.appColor(color)
+        )
+//        verificationHelpLabel.text = message
+//        verificationHelpLabel.textColor = UIColor.appColor(color)
     }
     
     private func updatePhoneNumberSectionVisibility() {
@@ -355,6 +363,7 @@ extension CertificationFormView {
         
         sendVerificationButton.setTitle("인증번호 재발송", for: .normal)
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
+        verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
         
         if let phoneNumber = phoneNumberTextField.text {

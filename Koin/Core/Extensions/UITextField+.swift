@@ -35,9 +35,9 @@ extension UITextField {
     }
     
     // 아이디 정규식
-    func isValidIDFormat() -> Bool {
+    func isValidIdFormat() -> Bool {
         guard let text = self.text else { return false }
-        let regex = "^[a-z0-9_.-]{1,13}$"
+        let regex = "^[a-z0-9_.-]{5,13}$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: text)
     }
     

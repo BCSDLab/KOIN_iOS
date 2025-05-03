@@ -13,6 +13,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedPhoneNumber(String)
         case sendVerificationCode(String)
         case checkVerificationCode(String, String)
+        case checkDuplicatedId(String)
     }
     
     enum Output {
@@ -20,6 +21,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
         case correctVerificationCode
+        case successCheckDuplicatedId
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -27,11 +29,13 @@ final class RegisterFormViewModel: ViewModelProtocol {
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
+    private let checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
         self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
+        self.checkDuplicatedIdUseCase = checkDuplicatedIdUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -43,6 +47,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.sendVerificationCode(phoneNumber: phoneNumber)
             case let .checkVerificationCode(phoneNumber, verificationCode):
                 self?.checkVerificationCode(phoneNumber: phoneNumber, verificationCode: verificationCode)
+            case let .checkDuplicatedId(loginId):
+                self?.checkDuplicatedId(loginId: loginId)
             }
         }.store(in: &subscriptions)
         
@@ -94,4 +100,16 @@ extension RegisterFormViewModel {
         }
         .store(in: &subscriptions)
     }
+    
+    private func checkDuplicatedId(loginId: String) {
+        checkDuplicatedIdUseCase.execute(loginId: loginId).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.outputSubject.send(.successCheckDuplicatedId)
+        }
+        .store(in: &subscriptions)
+    }
+
 }

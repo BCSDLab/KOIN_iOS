@@ -76,4 +76,8 @@ final class DefaultUserRepository: UserRepository {
     func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkVerificationCode(requestModel: requestModel)
     }
+    
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkDuplicatedId(requestModel: requestModel)
+    }
 }

@@ -22,6 +22,7 @@ protocol UserService {
     func checkLogin() -> AnyPublisher<Bool, Never>
     func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
     func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
@@ -150,5 +151,9 @@ final class DefaultUserService: UserService {
     
     func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: UserAPI.checkVerificationCode(requestModel))
+    }
+    
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedId(requestModel))
     }
 }
