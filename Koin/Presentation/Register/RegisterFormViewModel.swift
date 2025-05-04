@@ -14,6 +14,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case sendVerificationCode(String)
         case checkVerificationCode(String, String)
         case checkDuplicatedId(String)
+        case getDeptList
     }
     
     enum Output {
@@ -22,6 +23,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
         case correctVerificationCode
         case successCheckDuplicatedId
+        case showDeptDropDownList([String])
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -30,12 +32,14 @@ final class RegisterFormViewModel: ViewModelProtocol {
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
     private let checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase
+    private let fetchDeptListUseCase: FetchDeptListUseCase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
         self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
         self.checkDuplicatedIdUseCase = checkDuplicatedIdUseCase
+        self.fetchDeptListUseCase = fetchDeptListUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -49,6 +53,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.checkVerificationCode(phoneNumber: phoneNumber, verificationCode: verificationCode)
             case let .checkDuplicatedId(loginId):
                 self?.checkDuplicatedId(loginId: loginId)
+            case .getDeptList:
+                self?.fetchDeptList()
             }
         }.store(in: &subscriptions)
         
@@ -112,4 +118,13 @@ extension RegisterFormViewModel {
         .store(in: &subscriptions)
     }
 
+    private func fetchDeptList() {
+        fetchDeptListUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showDeptDropDownList(response))
+        }.store(in: &subscriptions)
+    }
 }

@@ -169,6 +169,8 @@ extension LoginViewController {
                 ),
                 checkDuplicatedIdUseCase: DefaultCheckDuplicatedIdUsecase (
                     userRepository: userRepository
+                ), fetchDeptListUseCase: DefaultFetchDeptListUseCase(
+                    timetableRepository: timetableRepositoy
                 )
             )
         )

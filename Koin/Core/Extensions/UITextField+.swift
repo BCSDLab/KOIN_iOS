@@ -47,4 +47,25 @@ extension UITextField {
         let regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{6,18}$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: text)
     }
+    
+    // 텍스트 필드 underline
+    func setUnderline(color: UIColor, thickness: CGFloat = 1.0, leftPadding: CGFloat = 0, rightPadding: CGFloat = 0) {
+
+        self.layer.sublayers?
+            .filter { $0.name == "underlineLayer" }
+            .forEach { $0.removeFromSuperlayer() }
+        
+        let underline = CALayer()
+        underline.name = "underlineLayer"
+        underline.backgroundColor = color.cgColor
+        underline.frame = CGRect(
+            x: leftPadding,
+            y: self.bounds.height - thickness,
+            width: self.bounds.width - leftPadding - rightPadding,
+            height: thickness
+        )
+        
+        self.layer.addSublayer(underline)
+        self.layer.masksToBounds = true
+    }
 }

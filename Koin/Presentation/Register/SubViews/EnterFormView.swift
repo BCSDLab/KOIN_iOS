@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Combine
+import DropDown
 
 final class EnterFormView: UIView {
     
@@ -107,12 +108,62 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
+    private let studentInfoGuideLabel = UILabel().then {
+        $0.text = "학부와 학번을 알려주세요."
+        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+        $0.textColor = .black
+    }
+    
+    private let deptButton = UIButton().then {
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        $0.layer.cornerRadius = 12
+    }
+    
+    private let deptDropDown = DropDown().then {
+        $0.backgroundColor = .systemBackground
+    }
+    
+    private let studentIdTextField = UITextField().then {
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "학번을 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    }
+    
+    private let studentNicknameTextField = UITextField().then {
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다.(선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    }
+    
+    private let checkStudentNicknameDuplicateButton = UIButton().then {
+        $0.backgroundColor = .appColor(.neutral300)
+        $0.setTitle("중복 확인", for: .normal)
+        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.layer.cornerRadius = 4
+        $0.isEnabled = false
+//        $0.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
+    }
+    
+    private let studentEmailTextField = UITextField().then {
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "koreatech 이메일(선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    }
+    
+    private let emailLabel = UILabel().then {
+        $0.text = "koreatech.ac.kr"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = .appColor(.neutral400)
+    }
+
     // MARK: Init
      init(viewModel: RegisterFormViewModel) {
          self.viewModel = viewModel
          super.init(frame: .zero)
          configureView()
          bind()
+         inputSubject.send(.getDeptList)
     }
     
     @available(*, unavailable)
@@ -145,6 +196,8 @@ final class EnterFormView: UIView {
                 break
             case .correctVerificationCode:
                 break
+            case let .showDeptDropDownList(deptList):
+                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.deptButton, dataSource: deptList)
             }
         }.store(in: &subscriptions)
     }
@@ -195,6 +248,10 @@ extension EnterFormView {
         
         if firstText == secondText {
             correctPasswordLabel.isHidden = false
+            
+            studentInfoGuideLabel.isHidden = false
+            deptButton.isHidden = false
+            deptDropDown.isHidden = false
         }
     }
     
@@ -213,12 +270,45 @@ extension EnterFormView {
         passwordTextField2.isSecureTextEntry.toggle()
         changeSecureButton2.setImage(passwordTextField2.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
     }
+    
+    @objc func buttonTapped(_ sender: UIButton) {
+        self.layoutIfNeeded() // 이 라인을 추가해 보세요
+        deptDropDown.show()
+    }
+    
+    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
+        dropDown.anchorView = button
+        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
+        dropDown.dataSource = dataSource
+        dropDown.direction = .bottom
+        dropDown.selectionAction = { (index: Int, item: String) in
+        
+            var buttonConfiguration = UIButton.Configuration.plain()
+            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
+            
+            var attributedTitle = AttributedString(item)
+            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
+            buttonConfiguration.attributedTitle = attributedTitle
+            button.configuration = buttonConfiguration
+
+            if let imageView = button.subviews.compactMap({ $0 as? UIImageView }).first {
+                imageView.image = UIImage.appImage(symbol: .chevronDown)
+                NSLayoutConstraint.activate([
+                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
+                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+                ])
+            }
+        }
+    }
 }
 
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctPasswordLabel].forEach {
+        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctPasswordLabel,     studentInfoGuideLabel, deptButton, deptDropDown,
+         studentIdTextField, studentNicknameTextField, checkStudentNicknameDuplicateButton, studentEmailTextField, emailLabel
+        ].forEach {
             self.addSubview($0)
         }
     }
@@ -309,10 +399,100 @@ extension EnterFormView {
             $0.height.equalTo(16)
         }
         
+        studentInfoGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(correctPasswordLabel.snp.bottom).offset(32)
+            $0.leading.equalTo(passwordLabel.snp.leading)
+            $0.height.equalTo(29)
+        }
+        
+        deptButton.snp.makeConstraints {
+            $0.top.equalTo(studentInfoGuideLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(passwordTextField1.snp.leading)
+            $0.trailing.equalTo(passwordTextField1.snp.trailing)
+            $0.height.equalTo(40)
+        }
+        
+        studentIdTextField.snp.makeConstraints {
+            $0.top.equalTo(deptButton.snp.bottom).offset(8)
+            $0.leading.equalTo(deptButton.snp.leading)
+            $0.trailing.equalTo(deptButton.snp.trailing)
+            $0.height.equalTo(40)
+        }
+        
+        studentNicknameTextField.snp.makeConstraints {
+            $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(deptButton.snp.leading)
+            $0.trailing.equalTo(checkStudentNicknameDuplicateButton.snp.leading).offset(-16)
+            $0.height.equalTo(40)
+        }
+        
+        checkStudentNicknameDuplicateButton.snp.makeConstraints {
+            $0.centerY.equalTo(studentNicknameTextField.snp.centerY)
+            $0.trailing.equalToSuperview().offset(-8)
+            $0.height.equalTo(32)
+            $0.width.lessThanOrEqualTo(86)
+        }
+        
+        studentEmailTextField.snp.makeConstraints {
+            $0.top.equalTo(studentNicknameTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(deptButton.snp.leading)
+            $0.trailing.equalTo(emailLabel.snp.leading).offset(-16)
+            $0.height.equalTo(40)
+        }
+        
+        emailLabel.snp.makeConstraints {
+            $0.centerY.equalTo(studentEmailTextField.snp.centerY)
+            $0.trailing.equalToSuperview().offset(-8)
+            $0.height.equalTo(22)
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setUpTextFieldUnderlines()
+    }
+    
+    private func setUpTextFieldUnderlines() {
+        [studentIdTextField, studentNicknameTextField, studentEmailTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
+    }
+    
+    private func setUpButtons() {
+        [deptButton].forEach { button in
+            var buttonConfiguration = UIButton.Configuration.plain()
+            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
+            
+            if button == deptButton {
+                var attributedTitle: AttributedString = "학부"
+                attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+                attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
+                buttonConfiguration.attributedTitle = attributedTitle
+            }
+            
+            button.configuration = buttonConfiguration
+            button.tintColor = UIColor.appColor(.neutral800)
+            button.contentHorizontalAlignment = .leading
+            button.layer.borderWidth = 1.0
+            button.layer.borderColor = UIColor.appColor(.neutral400).cgColor
+            button.backgroundColor = UIColor.appColor(.neutral0)
+            if let image = UIImage.appImage(symbol: .chevronDown) {
+                let imageView = UIImageView(image: image)
+                imageView.tintColor = UIColor.appColor(.neutral800)
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                button.addSubview(imageView)
+                NSLayoutConstraint.activate([
+                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
+                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+                ])
+            }
+        }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+//        setUpTextFieldUnderlines()
+        setUpButtons()
     }
 }

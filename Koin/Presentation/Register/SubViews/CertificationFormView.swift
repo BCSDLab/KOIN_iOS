@@ -216,6 +216,8 @@ final class CertificationFormView: UIView {
                 self?.onVerificationStatusChanged?(true)
             case .successCheckDuplicatedId:
                 break
+            case .showDeptDropDownList(_):
+                break
             }
         }.store(in: &subscriptions)
     }
