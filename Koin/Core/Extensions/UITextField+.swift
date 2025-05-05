@@ -34,6 +34,22 @@ extension UITextField {
         self.rightViewMode = .whileEditing
     }
     
+    // 텍스트 필드 토글 버튼
+    func setRightToggleButton(image: UIImage?, target: Any?, action: Selector) {
+        let button = UIButton(type: .custom)
+        button.setImage(image, for: .normal)
+        button.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        button.tintColor = .appColor(.neutral800)
+        button.addTarget(target, action: action, for: .touchUpInside)
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 20))
+        container.addSubview(button)
+        button.center = container.center
+        
+        self.rightView = container
+        self.rightViewMode = .always
+    }
+    
     // 아이디 정규식
     func isValidIdFormat() -> Bool {
         guard let text = self.text else { return false }

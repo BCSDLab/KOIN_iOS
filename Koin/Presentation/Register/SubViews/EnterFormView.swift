@@ -23,10 +23,6 @@ final class EnterFormView: UIView {
         $0.textColor = .black
         $0.text = "사용하실 아이디를 입력해 주세요."
     }
-    
-    private let seperateView1 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
-    }
 
     private let idTextField = UITextField().then {
         $0.configureDefaultTextField()
@@ -66,16 +62,8 @@ final class EnterFormView: UIView {
         $0.setCustomPlaceholder(text: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isSecureTextEntry = true
+        $0.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped1))
         $0.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
-    }
-    
-    private let changeSecureButton1 = UIButton().then { button in
-        button.setImage(UIImage.appImage(asset: .visibility), for: .normal)
-        button.addTarget(self, action: #selector(changeSecureButtonTapped1), for: .touchUpInside)
-    }
-    
-    private let seperateView2 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
     }
     
     private let passwordTextField2 = UITextField().then {
@@ -84,18 +72,8 @@ final class EnterFormView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isSecureTextEntry = true
         $0.isHidden = true
+        $0.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
         $0.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
-    }
-    
-    private let changeSecureButton2 = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .visibility), for: .normal)
-        $0.addTarget(self, action: #selector(changeSecureButtonTapped2), for: .touchUpInside)
-        $0.isHidden = true
-    }
-
-    private let seperateView3 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
-        $0.isHidden = true
     }
     
     private let correctPasswordLabel = UILabel().then {
@@ -114,9 +92,18 @@ final class EnterFormView: UIView {
         $0.textColor = .black
     }
     
-    private let deptButton = UIButton().then {
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+    private let departmentDropdownButton = UIButton().then {
+        $0.applyDropdownStyle(
+            title: "학부",
+            font: UIFont.appFont(.pretendardRegular, size: 14),
+            titleColor: .appColor(.neutral800),
+            borderColor: .appColor(.neutral400),
+            backgroundColor: .appColor(.neutral0),
+            icon: UIImage.appImage(symbol: .chevronDown)
+        )
         $0.layer.cornerRadius = 12
+
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
     private let deptDropDown = DropDown().then {
@@ -142,7 +129,6 @@ final class EnterFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
-//        $0.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
     }
     
     private let studentEmailTextField = UITextField().then {
@@ -158,17 +144,22 @@ final class EnterFormView: UIView {
     }
 
     // MARK: Init
-     init(viewModel: RegisterFormViewModel) {
-         self.viewModel = viewModel
-         super.init(frame: .zero)
-         configureView()
-         bind()
-         inputSubject.send(.getDeptList)
+    init(viewModel: RegisterFormViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
+        configureView()
+        bind()
+        inputSubject.send(.getDeptList)
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setUpTextFieldUnderline()
     }
     
     private func bind() {
@@ -197,7 +188,7 @@ final class EnterFormView: UIView {
             case .correctVerificationCode:
                 break
             case let .showDeptDropDownList(deptList):
-                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.deptButton, dataSource: deptList)
+                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             }
         }.store(in: &subscriptions)
     }
@@ -240,7 +231,7 @@ extension EnterFormView {
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         let isValid = textField.isValidPasswordFormat()
-        [passwordTextField2, changeSecureButton2, seperateView3].forEach { $0.isHidden = !isValid }
+        passwordTextField2.isHidden = !isValid
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
@@ -250,7 +241,7 @@ extension EnterFormView {
             correctPasswordLabel.isHidden = false
             
             studentInfoGuideLabel.isHidden = false
-            deptButton.isHidden = false
+            departmentDropdownButton.isHidden = false
             deptDropDown.isHidden = false
         }
     }
@@ -263,16 +254,30 @@ extension EnterFormView {
     
     @objc private func changeSecureButtonTapped1() {
         passwordTextField1.isSecureTextEntry.toggle()
-        changeSecureButton1.setImage(passwordTextField1.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
+        
+        if let container = passwordTextField1.rightView,
+           let button = container.subviews.first as? UIButton {
+            let image = passwordTextField1.isSecureTextEntry
+                ? UIImage.appImage(asset: .visibility)
+                : UIImage.appImage(asset: .visibilityNon)
+            button.setImage(image, for: .normal)
+        }
     }
     
     @objc private func changeSecureButtonTapped2() {
         passwordTextField2.isSecureTextEntry.toggle()
-        changeSecureButton2.setImage(passwordTextField2.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
+        
+        if let container = passwordTextField2.rightView,
+           let button = container.subviews.first as? UIButton {
+            let image = passwordTextField2.isSecureTextEntry
+                ? UIImage.appImage(asset: .visibility)
+                : UIImage.appImage(asset: .visibilityNon)
+            button.setImage(image, for: .normal)
+        }
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        self.layoutIfNeeded() // 이 라인을 추가해 보세요
+        self.layoutIfNeeded()
         deptDropDown.show()
     }
     
@@ -306,8 +311,12 @@ extension EnterFormView {
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, seperateView1, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, changeSecureButton1, seperateView2, passwordTextField2, changeSecureButton2, seperateView3, correctPasswordLabel,     studentInfoGuideLabel, deptButton, deptDropDown,
-         studentIdTextField, studentNicknameTextField, checkStudentNicknameDuplicateButton, studentEmailTextField, emailLabel
+        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel,
+         passwordLabel, passwordTextField1, passwordTextField2,
+         correctPasswordLabel, studentInfoGuideLabel,
+         departmentDropdownButton, deptDropDown, studentIdTextField,
+         studentNicknameTextField, checkStudentNicknameDuplicateButton,
+         studentEmailTextField, emailLabel
         ].forEach {
             self.addSubview($0)
         }
@@ -327,13 +336,6 @@ extension EnterFormView {
             $0.height.equalTo(40)
         }
         
-        seperateView1.snp.makeConstraints {
-            $0.top.equalTo(idTextField.snp.bottom)
-            $0.leading.equalTo(idLabel.snp.leading)
-            $0.trailing.equalTo(idTextField.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         checkIdDuplicateButton.snp.makeConstraints {
             $0.centerY.equalTo(idTextField.snp.centerY)
             $0.trailing.equalToSuperview().offset(-8)
@@ -342,13 +344,13 @@ extension EnterFormView {
         }
         
         checkIdResponseLabel.snp.makeConstraints {
-            $0.top.equalTo(seperateView1.snp.bottom).offset(8)
-            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
-            $0.height.equalTo(16)
+            $0.top.equalTo(idTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(idTextField.snp.leading).offset(4)
+            $0.height.equalTo(18)
         }
         
         passwordLabel.snp.makeConstraints {
-            $0.top.equalTo(seperateView1.snp.bottom).offset(32)
+            $0.top.equalTo(idTextField.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(8)
             $0.height.equalTo(29)
         }
@@ -360,43 +362,17 @@ extension EnterFormView {
             $0.height.equalTo(40)
         }
         
-        changeSecureButton1.snp.makeConstraints {
-            $0.centerY.equalTo(passwordTextField1.snp.centerY)
-            $0.trailing.equalToSuperview().offset(-8)
-            $0.width.height.equalTo(20)
-        }
-        
-        seperateView2.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField1.snp.bottom)
-            $0.leading.equalTo(passwordLabel.snp.leading)
-            $0.trailing.equalTo(changeSecureButton1.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         passwordTextField2.snp.makeConstraints {
-            $0.top.equalTo(seperateView2.snp.bottom).offset(12)
+            $0.top.equalTo(passwordTextField1.snp.bottom).offset(12)
             $0.leading.equalTo(passwordLabel.snp.leading).offset(4)
             $0.trailing.equalTo(checkIdDuplicateButton.snp.trailing)
             $0.height.equalTo(40)
         }
         
-        changeSecureButton2.snp.makeConstraints {
-            $0.centerY.equalTo(passwordTextField2.snp.centerY)
-            $0.trailing.equalToSuperview().offset(-8)
-            $0.width.height.equalTo(20)
-        }
-        
-        seperateView3.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField2.snp.bottom)
-            $0.leading.equalTo(passwordLabel.snp.leading)
-            $0.trailing.equalTo(changeSecureButton2.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         correctPasswordLabel.snp.makeConstraints {
-            $0.top.equalTo(seperateView3.snp.bottom)
-            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
-            $0.height.equalTo(16)
+            $0.top.equalTo(passwordTextField2.snp.bottom).offset(8)
+            $0.leading.equalTo(passwordTextField2.snp.leading).offset(4)
+            $0.height.equalTo(18)
         }
         
         studentInfoGuideLabel.snp.makeConstraints {
@@ -405,7 +381,7 @@ extension EnterFormView {
             $0.height.equalTo(29)
         }
         
-        deptButton.snp.makeConstraints {
+        departmentDropdownButton.snp.makeConstraints {
             $0.top.equalTo(studentInfoGuideLabel.snp.bottom).offset(8)
             $0.leading.equalTo(passwordTextField1.snp.leading)
             $0.trailing.equalTo(passwordTextField1.snp.trailing)
@@ -413,15 +389,15 @@ extension EnterFormView {
         }
         
         studentIdTextField.snp.makeConstraints {
-            $0.top.equalTo(deptButton.snp.bottom).offset(8)
-            $0.leading.equalTo(deptButton.snp.leading)
-            $0.trailing.equalTo(deptButton.snp.trailing)
+            $0.top.equalTo(departmentDropdownButton.snp.bottom).offset(8)
+            $0.leading.equalTo(departmentDropdownButton.snp.leading)
+            $0.trailing.equalTo(departmentDropdownButton.snp.trailing)
             $0.height.equalTo(40)
         }
         
         studentNicknameTextField.snp.makeConstraints {
             $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
-            $0.leading.equalTo(deptButton.snp.leading)
+            $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalTo(checkStudentNicknameDuplicateButton.snp.leading).offset(-16)
             $0.height.equalTo(40)
         }
@@ -435,7 +411,7 @@ extension EnterFormView {
         
         studentEmailTextField.snp.makeConstraints {
             $0.top.equalTo(studentNicknameTextField.snp.bottom).offset(8)
-            $0.leading.equalTo(deptButton.snp.leading)
+            $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalTo(emailLabel.snp.leading).offset(-16)
             $0.height.equalTo(40)
         }
@@ -447,52 +423,15 @@ extension EnterFormView {
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setUpTextFieldUnderlines()
-    }
-    
-    private func setUpTextFieldUnderlines() {
-        [studentIdTextField, studentNicknameTextField, studentEmailTextField].forEach {
+    private func setUpTextFieldUnderline() {
+        [idTextField, studentIdTextField, studentNicknameTextField,
+         passwordTextField1, passwordTextField2, studentEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
-        }
-    }
-    
-    private func setUpButtons() {
-        [deptButton].forEach { button in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            
-            if button == deptButton {
-                var attributedTitle: AttributedString = "학부"
-                attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-                attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-                buttonConfiguration.attributedTitle = attributedTitle
-            }
-            
-            button.configuration = buttonConfiguration
-            button.tintColor = UIColor.appColor(.neutral800)
-            button.contentHorizontalAlignment = .leading
-            button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.appColor(.neutral400).cgColor
-            button.backgroundColor = UIColor.appColor(.neutral0)
-            if let image = UIImage.appImage(symbol: .chevronDown) {
-                let imageView = UIImageView(image: image)
-                imageView.tintColor = UIColor.appColor(.neutral800)
-                imageView.translatesAutoresizingMaskIntoConstraints = false
-                button.addSubview(imageView)
-                NSLayoutConstraint.activate([
-                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
-                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-                ])
-            }
         }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-//        setUpTextFieldUnderlines()
-        setUpButtons()
     }
 }
