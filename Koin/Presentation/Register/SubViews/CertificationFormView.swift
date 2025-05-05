@@ -37,16 +37,10 @@ final class CertificationFormView: UIView {
     private let nameTextField = UITextField().then {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "2~5 자리로 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
-        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearNameTextField))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
     }
     
-    private let seperateView1 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
-    }
-    
-    private lazy var femaleButton = UIButton().then {
+    private let femaleButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .circlePrimary500)
         var text = AttributedString("여성")
@@ -55,10 +49,9 @@ final class CertificationFormView: UIView {
         configuration.imagePadding = 8
         configuration.baseForegroundColor = .black
         $0.configuration = configuration
-        $0.addTarget(self, action: #selector(femaleButtonTapped), for: .touchUpInside)
     }
     
-    private lazy var maleButton = UIButton().then {
+    private let maleButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .circlePrimary500)
         var text = AttributedString("남성")
@@ -67,7 +60,6 @@ final class CertificationFormView: UIView {
         configuration.imagePadding = 8
         configuration.baseForegroundColor = .black
         $0.configuration = configuration
-        $0.addTarget(self, action: #selector(maleButtonTapped), for: .touchUpInside)
     }
     
     private let phoneNumberLabel = UILabel().then {
@@ -80,14 +72,7 @@ final class CertificationFormView: UIView {
     private let phoneNumberTextField = UITextField().then {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "- 없이 번호를 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
-        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearPhoneNumberTextField))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
-        $0.isHidden = true
-    }
-    
-    private let seperateView2 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
         $0.isHidden = true
     }
     
@@ -98,7 +83,6 @@ final class CertificationFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
-        $0.addTarget(self, action: #selector(sendVerificationButtonTapped), for: .touchUpInside)
         $0.isHidden = true
     }
 
@@ -131,7 +115,6 @@ final class CertificationFormView: UIView {
         $0.setTitleColor(.appColor(.primary500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.isHidden = true
-        $0.addTarget(self, action: #selector(contactButtonButtonTapped), for: .touchUpInside)
     }
     
     private let verificationTextField = UITextField().then {
@@ -139,7 +122,6 @@ final class CertificationFormView: UIView {
         $0.setCustomPlaceholder(text: "인증번호를 입력해주세요.", textColor: UIColor.appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isHidden = true
-        $0.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let timerLabel = UILabel().then {
@@ -147,11 +129,6 @@ final class CertificationFormView: UIView {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .center
-        $0.isHidden = true
-    }
-    
-    private let seperateView3 = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
         $0.isHidden = true
     }
     
@@ -163,7 +140,6 @@ final class CertificationFormView: UIView {
         $0.layer.cornerRadius = 4
         $0.isHidden = true
         $0.isEnabled = false
-        $0.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
     }
     
     private let verificationHelpLabel = UILabel().then {
@@ -175,6 +151,7 @@ final class CertificationFormView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
+        setAddTarget()
         bind()
     }
     
@@ -183,10 +160,15 @@ final class CertificationFormView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setUpTextFieldUnderline()
+    }
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
+            guard self != nil else { return }
             switch output {
             case let .showHttpResult(message, labelColor):
                 if let verificationCode = self?.verificationTextField.text, !verificationCode.isEmpty {
@@ -204,8 +186,6 @@ final class CertificationFormView: UIView {
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
                 self?.verificationHelpLabel.isHidden = false
-//                self?.verificationHelpLabel.textColor = .appColor(.success700)
-//                self?.verificationHelpLabel.text = "인증번호가 일치합니다."
                 self?.verificationHelpLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
                     text: "인증번호가 일치합니다.",
@@ -222,6 +202,19 @@ final class CertificationFormView: UIView {
                 break
             }
         }.store(in: &subscriptions)
+    }
+    
+    private func setAddTarget() {
+        nameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearNameTextField))
+        nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
+        femaleButton.addTarget(self, action: #selector(femaleButtonTapped), for: .touchUpInside)
+        maleButton.addTarget(self, action: #selector(maleButtonTapped), for: .touchUpInside)
+        phoneNumberTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearPhoneNumberTextField))
+        phoneNumberTextField.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(_:)), for: .editingChanged)
+        sendVerificationButton.addTarget(self, action: #selector(sendVerificationButtonTapped), for: .touchUpInside)
+        contactButton.addTarget(self, action: #selector(contactButtonButtonTapped), for: .touchUpInside)
+        verificationTextField.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
+        verificationButton.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -291,8 +284,6 @@ extension CertificationFormView {
             font: UIFont.appFont(.pretendardRegular, size: 12),
             textColor: UIColor.appColor(color)
         )
-//        verificationHelpLabel.text = message
-//        verificationHelpLabel.textColor = UIColor.appColor(color)
     }
     
     private func updatePhoneNumberSectionVisibility() {
@@ -305,7 +296,6 @@ extension CertificationFormView {
         
         phoneNumberLabel.isHidden = !shouldShowPhoneFields
         phoneNumberTextField.isHidden = !shouldShowPhoneFields
-        seperateView2.isHidden = !shouldShowPhoneFields
         sendVerificationButton.isHidden = !shouldShowPhoneFields
     }
     
@@ -362,7 +352,6 @@ extension CertificationFormView {
 
         verificationTextField.isHidden = true
         timerLabel.isHidden = true
-        seperateView3.isHidden = true
         verificationButton.isHidden = true
         
         sendVerificationButton.setTitle("인증번호 재발송", for: .normal)
@@ -406,7 +395,6 @@ extension CertificationFormView {
     private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDTO) {
         verificationTextField.isHidden = false
         timerLabel.isHidden = false
-        seperateView3.isHidden = false
         verificationButton.isHidden = false
         warningImageView.isHidden = false
         warningImageView.image = UIImage.appImage(asset: .checkGreenCircle)
@@ -436,7 +424,7 @@ extension CertificationFormView {
             contactButton.isHidden = true
         }
         
-        verificationTextField.becomeFirstResponder()    // 인증번호 발송 성공 직후 키보드 올리기
+        verificationTextField.becomeFirstResponder()
     }
     
     private func makeVerificationMessage(remainingCount: Int, totalCount: Int) -> NSAttributedString {
@@ -481,7 +469,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, seperateView1, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, seperateView2, sendVerificationButton, warningImageView, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, seperateView3, verificationButton, verificationHelpLabel].forEach {
+        [nameAndGenderLabel, nameTextField, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, warningImageView, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -501,22 +489,15 @@ extension CertificationFormView {
             $0.height.equalTo(40)
         }
         
-        seperateView1.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom)
-            $0.leading.equalTo(nameTextField.snp.leading)
-            $0.trailing.equalTo(nameTextField.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         femaleButton.snp.makeConstraints {
-            $0.top.equalTo(seperateView1.snp.bottom).offset(16)
-            $0.leading.equalTo(seperateView1.snp.leading)
+            $0.top.equalTo(nameTextField.snp.bottom).offset(16)
+            $0.leading.equalTo(nameTextField.snp.leading)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
         }
         
         maleButton.snp.makeConstraints {
-            $0.top.equalTo(seperateView1.snp.bottom).offset(16)
+            $0.top.equalTo(nameTextField.snp.bottom).offset(16)
             $0.leading.equalTo(femaleButton.snp.trailing).offset(32)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
@@ -536,13 +517,6 @@ extension CertificationFormView {
             $0.height.equalTo(40)
         }
         
-        seperateView2.snp.makeConstraints {
-            $0.top.equalTo(phoneNumberTextField.snp.bottom)
-            $0.leading.equalTo(phoneNumberTextField.snp.leading)
-            $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         sendVerificationButton.snp.makeConstraints {
             $0.centerY.equalTo(phoneNumberTextField.snp.centerY)
             $0.leading.equalTo(phoneNumberTextField.snp.trailing).offset(16)
@@ -551,8 +525,8 @@ extension CertificationFormView {
         }
         
         warningImageView.snp.makeConstraints {
-            $0.top.equalTo(seperateView2.snp.bottom).offset(9.5)
-            $0.leading.equalTo(seperateView2.snp.leading).offset(4)
+            $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(9.5)
+            $0.leading.equalTo(phoneNumberTextField.snp.leading).offset(4)
             $0.width.height.equalTo(16)
         }
         
@@ -591,29 +565,28 @@ extension CertificationFormView {
         
         timerLabel.snp.makeConstraints {
             $0.centerY.equalTo(verificationTextField.snp.centerY)
-            $0.trailing.equalTo(seperateView3.snp.trailing).offset(4)
+            $0.trailing.equalTo(verificationTextField.snp.trailing).offset(4)
             $0.width.greaterThanOrEqualTo(39)
             $0.height.equalTo(22)
         }
         
-        seperateView3.snp.makeConstraints {
-            $0.top.equalTo(verificationTextField.snp.bottom)
-            $0.leading.equalTo(phoneNumberTextField.snp.leading)
-            $0.trailing.equalTo(phoneNumberTextField.snp.trailing)
-            $0.height.equalTo(1)
-        }
-        
         verificationButton.snp.makeConstraints {
             $0.centerY.equalTo(verificationTextField.snp.centerY)
-            $0.leading.equalTo(seperateView3.snp.trailing).offset(16)
+            $0.leading.equalTo(verificationTextField.snp.trailing).offset(16)
             $0.trailing.equalTo(sendVerificationButton.snp.trailing)
             $0.height.equalTo(32)
         }
         
         verificationHelpLabel.snp.makeConstraints {
-            $0.top.equalTo(seperateView3.snp.bottom).offset(8)
-            $0.leading.equalTo(seperateView3.snp.leading).offset(4)
+            $0.top.equalTo(verificationTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(verificationTextField.snp.leading).offset(4)
             $0.height.equalTo(19)
+        }
+    }
+    
+    private func setUpTextFieldUnderline() {
+        [nameTextField, phoneNumberTextField, verificationTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }
     
