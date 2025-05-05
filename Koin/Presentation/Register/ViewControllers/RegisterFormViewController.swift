@@ -42,9 +42,6 @@ final class RegisterFormViewController: UIViewController {
     }
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView().then { _ in
-    }
-    
     private let stepTextLabel = UILabel()
     
     private let stepLabel = UILabel()
@@ -185,14 +182,11 @@ extension RegisterFormViewController {
 
 extension RegisterFormViewController {
     private func setUpLayOuts() {
-        [stepTextLabel, stepLabel, progressView, scrollView, nextButton].forEach {
+        [stepTextLabel, stepLabel, progressView, nextButton, agreementView, certificationView, selectTypeView, enterFormView].forEach {
             view.addSubview($0)
         }
-        
-        [agreementView, certificationView, selectTypeView, enterFormView].forEach {
-            scrollView.addSubview($0)
-        }
     }
+
     
     private func setUpConstraints() {
         stepTextLabel.snp.makeConstraints {
@@ -211,12 +205,6 @@ extension RegisterFormViewController {
             $0.height.equalTo(3)
         }
         
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(progressView.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(24)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
-        }
-        
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
             $0.height.equalTo(50)
@@ -224,27 +212,21 @@ extension RegisterFormViewController {
         }
         
         agreementView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(1000)
-            $0.width.equalTo(progressView)
+            $0.top.equalTo(progressView.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
         }
-        
+
         certificationView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(1000)
-            $0.width.equalTo(progressView)
+            $0.edges.equalTo(agreementView)
         }
-        
+
         selectTypeView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(1000)
-            $0.width.equalTo(progressView)
+            $0.edges.equalTo(agreementView)
         }
-        
+
         enterFormView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(1000)
-            $0.width.equalTo(progressView)
+            $0.edges.equalTo(agreementView)
         }
     }
     

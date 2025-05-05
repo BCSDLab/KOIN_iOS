@@ -229,7 +229,6 @@ final class EnterFormView: UIView {
         studentEmailTextField.addTarget(self, action: #selector(studentEmailTextFieldDidChange(_:)), for: .editingChanged)
     }
     
-    // FIXME: - 학생 완료하면 외부인 해야함
     func configure(for userType: SelectTypeFormView.UserType?) {
         self.userType = userType
     }
