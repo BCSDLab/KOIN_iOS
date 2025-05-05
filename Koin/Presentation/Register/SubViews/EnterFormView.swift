@@ -16,6 +16,7 @@ final class EnterFormView: UIView {
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    private var userType: SelectTypeFormView.UserType?
     
     // MARK: - UI Components
     private let idLabel = UILabel().then {
@@ -84,6 +85,7 @@ final class EnterFormView: UIView {
         $0.text = "학부와 학번을 알려주세요."
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = .black
+        $0.isHidden = true
     }
     
     private let departmentDropdownButton = UIButton().then {
@@ -96,16 +98,19 @@ final class EnterFormView: UIView {
             icon: UIImage.appImage(symbol: .chevronDown)
         )
         $0.layer.cornerRadius = 12
+        $0.isHidden = true
     }
     
     private let deptDropDown = DropDown().then {
         $0.backgroundColor = .systemBackground
+        $0.isHidden = true
     }
     
     private let studentIdTextField = UITextField().then {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "학번을 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
     }
     
     private let studentIdWarningLabel = UILabel().then {
@@ -117,6 +122,7 @@ final class EnterFormView: UIView {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
     }
     
     private let checkStudentNicknameDuplicateButton = UIButton().then {
@@ -126,6 +132,7 @@ final class EnterFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
+        $0.isHidden = true
     }
     
     private let studentNicknameWarningLabel = UILabel().then {
@@ -137,12 +144,14 @@ final class EnterFormView: UIView {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "koreatech 이메일(선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
     }
     
     private let emailLabel = UILabel().then {
         $0.text = "koreatech.ac.kr"
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral400)
+        $0.isHidden = true
     }
 
     // MARK: Init
@@ -217,19 +226,12 @@ final class EnterFormView: UIView {
         studentNicknameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentNicknameTextField))
         studentNicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(_:)), for: .editingChanged)
         checkStudentNicknameDuplicateButton.addTarget(self, action: #selector(checkStudentNicknameDuplicateButtonTapped), for: .touchUpInside)
-
+        studentEmailTextField.addTarget(self, action: #selector(studentEmailTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     // FIXME: - 학생 완료하면 외부인 해야함
     func configure(for userType: SelectTypeFormView.UserType?) {
-        switch userType {
-        case .student:
-            idLabel.textColor = .black
-        case .general:
-            idLabel.textColor = .blue
-        case .none:
-            break
-        }
+        self.userType = userType
     }
 }
 
@@ -256,20 +258,24 @@ extension EnterFormView {
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
+        guard textField.text != nil else { return }
         let isValid = textField.isValidPasswordFormat()
         passwordTextField2.isHidden = !isValid
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
         guard let firstText = passwordTextField1.text, let secondText = passwordTextField2.text else { return }
-        
+
         if firstText == secondText {
             correctPasswordLabel.isHidden = false
-            
-            studentInfoGuideLabel.isHidden = false
-            departmentDropdownButton.isHidden = false
-            deptDropDown.isHidden = false
+
+            if userType == .student {
+                [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+                 studentIdTextField, studentNicknameTextField, checkStudentNicknameDuplicateButton,
+                 studentEmailTextField, emailLabel].forEach {
+                    $0.isHidden = false
+                }
+            }
         }
     }
     
@@ -356,6 +362,17 @@ extension EnterFormView {
         inputSubject.send(.checkDuplicatedNickname(nicknameText))
         studentNicknameWarningLabel.isHidden = false
     }
+    
+    @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+
+        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._-")
+        
+        let filteredText = text.filter { String($0).rangeOfCharacter(from: allowedCharacterSet) != nil }
+
+        let trimmedText = String(filteredText.prefix(30))
+        textField.text = trimmedText
+    }
 }
 
 // MARK: UI Settings
@@ -365,8 +382,7 @@ extension EnterFormView {
          passwordLabel, passwordTextField1, passwordTextField2,
          correctPasswordLabel, studentInfoGuideLabel,
          departmentDropdownButton, deptDropDown, studentIdTextField,
-         studentIdWarningLabel,
-         studentNicknameTextField, checkStudentNicknameDuplicateButton,
+         studentIdWarningLabel, studentNicknameTextField, checkStudentNicknameDuplicateButton,
          studentNicknameWarningLabel,
          studentEmailTextField, emailLabel
         ].forEach {
@@ -476,7 +492,7 @@ extension EnterFormView {
         studentEmailTextField.snp.makeConstraints {
             $0.top.equalTo(studentNicknameTextField.snp.bottom).offset(8)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
-            $0.trailing.equalTo(emailLabel.snp.leading).offset(-16)
+            $0.trailing.equalToSuperview().offset(-126)
             $0.height.equalTo(40)
         }
         
