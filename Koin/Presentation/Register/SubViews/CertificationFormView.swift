@@ -15,6 +15,7 @@ final class CertificationFormView: UIView {
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    
     private var timer: Timer?
     private var remainingSeconds: Int = 180
     var onVerificationStatusChanged: ((Bool) -> Void)?
@@ -41,25 +42,11 @@ final class CertificationFormView: UIView {
     }
     
     private let femaleButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .circlePrimary500)
-        var text = AttributedString("여성")
-        text.font = UIFont.appFont(.pretendardRegular, size: 16)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 8
-        configuration.baseForegroundColor = .black
-        $0.configuration = configuration
+        $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500), foregroundColor: .black)
     }
     
     private let maleButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .circlePrimary500)
-        var text = AttributedString("남성")
-        text.font = UIFont.appFont(.pretendardRegular, size: 16)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 8
-        configuration.baseForegroundColor = .black
-        $0.configuration = configuration
+        $0.applyRadioStyle(title: "남성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500), foregroundColor: .black)
     }
     
     private let phoneNumberLabel = UILabel().then {
@@ -77,22 +64,13 @@ final class CertificationFormView: UIView {
     }
     
     private let sendVerificationButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral300)
-        $0.setTitle("인증번호 발송", for: .normal)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
-        $0.layer.cornerRadius = 4
-        $0.isEnabled = false
-        $0.isHidden = true
-    }
-
-    private let warningImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .warningOrange)
+        $0.applyVerificationButtonStyle(title: "인증번호 발송", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
+        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         $0.isHidden = true
     }
 
     private let phoneNumberReponseLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
         $0.isHidden = true
     }
     
@@ -133,13 +111,9 @@ final class CertificationFormView: UIView {
     }
     
     private let verificationButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral300)
-        $0.setTitle("인증번호 확인", for: .normal)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
-        $0.layer.cornerRadius = 4
+        $0.applyVerificationButtonStyle(title: "인증번호 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
+        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         $0.isHidden = true
-        $0.isEnabled = false
     }
     
     private let verificationHelpLabel = UILabel().then {
@@ -167,8 +141,10 @@ final class CertificationFormView: UIView {
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard self != nil else { return }
+            
             switch output {
             case let .showHttpResult(message, labelColor):
                 if let verificationCode = self?.verificationTextField.text, !verificationCode.isEmpty {
@@ -176,14 +152,14 @@ final class CertificationFormView: UIView {
                 } else {
                     self?.showHttpResult(message, labelColor)
                 }
+                
             case .changeSendVerificationButtonStatus:
-                self?.warningImageView.isHidden = true
                 self?.phoneNumberReponseLabel.isHidden = true
-                self?.sendVerificationButton.isEnabled = true
-                self?.sendVerificationButton.backgroundColor = .appColor(.primary500)
-                self?.sendVerificationButton.setTitleColor(.white, for: .normal)
+                self?.sendVerificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+                
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
+                
             case .correctVerificationCode:
                 self?.verificationHelpLabel.isHidden = false
                 self?.verificationHelpLabel.setImageText(
@@ -194,11 +170,8 @@ final class CertificationFormView: UIView {
                 )
                 self?.contactButton.isHidden = true
                 self?.onVerificationStatusChanged?(true)
-            case .successCheckDuplicatedId:
-                break
-            case .showDeptDropDownList(_):
-                break
-            case .changeCheckButtonStatus:
+                
+            default:
                 break
             }
         }.store(in: &subscriptions)
@@ -220,19 +193,7 @@ final class CertificationFormView: UIView {
 
 extension CertificationFormView {
     @objc private func clearNameTextField() {
-        nameTextField.text = nil
-    }
-    
-    @objc private func clearPhoneNumberTextField() {
-        phoneNumberTextField.text = nil
-        sendVerificationButton.isEnabled = false
-        sendVerificationButton.backgroundColor = .appColor(.neutral300)
-        sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
-        goToLoginButton.isHidden = true
-        phoneNotFoundLabel.isHidden = true
-        contactButton.isHidden = true
-        warningImageView.isHidden = true
-        phoneNumberReponseLabel.isHidden = true
+        nameTextField.text = ""
     }
     
     @objc private func nameTextFieldDidChange(_ textField: UITextField) {
@@ -241,6 +202,25 @@ extension CertificationFormView {
             textField.text = String(text.prefix(5))
         }
         updatePhoneNumberSectionVisibility()
+    }
+    
+    @objc private func femaleButtonTapped() {
+        updateGenderSelection(isFemale: true)
+        updatePhoneNumberSectionVisibility()
+    }
+
+    @objc private func maleButtonTapped() {
+        updateGenderSelection(isFemale: false)
+        updatePhoneNumberSectionVisibility()
+    }
+    
+    @objc private func clearPhoneNumberTextField() {
+        phoneNumberTextField.text = ""
+        sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+        goToLoginButton.isHidden = true
+        phoneNotFoundLabel.isHidden = true
+        contactButton.isHidden = true
+        phoneNumberReponseLabel.isHidden = true
     }
     
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
@@ -255,11 +235,8 @@ extension CertificationFormView {
         }
         
         if textField.text?.isEmpty ?? true {
-            warningImageView.isHidden = true
             phoneNumberReponseLabel.isHidden = true
-            sendVerificationButton.isEnabled = false
-            sendVerificationButton.backgroundColor = .appColor(.neutral300)
-            sendVerificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+            sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         }
         
         inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
@@ -289,8 +266,7 @@ extension CertificationFormView {
     private func updatePhoneNumberSectionVisibility() {
         let nameCount = nameTextField.text?.count ?? 0
         let isNameValid = (2...5).contains(nameCount)
-        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) ||
-                                (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
+        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) || (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
         
         let shouldShowPhoneFields = isNameValid && isGenderSelected
         
@@ -301,28 +277,13 @@ extension CertificationFormView {
     
     private func changeVerificationButtonStatus(_ text: String) {
         if text.count == 6 {
-            verificationButton.isEnabled = true
-            verificationButton.backgroundColor = .appColor(.primary500)
-            verificationButton.setTitleColor(.white, for: .normal)
+            verificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         } else {
-            verificationButton.isEnabled = false
-            verificationButton.backgroundColor = .appColor(.neutral300)
-            verificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
+            verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         }
     }
     
-    @objc private func femaleButtonTapped() {
-        updateGenderSelection(isFemale: true)
-        updatePhoneNumberSectionVisibility()
-    }
-
-    @objc private func maleButtonTapped() {
-        updateGenderSelection(isFemale: false)
-        updatePhoneNumberSectionVisibility()
-    }
-    
     private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
-        warningImageView.isHidden = false
         phoneNumberReponseLabel.isHidden = false
         phoneNumberReponseLabel.text = message
         phoneNumberReponseLabel.textColor = UIColor.appColor(color)
@@ -396,8 +357,6 @@ extension CertificationFormView {
         verificationTextField.isHidden = false
         timerLabel.isHidden = false
         verificationButton.isHidden = false
-        warningImageView.isHidden = false
-        warningImageView.image = UIImage.appImage(asset: .checkGreenCircle)
         
         phoneNumberReponseLabel.isHidden = false
         phoneNumberReponseLabel.attributedText = makeVerificationMessage(
@@ -406,6 +365,7 @@ extension CertificationFormView {
         )
         
         verificationTextField.text = ""
+        
         verificationButton.isEnabled = false
         verificationButton.backgroundColor = .appColor(.neutral300)
         verificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
@@ -469,7 +429,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, warningImageView, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
+        [nameAndGenderLabel, nameTextField, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -524,16 +484,10 @@ extension CertificationFormView {
             $0.height.equalTo(32)
         }
         
-        warningImageView.snp.makeConstraints {
-            $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(9.5)
-            $0.leading.equalTo(phoneNumberTextField.snp.leading).offset(4)
-            $0.width.height.equalTo(16)
-        }
-        
         phoneNumberReponseLabel.snp.makeConstraints {
-            $0.centerY.equalTo(warningImageView.snp.centerY)
-            $0.leading.equalTo(warningImageView.snp.trailing).offset(4)
-            $0.height.greaterThanOrEqualTo(19)
+            $0.top.equalTo(phoneNumberTextField.snp.bottom)
+            $0.leading.equalTo(phoneNumberTextField.snp.leading).offset(4)
+            $0.height.equalTo(20)
         }
         
         goToLoginButton.snp.makeConstraints {
@@ -545,7 +499,7 @@ extension CertificationFormView {
         
         phoneNotFoundLabel.snp.makeConstraints {
             $0.top.equalTo(phoneNumberReponseLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(warningImageView.snp.leading)
+            $0.leading.equalTo(phoneNumberReponseLabel.snp.leading)
             $0.height.equalTo(19)
         }
         

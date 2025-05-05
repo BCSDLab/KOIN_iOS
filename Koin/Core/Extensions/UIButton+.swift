@@ -47,4 +47,21 @@ extension UIButton {
             ])
         }
     }
+    
+    func applyRadioStyle(title: String, font: UIFont, image: UIImage?, foregroundColor: UIColor) {
+        var config = UIButton.Configuration.plain()
+        var attributedTitle = AttributedString(title)
+        attributedTitle.font = font
+        config.attributedTitle = attributedTitle
+        config.image = image ?? UIImage()
+        config.imagePadding = 8
+        config.baseForegroundColor = foregroundColor
+        self.configuration = config
+    }
+    
+    func applyVerificationButtonStyle(title: String, font: UIFont, cornerRadius: CGFloat) {
+        self.setTitle(title, for: .normal)
+        self.titleLabel?.font = font
+        self.layer.cornerRadius = cornerRadius
+    }
 }
