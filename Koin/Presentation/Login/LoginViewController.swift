@@ -171,7 +171,8 @@ extension LoginViewController {
                     userRepository: userRepository
                 ), fetchDeptListUseCase: DefaultFetchDeptListUseCase(
                     timetableRepository: timetableRepositoy
-                )
+                ), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase (
+                    userRepository: userRepository)
             )
         )
         registerViewController.title = "회원가입"

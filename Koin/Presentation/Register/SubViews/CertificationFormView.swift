@@ -218,6 +218,8 @@ final class CertificationFormView: UIView {
                 break
             case .showDeptDropDownList(_):
                 break
+            case .changeCheckButtonStatus:
+                break
             }
         }.store(in: &subscriptions)
     }

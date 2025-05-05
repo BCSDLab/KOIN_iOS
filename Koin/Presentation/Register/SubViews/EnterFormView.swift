@@ -106,8 +106,6 @@ final class EnterFormView: UIView {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "학번을 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
-        $0.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let studentIdWarningLabel = UILabel().then {
@@ -117,7 +115,7 @@ final class EnterFormView: UIView {
     
     private let studentNicknameTextField = UITextField().then {
         $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다.(선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
+        $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
@@ -128,6 +126,11 @@ final class EnterFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
+    }
+    
+    private let studentNicknameWarningLabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "중복된 닉네임입니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.isHidden = true
     }
     
     private let studentEmailTextField = UITextField().then {
@@ -189,6 +192,14 @@ final class EnterFormView: UIView {
                 break
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
+            case .changeCheckButtonStatus:
+                self?.checkStudentNicknameDuplicateButton.updateState(
+                    isEnabled: false,
+                    enabledColor: .appColor(.primary500),
+                    disabledColor: .appColor(.neutral300)
+                )
+                self?.studentNicknameWarningLabel.setImageText(image: .appImage(asset: .checkGreenCircle), text: "사용 가능한 닉네임입니다.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub700))
+
             }
         }.store(in: &subscriptions)
     }
@@ -201,6 +212,12 @@ final class EnterFormView: UIView {
         passwordTextField2.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
         passwordTextField2.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
         departmentDropdownButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        studentIdTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
+        studentIdTextField.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
+        studentNicknameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentNicknameTextField))
+        studentNicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(_:)), for: .editingChanged)
+        checkStudentNicknameDuplicateButton.addTarget(self, action: #selector(checkStudentNicknameDuplicateButtonTapped), for: .touchUpInside)
+
     }
     
     // FIXME: - 학생 완료하면 외부인 해야함
@@ -298,21 +315,47 @@ extension EnterFormView {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let studentIdText = text.filter { $0.isNumber }
-        let trimmedStudentIdText = String(studentIdText.prefix(10))
+        let numericText = text.filter { $0.isNumber }
+        let trimmedText = String(numericText.prefix(10))
+        
+        textField.text = trimmedText
 
-        let isLengthValid = trimmedStudentIdText.count >= 8 && trimmedStudentIdText.count <= 10
-        let yearPart = String(trimmedStudentIdText.prefix(4))
+        let yearPart = String(trimmedText.prefix(4))
         let isYearValid: Bool = {
             guard let year = Int(yearPart) else { return false }
             let currentYear = Calendar.current.component(.year, from: Date())
             return (1991...currentYear).contains(year)
         }()
 
+        let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
+
         studentIdWarningLabel.isHidden = isLengthValid && isYearValid
     }
 
+    
+    @objc private func clearStudentNicknameTextField() {
+        studentNicknameTextField.text = nil
+    }
+    
+    @objc private func nicknameTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
 
+        let trimmedText = String(text.prefix(10))
+        textField.text = trimmedText
+
+        let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
+        checkStudentNicknameDuplicateButton.updateState(
+            isEnabled: isValid,
+            enabledColor: .appColor(.primary500),
+            disabledColor: .appColor(.neutral300)
+        )
+    }
+    
+    @objc private func checkStudentNicknameDuplicateButtonTapped() {
+        guard let nicknameText = studentNicknameTextField.text else { return }
+        inputSubject.send(.checkDuplicatedNickname(nicknameText))
+        studentNicknameWarningLabel.isHidden = false
+    }
 }
 
 // MARK: UI Settings
@@ -324,6 +367,7 @@ extension EnterFormView {
          departmentDropdownButton, deptDropDown, studentIdTextField,
          studentIdWarningLabel,
          studentNicknameTextField, checkStudentNicknameDuplicateButton,
+         studentNicknameWarningLabel,
          studentEmailTextField, emailLabel
         ].forEach {
             self.addSubview($0)
@@ -354,7 +398,7 @@ extension EnterFormView {
         checkIdResponseLabel.snp.makeConstraints {
             $0.top.equalTo(idTextField.snp.bottom).offset(8)
             $0.leading.equalTo(idTextField.snp.leading).offset(4)
-            $0.height.equalTo(18)
+            $0.height.equalTo(20)
         }
         
         passwordLabel.snp.makeConstraints {
@@ -378,9 +422,9 @@ extension EnterFormView {
         }
         
         correctPasswordLabel.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField2.snp.bottom).offset(8)
+            $0.top.equalTo(passwordTextField2.snp.bottom)
             $0.leading.equalTo(passwordTextField2.snp.leading).offset(4)
-            $0.height.equalTo(18)
+            $0.height.equalTo(20)
         }
         
         studentInfoGuideLabel.snp.makeConstraints {
@@ -421,6 +465,12 @@ extension EnterFormView {
             $0.trailing.equalToSuperview().offset(-8)
             $0.height.equalTo(32)
             $0.width.lessThanOrEqualTo(86)
+        }
+        
+        studentNicknameWarningLabel.snp.makeConstraints {
+            $0.top.equalTo(studentNicknameTextField.snp.bottom)
+            $0.leading.equalTo(studentNicknameTextField.snp.leading)
+            $0.height.equalTo(20)
         }
         
         studentEmailTextField.snp.makeConstraints {

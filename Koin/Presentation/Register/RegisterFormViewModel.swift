@@ -15,6 +15,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkVerificationCode(String, String)
         case checkDuplicatedId(String)
         case getDeptList
+        case checkDuplicatedNickname(String)
     }
     
     enum Output {
@@ -24,6 +25,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case correctVerificationCode
         case successCheckDuplicatedId
         case showDeptDropDownList([String])
+        case changeCheckButtonStatus
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -33,13 +35,15 @@ final class RegisterFormViewModel: ViewModelProtocol {
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
     private let checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase
     private let fetchDeptListUseCase: FetchDeptListUseCase
+    private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
         self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
         self.checkDuplicatedIdUseCase = checkDuplicatedIdUseCase
         self.fetchDeptListUseCase = fetchDeptListUseCase
+        self.checkDuplicatedNicknameUseCase = checkDuplicatedNicknameUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -55,6 +59,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.checkDuplicatedId(loginId: loginId)
             case .getDeptList:
                 self?.fetchDeptList()
+            case let .checkDuplicatedNickname(nickname):
+                self?.checkDuplicatedNickname(nickname: nickname)
             }
         }.store(in: &subscriptions)
         
@@ -125,6 +131,17 @@ extension RegisterFormViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showDeptDropDownList(response))
+        }.store(in: &subscriptions)
+    }
+    
+    private func checkDuplicatedNickname(nickname: String) {
+        checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showHttpResult(error.message, .danger700))
+            }
+        } receiveValue: { [weak self] _ in
+//            self?.outputSubject.send(.showHttpResult("사용 가능한 닉네임입니다", .neutral800))
+            self?.outputSubject.send(.changeCheckButtonStatus)
         }.store(in: &subscriptions)
     }
 }
