@@ -42,12 +42,16 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO], _ keywordNoticePhrase: ((String, String), Int)?) {
         self.popularNoticeList = popularNoticeList
         self.keywordNoticePhrase = keywordNoticePhrase
-        bannerCount = keywordNoticePhrase == nil ? popularNoticeList.count : popularNoticeList.count + 1
+        bannerCount = popularNoticeList.count
         startAutoScroll()
         reloadData()
     }
 
     func pageControlChanged(_ index: Int) {
+        guard index >= 0 && index < popularNoticeList.count else {
+            return
+        }
+
         isPagingEnabled = false
         let finalIndex = IndexPath(row: index, section: 0)
         currentIdx = index
