@@ -8,6 +8,10 @@
 import Foundation
 
 final class MockAnalyticsService: LogAnalyticsService {
+    func logEvent(name: String, label: String, value: String, category: String) {
+        debugPrint("\(label) \(category) \(value)")
+    }
+    
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         debugPrint("\(label) \(category) \(value)")
     }

@@ -21,145 +21,110 @@ final class HomeViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let wrapperView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private let wrapperView = UIView().then { _ in
+    }
     
-    private let grayColorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral50)
-        return view
-    }()
+    private let grayColorView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral50)
+    }
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.contentInsetAdjustmentBehavior = .never
-        return scrollView
-    }()
+    private let scrollView = UIScrollView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+    }
     
-    private let logoView: LogoView = {
-        let logoView = LogoView(frame: .zero)
-        return logoView
-    }()
+    private let logoView = LogoView(frame: .zero).then { _ in
+    }
     
-    private let tabBarView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
+    private let tabBarView = UIView().then {
+        $0.backgroundColor = .clear
+    }
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.appImage(asset: .logo)
-        return imageView
-    }()
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .logo)
+    }
     
-    private let noticeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "게시판"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let noticeLabel = UILabel().then {
+        $0.text = "게시판"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
     private let busView = BusView()
     
-    private let noticeListCollectionView: NoticeListCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width - 48
-        flowLayout.itemSize = CGSize(width: width, height: 175)
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 0
-        let collectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.decelerationRate = .fast
-        return collectionView
-    }()
+    private let noticeListCollectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout:  UICollectionViewFlowLayout().then{
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 175)
+        $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 0
+    }).then {
+        $0.decelerationRate = .fast
+    }
     
-    private let noticePageControl: UIPageControl = {
-        let pageControl = UIPageControl(frame: .zero)
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = 4
-        pageControl.currentPageIndicatorTintColor = .appColor(.primary400)
-        pageControl.pageIndicatorTintColor = .appColor(.neutral300)
-        return pageControl
-    }()
+    private let noticePageControl = UIPageControl(frame: .zero).then {
+        $0.currentPage = 0
+        $0.numberOfPages = 4
+        $0.currentPageIndicatorTintColor = .appColor(.primary400)
+        $0.pageIndicatorTintColor = .appColor(.neutral300)
+    }
     
     private let goNoticePageButton = UIButton()
     
     private let goDiningPageButton = UIButton()
     
-    private let busLabel: UILabel = {
-        let label = UILabel()
-        label.text = "버스"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let busLabel = UILabel().then {
+        $0.text = "버스"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let busQrCodeButton: UIButton = {
+    private let busQrCodeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .qrCode)
         configuration.attributedTitle = AttributedString("셔틀 탑승권", attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral600)]))
         configuration.imagePadding = 3
         configuration.imagePlacement = .leading
-        let button = UIButton()
-        button.configuration = configuration
-        return button
-    }()
+        $0.configuration = configuration
+    }
     
-    private let shopLabel: UILabel = {
-        let label = UILabel()
-        label.text = "주변상점"
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let shopLabel = UILabel().then {
+        $0.text = "주변상점"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let categoryCollectionView: CategoryCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then { _ in
+    }
     
-    private let menuLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.primary500)
-        label.font = UIFont.appFont(.pretendardBold, size: 15)
-        return label
-    }()
+    private let menuLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 15)
+    }
     
-    private let diningTooltipImageView: CancelableImageView = {
-        let imageView = CancelableImageView(frame: .zero)
-        imageView.isHidden = true
-        return imageView
-    }()
+    private let diningTooltipImageView = CancelableImageView(frame: .zero).then {
+        $0.isHidden = true
+    }
     
-    private let cornerSegmentControl: UISegmentedControl = {
-        let segment = UISegmentedControl()
-        segment.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        segment.insertSegment(withTitle: "A코너", at: 0, animated: true)
-        segment.insertSegment(withTitle: "B코너", at: 1, animated: true)
-        segment.insertSegment(withTitle: "C코너", at: 2, animated: true)
-        segment.insertSegment(withTitle: "능수관", at: 3, animated: true)
-        segment.selectedSegmentIndex = 0
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .normal)
-        segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .selected)
-        return segment
-    }()
+    private let cornerSegmentControl = UISegmentedControl().then {
+        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        $0.insertSegment(withTitle: "A코너", at: 0, animated: true)
+        $0.insertSegment(withTitle: "B코너", at: 1, animated: true)
+        $0.insertSegment(withTitle: "C코너", at: 2, animated: true)
+        $0.insertSegment(withTitle: "능수관", at: 3, animated: true)
+        $0.selectedSegmentIndex = 0
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardMedium, size: 14)], for: .selected)
+    }
     
-    private lazy var underlineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.primary500)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var underlineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
     
-    private let menuBackgroundView: MenuBackgroundView = {
-        let menuBackgroundView = MenuBackgroundView(frame: .zero)
-        return menuBackgroundView
-    }()
+    private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
+    }
+    
+    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
+    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
     
     // MARK: - Initialization
     
@@ -180,6 +145,7 @@ final class HomeViewController: UIViewController {
         bind()
         print(KeychainWorker.shared.read(key: .access))
         print(KeychainWorker.shared.read(key: .fcm))
+        print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
@@ -188,10 +154,7 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-   //     print(KeychainWorker.shared.read(key: .access) ?? "")
-        
-     //   print("위가 엑세스 아래가 리프레시")
-     //   print("위가 엑세스 아래가 리프레시")
+        checkAndShowBanner()
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self
@@ -247,6 +210,8 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .updateBanner(let banner, let abTestResult):
+                self?.showBanner(banner: banner, abTestResult: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -312,10 +277,127 @@ final class HomeViewController: UIViewController {
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
+        
+        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    private func handleBannerTap(_ banner: Banner) {
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
+        if let version = banner.version {
+            // 현재 앱 버전
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            
+            let isOld = isVersion(currentVersion, lowerThan: version)
+            
+            if isOld {
+                showToast(message: "해당 기능을 사용하기 위해서는 업데이트가 꼭 필요해요")
+                  
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                      if let appStoreURL = URL(string: "https://apps.apple.com/kr/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622") {
+                          UIApplication.shared.open(appStoreURL)
+                      }
+                  }
+                  
+                  return
+            }
+        }
+        
+        if let redirect = banner.redirectLink {
+            // redirect 로직
+            if redirect == "shop" {
+                dismiss(animated: true)
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                
+                let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+                let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+                let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+                let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+                let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+                
+                let viewModel = ShopViewModel(
+                    fetchShopListUseCase: fetchShopListUseCase,
+                    fetchEventListUseCase: fetchEventListUseCase,
+                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                    fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                    fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                    selectedId: 0
+                )
+                let shopViewController = ShopViewControllerA(viewModel: viewModel)
+                navigationController?.pushViewController(shopViewController, animated: true)
+            } else if redirect == "dining" {
+                dismiss(animated: true)
+                navigatetoDining()
+            } else if redirect == "keyword" {
+                dismiss(animated: true)
+                let noticeListService = DefaultNoticeService()
+                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+                let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+                let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+    }
+    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> Bool {
+        let currentComponents = currentVersion.split(separator: ".").compactMap { Int($0) }
+        let requiredComponents = requiredVersion.split(separator: ".").compactMap { Int($0) }
+
+        for i in 0..<max(currentComponents.count, requiredComponents.count) {
+            let current = i < currentComponents.count ? currentComponents[i] : 0
+            let required = i < requiredComponents.count ? requiredComponents[i] : 0
+            if current < required { return true }
+            if current > required { return false }
+        }
+
+        return false
+    }
+    private func showBanner(banner: BannerDTO, abTestResult: AssignAbTestResponse) {
+        if banner.count == 0 { return }
+        let viewController: UIViewController
+        if abTestResult.variableName == .bottomBanner {
+            bannerViewControllerA.setBanners(banners: banner.banners)
+            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        } else {
+            bannerViewControllerB.setBanners(banners: banner.banners)
+            viewController = bannerViewControllerB
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        }
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
+    }
+    
+    private func checkAndShowBanner() {
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
+            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+               Date() < thresholdDate {
+                return
+            }
+        }
+        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+    }
     
     @objc private func tapBusQrCode() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))

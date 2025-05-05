@@ -203,7 +203,7 @@ final class ReviewListViewController: UIViewController {
         }.store(in: &cancellables)
         
         reviewWriteLoginModalViewController.loginButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteLogin, .click, self?.viewModel.shopName ?? ""))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 작성 팝업"))
             self?.navigateToLogin()
         }.store(in: &cancellables)
         
@@ -224,7 +224,7 @@ final class ReviewListViewController: UIViewController {
         
         reviewReportLoginModalViewController.loginButtonPublisher.sink { [weak self] in
             self?.navigateToLogin()
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewReportLogin, .click, self?.viewModel.shopName ?? ""))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 신고 팝업"))
         }.store(in: &cancellables)
         
         reviewReportLoginModalViewController.cancelButtonPublisher.sink { [weak self] in

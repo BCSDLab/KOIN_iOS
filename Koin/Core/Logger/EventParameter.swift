@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol EventLabelType {
     var rawValue: String { get }
     var team: String { get }
@@ -44,6 +43,7 @@ enum EventParameter {
             case shopCan = "shop_can"
             case shopPicture = "shop_picture"
             case hamburger = "hamburger"
+            case shopCategoriesBenefit = "shop_categories_benefit"
             case shopCategoriesEvent = "shop_categories_event"
             case shopDetailViewEvent = "shop_detail_view_event"
             case shopCategoriesSearch = "shop_categories_search"
@@ -60,15 +60,15 @@ enum EventParameter {
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
             case shopDetailViewReviewDeleteDone = "shop_detail_view_review_delete_done"
             case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
-            case shopDetailViewReviewWriteLogin = "shop_detail_view_review_write_login"
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
-            case shopDetailViewReviewReportLogin = "shop_detail_view_review_report_login"
             case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
             case mainShopBenefit = "main_shop_benefit"
             case benefitShopCategories = "benefit_shop_categories"
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            
+            case loginPrompt = "login_prompt"
             var team: String {
                 return "BUSINESS"
             }
@@ -158,6 +158,9 @@ enum EventParameter {
             case itemPostReportConfirm = "item_post_report_confirm"
             case messageListSelect = "message_list_select"
             case itemPostType = "item_post_type"
+            
+            case loginPrompt = "login_prompt"
+
             var team: String {
                 return "CAMPUS"
             }
@@ -192,6 +195,7 @@ enum EventParameter {
         case scroll
         case swipe
         case signup
+        case entry
         case abTestBenefit = "a/b test 로깅(3차 스프린트, 혜택페이지)"
         case abTestDining = "a/b test 로깅(식단 메인 진입점)"
         case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"

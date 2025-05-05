@@ -10,11 +10,15 @@ import Combine
 
 protocol CoreService {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
+    func fetchBanner() -> AnyPublisher<BannerDTO, Error>
 }
 
 final class DefaultCoreService: CoreService {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, any Error> {
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
         return request(.checkVersion)
+    }
+    func fetchBanner() -> AnyPublisher<BannerDTO, Error> {
+        return request(.fetchBanner)
     }
 
     private func request<T: Decodable>(_ api: CoreAPI) -> AnyPublisher<T, Error> {

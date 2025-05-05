@@ -250,6 +250,12 @@
 		D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */; };
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
+		D223D6142D9BF1FE00C29BE6 /* BannerViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */; };
+		D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */; };
+		D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */; };
+		D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */; };
+		D223D61E2D9C205A00C29BE6 /* BannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */; };
+		D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
 		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
@@ -861,6 +867,12 @@
 		D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifySemesterModalViewController.swift; sourceTree = "<group>"; };
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
+		D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerA.swift; sourceTree = "<group>"; };
+		D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerB.swift; sourceTree = "<group>"; };
+		D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerDTO.swift; sourceTree = "<group>"; };
+		D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBannerUseCase.swift; sourceTree = "<group>"; };
+		D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
+		D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -1793,6 +1805,7 @@
 			isa = PBXGroup;
 			children = (
 				D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */,
+				D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1845,6 +1858,23 @@
 				D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */,
 			);
 			path = SubViews;
+			sourceTree = "<group>";
+		};
+		D223D60E2D9BEC8100C29BE6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		D223D61C2D9C204B00C29BE6 /* BannerCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */,
+				D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */,
+			);
+			path = BannerCollectionView;
 			sourceTree = "<group>";
 		};
 		D22421322C897C5E00E8B480 /* Settings */ = {
@@ -2258,12 +2288,15 @@
 		D27DD02C2BA608310081FD36 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D223D61C2D9C204B00C29BE6 /* BannerCollectionView */,
 				D2F4FD572CBE089C008C91D8 /* ShopCollectionView */,
 				83FA91892C81E2D00090351F /* NoticeListCollectionView */,
 				D27DD0302BA608310081FD36 /* BusView */,
 				D27DD0332BA608310081FD36 /* MenuView */,
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
+				D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */,
+				D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2467,6 +2500,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				D223D60E2D9BEC8100C29BE6 /* Core */,
 				D2D4625E2D63A78000C60864 /* Chat */,
 				833D9C202C6B4F4C00982145 /* NoticeList */,
 				D29F21EE2C4F611F00994554 /* Noti */,
@@ -2499,6 +2533,8 @@
 		D27DD07E2BA608310081FD36 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
+				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
 				836242352BD9522400845499 /* FirebaseLog.swift */,
 				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
@@ -3060,7 +3096,6 @@
 				D2A8F8B02C4946480090C7A4 /* Bus */,
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
-				D2FB236F2C0412860098BA2B /* Log */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3162,15 +3197,6 @@
 				D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */,
 			);
 			path = Analytics;
-			sourceTree = "<group>";
-		};
-		D2FB236F2C0412860098BA2B /* Log */ = {
-			isa = PBXGroup;
-			children = (
-				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
-				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
-			);
-			path = Log;
 			sourceTree = "<group>";
 		};
 		D2FB23722C04305A0098BA2B /* Service */ = {
@@ -3624,6 +3650,7 @@
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
+				D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */,
 				D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
@@ -3736,6 +3763,7 @@
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
+				D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
@@ -3772,6 +3800,7 @@
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
+				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
 				8354BE372C79C6AF009D4D7A /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				83EBB8762D0FDD7700346018 /* BusSearchResultTableViewCell.swift in Sources */,
@@ -3796,6 +3825,7 @@
 				D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */,
+				D223D61E2D9C205A00C29BE6 /* BannerCollectionView.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
@@ -3990,7 +4020,9 @@
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
 				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
+				D223D6142D9BF1FE00C29BE6 /* BannerViewControllerA.swift in Sources */,
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
+				D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */,
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
