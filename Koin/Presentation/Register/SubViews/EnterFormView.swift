@@ -28,7 +28,6 @@ final class EnterFormView: UIView {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "5~13자리로 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.addTarget(self, action: #selector(idTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     private let checkIdDuplicateButton = UIButton().then {
@@ -38,7 +37,6 @@ final class EnterFormView: UIView {
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
         $0.layer.cornerRadius = 4
         $0.isEnabled = false
-        $0.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
     }
     
     private let checkIdResponseLabel: UILabel = UILabel().then {
@@ -62,8 +60,6 @@ final class EnterFormView: UIView {
         $0.setCustomPlaceholder(text: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isSecureTextEntry = true
-        $0.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped1))
-        $0.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
     }
     
     private let passwordTextField2 = UITextField().then {
@@ -72,8 +68,6 @@ final class EnterFormView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isSecureTextEntry = true
         $0.isHidden = true
-        $0.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
-        $0.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
     }
     
     private let correctPasswordLabel = UILabel().then {
@@ -102,8 +96,6 @@ final class EnterFormView: UIView {
             icon: UIImage.appImage(symbol: .chevronDown)
         )
         $0.layer.cornerRadius = 12
-
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
     private let deptDropDown = DropDown().then {
@@ -114,6 +106,13 @@ final class EnterFormView: UIView {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "학번을 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
+        $0.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    private let studentIdWarningLabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 학번 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.isHidden = true
     }
     
     private let studentNicknameTextField = UITextField().then {
@@ -148,6 +147,7 @@ final class EnterFormView: UIView {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
+        setAddTarget()
         bind()
         inputSubject.send(.getDeptList)
     }
@@ -177,7 +177,7 @@ final class EnterFormView: UIView {
             case .successCheckDuplicatedId:
                 self?.checkIdResponseLabel.setImageText(
                         image: UIImage.appImage(asset: .checkGreenCircle),
-                        text: "사용 가능한 아이디 입니다.",
+                        text: "사용 가능한 아이디입니다.",
                         font: UIFont.appFont(.pretendardRegular, size: 12),
                         textColor: .appColor(.success700)
                     )
@@ -191,6 +191,16 @@ final class EnterFormView: UIView {
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             }
         }.store(in: &subscriptions)
+    }
+    
+    private func setAddTarget() {
+        idTextField.addTarget(self, action: #selector(idTextFieldDidChange(_:)), for: .editingChanged)
+        checkIdDuplicateButton.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
+        passwordTextField1.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped1))
+        passwordTextField1.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
+        passwordTextField2.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
+        passwordTextField2.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
+        departmentDropdownButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
     // FIXME: - 학생 완료하면 외부인 해야함
@@ -281,31 +291,28 @@ extension EnterFormView {
         deptDropDown.show()
     }
     
-    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
-        dropDown.anchorView = button
-        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
-        dropDown.dataSource = dataSource
-        dropDown.direction = .bottom
-        dropDown.selectionAction = { (index: Int, item: String) in
-        
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            
-            var attributedTitle = AttributedString(item)
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-
-            if let imageView = button.subviews.compactMap({ $0 as? UIImageView }).first {
-                imageView.image = UIImage.appImage(symbol: .chevronDown)
-                NSLayoutConstraint.activate([
-                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
-                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-                ])
-            }
-        }
+    @objc private func clearStudentIdTextField() {
+        studentIdTextField.text = nil
     }
+    
+    @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+
+        let studentIdText = text.filter { $0.isNumber }
+        let trimmedStudentIdText = String(studentIdText.prefix(10))
+
+        let isLengthValid = trimmedStudentIdText.count >= 8 && trimmedStudentIdText.count <= 10
+        let yearPart = String(trimmedStudentIdText.prefix(4))
+        let isYearValid: Bool = {
+            guard let year = Int(yearPart) else { return false }
+            let currentYear = Calendar.current.component(.year, from: Date())
+            return (1991...currentYear).contains(year)
+        }()
+
+        studentIdWarningLabel.isHidden = isLengthValid && isYearValid
+    }
+
+
 }
 
 // MARK: UI Settings
@@ -315,6 +322,7 @@ extension EnterFormView {
          passwordLabel, passwordTextField1, passwordTextField2,
          correctPasswordLabel, studentInfoGuideLabel,
          departmentDropdownButton, deptDropDown, studentIdTextField,
+         studentIdWarningLabel,
          studentNicknameTextField, checkStudentNicknameDuplicateButton,
          studentEmailTextField, emailLabel
         ].forEach {
@@ -395,6 +403,12 @@ extension EnterFormView {
             $0.height.equalTo(40)
         }
         
+        studentIdWarningLabel.snp.makeConstraints {
+            $0.top.equalTo(studentIdTextField.snp.bottom)
+            $0.leading.equalTo(studentIdTextField.snp.leading)
+            $0.height.equalTo(20)
+        }
+        
         studentNicknameTextField.snp.makeConstraints {
             $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
@@ -427,6 +441,32 @@ extension EnterFormView {
         [idTextField, studentIdTextField, studentNicknameTextField,
          passwordTextField1, passwordTextField2, studentEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
+    }
+    
+    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
+        dropDown.anchorView = button
+        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
+        dropDown.dataSource = dataSource
+        dropDown.direction = .bottom
+        dropDown.selectionAction = { (index: Int, item: String) in
+        
+            var buttonConfiguration = UIButton.Configuration.plain()
+            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
+            
+            var attributedTitle = AttributedString(item)
+            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
+            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
+            buttonConfiguration.attributedTitle = attributedTitle
+            button.configuration = buttonConfiguration
+
+            if let imageView = button.subviews.compactMap({ $0 as? UIImageView }).first {
+                imageView.image = UIImage.appImage(symbol: .chevronDown)
+                NSLayoutConstraint.activate([
+                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
+                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+                ])
+            }
         }
     }
     
