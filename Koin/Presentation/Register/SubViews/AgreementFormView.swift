@@ -33,7 +33,11 @@ final class AgreementFormView: UIView {
         $0.text = "모두 동의합니다."
     }
     
-    // MARK: 개인정보 이용약관
+    private let agreementStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 24
+    }
+    
     private let agreementCheckbox1 = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
@@ -56,7 +60,6 @@ final class AgreementFormView: UIView {
         $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
     }
     
-    // MARK: 코인 이용약관
     private let agreementCheckbox2 = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
@@ -80,7 +83,6 @@ final class AgreementFormView: UIView {
         $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
     }
     
-    // MARK: 마케팅수신 동의약관
     private let agreementCheckbox3 = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
         $0.tintColor = UIColor.appColor(.gray)
@@ -105,10 +107,11 @@ final class AgreementFormView: UIView {
     }
     
     // MARK: Init
-     init(viewModel: RegisterFormViewModel) {
+    init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
+        setUpButtonTargets()
     }
     
     @available(*, unavailable)
@@ -150,11 +153,8 @@ extension AgreementFormView {
     }
 
     private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
-        if isSelected {
-            checkbox.setImage(UIImage.appImage(asset: .checkFilledCircle), for: .normal)
-        } else {
-            checkbox.setImage(UIImage.appImage(asset: .checkEmptyCircle), for: .normal)
-        }
+        let image = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
+        checkbox.setImage(image, for: .normal)
     }
 
     private func setUpButtonTargets() {
@@ -181,86 +181,81 @@ extension AgreementFormView {
 }
 
 // MARK: UI Settings
-
 extension AgreementFormView {
     private func setUpLayOuts() {
-        [seperateView, agreementAllCheckbox, agreementAllLabel, agreementCheckbox1, agreementLabel1, agreementTextView1, agreementCheckbox2, agreementLabel2, agreementTextView2, agreementCheckbox3, agreementLabel3, agreementTextView3].forEach {
-            self.addSubview($0)
+        [seperateView, agreementAllCheckbox, agreementAllLabel, agreementStackView].forEach {
+            addSubview($0)
+        }
+
+        let item1Header = UIStackView(arrangedSubviews: [agreementCheckbox1, agreementLabel1]).then {
+            $0.axis = .horizontal
+            $0.spacing = 8
+        }
+        
+        let item1 = UIStackView(arrangedSubviews: [item1Header, agreementTextView1]).then {
+            $0.axis = .vertical
+            $0.spacing = 8
+        }
+
+        let item2Header = UIStackView(arrangedSubviews: [agreementCheckbox2, agreementLabel2]).then {
+            $0.axis = .horizontal
+            $0.spacing = 8
+        }
+
+        let item2 = UIStackView(arrangedSubviews: [item2Header, agreementTextView2]).then {
+            $0.axis = .vertical
+            $0.spacing = 8
+        }
+
+        let item3Header = UIStackView(arrangedSubviews: [agreementCheckbox3, agreementLabel3]).then {
+            $0.axis = .horizontal
+            $0.spacing = 8
+        }
+
+        let item3 = UIStackView(arrangedSubviews: [item3Header, agreementTextView3]).then {
+            $0.axis = .vertical
+            $0.spacing = 8
+        }
+
+        [item1, item2, item3].forEach {
+            agreementStackView.addArrangedSubview($0)
         }
     }
-    
+
     private func setUpConstraints() {
         seperateView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(40)
         }
-        
+
         agreementAllCheckbox.snp.makeConstraints {
             $0.leading.equalTo(seperateView.snp.leading).offset(8)
             $0.width.height.equalTo(16)
             $0.centerY.equalTo(seperateView)
         }
-        
+
         agreementAllLabel.snp.makeConstraints {
             $0.leading.equalTo(agreementAllCheckbox.snp.trailing).offset(8)
             $0.centerY.equalTo(seperateView)
         }
-        
-        agreementCheckbox1.snp.makeConstraints {
-            $0.top.equalTo(seperateView.snp.bottom).offset(19)
-            $0.width.height.equalTo(16)
-            $0.leading.equalToSuperview()
-        }
-        
-        agreementLabel1.snp.makeConstraints {
-            $0.leading.equalTo(agreementCheckbox1.snp.trailing).offset(8)
-            $0.centerY.equalTo(agreementCheckbox1)
-        }
-        
-        agreementTextView1.snp.makeConstraints {
+
+        agreementStackView.snp.makeConstraints {
+            $0.top.equalTo(seperateView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(agreementLabel1.snp.bottom).offset(8)
-            $0.height.equalTo(120)
+            $0.bottom.lessThanOrEqualToSuperview()
         }
-        
-        agreementCheckbox2.snp.makeConstraints {
-            $0.top.equalTo(agreementTextView1.snp.bottom).offset(16)
-            $0.width.height.equalTo(16)
-            $0.leading.equalToSuperview()
+
+        [agreementTextView1, agreementTextView2, agreementTextView3].forEach {
+            $0.snp.makeConstraints { $0.height.equalTo(120) }
         }
-        
-        agreementLabel2.snp.makeConstraints {
-            $0.leading.equalTo(agreementCheckbox2.snp.trailing).offset(8)
-            $0.centerY.equalTo(agreementCheckbox2)
-        }
-        
-        agreementTextView2.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(agreementLabel2.snp.bottom).offset(8)
-            $0.height.equalTo(120)
-        }
-        
-        agreementCheckbox3.snp.makeConstraints {
-            $0.top.equalTo(agreementTextView2.snp.bottom).offset(16)
-            $0.width.height.equalTo(16)
-            $0.leading.equalToSuperview()
-        }
-        
-        agreementLabel3.snp.makeConstraints {
-            $0.leading.equalTo(agreementCheckbox3.snp.trailing).offset(8)
-            $0.centerY.equalTo(agreementCheckbox3)
-        }
-        
-        agreementTextView3.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(agreementLabel3.snp.bottom).offset(8)
-            $0.height.equalTo(120)
+
+        [agreementCheckbox1, agreementCheckbox2, agreementCheckbox3].forEach {
+            $0.snp.makeConstraints { $0.width.height.equalTo(16) }
         }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        setUpButtonTargets()
     }
 }
