@@ -123,6 +123,9 @@ final class HomeViewController: UIViewController {
     private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
     }
     
+    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
+    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
+    
     // MARK: - Initialization
     
     init(viewModel: HomeViewModel) {
@@ -142,6 +145,7 @@ final class HomeViewController: UIViewController {
         bind()
         print(KeychainWorker.shared.read(key: .access))
         print(KeychainWorker.shared.read(key: .fcm))
+        print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
@@ -150,10 +154,7 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-   //     print(KeychainWorker.shared.read(key: .access) ?? "")
-        
-     //   print("위가 엑세스 아래가 리프레시")
-     //   print("위가 엑세스 아래가 리프레시")
+        checkAndShowBanner()
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self
@@ -209,6 +210,8 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .updateBanner(let banner, let abTestResult):
+                self?.showBanner(banner: banner, abTestResult: abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -274,10 +277,127 @@ final class HomeViewController: UIViewController {
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
+        
+        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    private func handleBannerTap(_ banner: Banner) {
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
+        if let version = banner.version {
+            // 현재 앱 버전
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            
+            let isOld = isVersion(currentVersion, lowerThan: version)
+            
+            if isOld {
+                showToast(message: "해당 기능을 사용하기 위해서는 업데이트가 꼭 필요해요")
+                  
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                      if let appStoreURL = URL(string: "https://apps.apple.com/kr/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622") {
+                          UIApplication.shared.open(appStoreURL)
+                      }
+                  }
+                  
+                  return
+            }
+        }
+        
+        if let redirect = banner.redirectLink {
+            // redirect 로직
+            if redirect == "shop" {
+                dismiss(animated: true)
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                
+                let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+                let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+                let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+                let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+                let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+                
+                let viewModel = ShopViewModel(
+                    fetchShopListUseCase: fetchShopListUseCase,
+                    fetchEventListUseCase: fetchEventListUseCase,
+                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                    fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                    fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                    selectedId: 0
+                )
+                let shopViewController = ShopViewControllerA(viewModel: viewModel)
+                navigationController?.pushViewController(shopViewController, animated: true)
+            } else if redirect == "dining" {
+                dismiss(animated: true)
+                navigatetoDining()
+            } else if redirect == "keyword" {
+                dismiss(animated: true)
+                let noticeListService = DefaultNoticeService()
+                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+                let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+                let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+    }
+    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> Bool {
+        let currentComponents = currentVersion.split(separator: ".").compactMap { Int($0) }
+        let requiredComponents = requiredVersion.split(separator: ".").compactMap { Int($0) }
+
+        for i in 0..<max(currentComponents.count, requiredComponents.count) {
+            let current = i < currentComponents.count ? currentComponents[i] : 0
+            let required = i < requiredComponents.count ? requiredComponents[i] : 0
+            if current < required { return true }
+            if current > required { return false }
+        }
+
+        return false
+    }
+    private func showBanner(banner: BannerDTO, abTestResult: AssignAbTestResponse) {
+        if banner.count == 0 { return }
+        let viewController: UIViewController
+        if abTestResult.variableName == .bottomBanner {
+            bannerViewControllerA.setBanners(banners: banner.banners)
+            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        } else {
+            bannerViewControllerB.setBanners(banners: banner.banners)
+            viewController = bannerViewControllerB
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        }
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
+    }
+    
+    private func checkAndShowBanner() {
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
+            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+               Date() < thresholdDate {
+                return
+            }
+        }
+        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+    }
     
     @objc private func tapBusQrCode() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))

@@ -9,6 +9,7 @@ import Alamofire
 
 enum CoreAPI {
     case checkVersion
+    case fetchBanner
 }
 
 extension CoreAPI: Router, URLRequestConvertible {
@@ -20,18 +21,19 @@ extension CoreAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .checkVersion: return "/version/ios"
+        case .fetchBanner: return "/banners/1"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .checkVersion: return .get
+        case .checkVersion, .fetchBanner: return .get
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .checkVersion: return [:]
+        case .checkVersion, .fetchBanner: return [:]
         }
     }
     
@@ -40,12 +42,15 @@ extension CoreAPI: Router, URLRequestConvertible {
         switch self {
         case .checkVersion:
             return nil
+        case .fetchBanner:
+            return ["platform": "IOS"]
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
         case .checkVersion: return URLEncoding.default
+        case .fetchBanner: return URLEncoding.default
         }
     }
  

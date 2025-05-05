@@ -24,7 +24,7 @@ final class KeychainWorker {
     func create(key: TokenType, token: String) {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key.rawValue,
+            kSecAttrAccount: keyType(key: key),
             kSecValueData: token.data(using: .utf8, allowLossyConversion: false) as Any
         ]
         SecItemDelete(query)
@@ -38,7 +38,7 @@ final class KeychainWorker {
     func read(key: TokenType) -> String? {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key.rawValue,
+            kSecAttrAccount: keyType(key: key),
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
         ]
@@ -60,7 +60,7 @@ final class KeychainWorker {
     func delete(key: TokenType) {
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key.rawValue
+            kSecAttrAccount: keyType(key: key)
         ]
         let status = SecItemDelete(query)
           if status == errSecSuccess {
@@ -70,6 +70,20 @@ final class KeychainWorker {
           } else {
               print("Error deleting the item, status code: \(status)")
           }
+    }
+    
+    private func keyType(key: TokenType) -> String {
+        let keyType: String
+        if key == .accessHistoryId {
+            if Bundle.main.isStage {
+                keyType = "stage\(key.rawValue)"
+            } else {
+                keyType = "production\(key.rawValue)"
+            }
+        } else {
+            keyType = key.rawValue
+        }
+        return keyType
     }
     
 }

@@ -9,4 +9,5 @@ import Combine
 
 protocol CoreRepository {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
+    func fetBanner() -> AnyPublisher<BannerDTO, Error>
 }
