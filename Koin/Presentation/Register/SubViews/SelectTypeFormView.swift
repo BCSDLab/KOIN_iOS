@@ -30,7 +30,6 @@ final class SelectTypeFormView: UIView {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
-        $0.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
     }
     
     private let generalButton = UIButton().then {
@@ -39,19 +38,24 @@ final class SelectTypeFormView: UIView {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
-        $0.addTarget(self, action: #selector(outsiderButtonTapped), for: .touchUpInside)
     }
     
     // MARK: Init
-     init(viewModel: RegisterFormViewModel) {
+    init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         configureView()
+        setAddTarget()
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setAddTarget() {
+        studentButton.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
+        generalButton.addTarget(self, action: #selector(generalButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -60,7 +64,7 @@ extension SelectTypeFormView {
         onUserTypeSelected?(.student)
     }
 
-    @objc private func outsiderButtonTapped() {
+    @objc private func generalButtonTapped() {
         onUserTypeSelected?(.general)
     }
 }
