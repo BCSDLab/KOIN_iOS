@@ -114,20 +114,20 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let studentNicknameTextField = UITextField().then {
+    private let nicknameTextField = UITextField().then {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.isHidden = true
     }
     
-    private let checkStudentNicknameDuplicateButton = UIButton().then {
+    private let nicknameDuplicateButton = UIButton().then {
         $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
         $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         $0.isHidden = true
     }
     
-    private let studentNicknameWarningLabel = UILabel().then {
+    private let nicknameResponseLabel = UILabel().then {
         $0.setImageText(image: .appImage(asset: .warningOrange), text: "중복된 닉네임입니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
         $0.isHidden = true
     }
@@ -139,10 +139,22 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let emailLabel = UILabel().then {
+    private let koreatechEmailLabel = UILabel().then {
         $0.text = "@koreatech.ac.kr"
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral400)
+        $0.isHidden = true
+    }
+    
+    private let generalEmailTextField = UITextField().then {
+        $0.configureDefaultTextField()
+        $0.setCustomPlaceholder(text: "이메일을 입력해 주세요. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
+    }
+    
+    private let generalEmailResponseLabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
         $0.isHidden = true
     }
 
@@ -188,12 +200,12 @@ final class EnterFormView: UIView {
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case .changeCheckButtonStatus:
-                self?.checkStudentNicknameDuplicateButton.updateState(
+                self?.nicknameDuplicateButton.updateState(
                     isEnabled: false,
                     enabledColor: .appColor(.primary500),
                     disabledColor: .appColor(.neutral300)
                 )
-                self?.studentNicknameWarningLabel.setImageText(
+                self?.nicknameResponseLabel.setImageText(
                     image: .appImage(asset: .checkGreenCircle),
                     text: "사용 가능한 닉네임입니다.",
                     font: .appFont(.pretendardRegular, size: 12),
@@ -214,10 +226,11 @@ final class EnterFormView: UIView {
         departmentDropdownButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         studentIdTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
         studentIdTextField.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
-        studentNicknameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentNicknameTextField))
-        studentNicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(_:)), for: .editingChanged)
-        checkStudentNicknameDuplicateButton.addTarget(self, action: #selector(checkStudentNicknameDuplicateButtonTapped), for: .touchUpInside)
+        nicknameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentNicknameTextField))
+        nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(_:)), for: .editingChanged)
+        nicknameDuplicateButton.addTarget(self, action: #selector(checkStudentNicknameDuplicateButtonTapped), for: .touchUpInside)
         studentEmailTextField.addTarget(self, action: #selector(studentEmailTextFieldDidChange(_:)), for: .editingChanged)
+        generalEmailTextField.addTarget(self, action: #selector(generalEmailTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     func configure(for userType: SelectTypeFormView.UserType?) {
@@ -260,11 +273,16 @@ extension EnterFormView {
             correctPasswordLabel.isHidden = false
 
             if userType == .student {
-                [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
-                 studentIdTextField, studentNicknameTextField, checkStudentNicknameDuplicateButton,
-                 studentEmailTextField, emailLabel].forEach {
+                [studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, nicknameTextField, nicknameDuplicateButton, studentEmailTextField, koreatechEmailLabel].forEach {
                     $0.isHidden = false
                 }
+                setUpStudentConstraints()
+            }
+            else {
+                [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
+                    $0.isHidden = false
+                }
+                setUpGeneralConstraints()
             }
         }
     }
@@ -330,7 +348,7 @@ extension EnterFormView {
 
     
     @objc private func clearStudentNicknameTextField() {
-        studentNicknameTextField.text = nil
+        nicknameTextField.text = nil
     }
     
     @objc private func nicknameTextFieldDidChange(_ textField: UITextField) {
@@ -340,7 +358,7 @@ extension EnterFormView {
         textField.text = trimmedText
 
         let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
-        checkStudentNicknameDuplicateButton.updateState(
+        nicknameDuplicateButton.updateState(
             isEnabled: isValid,
             enabledColor: .appColor(.primary500),
             disabledColor: .appColor(.neutral300)
@@ -348,9 +366,9 @@ extension EnterFormView {
     }
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
-        guard let nicknameText = studentNicknameTextField.text else { return }
+        guard let nicknameText = nicknameTextField.text else { return }
         inputSubject.send(.checkDuplicatedNickname(nicknameText))
-        studentNicknameWarningLabel.isHidden = false
+        nicknameResponseLabel.isHidden = false
     }
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
@@ -360,18 +378,30 @@ extension EnterFormView {
         let trimmedText = String(filteredText.prefix(30))
         textField.text = trimmedText
     }
+    
+    @objc private func generalEmailTextFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        let trimmedText = String(text.prefix(30))
+        textField.text = trimmedText
+
+        if !trimmedText.isValidEmailFormat {
+            generalEmailResponseLabel.isHidden = false
+        }
+    }
+
 }
 
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, studentNicknameTextField, checkStudentNicknameDuplicateButton, studentNicknameWarningLabel, studentEmailTextField, emailLabel
+        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, nicknameTextField, nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField, koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
         ].forEach {
             self.addSubview($0)
         }
     }
     
-    private func setUpConstraints() {
+    private func setUpBaseConstraints() {
         idLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(8)
@@ -423,7 +453,9 @@ extension EnterFormView {
             $0.leading.equalTo(passwordTextField2.snp.leading).offset(4)
             $0.height.equalTo(20)
         }
-        
+    }
+    
+    private func setUpStudentConstraints() {
         studentInfoGuideLabel.snp.makeConstraints {
             $0.top.equalTo(correctPasswordLabel.snp.bottom).offset(32)
             $0.leading.equalTo(passwordLabel.snp.leading)
@@ -450,43 +482,78 @@ extension EnterFormView {
             $0.height.equalTo(20)
         }
         
-        studentNicknameTextField.snp.makeConstraints {
+        nicknameTextField.snp.makeConstraints {
             $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
-            $0.trailing.equalTo(checkStudentNicknameDuplicateButton.snp.leading).offset(-16)
+            $0.trailing.equalTo(nicknameDuplicateButton.snp.leading).offset(-16)
             $0.height.equalTo(40)
         }
         
-        checkStudentNicknameDuplicateButton.snp.makeConstraints {
-            $0.centerY.equalTo(studentNicknameTextField.snp.centerY)
+        nicknameDuplicateButton.snp.makeConstraints {
+            $0.centerY.equalTo(nicknameTextField.snp.centerY)
             $0.trailing.equalToSuperview().offset(-8)
             $0.height.equalTo(32)
             $0.width.lessThanOrEqualTo(86)
         }
         
-        studentNicknameWarningLabel.snp.makeConstraints {
-            $0.top.equalTo(studentNicknameTextField.snp.bottom)
-            $0.leading.equalTo(studentNicknameTextField.snp.leading)
+        nicknameResponseLabel.snp.makeConstraints {
+            $0.top.equalTo(nicknameTextField.snp.bottom)
+            $0.leading.equalTo(nicknameTextField.snp.leading)
             $0.height.equalTo(20)
         }
         
         studentEmailTextField.snp.makeConstraints {
-            $0.top.equalTo(studentNicknameTextField.snp.bottom).offset(8)
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(8)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalToSuperview().offset(-126)
             $0.height.equalTo(40)
         }
         
-        emailLabel.snp.makeConstraints {
+        koreatechEmailLabel.snp.makeConstraints {
             $0.centerY.equalTo(studentEmailTextField.snp.centerY)
             $0.trailing.equalToSuperview().offset(-8)
             $0.height.equalTo(22)
         }
     }
     
+    private func setUpGeneralConstraints() {
+        nicknameTextField.snp.makeConstraints {
+            $0.top.equalTo(correctPasswordLabel.snp.bottom).offset(32)
+            $0.leading.equalTo(passwordTextField2.snp.leading)
+            $0.trailing.equalTo(nicknameDuplicateButton.snp.leading).offset(-16)
+            $0.height.equalTo(40)
+        }
+        
+        nicknameDuplicateButton.snp.makeConstraints {
+            $0.centerY.equalTo(nicknameTextField.snp.centerY)
+            $0.trailing.equalToSuperview().offset(-8)
+            $0.height.equalTo(32)
+            $0.width.lessThanOrEqualTo(86)
+        }
+        
+        nicknameResponseLabel.snp.makeConstraints {
+            $0.top.equalTo(nicknameTextField.snp.bottom)
+            $0.leading.equalTo(nicknameTextField.snp.leading)
+            $0.height.equalTo(20)
+        }
+        
+        generalEmailTextField.snp.makeConstraints {
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(8)
+            $0.leading.equalTo(nicknameTextField.snp.leading)
+            $0.trailing.equalTo(nicknameDuplicateButton.snp.trailing)
+            $0.height.equalTo(40)
+        }
+        
+        generalEmailResponseLabel.snp.makeConstraints {
+            $0.top.equalTo(generalEmailTextField.snp.bottom)
+            $0.leading.equalTo(generalEmailTextField.snp.leading)
+            $0.height.equalTo(20)
+        }
+    }
+    
     private func setUpTextFieldUnderline() {
-        [idTextField, studentIdTextField, studentNicknameTextField,
-         passwordTextField1, passwordTextField2, studentEmailTextField].forEach {
+        [idTextField, studentIdTextField, nicknameTextField,
+         passwordTextField1, passwordTextField2, studentEmailTextField, generalEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }
@@ -519,6 +586,6 @@ extension EnterFormView {
     
     private func configureView() {
         setUpLayOuts()
-        setUpConstraints()
+        setUpBaseConstraints()
     }
 }
