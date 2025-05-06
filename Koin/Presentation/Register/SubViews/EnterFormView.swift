@@ -32,12 +32,8 @@ final class EnterFormView: UIView {
     }
     
     private let checkIdDuplicateButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral300)
-        $0.setTitle("중복 확인", for: .normal)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
-        $0.layer.cornerRadius = 4
-        $0.isEnabled = false
+        $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
+        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
     }
     
     private let checkIdResponseLabel: UILabel = UILabel().then {
@@ -126,12 +122,8 @@ final class EnterFormView: UIView {
     }
     
     private let checkStudentNicknameDuplicateButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral300)
-        $0.setTitle("중복 확인", for: .normal)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 10)
-        $0.layer.cornerRadius = 4
-        $0.isEnabled = false
+        $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
+        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         $0.isHidden = true
     }
     
@@ -148,7 +140,7 @@ final class EnterFormView: UIView {
     }
     
     private let emailLabel = UILabel().then {
-        $0.text = "koreatech.ac.kr"
+        $0.text = "@koreatech.ac.kr"
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral400)
         $0.isHidden = true
@@ -182,23 +174,17 @@ final class EnterFormView: UIView {
             case let .showHttpResult(message, labelColor):
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange),
-                        text: message,
-                        font: UIFont.appFont(.pretendardRegular, size: 12),
-                        textColor: .appColor(labelColor)
+                    text: message,
+                    font: UIFont.appFont(.pretendardRegular, size: 12),
+                    textColor: .appColor(labelColor)
                     )
             case .successCheckDuplicatedId:
                 self?.checkIdResponseLabel.setImageText(
-                        image: UIImage.appImage(asset: .checkGreenCircle),
-                        text: "사용 가능한 아이디입니다.",
-                        font: UIFont.appFont(.pretendardRegular, size: 12),
-                        textColor: .appColor(.success700)
+                    image: UIImage.appImage(asset: .checkGreenCircle),
+                    text: "사용 가능한 아이디입니다.",
+                    font: UIFont.appFont(.pretendardRegular, size: 12),
+                    textColor: .appColor(.success700)
                     )
-            case .changeSendVerificationButtonStatus:
-                break
-            case .sendVerificationCodeSuccess(response: let response):
-                break
-            case .correctVerificationCode:
-                break
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case .changeCheckButtonStatus:
@@ -207,8 +193,13 @@ final class EnterFormView: UIView {
                     enabledColor: .appColor(.primary500),
                     disabledColor: .appColor(.neutral300)
                 )
-                self?.studentNicknameWarningLabel.setImageText(image: .appImage(asset: .checkGreenCircle), text: "사용 가능한 닉네임입니다.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub700))
-
+                self?.studentNicknameWarningLabel.setImageText(
+                    image: .appImage(asset: .checkGreenCircle),
+                    text: "사용 가능한 닉네임입니다.",
+                    font: .appFont(.pretendardRegular, size: 12),
+                    textColor: .appColor(.success700))
+            default:
+                break
             }
         }.store(in: &subscriptions)
     }
@@ -364,11 +355,8 @@ extension EnterFormView {
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-
         let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._-")
-        
         let filteredText = text.filter { String($0).rangeOfCharacter(from: allowedCharacterSet) != nil }
-
         let trimmedText = String(filteredText.prefix(30))
         textField.text = trimmedText
     }
@@ -377,13 +365,7 @@ extension EnterFormView {
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel,
-         passwordLabel, passwordTextField1, passwordTextField2,
-         correctPasswordLabel, studentInfoGuideLabel,
-         departmentDropdownButton, deptDropDown, studentIdTextField,
-         studentIdWarningLabel, studentNicknameTextField, checkStudentNicknameDuplicateButton,
-         studentNicknameWarningLabel,
-         studentEmailTextField, emailLabel
+        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, studentNicknameTextField, checkStudentNicknameDuplicateButton, studentNicknameWarningLabel, studentEmailTextField, emailLabel
         ].forEach {
             self.addSubview($0)
         }
