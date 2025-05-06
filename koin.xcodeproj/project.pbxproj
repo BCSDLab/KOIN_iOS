@@ -586,6 +586,8 @@
 		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
 		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
 		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
+		D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */; };
+		D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */; };
 		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
 		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 /* End PBXBuildFile section */
@@ -1216,6 +1218,8 @@
 		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
+		D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralRegisterFormRequest.swift; sourceTree = "<group>"; };
+		D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRegisterFormRequest.swift; sourceTree = "<group>"; };
 		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
@@ -2697,6 +2701,8 @@
 				D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */,
 				D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */,
 				D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */,
+				D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */,
+				D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3602,6 +3608,7 @@
 				D27DD0A82BA608310081FD36 /* ShopDataViewControllerA.swift in Sources */,
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
+				D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */,
 				D2FB23532BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift in Sources */,
 				D28987102D0FD6CF00AA7285 /* CenterFlowLayout.swift in Sources */,
 				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
@@ -3914,6 +3921,7 @@
 				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
 				D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */,
 				83E770D62D0184DE00EB3F84 /* BusTimetableDataViewModel.swift in Sources */,
+				D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */,
 				D2B219392D665BFA00EAF5B1 /* ChatDateHeaderView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
