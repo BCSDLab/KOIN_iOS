@@ -117,6 +117,7 @@ final class CertificationFormView: UIView {
     }
     
     private let verificationHelpLabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
         $0.isHidden = true
     }
     
@@ -144,7 +145,6 @@ final class CertificationFormView: UIView {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard self != nil else { return }
-            
             switch output {
             case let .showHttpResult(message, labelColor):
                 if let verificationCode = self?.verificationTextField.text, !verificationCode.isEmpty {
@@ -152,16 +152,16 @@ final class CertificationFormView: UIView {
                 } else {
                     self?.showHttpResult(message, labelColor)
                 }
-                
             case .changeSendVerificationButtonStatus:
                 self?.phoneNumberReponseLabel.isHidden = true
                 self?.sendVerificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
-                
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
-                
             case .correctVerificationCode:
                 self?.verificationHelpLabel.isHidden = false
+                self?.timer?.invalidate()
+                self?.timer = nil
+                self?.timerLabel.isHidden = true
                 self?.verificationHelpLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
                     text: "인증번호가 일치합니다.",
@@ -170,7 +170,6 @@ final class CertificationFormView: UIView {
                 )
                 self?.contactButton.isHidden = true
                 self?.onVerificationStatusChanged?(true)
-                
             default:
                 break
             }
@@ -214,20 +213,44 @@ extension CertificationFormView {
         updatePhoneNumberSectionVisibility()
     }
     
+    private func updateGenderSelection(isFemale: Bool) {
+        var femaleConfig = femaleButton.configuration
+        var maleConfig = maleButton.configuration
+
+        femaleConfig?.image = UIImage.appImage(asset: isFemale ? .circleCheckedPrimary500 : .circlePrimary500)
+        maleConfig?.image = UIImage.appImage(asset: isFemale ? .circlePrimary500 : .circleCheckedPrimary500)
+
+        femaleButton.configuration = femaleConfig
+        maleButton.configuration = maleConfig
+
+        // 선택된 성별을 ViewModel에 저장할 때 여기서 처리하기
+        // viewModel.selectedGender = isFemale ? .female : .male
+    }
+    
+    private func updatePhoneNumberSectionVisibility() {
+        let nameCount = nameTextField.text?.count ?? 0
+        let isNameValid = (2...5).contains(nameCount)
+        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) || (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
+        
+        let shouldShowPhoneFields = isNameValid && isGenderSelected
+        
+        phoneNumberLabel.isHidden = !shouldShowPhoneFields
+        phoneNumberTextField.isHidden = !shouldShowPhoneFields
+        sendVerificationButton.isHidden = !shouldShowPhoneFields
+    }
+    
     @objc private func clearPhoneNumberTextField() {
         phoneNumberTextField.text = ""
         sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
-        goToLoginButton.isHidden = true
-        phoneNotFoundLabel.isHidden = true
-        contactButton.isHidden = true
-        phoneNumberReponseLabel.isHidden = true
+        [goToLoginButton, phoneNotFoundLabel, contactButton, phoneNumberReponseLabel].forEach {
+            $0.isHidden = true
+        }
     }
     
     @objc private func phoneNumberTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
         let filteredText = text.filter { $0.isNumber }
-        
         if filteredText.count > 11 {
             textField.text = String(filteredText.prefix(11))
         } else {
@@ -263,18 +286,6 @@ extension CertificationFormView {
         )
     }
     
-    private func updatePhoneNumberSectionVisibility() {
-        let nameCount = nameTextField.text?.count ?? 0
-        let isNameValid = (2...5).contains(nameCount)
-        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) || (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
-        
-        let shouldShowPhoneFields = isNameValid && isGenderSelected
-        
-        phoneNumberLabel.isHidden = !shouldShowPhoneFields
-        phoneNumberTextField.isHidden = !shouldShowPhoneFields
-        sendVerificationButton.isHidden = !shouldShowPhoneFields
-    }
-    
     private func changeVerificationButtonStatus(_ text: String) {
         if text.count == 6 {
             verificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
@@ -285,17 +296,17 @@ extension CertificationFormView {
     
     private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
         phoneNumberReponseLabel.isHidden = false
-        phoneNumberReponseLabel.text = message
-        phoneNumberReponseLabel.textColor = UIColor.appColor(color)
         
         if message == "이미 존재하는 전화번호입니다." {
-            goToLoginButton.isHidden = false
-            phoneNotFoundLabel.isHidden = false
-            contactButton.isHidden = false
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger600))
+            [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
+                $0.isHidden = false
+            }
         } else {
-            goToLoginButton.isHidden = true
-            phoneNotFoundLabel.isHidden = true
-            contactButton.isHidden = true
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningOrange), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(color))
+            [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
+                $0.isHidden = true
+            }
         }
     }
     
@@ -311,21 +322,18 @@ extension CertificationFormView {
         remainingSeconds = 180
         startTimer()
 
-        verificationTextField.isHidden = true
-        timerLabel.isHidden = true
-        verificationButton.isHidden = true
+        [contactButton, verificationTextField, timerLabel, verificationButton].forEach { $0.isHidden = true }
         
         sendVerificationButton.setTitle("인증번호 재발송", for: .normal)
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
         verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
         
-        if let phoneNumber = phoneNumberTextField.text {
-            print("📮 [View] 보내는 전화번호: \(phoneNumber)")
-            inputSubject.send(.sendVerificationCode(phoneNumber))
-        } else {
-            print("❌ [View] 전화번호가 비어 있음")
+        guard let phoneNumber = phoneNumberTextField.text, !phoneNumber.isEmpty else {
+            return
         }
+        
+        inputSubject.send(.sendVerificationCode(phoneNumber))
     }
     
     private func startTimer() {
@@ -342,7 +350,7 @@ extension CertificationFormView {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.verificationHelpLabel.isHidden = false
-                self.verificationHelpLabel.text = "유효시간이 지났습니다. 인증번호를 재발송 해주세요."
+                self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
             }
         }
     }
@@ -354,25 +362,15 @@ extension CertificationFormView {
     }
     
     private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDTO) {
-        verificationTextField.isHidden = false
-        timerLabel.isHidden = false
-        verificationButton.isHidden = false
-        
-        phoneNumberReponseLabel.isHidden = false
-        phoneNumberReponseLabel.attributedText = makeVerificationMessage(
-            remainingCount: response.remainingCount,
-            totalCount: response.totalCount
-        )
+        [verificationTextField, timerLabel, verificationButton, phoneNumberReponseLabel].forEach { $0.isHidden = false }
+
+        phoneNumberReponseLabel.setImageAttributedText(image: .appImage(asset: .checkGreenCircle), attributedText: makeVerificationMessage(remainingCount: response.remainingCount, totalCount: response.totalCount))
         
         verificationTextField.text = ""
+        verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
         
-        verificationButton.isEnabled = false
-        verificationButton.backgroundColor = .appColor(.neutral300)
-        verificationButton.setTitleColor(.appColor(.neutral600), for: .normal)
-        
-        if response.currentCount >= 2 {
-            verificationHelpLabel.isHidden = false
-            contactButton.isHidden = false
+        if response.currentCount > 1 {
+            [verificationHelpLabel, contactButton].forEach { $0.isHidden = false }
             contactButton.snp.remakeConstraints {
                 $0.centerY.equalTo(verificationHelpLabel.snp.centerY)
                 $0.leading.equalTo(verificationHelpLabel.snp.trailing).offset(8)
@@ -380,8 +378,7 @@ extension CertificationFormView {
                 $0.width.greaterThanOrEqualTo(42)
             }
         } else {
-            verificationHelpLabel.isHidden = true
-            contactButton.isHidden = true
+            [verificationHelpLabel, contactButton].forEach { $0.isHidden = true }
         }
         
         verificationTextField.becomeFirstResponder()
@@ -394,6 +391,7 @@ extension CertificationFormView {
             let nsRange = NSRange(successRange, in: fullText)
             attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.success700), range: nsRange)
         }
+        
         if let countRange = fullText.range(of: "남은 횟수 (\(remainingCount)/\(totalCount))") {
             let nsRange = NSRange(countRange, in: fullText)
             attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral500), range: nsRange)
@@ -404,25 +402,10 @@ extension CertificationFormView {
     
     @objc private func verificationButtonTapped() {
         if let verificationText = verificationTextField.text, let phoneNumber = phoneNumberTextField.text {
-            print("📮 [View] 보내는 전화번호 및 인증번호: \(phoneNumber), \(verificationText)")
             inputSubject.send(.checkVerificationCode(phoneNumber, verificationText))
         } else {
-            print("인증번호 비어 있음")
+            return
         }
-    }
-
-    private func updateGenderSelection(isFemale: Bool) {
-        var femaleConfig = femaleButton.configuration
-        var maleConfig = maleButton.configuration
-
-        femaleConfig?.image = UIImage.appImage(asset: isFemale ? .circleCheckedPrimary500 : .circlePrimary500)
-        maleConfig?.image = UIImage.appImage(asset: isFemale ? .circlePrimary500 : .circleCheckedPrimary500)
-
-        femaleButton.configuration = femaleConfig
-        maleButton.configuration = maleConfig
-
-        // 선택된 성별을 ViewModel에 저장할 때 여기서 처리하기
-        // viewModel.selectedGender = isFemale ? .female : .male
     }
 }
 
@@ -493,7 +476,7 @@ extension CertificationFormView {
         goToLoginButton.snp.makeConstraints {
             $0.centerY.equalTo(phoneNumberReponseLabel.snp.centerY)
             $0.leading.equalTo(phoneNumberReponseLabel.snp.trailing).offset(8)
-            $0.height.greaterThanOrEqualTo(19)
+            $0.height.equalTo(20)
             $0.width.greaterThanOrEqualTo(55)
         }
         

@@ -26,14 +26,25 @@ extension UILabel {
         imageAttachment.bounds = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
         attributedString.append(NSAttributedString(attachment: imageAttachment))
 
-        let textWithSpacing = NSAttributedString(string: " " + text, attributes: [
-            .font: font,
-            .foregroundColor: textColor,
-            .baselineOffset: 4
-        ])
+        let textWithSpacing = NSAttributedString(string: " " + text, attributes: [.font: font, .foregroundColor: textColor, .baselineOffset: 4])
         
         attributedString.append(textWithSpacing)
 
         self.attributedText = attributedString
+    }
+    
+    func setImageAttributedText(image: UIImage?, attributedText: NSAttributedString) {
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        attachment.bounds = CGRect(x: 0, y: -3, width: 16, height: 16)
+        
+        let imageString = NSAttributedString(attachment: attachment)
+        
+        let combined = NSMutableAttributedString()
+        combined.append(imageString)
+        combined.append(NSAttributedString(string: " "))
+        combined.append(attributedText)
+        
+        self.attributedText = combined
     }
 }
