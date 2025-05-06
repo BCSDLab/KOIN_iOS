@@ -177,13 +177,26 @@ extension RegisterFormViewController {
             return
         }
 
+        if currentStep == .enterForm {
+            enterFormView.tryRegister()
+
+            viewModel.outputPublisher
+                .receive(on: RunLoop.main)
+                .sink { [weak self] output in
+                    guard let self = self else { return }
+                    if case .succesRegister = output {
+                        let completionVC = RegisterCompletionViewController()
+                        self.navigationController?.pushViewController(completionVC, animated: true)
+                    }
+                }.store(in: &subscriptions)
+            return
+        }
+
         if let nextStep = currentStep.next() {
             currentStep = nextStep
-        } else {
-            let completionVC = RegisterCompletionViewController()
-            navigationController?.pushViewController(completionVC, animated: true)
         }
     }
+
 }
 
 extension RegisterFormViewController {

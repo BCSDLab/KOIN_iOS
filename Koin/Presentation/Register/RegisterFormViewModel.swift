@@ -8,7 +8,18 @@
 import Combine
 
 final class RegisterFormViewModel: ViewModelProtocol {
+    var tempName: String?
+    var tempPhoneNumber: String?
+    var tempGender: String? // "0" = 남성, "1" = 여성
+    var userType: UserType?
+    var outputPublisher: AnyPublisher<Output, Never> {
+        outputSubject.eraseToAnyPublisher()
+    }
     
+    enum UserType {
+        case student, general
+    }
+
     enum Input {
         case checkDuplicatedPhoneNumber(String)
         case sendVerificationCode(String)
@@ -16,6 +27,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedId(String)
         case getDeptList
         case checkDuplicatedNickname(String)
+        case tryStudentRegister(StudentRegisterFormRequest)
+        case tryGeneralRegister(GeneralRegisterFormRequest)
     }
     
     enum Output {
@@ -26,6 +39,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case successCheckDuplicatedId
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
+        case succesRegister
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -36,14 +50,16 @@ final class RegisterFormViewModel: ViewModelProtocol {
     private let checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
+    private let registerFormUseCase: RegisterFormUseCase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, registerFormUseCase: RegisterFormUseCase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
         self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
         self.checkDuplicatedIdUseCase = checkDuplicatedIdUseCase
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.checkDuplicatedNicknameUseCase = checkDuplicatedNicknameUseCase
+        self.registerFormUseCase = registerFormUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -61,6 +77,10 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.fetchDeptList()
             case let .checkDuplicatedNickname(nickname):
                 self?.checkDuplicatedNickname(nickname: nickname)
+            case let .tryStudentRegister(request):
+                self?.studentRegister(registerRequest: request)
+            case let .tryGeneralRegister(request):
+                self?.generalRegister(registerRequest: request)
             }
         }.store(in: &subscriptions)
         
@@ -142,4 +162,56 @@ extension RegisterFormViewModel {
             self?.outputSubject.send(.changeCheckButtonStatus)
         }.store(in: &subscriptions)
     }
+    
+    private func studentRegister(registerRequest: StudentRegisterFormRequest) {
+        registerFormUseCase.studentExecute(
+            name: registerRequest.name,
+            phoneNumber: registerRequest.phoneNumber,
+            loginId: registerRequest.loginId,
+            password: registerRequest.password,
+            department: registerRequest.department,
+            studentNumber: registerRequest.studentNumber,
+            gender: registerRequest.gender,
+            email: registerRequest.email?.isEmpty == true ? nil : "\(registerRequest.email!)@koreatech.ac.kr",
+            nickname: registerRequest.nickname?.isEmpty == true ? nil : registerRequest.nickname
+        )
+        .sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                // TODO: - 백엔드 중복 에러 고쳐지면 수정할 예정
+//                print("name: \(registerRequest.name)")
+//                print("phoneNumber: \(registerRequest.phoneNumber)")
+//                print("loginId: \(registerRequest.loginId)")
+//                print("password: \(registerRequest.password)")
+//                print("department: \(registerRequest.department)")
+//                print("studentNumber: \(registerRequest.studentNumber)")
+//                print("gender: \(registerRequest.gender)")
+//                print("nickname: \(registerRequest.nickname ?? "nil")")
+//                print("email: \(registerRequest.email ?? "nil")")
+                print("❌ 학생 회원가입 실패: \(error.message), code: \(error.code)")
+            }
+        } receiveValue: { [weak self] _ in
+            self?.outputSubject.send(.succesRegister)
+        }.store(in: &subscriptions)
+    }
+
+    private func generalRegister(registerRequest: GeneralRegisterFormRequest) {
+        registerFormUseCase.generalExecute(
+            name: registerRequest.name,
+            phoneNumber: registerRequest.phoneNumber,
+            loginId: registerRequest.loginId,
+            gender: registerRequest.gender,
+            password: registerRequest.password,
+            email: registerRequest.email?.isEmpty == true ? nil : registerRequest.email,
+            nickname: registerRequest.nickname?.isEmpty == true ? nil : registerRequest.nickname
+
+        )
+        .sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                print("❌ 외부인 회원가입 실패: \(error.message), code: \(error.code)")
+            }
+        } receiveValue: { [weak self] _ in
+            self?.outputSubject.send(.succesRegister)
+        }.store(in: &subscriptions)
+    }
+
 }

@@ -170,6 +170,9 @@ final class CertificationFormView: UIView {
                 )
                 self?.contactButton.isHidden = true
                 self?.onVerificationStatusChanged?(true)
+                self?.viewModel.tempName = self?.nameTextField.text
+                self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
+                self?.viewModel.tempGender = self?.femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500) ? "1" : "0"
             default:
                 break
             }
@@ -222,9 +225,6 @@ extension CertificationFormView {
 
         femaleButton.configuration = femaleConfig
         maleButton.configuration = maleConfig
-
-        // 선택된 성별을 ViewModel에 저장할 때 여기서 처리하기
-        // viewModel.selectedGender = isFemale ? .female : .male
     }
     
     private func updatePhoneNumberSectionVisibility() {

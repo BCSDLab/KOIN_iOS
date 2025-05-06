@@ -61,10 +61,12 @@ final class SelectTypeFormView: UIView {
 
 extension SelectTypeFormView {
     @objc private func studentButtonTapped() {
+        viewModel.userType = .student
         onUserTypeSelected?(.student)
     }
 
     @objc private func generalButtonTapped() {
+        viewModel.userType = .general
         onUserTypeSelected?(.general)
     }
 }

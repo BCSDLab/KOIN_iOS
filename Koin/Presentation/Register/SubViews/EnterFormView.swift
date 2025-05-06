@@ -245,6 +245,56 @@ final class EnterFormView: UIView {
     func configure(for userType: SelectTypeFormView.UserType?) {
         self.userType = userType
     }
+    
+    func tryRegister() {
+        guard let userType = self.userType else { return }
+        guard let loginId = idTextField.text,
+              let password = passwordTextField1.text else { return }
+
+        let nicknameText = nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let nickname = (nicknameText?.isEmpty == true) ? nil : nicknameText
+
+        switch userType {
+        case .student:
+            guard let dept = departmentDropdownButton.titleLabel?.text,
+                  let studentNumber = studentIdTextField.text else { return }
+
+            let emailText = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let email = (emailText?.isEmpty == true) ? nil : emailText
+
+            let request = StudentRegisterFormRequest(
+                name: viewModel.tempName ?? "",
+                phoneNumber: viewModel.tempPhoneNumber ?? "",
+                loginId: loginId,
+                password: password,
+                department: dept,
+                studentNumber: studentNumber,
+                gender: viewModel.tempGender ?? "",
+                email: email,
+                nickname: nickname
+            )
+
+            viewModel.transform(with: Just(.tryStudentRegister(request)).eraseToAnyPublisher())
+                .sink { _ in }.store(in: &subscriptions)
+
+        case .general:
+            let emailText = generalEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let email = (emailText?.isEmpty == true) ? nil : emailText
+
+            let request = GeneralRegisterFormRequest(
+                name: viewModel.tempName ?? "",
+                phoneNumber: viewModel.tempPhoneNumber ?? "",
+                loginId: loginId,
+                gender: viewModel.tempGender ?? "",
+                password: password,
+                email: email,
+                nickname: nickname
+            )
+
+            viewModel.transform(with: Just(.tryGeneralRegister(request)).eraseToAnyPublisher())
+                .sink { _ in }.store(in: &subscriptions)
+        }
+    }
 }
 
 extension EnterFormView {
