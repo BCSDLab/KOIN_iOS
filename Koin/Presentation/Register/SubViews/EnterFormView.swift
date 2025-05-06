@@ -17,6 +17,15 @@ final class EnterFormView: UIView {
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var userType: SelectTypeFormView.UserType?
+    var onEnterFormStatusChanged: ((Bool) -> Void)?
+    
+    override var isHidden: Bool {
+        didSet {
+            if isHidden == false {
+                self.onEnterFormStatusChanged?(false)
+            }
+        }
+    }
     
     // MARK: - UI Components
     private let idLabel = UILabel().then {
@@ -267,7 +276,8 @@ extension EnterFormView {
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
-        guard let firstText = passwordTextField1.text, let secondText = passwordTextField2.text else { return }
+        guard let firstText = passwordTextField1.text,
+              let secondText = passwordTextField2.text else { return }
 
         if firstText == secondText {
             correctPasswordLabel.isHidden = false
@@ -277,13 +287,17 @@ extension EnterFormView {
                     $0.isHidden = false
                 }
                 setUpStudentConstraints()
-            }
-            else {
+                onEnterFormStatusChanged?(false)
+            } else {
                 [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
                     $0.isHidden = false
                 }
                 setUpGeneralConstraints()
+                onEnterFormStatusChanged?(true)
             }
+        } else {
+            correctPasswordLabel.isHidden = true
+            onEnterFormStatusChanged?(false)
         }
     }
     
@@ -331,7 +345,6 @@ extension EnterFormView {
 
         let numericText = text.filter { $0.isNumber }
         let trimmedText = String(numericText.prefix(10))
-        
         textField.text = trimmedText
 
         let yearPart = String(trimmedText.prefix(4))
@@ -342,10 +355,13 @@ extension EnterFormView {
         }()
 
         let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
+        let isValid = isLengthValid && isYearValid
+        studentIdWarningLabel.isHidden = isValid
 
-        studentIdWarningLabel.isHidden = isLengthValid && isYearValid
+        if userType == .student {
+            onEnterFormStatusChanged?(isValid)
+        }
     }
-
     
     @objc private func clearStudentNicknameTextField() {
         nicknameTextField.text = nil
@@ -389,7 +405,6 @@ extension EnterFormView {
             generalEmailResponseLabel.isHidden = false
         }
     }
-
 }
 
 // MARK: UI Settings
@@ -552,8 +567,7 @@ extension EnterFormView {
     }
     
     private func setUpTextFieldUnderline() {
-        [idTextField, studentIdTextField, nicknameTextField,
-         passwordTextField1, passwordTextField2, studentEmailTextField, generalEmailTextField].forEach {
+        [idTextField, studentIdTextField, nicknameTextField, passwordTextField1, passwordTextField2, studentEmailTextField, generalEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }

@@ -153,6 +153,11 @@ final class RegisterFormViewController: UIViewController {
             self.userType = selectedType
             self.currentStep = .enterForm
         }
+        
+        enterFormView.onEnterFormStatusChanged = { [weak self] isVerified in
+            guard let self = self else { return }
+            self.updateNextButtonState(enabled: isVerified)
+        }
     }
     
     private func updateNextButtonState(enabled: Bool) {
