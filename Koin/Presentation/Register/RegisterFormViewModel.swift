@@ -88,7 +88,6 @@ extension RegisterFormViewModel {
                     self.outputSubject.send(.showHttpResult(error.message, .sub500))
                 }
             } receiveValue: { [weak self] response in
-                print("✅ [ViewModel] 인증번호 발송 성공. 응답 데이터: \(response)")
                 self?.outputSubject.send(.sendVerificationCodeSuccess(response: response))
             }
             .store(in: &subscriptions)
@@ -140,7 +139,6 @@ extension RegisterFormViewModel {
                 self?.outputSubject.send(.showHttpResult(error.message, .danger700))
             }
         } receiveValue: { [weak self] _ in
-//            self?.outputSubject.send(.showHttpResult("사용 가능한 닉네임입니다", .neutral800))
             self?.outputSubject.send(.changeCheckButtonStatus)
         }.store(in: &subscriptions)
     }

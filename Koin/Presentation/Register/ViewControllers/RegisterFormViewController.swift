@@ -171,12 +171,13 @@ extension RegisterFormViewController {
         if currentStep == .selectType {
             return
         }
-        
+
         if let nextStep = currentStep.next() {
             currentStep = nextStep
+        } else {
+            let completionVC = RegisterCompletionViewController()
+            navigationController?.pushViewController(completionVC, animated: true)
         }
-        // TODO: 여기부분에 마지막 부분이면 추가 처리.
-        // 학생, 외부인 분기 처리 추가 필요.
     }
 }
 
