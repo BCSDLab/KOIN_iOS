@@ -23,6 +23,8 @@ protocol UserService {
     func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
     func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse>
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
@@ -155,5 +157,13 @@ final class DefaultUserService: UserService {
     
     func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.checkDuplicatedId(requestModel))
+    }
+    
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.studentRegisterForm(requestModel))
+    }
+    
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.generalRegisterForm(requestModel))
     }
 }
