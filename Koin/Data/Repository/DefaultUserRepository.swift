@@ -80,4 +80,12 @@ final class DefaultUserRepository: UserRepository {
     func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkDuplicatedId(requestModel: requestModel)
     }
+    
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.studentRegisterForm(requestModel: requestModel)
+    }
+    
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.generalRegisterForm(requestModel: requestModel)
+    }
 }
