@@ -23,6 +23,8 @@ enum UserAPI {
     case sendVerificationCode(SendVerificationCodeRequest)
     case checkVerificationCode(CheckVerificationCodeRequest)
     case checkDuplicatedId(CheckDuplicatedIdRequest)
+    case studentRegisterForm(StudentRegisterFormRequest)
+    case generalRegisterForm(GeneralRegisterFormRequest)
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -47,12 +49,14 @@ extension UserAPI: Router, URLRequestConvertible {
         case .sendVerificationCode: return "/users/verification/sms/send"
         case .checkVerificationCode: return "/users/verification/sms/verify"
         case .checkDuplicatedId: return "/user/check/id"
+        case .studentRegisterForm: return "/v2/users/students/register"
+        case .generalRegisterForm: return "/v2/users/register"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode: return .post
+        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin, .checkDuplicatedId: return .get
         case .modify: return .put
         case .revoke: return .delete
@@ -63,7 +67,7 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchUserData, .revoke, .checkAuth, .checkLogin:
             break
@@ -110,12 +114,16 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .checkDuplicatedId(let request):
             return try? request.toDictionary()
+        case .studentRegisterForm(let request):
+            return try? JSONEncoder().encode(request)
+        case .generalRegisterForm(let request):
+            return try? JSONEncoder().encode(request)
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode: return JSONEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm: return JSONEncoding.default
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkDuplicatedId: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil
