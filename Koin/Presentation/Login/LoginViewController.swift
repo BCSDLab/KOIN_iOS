@@ -21,40 +21,44 @@ final class LoginViewController: UIViewController {
         $0.image = UIImage.appImage(asset: .koinLogo)
     }
     
-    private let emailTextField = UITextField().then {
-        $0.placeholder = "KOREATECH 이메일"
+    private let idTextField = UITextField().then {
+        $0.placeholder = "아이디(Koreatech ID/전화번호)"
         $0.autocapitalizationType = .none
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
-    }
-    
-    private let emailGuideLabel = UILabel().then {
-        $0.text = "@ koreatech.ac.kr"
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 16)
     }
     
     private let separateView1 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
-    private let emailWarningLabel = UILabel().then {
+    private let idWarningLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
-        $0.textColor = .red
+        $0.textColor = UIColor.appColor(.sub500)
     }
     
     private let passwordTextField = UITextField().then {
         $0.placeholder = "비밀번호"
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 16)
         $0.isSecureTextEntry = true
     }
     
+    private let changeSecureButton = UIButton().then { button in
+        button.setImage(UIImage.appImage(asset: .visibility), for: .normal)
+    }
+    
     private let separateView2 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     private let passwordWarningLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
         $0.numberOfLines = 2
-        $0.textColor = .red
+        $0.textColor = UIColor.appColor(.sub500)
+    }
+    
+    private let warningImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .warningOrange)
+        $0.isHidden = true
     }
     
     private let loginButton = UIButton().then {
@@ -62,6 +66,7 @@ final class LoginViewController: UIViewController {
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
     }
     
     private let registerButton = UIButton().then {
@@ -69,20 +74,39 @@ final class LoginViewController: UIViewController {
         $0.setTitle("회원가입", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
     }
     
     private let findIdButton = UIButton().then {
-        $0.setTitle("아이디 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .findId)
+        var text = AttributedString("아이디 찾기")
+        text.font = UIFont.appFont(.pretendardRegular, size: 13)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 1
+        configuration.baseForegroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = .clear
+        $0.configuration = configuration
     }
     
     private let findPasswordButton = UIButton().then {
-        $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 13)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .findPassword)
+        var text = AttributedString("비밀번호 찾기")
+        text.font = UIFont.appFont(.pretendardRegular, size: 13)
+        configuration.attributedTitle = text
+        configuration.imagePadding = 1
+        configuration.baseForegroundColor = UIColor.appColor(.neutral500)
+        $0.backgroundColor = .clear
+        $0.configuration = configuration
     }
     
+    private let copyrightLabel = UILabel().then {
+        $0.text = "Copyright @ BCSD Lab All rights reserved."
+        $0.textColor = UIColor.appColor(.neutral700)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textAlignment = .center
+    }
     
     // MARK: - Initialization
     init(viewModel: LoginViewModel) {
@@ -102,11 +126,12 @@ final class LoginViewController: UIViewController {
         configureView()
         bind()
         hideKeyboardWhenTappedAround()
+        changeSecureButton.addTarget(self, action: #selector(changeSecureButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         findIdButton.addTarget(self, action: #selector(findIdButtonTapped), for: .touchUpInside)
         findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
-        emailTextField.delegate = self
+        idTextField.delegate = self
         passwordTextField.delegate = self
     }
     
@@ -120,16 +145,20 @@ final class LoginViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showErrorMessage(message):
+                self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
-        
     }
 }
 
 extension LoginViewController {
+    @objc private func changeSecureButtonTapped() {
+        passwordTextField.isSecureTextEntry.toggle()
+        changeSecureButton.setImage(passwordTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)
+    }
 
     @objc private func findIdButtonTapped() {
         if let url = URL(string: "https://portal.koreatech.ac.kr/kut/page/findUser.jsp") {
@@ -144,11 +173,11 @@ extension LoginViewController {
         navigationController?.pushViewController(findPasswordViewController, animated: true)
     }
     
-    
     @objc func loginButtonTapped() {
-        emailWarningLabel.text = ""
+        warningImageView.isHidden = true
+        idWarningLabel.text = ""
         passwordWarningLabel.text = ""
-        inputSubject.send(.login(emailTextField.text ?? "", passwordTextField.text ?? ""))
+        inputSubject.send(.login(idTextField.text ?? "", passwordTextField.text ?? ""))
     }
     
     @objc func registerButtonTapped() {
@@ -188,83 +217,90 @@ extension LoginViewController {
 extension LoginViewController {
     
     private func setUpLayOuts() {
-        [logoImageView, emailTextField, emailGuideLabel, separateView1, emailWarningLabel, passwordTextField, separateView2, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton].forEach {
+        [logoImageView, idTextField, separateView1, idWarningLabel, passwordTextField, changeSecureButton, separateView2, warningImageView, passwordWarningLabel, loginButton, registerButton, findIdButton, findPasswordButton, copyrightLabel].forEach {
             view.addSubview($0)
         }
     }
     private func setUpConstraints() {
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(90)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.height.equalTo(50)
-            make.width.equalTo(80)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            make.leading.equalTo(view.snp.leading).offset(40)
+            make.height.equalTo(60)
+            make.width.equalTo(107)
         }
-        emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(70)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.centerX)
-            make.height.equalTo(20)
-        }
-        emailGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.top)
-            make.leading.equalTo(view.snp.centerX)
-            make.height.equalTo(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+        idTextField.snp.makeConstraints { make in
+            make.top.equalTo(logoImageView.snp.bottom).offset(32)
+            make.leading.equalTo(view.snp.leading).offset(48)
+            make.trailing.equalTo(view.snp.trailing).offset(-48)
+            make.height.equalTo(40)
         }
         separateView1.snp.makeConstraints { make in
-            make.top.equalTo(emailGuideLabel.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(idTextField.snp.bottom)
+            make.leading.equalTo(idTextField.snp.leading)
+            make.trailing.equalTo(idTextField.snp.trailing)
             make.height.equalTo(1)
         }
-        emailWarningLabel.snp.makeConstraints { make in
-            make.top.equalTo(separateView1.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
+        idWarningLabel.snp.makeConstraints { make in
+            make.top.equalTo(separateView1.snp.bottom)
+            make.leading.equalTo(idTextField.snp.leading)
             make.height.equalTo(20)
         }
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailWarningLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(20)
+            make.top.equalTo(idTextField.snp.bottom).offset(16)
+            make.leading.equalTo(idTextField.snp.leading)
+            make.trailing.equalTo(idTextField.snp.trailing)
+            make.height.equalTo(40)
+        }
+        changeSecureButton.snp.makeConstraints { make in
+            make.centerY.equalTo(passwordTextField.snp.centerY)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
+            make.width.height.equalTo(20)
         }
         separateView2.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(passwordTextField.snp.bottom)
+            make.leading.equalTo(passwordTextField.snp.leading)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
             make.height.equalTo(1)
         }
+        warningImageView.snp.makeConstraints { make in
+            make.centerY.equalTo(passwordWarningLabel.snp.centerY)
+            make.leading.equalTo(separateView2.snp.leading)
+            make.width.height.equalTo(16)
+        }
         passwordWarningLabel.snp.makeConstraints { make in
-            make.top.equalTo(separateView2.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
+            make.top.equalTo(separateView2.snp.bottom)
+            make.leading.equalTo(warningImageView.snp.trailing).offset(4)
             make.height.greaterThanOrEqualTo(20)
         }
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(passwordWarningLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(50)
+            make.top.equalTo(separateView2.snp.bottom).offset(48)
+            make.leading.equalTo(separateView2.snp.leading)
+            make.trailing.equalTo(separateView2.snp.trailing)
+            make.height.equalTo(44)
         }
         registerButton.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(5)
-            make.leading.equalTo(view.snp.leading).offset(30)
-            make.trailing.equalTo(view.snp.trailing).offset(-30)
-            make.height.equalTo(50)
+            make.top.equalTo(loginButton.snp.bottom).offset(24)
+            make.leading.equalTo(loginButton.snp.leading)
+            make.trailing.equalTo(loginButton.snp.trailing)
+            make.height.equalTo(44)
         }
         findIdButton.snp.makeConstraints { make in
-            make.top.equalTo(registerButton.snp.bottom).offset(10)
+            make.top.equalTo(registerButton.snp.bottom).offset(32)
             make.trailing.equalTo(view.snp.centerX).offset(-5)
-            make.width.equalTo(70)
-            make.height.equalTo(15)
+            make.width.greaterThanOrEqualTo(84)
+            make.height.equalTo(20)
         }
         findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(findIdButton.snp.top)
             make.leading.equalTo(view.snp.centerX)
-            make.width.equalTo(90)
-            make.height.equalTo(15)
+            make.width.greaterThanOrEqualTo(100)
+            make.height.equalTo(20)
         }
- 
+        copyrightLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-32)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(18)
+        }
     }
     
     private func configureView() {

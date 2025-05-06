@@ -141,6 +141,8 @@ enum ImageAsset: String {
     case circleCheckedPrimary500
     case checkGreenCircle
     case warningRed
+    case findId
+    case findPassword
 }
 
 enum SFSymbols: String {
