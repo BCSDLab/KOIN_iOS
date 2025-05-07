@@ -31,7 +31,7 @@ extension UserAPI: Router, URLRequestConvertible {
         case .findPassword: return "/user/find/password"
         case .register: return "/user/student/register"
         case .checkDuplicatedNickname: return "/user/check/nickname"
-        case .login: return "/student/login"
+        case .login: return "/v2/users/login"
         case .fetchUserData, .modify: return "/user/student/me"
         case .checkPassword: return "/user/check/password"
         case .revoke: return "/user"
