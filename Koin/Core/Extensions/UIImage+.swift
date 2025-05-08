@@ -134,6 +134,13 @@ enum ImageAsset: String {
     case block
     case gallery
     case send
+    case checkEmptyCircle
+    case checkFilledCircle
+    case cancelNeutral500
+    case circlePrimary500
+    case circleCheckedPrimary500
+    case checkGreenCircle
+    case warningRed
     case findId
     case findPassword
 }

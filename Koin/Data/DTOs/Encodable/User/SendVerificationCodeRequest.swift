@@ -1,0 +1,14 @@
+//
+//  SendVerificationCodeRequest.swift
+//  koin
+//
+//  Created by 이은지 on 4/28/25.
+//
+
+struct SendVerificationCodeRequest: Encodable {
+    let phoneNumber: String
+    
+    enum CodingKeys: String, CodingKey {
+        case phoneNumber = "phone_number"
+    }
+}

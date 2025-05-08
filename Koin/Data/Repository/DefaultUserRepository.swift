@@ -9,7 +9,6 @@ import Combine
 
 final class DefaultUserRepository: UserRepository {
     
-    
     private let service: UserService
     
     init(service: UserService) {
@@ -45,6 +44,10 @@ final class DefaultUserRepository: UserRepository {
         service.findPassword(requestModel: requestModel)
     }
     
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkDuplicatedPhoneNumber(requestModel: requestModel)
+    }
+    
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkDuplicatedNickname(requestModel: requestModel)
     }
@@ -61,7 +64,28 @@ final class DefaultUserRepository: UserRepository {
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkPassword(requestModel: requestModel)
     }
+    
     func checkLogin() -> AnyPublisher<Bool, Never> {
         service.checkLogin()
+    }
+    
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
+        service.sendVerificationCode(requestModel: requestModel)
+    }
+    
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkVerificationCode(requestModel: requestModel)
+    }
+    
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.checkDuplicatedId(requestModel: requestModel)
+    }
+    
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.studentRegisterForm(requestModel: requestModel)
+    }
+    
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.generalRegisterForm(requestModel: requestModel)
     }
 }

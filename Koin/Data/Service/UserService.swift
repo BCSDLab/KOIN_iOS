@@ -11,6 +11,7 @@ import Combine
 protocol UserService {
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse>
     func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse>
     func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse>
@@ -19,9 +20,15 @@ protocol UserService {
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
     func checkLogin() -> AnyPublisher<Bool, Never>
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse>
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
+    
     private let networkService = NetworkService()
     
     func checkLogin() -> AnyPublisher<Bool, Never> {
@@ -45,9 +52,6 @@ final class DefaultUserService: UserService {
             .eraseToAnyPublisher()
     }
 
-
-
-    
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.checkAuth)
             .catch { [weak self] error -> AnyPublisher<UserTypeResponse, ErrorResponse> in
@@ -62,12 +66,17 @@ final class DefaultUserService: UserService {
             }
             .eraseToAnyPublisher()
     }
+    
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.findPassword(requestModel))
     }
     
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.register(requestModel))
+    }
+    
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedPhoneNumber(requestModel))
     }
     
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
@@ -136,5 +145,25 @@ final class DefaultUserService: UserService {
                 }
             }
             .eraseToAnyPublisher()
+    }
+    
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.sendVerificationCode(requestModel))
+    }
+    
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.checkVerificationCode(requestModel))
+    }
+    
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedId(requestModel))
+    }
+    
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.studentRegisterForm(requestModel))
+    }
+    
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.generalRegisterForm(requestModel))
     }
 }
