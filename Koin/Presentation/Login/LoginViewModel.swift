@@ -32,8 +32,8 @@ final class LoginViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .login(email, password):
-                self?.login(email: email, password: password)
+            case let .login(loginId, loginPw):
+                self?.login(loginId: loginId, loginPw: loginPw)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -45,8 +45,8 @@ final class LoginViewModel: ViewModelProtocol {
 
 extension LoginViewModel {
 
-    private func login(email: String, password: String) {
-        loginUseCase.execute(email: email, password: password).sink { [weak self] completion in
+    private func login(loginId: String, loginPw: String) {
+        loginUseCase.execute(loginId: loginId, loginPw: loginPw).sink { [weak self] completion in
             if case .failure(let error) = completion {
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
