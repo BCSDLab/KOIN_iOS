@@ -68,6 +68,11 @@ final class EnterFormView: UIView {
         $0.isSecureTextEntry = true
     }
     
+    private let passwordInfoLabel: UILabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.isHidden = true
+    }
+    
     private let passwordTextField2 = UITextField().then {
         $0.configureDefaultTextField()
         $0.setCustomPlaceholder(text: "비밀번호를 다시 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
@@ -193,6 +198,8 @@ final class EnterFormView: UIView {
             guard let strongSelf = self else { return }
             switch output {
             case let .showHttpResult(message, labelColor):
+                guard !message.isEmpty else { return }
+                self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange),
                     text: message,
@@ -200,12 +207,14 @@ final class EnterFormView: UIView {
                     textColor: .appColor(labelColor)
                     )
             case .successCheckDuplicatedId:
+                self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
                     text: "사용 가능한 아이디입니다.",
                     font: UIFont.appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700)
                     )
+                self?.checkIdDuplicateButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case .changeCheckButtonStatus:
@@ -244,6 +253,7 @@ final class EnterFormView: UIView {
     
     func configure(for userType: SelectTypeFormView.UserType?) {
         self.userType = userType
+        checkIdResponseLabel.isHidden = true
     }
     
     func tryRegister() {
@@ -320,10 +330,14 @@ extension EnterFormView {
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
-        guard textField.text != nil else { return }
+        guard let text = textField.text else { return }
+
         let isValid = textField.isValidPasswordFormat()
+
+        passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
     }
+
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
         guard let firstText = passwordTextField1.text,
@@ -353,7 +367,6 @@ extension EnterFormView {
     
     @objc private func checkDuplicateButtonTapped() {
         guard let loginId = idTextField.text else { return }
-        checkIdResponseLabel.isHidden = false
         inputSubject.send(.checkDuplicatedId(loginId))
     }
     
@@ -460,7 +473,7 @@ extension EnterFormView {
 // MARK: UI Settings
 extension EnterFormView {
     private func setUpLayOuts() {
-        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, nicknameTextField, nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField, koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
+        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordInfoLabel, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, nicknameTextField, nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField, koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
         ].forEach {
             self.addSubview($0)
         }
@@ -504,6 +517,13 @@ extension EnterFormView {
             $0.leading.equalTo(passwordLabel.snp.leading).offset(4)
             $0.trailing.equalTo(checkIdDuplicateButton.snp.trailing)
             $0.height.equalTo(40)
+        }
+        
+        passwordInfoLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField1.snp.bottom)
+            $0.leading.equalTo(passwordTextField1.snp.leading)
+            $0.trailing.equalTo(passwordTextField1.snp.trailing)
+            $0.height.equalTo(20)
         }
         
         passwordTextField2.snp.makeConstraints {
