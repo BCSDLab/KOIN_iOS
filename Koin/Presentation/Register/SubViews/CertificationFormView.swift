@@ -41,6 +41,11 @@ final class CertificationFormView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
+    private let nameHelpLabel = UILabel().then {
+        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.isHidden = true
+    }
+    
     private let femaleButton = UIButton().then {
         $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500), foregroundColor: .black)
     }
@@ -200,10 +205,14 @@ extension CertificationFormView {
     
     @objc private func nameTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        if text.count > 5 {
+        if text.count <= 1 {
+            nameHelpLabel.isHidden = false
+        } else if text.count <= 5 {
+            nameHelpLabel.isHidden = true
+            updatePhoneNumberSectionVisibility()
+        } else {
             textField.text = String(text.prefix(5))
         }
-        updatePhoneNumberSectionVisibility()
     }
     
     @objc private func femaleButtonTapped() {
@@ -412,7 +421,7 @@ extension CertificationFormView {
 // MARK: UI Settings
 extension CertificationFormView {
     private func setUpLayOuts() {
-        [nameAndGenderLabel, nameTextField, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
+        [nameAndGenderLabel, nameTextField, nameHelpLabel, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -432,15 +441,22 @@ extension CertificationFormView {
             $0.height.equalTo(40)
         }
         
+        nameHelpLabel.snp.makeConstraints {
+            $0.top.equalTo(nameTextField.snp.bottom)
+            $0.leading.equalTo(nameTextField.snp.leading)
+            $0.trailing.equalTo(nameTextField.snp.trailing)
+            $0.height.equalTo(20)
+        }
+        
         femaleButton.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(16)
+            $0.top.equalTo(nameHelpLabel.snp.bottom).offset(10)
             $0.leading.equalTo(nameTextField.snp.leading)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
         }
         
         maleButton.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(16)
+            $0.top.equalTo(femaleButton.snp.top)
             $0.leading.equalTo(femaleButton.snp.trailing).offset(32)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)

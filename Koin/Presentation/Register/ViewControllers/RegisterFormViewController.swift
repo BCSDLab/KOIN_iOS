@@ -217,10 +217,9 @@ extension RegisterFormViewController {
 
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(stackView)
 
         [agreementView, certificationView, selectTypeView, enterFormView].forEach {
-            stackView.addArrangedSubview($0)
+            contentView.addSubview($0)
         }
     }
     
@@ -258,8 +257,10 @@ extension RegisterFormViewController {
             $0.width.equalToSuperview()
         }
 
-        stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        [agreementView, certificationView, selectTypeView, enterFormView].forEach {
+            $0.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
         }
     }
     
