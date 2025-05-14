@@ -239,8 +239,10 @@ final class EnterFormView: UIView {
         checkIdDuplicateButton.addTarget(self, action: #selector(checkDuplicateButtonTapped), for: .touchUpInside)
         passwordTextField1.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped1))
         passwordTextField1.addTarget(self, action: #selector(passwordTextField1DidChange(_:)), for: .editingChanged)
+        passwordTextField1.delegate = self
         passwordTextField2.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
         passwordTextField2.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
+        passwordTextField2.delegate = self
         departmentDropdownButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         studentIdTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
         studentIdTextField.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
@@ -337,7 +339,6 @@ extension EnterFormView {
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
     }
-
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
         guard let firstText = passwordTextField1.text,
@@ -467,6 +468,14 @@ extension EnterFormView {
         if !trimmedText.isValidEmailFormat {
             generalEmailResponseLabel.isHidden = false
         }
+    }
+}
+
+extension EnterFormView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        return newText.count <= 18
     }
 }
 
