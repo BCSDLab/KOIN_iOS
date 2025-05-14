@@ -167,6 +167,8 @@ final class CertificationFormView: UIView {
                 self?.timer?.invalidate()
                 self?.timer = nil
                 self?.timerLabel.isHidden = true
+                self?.sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+                self?.verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
                 self?.verificationHelpLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
                     text: "인증번호가 일치합니다.",
