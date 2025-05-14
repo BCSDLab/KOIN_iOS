@@ -197,15 +197,24 @@ final class EnterFormView: UIView {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-            case let .showHttpResult(message, labelColor):
+//            case let .showHttpResult(message, labelColor):
+//                guard !message.isEmpty else { return }
+//                self?.checkIdResponseLabel.isHidden = false
+//                self?.checkIdResponseLabel.setImageText(
+//                    image: UIImage.appImage(asset: .warningOrange),
+//                    text: message,
+//                    font: UIFont.appFont(.pretendardRegular, size: 12),
+//                    textColor: .appColor(labelColor)
+//                    )
+            case let .showIdHttpResult(message, color):
                 guard !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange),
                     text: message,
                     font: UIFont.appFont(.pretendardRegular, size: 12),
-                    textColor: .appColor(labelColor)
-                    )
+                    textColor: .appColor(.sub500)
+                )
             case .successCheckDuplicatedId:
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
@@ -217,6 +226,14 @@ final class EnterFormView: UIView {
                 self?.checkIdDuplicateButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
+            case let .showNicknameHttpResult(message, color):
+                self?.nicknameResponseLabel.isHidden = false
+                self?.nicknameResponseLabel.setImageText(
+                    image: UIImage.appImage(asset: .warningOrange),
+                    text: message,
+                    font: UIFont.appFont(.pretendardRegular, size: 12),
+                    textColor: .appColor(.sub500)
+                )
             case .changeCheckButtonStatus:
                 self?.nicknameDuplicateButton.updateState(
                     isEnabled: false,
@@ -465,9 +482,7 @@ extension EnterFormView {
         let trimmedText = String(text.prefix(30))
         textField.text = trimmedText
 
-        if !trimmedText.isValidEmailFormat {
-            generalEmailResponseLabel.isHidden = false
-        }
+        generalEmailResponseLabel.isHidden = trimmedText.isValidEmailFormat
     }
 }
 

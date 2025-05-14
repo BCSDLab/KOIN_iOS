@@ -33,6 +33,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     enum Output {
         case showHttpResult(String, SceneColorAsset)
+        case showIdHttpResult(String, SceneColorAsset)
+        case showNicknameHttpResult(String, SceneColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
         case correctVerificationCode
@@ -135,7 +137,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedId(loginId: String) {
         checkDuplicatedIdUseCase.execute(loginId: loginId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+                self?.outputSubject.send(.showIdHttpResult(error.message, .sub500))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.successCheckDuplicatedId)
