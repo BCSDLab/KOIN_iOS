@@ -42,8 +42,12 @@ final class RegisterFormViewController: UIViewController {
     }
     
     // MARK: - UI Components
-    private let stepTextLabel = UILabel()
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
     
+    private let contentView = UIView()
+    private let stepTextLabel = UILabel()
     private let stepLabel = UILabel()
     
     private let progressView = UIProgressView().then {
@@ -64,6 +68,12 @@ final class RegisterFormViewController: UIViewController {
         $0.isEnabled = false
         $0.backgroundColor = UIColor.appColor(.neutral300)
         $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+    }
+    
+    private let stackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 0
+        $0.distribution = .fill
     }
     
     private lazy var agreementView = AgreementFormView(viewModel: viewModel).then {
@@ -201,51 +211,55 @@ extension RegisterFormViewController {
 
 extension RegisterFormViewController {
     private func setUpLayOuts() {
-        [stepTextLabel, stepLabel, progressView, nextButton, agreementView, certificationView, selectTypeView, enterFormView].forEach {
+        [stepTextLabel, stepLabel, progressView, nextButton].forEach {
             view.addSubview($0)
         }
-    }
 
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(stackView)
+
+        [agreementView, certificationView, selectTypeView, enterFormView].forEach {
+            stackView.addArrangedSubview($0)
+        }
+    }
     
     private func setUpConstraints() {
         stepTextLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.leading.equalToSuperview().offset(24)
         }
-        
+
         stepLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.top.equalTo(stepTextLabel)
             $0.trailing.equalToSuperview().offset(-24)
         }
-        
+
         progressView.snp.makeConstraints {
             $0.top.equalTo(stepTextLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.height.equalTo(3)
         }
-        
+
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
             $0.height.equalTo(50)
             $0.horizontalEdges.equalToSuperview().inset(32)
         }
-        
-        agreementView.snp.makeConstraints {
+
+        scrollView.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.horizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalTo(nextButton.snp.top).offset(-32)
         }
 
-        certificationView.snp.makeConstraints {
-            $0.edges.equalTo(agreementView)
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
         }
 
-        selectTypeView.snp.makeConstraints {
-            $0.edges.equalTo(agreementView)
-        }
-
-        enterFormView.snp.makeConstraints {
-            $0.edges.equalTo(agreementView)
+        stackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
     
@@ -263,4 +277,3 @@ extension RegisterFormViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
