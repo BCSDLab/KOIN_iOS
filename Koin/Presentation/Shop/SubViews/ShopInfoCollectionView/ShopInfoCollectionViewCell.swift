@@ -8,11 +8,13 @@
 import UIKit
 
 final class ShopInfoCollectionViewCell: UICollectionViewCell {
+    private var benefitTimer: Timer?
+    private var benefitDetails: [String] = []
+    private var currentIndex: Int = 0
     
-    private let eventLabel: UILabel = {
-        let label = UILabel()
+    private let eventLabel = UILabel().then {
         let attributedString = NSMutableAttributedString(string: "이벤트 ")
-        label.textAlignment = .center
+        $0.textAlignment = .center
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.appFont(.pretendardMedium, size: 8),
             .foregroundColor: UIColor.appColor(.primary300),
@@ -24,39 +26,32 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         imageAttachment.image = UIImage.appImage(asset: .lamp)
         imageAttachment.bounds = CGRect(x: 0, y: 3, width: 7, height: 7)
         attributedString.append(NSAttributedString(attachment: imageAttachment))
-        label.clipsToBounds = true
-        label.layer.cornerRadius = 8
-        label.layer.borderColor = UIColor.appColor(.primary300).cgColor
-        label.layer.borderWidth = 0.5
-        label.attributedText = attributedString
-        label.backgroundColor = .systemBackground
-        return label
-    }()
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+        $0.layer.borderColor = UIColor.appColor(.primary300).cgColor
+        $0.layer.borderWidth = 0.5
+        $0.attributedText = attributedString
+        $0.backgroundColor = .systemBackground
+    }
 
-    private let borderView: UIView = {
-        let view = UIView()
-        view.layer.borderWidth = 1.0
-        view.layer.borderColor = UIColor.appColor(.neutral200).cgColor
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-        return view
-    }()
+    private let borderView = UIView().then {
+        $0.layer.borderWidth = 1.0
+        $0.layer.borderColor = UIColor.appColor(.neutral200).cgColor
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+    }
     
-    private let shopTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.neutral800)
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        return label
-    }()
+    private let shopTitleLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.numberOfLines = 0
+        $0.lineBreakMode = .byWordWrapping
+    }
     
-    private let benefitLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.appColor(.primary300)
-        label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        return label
-    }()
+    private let benefitLabel = UILabel().then {
+        $0.textColor = UIColor.appColor(.primary300)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+    }
     
     private let starImageView = UIImageView().then { _ in
     }
@@ -71,12 +66,16 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
-    private let shopReadyView: ShopReadyView = {
-        let view = ShopReadyView(frame: .zero)
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-        return view
-    }()
+    private let shopReadyView = ShopReadyView(frame: .zero).then {
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        stopBenefitRotation()
+        benefitLabel.text = nil
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -101,11 +100,39 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         }
         
         if let detail = info.benefitDetail {
-            benefitLabel.text = info.benefitDetail
+            benefitLabel.text = detail
+            stopBenefitRotation()
         } else {
-            benefitLabel.text = info.benefitDetails.first
+            benefitDetails = info.benefitDetails
+            benefitLabel.text = benefitDetails.first
         }
+        
         benefitLabel.isHidden = info.isOpen ? false : true
+    }
+    
+    func startBenefitRotation() {
+        guard benefitDetails.count > 1 else { return }
+
+        stopBenefitRotation()
+        currentIndex = 0
+
+        benefitTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            guard let self = self, !self.benefitDetails.isEmpty else { return }
+            self.currentIndex = (self.currentIndex + 1) % self.benefitDetails.count
+            let nextText = self.benefitDetails[self.currentIndex]
+            self.animateBenefitChange(to: nextText)
+        }
+    }
+
+    func stopBenefitRotation() {
+        benefitTimer?.invalidate()
+        benefitTimer = nil
+    }
+    
+    private func animateBenefitChange(to newText: String) {
+        UIView.transition(with: benefitLabel, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+            self.benefitLabel.text = newText
+        }, completion: nil)
     }
 }
 
