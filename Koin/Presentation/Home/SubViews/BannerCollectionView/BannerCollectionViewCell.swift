@@ -11,8 +11,10 @@ final class BannerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
-    private let imageView = UIImageView()
-    
+    private let imageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.clipsToBounds = true
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
