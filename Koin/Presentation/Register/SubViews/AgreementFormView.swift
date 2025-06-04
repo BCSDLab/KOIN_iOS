@@ -63,7 +63,7 @@ final class AgreementFormView: UIView {
         $0.text = AgreementText.personalInformation.description
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor.appColor(.lightGray).cgColor
+        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
         $0.layer.borderWidth = 1.0
         $0.layer.cornerRadius = 5.0
         $0.isEditable = false
@@ -94,7 +94,7 @@ final class AgreementFormView: UIView {
         $0.text = AgreementText.koin.description
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor.appColor(.lightGray).cgColor
+        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
         $0.layer.borderWidth = 1.0
         $0.layer.cornerRadius = 5.0
         $0.isEditable = false
@@ -125,7 +125,7 @@ final class AgreementFormView: UIView {
         $0.text = AgreementText.marketing.description
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor.appColor(.lightGray).cgColor
+        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
         $0.layer.borderWidth = 1.0
         $0.layer.cornerRadius = 5.0
         $0.isEditable = false
