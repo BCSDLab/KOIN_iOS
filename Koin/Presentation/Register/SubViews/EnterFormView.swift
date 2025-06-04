@@ -100,19 +100,23 @@ final class EnterFormView: UIView {
     
     private let departmentDropdownButton = UIButton().then {
         $0.applyDropdownStyle(
-            title: "학부",
+            title: "학부를 선택해주세요.",
             font: UIFont.appFont(.pretendardRegular, size: 14),
-            titleColor: .appColor(.neutral800),
-            borderColor: .appColor(.neutral400),
+            titleColor: .appColor(.neutral400),
+            borderColor: .white,
             backgroundColor: .appColor(.neutral0),
             icon: UIImage.appImage(symbol: .chevronDown)
         )
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.06
+        $0.layer.shadowOffset = CGSize(width: 0, height: 1)
+        $0.layer.shadowRadius = 4
         $0.layer.cornerRadius = 12
         $0.isHidden = true
     }
     
     private let deptDropDown = DropDown().then {
-        $0.backgroundColor = .systemBackground
+        $0.backgroundColor = .white
         $0.isHidden = true
     }
     
@@ -197,15 +201,6 @@ final class EnterFormView: UIView {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-//            case let .showHttpResult(message, labelColor):
-//                guard !message.isEmpty else { return }
-//                self?.checkIdResponseLabel.isHidden = false
-//                self?.checkIdResponseLabel.setImageText(
-//                    image: UIImage.appImage(asset: .warningOrange),
-//                    text: message,
-//                    font: UIFont.appFont(.pretendardRegular, size: 12),
-//                    textColor: .appColor(labelColor)
-//                    )
             case let .showIdHttpResult(message, color):
                 guard !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
@@ -260,7 +255,7 @@ final class EnterFormView: UIView {
         passwordTextField2.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
         passwordTextField2.addTarget(self, action: #selector(passwordTextField2DidChange(_:)), for: .editingChanged)
         passwordTextField2.delegate = self
-        departmentDropdownButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        departmentDropdownButton.addTarget(self, action: #selector(departmentButtonTapped(_:)), for: .touchUpInside)
         studentIdTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentIdTextField))
         studentIdTextField.addTarget(self, action: #selector(studentIdTextFieldDidChange(_:)), for: .editingChanged)
         nicknameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearStudentNicknameTextField))
@@ -412,7 +407,7 @@ extension EnterFormView {
         }
     }
     
-    @objc func buttonTapped(_ sender: UIButton) {
+    @objc func departmentButtonTapped(_ sender: UIButton) {
         self.layoutIfNeeded()
         deptDropDown.show()
     }
@@ -573,7 +568,7 @@ extension EnterFormView {
         
         departmentDropdownButton.snp.makeConstraints {
             $0.top.equalTo(studentInfoGuideLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(passwordTextField1.snp.leading)
+            $0.leading.equalTo(studentInfoGuideLabel.snp.leading)
             $0.trailing.equalTo(passwordTextField1.snp.trailing)
             $0.height.equalTo(40)
         }
@@ -666,19 +661,19 @@ extension EnterFormView {
         }
     }
     
+    // TODO: - 드롭 다운 버튼 리스트 디자인 수정
     private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
         dropDown.anchorView = button
         dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
         dropDown.dataSource = dataSource
         dropDown.direction = .bottom
         dropDown.selectionAction = { (index: Int, item: String) in
-        
             var buttonConfiguration = UIButton.Configuration.plain()
             buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
             
             var attributedTitle = AttributedString(item)
             attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
+            attributedTitle.foregroundColor = UIColor.appColor(.neutral500)
             buttonConfiguration.attributedTitle = attributedTitle
             button.configuration = buttonConfiguration
 
