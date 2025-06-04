@@ -34,11 +34,11 @@ final class EnterFormView: UIView {
         $0.text = "사용하실 아이디를 입력해 주세요."
     }
 
-    private let idTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "5~13자리로 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-    }
+    private let idTextField = DefaultTextField(
+        placeholder: "5~13자리로 입력해 주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    )
     
     private let checkIdDuplicateButton = UIButton().then {
         $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
@@ -61,10 +61,11 @@ final class EnterFormView: UIView {
         $0.text = "사용하실 비밀번호를 입력해 주세요."
     }
     
-    private let passwordTextField1 = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let passwordTextField1 = DefaultTextField(
+        placeholder: "특수문자 포함 영어와 숫자 6~18자리로 입력해주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 13)
+    ).then {
         $0.isSecureTextEntry = true
     }
     
@@ -73,10 +74,11 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let passwordTextField2 = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "비밀번호를 다시 입력해 주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let passwordTextField2 = DefaultTextField(
+        placeholder: "비밀번호를 다시 입력해 주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 13)
+    ).then {
         $0.isSecureTextEntry = true
         $0.isHidden = true
     }
@@ -120,10 +122,11 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let studentIdTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "학번을 입력해주세요.", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let studentIdTextField = DefaultTextField(
+        placeholder: "학번을 입력해주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     
@@ -132,10 +135,11 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let nicknameTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "닉네임은 변경 가능합니다. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let nicknameTextField = DefaultTextField(
+        placeholder: "닉네임은 변경 가능합니다. (선택)",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     
@@ -150,10 +154,11 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let studentEmailTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "koreatech 이메일(선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let studentEmailTextField = DefaultTextField(
+        placeholder: "koreatech 이메일(선택)",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     
@@ -164,10 +169,11 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let generalEmailTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "이메일을 입력해 주세요. (선택)", textColor: .appColor(.neutral400), font: .appFont(.pretendardRegular, size: 13))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let generalEmailTextField = DefaultTextField(
+        placeholder: "이메일을 입력해 주세요. (선택)",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     

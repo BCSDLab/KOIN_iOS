@@ -35,11 +35,11 @@ final class CertificationFormView: UIView {
         $0.text = "성함과 성별을 알려주세요."
     }
     
-    private let nameTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "2~5 자리로 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-    }
+    private let nameTextField = DefaultTextField(
+        placeholder: "2~5 자리로 입력해 주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    )
     
     private let nameHelpLabel = UILabel().then {
         $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
@@ -61,10 +61,11 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    private let phoneNumberTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "- 없이 번호를 입력해 주세요.", textColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let phoneNumberTextField = DefaultTextField(
+        placeholder: "- 없이 번호를 입력해 주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     
@@ -100,10 +101,11 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    private let verificationTextField = UITextField().then {
-        $0.configureDefaultTextField()
-        $0.setCustomPlaceholder(text: "인증번호를 입력해주세요.", textColor: UIColor.appColor(.neutral400), font: .appFont(.pretendardRegular, size: 14))
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+    private let verificationTextField = DefaultTextField(
+        placeholder: "인증번호를 입력해주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
         $0.isHidden = true
     }
     
