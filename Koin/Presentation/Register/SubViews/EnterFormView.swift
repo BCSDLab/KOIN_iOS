@@ -40,9 +40,14 @@ final class EnterFormView: UIView {
         font: UIFont.appFont(.pretendardRegular, size: 14)
     )
     
-    private let checkIdDuplicateButton = UIButton().then {
-        $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
-        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+    private let checkIdDuplicateButton = StatefulButton(
+        title: "중복 확인",
+        font: .appFont(.pretendardRegular, size: 10),
+        enabledColor: .appColor(.primary500),
+        disabledColor: .appColor(.neutral300),
+        cornerRadius: 4
+    ).then {
+        $0.updateState(isEnabled: false)
     }
     
     private let checkIdResponseLabel: UILabel = UILabel().then {
@@ -143,9 +148,14 @@ final class EnterFormView: UIView {
         $0.isHidden = true
     }
     
-    private let nicknameDuplicateButton = UIButton().then {
-        $0.applyVerificationButtonStyle(title: "중복 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
-        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+    private let nicknameDuplicateButton = StatefulButton(
+        title: "중복 확인",
+        font: .appFont(.pretendardRegular, size: 10),
+        enabledColor: .appColor(.primary500),
+        disabledColor: .appColor(.neutral300),
+        cornerRadius: 4
+    ).then {
+        $0.updateState(isEnabled: false)
         $0.isHidden = true
     }
     
@@ -224,7 +234,7 @@ final class EnterFormView: UIView {
                     font: UIFont.appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700)
                     )
-                self?.checkIdDuplicateButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+                self?.checkIdDuplicateButton.updateState(isEnabled: false)
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case let .showNicknameHttpResult(message, color):
@@ -236,11 +246,7 @@ final class EnterFormView: UIView {
                     textColor: .appColor(.sub500)
                 )
             case .changeCheckButtonStatus:
-                self?.nicknameDuplicateButton.updateState(
-                    isEnabled: false,
-                    enabledColor: .appColor(.primary500),
-                    disabledColor: .appColor(.neutral300)
-                )
+                self?.nicknameDuplicateButton.updateState(isEnabled: false)
                 self?.nicknameResponseLabel.setImageText(
                     image: .appImage(asset: .checkGreenCircle),
                     text: "사용 가능한 닉네임입니다.",
@@ -342,11 +348,7 @@ extension EnterFormView {
 
         let isValid = textField.isValidIdFormat()
 
-        checkIdDuplicateButton.updateState(
-            isEnabled: isValid,
-            enabledColor: .appColor(.primary500),
-            disabledColor: .appColor(.neutral300)
-        )
+        checkIdDuplicateButton.updateState(isEnabled: isValid)
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
@@ -456,11 +458,7 @@ extension EnterFormView {
         textField.text = trimmedText
 
         let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
-        nicknameDuplicateButton.updateState(
-            isEnabled: isValid,
-            enabledColor: .appColor(.primary500),
-            disabledColor: .appColor(.neutral300)
-        )
+        nicknameDuplicateButton.updateState(isEnabled: isValid)
     }
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {

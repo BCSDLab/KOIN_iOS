@@ -8,12 +8,6 @@
 import UIKit
 
 extension UIButton {
-    func updateState(isEnabled: Bool, enabledColor: UIColor, disabledColor: UIColor) {
-        self.isEnabled = isEnabled
-        self.backgroundColor = isEnabled ? enabledColor : disabledColor
-        self.setTitleColor(isEnabled ? .white : .appColor(.neutral600), for: .normal)
-    }
-    
     func applyDropdownStyle(title: String,
                             font: UIFont = UIFont.systemFont(ofSize: 14),
                             titleColor: UIColor = .black,
@@ -57,11 +51,5 @@ extension UIButton {
         config.imagePadding = 8
         config.baseForegroundColor = foregroundColor
         self.configuration = config
-    }
-    
-    func applyVerificationButtonStyle(title: String, font: UIFont, cornerRadius: CGFloat) {
-        self.setTitle(title, for: .normal)
-        self.titleLabel?.font = font
-        self.layer.cornerRadius = cornerRadius
     }
 }

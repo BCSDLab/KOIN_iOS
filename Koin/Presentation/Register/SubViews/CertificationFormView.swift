@@ -69,9 +69,14 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    private let sendVerificationButton = UIButton().then {
-        $0.applyVerificationButtonStyle(title: "인증번호 발송", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
-        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+    private let sendVerificationButton = StatefulButton(
+        title: "인증번호 발송",
+        font: .appFont(.pretendardRegular, size: 10),
+        enabledColor: .appColor(.primary500),
+        disabledColor: .appColor(.neutral300),
+        cornerRadius: 4
+    ).then {
+        $0.updateState(isEnabled: false)
         $0.isHidden = true
     }
 
@@ -117,9 +122,14 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    private let verificationButton = UIButton().then {
-        $0.applyVerificationButtonStyle(title: "인증번호 확인", font: .appFont(.pretendardRegular, size: 10), cornerRadius: 4)
-        $0.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+    private let verificationButton = StatefulButton(
+        title: "인증번호 확인",
+        font: .appFont(.pretendardRegular, size: 10),
+        enabledColor: .appColor(.primary500),
+        disabledColor: .appColor(.neutral300),
+        cornerRadius: 4
+    ).then {
+        $0.updateState(isEnabled: false)
         $0.isHidden = true
     }
     
@@ -161,7 +171,7 @@ final class CertificationFormView: UIView {
                 }
             case .changeSendVerificationButtonStatus:
                 self?.phoneNumberReponseLabel.isHidden = true
-                self?.sendVerificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+                self?.sendVerificationButton.updateState(isEnabled: true)
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
@@ -169,8 +179,8 @@ final class CertificationFormView: UIView {
                 self?.timer?.invalidate()
                 self?.timer = nil
                 self?.timerLabel.isHidden = true
-                self?.sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
-                self?.verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+                self?.sendVerificationButton.updateState(isEnabled: false)
+                self?.verificationButton.updateState(isEnabled: false)
                 self?.verificationHelpLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
                     text: "인증번호가 일치합니다.",
@@ -254,7 +264,7 @@ extension CertificationFormView {
     
     @objc private func clearPhoneNumberTextField() {
         phoneNumberTextField.text = ""
-        sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+        sendVerificationButton.updateState(isEnabled: false)
         [goToLoginButton, phoneNotFoundLabel, contactButton, phoneNumberReponseLabel].forEach {
             $0.isHidden = true
         }
@@ -272,7 +282,7 @@ extension CertificationFormView {
         
         if textField.text?.isEmpty ?? true {
             phoneNumberReponseLabel.isHidden = true
-            sendVerificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+            sendVerificationButton.updateState(isEnabled: false)
         }
         
         inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
@@ -301,9 +311,9 @@ extension CertificationFormView {
     
     private func changeVerificationButtonStatus(_ text: String) {
         if text.count == 6 {
-            verificationButton.updateState(isEnabled: true, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+            verificationButton.updateState(isEnabled: true)
         } else {
-            verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+            verificationButton.updateState(isEnabled: true)
         }
     }
     
@@ -380,7 +390,7 @@ extension CertificationFormView {
         phoneNumberReponseLabel.setImageAttributedText(image: .appImage(asset: .checkGreenCircle), attributedText: makeVerificationMessage(remainingCount: response.remainingCount, totalCount: response.totalCount))
         
         verificationTextField.text = ""
-        verificationButton.updateState(isEnabled: false, enabledColor: .appColor(.primary500), disabledColor: .appColor(.neutral300))
+        verificationButton.updateState(isEnabled: false)
         
         if response.currentCount > 1 {
             [verificationHelpLabel, contactButton].forEach { $0.isHidden = false }
