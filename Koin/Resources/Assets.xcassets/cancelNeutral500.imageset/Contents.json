@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "cancelNeutral500.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
