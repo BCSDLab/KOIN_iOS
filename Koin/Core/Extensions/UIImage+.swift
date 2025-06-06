@@ -159,7 +159,6 @@ enum SFSymbols: String {
 }
 
 extension UIImage {
-    
     static func appImage(asset: ImageAsset) -> UIImage? {
         return UIImage(named: asset.rawValue)
     }
@@ -168,4 +167,9 @@ extension UIImage {
         return UIImage(systemName: symbol.rawValue)
     }
     
+    func resize(to size: CGSize) -> UIImage? {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
 }
