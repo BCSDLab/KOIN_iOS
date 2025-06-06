@@ -8,22 +8,63 @@
 import UIKit
 import SnapKit
 
-final class AgreementFormView: UIView {
+final class AgreementFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
-    var onRequiredAgreementsChanged: ((Bool) -> Void)?
+    private var onRequiredAgreementsChanged: ((Bool) -> Void)?
+    private var agreementItems: [AgreementItemView] = []
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
+    private let stepTextLabel = UILabel().then {
+        $0.text = "1. 약관 동의"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
+    
+    private let stepLabel = UILabel().then {
+        $0.text = "1 / 4"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
+    
+    private let progressView = UIProgressView().then {
+        $0.trackTintColor = UIColor.appColor(.neutral200)
+        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.progress = 0.25
+
+        NSLayoutConstraint.activate([
+            $0.heightAnchor.constraint(equalToConstant: 3)
+        ])
+    }
+    
+    private let nextButton = UIButton().then {
+        $0.setTitle("다음", for: .normal)
+        $0.layer.cornerRadius = 8
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+    }
+    
     private let agreementAllButton = UIButton(type: .system).then {
+        let resizedImage = UIImage.appImage(asset: .checkEmptyCircle)?
+            .resize(to: CGSize(width: 16, height: 16))
+        
         var config = UIButton.Configuration.plain()
         config.image = UIImage.appImage(asset: .checkEmptyCircle)
+        config.image = resizedImage
         config.imagePlacement = .leading
         config.imagePadding = 8
         config.baseForegroundColor = UIColor.appColor(.primary500)
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
-        config.background.backgroundColor = .clear
-        config.background.strokeColor = .clear
 
         var attrTitle = AttributedString("모두 동의합니다.")
         attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
@@ -33,6 +74,13 @@ final class AgreementFormView: UIView {
         $0.contentHorizontalAlignment = .leading
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 5
+
+        $0.configurationUpdateHandler = { button in
+            var updatedConfig = button.configuration
+            updatedConfig?.baseForegroundColor = UIColor.appColor(.primary500)
+            updatedConfig?.background.backgroundColor = UIColor.appColor(.neutral100)
+            button.configuration = updatedConfig
+        }
     }
     
     private let agreementStackView = UIStackView().then {
@@ -40,219 +88,221 @@ final class AgreementFormView: UIView {
         $0.spacing = 24
     }
     
-    private let agreementCheckButton1 = UIButton(type: .system).then {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage.appImage(asset: .checkEmptyCircle)
-        config.imagePlacement = .leading
-        config.imagePadding = 8
-        config.baseForegroundColor = UIColor.appColor(.gray)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
-        config.background.backgroundColor = .clear
-        config.background.strokeColor = .clear
-
-        var attrTitle = AttributedString("개인정보 이용약관 (필수)")
-        attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
-        config.attributedTitle = attrTitle
-
-        $0.configuration = config
-        $0.contentHorizontalAlignment = .leading
-        $0.backgroundColor = .clear
-    }
-
-    private let agreementTextView1 = UITextView().then {
-        $0.text = AgreementText.personalInformation.description
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
-        $0.layer.borderWidth = 1.0
-        $0.layer.cornerRadius = 5.0
-        $0.isEditable = false
-        $0.isScrollEnabled = true
-        $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-    }
-    
-    private let agreementCheckButton2 = UIButton(type: .system).then {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage.appImage(asset: .checkEmptyCircle)
-        config.imagePlacement = .leading
-        config.imagePadding = 8
-        config.baseForegroundColor = UIColor.appColor(.gray)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
-        config.background.backgroundColor = .clear
-        config.background.strokeColor = .clear
-
-        var attrTitle = AttributedString("코인 이용약관 (필수)")
-        attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
-        config.attributedTitle = attrTitle
-
-        $0.configuration = config
-        $0.contentHorizontalAlignment = .leading
-        $0.backgroundColor = .clear
-    }
-    
-    private let agreementTextView2 = UITextView().then {
-        $0.text = AgreementText.koin.description
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
-        $0.layer.borderWidth = 1.0
-        $0.layer.cornerRadius = 5.0
-        $0.isEditable = false
-        $0.isScrollEnabled = true
-        $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-    }
-    
-    private let agreementCheckButton3 = UIButton(type: .system).then {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage.appImage(asset: .checkEmptyCircle)
-        config.imagePlacement = .leading
-        config.imagePadding = 8
-        config.baseForegroundColor = UIColor.appColor(.gray)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
-        config.background.backgroundColor = .clear
-        config.background.strokeColor = .clear
-
-        var attrTitle = AttributedString("마케팅수신 동의약관 (선택)")
-        attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
-        config.attributedTitle = attrTitle
-
-        $0.configuration = config
-        $0.contentHorizontalAlignment = .leading
-        $0.backgroundColor = .clear
-    }
-    
-    private let agreementTextView3 = UITextView().then {
-        $0.text = AgreementText.marketing.description
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.systemFont(ofSize: 9)
-        $0.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
-        $0.layer.borderWidth = 1.0
-        $0.layer.cornerRadius = 5.0
-        $0.isEditable = false
-        $0.isScrollEnabled = true
-        $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-    }
-    
-    // MARK: Init
+    // MARK: - Init
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
-        super.init(frame: .zero)
-        configureView()
-        setUpButtonTargets()
+        super.init(nibName: nil, bundle: nil)
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureView()
+        configureAgreementItems()
+        setUpButtonTargets()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
+    }
+    
+    private func configureAgreementItems() {
+        let item1 = AgreementItemView(title: "개인정보 이용약관 (필수)", text: AgreementText.personalInformation.description)
+        let item2 = AgreementItemView(title: "코인 이용약관 (필수)", text: AgreementText.koin.description)
+        let item3 = AgreementItemView(title: "마케팅수신 동의약관 (선택)", text: AgreementText.marketing.description)
+
+        agreementItems = [item1, item2, item3]
+        agreementItems.forEach { agreementStackView.addArrangedSubview($0) }
+    }
+
+    private func setUpButtonTargets() {
+        agreementItems.forEach { item in
+            item.checkButton.addTarget(self, action: #selector(individualAgreementTapped(_:)), for: .touchUpInside)
+        }
+        agreementAllButton.addTarget(self, action: #selector(allAgreementTapped(_:)), for: .touchUpInside)
+    }
 }
 
-extension AgreementFormView {
+extension AgreementFormViewController {
     @objc private func allAgreementTapped(_ sender: UIButton) {
-        agreementAllButton.isSelected = !agreementAllButton.isSelected
-        let newState = agreementAllButton.isSelected
-        
-        updateCheckboxImage(checkbox: agreementAllButton, isSelected: newState)
-        
-        [agreementCheckButton1, agreementCheckButton2, agreementCheckButton3].forEach { checkbox in
-            checkbox.isSelected = newState
-            updateCheckboxImage(checkbox: checkbox, isSelected: newState)
+        sender.isSelected.toggle()
+        updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
+        agreementItems.forEach {
+            $0.checkButton.isSelected = sender.isSelected
+            updateCheckboxImage(checkbox: $0.checkButton, isSelected: sender.isSelected)
         }
-        
-        let requiredAgreementsChecked = agreementCheckButton1.isSelected && agreementCheckButton2.isSelected
-        onRequiredAgreementsChanged?(requiredAgreementsChecked)
+        notifyAgreementState()
     }
     
     @objc private func individualAgreementTapped(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
+        sender.isSelected.toggle()
         updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
-        
-        let areAllSelected = agreementCheckButton1.isSelected && agreementCheckButton2.isSelected && agreementCheckButton3.isSelected
-        agreementAllButton.isSelected = areAllSelected
-        updateCheckboxImage(checkbox: agreementAllButton, isSelected: areAllSelected)
 
-        let requiredAgreementsChecked = agreementCheckButton1.isSelected && agreementCheckButton2.isSelected
-        onRequiredAgreementsChanged?(requiredAgreementsChecked)
-        
-        if sender == agreementCheckButton3 && sender.isSelected {
+        let allSelected = agreementItems.allSatisfy { $0.checkButton.isSelected }
+        agreementAllButton.isSelected = allSelected
+        updateCheckboxImage(checkbox: agreementAllButton, isSelected: allSelected)
+
+        notifyAgreementState()
+
+        if sender == agreementItems[2].checkButton && sender.isSelected {
             requestPushNotificationPermission()
         }
     }
 
-    private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
-        let image = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
-        checkbox.setImage(image, for: .normal)
+    private func notifyAgreementState() {
+        let requiredChecked = agreementItems[0].checkButton.isSelected && agreementItems[1].checkButton.isSelected
+        
+        nextButton.isEnabled = requiredChecked
+        nextButton.backgroundColor = requiredChecked
+            ? UIColor.appColor(.primary500)
+            : UIColor.appColor(.neutral300)
+        nextButton.setTitleColor(
+            requiredChecked ? .white : UIColor.appColor(.neutral600),
+            for: .normal
+        )
+        
+        onRequiredAgreementsChanged?(requiredChecked)
     }
 
-    private func setUpButtonTargets() {
-        agreementCheckButton1.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
-        agreementCheckButton2.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
-        agreementCheckButton3.addTarget(self, action: #selector(individualAgreementTapped), for: .touchUpInside)
-        agreementAllButton.addTarget(self, action: #selector(allAgreementTapped), for: .touchUpInside)
+    private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
+        let original = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
+        let resized = original?.resize(to: CGSize(width: 16, height: 16))
+        checkbox.setImage(resized, for: .normal)
     }
-    
+
     private func requestPushNotificationPermission() {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 print("푸시 권한 요청 실패: \(error.localizedDescription)")
-                return
-            }
-            if granted {
-                print("사용자 푸시 알림 권한 허용")
             } else {
-                print("사용자 푸시 알림 권한 거부")
+                print(granted ? "사용자 푸시 알림 권한 허용" : "사용자 푸시 알림 권한 거부")
             }
         }
     }
 }
 
 // MARK: UI Settings
-extension AgreementFormView {
-    private func setUpLayOuts() {
-        [agreementAllButton, agreementStackView].forEach {
-            addSubview($0)
-        }
-        
-        let item1 = UIStackView(arrangedSubviews: [agreementCheckButton1, agreementTextView1]).then {
-            $0.axis = .vertical
-            $0.spacing = 8
-        }
-
-        let item2 = UIStackView(arrangedSubviews: [agreementCheckButton2, agreementTextView2]).then {
-            $0.axis = .vertical
-            $0.spacing = 8
-        }
-
-        let item3 = UIStackView(arrangedSubviews: [agreementCheckButton3, agreementTextView3]).then {
-            $0.axis = .vertical
-            $0.spacing = 8
-        }
-
-        [item1, item2, item3].forEach {
-            agreementStackView.addArrangedSubview($0)
-        }
+extension AgreementFormViewController {
+    private func setUpLayouts() {
+        [stepTextLabel, stepLabel, progressView, nextButton].forEach { view.addSubview($0) }
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [agreementAllButton, agreementStackView].forEach { contentView.addSubview($0) }
     }
 
     private func setUpConstraints() {
+        stepTextLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.leading.equalToSuperview().offset(24)
+        }
+
+        stepLabel.snp.makeConstraints {
+            $0.top.equalTo(stepTextLabel)
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+
+        progressView.snp.makeConstraints {
+            $0.top.equalTo(stepTextLabel.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.height.equalTo(3)
+        }
+
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-40)
+            $0.height.equalTo(50)
+            $0.horizontalEdges.equalToSuperview().inset(32)
+        }
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(progressView.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
+        }
+
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+
         agreementAllButton.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(40)
         }
 
         agreementStackView.snp.makeConstraints {
-            $0.top.equalTo(agreementAllButton.snp.bottom).offset(24)
+            $0.top.equalTo(agreementAllButton.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.lessThanOrEqualToSuperview()
-        }
-
-        [agreementTextView1, agreementTextView2, agreementTextView3].forEach {
-            $0.snp.makeConstraints { $0.height.equalTo(120) }
         }
     }
     
     private func configureView() {
-        setUpLayOuts()
+        setUpLayouts()
         setUpConstraints()
+        view.backgroundColor = .white
+    }
+}
+
+// MARK: - 체크박스 뷰
+private final class AgreementItemView: UIStackView {
+    let checkButton = UIButton(type: .system)
+    let textView = UITextView()
+
+    init(title: String, text: String) {
+        super.init(frame: .zero)
+        axis = .vertical
+        spacing = 4
+
+        let resizedImage = UIImage.appImage(asset: .checkEmptyCircle)?
+            .resize(to: CGSize(width: 16, height: 16))
+
+        var config = UIButton.Configuration.plain()
+        config.image = resizedImage
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.baseForegroundColor = UIColor.appColor(.gray)
+
+        var attrTitle = AttributedString(title)
+        attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
+        config.attributedTitle = attrTitle
+        config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        checkButton.configuration = config
+        checkButton.contentHorizontalAlignment = .leading
+        checkButton.snp.makeConstraints {
+            $0.height.lessThanOrEqualTo(22)
+        }
+        checkButton.configurationUpdateHandler = { button in
+            var updatedConfig = button.configuration
+            updatedConfig?.baseForegroundColor = UIColor.appColor(.gray)
+            updatedConfig?.background.backgroundColor = .clear
+            button.configuration = updatedConfig
+        }
+
+        textView.text = text
+        textView.textColor = UIColor.appColor(.neutral800)
+        textView.font = UIFont.systemFont(ofSize: 9)
+        textView.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
+        textView.layer.borderWidth = 1.0
+        textView.layer.cornerRadius = 5.0
+        textView.isEditable = false
+        textView.isScrollEnabled = true
+        textView.showsVerticalScrollIndicator = false
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        textView.snp.makeConstraints { $0.height.equalTo(120) }
+
+        [checkButton, textView].forEach {
+            addArrangedSubview($0)
+        }
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
