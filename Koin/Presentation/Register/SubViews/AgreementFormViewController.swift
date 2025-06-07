@@ -1,5 +1,5 @@
 //
-//  AgreementFormView.swift
+//  AgreementFormViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 4/10/25.
