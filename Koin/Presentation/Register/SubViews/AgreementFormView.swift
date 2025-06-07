@@ -12,7 +12,6 @@ final class AgreementFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
-    private var onRequiredAgreementsChanged: ((Bool) -> Void)?
     private var agreementItems: [AgreementItemView] = []
     
     // MARK: - UI Components
@@ -111,7 +110,9 @@ final class AgreementFormViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
-    
+}
+
+extension AgreementFormViewController {
     private func configureAgreementItems() {
         let item1 = AgreementItemView(title: "개인정보 이용약관 (필수)", text: AgreementText.personalInformation.description)
         let item2 = AgreementItemView(title: "코인 이용약관 (필수)", text: AgreementText.koin.description)
@@ -126,6 +127,31 @@ final class AgreementFormViewController: UIViewController {
             item.checkButton.addTarget(self, action: #selector(individualAgreementTapped(_:)), for: .touchUpInside)
         }
         agreementAllButton.addTarget(self, action: #selector(allAgreementTapped(_:)), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+    }
+    
+    private func notifyAgreementState() {
+        let requiredChecked = agreementItems[0].checkButton.isSelected && agreementItems[1].checkButton.isSelected
+        
+        nextButton.isEnabled = requiredChecked
+        nextButton.backgroundColor = requiredChecked ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
+        nextButton.setTitleColor(requiredChecked ? .white : UIColor.appColor(.neutral600), for: .normal)
+    }
+
+    private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
+        let original = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
+        let resized = original?.resize(to: CGSize(width: 16, height: 16))
+        checkbox.setImage(resized, for: .normal)
+    }
+
+    private func requestPushNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("푸시 권한 요청 실패: \(error.localizedDescription)")
+            } else {
+                print(granted ? "사용자 푸시 알림 권한 허용" : "사용자 푸시 알림 권한 거부")
+            }
+        }
     }
 }
 
@@ -154,46 +180,27 @@ extension AgreementFormViewController {
             requestPushNotificationPermission()
         }
     }
-
-    private func notifyAgreementState() {
-        let requiredChecked = agreementItems[0].checkButton.isSelected && agreementItems[1].checkButton.isSelected
-        
-        nextButton.isEnabled = requiredChecked
-        nextButton.backgroundColor = requiredChecked
-            ? UIColor.appColor(.primary500)
-            : UIColor.appColor(.neutral300)
-        nextButton.setTitleColor(
-            requiredChecked ? .white : UIColor.appColor(.neutral600),
-            for: .normal
-        )
-        
-        onRequiredAgreementsChanged?(requiredChecked)
-    }
-
-    private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
-        let original = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
-        let resized = original?.resize(to: CGSize(width: 16, height: 16))
-        checkbox.setImage(resized, for: .normal)
-    }
-
-    private func requestPushNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if let error = error {
-                print("푸시 권한 요청 실패: \(error.localizedDescription)")
-            } else {
-                print(granted ? "사용자 푸시 알림 권한 허용" : "사용자 푸시 알림 권한 거부")
-            }
-        }
+    
+    @objc private func nextButtonTapped() {
+        let viewController = CertificationFormViewController(viewModel: viewModel)
+        viewController.title = "회원가입"
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
 // MARK: UI Settings
 extension AgreementFormViewController {
     private func setUpLayouts() {
-        [stepTextLabel, stepLabel, progressView, nextButton].forEach { view.addSubview($0) }
+        [stepTextLabel, stepLabel, progressView, nextButton].forEach {
+            view.addSubview($0)
+        }
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [agreementAllButton, agreementStackView].forEach { contentView.addSubview($0) }
+        
+        [agreementAllButton, agreementStackView].forEach {
+            contentView.addSubview($0)
+        }
     }
 
     private func setUpConstraints() {
@@ -243,9 +250,9 @@ extension AgreementFormViewController {
     }
     
     private func configureView() {
+        view.backgroundColor = .white
         setUpLayouts()
         setUpConstraints()
-        view.backgroundColor = .white
     }
 }
 
