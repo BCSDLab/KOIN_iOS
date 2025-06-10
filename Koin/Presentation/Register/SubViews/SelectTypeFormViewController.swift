@@ -90,6 +90,8 @@ final class SelectTypeFormViewController: UIViewController {
     private func setUpButtonTargets() {
         studentButton.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
         generalButton.addTarget(self, action: #selector(generalButtonTapped), for: .touchUpInside)
+        studentButton.addTarget(self, action: #selector(userTypeButtonTapped), for: .touchUpInside)
+        generalButton.addTarget(self, action: #selector(userTypeButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -102,6 +104,12 @@ extension SelectTypeFormViewController {
     @objc private func generalButtonTapped() {
         viewModel.userType = .general
         onUserTypeSelected?(.general)
+    }
+    
+    @objc private func userTypeButtonTapped() {
+        let viewController = EnterFormViewController(viewModel: viewModel)
+        viewController.title = "회원가입"
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
