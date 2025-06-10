@@ -231,7 +231,7 @@
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
 		D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */; };
-		D20CFC082DA8031F00ADEF3B /* SelectTypeFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */; };
+		D20CFC082DA8031F00ADEF3B /* SelectTypeFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */; };
 		D20CFC0A2DA8032D00ADEF3B /* EnterFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
@@ -865,7 +865,7 @@
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
-		D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormView.swift; sourceTree = "<group>"; };
+		D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormView.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
@@ -1881,7 +1881,7 @@
 			children = (
 				D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */,
 				D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */,
-				D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */,
+				D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */,
 				D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */,
 			);
 			path = SubViews;
@@ -3983,7 +3983,7 @@
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
-				D20CFC082DA8031F00ADEF3B /* SelectTypeFormView.swift in Sources */,
+				D20CFC082DA8031F00ADEF3B /* SelectTypeFormViewController.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,

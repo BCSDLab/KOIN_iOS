@@ -229,6 +229,9 @@ final class CertificationFormViewController: UIViewController {
                 self?.viewModel.tempName = self?.nameTextField.text
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500) ? "1" : "0"
+                self?.nextButton.isEnabled = true
+                self?.nextButton.backgroundColor = UIColor.appColor(.primary500)
+                self?.nextButton.setTitleColor(.white, for: .normal)
             default:
                 break
             }
@@ -246,6 +249,7 @@ final class CertificationFormViewController: UIViewController {
         contactButton.addTarget(self, action: #selector(contactButtonButtonTapped), for: .touchUpInside)
         verificationTextField.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
         verificationButton.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -466,6 +470,12 @@ extension CertificationFormViewController {
         } else {
             return
         }
+    }
+    
+    @objc private func nextButtonTapped() {
+        let viewController = SelectTypeFormViewController(viewModel: viewModel)
+        viewController.title = "회원가입"
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
