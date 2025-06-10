@@ -1,5 +1,5 @@
 //
-//  CertificationFormView.swift
+//  CertificationFormViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 4/10/25.
@@ -9,26 +9,54 @@ import UIKit
 import SnapKit
 import Combine
 
-final class CertificationFormView: UIView {
+final class CertificationFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    
     private var timer: Timer?
     private var remainingSeconds: Int = 180
-    var onVerificationStatusChanged: ((Bool) -> Void)?
-    
-    override var isHidden: Bool {
-        didSet {
-            if isHidden == false {
-                self.onVerificationStatusChanged?(false)
-            }
-        }
-    }
 
     // MARK: - UI Components
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
+    private let stepTextLabel = UILabel().then {
+        $0.text = "2. 본인 인증"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
+    
+    private let stepLabel = UILabel().then {
+        $0.text = "2 / 4"
+        $0.textColor = UIColor.appColor(.primary500)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+    }
+    
+    private let progressView = UIProgressView().then {
+        $0.trackTintColor = UIColor.appColor(.neutral200)
+        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.progress = 0.5
+
+        NSLayoutConstraint.activate([
+            $0.heightAnchor.constraint(equalToConstant: 3)
+        ])
+    }
+    
+    private let nextButton = UIButton().then {
+        $0.setTitle("다음", for: .normal)
+        $0.layer.cornerRadius = 8
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+    }
+
     private let nameAndGenderLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = .black
@@ -138,22 +166,32 @@ final class CertificationFormView: UIView {
         $0.isHidden = true
     }
     
-    // MARK: Init
+    // MARK: - Init
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
-        super.init(frame: .zero)
-        configureView()
-        setAddTarget()
-        bind()
+        super.init(nibName: nil, bundle: nil)
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureView()
+        setUpButtonTargets()
+        bind()
+    }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
     }
     
@@ -188,7 +226,6 @@ final class CertificationFormView: UIView {
                     textColor: UIColor.appColor(.success700)
                 )
                 self?.contactButton.isHidden = true
-                self?.onVerificationStatusChanged?(true)
                 self?.viewModel.tempName = self?.nameTextField.text
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500) ? "1" : "0"
@@ -198,7 +235,7 @@ final class CertificationFormView: UIView {
         }.store(in: &subscriptions)
     }
     
-    private func setAddTarget() {
+    private func setUpButtonTargets() {
         nameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearNameTextField))
         nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
         femaleButton.addTarget(self, action: #selector(femaleButtonTapped), for: .touchUpInside)
@@ -212,7 +249,7 @@ final class CertificationFormView: UIView {
     }
 }
 
-extension CertificationFormView {
+extension CertificationFormViewController {
     @objc private func clearNameTextField() {
         nameTextField.text = ""
     }
@@ -433,14 +470,55 @@ extension CertificationFormView {
 }
 
 // MARK: UI Settings
-extension CertificationFormView {
-    private func setUpLayOuts() {
+extension CertificationFormViewController {
+    private func setUpLayouts() {
+        [stepTextLabel, stepLabel, progressView, nextButton].forEach {
+            view.addSubview($0)
+        }
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
         [nameAndGenderLabel, nameTextField, nameHelpLabel, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
-            self.addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        stepTextLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.leading.equalToSuperview().offset(24)
+        }
+
+        stepLabel.snp.makeConstraints {
+            $0.top.equalTo(stepTextLabel)
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+
+        progressView.snp.makeConstraints {
+            $0.top.equalTo(stepTextLabel.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.height.equalTo(3)
+        }
+
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-40)
+            $0.height.equalTo(50)
+            $0.horizontalEdges.equalToSuperview().inset(32)
+        }
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(progressView.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
+        }
+
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.greaterThanOrEqualToSuperview()
+        }
+        
         nameAndGenderLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(48)
             $0.leading.equalToSuperview().offset(8)
@@ -558,7 +636,8 @@ extension CertificationFormView {
     }
     
     private func configureView() {
-        setUpLayOuts()
+        view.backgroundColor = .white
+        setUpLayouts()
         setUpConstraints()
     }
 }

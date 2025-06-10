@@ -230,7 +230,7 @@
 		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
-		D20CFC062DA800CE00ADEF3B /* CertificationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */; };
+		D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */; };
 		D20CFC082DA8031F00ADEF3B /* SelectTypeFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */; };
 		D20CFC0A2DA8032D00ADEF3B /* EnterFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
@@ -864,7 +864,7 @@
 		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
-		D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormView.swift; sourceTree = "<group>"; };
+		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormView.swift; sourceTree = "<group>"; };
 		D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormView.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
@@ -1880,7 +1880,7 @@
 			isa = PBXGroup;
 			children = (
 				D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */,
-				D20CFC052DA800CE00ADEF3B /* CertificationFormView.swift */,
+				D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */,
 				D20CFC072DA8031F00ADEF3B /* SelectTypeFormView.swift */,
 				D20CFC092DA8032D00ADEF3B /* EnterFormView.swift */,
 			);
@@ -3577,7 +3577,7 @@
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
-				D20CFC062DA800CE00ADEF3B /* CertificationFormView.swift in Sources */,
+				D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */,
 				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
