@@ -604,8 +604,9 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-        navigationController?.pushViewController(serviceSelectViewController, animated: true)
+        let viewController = ClubWebViewController()
+//        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func navigateToForceUpdate(version: String) {
