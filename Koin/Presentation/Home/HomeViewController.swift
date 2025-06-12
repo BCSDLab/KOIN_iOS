@@ -51,6 +51,8 @@ final class HomeViewController: UIViewController {
     
     private let busView = BusView()
     
+    private let clubView = ClubView()
+    
     private let noticeListCollectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout:  UICollectionViewFlowLayout().then{
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 175)
         $0.scrollDirection = .horizontal
@@ -157,6 +159,7 @@ final class HomeViewController: UIViewController {
         checkAndShowBanner()
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
     }
     
@@ -212,7 +215,23 @@ final class HomeViewController: UIViewController {
                 self?.setAbTestResult(result: abTestResult)
             case .updateBanner(let banner, let abTestResult):
                 self?.showBanner(banner: banner, abTestResult: abTestResult)
+            case .setHotClub(let hotClub):
+                self?.clubView.setupHotClub(club: hotClub)
+            case .setClubCategories(let response):
+                self?.clubView.setupClubCategories(categories: response.clubCategories)
             }
+        }.store(in: &subscriptions)
+        
+        clubView.clubCategoryPublisher.sink { [weak self] id in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs?categoryId=\(id)"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.clubListButtonPublisher.sink { [weak self] in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.hotClubButtonPublisher.sink { [weak self] in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs"), animated: true)
         }.store(in: &subscriptions)
         
         logoView.lineButtonPublisher.sink { [weak self] in
@@ -604,6 +623,7 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
+     //   let viewController = ClubWebViewController()
         let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
@@ -680,7 +700,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -749,8 +769,12 @@ extension HomeViewController {
             make.height.equalTo(65)
             make.width.equalTo(scrollView.snp.width)
         }
+        clubView.snp.makeConstraints { make in
+            make.top.equalTo(busView.snp.bottom).offset(24)
+            make.horizontalEdges.equalTo(scrollView)
+        }
         shopLabel.snp.makeConstraints { make in
-            make.top.equalTo(busView.snp.bottom).offset(40)
+            make.top.equalTo(clubView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
