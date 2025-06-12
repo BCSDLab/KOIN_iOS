@@ -222,6 +222,18 @@ final class HomeViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        clubView.clubCategoryPublisher.sink { [weak self] id in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs?categoryId=\(id)"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.clubListButtonPublisher.sink { [weak self] in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.hotClubButtonPublisher.sink { [weak self] in
+            self?.navigationController?.pushViewController(ClubWebViewController(path: "/clubs"), animated: true)
+        }.store(in: &subscriptions)
+        
         logoView.lineButtonPublisher.sink { [weak self] in
             self?.navigateToServiceSelectViewController()
         }.store(in: &subscriptions)
