@@ -30,7 +30,7 @@ final class ClubWebViewController: UIViewController {
     private var didSendTokens = false
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let path: String
+    private let parameter: String?
     
     private let webView: NoInputAccessoryWKWebView = {
         let contentController = WKUserContentController()
@@ -44,8 +44,8 @@ final class ClubWebViewController: UIViewController {
     override var inputAccessoryView: UIView? {
         return nil
     }
-    init(path: String) {
-        self.path = path
+    init(parameter: String?) {
+        self.parameter = parameter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -86,9 +86,16 @@ final class ClubWebViewController: UIViewController {
         guard var components = URLComponents(string: Bundle.main.baseUrl) else {
             return
         }
-        components.host = components.host?.replacingOccurrences(of: "api.", with: "")
-        components.path = path
-        
+        if let originalHost = components.host {
+            let updatedHost = originalHost.replacingOccurrences(of: "api.", with: "")
+            components.host = updatedHost
+        }
+
+        components.path = "/clubs"
+
+        components.queryItems = [
+            URLQueryItem(name: "categoryId", value: parameter)
+        ]
         guard let url = components.url else {
             return
         }

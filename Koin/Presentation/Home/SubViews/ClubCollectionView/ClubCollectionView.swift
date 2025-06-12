@@ -12,6 +12,8 @@ final class ClubCollectionView: UICollectionView, UICollectionViewDataSource, UI
     
     private var clubs: [ClubCategory] = []
     private var clubImages: [ImageAsset] = [ImageAsset.club1, ImageAsset.club2, ImageAsset.club3, ImageAsset.club4, ImageAsset.club5]
+    var itemWidth: CGFloat { 62 }
+    var itemHeight: CGFloat { 84 }
     let tapPublisher = PassthroughSubject<Int, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -36,10 +38,36 @@ final class ClubCollectionView: UICollectionView, UICollectionViewDataSource, UI
 }
 extension ClubCollectionView: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-           return CGSize(width: 62, height: 84)
+    func collectionView(_ collectionView: UICollectionView,
+                           layout collectionViewLayout: UICollectionViewLayout,
+                           sizeForItemAt indexPath: IndexPath) -> CGSize {
+           return CGSize(width: itemWidth, height: itemHeight)
        }
        
+       func collectionView(_ collectionView: UICollectionView,
+                           layout collectionViewLayout: UICollectionViewLayout,
+                           minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+           return calculateSpacing()
+       }
+       
+       func collectionView(_ collectionView: UICollectionView,
+                           layout collectionViewLayout: UICollectionViewLayout,
+                           minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+           return 16
+       }
+       
+       func collectionView(_ collectionView: UICollectionView,
+                           layout collectionViewLayout: UICollectionViewLayout,
+                           insetForSectionAt section: Int) -> UIEdgeInsets {
+           let spacing = calculateSpacing()
+           return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+       }
+       
+       private func calculateSpacing() -> CGFloat {
+           let totalCellWidth = itemWidth * 5
+           let totalSpacing = self.bounds.width - totalCellWidth
+           return totalSpacing / 6
+       }
 }
 
 // MARK: - Data Source
