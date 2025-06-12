@@ -25,7 +25,7 @@ extension CoreAPI: Router, URLRequestConvertible {
         case .checkVersion: return "/version/ios"
         case .fetchBanner: return "/banners/1"
         case .fetchClubCategories: return "/clubs/categories"
-        case .fetchHotClubs: return "/club/hot"
+        case .fetchHotClubs: return "/clubs/hot"
         }
     }
     

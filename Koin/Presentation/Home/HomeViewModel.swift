@@ -22,6 +22,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getNoticeBanner(Date?)
         case getAbTestResult(String)
         case getBannerAbTest(String)
+        case getClubAbTest(String)
     }
     
     // MARK: - Output
@@ -33,6 +34,8 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case updateBanner(BannerDTO, AssignAbTestResponse)
+        case setHotClub(HotClubDTO)
+        case setClubCategories(ClubCategoriesDTO)
     }
     
     // MARK: - Properties
@@ -49,6 +52,8 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -93,6 +98,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
+            case .getClubAbTest(let request):
+                self?.getClubAbTest(request: request)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -111,7 +118,40 @@ extension HomeViewModel {
             self?.outputSubject.send(.updateBanner(response, abTestResult))
         }.store(in: &subscriptions)
     }
+    private func fetchHotClub() {
+        fetchHotClubsUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] hotClub in
+            self?.outputSubject.send(.setHotClub(hotClub))
+        }).store(in: &subscriptions)
+    }
     
+    private func fetchClubCategories() {
+        fetchClubCategoriesUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] categories in
+            self?.outputSubject.send(.setClubCategories(categories))
+        }).store(in: &subscriptions)
+    }
+    private func getClubAbTest(request: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
+            .sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            if abTestResult.variableName == .hot {
+                self?.fetchHotClub()
+            } else {
+                self?.fetchClubCategories()
+            }
+        }).store(in: &subscriptions)
+    }
     private func getBannerAbTest(request: String) {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
             .sink(receiveCompletion: { completion in

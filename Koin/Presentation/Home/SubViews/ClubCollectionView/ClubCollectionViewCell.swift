@@ -7,13 +7,20 @@
 
 import UIKit
 
-final class BannerCollectionViewCell: UICollectionViewCell {
+final class ClubCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 31
+    }
+    
+    private let nameLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = UIColor.appColor(.neutral700)
     }
     
     override init(frame: CGRect) {
@@ -26,22 +33,30 @@ final class BannerCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func configure(_ item: Banner) {
-        imageView.loadImageWithSpinner(from: item.imageURL)
+    func configure(_ item: ClubCategory, image: ImageAsset) {
+        imageView.image = UIImage.appImage(asset: image)
+        nameLabel.text = item.name
     }
     
 }
 
-extension BannerCollectionViewCell {
+extension ClubCollectionViewCell {
     private func setUpLayouts() {
-        [imageView].forEach {
+        [imageView, nameLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        imageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(62)
+        }
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom)
+            make.centerX.equalTo(imageView)
+            make.height.equalTo(22)
         }
     }
 

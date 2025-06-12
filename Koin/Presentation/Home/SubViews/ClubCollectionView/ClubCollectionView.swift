@@ -10,10 +10,11 @@ import UIKit
 
 final class ClubCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    private var clubs: [Banner] = []
+    private var clubs: [ClubCategory] = []
+    private var clubImages: [ImageAsset] = [ImageAsset.club1, ImageAsset.club2, ImageAsset.club3, ImageAsset.club4, ImageAsset.club5]
+    let tapPublisher = PassthroughSubject<Int, Never>()
     
-    init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout, viewModel: HomeViewModel) {
-        self.viewModel = viewModel
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
@@ -23,107 +24,40 @@ final class ClubCollectionView: UICollectionView, UICollectionViewDataSource, UI
     }
     
     private func commonInit() {
-        register(BannerCollectionViewCell.self, forCellWithReuseIdentifier: BannerCollectionViewCell.identifier)
+        register(ClubCollectionViewCell.self, forCellWithReuseIdentifier: ClubCollectionViewCell.identifier)
         dataSource = self
         delegate = self
-        showsHorizontalScrollIndicator = false
-        decelerationRate = .fast
-        isPagingEnabled = true
     }
-    func setClubs(_ banners: [Banner]) {
-        self.banners = banners
+    
+    func setClubs(_ clubs: [ClubCategory]) {
+        self.clubs = clubs
         self.reloadData()
-        startAutoScroll()
     }
 }
-extension BannerCollectionView: UICollectionViewDelegateFlowLayout {
+extension ClubCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return collectionView.bounds.size
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        isUserScrolling = true
-        stopAutoScroll()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            handleScrollFinished()
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        handleScrollFinished()
-    }
-    
-    private func handleScrollFinished() {
-        let visibleIndex = Int(round(contentOffset.x / bounds.width))
-        
-        if visibleIndex == banners.count - 1 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                let firstIndexPath = IndexPath(item: 0, section: 0)
-                self.scrollToItem(at: firstIndexPath, at: .centeredHorizontally, animated: true)
-                if self.isUserScrolling {
-                    self.viewModel.logAnalyticsEventUseCase.logEvent(name: "CAMPUS", label: "main_next_modal", value: self.showingBanner, category: "swipe")
-                }
-                self.scrollPublisher.send((0, self.banners.count))
-                self.isUserScrolling = false
-            }
-        } else {
-            if isUserScrolling {
-                self.viewModel.logAnalyticsEventUseCase.logEvent(name: "CAMPUS", label: "main_next_modal", value: self.showingBanner, category: "swipe")
-            }
-            scrollPublisher.send((visibleIndex, banners.count))
-            isUserScrolling = false
-        }
-        
-        resetAutoScrollTimer()
-    }
-    
-    private func resetAutoScrollTimer() {
-        stopAutoScroll()
-        startAutoScroll()
-    }
-    
-    func startAutoScroll() {
-        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
-    }
-    
-    func stopAutoScroll() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    @objc private func scrollToNextItem() {
-        guard !banners.isEmpty else { return }
-        
-        let visibleIndex = Int(round(contentOffset.x / bounds.width))
-        let nextIndex = (visibleIndex + 1) % banners.count
-        
-        let indexPath = IndexPath(item: nextIndex, section: 0)
-        scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        scrollPublisher.send((nextIndex, banners.count))
-    }
+           return CGSize(width: 62, height: 84)
+       }
+       
 }
 
 // MARK: - Data Source
-extension BannerCollectionView {
+extension ClubCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return banners.count
+        return clubs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard banners.indices.contains(indexPath.item) else { return }
-        tapPublisher.send(banners[indexPath.item])
+        tapPublisher.send(clubs[indexPath.item].id)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.identifier, for: indexPath) as? BannerCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ClubCollectionViewCell.identifier, for: indexPath) as? ClubCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(banners[indexPath.item])
+        cell.configure(clubs[indexPath.item], image: clubImages[indexPath.row])
         return cell
     }
 }

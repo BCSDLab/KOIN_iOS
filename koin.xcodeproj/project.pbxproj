@@ -234,6 +234,7 @@
 		D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */; };
 		D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */; };
 		D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */; };
+		D20AD6D32DFB4A790067760A /* ClubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D22DFB4A790067760A /* ClubView.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
@@ -858,6 +859,7 @@
 		D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotClubDTO.swift; sourceTree = "<group>"; };
 		D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotClubsUseCase.swift; sourceTree = "<group>"; };
 		D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchClubCategoriesUseCase.swift; sourceTree = "<group>"; };
+		D20AD6D22DFB4A790067760A /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
@@ -2334,6 +2336,7 @@
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
 				D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */,
 				D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */,
+				D20AD6D22DFB4A790067760A /* ClubView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3566,6 +3569,7 @@
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				D2B7EBD72D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift in Sources */,
+				D20AD6D32DFB4A790067760A /* ClubView.swift in Sources */,
 				835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
