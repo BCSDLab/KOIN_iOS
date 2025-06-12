@@ -134,6 +134,13 @@ enum ImageAsset: String {
     case block
     case gallery
     case send
+    case chevronRightBlue
+    case note
+    case club1
+    case club2
+    case club3
+    case club4
+    case club5
 }
 
 enum SFSymbols: String {
