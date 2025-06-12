@@ -228,6 +228,12 @@
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
 		D20AD6972DF69EE50067760A /* ClubWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6962DF69EE50067760A /* ClubWebViewController.swift */; };
+		D20AD6C72DFB41D00067760A /* ClubCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */; };
+		D20AD6C92DFB41D80067760A /* ClubCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */; };
+		D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */; };
+		D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */; };
+		D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */; };
+		D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
@@ -846,6 +852,12 @@
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		D20AD6962DF69EE50067760A /* ClubWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubWebViewController.swift; sourceTree = "<group>"; };
+		D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionViewCell.swift; sourceTree = "<group>"; };
+		D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
+		D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCategoriesDTO.swift; sourceTree = "<group>"; };
+		D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotClubDTO.swift; sourceTree = "<group>"; };
+		D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotClubsUseCase.swift; sourceTree = "<group>"; };
+		D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchClubCategoriesUseCase.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
@@ -1808,6 +1820,8 @@
 			children = (
 				D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */,
 				D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */,
+				D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */,
+				D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1839,6 +1853,15 @@
 				D20AD6962DF69EE50067760A /* ClubWebViewController.swift */,
 			);
 			path = Club;
+			sourceTree = "<group>";
+		};
+		D20AD6C52DFB41B90067760A /* ClubCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */,
+				D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */,
+			);
+			path = ClubCollectionView;
 			sourceTree = "<group>";
 		};
 		D215726D2CEE28C30061E725 /* Timetable */ = {
@@ -1874,6 +1897,8 @@
 			isa = PBXGroup;
 			children = (
 				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+				D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */,
+				D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2299,6 +2324,7 @@
 		D27DD02C2BA608310081FD36 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D20AD6C52DFB41B90067760A /* ClubCollectionView */,
 				D223D61C2D9C204B00C29BE6 /* BannerCollectionView */,
 				D2F4FD572CBE089C008C91D8 /* ShopCollectionView */,
 				83FA91892C81E2D00090351F /* NoticeListCollectionView */,
@@ -3562,6 +3588,7 @@
 				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
 				83E770B62CFB5A3B00EB3F84 /* ShuttleTimetableTableView.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
+				D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
 				D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */,
 				D2D4625D2D63A46800C60864 /* ChatListTableViewModel.swift in Sources */,
@@ -3747,6 +3774,7 @@
 				8354BE352C79C699009D4D7A /* RecommendedKeywordCollectionView.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
+				D20AD6C92DFB41D80067760A /* ClubCollectionView.swift in Sources */,
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
 				D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
@@ -3845,6 +3873,7 @@
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,
 				83EBB85E2D0FD6DF00346018 /* BusSearchViewController.swift in Sources */,
+				D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
@@ -3906,6 +3935,7 @@
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
+				D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
@@ -3979,6 +4009,7 @@
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
+				D20AD6C72DFB41D00067760A /* ClubCollectionViewCell.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
@@ -4055,6 +4086,7 @@
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
+				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,

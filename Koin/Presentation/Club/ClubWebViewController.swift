@@ -21,35 +21,42 @@ final class LeakAvoider: NSObject, WKScriptMessageHandler {
 }
 
 final class ClubWebViewController: UIViewController {
-    
-    private var webView: WKWebView!
-    
+    private var didSendTokens = false
+    private let webView: WKWebView = {
+        let contentController = WKUserContentController()
+        let config = WKWebViewConfiguration()
+        config.userContentController = contentController
+
+        let webView = WKWebView(frame: .zero, configuration: config)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        return webView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadClubPage()
         setupWebView()
+        loadClubPage()
         addBlueSafeAreaView()
     }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    
+
     private func setupWebView() {
-        let contentController = WKUserContentController()
-        contentController.add(LeakAvoider(delegate: self), name: "tokenBridge")
+        // message handler 재등록
+        if let controller = webView.configuration.userContentController as? WKUserContentController {
+            controller.removeScriptMessageHandler(forName: "tokenBridge")
+            controller.add(LeakAvoider(delegate: self), name: "tokenBridge")
+        }
 
-        let config = WKWebViewConfiguration()
-        config.userContentController = contentController
-
-        webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
-        webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
 
         NSLayoutConstraint.activate([
@@ -59,22 +66,20 @@ final class ClubWebViewController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
     private func loadClubPage() {
-        guard let url = URL(string: "https://stage.koreatech.in/clubs") else {
+        guard let url = URL(string: "https://koreatech.in/clubs") else {
             print("❌ 유효하지 않은 URL입니다.")
             return
         }
-        
+
         let request = URLRequest(url: url)
         webView.load(request)
     }
-    
+
     func sendTokensToWeb(access: String, refresh: String) {
-        let escapedAccess  = access.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "'", with: "\\'")
+        let escapedAccess = access.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "'", with: "\\'")
         let escapedRefresh = refresh.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "'", with: "\\'")
-        print(access)
-        print(escapedAccess)
         let js = "window.setTokens('\(escapedAccess)', '\(escapedRefresh)')"
         print(js)
         webView.evaluateJavaScript(js) { result, error in
@@ -85,50 +90,7 @@ final class ClubWebViewController: UIViewController {
             }
         }
     }
-}
 
-// MARK: - WKNavigationDelegate
-extension ClubWebViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("🌐 웹 페이지 로딩 완료")
-        let token = KeychainWorker.shared.read(key: .access) ?? ""
-        let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
-    //    self.sendTokensToWeb(access: token, refresh: refresh)
-    }
-}
-
-// MARK: - JS 통신 처리
-extension ClubWebViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController,
-                               didReceive message: WKScriptMessage) {
-        print(message)
-        guard message.name == "tokenBridge" else { return }
-        guard let body = message.body as? String else { return }
-        
-        if body.hasPrefix("saveTokens:") {
-            let jsonString = String(body.dropFirst("saveTokens:".count))
-            if let data = jsonString.data(using: .utf8),
-               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String] {
-                let access = dict["access"] ?? ""
-                let refresh = dict["refresh"] ?? ""
-                KeychainWorker.shared.create(key: .access, token: access)
-                KeychainWorker.shared.create(key: .refresh, token: refresh)
-                print("🔐 iOS Keychain 저장 완료")
-            }
-            return
-        }
-        
-        switch body {
-        case "getUserToken":
-            let token = KeychainWorker.shared.read(key: .access) ?? ""
-            sendTokensToWeb(access: token, refresh: "")
-        case "getRefreshToken":
-            let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
-            sendTokensToWeb(access: "", refresh: refresh)
-        default:
-            print("⚠️ 지원되지 않는 메서드 요청: \(body)")
-        }
-    }
     private func addBlueSafeAreaView() {
         let blueView = UIView()
         blueView.backgroundColor = .systemBlue
@@ -141,5 +103,75 @@ extension ClubWebViewController: WKScriptMessageHandler {
             blueView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             blueView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
+    }
+}
+
+// MARK: - WKNavigationDelegate
+extension ClubWebViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("🌐 웹 페이지 로딩 완료")
+        guard !didSendTokens else { return }
+            didSendTokens = true
+
+            let token = KeychainWorker.shared.read(key: .access) ?? ""
+            let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
+            self.sendTokensToWeb(access: token, refresh: refresh)
+    }
+}
+
+// MARK: - JS 통신 처리
+extension ClubWebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController,
+                              didReceive message: WKScriptMessage) {
+
+        guard message.name == "tokenBridge" else { return }
+        guard let bodyString = message.body as? String,
+              let data = bodyString.data(using: .utf8),
+              let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let method = payload["method"] as? String,
+              let callbackId = payload["callbackId"] as? String else {
+            return
+        }
+        print(method)
+        let args = payload["args"] as? [Any] ?? []
+
+        switch method {
+        case "getUserToken":
+            let access = KeychainWorker.shared.read(key: .access) ?? ""
+            let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
+            sendCallbackToWeb(callbackId: callbackId, result: ["access": access, "refresh": refresh])
+        case "getRefreshToken":
+            if let tokenData = args.first as? [String: String] {
+                KeychainWorker.shared.create(key: .access, token: tokenData["access"] ?? "")
+                KeychainWorker.shared.create(key: .refresh, token: tokenData["refresh"] ?? "")
+                sendCallbackToWeb(callbackId: callbackId, result: ["success": true])
+            }
+        case "backButtonTapped":
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+            sendCallbackToWeb(callbackId: callbackId, result: ["success": true])
+
+        default:
+            print("⚠️ 지원되지 않는 메서드: \(method)")
+        }
+    }
+
+    private func sendCallbackToWeb(callbackId: String, result: Any) {
+        do {
+            let resultData = try JSONSerialization.data(withJSONObject: result)
+            let resultString = String(data: resultData, encoding: .utf8) ?? "{}"
+            let js = "window.setTokens('\(callbackId)', \(resultString))"
+
+            DispatchQueue.main.async {
+                self.webView.evaluateJavaScript(js) { _, error in
+                    if let error = error {
+                        print("콜백 전송 실패: \(error)")
+                    }
+                }
+            }
+        } catch {
+            print("JSON 직렬화 실패: \(error)")
+        }
     }
 }
