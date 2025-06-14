@@ -1262,7 +1262,6 @@
 		0F74C4F52BA8562D00EF4F58 /* Register */ = {
 			isa = PBXGroup;
 			children = (
-				D20CFC002DA7F71D00ADEF3B /* SubViews */,
 				D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */,
 				D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */,
 			);
@@ -1863,19 +1862,12 @@
 			isa = PBXGroup;
 			children = (
 				D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		D20CFC002DA7F71D00ADEF3B /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
 				D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */,
 				D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */,
 				D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */,
 				D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */,
 			);
-			path = SubViews;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		D215726D2CEE28C30061E725 /* Timetable */ = {
