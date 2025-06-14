@@ -238,8 +238,6 @@ final class EnterFormViewController: UIViewController {
         setUpButtonTargets()
         bind()
         inputSubject.send(.getDeptList)
-        
-        viewModel.logCurrentState()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -294,6 +292,10 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700))
             case let .showUserType(type):
                 self?.configureUserTypeSpecificUI(for: type)
+            case .succesRegister:
+                let viewController = RegisterCompletionViewController()
+                viewController.title = "회원가입"
+                self?.navigationController?.pushViewController(viewController, animated: true)
             default:
                 break
             }
@@ -518,9 +520,51 @@ extension EnterFormViewController {
     }
     
     @objc private func nextButtonTapped() {
-//        let viewController = SelectTypeFormViewController(viewModel: viewModel)
-//        viewController.title = "회원가입"
-//        navigationController?.pushViewController(viewController, animated: true)
+        guard let userType = viewModel.userType else { return }
+
+        let loginId = idTextField.text ?? ""
+        let password = passwordTextField2.text ?? ""
+        let nickname = nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let finalNickname = (nickname?.isEmpty == true) ? nil : nickname
+
+        switch userType {
+        case .student:
+            let department = departmentDropdownButton.titleLabel?.text ?? ""
+            let studentNumber = studentIdTextField.text ?? ""
+
+            let emailInput = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let email = (emailInput?.isEmpty == true) ? nil : emailInput
+
+            let request = StudentRegisterFormRequest(
+                name: viewModel.tempName ?? "",
+                phoneNumber: viewModel.tempPhoneNumber ?? "",
+                loginId: loginId,
+                password: password,
+                department: department,
+                studentNumber: studentNumber,
+                gender: viewModel.tempGender ?? "",
+                email: email,
+                nickname: finalNickname
+            )
+
+            inputSubject.send(.tryStudentRegister(request))
+
+        case .general:
+            let emailInput = generalEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let email = (emailInput?.isEmpty == true) ? nil : emailInput
+
+            let request = GeneralRegisterFormRequest(
+                name: viewModel.tempName ?? "",
+                phoneNumber: viewModel.tempPhoneNumber ?? "",
+                loginId: loginId,
+                gender: viewModel.tempGender ?? "",
+                password: password,
+                email: email,
+                nickname: finalNickname
+            )
+
+            inputSubject.send(.tryGeneralRegister(request))
+        }
     }
 }
 

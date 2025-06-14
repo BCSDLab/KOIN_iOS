@@ -17,17 +17,6 @@ final class RegisterFormViewModel: ViewModelProtocol {
         self.userType = type
     }
     
-    // FIXME: - 로그 확인용 지우기
-    func logCurrentState(tag: String = "💡ViewModel 상태") {
-        print("""
-        \(tag)
-        tempName: \(tempName ?? "nil")
-        tempPhoneNumber: \(tempPhoneNumber ?? "nil")
-        tempGender: \(tempGender ?? "nil")
-        userType: \(userType.map { "\($0)" } ?? "nil")
-        """)
-    }
-    
     var outputPublisher: AnyPublisher<Output, Never> {
         outputSubject.eraseToAnyPublisher()
     }
@@ -184,15 +173,18 @@ extension RegisterFormViewModel {
     }
     
     private func studentRegister(registerRequest: StudentRegisterFormRequest) {
+        var mutableRequest = registerRequest
+        mutableRequest.sha256()
+        
         registerFormUseCase.studentExecute(
             name: registerRequest.name,
             phoneNumber: registerRequest.phoneNumber,
             loginId: registerRequest.loginId,
-            password: registerRequest.password,
+            password: mutableRequest.password,
             department: registerRequest.department,
             studentNumber: registerRequest.studentNumber,
             gender: registerRequest.gender,
-            email: registerRequest.email?.isEmpty == true ? nil : "\(registerRequest.email!)@koreatech.ac.kr",
+            email: registerRequest.email.flatMap { $0.isEmpty ? nil : "\($0)@koreatech.ac.kr"},
             nickname: registerRequest.nickname?.isEmpty == true ? nil : registerRequest.nickname
         )
         .sink { [weak self] completion in
@@ -205,15 +197,17 @@ extension RegisterFormViewModel {
     }
 
     private func generalRegister(registerRequest: GeneralRegisterFormRequest) {
+        var mutableRequest = registerRequest
+        mutableRequest.sha256()
+        
         registerFormUseCase.generalExecute(
             name: registerRequest.name,
             phoneNumber: registerRequest.phoneNumber,
             loginId: registerRequest.loginId,
             gender: registerRequest.gender,
-            password: registerRequest.password,
+            password: mutableRequest.password,
             email: registerRequest.email?.isEmpty == true ? nil : registerRequest.email,
             nickname: registerRequest.nickname?.isEmpty == true ? nil : registerRequest.nickname
-
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -223,5 +217,4 @@ extension RegisterFormViewModel {
             self?.outputSubject.send(.succesRegister)
         }.store(in: &subscriptions)
     }
-
 }
