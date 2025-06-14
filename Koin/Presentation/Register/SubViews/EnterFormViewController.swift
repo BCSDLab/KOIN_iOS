@@ -16,16 +16,6 @@ final class EnterFormViewController: UIViewController {
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    private var userType: SelectTypeFormViewController.UserType?
-//    var onEnterFormStatusChanged: ((Bool) -> Void)?
-//    
-//    override var isHidden: Bool {
-//        didSet {
-//            if isHidden == false {
-//                self.onEnterFormStatusChanged?(false)
-//            }
-//        }
-//    }
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then {
@@ -248,6 +238,8 @@ final class EnterFormViewController: UIViewController {
         setUpButtonTargets()
         bind()
         inputSubject.send(.getDeptList)
+        
+        viewModel.logCurrentState()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -300,6 +292,8 @@ final class EnterFormViewController: UIViewController {
                     text: "사용 가능한 닉네임입니다.",
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
+            case let .showUserType(type):
+                self?.configureUserTypeSpecificUI(for: type)
             default:
                 break
             }
@@ -323,17 +317,13 @@ final class EnterFormViewController: UIViewController {
         nicknameDuplicateButton.addTarget(self, action: #selector(checkStudentNicknameDuplicateButtonTapped), for: .touchUpInside)
         studentEmailTextField.addTarget(self, action: #selector(studentEmailTextFieldDidChange(_:)), for: .editingChanged)
         generalEmailTextField.addTarget(self, action: #selector(generalEmailTextFieldDidChange(_:)), for: .editingChanged)
-    }
-    
-    func configure(for userType: SelectTypeFormViewController.UserType?) {
-        self.userType = userType
-        checkIdResponseLabel.isHidden = true
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
     func tryRegister() {
-        guard let userType = self.userType else { return }
         guard let loginId = idTextField.text,
-              let password = passwordTextField1.text else { return }
+              let password = passwordTextField1.text,
+              let userType = viewModel.userType else { return }
 
         let nicknameText = nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         let nickname = (nicknameText?.isEmpty == true) ? nil : nicknameText
@@ -415,22 +405,11 @@ extension EnterFormViewController {
         if firstText == secondText {
             correctPasswordLabel.isHidden = false
 
-            if userType == .student {
-                [studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, nicknameTextField, nicknameDuplicateButton, studentEmailTextField, koreatechEmailLabel].forEach {
-                    $0.isHidden = false
-                }
-                setUpStudentConstraints()
-//                onEnterFormStatusChanged?(false)
-            } else {
-                [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
-                    $0.isHidden = false
-                }
-                setUpGeneralConstraints()
-//                onEnterFormStatusChanged?(true)
+            if let userType = viewModel.userType {
+                configureUserTypeSpecificUI(for: userType)
             }
         } else {
             correctPasswordLabel.isHidden = true
-//            onEnterFormStatusChanged?(false)
         }
     }
     
@@ -489,9 +468,15 @@ extension EnterFormViewController {
         let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
         let isValid = isLengthValid && isYearValid
         studentIdWarningLabel.isHidden = isValid
-
-        if userType == .student {
-//            onEnterFormStatusChanged?(isValid)
+        
+        if isValid {
+            nextButton.isEnabled = true
+            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.setTitleColor(.white, for: .normal)
+        } else {
+            nextButton.isEnabled = false
+            nextButton.backgroundColor = UIColor.appColor(.neutral300)
+            nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
         }
     }
     
@@ -531,6 +516,12 @@ extension EnterFormViewController {
 
         generalEmailResponseLabel.isHidden = trimmedText.isValidEmailFormat
     }
+    
+    @objc private func nextButtonTapped() {
+//        let viewController = SelectTypeFormViewController(viewModel: viewModel)
+//        viewController.title = "회원가입"
+//        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension EnterFormViewController {
@@ -551,7 +542,13 @@ extension EnterFormViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [idLabel, idTextField, checkIdDuplicateButton, checkIdResponseLabel, passwordLabel, passwordTextField1, passwordInfoLabel, passwordTextField2, correctPasswordLabel, studentInfoGuideLabel, departmentDropdownButton, deptDropDown, studentIdTextField, studentIdWarningLabel, nicknameTextField, nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField, koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
+        [idLabel, idTextField, checkIdDuplicateButton,
+         checkIdResponseLabel, passwordLabel, passwordTextField1,
+         passwordInfoLabel, passwordTextField2, correctPasswordLabel,
+         studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+         studentIdTextField, studentIdWarningLabel, nicknameTextField,
+         nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField,
+         koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
         ].forEach {
             contentView.addSubview($0)
         }
@@ -710,6 +707,7 @@ extension EnterFormViewController {
             $0.centerY.equalTo(studentEmailTextField.snp.centerY)
             $0.trailing.equalToSuperview().offset(-8)
             $0.height.equalTo(22)
+            $0.bottom.equalToSuperview().offset(-24)
         }
     }
     
@@ -745,11 +743,37 @@ extension EnterFormViewController {
             $0.top.equalTo(generalEmailTextField.snp.bottom)
             $0.leading.equalTo(generalEmailTextField.snp.leading)
             $0.height.equalTo(20)
+            $0.bottom.equalToSuperview().offset(-165)
         }
     }
     
+    private func configureUserTypeSpecificUI(for userType: RegisterFormViewModel.UserType) {
+        switch userType {
+        case .student:
+            [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+             studentIdTextField, nicknameTextField, nicknameDuplicateButton,
+             studentEmailTextField, koreatechEmailLabel].forEach {
+                $0.isHidden = false
+            }
+            setUpStudentConstraints()
+
+        case .general:
+            [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
+                $0.isHidden = false
+            }
+            setUpGeneralConstraints()
+
+            nextButton.isEnabled = true
+            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.setTitleColor(.white, for: .normal)
+        }
+
+        view.layoutIfNeeded()
+        setUpTextFieldUnderline()
+    }
+    
     private func setUpTextFieldUnderline() {
-        [idTextField, studentIdTextField, nicknameTextField, passwordTextField1, passwordTextField2, studentEmailTextField, generalEmailTextField].forEach {
+        [idTextField, passwordTextField1, passwordTextField2, studentIdTextField, nicknameTextField, studentEmailTextField, generalEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }

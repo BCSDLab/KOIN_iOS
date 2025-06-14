@@ -11,7 +11,23 @@ final class RegisterFormViewModel: ViewModelProtocol {
     var tempName: String?
     var tempPhoneNumber: String?
     var tempGender: String? // "0" = 남성, "1" = 여성
-    var userType: UserType?
+    private(set) var userType: UserType?
+
+    func selectUserType(_ type: UserType) {
+        self.userType = type
+    }
+    
+    // FIXME: - 로그 확인용 지우기
+    func logCurrentState(tag: String = "💡ViewModel 상태") {
+        print("""
+        \(tag)
+        tempName: \(tempName ?? "nil")
+        tempPhoneNumber: \(tempPhoneNumber ?? "nil")
+        tempGender: \(tempGender ?? "nil")
+        userType: \(userType.map { "\($0)" } ?? "nil")
+        """)
+    }
+    
     var outputPublisher: AnyPublisher<Output, Never> {
         outputSubject.eraseToAnyPublisher()
     }
@@ -42,10 +58,12 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
+        case showUserType(UserType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
@@ -179,16 +197,6 @@ extension RegisterFormViewModel {
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
-                // TODO: - 백엔드 중복 에러 고쳐지면 수정할 예정
-//                print("name: \(registerRequest.name)")
-//                print("phoneNumber: \(registerRequest.phoneNumber)")
-//                print("loginId: \(registerRequest.loginId)")
-//                print("password: \(registerRequest.password)")
-//                print("department: \(registerRequest.department)")
-//                print("studentNumber: \(registerRequest.studentNumber)")
-//                print("gender: \(registerRequest.gender)")
-//                print("nickname: \(registerRequest.nickname ?? "nil")")
-//                print("email: \(registerRequest.email ?? "nil")")
                 print("❌ 학생 회원가입 실패: \(error.message), code: \(error.code)")
             }
         } receiveValue: { [weak self] _ in
