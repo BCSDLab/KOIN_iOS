@@ -227,6 +227,12 @@
 		D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
+		D20AD6DE2E012A0F0067760A /* FindPhoneIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */; };
+		D20AD6E02E012A240067760A /* FindEmailIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6DF2E012A240067760A /* FindEmailIdViewController.swift */; };
+		D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E12E012A390067760A /* FoundIdViewController.swift */; };
+		D20AD6E42E012A430067760A /* FindIdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E32E012A430067760A /* FindIdViewModel.swift */; };
+		D20AD6E72E012E3B0067760A /* StateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E62E012E3B0067760A /* StateButton.swift */; };
+		D20AD6E92E013E430067760A /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E82E013E430067760A /* StateView.swift */; };
 		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
@@ -861,6 +867,12 @@
 		D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiContentViewController.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
+		D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPhoneIdViewController.swift; sourceTree = "<group>"; };
+		D20AD6DF2E012A240067760A /* FindEmailIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailIdViewController.swift; sourceTree = "<group>"; };
+		D20AD6E12E012A390067760A /* FoundIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundIdViewController.swift; sourceTree = "<group>"; };
+		D20AD6E32E012A430067760A /* FindIdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdViewModel.swift; sourceTree = "<group>"; };
+		D20AD6E62E012E3B0067760A /* StateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateButton.swift; sourceTree = "<group>"; };
+		D20AD6E82E013E430067760A /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
 		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
@@ -1867,6 +1879,27 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
+		D20AD6DC2E0128FD0067760A /* FindId */ = {
+			isa = PBXGroup;
+			children = (
+				D20AD6E52E012A480067760A /* ViewControllers */,
+				D20AD6E32E012A430067760A /* FindIdViewModel.swift */,
+				D20AD6E62E012E3B0067760A /* StateButton.swift */,
+				D20AD6E82E013E430067760A /* StateView.swift */,
+			);
+			path = FindId;
+			sourceTree = "<group>";
+		};
+		D20AD6E52E012A480067760A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */,
+				D20AD6DF2E012A240067760A /* FindEmailIdViewController.swift */,
+				D20AD6E12E012A390067760A /* FoundIdViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2256,6 +2289,7 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D20AD6DC2E0128FD0067760A /* FindId */,
 				D2D462552D639E1900C60864 /* ChatList */,
 				D2FFA9792D6200F100EF8E56 /* Chat */,
 				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
@@ -3722,6 +3756,7 @@
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
+				D20AD6E72E012E3B0067760A /* StateButton.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
@@ -3755,6 +3790,7 @@
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
+				D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */,
@@ -3820,6 +3856,7 @@
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */,
+				D20AD6E42E012A430067760A /* FindIdViewModel.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
@@ -4054,6 +4091,7 @@
 				D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2B7EBD22D37E3D700EE46B0 /* DeleteLostItemUseCase.swift in Sources */,
+				D20AD6DE2E012A0F0067760A /* FindPhoneIdViewController.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
@@ -4065,10 +4103,12 @@
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
+				D20AD6E92E013E430067760A /* StateView.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				D20AB9672C572003006BC684 /* CancelableImageView.swift in Sources */,
+				D20AD6E02E012A240067760A /* FindEmailIdViewController.swift in Sources */,
 				D2078C032BC5DD1600A39861 /* EventShopCollectionViewCell.swift in Sources */,
 				D2908C932BB580480008F908 /* LogoView.swift in Sources */,
 				D27DD09D2BA608310081FD36 /* DiningCollectionView.swift in Sources */,
