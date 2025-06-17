@@ -20,6 +20,7 @@ enum UserType: String, Codable {
     case admin = "ADMIN"
     case coop = "COOP"
     case council = "COUNCIL"
+    case general = "GENERAL"
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
