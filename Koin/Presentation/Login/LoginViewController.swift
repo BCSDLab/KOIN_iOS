@@ -184,32 +184,6 @@ extension LoginViewController {
         let timetableRepositoy = DefaultTimetableRepository(service: DefaultTimetableService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-        
-        // FIXME: - 회원가입 리팩토링 후 지울 주석들
-//         let registerViewController = RegisterViewController(viewModel: RegisterViewModel(fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: timetableRepositoy), registerUseCase: DefaultRegisterUseCase(userRepository: userRepository), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase(userRepository: userRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: logRepoository)))
-        
-//        let registerViewController = RegisterFormViewController(
-//            viewModel: RegisterFormViewModel(
-//                checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
-//                    userRepository: userRepository
-//                ),
-//                sendVerificationCodeUseCase: DefaultSendVerificationCodeUseCase(
-//                    userRepository: userRepository
-//                ),
-//                checkVerificationCodeUseCase: DefaultCheckVerificationCodeUsecase(
-//                    userRepository: userRepository
-//                ),
-//                checkDuplicatedIdUseCase: DefaultCheckDuplicatedIdUsecase (
-//                    userRepository: userRepository
-//                ), fetchDeptListUseCase: DefaultFetchDeptListUseCase(
-//                    timetableRepository: timetableRepositoy
-//                ), checkDuplicatedNicknameUseCase: DefaultCheckDuplicatedNicknameUseCase (
-//                    userRepository: userRepository
-//                ), registerFormUseCase: DefaultRegisterFormUseCase(
-//                    userRepository: userRepository
-//                )
-//            )
-//        )
         let registerViewController = AgreementFormViewController(
             viewModel: RegisterFormViewModel(
                 checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
