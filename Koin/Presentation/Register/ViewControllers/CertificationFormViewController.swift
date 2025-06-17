@@ -183,11 +183,18 @@ final class CertificationFormViewController: UIViewController {
         configureView()
         setUpButtonTargets()
         bind()
+        hideKeyboardWhenTappedAround()
+        addKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeKeyboardNotifications()
     }
     
     override func viewDidLayoutSubviews() {
@@ -229,6 +236,9 @@ final class CertificationFormViewController: UIViewController {
                 self?.viewModel.tempName = self?.nameTextField.text
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500) ? "1" : "0"
+                self?.nextButton.isEnabled = true
+                self?.nextButton.backgroundColor = UIColor.appColor(.primary500)
+                self?.nextButton.setTitleColor(.white, for: .normal)
             default:
                 break
             }
@@ -246,10 +256,34 @@ final class CertificationFormViewController: UIViewController {
         contactButton.addTarget(self, action: #selector(contactButtonButtonTapped), for: .touchUpInside)
         verificationTextField.addTarget(self, action: #selector(verificationTextFieldDidChange(_:)), for: .editingChanged)
         verificationButton.addTarget(self, action: #selector(verificationButtonTapped), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
 }
 
 extension CertificationFormViewController {
+    private func addKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    private func removeKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        scrollView.contentInset.bottom = keyboardFrame.height
+        scrollView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets.bottom = 0
+    }
+    
     @objc private func clearNameTextField() {
         nameTextField.text = ""
     }
@@ -466,6 +500,12 @@ extension CertificationFormViewController {
         } else {
             return
         }
+    }
+    
+    @objc private func nextButtonTapped() {
+        let viewController = SelectTypeFormViewController(viewModel: viewModel)
+        viewController.title = "회원가입"
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

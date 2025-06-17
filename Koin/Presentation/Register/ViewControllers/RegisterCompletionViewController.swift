@@ -58,23 +58,23 @@ final class RegisterCompletionViewController: UIViewController {
 extension RegisterCompletionViewController {
     @objc private func loginButtonTapped() {
         if let navigationController = self.navigationController {
-            let viewControllers = navigationController.viewControllers
-            let targetIndex = max(0, viewControllers.count - 3)
-            navigationController.popToViewController(viewControllers[targetIndex], animated: true)
+            if let loginVC = navigationController.viewControllers.first(where: { $0 is LoginViewController }) {
+                navigationController.popToViewController(loginVC, animated: true)
+            }
         }
     }
-    
+
     @objc private func homeButtonTapped() {
         if let navigationController = self.navigationController {
-            let viewControllers = navigationController.viewControllers
-            let targetIndex = max(0, viewControllers.count - 5)
-            navigationController.popToViewController(viewControllers[targetIndex], animated: true)
+            if let homeVC = navigationController.viewControllers.first(where: { $0 is HomeViewController }) {
+                navigationController.popToViewController(homeVC, animated: true)
+            }
         }
     }
 }
 
 extension RegisterCompletionViewController {
-    private func setUpLayOuts() {
+    private func setUpLayout() {
         [koinLogoImageView, registerCompletionLabel, loginButton, homeButton].forEach {
             view.addSubview($0)
         }
@@ -108,9 +108,9 @@ extension RegisterCompletionViewController {
     }
     
     private func configureView() {
-        setUpLayOuts()
+        setUpLayout()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .white
     }
 }
 
