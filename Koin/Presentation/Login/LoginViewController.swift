@@ -166,8 +166,7 @@ extension LoginViewController {
     }
     
     @objc private func findPasswordButtonTapped() {
-        let findPasswordViewController = FindPasswordViewController(viewModel: FindPasswordViewModel(findPasswordUseCase: DefaultFindPasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
-        findPasswordViewController.title = "비밀번호 찾기"
+        let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
     }
     
