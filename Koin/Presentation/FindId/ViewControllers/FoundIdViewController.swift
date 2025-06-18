@@ -73,10 +73,37 @@ final class FoundIdViewController: UIViewController {
 
 extension FoundIdViewController {
     @objc private func loginButtonTapped() {
-        
+        let homeViewController = makeHomeViewController()
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let viewControllers = [homeViewController, serviceSelectViewController, loginViewController]
+        navigationController?.setViewControllers(viewControllers, animated: true)
     }
     @objc private func registerButtonTapped() {
+        let homeViewController = makeHomeViewController()
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+    }
+    
+    private func makeHomeViewController() -> UIViewController {
+        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let dateProvider = DefaultDateProvider()
         
+        let homeViewModel = HomeViewModel(
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
+            dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()
+        )
+        let viewController = HomeViewController(viewModel: homeViewModel)
+        return viewController
     }
     func updateSubMessageLabel(with id: String) {
         let baseText = "아이디는 \(id)입니다."
