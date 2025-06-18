@@ -18,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         
-        let navigationController = CustomNavigationController(rootViewController: FindPhoneIdViewController(viewModel: FindIdViewModel()))
+   //     let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
+        let navigationController = CustomNavigationController(rootViewController: FoundIdViewController(viewModel: FindIdViewModel()))
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()

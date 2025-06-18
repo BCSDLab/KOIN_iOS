@@ -23,7 +23,9 @@ final class FindPhoneIdViewController: UIViewController {
         $0.text = "휴대전화 번호"
     }
     
-    private let phoneNumberTextField = DefaultTextField(placeholder: "- 없이 번호를 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private let phoneNumberTextField = DefaultTextField(placeholder: "- 없이 번호를 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.keyboardType = .numberPad
+    }
     
     private let sendButton = StateButton().then {
         $0.setState(state: .unusable)
@@ -40,16 +42,22 @@ final class FindPhoneIdViewController: UIViewController {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
     }
     
-    private let phoneStateView = StateView()
+    private let phoneStateView = StateView().then {
+        $0.isHidden = true
+    }
     
     private let remainCountLabel = UILabel().then {
         $0.text = "남은 횟수 (4/5)"
+        $0.isHidden = true
     }
     
-    private let certNumberTextField = DefaultTextField(placeholder: "인증번호를 입력해주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private let certNumberTextField = DefaultTextField(placeholder: "인증번호를 입력해주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.keyboardType = .numberPad
+    }
     
     private let remainTimeLabel = UILabel().then {
         $0.text = "05:00"
+        $0.isHidden = true
     }
     
     private let certNumberButton = StateButton().then {
@@ -79,6 +87,9 @@ final class FindPhoneIdViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
+        hideKeyboardWhenTappedAround()
+        phoneNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        certNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,12 +101,13 @@ final class FindPhoneIdViewController: UIViewController {
     
     private func bind() {
         $remainCount.receive(on: DispatchQueue.main).sink { [weak self] count in
-            <#code#>
+            //
         }.store(in: &subscriptions)
     }
 }
 
 extension FindPhoneIdViewController {
+    
     @objc private func sendButtonTapped() {
         
     }
@@ -104,6 +116,21 @@ extension FindPhoneIdViewController {
     }
     @objc private func changeButtonTapped() {
         
+    }
+    @objc private func textFieldDidChange(textField: UITextField) {
+        if textField == phoneNumberTextField {
+            if textField.text == "" {
+                sendButton.setState(state: .unusable)
+            } else {
+                sendButton.setState(state: .usable)
+            }
+        } else {
+            if textField.text == "" {
+                certNumberButton.setState(state: .unusable)
+            } else {
+                certNumberButton.setState(state: .usable)
+            }
+        }
     }
 }
 
@@ -125,7 +152,7 @@ extension FindPhoneIdViewController {
             $0.top.equalTo(phoneNumberLabel.snp.bottom).offset(25)
             $0.leading.equalTo(phoneNumberLabel)
             $0.trailing.equalTo(sendButton.snp.leading).offset(-16)
-            $0.height.equalTo(22)
+            $0.height.equalTo(40)
         }
         sendButton.snp.makeConstraints {
             $0.top.equalTo(phoneNumberTextField)
@@ -156,7 +183,7 @@ extension FindPhoneIdViewController {
             $0.top.equalTo(phoneStateView.snp.bottom).offset(30)
             $0.leading.equalTo(phoneNumberLabel)
             $0.trailing.equalTo(sendButton.snp.leading).offset(-16)
-            $0.height.equalTo(22)
+            $0.height.equalTo(40)
         }
         remainTimeLabel.snp.makeConstraints {
             $0.centerY.equalTo(certNumberTextField)
@@ -188,6 +215,9 @@ extension FindPhoneIdViewController {
         remainTimeLabel.textColor = UIColor.appColor(.neutral500)
         helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         helpLabel.textColor = UIColor.appColor(.neutral500)
+        [phoneNumberTextField, certNumberTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
     }
     
     private func setupUI() {

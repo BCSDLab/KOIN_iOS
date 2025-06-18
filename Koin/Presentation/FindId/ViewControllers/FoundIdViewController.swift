@@ -16,6 +16,28 @@ final class FoundIdViewController: UIViewController {
     
     // MARK: - UI Components
     
+    private let messageLabel = UILabel().then {
+        $0.text = "아이디 조회 결과"
+    }
+    
+    private let subMessageLabel = UILabel()
+    
+    private let loginButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.sub500)
+        $0.setTitle("로그인 바로가기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
+    }
+    
+    private let registerButton = UIButton().then {
+        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.setTitle("비밀번호 찾기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.layer.cornerRadius = 8
+    }
+    
     init(viewModel: FindIdViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -32,6 +54,7 @@ final class FoundIdViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
+        updateSubMessageLabel(with: "abc123")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,24 +70,63 @@ final class FoundIdViewController: UIViewController {
 }
 
 extension FoundIdViewController {
-   
+    func updateSubMessageLabel(with id: String) {
+        let baseText = "아이디는 \(id)입니다."
+        let attributed = NSMutableAttributedString(string: baseText)
+        
+        let fullFont = UIFont.appFont(.pretendardRegular, size: 16)
+        let fullColor = UIColor.appColor(.gray)
+        
+        let highlightFont = UIFont.appFont(.pretendardMedium, size: 20)
+        let highlightColor = UIColor.black
+        
+        attributed.addAttribute(.font, value: fullFont, range: NSRange(location: 0, length: baseText.count))
+        attributed.addAttribute(.foregroundColor, value: fullColor, range: NSRange(location: 0, length: baseText.count))
+        
+        if let idRange = baseText.range(of: id) {
+            let nsRange = NSRange(idRange, in: baseText)
+            attributed.addAttribute(.font, value: highlightFont, range: nsRange)
+            attributed.addAttribute(.foregroundColor, value: highlightColor, range: nsRange)
+        }
+        
+        subMessageLabel.attributedText = attributed
+    }
 }
 
 extension FoundIdViewController {
     
     private func setupLayOuts() {
-        [].forEach {
+        [messageLabel, subMessageLabel, loginButton, registerButton].forEach {
             view.addSubview($0)
         }
-        
     }
     
     private func setupConstraints() {
-   
+        messageLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview().offset(-100)
+            $0.centerX.equalToSuperview()
+        }
+        subMessageLabel.snp.makeConstraints {
+            $0.top.equalTo(messageLabel.snp.bottom).offset(24)
+            $0.centerX.equalToSuperview()
+        }
+        loginButton.snp.makeConstraints {
+            $0.top.equalTo(subMessageLabel.snp.bottom).offset(64)
+            $0.centerX.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(48)
+            $0.height.equalTo(48)
+        }
+        registerButton.snp.makeConstraints {
+            $0.top.equalTo(loginButton.snp.bottom).offset(24)
+            $0.centerX.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(48)
+            $0.height.equalTo(48)
+        }
     }
     
     private func setupComponents() {
-      
+        messageLabel.font = UIFont.appFont(.pretendardBold, size: 24)
+        messageLabel.textColor = UIColor.appColor(.primary500)
     }
     
     private func setupUI() {
