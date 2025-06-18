@@ -28,9 +28,7 @@ final class FindPhoneIdViewController: UIViewController {
         $0.text = certType == .phone ? "휴대전화 번호" : "이메일"
     }
     
-    private lazy var phoneNumberTextField = DefaultTextField(placeholder: certType == .phone ? "- 없이 번호를 입력해 주세요." : "등록된 이메일을 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
-        $0.keyboardType = .numberPad
-    }
+    private lazy var phoneNumberTextField = DefaultTextField(placeholder: certType == .phone ? "- 없이 번호를 입력해 주세요." : "등록된 이메일을 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
     
     private let sendButton = StateButton().then {
         $0.setState(state: .unusable)
