@@ -82,6 +82,9 @@ extension FoundIdViewController {
     @objc private func registerButtonTapped() {
         let homeViewController = makeHomeViewController()
         let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
+        let viewControllers = [homeViewController, serviceSelectViewController, findPasswordViewController]
+        navigationController?.setViewControllers(viewControllers, animated: true)
     }
     
     private func makeHomeViewController() -> UIViewController {

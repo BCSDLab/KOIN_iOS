@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   //      let navigationController = CustomNavigationController(rootViewController: ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase), userType: .general))
     //    let navigationController = CustomNavigationController(rootViewController: SettingsViewController(viewModel: SettingsViewModel()))
    //     let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
-        let navigationController = CustomNavigationController(rootViewController: FindPasswordCertViewController(viewModel: FindPasswordViewModel()))
+        let navigationController = CustomNavigationController(rootViewController: LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))))
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()

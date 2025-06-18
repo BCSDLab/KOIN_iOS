@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class FindPasswordViewModel {
     
@@ -23,15 +24,56 @@ final class FindPasswordViewModel {
     @Published var id: String = ""
     @Published var inputData: String = ""
     @Published var certNumber = ""
-    @Published var newPassword: String = ""
+    
+    @Published var password: String = "" {
+        didSet {
+            validatePassword()
+            validatePasswordMatch()
+        }
+    }
+    @Published var passwordMatch: String = "" {
+        didSet {
+            validatePasswordMatch()
+        }
+    }
     
     let sendMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let checkMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let changeSuccessPublisher = PassthroughSubject<Void, Never>()
     let toastMessagePublisher = PassthroughSubject<String, Never>()
+    let passwordMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let passwordMatchMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    @Published var isPasswordValidAll: Bool = false
 }
 
 extension FindPasswordViewModel {
+    private func updatePasswordValidationState() {
+        let passwordRegex = "^(?=.*[!@#$%^&*()_+=-])(?=.*[A-Za-z0-9])[A-Za-z0-9!@#$%^&*()_+=-]{6,18}$"
+            let isPasswordValid = NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
+            let isMatch = password == passwordMatch && !passwordMatch.isEmpty
+            isPasswordValidAll = isPasswordValid && isMatch
+        }
+    private func validatePassword() {
+        let passwordRegex = "^(?=.*[!@#$%^&*()_+=-])(?=.*[A-Za-z0-9])[A-Za-z0-9!@#$%^&*()_+=-]{6,18}$"
+        let isValid = NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
+        if isValid {
+            passwordMessagePublisher.send(("사용 가능한 비밀번호입니다.", true))
+        } else {
+            passwordMessagePublisher.send(("특수문자 포함 영어와 숫자 6~18 자리로 입력해 주세요.", false))
+        }
+        updatePasswordValidationState()
+    }
+    
+    private func validatePasswordMatch() {
+        if passwordMatch.isEmpty {
+            passwordMatchMessagePublisher.send(("비밀번호를 다시 입력해주세요.", false))
+        } else if password == passwordMatch {
+            passwordMatchMessagePublisher.send(("비밀번호가 일치합니다.", true))
+        } else {
+            passwordMatchMessagePublisher.send(("비밀번호가 일치하지 않습니다.", false))
+        }
+        updatePasswordValidationState()
+    }
     func sendVerificationCode() {
         sendVerificationCodeUseCase.execute(request: .init(phoneNumber: inputData)).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -54,7 +96,7 @@ extension FindPasswordViewModel {
     }
     
     func findPasswordSms(phoneNumber: String) {
-        findPasswordSmsUseCase.execute(requestModel: .init(loginId: id, phoneNumber: inputData, newPassword: newPassword)).sink { [weak self] completion in
+        findPasswordSmsUseCase.execute(requestModel: .init(loginId: id, phoneNumber: inputData, newPassword: password)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.toastMessagePublisher.send(error.message)
             }
@@ -83,7 +125,7 @@ extension FindPasswordViewModel {
         }.store(in: &subscriptions)
     }
     func findPasswordEmail(email: String) {
-        findPasswordEmailUseCase.execute(requestModel: .init(loginId: id, email: inputData, newPassword: newPassword)).sink { [weak self] completion in
+        findPasswordEmailUseCase.execute(requestModel: .init(loginId: id, email: inputData, newPassword: password)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.toastMessagePublisher.send(error.message)
             }
