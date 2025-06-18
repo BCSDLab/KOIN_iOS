@@ -32,7 +32,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
-    private var userData: UserDTO? = nil
+    private(set) var userData: UserDTO? = nil
     
     init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
@@ -78,7 +78,7 @@ extension ChangeMyProfileViewModel {
     }
     
     private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink { [weak self] completion in
+        fetchUserDataUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }

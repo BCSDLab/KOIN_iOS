@@ -106,6 +106,11 @@ final class FindPhoneIdViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpTextFieldUnderline()
+    }
+    
     // MARK: - Bind
     
     private func bind() {
@@ -288,11 +293,14 @@ extension FindPhoneIdViewController {
         remainTimeLabel.textColor = UIColor.appColor(.neutral500)
         helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         helpLabel.textColor = UIColor.appColor(.neutral500)
-        [phoneNumberTextField, certNumberTextField].forEach {
-            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
-        }
         [helpLabel, changeButton].forEach {
             $0.isHidden = certType == .email
+        }
+    }
+    
+    private func setUpTextFieldUnderline() {
+        [phoneNumberTextField, certNumberTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }
     

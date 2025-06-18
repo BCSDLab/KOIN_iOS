@@ -42,41 +42,79 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "아이디"
     }
     
-    private let idValueLabel = UILabel().then { label in
+    private let idTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.isUserInteractionEnabled = false
     }
     
     private let nameTitleLabel = UILabel().then {
         $0.text = "이름"
     }
     
-    private let nameTextField = UITextField().then { textField in
-        textField.placeholder = "홍길동(선택)"
-    }
+    private let nameTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
     
     private let nicknameTitleLabel = UILabel().then {
-        $0.text = "닉네임"
+        $0.text = "닉네임(선택)"
     }
     
-    private let nicknameTextField = UITextField().then { textField in
-        textField.placeholder = "닉네임을 입력해주세요.(선택)"
+    private let nicknameTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    
+    private let nicknameStateView = StateView().then {
+        $0.isHidden = true
     }
     
-    private let nicknameCheckButton = UIButton().then {
-        $0.isEnabled = false
-        $0.backgroundColor = UIColor.appColor(.neutral300)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 4
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.setTitle("중복확인", for: .normal)
+    private let nicknameCheckButton = StateButton(title: "중복 확인").then {
+        $0.setState(state: .unusable)
     }
     
     private let phoneTitleLabel = UILabel().then {
         $0.text = "휴대전화"
     }
     
-    private let phoneTextField = UITextField().then { textField in
-        textField.placeholder = "010-0000-0000(선택)"
+    private let phoneTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    
+    private let sendButton = StateButton(title: "인증번호 발송").then {
+        $0.setState(state: .unusable)
+    }
+    
+    private let phoneStateView = StateView().then {
+        $0.isHidden = true
+    }
+    
+    private let certNumberTextField = DefaultTextField(placeholder: "인증번호를 입력해주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.isHidden = true
+    }
+    
+    private let remainTimeLabel = UILabel().then {
+        $0.isHidden = true
+    }
+    
+    private let certNumberCheckButton = StateButton(title: "인증번호 확인").then {
+        $0.setState(state: .unusable)
+        $0.isHidden = true
+    }
+    
+    private let helpLabel = UILabel().then {
+        $0.text = "인증번호 발송이 안 되시나요?"
+        $0.isHidden = true
+    }
+    
+    private let inquryButton = UIButton().then {
+        $0.setTitle("문의하기", for: .normal)
+        $0.isHidden = true
+    }
+    
+    private let certNumberStateView = StateView().then {
+        $0.isHidden = true
+    }
+    
+    private let emailTitleLabel = UILabel().then {
+        $0.text = "이메일"
+    }
+    
+    private let emailTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    
+    private let emailTextLabel = UILabel().then {
+        $0.text = "@koreatech.ac.kr"
     }
     
     private let studentInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
@@ -90,9 +128,7 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "학번"
     }
     
-    private let studentNumberTextField = UITextField().then { textField in
-        textField.placeholder = "학번을 입력해주세요.(선택)"
-    }
+    private let studentNumberTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
     
     private let majorTitleLabel = UILabel().then {
         $0.text = "전공"
@@ -109,35 +145,57 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "성별"
     }
     
-    private let maleButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.setTitle("남성", for: .normal)
-    }
+    private let maleButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.baseBackgroundColor = .systemBackground
+        config.imagePadding = 4
+        config.imagePlacement = .trailing
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0)
+        config.baseForegroundColor = UIColor.appColor(.neutral600)
+        button.configuration = config
+        button.contentHorizontalAlignment = .leading
+        button.configurationUpdateHandler = { button in
+            var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
+            let isSelected = button.isSelected
+            updatedConfig.image = isSelected
+            ? UIImage(named: "circleCheckedPrimary500")
+            : UIImage(named: "circlePrimary500")
+            var text = AttributedString("남성")
+            text.font = UIFont.appFont(.pretendardRegular, size: 12)
+            updatedConfig.attributedTitle = text
+            button.configuration = updatedConfig
+        }
+        return button
+    }()
     
-    private let femaleButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.setTitle("여성", for: .normal)
-    }
+    private let femaleButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        config.baseBackgroundColor = .systemBackground
+        config.imagePadding = 4
+        config.imagePlacement = .trailing
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0)
+        config.baseForegroundColor = UIColor.appColor(.neutral600)
+        button.configuration = config
+        button.contentHorizontalAlignment = .leading
+        button.configurationUpdateHandler = { button in
+            var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
+            let isSelected = button.isSelected
+            updatedConfig.image = isSelected
+            ? UIImage(named: "circleCheckedPrimary500")
+            : UIImage(named: "circlePrimary500")
+            var text = AttributedString("여성")
+            text.font = UIFont.appFont(.pretendardRegular, size: 12)
+            updatedConfig.attributedTitle = text
+            button.configuration = updatedConfig
+        }
+        return button
+    }()
     
-    private let saveButton = UIButton().then {
+    private let saveButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 15)).then {
         $0.setTitle("저장", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
+        $0.setState(state: .unusable)
     }
     
     // MARK: - Initialization
@@ -166,6 +224,9 @@ final class ChangeMyProfileViewController: UIViewController {
         maleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         femaleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         nicknameCheckButton.addTarget(self, action: #selector(nicknameCheckButtonTapped), for: .touchUpInside)
+        
+        nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(textField:)), for: .editingChanged)
+        
         hideKeyboardWhenTappedAround()
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
             $0.delegate = self
@@ -177,6 +238,10 @@ final class ChangeMyProfileViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpTextFieldUnderline()
+    }
     
     // MARK: - Bind
     
@@ -188,7 +253,8 @@ final class ChangeMyProfileViewController: UIViewController {
             case let .showToast(message, success, request):
                 switch request {
                 case .nickname:
-                     self?.nicknameCheckButton.isEnabled = !success
+                    self?.saveButton.setState(state: success ? .usable : .unusable)
+                    self?.saveButton.setTitle(success ? "저장" : "닉네임 중복확인을 해주세요.", for: .normal)
                 case .save:
                     if success { self?.navigationController?.popViewController(animated: true) }
                 }
@@ -200,27 +266,6 @@ final class ChangeMyProfileViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        let isNicknameButtonEnabled = nicknameCheckButton
-            .publisher(for: \.isEnabled)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isEnabled in
-                if isEnabled {
-                    self?.saveButton.setTitle("닉네임 중복확인을 해주세요.", for: .normal)
-                    self?.saveButton.backgroundColor = UIColor.appColor(.neutral300)
-                    self?.saveButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-                    self?.saveButton.isEnabled = false
-                    self?.nicknameCheckButton.backgroundColor = UIColor.appColor(.primary500)
-                    self?.nicknameCheckButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-                } else {
-                    self?.saveButton.setTitle("저장", for: .normal)
-                    self?.saveButton.backgroundColor = UIColor.appColor(.primary500)
-                    self?.saveButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-                    self?.saveButton.isEnabled = true
-                    self?.nicknameCheckButton.backgroundColor = UIColor.appColor(.neutral300)
-                    self?.nicknameCheckButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-                }
-            }
-        isNicknameButtonEnabled.store(in: &subscriptions)
     }
 }
 
@@ -230,16 +275,16 @@ extension ChangeMyProfileViewController {
         inputSubject.send(.checkNickname(nicknameTextField.text ?? ""))
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    @objc private func nicknameTextFieldDidChange(textField: UITextField) {
         
-        if textField == nicknameTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            
-            nicknameCheckButton.isEnabled = true
+        saveButton.setState(state: .unusable)
+        saveButton.setTitle("닉네임 중복확인을 해주세요.", for: .normal)
+        
+        if textField.text == "" { nicknameCheckButton.setState(state: .unusable) }
+        else {
+            nicknameCheckButton.setState(state: textField.text ?? "" == viewModel.userData?.nickname ?? "" ? .unusable : .usable)
         }
         
-        return true
     }
     
     @objc private func genderButtonTapped(sender: UIButton) {
@@ -254,12 +299,8 @@ extension ChangeMyProfileViewController {
             unselectedButton = maleButton
         }
         selectedButton.isSelected = true
-        selectedButton.backgroundColor = UIColor.appColor(.primary500)
-        selectedButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
         
         unselectedButton.isSelected = false
-        unselectedButton.backgroundColor = UIColor.appColor(.neutral300)
-        unselectedButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
     }
     
     @objc private func deptButtonTapped() {
@@ -285,12 +326,12 @@ extension ChangeMyProfileViewController {
     }
     
     private func showProfile(_ profile: UserDTO) {
-        idValueLabel.text = profile.email
+        idTextField.text = profile.loginId
         nameTextField.text = profile.name
         nicknameTextField.text = profile.nickname
         phoneTextField.text = profile.phoneNumber
         studentNumberTextField.text = profile.studentNumber
-        
+        emailTextField.text = (profile.email ?? "").replacingOccurrences(of: "@koreatech.ac.kr", with: "", options: [.backwards, .anchored])
         if let major = profile.major {
             guard var buttonConfiguration = deptButton.configuration else { return }
             var attributedTitle = AttributedString(major)
@@ -302,12 +343,8 @@ extension ChangeMyProfileViewController {
         if let genderIntValue = profile.gender {
             if genderIntValue == 0 {
                 maleButton.isSelected = true
-                maleButton.backgroundColor = UIColor.appColor(.primary500)
-                maleButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             } else {
                 femaleButton.isSelected = true
-                femaleButton.backgroundColor = UIColor.appColor(.primary500)
-                femaleButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             }
         }
     }
@@ -338,7 +375,7 @@ extension ChangeMyProfileViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(saveButton)
-        [primaryInfoLabel, idTitleLabel, idValueLabel, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton].forEach {
+        [primaryInfoLabel, idTitleLabel, idTextField, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton , emailTitleLabel, emailTextField, emailTextLabel, sendButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -358,48 +395,85 @@ extension ChangeMyProfileViewController {
             make.top.equalTo(primaryInfoLabel.snp.bottom).offset(5)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
-        idValueLabel.snp.makeConstraints { make in
+        idTextField.snp.makeConstraints { make in
             make.top.equalTo(idTitleLabel.snp.bottom).offset(18)
-            make.leading.equalTo(24)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.height.equalTo(32)
         }
         nameTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(idValueLabel.snp.bottom).offset(20)
+            make.top.equalTo(idTextField.snp.bottom).offset(32)
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         nameTextField.snp.makeConstraints { make in
             make.top.equalTo(nameTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(46)
+            make.height.equalTo(32)
         }
         nicknameTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(5)
+            make.top.equalTo(nameTextField.snp.bottom).offset(32)
             make.leading.equalTo(nameTitleLabel.snp.leading)
         }
         nicknameTextField.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(nicknameCheckButton.snp.leading).offset(-12)
-            make.height.equalTo(46)
+            make.height.equalTo(32)
         }
         nicknameCheckButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.width.equalTo(85)
-            make.height.equalTo(46)
+            make.height.equalTo(32)
         }
         phoneTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(nicknameTextField.snp.bottom).offset(8)
+            make.top.equalTo(nicknameTextField.snp.bottom).offset(32)
             make.leading.equalTo(nameTitleLabel.snp.leading)
         }
         phoneTextField.snp.makeConstraints { make in
             make.top.equalTo(phoneTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.trailing.equalTo(nicknameTextField)
+            make.height.equalTo(32)
+        }
+        sendButton.snp.makeConstraints { make in
+            make.centerY.equalTo(phoneTextField)
+            make.trailing.equalTo(nicknameCheckButton)
+            make.size.equalTo(nicknameCheckButton)
+        }
+        emailTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(phoneTextField.snp.bottom).offset(32)
+            make.leading.equalTo(view.snp.leading).offset(24)
+        }
+        emailTextField.snp.makeConstraints { make in
+            make.top.equalTo(emailTitleLabel.snp.bottom).offset(8)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.trailing.equalTo(view.snp.centerX)
+            make.height.equalTo(32)
+        }
+        emailTextLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(emailTextField)
+            make.leading.equalTo(emailTextField.snp.trailing).offset(8)
+        }
+        genderTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(emailTextField.snp.bottom).offset(30)
+            make.leading.equalTo(nameTitleLabel.snp.leading)
+        }
+        maleButton.snp.makeConstraints { make in
+            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
+            make.leading.equalTo(view.snp.leading).offset(24)
+            make.width.equalTo(100)
+            make.height.equalTo(46)
+        }
+        femaleButton.snp.makeConstraints { make in
+            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
+            make.leading.equalTo(maleButton.snp.trailing).offset(18.5)
+            make.width.equalTo(100)
             make.height.equalTo(46)
         }
         studentInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(phoneTextField.snp.bottom).offset(15)
+            make.top.equalTo(maleButton.snp.bottom).offset(32)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(38)
         }
@@ -411,32 +485,16 @@ extension ChangeMyProfileViewController {
             make.top.equalTo(studentNumberTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(46)
+            make.height.equalTo(32)
         }
         majorTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(studentNumberTextField.snp.bottom).offset(8)
+            make.top.equalTo(studentNumberTextField.snp.bottom).offset(32)
             make.leading.equalTo(nameTitleLabel.snp.leading)
         }
         deptButton.snp.makeConstraints { make in
             make.top.equalTo(majorTitleLabel.snp.bottom).offset(5)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(46)
-            make.width.equalTo(200)
-        }
-        genderTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(deptButton.snp.bottom).offset(30)
             make.leading.equalTo(nameTitleLabel.snp.leading)
-        }
-        maleButton.snp.makeConstraints { make in
-            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.centerX).offset(-18.5)
-            make.height.equalTo(46)
-        }
-        femaleButton.snp.makeConstraints { make in
-            make.top.equalTo(genderTitleLabel.snp.bottom).offset(16)
-            make.leading.equalTo(view.snp.centerX).offset(18.5)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.trailing.equalTo(studentNumberTextField)
             make.height.equalTo(46)
             make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
         }
@@ -449,24 +507,12 @@ extension ChangeMyProfileViewController {
     }
     
     private func setUpLabels() {
-        [idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, studentNumberTitleLabel, majorTitleLabel].forEach {
+        [idTitleLabel, nameTitleLabel, nicknameTitleLabel, phoneTitleLabel, studentNumberTitleLabel, majorTitleLabel, emailTitleLabel].forEach {
             $0.font = UIFont.appFont(.pretendardRegular, size: 16)
             $0.textColor = UIColor.appColor(.neutral600)
         }
-    }
-    
-    private func setUpTextFields() {
-        [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
-            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.backgroundColor = UIColor.appColor(.neutral100)
-            $0.layer.cornerRadius = 4
-            $0.layer.masksToBounds = true
-            
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24, height: $0.frame.height))
-            $0.leftView = paddingView
-            $0.leftViewMode = .always
-        }
+        emailTextLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
+        emailTextLabel.textColor = .black
     }
     
     private func setUpButtons() {
@@ -495,12 +541,14 @@ extension ChangeMyProfileViewController {
             }
         }
     }
-    
+    private func setUpTextFieldUnderline() {
+        [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField, emailTextField, idTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
+    }
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        setUpLabels()
-        setUpTextFields()
         setUpButtons()
         self.view.backgroundColor = .systemBackground
     }
