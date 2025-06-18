@@ -235,6 +235,14 @@
 		D20AD6E92E013E430067760A /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E82E013E430067760A /* StateView.swift */; };
 		D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */; };
 		D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */; };
+		D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */; };
+		D20AD6F12E029B560067760A /* SendVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */; };
+		D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */; };
+		D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */; };
+		D20AD6F92E02A11D0067760A /* FindIdSmsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */; };
+		D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */; };
+		D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */; };
+		D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */; };
 		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
@@ -877,6 +885,14 @@
 		D20AD6E82E013E430067760A /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
 		D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsRequest.swift; sourceTree = "<group>"; };
 		D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsResponse.swift; sourceTree = "<group>"; };
+		D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailResponse.swift; sourceTree = "<group>"; };
+		D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsUseCase.swift; sourceTree = "<group>"; };
+		D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailUseCase.swift; sourceTree = "<group>"; };
 		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
@@ -2749,6 +2765,8 @@
 				D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */,
 				D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */,
 				D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */,
+				D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */,
+				D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2803,6 +2821,8 @@
 				D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */,
 				D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */,
 				D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */,
+				D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */,
+				D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2865,6 +2885,10 @@
 				D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */,
 				D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */,
 				D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */,
+				D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */,
+				D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */,
+				D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */,
+				D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3621,6 +3645,7 @@
 				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
+				D20AD6F92E02A11D0067760A /* FindIdSmsResponse.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
 				83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */,
 				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
@@ -3795,6 +3820,7 @@
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
+				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */,
@@ -4001,12 +4027,14 @@
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
+				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
 				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
 				D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
+				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
@@ -4065,6 +4093,7 @@
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
+				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
 				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
@@ -4087,6 +4116,7 @@
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
+				D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
@@ -4105,6 +4135,7 @@
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				83EBB87C2D0FE02900346018 /* BusSearchDatePickerViewController.swift in Sources */,
+				D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
@@ -4175,6 +4206,7 @@
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
 				D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
+				D20AD6F12E029B560067760A /* SendVerificationEmailRequest.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,

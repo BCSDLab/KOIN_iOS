@@ -25,6 +25,10 @@ enum UserAPI {
     case checkDuplicatedId(CheckDuplicatedIdRequest)
     case studentRegisterForm(StudentRegisterFormRequest)
     case generalRegisterForm(GeneralRegisterFormRequest)
+    case sendVerificationEmail(SendVerificationEmailRequest)
+    case checkVerificationEmail(CheckVerificationEmailRequest)
+    case findIdSms(FindIdSmsRequest)
+    case findIdEmail(FindIdEmailRequest)
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -48,15 +52,19 @@ extension UserAPI: Router, URLRequestConvertible {
         case .checkLogin: return "/user/check/login"
         case .sendVerificationCode: return "/users/verification/sms/send"
         case .checkVerificationCode: return "/users/verification/sms/verify"
+        case .sendVerificationEmail: return "/users/verification/sms/send"
+        case .checkVerificationEmail: return "/users/verification/sms/verify"
         case .checkDuplicatedId: return "/user/check/id"
         case .studentRegisterForm: return "/v2/users/students/register"
         case .generalRegisterForm: return "/v2/users/register"
+        case .findIdSms: return "/v2/id/find/sms"
+        case .findIdEmail: return "/v2/id/find/email"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm: return .post
+        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, findIdSms, .findIdEmail: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin, .checkDuplicatedId: return .get
         case .modify: return .put
         case .revoke: return .delete
@@ -67,7 +75,7 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchUserData, .revoke, .checkAuth, .checkLogin:
             break
@@ -118,12 +126,20 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .generalRegisterForm(let request):
             return try? JSONEncoder().encode(request)
+        case .sendVerificationEmail(let request):
+            return try? JSONEncoder().encode(request)
+        case .checkVerificationEmail(let request):
+            return try? JSONEncoder().encode(request)
+        case .findIdSms(let request):
+            return try? JSONEncoder().encode(request)
+        case .findIdEmail(let request):
+            return try? JSONEncoder().encode(request)
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm: return JSONEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail: return JSONEncoding.default
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkDuplicatedId: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil
