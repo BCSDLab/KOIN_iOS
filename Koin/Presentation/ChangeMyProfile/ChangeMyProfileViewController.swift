@@ -481,12 +481,7 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func saveButtonTapped() {
-        var deptText: String?
-        if let label = deptButton.subviews.compactMap({ $0 as? UILabel }).first {
-            if label.text == "선택된 전공이 없습니다." { deptText = nil }
-            else { deptText = label.text }
-        }
-        let userInfo = UserPutRequest(gender: viewModel.modifyUserData?.gender, identity: 0, isGraduated: false, major: deptText, name: viewModel.modifyUserData?.name, nickname: viewModel.modifyUserData?.nickname, phoneNumber: viewModel.modifyUserData?.phoneNumber, studentNumber: viewModel.modifyUserData?.studentNumber, email: viewModel.modifyUserData?.email)
+        let userInfo = UserPutRequest(gender: viewModel.modifyUserData?.gender, identity: 0, isGraduated: false, major: viewModel.modifyUserData?.major, name: viewModel.modifyUserData?.name, nickname: viewModel.modifyUserData?.nickname, phoneNumber: viewModel.modifyUserData?.phoneNumber, studentNumber: viewModel.modifyUserData?.studentNumber, email: viewModel.modifyUserData?.email)
         inputSubject.send(.modifyProfile(userInfo))
     }
     
@@ -520,10 +515,11 @@ extension ChangeMyProfileViewController {
         dropDown.dataSource = dataSource
         dropDown.direction = .bottom
         dropDown.selectionBackgroundColor = .clear
-        dropDown.selectionAction = { (index: Int, item: String) in
+        dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             var buttonConfiguration = UIButton.Configuration.plain()
             buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
             var attributedTitle = AttributedString(item)
+            self?.viewModel.modifyUserData?.major = item
             attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
             attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
             buttonConfiguration.attributedTitle = attributedTitle
