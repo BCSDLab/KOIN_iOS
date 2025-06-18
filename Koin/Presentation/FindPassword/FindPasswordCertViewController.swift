@@ -11,8 +11,15 @@ import UIKit
 final class FindPasswordCertViewController: UIViewController {
     
     // MARK: - Properties
+    enum CertType {
+        case email
+        case phone
+    }
+    private let certType: CertType
     private let viewModel: FindPasswordViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    @Published private var remainTime = 180
+    private var timer: AnyCancellable?
     
     // MARK: - UI Components
     
@@ -50,20 +57,22 @@ final class FindPasswordCertViewController: UIViewController {
         $0.isHidden = true
     }
     
-    private let phoneLabel = UILabel().then {
-        $0.text = "휴대전화 번호"
+    private lazy var phoneLabel = UILabel().then {
+        $0.text = certType == .phone ? "휴대전화 번호" : "이메일"
     }
     
-    private let phoneTextField = DefaultTextField(placeholder: "- 없이 번호를 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private lazy var phoneTextField = DefaultTextField(placeholder: certType == .phone ? "휴대전화 번호" : "등록한 이메일을 입력해주세요", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
     
     private let sendButton = StateButton(title: "인증번호 발송")
     
-    private let helpLabel = UILabel().then {
+    private lazy var helpLabel = UILabel().then {
         $0.text = "휴대전화 등록을 안 하셨나요?"
+        $0.isHidden = certType == .phone ? false : true
     }
     
-    private let changeButton = UIButton().then {
+    private lazy var changeButton = UIButton().then {
         $0.setTitle("이메일로 찾기", for: .normal)
+        $0.isHidden = certType == .phone ? false : true
     }
     
     private let phoneStateView = StateView().then {
@@ -92,8 +101,9 @@ final class FindPasswordCertViewController: UIViewController {
         $0.setState(state: .unusable)
     }
     
-    init(viewModel: FindPasswordViewModel) {
+    init(viewModel: FindPasswordViewModel, certType: CertType = .phone) {
         self.viewModel = viewModel
+        self.certType = certType
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "비밀번호 찾기"
     }
@@ -109,6 +119,15 @@ final class FindPasswordCertViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        changeButton.addTarget(self, action: #selector(changeButtonTapped), for: .touchUpInside)
+        certNumberCheckButton.addTarget(self, action: #selector(certNumberCheckButtonTapped), for: .touchUpInside)
+        
+        phoneTextField.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+        certNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        idtextField.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+        hideKeyboardWhenTappedAround()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,12 +142,85 @@ final class FindPasswordCertViewController: UIViewController {
     
     private func bind() {
         
+        viewModel.$inputData.receive(on: DispatchQueue.main).dropFirst().sink { [weak self] text in
+            self?.sendButton.setState(state: text.isEmpty ? .unusable : .usable)
+        }.store(in: &subscriptions)
+        
+        viewModel.$certNumber.receive(on: DispatchQueue.main).dropFirst().sink { [weak self] text in
+            self?.certNumberCheckButton.setState(state: text.isEmpty ? .unusable : .usable)
+        }.store(in: &subscriptions)
+        
+        viewModel.sendMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            guard let self = self else { return }
+            phoneStateView.isHidden = false
+            phoneStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+            if response.1 {
+                startTimer()
+                [certNumberTextField, remainTimeLabel, helpLabel, changeButton, certNumberCheckButton].forEach {
+                    $0.isHidden = false
+                }
+            }
+        }.store(in: &subscriptions)
+        
+        viewModel.checkMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            guard let self = self else { return }
+            certNumberStateView.isHidden = false
+            certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+            if response.1 {
+                saveButton.setState(state: .usable)
+            }
+        }.store(in: &subscriptions)
     }
 }
 
 extension FindPasswordCertViewController {
-    
-
+    private func startTimer() {
+        remainTime = 180
+        timer?.cancel()
+        
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.remainTime > 0 {
+                    self.remainTime -= 1
+                } else {
+                    self.timer?.cancel()
+                }
+            }
+    }
+    @objc private func sendButtonTapped() {
+        switch certType {
+        case .phone: viewModel.sendVerificationCode()
+        case .email: viewModel.sendVerificationEmail()
+        }
+    }
+    @objc private func saveButtonTapped() {
+        navigationController?.pushViewController(FindPasswordChangeViewController(viewModel: viewModel), animated: true)
+    }
+    @objc private func changeButtonTapped() {
+        if var viewControllers = navigationController?.viewControllers {
+            viewControllers.removeLast()
+            let newVC = FindPasswordCertViewController(viewModel: viewModel, certType: .email)
+            viewControllers.append(newVC)
+            navigationController?.setViewControllers(viewControllers, animated: true)
+        }
+    }
+    @objc private func certNumberCheckButtonTapped() {
+        switch certType {
+        case .phone: viewModel.checkVerificationCode()
+        case .email: viewModel.checkVerificationEmail()
+        }
+    }
+    @objc private func textFieldDidChange(textField: UITextField) {
+        if textField == phoneTextField {
+            viewModel.inputData = textField.text ?? ""
+        } else if textField == certNumberTextField {
+            viewModel.certNumber = textField.text ?? ""
+        } else if textField == idtextField {
+            viewModel.id = textField.text ?? ""
+        }
+    }
 }
 
 extension FindPasswordCertViewController {

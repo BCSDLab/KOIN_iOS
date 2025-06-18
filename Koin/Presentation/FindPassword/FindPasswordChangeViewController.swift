@@ -55,6 +55,7 @@ final class FindPasswordChangeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
         setupUI()
         bind()
     }
@@ -67,7 +68,19 @@ final class FindPasswordChangeViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
+        viewModel.toastMessagePublisher.sink { [weak self] message in
+            self?.showToast(message: message)
+        }.store(in: &subscriptions)
         
+        viewModel.changeSuccessPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            if var viewControllers = navigationController?.viewControllers {
+                viewControllers.removeLast()
+                let newVC = FindPasswordCertViewController(viewModel: viewModel, certType: .email)
+                viewControllers.append(newVC)
+                navigationController?.setViewControllers(viewControllers, animated: true)
+            }
+        }.store(in: &subscriptions)
     }
 }
 
