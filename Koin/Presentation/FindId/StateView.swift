@@ -33,7 +33,8 @@ final class StateView: UIView {
     }
     
     
-    private func setState(state: State, message: String) {
+     func setState(state: State, message: String) {
+         messageLabel.text = message
         switch state {
         case .success:
             imageView.image = UIImage(named: "successCircle")
@@ -58,7 +59,7 @@ extension StateView {
     private func setupConstraints() {
         imageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.verticalEdges.equalToSuperview()
+            make.top.equalToSuperview()
             make.height.equalToSuperview()
             make.width.equalTo(imageView.snp.height)
         }

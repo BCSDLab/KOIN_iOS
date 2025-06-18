@@ -57,14 +57,14 @@ extension UserAPI: Router, URLRequestConvertible {
         case .checkDuplicatedId: return "/user/check/id"
         case .studentRegisterForm: return "/v2/users/students/register"
         case .generalRegisterForm: return "/v2/users/register"
-        case .findIdSms: return "/v2/id/find/sms"
-        case .findIdEmail: return "/v2/id/find/email"
+        case .findIdSms: return "/users/id/find/sms"
+        case .findIdEmail: return "/users/id/find/email"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, findIdSms, .findIdEmail: return .post
+        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdSms, .findIdEmail: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin, .checkDuplicatedId: return .get
         case .modify: return .put
         case .revoke: return .delete

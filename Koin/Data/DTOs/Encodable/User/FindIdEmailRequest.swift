@@ -8,9 +8,6 @@
 import Foundation
 
 struct FindIdEmailRequest: Codable {
-    let phoneNumber: String
+    let email: String
 
-    enum CodingKeys: String, CodingKey {
-        case phoneNumber = "phone_number"
-    }
 }

@@ -54,7 +54,9 @@ final class FoundIdViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
-        updateSubMessageLabel(with: "abc123")
+        updateSubMessageLabel(with: viewModel.loginId ?? "")
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +72,12 @@ final class FoundIdViewController: UIViewController {
 }
 
 extension FoundIdViewController {
+    @objc private func loginButtonTapped() {
+        
+    }
+    @objc private func registerButtonTapped() {
+        
+    }
     func updateSubMessageLabel(with id: String) {
         let baseText = "아이디는 \(id)입니다."
         let attributed = NSMutableAttributedString(string: baseText)

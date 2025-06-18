@@ -15,10 +15,10 @@ final class FindPhoneIdViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     @Published private var remainCount = 5
     @Published private var remainTime = 300
-    
+    private var timer: AnyCancellable?
     
     // MARK: - UI Components
-
+    
     private let phoneNumberLabel = UILabel().then {
         $0.text = "휴대전화 번호"
     }
@@ -69,6 +69,7 @@ final class FindPhoneIdViewController: UIViewController {
     
     private let saveButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 16)).then {
         $0.setState(state: .unusable)
+        $0.setTitle("저장", for: .normal)
     }
     
     init(viewModel: FindIdViewModel) {
@@ -90,6 +91,10 @@ final class FindPhoneIdViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         phoneNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         certNumberTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        certNumberButton.addTarget(self, action: #selector(certNumberButtonTapped), for: .touchUpInside)
+        changeButton.addTarget(self, action: #selector(changeButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,22 +105,73 @@ final class FindPhoneIdViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        $remainCount.receive(on: DispatchQueue.main).sink { [weak self] count in
-            //
+        $remainTime
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] seconds in
+                print(seconds)
+                guard let self = self else { return }
+                let minutes = seconds / 60
+                let remainingSeconds = seconds % 60
+                remainTimeLabel.text = String(format: "%02d:%02d", minutes, remainingSeconds)
+                remainTimeLabel.isHidden = seconds == 0 || seconds == 300
+                if seconds == 0 {
+                    certNumberStateView.setState(state: .warning, message: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.")
+                    certNumberStateView.isHidden = false
+                }
+            }.store(in: &subscriptions)
+        
+        viewModel.sendMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.phoneStateView.setState(state: response.1 ? .success : .warning , message: response.0)
+            self?.phoneStateView.isHidden = false
+            if response.1 {
+                self?.startTimer()
+            }
+            self?.certNumberStateView.isHidden = true
+        }.store(in: &subscriptions)
+        
+        viewModel.checkMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.certNumberStateView.isHidden = false
+            if !response.1 {
+                self?.certNumberStateView.setState(state: .warning, message: response.0)
+            } else {
+                self?.certNumberStateView.setState(state: .success, message: response.0)
+                self?.saveButton.setState(state: .usable)
+                self?.certNumberButton.setState(state: .unusable)
+                self?.timer?.cancel()
+                self?.timer = nil
+                self?.remainTimeLabel.isHidden = true
+            }
         }.store(in: &subscriptions)
     }
 }
 
 extension FindPhoneIdViewController {
-    
-    @objc private func sendButtonTapped() {
+    private func startTimer() {
+        remainTime = 300
+        timer?.cancel()
         
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.remainTime > 0 {
+                    self.remainTime -= 1
+                } else {
+                    self.timer?.cancel()
+                }
+            }
+    }
+    @objc private func sendButtonTapped() {
+        viewModel.sendVerificationCode(phoneNumber: phoneNumberTextField.text ?? "")
     }
     @objc private func certNumberButtonTapped() {
-        
+        viewModel.checkVerificationCode(phoneNumber: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
     }
     @objc private func changeButtonTapped() {
-        
+       // navigationController?.pushViewController(FoundIdViewController(viewModel: viewModel), animated: true)
+    }
+    @objc private func saveButtonTapped() {
+        navigationController?.pushViewController(FoundIdViewController(viewModel: viewModel), animated: true)
     }
     @objc private func textFieldDidChange(textField: UITextField) {
         if textField == phoneNumberTextField {
@@ -187,7 +243,7 @@ extension FindPhoneIdViewController {
         }
         remainTimeLabel.snp.makeConstraints {
             $0.centerY.equalTo(certNumberTextField)
-            $0.trailing.equalTo(certNumberTextField.snp.trailing).offset(-28)
+            $0.trailing.equalTo(certNumberTextField.snp.trailing).offset(-14)
         }
         certNumberButton.snp.makeConstraints {
             $0.top.equalTo(certNumberTextField)
