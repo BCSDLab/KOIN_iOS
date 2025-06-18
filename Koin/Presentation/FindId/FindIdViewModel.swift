@@ -58,30 +58,32 @@ extension FindIdViewModel {
     }
     ///
     func sendVerificationEmail(email: String) {
-        sendVerificationEmailUseCase.execute(requestModel: .init(email: email)).sink { completion in
+        sendVerificationEmailUseCase.execute(requestModel: .init(email: email)).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.sendMessagePublisher.send((error.message, false))
             }
         } receiveValue: { [weak self] response in
-            
+            self?.sendMessagePublisher.send(("인증번호가 발송되었습니다.", true))
         }.store(in: &subscriptions)
     }
     func checkVerificationEmail(email: String, code: String) {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink { completion in
+        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
+                self?.checkMessagePublisher.send((error.message, false))
             }
         } receiveValue: { [weak self] response in
             self?.findIdEmail(email: email)
         }.store(in: &subscriptions)
     }
     func findIdEmail(email: String) {
-        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink { completion in
+        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+                self?.checkMessagePublisher.send((error.message, false))
             }
         } receiveValue: { [weak self] response in
-            print(response)
+            self?.loginId = response.loginID
+            self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
         }.store(in: &subscriptions)
     }
 }

@@ -10,8 +10,13 @@ import UIKit
 
 final class FindPhoneIdViewController: UIViewController {
     
+    enum CertType {
+        case phone
+        case email
+    }
     // MARK: - Properties
     private let viewModel: FindIdViewModel
+    private let certType: CertType
     private var subscriptions: Set<AnyCancellable> = []
     @Published private var remainCount = 5
     @Published private var remainTime = 300
@@ -19,11 +24,11 @@ final class FindPhoneIdViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let phoneNumberLabel = UILabel().then {
-        $0.text = "휴대전화 번호"
+    private lazy var phoneNumberLabel = UILabel().then {
+        $0.text = certType == .phone ? "휴대전화 번호" : "이메일"
     }
     
-    private let phoneNumberTextField = DefaultTextField(placeholder: "- 없이 번호를 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+    private lazy var phoneNumberTextField = DefaultTextField(placeholder: certType == .phone ? "- 없이 번호를 입력해 주세요." : "등록된 이메일을 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
         $0.keyboardType = .numberPad
     }
     
@@ -72,8 +77,9 @@ final class FindPhoneIdViewController: UIViewController {
         $0.setTitle("저장", for: .normal)
     }
     
-    init(viewModel: FindIdViewModel) {
+    init(viewModel: FindIdViewModel, certType: CertType = .phone) {
         self.viewModel = viewModel
+        self.certType = certType
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -162,13 +168,26 @@ extension FindPhoneIdViewController {
             }
     }
     @objc private func sendButtonTapped() {
-        viewModel.sendVerificationCode(phoneNumber: phoneNumberTextField.text ?? "")
+        if certType == .phone {
+            viewModel.sendVerificationCode(phoneNumber: phoneNumberTextField.text ?? "")
+        } else {
+            viewModel.sendVerificationEmail(email: phoneNumberTextField.text ?? "")
+        }
     }
     @objc private func certNumberButtonTapped() {
-        viewModel.checkVerificationCode(phoneNumber: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
+        if certType == .phone {
+            viewModel.checkVerificationCode(phoneNumber: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
+        } else {
+            viewModel.checkVerificationEmail(email: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
+        }
     }
     @objc private func changeButtonTapped() {
-       // navigationController?.pushViewController(FoundIdViewController(viewModel: viewModel), animated: true)
+        if var viewControllers = navigationController?.viewControllers {
+            viewControllers.removeLast()
+            let newVC = FindPhoneIdViewController(viewModel: viewModel, certType: .email)
+            viewControllers.append(newVC)
+            navigationController?.setViewControllers(viewControllers, animated: true)
+        }
     }
     @objc private func saveButtonTapped() {
         navigationController?.pushViewController(FoundIdViewController(viewModel: viewModel), animated: true)
@@ -273,6 +292,9 @@ extension FindPhoneIdViewController {
         helpLabel.textColor = UIColor.appColor(.neutral500)
         [phoneNumberTextField, certNumberTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
+        [helpLabel, changeButton].forEach {
+            $0.isHidden = certType == .email
         }
     }
     
