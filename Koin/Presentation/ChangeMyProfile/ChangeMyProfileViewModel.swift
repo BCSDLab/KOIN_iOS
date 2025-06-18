@@ -15,10 +15,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
         case save
     }
     enum Input {
-        case fetchUserData
-        case fetchDeptList
         case modifyProfile(UserPutRequest)
-        case checkNickname(String)
     }
     enum Output {
         case showToast(String, Bool, Request)
@@ -32,26 +29,34 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
+    private let userRepository = DefaultUserRepository(service: DefaultUserService())
+    private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
+    private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
+    
     private(set) var userData: UserDTO? = nil
+    @Published var modifyUserData: UserDTO? = nil
+    
+    @Published var phoneNumberSuccess: Bool = true
+    @Published var nicknameSuccess: Bool = true
+    @Published private(set) var isFormValid: Bool = false
+    
+    let nicknameMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let phoneNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let certNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     
     init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.modifyUseCase = modifyUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.checkDuplicatedNicknameUseCase = checkDuplicatedNicknameUseCase
+        bind()
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .fetchUserData:
-                self?.fetchUserData()
-            case .fetchDeptList:
-                self?.fetchDeptList()
             case let .modifyProfile(request):
                 self?.modifyProfile(request: request)
-            case let .checkNickname(nickname):
-                self?.checkDuplicatedNickname(nickname: nickname)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -59,25 +64,52 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
 }
 
 extension ChangeMyProfileViewModel {
-    
-    private func checkDuplicatedNickname(nickname: String) {
-        checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                if self?.userData?.nickname == nickname {
-                    self?.outputSubject.send(.showToast("사용가능한 닉네임입니다.", true, .nickname))
-                } else {
-                    Log.make().error("\(error)")
-                    self?.outputSubject.send(.showToast(error.message, false, .nickname))
-                }
+    private func bind() {
+        Publishers.CombineLatest3($modifyUserData, $phoneNumberSuccess, $nicknameSuccess)
+            .map { [weak self] modified, emailOK, nicknameOK in
+                guard let original = self?.userData else { return false }
+                return emailOK && nicknameOK && original != modified
             }
-        } receiveValue: { [weak self] response in
-            print(response)
-            self?.outputSubject.send(.showToast("사용가능한 닉네임입니다.", true, .nickname))
-        }.store(in: &subscriptions)
-
+            .assign(to: &$isFormValid)
     }
     
-    private func fetchUserData() {
+    func sendVerificationCode(phoneNumber: String) {
+        sendVerificationCodeUseCase.execute(request: .init(phoneNumber: phoneNumber)).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.phoneNumberMessagePublisher.send((error.message, false))
+            }
+        } receiveValue: { [weak self] _ in
+            self?.phoneNumberMessagePublisher.send(("인증번호가 발송되었습니다.", true))
+        }.store(in: &subscriptions)
+    }
+    
+    func checkVerificationCode(phoneNumber: String, code: String) {
+        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.certNumberMessagePublisher.send((error.message, false))
+            }
+        } receiveValue: { [weak self] response in
+            self?.certNumberMessagePublisher.send(("인증번호가 일치합니다.", true))
+            self?.modifyUserData?.phoneNumber = phoneNumber
+            self?.phoneNumberSuccess = true
+        }.store(in: &subscriptions)
+    }
+    
+    func checkDuplicatedNickname(nickname: String) {
+        checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.nicknameMessagePublisher.send((error.message, false))
+            }
+        } receiveValue: { [weak self] response in
+            self?.nicknameMessagePublisher.send(("사용 가능한 닉네임입니다.", true))
+            self?.modifyUserData?.nickname = nickname
+            self?.nicknameSuccess = true
+        }.store(in: &subscriptions)
+    }
+    
+    func fetchUserData() {
         fetchUserDataUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -85,10 +117,11 @@ extension ChangeMyProfileViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showProfile(response))
             self?.userData = response
+            self?.modifyUserData = response
         }.store(in: &subscriptions)
     }
     
-    private func fetchDeptList() {
+    func fetchDeptList() {
         fetchDeptListUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -109,7 +142,7 @@ extension ChangeMyProfileViewModel {
             self?.userData = response
             UserDataManager.shared.setUserData(userData: response)
         }.store(in: &subscriptions)
-
+        
     }
-
+    
 }

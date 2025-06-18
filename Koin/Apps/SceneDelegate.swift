@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let navigationController = CustomNavigationController(rootViewController: ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase)))
         
- //       let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
+  //      let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()

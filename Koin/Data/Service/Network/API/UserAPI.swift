@@ -13,9 +13,11 @@ enum UserAPI {
     case checkDuplicatedPhoneNumber(CheckDuplicatedPhoneNumberRequest)
     case checkDuplicatedNickname(CheckDuplicatedNicknameRequest)
     case login(LoginRequest)
-    case fetchUserData
+    case fetchStudentUserData
+    case fetchGeneralUserData
+    case modifyStudentUserData(UserPutRequest)
+    case modifyGeneralUserData(UserPutRequest)
     case checkPassword(CheckPasswordRequest)
-    case modify(UserPutRequest)
     case refreshToken(RefreshTokenRequest)
     case revoke
     case checkAuth
@@ -44,7 +46,10 @@ extension UserAPI: Router, URLRequestConvertible {
         case .checkDuplicatedPhoneNumber: return "/user/check/phone"
         case .checkDuplicatedNickname: return "/user/check/nickname"
         case .login: return "/v2/users/login"
-        case .fetchUserData, .modify: return "/user/student/me"
+        case .fetchStudentUserData: return "/user/student/me"
+        case .modifyStudentUserData: return "/v2/users/students/me"
+        case .fetchGeneralUserData: return "/v2/users/me"
+        case .modifyGeneralUserData: return "/v2/users/me"
         case .checkPassword: return "/user/check/password"
         case .revoke: return "/user"
         case .refreshToken: return "/user/refresh"
@@ -65,8 +70,8 @@ extension UserAPI: Router, URLRequestConvertible {
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdSms, .findIdEmail: return .post
-        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkLogin, .checkDuplicatedId: return .get
-        case .modify: return .put
+        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkLogin, .checkDuplicatedId, .fetchGeneralUserData: return .get
+        case .modifyStudentUserData, .modifyGeneralUserData: return .put
         case .revoke: return .delete
         }
     }
@@ -75,19 +80,19 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modify, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modifyStudentUserData, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms, .modifyGeneralUserData:
             baseHeaders["Content-Type"] = "application/json"
-        case .fetchUserData, .revoke, .checkAuth, .checkLogin:
+        case .fetchStudentUserData, .revoke, .checkAuth, .checkLogin, .fetchGeneralUserData:
             break
         }
-        switch self {
-        case .fetchUserData, .revoke, .modify, .checkPassword, .checkAuth :
-            if let token = KeychainWorker.shared.read(key: .access) {
-                baseHeaders["Authorization"] = "Bearer \(token)"
+            switch self {
+            case .fetchStudentUserData, .revoke, .modifyStudentUserData, .checkPassword, .checkAuth , .fetchGeneralUserData, .modifyGeneralUserData:
+                if let token = KeychainWorker.shared.read(key: .access) {
+                    baseHeaders["Authorization"] = "Bearer \(token)"
+                }
+            default: break
             }
-        default: break
-        }
-        return baseHeaders
+            return baseHeaders
     }
     
     public var parameters: Any? {
@@ -102,11 +107,15 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .checkDuplicatedNickname(let request):
             return try? request.toDictionary()
-        case .fetchUserData:
+        case .fetchStudentUserData:
+            return nil
+        case .fetchGeneralUserData:
             return nil
         case .checkPassword(let request):
             return try? JSONEncoder().encode(request)
-        case .modify(let request):
+        case .modifyStudentUserData(let request):
+            return try? JSONEncoder().encode(request)
+        case .modifyGeneralUserData(let request):
             return try? JSONEncoder().encode(request)
         case .revoke:
             return nil
@@ -139,8 +148,8 @@ extension UserAPI: Router, URLRequestConvertible {
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modify, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail: return JSONEncoding.default
-        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchUserData, .checkAuth, .checkDuplicatedId: return URLEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modifyStudentUserData, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail, .modifyGeneralUserData: return JSONEncoding.default
+        case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkDuplicatedId, .fetchGeneralUserData: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil
         }

@@ -14,6 +14,8 @@ final class ChangeMyProfileViewController: UIViewController {
     private let viewModel: ChangeMyProfileViewModel
     private let inputSubject: PassthroughSubject<ChangeMyProfileViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    @Published private var remainTime = 180
+    private var timer: AnyCancellable?
     
     // MARK: - UI Components
     
@@ -217,16 +219,20 @@ final class ChangeMyProfileViewController: UIViewController {
         super.viewDidLoad()
         bind()
         configureView()
-        inputSubject.send(.fetchUserData)
-        inputSubject.send(.fetchDeptList)
+        viewModel.fetchUserData()
+        viewModel.fetchDeptList()
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         deptButton.addTarget(self, action: #selector(deptButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         maleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         femaleButton.addTarget(self, action: #selector(genderButtonTapped), for: .touchUpInside)
         nicknameCheckButton.addTarget(self, action: #selector(nicknameCheckButtonTapped), for: .touchUpInside)
+        inquryButton.addTarget(self, action: #selector(inquryButtonTapped), for: .touchUpInside)
+        certNumberCheckButton.addTarget(self, action: #selector(certNumberCheckButtonTapped), for: .touchUpInside)
         
         nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(textField:)), for: .editingChanged)
-        
+        phoneTextField.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(textField:)), for: .editingChanged)
+        certNumberTextField.addTarget(self, action: #selector(certNumberTextFieldDidChange), for: .editingChanged)
         hideKeyboardWhenTappedAround()
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
             $0.delegate = self
@@ -246,15 +252,68 @@ final class ChangeMyProfileViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
+        
+        viewModel.nicknameMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.nicknameStateView.isHidden = false
+            self?.nicknameStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+        }.store(in: &subscriptions)
+        
+        viewModel.phoneNumberMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            guard let self = self else { return }
+            phoneStateView.isHidden = false
+            phoneStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+            if response.1 {
+              startTimer()
+                [certNumberTextField, remainTimeLabel, helpLabel, inquryButton, certNumberCheckButton].forEach {
+                    $0.isHidden = false
+                }
+                emailTitleLabel.snp.remakeConstraints { [weak self] make in
+                    guard let self = self else { return }
+                    make.top.equalTo(helpLabel.snp.bottom).offset(32)
+                    make.leading.equalTo(view.snp.leading).offset(24)
+                }
+            }
+        }.store(in: &subscriptions)
+        
+        viewModel.certNumberMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.certNumberStateView.isHidden = false
+            self?.certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+            if response.1 {
+                self?.timer?.cancel()
+                self?.timer = nil
+                self?.remainTimeLabel.isHidden = true
+            }
+        }.store(in: &subscriptions)
+        
+        viewModel.$isFormValid.receive(on: DispatchQueue.main).dropFirst().sink { [weak self] isValid in
+            self?.saveButton.setState(state: isValid ? .usable : .unusable)
+            if isValid {
+                self?.saveButton.setTitle("저장", for: .normal)
+            }
+        }.store(in: &subscriptions)
+        
+        $remainTime
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] seconds in
+                print(seconds)
+                guard let self = self else { return }
+                let minutes = seconds / 60
+                let remainingSeconds = seconds % 60
+                remainTimeLabel.text = String(format: "%02d:%02d", minutes, remainingSeconds)
+                remainTimeLabel.isHidden = seconds == 0 || seconds == 180
+                if seconds == 0 {
+                    certNumberStateView.setState(state: .warning, message: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.")
+                    certNumberStateView.isHidden = false
+                }
+            }.store(in: &subscriptions)
+        
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
             case let .showToast(message, success, request):
                 switch request {
-                case .nickname:
-                    self?.saveButton.setState(state: success ? .usable : .unusable)
-                    self?.saveButton.setTitle(success ? "저장" : "닉네임 중복확인을 해주세요.", for: .normal)
+                case .nickname: break
                 case .save:
                     if success { self?.navigationController?.popViewController(animated: true) }
                 }
@@ -267,24 +326,66 @@ final class ChangeMyProfileViewController: UIViewController {
         }.store(in: &subscriptions)
         
     }
+    private func startTimer() {
+        remainTime = 180
+        timer?.cancel()
+        
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.remainTime > 0 {
+                    self.remainTime -= 1
+                } else {
+                    self.timer?.cancel()
+                }
+            }
+    }
 }
 
 extension ChangeMyProfileViewController {
+    @objc private func inquryButtonTapped() {
+        if let url = URL(string:
+                            "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    @objc private func sendButtonTapped() {
+        viewModel.sendVerificationCode(phoneNumber: phoneTextField.text ?? "")
+    }
     
     @objc private func nicknameCheckButtonTapped(_ sender: UIButton) {
-        inputSubject.send(.checkNickname(nicknameTextField.text ?? ""))
+        viewModel.checkDuplicatedNickname(nickname: nicknameTextField.text ?? "")
+    }
+    
+    @objc private func certNumberCheckButtonTapped() {
+        viewModel.checkVerificationCode(phoneNumber: phoneTextField.text ?? "", code: certNumberTextField.text ?? "")
+    }
+    
+    @objc private func phoneNumberTextFieldDidChange(textField: UITextField) {
+        saveButton.setState(state: .unusable)
+        saveButton.setTitle("휴대전화 인증을 해주세요.", for: .normal)
+        viewModel.phoneNumberSuccess = false
+        if textField.text == "" { sendButton.setState(state: .unusable) }
+        else {
+            sendButton.setState(state: textField.text ?? "" == viewModel.userData?.phoneNumber ?? "" ? .unusable : .usable)
+        }
     }
     
     @objc private func nicknameTextFieldDidChange(textField: UITextField) {
-        
         saveButton.setState(state: .unusable)
         saveButton.setTitle("닉네임 중복확인을 해주세요.", for: .normal)
-        
+        viewModel.nicknameSuccess = false
         if textField.text == "" { nicknameCheckButton.setState(state: .unusable) }
         else {
             nicknameCheckButton.setState(state: textField.text ?? "" == viewModel.userData?.nickname ?? "" ? .unusable : .usable)
         }
-        
+    }
+    @objc private func certNumberTextFieldDidChange(textField: UITextField) {
+        if textField.text == "" { certNumberCheckButton.setState(state: .unusable) }
+        else {
+            certNumberCheckButton.setState(state: .usable)
+        }
     }
     
     @objc private func genderButtonTapped(sender: UIButton) {
@@ -299,8 +400,8 @@ extension ChangeMyProfileViewController {
             unselectedButton = maleButton
         }
         selectedButton.isSelected = true
-        
         unselectedButton.isSelected = false
+        viewModel.modifyUserData?.gender = selectedButton == maleButton ? 0 : 1
     }
     
     @objc private func deptButtonTapped() {
@@ -321,7 +422,7 @@ extension ChangeMyProfileViewController {
         if maleButton.isSelected { gender = 0 }
         else if femaleButton.isSelected { gender = 1 }
         else { gender = nil }
-        let userInfo = UserPutRequest(gender: gender, identity: 0, isGraduated: false, major: deptText, name: nameText, nickname: nicknameText, password: nil, phoneNumber: phonetext, studentNumber: studentNumberText)
+        let userInfo = UserPutRequest(gender: gender, identity: 0, isGraduated: false, major: deptText, name: nameText, nickname: nicknameText, phoneNumber: phonetext, studentNumber: studentNumberText)
         inputSubject.send(.modifyProfile(userInfo))
     }
     
@@ -363,7 +464,6 @@ extension ChangeMyProfileViewController {
             attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
             buttonConfiguration.attributedTitle = attributedTitle
             button.configuration = buttonConfiguration
-            
         }
     }
     
@@ -375,7 +475,7 @@ extension ChangeMyProfileViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(saveButton)
-        [primaryInfoLabel, idTitleLabel, idTextField, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton , emailTitleLabel, emailTextField, emailTextLabel, sendButton].forEach {
+        [primaryInfoLabel, idTitleLabel, idTextField, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton , emailTitleLabel, emailTextField, emailTextLabel, sendButton, nicknameStateView, phoneStateView, certNumberStateView, certNumberTextField, remainTimeLabel, certNumberCheckButton, helpLabel, inquryButton].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -396,7 +496,7 @@ extension ChangeMyProfileViewController {
             make.leading.equalTo(view.snp.leading).offset(24)
         }
         idTextField.snp.makeConstraints { make in
-            make.top.equalTo(idTitleLabel.snp.bottom).offset(18)
+            make.top.equalTo(idTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
             make.height.equalTo(32)
@@ -421,6 +521,11 @@ extension ChangeMyProfileViewController {
             make.trailing.equalTo(nicknameCheckButton.snp.leading).offset(-12)
             make.height.equalTo(32)
         }
+        nicknameStateView.snp.makeConstraints {
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(5)
+            $0.leading.equalTo(certNumberStateView)
+            $0.height.equalTo(19)
+        }
         nicknameCheckButton.snp.makeConstraints { make in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(8)
             make.trailing.equalTo(view.snp.trailing).offset(-24)
@@ -436,6 +541,42 @@ extension ChangeMyProfileViewController {
             make.leading.equalTo(view.snp.leading).offset(24)
             make.trailing.equalTo(nicknameTextField)
             make.height.equalTo(32)
+        }
+        phoneStateView.snp.makeConstraints {
+            $0.top.equalTo(phoneTextField.snp.bottom).offset(5)
+            $0.leading.equalTo(certNumberStateView)
+            $0.height.equalTo(19)
+        }
+        certNumberTextField.snp.makeConstraints {
+            $0.top.equalTo(phoneStateView.snp.bottom).offset(5)
+            $0.leading.equalTo(phoneTextField)
+            $0.trailing.equalTo(nicknameTextField)
+            $0.height.equalTo(32)
+        }
+        remainTimeLabel.snp.makeConstraints {
+            $0.centerY.equalTo(certNumberTextField)
+            $0.trailing.equalTo(certNumberTextField.snp.trailing).offset(-4)
+        }
+        certNumberCheckButton.snp.makeConstraints {
+            $0.top.equalTo(certNumberTextField)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.width.equalTo(85)
+            $0.height.equalTo(32)
+        }
+        helpLabel.snp.makeConstraints {
+            $0.top.equalTo(certNumberTextField.snp.bottom).offset(5)
+            $0.leading.equalTo(certNumberTextField)
+        }
+        inquryButton.snp.makeConstraints {
+            $0.centerY.equalTo(helpLabel)
+            $0.leading.equalTo(helpLabel.snp.trailing).offset(8)
+            $0.width.equalTo(50)
+            $0.height.equalTo(19)
+        }
+        certNumberStateView.snp.makeConstraints {
+            $0.top.equalTo(helpLabel.snp.bottom).offset(5)
+            $0.leading.equalTo(phoneTitleLabel)
+            $0.height.equalTo(19)
         }
         sendButton.snp.makeConstraints { make in
             make.centerY.equalTo(phoneTextField)
@@ -511,6 +652,12 @@ extension ChangeMyProfileViewController {
             $0.font = UIFont.appFont(.pretendardRegular, size: 16)
             $0.textColor = UIColor.appColor(.neutral600)
         }
+        remainTimeLabel.font = UIFont.appFont(.pretendardMedium, size: 14)
+        remainTimeLabel.textColor = UIColor.appColor(.neutral500)
+        helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
+        helpLabel.textColor = UIColor.appColor(.neutral500)
+        inquryButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
+        inquryButton.setTitleColor(UIColor.appColor(.primary500), for: .normal)
         emailTextLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         emailTextLabel.textColor = .black
     }
@@ -542,7 +689,7 @@ extension ChangeMyProfileViewController {
         }
     }
     private func setUpTextFieldUnderline() {
-        [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField, emailTextField, idTextField].forEach {
+        [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField, emailTextField, idTextField, certNumberTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
         }
     }
@@ -550,6 +697,7 @@ extension ChangeMyProfileViewController {
         setUpLayOuts()
         setUpConstraints()
         setUpButtons()
+        setUpLabels()
         self.view.backgroundColor = .systemBackground
     }
 }

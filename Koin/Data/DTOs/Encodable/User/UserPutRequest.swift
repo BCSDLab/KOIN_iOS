@@ -12,9 +12,10 @@ struct UserPutRequest: Encodable {
     let major: String?
     let name: String?
     let nickname: String?
-    var password: String?
+    var password: String? = nil
     let phoneNumber: String?
     let studentNumber: String?
+    let email: String? = nil
     
     enum CodingKeys: String, CodingKey {
         case gender, identity, major, name, nickname, password
