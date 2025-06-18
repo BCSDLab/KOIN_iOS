@@ -11,19 +11,31 @@ import UIKit
 
 final class ChangeMyProfileViewController: UIViewController {
     
+    enum UserType {
+        case student
+        case general
+    }
+    
     private let viewModel: ChangeMyProfileViewModel
     private let inputSubject: PassthroughSubject<ChangeMyProfileViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     @Published private var remainTime = 180
     private var timer: AnyCancellable?
+    private let userType: UserType
     
     // MARK: - UI Components
     
     private let scrollView = UIScrollView().then { scrollView in
     }
     
-    private let deptButton: UIButton = {
+    private let revokeModalViewController = RevokeModalViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
+    private lazy var deptButton: UIButton = {
         let button = UIButton()
+        button.isHidden = userType == .general ? true : false
         return button
     }()
     
@@ -115,32 +127,39 @@ final class ChangeMyProfileViewController: UIViewController {
     
     private let emailTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
     
-    private let emailTextLabel = UILabel().then {
+    private lazy var emailTextLabel = UILabel().then {
         $0.text = "@koreatech.ac.kr"
+        $0.isHidden = userType == .general ? true : false
     }
     
-    private let studentInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
+    private lazy var studentInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
         $0.text = "학생정보"
         $0.backgroundColor = UIColor.appColor(.neutral50)
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral600)
+        $0.isHidden = userType == .general ? true : false
     }
     
-    private let studentNumberTitleLabel = UILabel().then {
+    private lazy var studentNumberTitleLabel = UILabel().then {
         $0.text = "학번"
+        $0.isHidden = userType == .general ? true : false
     }
     
-    private let studentNumberTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private lazy var studentNumberTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.isHidden = userType == .general ? true : false
+    }
     
-    private let majorTitleLabel = UILabel().then {
+    private lazy var majorTitleLabel = UILabel().then {
         $0.text = "전공"
+        $0.isHidden = userType == .general ? true : false
     }
     
-    private let majorButton = UIButton().then { button in
+    private lazy var majorButton = UIButton().then { button in
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
+        button.isHidden = userType == .general ? true : false
     }
     
     private let genderTitleLabel = UILabel().then {
@@ -202,8 +221,9 @@ final class ChangeMyProfileViewController: UIViewController {
     
     // MARK: - Initialization
     
-    init(viewModel: ChangeMyProfileViewModel) {
+    init(viewModel: ChangeMyProfileViewModel, userType: UserType) {
         self.viewModel = viewModel
+        self.userType = userType
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "내 프로필"
     }
@@ -233,10 +253,14 @@ final class ChangeMyProfileViewController: UIViewController {
         nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldDidChange(textField:)), for: .editingChanged)
         phoneTextField.addTarget(self, action: #selector(phoneNumberTextFieldDidChange(textField:)), for: .editingChanged)
         certNumberTextField.addTarget(self, action: #selector(certNumberTextFieldDidChange), for: .editingChanged)
+        nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange), for: .editingChanged)
+        studentNumberTextField.addTarget(self, action: #selector(studentNumberTextFieldDidChange), for: .editingChanged)
         hideKeyboardWhenTappedAround()
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField].forEach {
             $0.delegate = self
         }
+        setupNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -248,10 +272,22 @@ final class ChangeMyProfileViewController: UIViewController {
         super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
     }
-    
+    private func setupNavigationBar() {
+        let button = UIButton()
+        button.setTitle("회원탈퇴", for: .normal)
+        button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
+        button.addTarget(self, action: #selector(revokeButtonTapped), for: .touchUpInside)
+        let barButtonItem = UIBarButtonItem(customView: button)
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
     // MARK: - Bind
     
     private func bind() {
+        
+        revokeModalViewController.revokeButtonPublisher.sink { [weak self] _ in
+            self?.viewModel.revoke()
+        }.store(in: &subscriptions)
         
         viewModel.nicknameMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             self?.nicknameStateView.isHidden = false
@@ -263,7 +299,7 @@ final class ChangeMyProfileViewController: UIViewController {
             phoneStateView.isHidden = false
             phoneStateView.setState(state: response.1 ? .success : .warning, message: response.0)
             if response.1 {
-              startTimer()
+                startTimer()
                 [certNumberTextField, remainTimeLabel, helpLabel, inquryButton, certNumberCheckButton].forEach {
                     $0.isHidden = false
                 }
@@ -318,6 +354,9 @@ final class ChangeMyProfileViewController: UIViewController {
                     if success { self?.navigationController?.popViewController(animated: true) }
                 }
                 self?.showToast(message: message, success: true)
+            case let .showToastMessage(message, success):
+                self?.showToast(message: message, success: success)
+                self?.navigationController?.popViewController(animated: true)
             case let .showProfile(profile):
                 self?.showProfile(profile)
             case let .showDeptDropDownList(deptList):
@@ -344,6 +383,9 @@ final class ChangeMyProfileViewController: UIViewController {
 }
 
 extension ChangeMyProfileViewController {
+    @objc private func revokeButtonTapped() {
+        present(revokeModalViewController, animated: true, completion: nil)
+    }
     @objc private func inquryButtonTapped() {
         if let url = URL(string:
                             "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
@@ -363,6 +405,12 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func phoneNumberTextFieldDidChange(textField: UITextField) {
+        if textField.text == viewModel.userData?.phoneNumber {
+            viewModel.phoneNumberSuccess = true
+            saveButton.setTitle("저장", for: .normal)
+            sendButton.setState(state: .unusable)
+            return
+        }
         saveButton.setState(state: .unusable)
         saveButton.setTitle("휴대전화 인증을 해주세요.", for: .normal)
         viewModel.phoneNumberSuccess = false
@@ -373,6 +421,12 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func nicknameTextFieldDidChange(textField: UITextField) {
+        if textField.text == viewModel.userData?.nickname {
+            viewModel.nicknameSuccess = true
+            saveButton.setTitle("저장", for: .normal)
+            nicknameCheckButton.setState(state: .unusable)
+            return
+        }
         saveButton.setState(state: .unusable)
         saveButton.setTitle("닉네임 중복확인을 해주세요.", for: .normal)
         viewModel.nicknameSuccess = false
@@ -386,6 +440,24 @@ extension ChangeMyProfileViewController {
         else {
             certNumberCheckButton.setState(state: .usable)
         }
+    }
+    @objc private func studentNumberTextFieldDidChange(textField: UITextField) {
+        viewModel.modifyUserData?.studentNumber = textField.text?.isEmpty == true ? nil : textField.text
+    }
+    @objc private func nameTextFieldDidChange(textField: UITextField) {
+        viewModel.modifyUserData?.name = textField.text?.isEmpty == true ? nil : textField.text
+    }
+    @objc private func emailTextFieldDidChange(textField: UITextField) {
+        if let text = textField.text, !text.isEmpty {
+            if userType == .general {
+                viewModel.modifyUserData?.email = text
+            } else {
+                viewModel.modifyUserData?.email = "\(text)@koreatech.ac.kr"
+            }
+        } else {
+            viewModel.modifyUserData?.email = nil
+        }
+        
     }
     
     @objc private func genderButtonTapped(sender: UIButton) {
@@ -409,20 +481,12 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func saveButtonTapped() {
-        let nameText: String? = nameTextField.text?.count ?? 0 >= 1 ? nameTextField.text : nil
-        let nicknameText: String? = nicknameTextField.text?.count ?? 0 >= 1 ? nicknameTextField.text : nil
-        let phonetext: String? = phoneTextField.text?.count ?? 0 >= 1 ? phoneTextField.text : nil
-        let studentNumberText: String? = studentNumberTextField.text?.count ?? 0 >= 1 ? studentNumberTextField.text : nil
         var deptText: String?
         if let label = deptButton.subviews.compactMap({ $0 as? UILabel }).first {
             if label.text == "선택된 전공이 없습니다." { deptText = nil }
             else { deptText = label.text }
         }
-        let gender: Int?
-        if maleButton.isSelected { gender = 0 }
-        else if femaleButton.isSelected { gender = 1 }
-        else { gender = nil }
-        let userInfo = UserPutRequest(gender: gender, identity: 0, isGraduated: false, major: deptText, name: nameText, nickname: nicknameText, phoneNumber: phonetext, studentNumber: studentNumberText)
+        let userInfo = UserPutRequest(gender: viewModel.modifyUserData?.gender, identity: 0, isGraduated: false, major: deptText, name: viewModel.modifyUserData?.name, nickname: viewModel.modifyUserData?.nickname, phoneNumber: viewModel.modifyUserData?.phoneNumber, studentNumber: viewModel.modifyUserData?.studentNumber, email: viewModel.modifyUserData?.email)
         inputSubject.send(.modifyProfile(userInfo))
     }
     
@@ -590,7 +654,7 @@ extension ChangeMyProfileViewController {
         emailTextField.snp.makeConstraints { make in
             make.top.equalTo(emailTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.centerX)
+            make.trailing.equalTo(userType == .general ? idTextField : view.snp.centerX)
             make.height.equalTo(32)
         }
         emailTextLabel.snp.makeConstraints { make in

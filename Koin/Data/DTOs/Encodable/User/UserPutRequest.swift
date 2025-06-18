@@ -15,10 +15,10 @@ struct UserPutRequest: Encodable {
     var password: String? = nil
     let phoneNumber: String?
     let studentNumber: String?
-    let email: String? = nil
+    let email: String?
     
     enum CodingKeys: String, CodingKey {
-        case gender, identity, major, name, nickname, password
+        case gender, identity, major, name, nickname, password, email
         case isGraduated = "is_graduated"
         case phoneNumber = "phone_number"
         case studentNumber = "student_number"

@@ -18,6 +18,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
         case modifyProfile(UserPutRequest)
     }
     enum Output {
+        case showToastMessage(String, Bool)
         case showToast(String, Bool, Request)
         case showProfile(UserDTO)
         case showDeptDropDownList([String])
@@ -32,6 +33,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private let userRepository = DefaultUserRepository(service: DefaultUserService())
     private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
     private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
+    private lazy var revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
     
     private(set) var userData: UserDTO? = nil
     @Published var modifyUserData: UserDTO? = nil
@@ -64,13 +66,15 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
 }
 
 extension ChangeMyProfileViewModel {
-    private func bind() {
-        Publishers.CombineLatest3($modifyUserData, $phoneNumberSuccess, $nicknameSuccess)
-            .map { [weak self] modified, emailOK, nicknameOK in
-                guard let original = self?.userData else { return false }
-                return emailOK && nicknameOK && original != modified
+    func revoke() {
+        revokeUseCase.execute().sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.outputSubject.send(.showToastMessage(error.message, false))
             }
-            .assign(to: &$isFormValid)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showToastMessage("회원탈퇴가 완료되었습니다.", true))
+            UserDataManager.shared.resetUserData()
+        }.store(in: &subscriptions)
     }
     
     func sendVerificationCode(phoneNumber: String) {
@@ -100,7 +104,11 @@ extension ChangeMyProfileViewModel {
         checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-                self?.nicknameMessagePublisher.send((error.message, false))
+                if nickname == self?.userData?.nickname {
+                    
+                } else {
+                    self?.nicknameMessagePublisher.send((error.message, false))
+                }
             }
         } receiveValue: { [weak self] response in
             self?.nicknameMessagePublisher.send(("사용 가능한 닉네임입니다.", true))
@@ -144,5 +152,12 @@ extension ChangeMyProfileViewModel {
         }.store(in: &subscriptions)
         
     }
-    
+    private func bind() {
+        Publishers.CombineLatest3($modifyUserData, $phoneNumberSuccess, $nicknameSuccess)
+            .map { [weak self] modified, emailOK, nicknameOK in
+                guard let original = self?.userData else { return false }
+                return emailOK && nicknameOK && original != modified
+            }
+            .assign(to: &$isFormValid)
+    }
 }

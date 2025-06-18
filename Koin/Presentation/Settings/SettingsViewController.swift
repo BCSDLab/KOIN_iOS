@@ -129,10 +129,10 @@ final class SettingsViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .showToast(message, success, scene):
+            case let .showToast(message, success, scene, type):
                 if success {
                     switch scene {
-                    case .profile: self?.navigateToProfile()
+                    case .profile: self?.navigateToProfile(type: type ?? .student)
                     case .changePassword: self?.navigateToChangePassword()
                     case .noti: self?.navigateToNoti()
                     }
@@ -188,8 +188,12 @@ extension SettingsViewController {
         inputSubject.send(.checkLogin(.noti))
     }
     
-    private func navigateToProfile() {
-        let viewController = MyProfileViewController(viewModel: MyProfileViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), revokeUseCase: DefaultRevokeUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+    private func navigateToProfile(type: UserType) {
+        let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let viewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase), userType: type == .student ? .student : .general)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
