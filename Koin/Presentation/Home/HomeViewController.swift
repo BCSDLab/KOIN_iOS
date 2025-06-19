@@ -87,8 +87,8 @@ final class HomeViewController: UIViewController {
         $0.configuration = configuration
     }
     
-    private let shopLabel = UILabel().then {
-        $0.text = "주변상점"
+    private let orderLabel = UILabel().then {
+        $0.text = "주문"
         $0.textColor = UIColor.appColor(.primary500)
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
@@ -578,9 +578,9 @@ extension HomeViewController {
             inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
         } else if id == -1 {
-            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .leaveVC, .mainShopCategories))
-            navigationController?.pushViewController(shopViewController, animated: true)
+            let orderTabBarViewController = OrderTabBarViewController()
+//            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .leaveVC, .mainShopCategories))
+            navigationController?.pushViewController(orderTabBarViewController, animated: true)
         }
     }
     
@@ -700,7 +700,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -773,17 +773,17 @@ extension HomeViewController {
             make.top.equalTo(busView.snp.bottom).offset(24)
             make.horizontalEdges.equalTo(scrollView)
         }
-        shopLabel.snp.makeConstraints { make in
+        orderLabel.snp.makeConstraints { make in
             make.top.equalTo(clubView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(11)
+            make.top.equalTo(orderLabel.snp.bottom).offset(11)
             make.leading.equalTo(scrollView.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
-            make.height.equalTo(146)
+            make.height.equalTo(166)
         }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
