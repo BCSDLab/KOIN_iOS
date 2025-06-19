@@ -8,19 +8,21 @@
 
 import Foundation
 
-struct UserDTO: Decodable {
+struct UserDTO: Decodable, Equatable {
     let id: Int?
+    let loginId: String?
     let anonymousNickname: String?
-    let email: String?
-    let gender: Int?
-    let major: String?
-    let name: String?
-    let nickname: String?
-    let studentNumber: String?
-    let phoneNumber: String?
+    var email: String?
+    var gender: Int?
+    var major: String?
+    var name: String?
+    var nickname: String?
+    var studentNumber: String?
+    var phoneNumber: String?
     
     enum CodingKeys: String, CodingKey {
         case id
+        case loginId = "login_id"
         case anonymousNickname = "anonymous_nickname"
         case email, gender, major, name, nickname
         case phoneNumber = "phone_number"

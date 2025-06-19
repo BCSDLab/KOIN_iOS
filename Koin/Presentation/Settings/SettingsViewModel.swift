@@ -16,7 +16,7 @@ final class SettingsViewModel: ViewModelProtocol {
     }
     // MARK: - Output
     enum Output {
-        case showToast(String, Bool, MovingScene)
+        case showToast(String, Bool, MovingScene, UserType?)
     }
     
     enum MovingScene {
@@ -29,13 +29,9 @@ final class SettingsViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     
     // MARK: - Initialization
-    
-    init(fetchUserDataUseCase: FetchUserDataUseCase) {
-        self.fetchUserDataUseCase = fetchUserDataUseCase
-    }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
@@ -50,13 +46,13 @@ final class SettingsViewModel: ViewModelProtocol {
 
 extension SettingsViewModel {
     private func checkLogin(movingScene: MovingScene) {
-        fetchUserDataUseCase.execute().sink { [weak self] completion in
+        checkAuthUseCase.execute().sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-                self?.outputSubject.send(.showToast(error.message, false, movingScene))
+                self?.outputSubject.send(.showToast(error.message, false, movingScene, nil))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showToast("", true, movingScene))
+            self?.outputSubject.send(.showToast("", true, movingScene, response.userType))
         }.store(in: &subscriptions)
     }
     

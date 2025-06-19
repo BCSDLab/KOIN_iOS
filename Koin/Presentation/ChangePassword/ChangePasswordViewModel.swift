@@ -70,7 +70,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
 extension ChangePasswordViewModel {
     
     private func changePassword(password: String) {
-        modifyUseCase.execute(requestModel: UserPutRequest(gender: userDTO?.gender, identity: nil, isGraduated: false, major: userDTO?.major, name: userDTO?.name, nickname: userDTO?.nickname, password: password, phoneNumber: userDTO?.phoneNumber, studentNumber: userDTO?.studentNumber)).sink { [weak self] completion in
+        modifyUseCase.execute(requestModel: UserPutRequest(gender: userDTO?.gender, identity: nil, isGraduated: false, major: userDTO?.major, name: userDTO?.name, nickname: userDTO?.nickname, password: password, phoneNumber: userDTO?.phoneNumber, studentNumber: userDTO?.studentNumber, email: userDTO?.email)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.outputSubject.send(.showToast(error.message, false, false))
