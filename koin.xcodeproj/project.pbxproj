@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1222,6 +1222,10 @@
 		D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartViewController.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D8C048612E0485FD00129B14 /* OrderSearchViewController */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OrderSearchViewController; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		839D71132BEB1570001BC7F7 /* Frameworks */ = {
@@ -3310,8 +3314,7 @@
 		D89E8A9A2E03B48100624C30 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */,
-				D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */,
+				D8C0485E2E04859800129B14 /* TabBarViewController */,
 				D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */,
 			);
 			path = Order;
@@ -3331,6 +3334,32 @@
 				D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */,
 			);
 			path = OrderCart;
+			sourceTree = "<group>";
+		};
+		D8C0485E2E04859800129B14 /* TabBarViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D8C0485F2E0485B700129B14 /* Home */,
+			);
+			path = TabBarViewController;
+			sourceTree = "<group>";
+		};
+		D8C0485F2E0485B700129B14 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				D8C048602E0485D000129B14 /* SubViews */,
+				D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */,
+				D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		D8C048602E0485D000129B14 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D8C048612E0485FD00129B14 /* OrderSearchViewController */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
@@ -3380,6 +3409,9 @@
 			);
 			dependencies = (
 				839D711C2BEB1570001BC7F7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D8C048612E0485FD00129B14 /* OrderSearchViewController */,
 			);
 			name = koin;
 			productName = koin;

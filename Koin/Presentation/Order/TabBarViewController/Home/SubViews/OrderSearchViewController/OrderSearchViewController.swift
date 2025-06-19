@@ -1,14 +1,13 @@
 //
-//  OrderViewController.swift
+//  OrderSearchViewController.swift
 //  koin
 //
-//  Created by 이은지 on 6/19/25.
+//  Created by 이은지 on 6/20/25.
 //
 
-import Combine
 import UIKit
 
-final class OrderViewController: UIViewController {
+final class OrderSearchViewController: UIViewController {
     
     // MARK: - UI Components
 
@@ -18,6 +17,7 @@ final class OrderViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "검색"
         configureView()
     }
     
@@ -27,10 +27,9 @@ final class OrderViewController: UIViewController {
     }
 }
 
-extension OrderViewController {
+extension OrderSearchViewController {
     
     private func setUpLayOuts() {
-        
     }
     
     private func setUpConstraints() {
@@ -40,7 +39,9 @@ extension OrderViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .yellow
+        view.backgroundColor = .blue
+//        view.backgroundColor = UIColor.appColor(.newBackground)
+
     }
 }
 

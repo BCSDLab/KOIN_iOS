@@ -38,7 +38,7 @@ extension OrderHistoryViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .blue
+        self.view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 
