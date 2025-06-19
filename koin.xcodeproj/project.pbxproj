@@ -584,6 +584,11 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
+		D89E8A9C2E03B48B00624C30 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */; };
+		D89E8A9E2E03B4D600624C30 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */; };
+		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
+		D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */; };
+		D8C0485D2E047A8C00129B14 /* OrderCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1210,6 +1215,11 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
+		D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
+		D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
+		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
+		D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
+		D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartViewController.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2290,6 +2300,9 @@
 				D27DD04E2BA608310081FD36 /* Shop */,
 				D239447A2C3BF41A00048F45 /* ShopReview */,
 				D22C54642C6924C5000826DA /* ShopReviewReport */,
+				D89E8A9A2E03B48100624C30 /* Order */,
+				D8C048582E046BDA00129B14 /* OrderHistory */,
+				D8C0485B2E047A6000129B14 /* OrderCart */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -3294,6 +3307,32 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		D89E8A9A2E03B48100624C30 /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */,
+				D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */,
+				D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */,
+			);
+			path = Order;
+			sourceTree = "<group>";
+		};
+		D8C048582E046BDA00129B14 /* OrderHistory */ = {
+			isa = PBXGroup;
+			children = (
+				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
+			);
+			path = OrderHistory;
+			sourceTree = "<group>";
+		};
+		D8C0485B2E047A6000129B14 /* OrderCart */ = {
+			isa = PBXGroup;
+			children = (
+				D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */,
+			);
+			path = OrderCart;
+			sourceTree = "<group>";
+		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -3556,6 +3595,7 @@
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */,
+				D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
@@ -3583,6 +3623,7 @@
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
+				D89E8A9C2E03B48B00624C30 /* OrderViewController.swift in Sources */,
 				D215725C2CEDD04C0061E725 /* LectureRequest.swift in Sources */,
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
@@ -3694,6 +3735,7 @@
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */,
 				D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */,
+				D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
@@ -3910,6 +3952,7 @@
 				83E770D62D0184DE00EB3F84 /* BusTimetableDataViewModel.swift in Sources */,
 				D2B219392D665BFA00EAF5B1 /* ChatDateHeaderView.swift in Sources */,
 				D27DD0FC2BA629380081FD36 /* LandOptionCollectionViewCell.swift in Sources */,
+				D8C0485D2E047A8C00129B14 /* OrderCartViewController.swift in Sources */,
 				D22C54962C6B77F0000826DA /* ReviewListViewModel.swift in Sources */,
 				D224216A2C8A3E0B00E8B480 /* PolicyContentCollectionViewCell.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
@@ -3992,6 +4035,7 @@
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
+				D89E8A9E2E03B4D600624C30 /* OrderViewModel.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
