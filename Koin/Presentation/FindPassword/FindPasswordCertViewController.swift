@@ -156,7 +156,7 @@ final class FindPasswordCertViewController: UIViewController {
             phoneStateView.setState(state: response.1 ? .success : .warning, message: response.0)
             if response.1 {
                 startTimer()
-                [certNumberTextField, remainTimeLabel, helpLabel, changeButton, certNumberCheckButton].forEach {
+                [certNumberTextField, remainTimeLabel, certNumberCheckButton].forEach {
                     $0.isHidden = false
                 }
             }
@@ -199,7 +199,7 @@ extension FindPasswordCertViewController {
         }
     }
     @objc private func saveButtonTapped() {
-        navigationController?.pushViewController(FindPasswordChangeViewController(viewModel: viewModel), animated: true)
+        navigationController?.pushViewController(FindPasswordChangeViewController(viewModel: viewModel, certType: certType), animated: true)
     }
     @objc private func changeButtonTapped() {
         if var viewControllers = navigationController?.viewControllers {

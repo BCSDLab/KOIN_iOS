@@ -41,6 +41,7 @@ final class FoundIdViewController: UIViewController {
     init(viewModel: FindIdViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "아이디 찾기"
     }
     
     @available(*, unavailable)

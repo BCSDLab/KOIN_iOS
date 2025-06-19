@@ -28,6 +28,7 @@ final class ChangePasswordSuccessViewController: UIViewController {
     }
     private let goLoginButton = StateButton(font: UIFont.appFont(.pretendardBold, size: 15)).then {
         $0.setState(state: .usable)
+        $0.setTitle("로그인 화면 바로가기", for: .normal)
     }
     
     init() {

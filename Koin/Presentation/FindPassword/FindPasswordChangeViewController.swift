@@ -11,6 +11,7 @@ import UIKit
 final class FindPasswordChangeViewController: UIViewController {
     
     // MARK: - Properties
+    private let certType: FindPasswordCertViewController.CertType
     private let viewModel: FindPasswordViewModel
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -69,8 +70,9 @@ final class FindPasswordChangeViewController: UIViewController {
         $0.setState(state: .unusable)
     }
     
-    init(viewModel: FindPasswordViewModel) {
+    init(viewModel: FindPasswordViewModel, certType: FindPasswordCertViewController.CertType) {
         self.viewModel = viewModel
+        self.certType = certType
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "비밀번호 찾기"
     }
@@ -87,13 +89,21 @@ final class FindPasswordChangeViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setupUI()
         bind()
+        [passwordTextField, passwordCheckTextField].forEach {
+            $0.delegate = self
+            $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        }
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpTextFieldUnderline()
+    }
     // MARK: - Bind
     
     private func bind() {
@@ -103,12 +113,7 @@ final class FindPasswordChangeViewController: UIViewController {
         
         viewModel.changeSuccessPublisher.sink { [weak self] in
             guard let self = self else { return }
-            if var viewControllers = navigationController?.viewControllers {
-                viewControllers.removeLast()
-                let newVC = FindPasswordCertViewController(viewModel: viewModel, certType: .email)
-                viewControllers.append(newVC)
-                navigationController?.setViewControllers(viewControllers, animated: true)
-            }
+            navigationController?.pushViewController(ChangePasswordSuccessViewController(), animated: true)
         }.store(in: &subscriptions)
         
         viewModel.passwordMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
@@ -135,7 +140,12 @@ extension FindPasswordChangeViewController {
             viewModel.passwordMatch = textField.text ?? ""
         }
     }
-
+    @objc private func nextButtonTapped() {
+        switch certType {
+        case .phone: viewModel.findPasswordSms()
+        case .email: viewModel.findPasswordEmail()
+        }
+    }
 }
 
 extension FindPasswordChangeViewController {
@@ -204,7 +214,11 @@ extension FindPasswordChangeViewController {
             $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         }
     }
-    
+    private func setUpTextFieldUnderline() {
+        [passwordTextField, passwordCheckTextField].forEach {
+            $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
+        }
+    }
     private func setupUI() {
         setupLayOuts()
         setupConstraints()

@@ -95,7 +95,7 @@ extension FindPasswordViewModel {
         }.store(in: &subscriptions)
     }
     
-    func findPasswordSms(phoneNumber: String) {
+    func findPasswordSms() {
         findPasswordSmsUseCase.execute(requestModel: .init(loginId: id, phoneNumber: inputData, newPassword: password)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.toastMessagePublisher.send(error.message)
@@ -124,7 +124,7 @@ extension FindPasswordViewModel {
             self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
         }.store(in: &subscriptions)
     }
-    func findPasswordEmail(email: String) {
+    func findPasswordEmail() {
         findPasswordEmailUseCase.execute(requestModel: .init(loginId: id, email: inputData, newPassword: password)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.toastMessagePublisher.send(error.message)
