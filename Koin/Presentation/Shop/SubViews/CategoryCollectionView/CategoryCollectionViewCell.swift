@@ -4,24 +4,22 @@
 //
 //  Created by 김나훈 on 3/12/24.
 //
+
 import UIKit
 
 final class CategoryCollectionViewCell: UICollectionViewCell {
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        return imageView
-    }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.lineBreakMode = .byClipping
-        label.sizeToFit()
-        return label
-    }()
+    // MARK: - UI Component
+    private let imageView = UIImageView().then {
+        $0.clipsToBounds = true
+    }
+
+    private let titleLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.lineBreakMode = .byClipping
+        $0.sizeToFit()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,7 +41,6 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
 extension CategoryCollectionViewCell {
     private func setUpLayouts() {
         [imageView, titleLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
     }
@@ -54,8 +51,9 @@ extension CategoryCollectionViewCell {
             make.centerX.equalTo(contentView.snp.centerX)
             make.height.equalTo(44)
         }
+        
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(4)
+            make.top.equalTo(imageView.snp.bottom).offset(8)
             make.height.equalTo(19)
             make.centerX.equalTo(imageView.snp.centerX)
         }
