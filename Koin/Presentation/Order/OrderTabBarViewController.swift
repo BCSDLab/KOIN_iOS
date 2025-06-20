@@ -45,14 +45,19 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
 
     // MARK: - Configure TabBar
     private func configureController() {
-        let orderViewController = tabBarNavigationController(
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        
+        let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar),
-            rootViewController: OrderViewController(),
+            rootViewController: OrderHomeViewController(
+                viewModel: OrderHomeViewModel(
+                    fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                )
+            ),
             title: "홈"
         )
         
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
         let shopViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .shopTabBar),
             rootViewController: ShopViewControllerA(
@@ -79,7 +84,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             title: "주문내역"
         )
 
-        viewControllers = [orderViewController, shopViewController, historyViewController]
+        viewControllers = [orderHomeViewController, shopViewController, historyViewController]
 
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)

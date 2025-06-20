@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -584,11 +584,14 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
-		D89E8A9C2E03B48B00624C30 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */; };
-		D89E8A9E2E03B4D600624C30 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */; };
+		D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */; };
+		D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */; };
 		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
 		D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */; };
 		D8C0485D2E047A8C00129B14 /* OrderCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */; };
+		D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */; };
+		D8C048692E0539D100129B14 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */; };
+		D8C0486B2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1215,17 +1218,16 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
-		D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
-		D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
+		D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewController.swift; sourceTree = "<group>"; };
+		D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewModel.swift; sourceTree = "<group>"; };
 		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
 		D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartViewController.swift; sourceTree = "<group>"; };
+		D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSearchViewController.swift; sourceTree = "<group>"; };
+		D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
+		D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		D8C048612E0485FD00129B14 /* OrderSearchViewController */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OrderSearchViewController; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		839D71132BEB1570001BC7F7 /* Frameworks */ = {
@@ -3348,8 +3350,8 @@
 			isa = PBXGroup;
 			children = (
 				D8C048602E0485D000129B14 /* SubViews */,
-				D89E8A9B2E03B48B00624C30 /* OrderViewController.swift */,
-				D89E8A9D2E03B4D600624C30 /* OrderViewModel.swift */,
+				D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */,
+				D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -3357,9 +3359,27 @@
 		D8C048602E0485D000129B14 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				D8C048612E0485FD00129B14 /* OrderSearchViewController */,
+				D8C048672E05376700129B14 /* OrderCategoryCollectionView */,
+				D8C048652E0489EB00129B14 /* OrderSearchViewController */,
 			);
 			path = SubViews;
+			sourceTree = "<group>";
+		};
+		D8C048652E0489EB00129B14 /* OrderSearchViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */,
+			);
+			path = OrderSearchViewController;
+			sourceTree = "<group>";
+		};
+		D8C048672E05376700129B14 /* OrderCategoryCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */,
+				D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */,
+			);
+			path = OrderCategoryCollectionView;
 			sourceTree = "<group>";
 		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
@@ -3409,9 +3429,6 @@
 			);
 			dependencies = (
 				839D711C2BEB1570001BC7F7 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D8C048612E0485FD00129B14 /* OrderSearchViewController */,
 			);
 			name = koin;
 			productName = koin;
@@ -3655,7 +3672,7 @@
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
-				D89E8A9C2E03B48B00624C30 /* OrderViewController.swift in Sources */,
+				D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */,
 				D215725C2CEDD04C0061E725 /* LectureRequest.swift in Sources */,
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
@@ -3722,6 +3739,7 @@
 				D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */,
 				D22C546D2C699780000826DA /* ImageDropDownCell.swift in Sources */,
 				D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */,
+				D8C048692E0539D100129B14 /* OrderCategoryCollectionView.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D215727A2CEE8E500061E725 /* TimetableCell.swift in Sources */,
@@ -3747,6 +3765,7 @@
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
+				D8C0486B2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift in Sources */,
 				D208A7D52CAE7754007040E7 /* HomeViewController.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
@@ -3833,6 +3852,7 @@
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				83EBB88E2D16B41F00346018 /* BusAreaSelectedCollectionView.swift in Sources */,
+				D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */,
 				D239448C2C3C9D6D00048F45 /* ReviewListCollectionView.swift in Sources */,
 				83E770A62CFA044900EB3F84 /* BusTimetableRouteCollectionViewCell.swift in Sources */,
 				83EBB8602D0FD6F100346018 /* BusSearchViewModel.swift in Sources */,
@@ -4067,7 +4087,7 @@
 				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
-				D89E8A9E2E03B4D600624C30 /* OrderViewModel.swift in Sources */,
+				D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
