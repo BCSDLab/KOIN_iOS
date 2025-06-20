@@ -592,6 +592,7 @@
 		D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */; };
 		D8C048692E0539D100129B14 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */; };
 		D8C0486B2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */; };
+		D8C0486D2E05B17B00129B14 /* SortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1226,6 +1227,7 @@
 		D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSearchViewController.swift; sourceTree = "<group>"; };
 		D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOptionSheetViewController.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3361,6 +3363,7 @@
 			children = (
 				D8C048672E05376700129B14 /* OrderCategoryCollectionView */,
 				D8C048652E0489EB00129B14 /* OrderSearchViewController */,
+				D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3919,6 +3922,7 @@
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
+				D8C0486D2E05B17B00129B14 /* SortOptionSheetViewController.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */,

@@ -22,7 +22,7 @@ final class OrderHomeViewController: UIViewController {
     
     private let contentView = UIView()
     
-    private let searchBarButton = UIButton(type: .system).then { button in
+    private let searchBarButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
         
         if let base = UIImage.appImage(asset: .search){
@@ -47,22 +47,48 @@ final class OrderHomeViewController: UIViewController {
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16,
                                                        bottom: 0, trailing: 160)
         
-        button.configuration = config
-        button.tintColor = .appColor(.neutral500)
+        $0.configuration = config
+        $0.tintColor = .appColor(.neutral500)
         
-        button.layer.shadowColor   = UIColor.black.cgColor
-        button.layer.shadowOffset  = CGSize(width: 0, height: 2)
-        button.layer.shadowRadius  = 4
-        button.layer.shadowOpacity = 0.04
-        button.layer.masksToBounds = false
+        $0.layer.shadowColor   = UIColor.black.cgColor
+        $0.layer.shadowOffset  = CGSize(width: 0, height: 2)
+        $0.layer.shadowRadius  = 4
+        $0.layer.shadowOpacity = 0.04
+        $0.layer.masksToBounds = false
     }
     
-    private let categoryCollectionView: OrderCategoryCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = OrderCategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let categoryCollectionView = OrderCategoryCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then { collectionView in
+    }
     
+    private let sortButton = UIButton(type: .system).then {
+        var config = UIButton.Configuration.plain()
+
+        var titleAttribute = AttributedString("기본순")
+        titleAttribute.font = UIFont.appFont(.pretendardBold, size: 14)
+        titleAttribute.foregroundColor = UIColor.appColor(.new500)
+        config.attributedTitle = titleAttribute
+
+        if let img = UIImage.appImage(asset: .chevronDown)?.withRenderingMode(.alwaysTemplate) {
+            config.image = img
+            config.imagePlacement = .trailing
+            config.imagePadding = 6
+        }
+
+        config.contentInsets = .init(top: 6, leading: 8, bottom: 6, trailing: 8)
+
+        config.background.backgroundColor = UIColor.appColor(.newBackground)
+        config.background.cornerRadius = 24
+        config.background.strokeWidth = 1
+        config.background.strokeColor = UIColor.appColor(.new500)
+
+        $0.configuration = config
+        $0.tintColor = .appColor(.new500)
+        $0.sizeToFit()
+    }
+
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
         self.viewModel = viewModel
@@ -96,6 +122,7 @@ final class OrderHomeViewController: UIViewController {
     
     private func setAddTarget() {
         searchBarButton.addTarget(self, action: #selector(searchBarButtonTapped), for: .touchUpInside)
+        sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -108,6 +135,39 @@ extension OrderHomeViewController {
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
+    
+    @objc private func sortButtonTapped() {
+        guard presentedViewController == nil else { return }
+        
+        let bottomSheetViewController = SortOptionSheetViewController()
+        bottomSheetViewController.onOptionSelected = { [weak self] sort in
+            guard let self = self else { return }
+            
+            var config = self.sortButton.configuration ?? .plain()
+            
+            var attribute = AttributedString(sort.title)
+            attribute.font = UIFont.appFont(.pretendardBold, size: 14)
+            attribute.foregroundColor = UIColor.appColor(.new500)
+            
+            config.attributedTitle = attribute
+            self.sortButton.configuration = config
+        }
+        
+        bottomSheetViewController.modalPresentationStyle = .pageSheet
+        if let sheet = bottomSheetViewController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                let detent = UISheetPresentationController.Detent
+                    .custom(identifier: .init("fixed233")) { _ in 233 }
+                sheet.detents = [detent]
+                sheet.selectedDetentIdentifier = detent.identifier
+            } else {
+                sheet.detents = [.medium()]
+            }
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 32
+        }
+        present(bottomSheetViewController, animated: true)
+    }
 }
 
 extension OrderHomeViewController {
@@ -115,7 +175,7 @@ extension OrderHomeViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [searchBarButton, categoryCollectionView].forEach {
+        [searchBarButton, categoryCollectionView, sortButton].forEach {
             contentView.addSubview($0)
         }
     }
@@ -140,7 +200,14 @@ extension OrderHomeViewController {
             $0.top.equalTo(searchBarButton.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(71)
+        }
+        
+        sortButton.snp.makeConstraints {
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(16)
+            $0.height.equalTo(34)
             $0.bottom.equalToSuperview()
+
         }
     }
     
