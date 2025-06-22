@@ -145,6 +145,10 @@ enum ImageAsset: String {
     case shopTabBar
     case orderDetailTabBar
     case shoppingCart
+    case filterIcon1
+    case filterIcon2
+    case filterIcon3
+    case filterIcon4
 }
 
 enum SFSymbols: String {

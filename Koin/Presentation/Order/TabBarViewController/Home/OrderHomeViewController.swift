@@ -88,6 +88,12 @@ final class OrderHomeViewController: UIViewController {
         $0.tintColor = .appColor(.new500)
         $0.sizeToFit()
     }
+    
+    private let filterCollectionView = FilterCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then { collectionView in
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
@@ -175,7 +181,7 @@ extension OrderHomeViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [searchBarButton, categoryCollectionView, sortButton].forEach {
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -206,6 +212,14 @@ extension OrderHomeViewController {
             $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(16)
             $0.height.equalTo(34)
+        }
+        
+        filterCollectionView.snp.makeConstraints {
+            $0.leading.equalTo(sortButton.snp.trailing).offset(16)
+            $0.centerY.equalTo(sortButton)
+            $0.height.equalTo(34)
+            $0.trailing.equalToSuperview().inset(16)
+            
             $0.bottom.equalToSuperview()
 
         }

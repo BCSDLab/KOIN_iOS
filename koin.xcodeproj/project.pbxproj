@@ -584,6 +584,7 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
+		D815DD992E082179004A72BE /* OrderFilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815DD982E082179004A72BE /* OrderFilterData.swift */; };
 		D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */; };
 		D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */; };
 		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
@@ -593,6 +594,8 @@
 		D8C048692E0539D100129B14 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */; };
 		D8C0486B2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */; };
 		D8C0486D2E05B17B00129B14 /* SortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */; };
+		D8C048702E05C8AE00129B14 /* FilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0486F2E05C8AE00129B14 /* FilterCollectionView.swift */; };
+		D8C048722E05C8B400129B14 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048712E05C8B400129B14 /* FilterCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1219,6 +1222,7 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
+		D815DD982E082179004A72BE /* OrderFilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilterData.swift; sourceTree = "<group>"; };
 		D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewController.swift; sourceTree = "<group>"; };
 		D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewModel.swift; sourceTree = "<group>"; };
 		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
@@ -1228,6 +1232,8 @@
 		D8C048682E0539D100129B14 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOptionSheetViewController.swift; sourceTree = "<group>"; };
+		D8C0486F2E05C8AE00129B14 /* FilterCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionView.swift; sourceTree = "<group>"; };
+		D8C048712E05C8B400129B14 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3149,6 +3155,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D815DD972E08216B004A72BE /* Order */,
 				D2D4626F2D63C58900C60864 /* Chat */,
 				D215726D2CEE28C30061E725 /* Timetable */,
 				833D9C102C6B269000982145 /* NoticeList */,
@@ -3315,6 +3322,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		D815DD972E08216B004A72BE /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				D815DD982E082179004A72BE /* OrderFilterData.swift */,
+			);
+			path = Order;
+			sourceTree = "<group>";
+		};
 		D89E8A9A2E03B48100624C30 /* Order */ = {
 			isa = PBXGroup;
 			children = (
@@ -3361,6 +3376,7 @@
 		D8C048602E0485D000129B14 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D8C0486E2E05C8A000129B14 /* FilterCollectionView */,
 				D8C048672E05376700129B14 /* OrderCategoryCollectionView */,
 				D8C048652E0489EB00129B14 /* OrderSearchViewController */,
 				D8C0486C2E05B17B00129B14 /* SortOptionSheetViewController.swift */,
@@ -3383,6 +3399,15 @@
 				D8C0486A2E0539D500129B14 /* OrderCategoryCollectionViewCell.swift */,
 			);
 			path = OrderCategoryCollectionView;
+			sourceTree = "<group>";
+		};
+		D8C0486E2E05C8A000129B14 /* FilterCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D8C0486F2E05C8AE00129B14 /* FilterCollectionView.swift */,
+				D8C048712E05C8B400129B14 /* FilterCollectionViewCell.swift */,
+			);
+			path = FilterCollectionView;
 			sourceTree = "<group>";
 		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
@@ -3700,6 +3725,7 @@
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
 				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
+				D815DD992E082179004A72BE /* OrderFilterData.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
@@ -3893,7 +3919,9 @@
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
+				D8C048722E05C8B400129B14 /* FilterCollectionViewCell.swift in Sources */,
 				D2FCBEA22D07FCB00097A388 /* DeleteFrameModalViewController.swift in Sources */,
+				D8C048702E05C8AE00129B14 /* FilterCollectionView.swift in Sources */,
 				D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */,
 				D2D380F02BA71994009AD5A9 /* LoginViewController.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
