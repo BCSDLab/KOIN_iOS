@@ -93,6 +93,8 @@ final class FindPasswordChangeViewController: UIViewController {
             $0.delegate = self
             $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         }
+        passwordTextField.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped1))
+        passwordCheckTextField.setRightToggleButton(image: .appImage(asset: .visibility), target: self, action: #selector(changeSecureButtonTapped2))
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
@@ -140,10 +142,35 @@ extension FindPasswordChangeViewController {
             viewModel.passwordMatch = textField.text ?? ""
         }
     }
+    
     @objc private func nextButtonTapped() {
         switch certType {
         case .phone: viewModel.findPasswordSms()
         case .email: viewModel.findPasswordEmail()
+        }
+    }
+    
+    @objc private func changeSecureButtonTapped1() {
+        passwordTextField.isSecureTextEntry.toggle()
+        
+        if let container = passwordTextField.rightView,
+           let button = container.subviews.first as? UIButton {
+            let image = passwordTextField.isSecureTextEntry
+                ? UIImage.appImage(asset: .visibility)
+                : UIImage.appImage(asset: .visibilityNon)
+            button.setImage(image, for: .normal)
+        }
+    }
+    
+    @objc private func changeSecureButtonTapped2() {
+        passwordCheckTextField.isSecureTextEntry.toggle()
+        
+        if let container = passwordCheckTextField.rightView,
+           let button = container.subviews.first as? UIButton {
+            let image = passwordCheckTextField.isSecureTextEntry
+                ? UIImage.appImage(asset: .visibility)
+                : UIImage.appImage(asset: .visibilityNon)
+            button.setImage(image, for: .normal)
         }
     }
 }
