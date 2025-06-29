@@ -167,7 +167,9 @@ final class FindPasswordCertViewController: UIViewController {
             certNumberStateView.isHidden = false
             certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
             if response.1 {
-                saveButton.setState(state: .usable)
+                if let idText = idtextField.text, !idText.isEmpty {
+                    saveButton.setState(state: .usable)
+                }
                 timer?.cancel()
                 timer = nil
                 remainTimeLabel.isHidden = true
