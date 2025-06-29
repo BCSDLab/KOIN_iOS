@@ -40,7 +40,7 @@ final class FindPhoneIdViewController: UIViewController {
     }
     
     private let changeButton = UIButton().then {
-        $0.setTitle("이메일로 받기", for: .normal)
+        $0.setTitle("이메일로 찾기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.primary500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
     }
@@ -224,7 +224,7 @@ extension FindPhoneIdViewController {
     
     private func setupConstraints() {
         phoneNumberLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(80)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(64)
             $0.leading.equalTo(view.snp.leading).offset(32)
         }
         phoneNumberTextField.snp.makeConstraints {
