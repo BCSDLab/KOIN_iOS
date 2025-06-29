@@ -110,6 +110,7 @@ final class CertificationFormViewController: UIViewController {
 
     private let phoneNumberReponseLabel = UILabel().then {
         $0.setImageText(image: .appImage(asset: .warningOrange), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
+        $0.numberOfLines = 2
         $0.isHidden = true
     }
     
@@ -290,13 +291,38 @@ extension CertificationFormViewController {
     
     @objc private func nameTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        if text.count <= 1 {
+
+        var koreanCount = 0
+        var englishCount = 0
+        var result = ""
+
+        for character in text {
+            if let scalar = character.unicodeScalars.first {
+                let value = scalar.value
+
+                if (0xAC00...0xD7A3).contains(value) {
+                    if koreanCount >= 5 { break }
+                    koreanCount += 1
+                    result.append(character)
+                } else if CharacterSet.letters.contains(scalar) {
+                    if englishCount >= 30 { break }
+                    englishCount += 1
+                    result.append(character)
+                } else {
+                    if koreanCount >= 5 { break }
+                    koreanCount += 1
+                    result.append(character)
+                }
+            }
+        }
+
+        textField.text = result
+
+        if koreanCount + englishCount <= 1 {
             nameHelpLabel.isHidden = false
-        } else if text.count <= 5 {
+        } else {
             nameHelpLabel.isHidden = true
             updatePhoneNumberSectionVisibility()
-        } else {
-            textField.text = String(text.prefix(5))
         }
     }
     
@@ -582,7 +608,7 @@ extension CertificationFormViewController {
         
         femaleButton.snp.makeConstraints {
             $0.top.equalTo(nameHelpLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(nameTextField.snp.leading)
+            $0.leading.equalTo(nameTextField.snp.leading).offset(-5)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
         }
@@ -618,7 +644,8 @@ extension CertificationFormViewController {
         phoneNumberReponseLabel.snp.makeConstraints {
             $0.top.equalTo(phoneNumberTextField.snp.bottom)
             $0.leading.equalTo(phoneNumberTextField.snp.leading).offset(4)
-            $0.height.equalTo(20)
+            $0.trailing.equalTo(sendVerificationButton.snp.trailing)
+            $0.height.greaterThanOrEqualTo(20)
         }
         
         goToLoginButton.snp.makeConstraints {
