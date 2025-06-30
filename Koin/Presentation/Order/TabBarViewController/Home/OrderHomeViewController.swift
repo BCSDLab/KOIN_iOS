@@ -94,6 +94,12 @@ final class OrderHomeViewController: UIViewController {
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then { collectionView in
     }
+    
+    private let orderShopCollectionView = OrderShopCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then { collectionView in
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
@@ -179,25 +185,14 @@ extension OrderHomeViewController {
 extension OrderHomeViewController {
     
     private func setUpLayOuts() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView].forEach {
-            contentView.addSubview($0)
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView].forEach {
+            view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
-        }
-        
         searchBarButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(40)
         }
@@ -219,9 +214,12 @@ extension OrderHomeViewController {
             $0.centerY.equalTo(sortButton)
             $0.height.equalTo(34)
             $0.trailing.equalToSuperview().inset(16)
-            
-            $0.bottom.equalToSuperview()
-
+        }
+        
+        orderShopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(sortButton.snp.bottom).offset(24)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
         }
     }
     
