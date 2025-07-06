@@ -44,6 +44,9 @@ final class FilterCollectionViewCell: UICollectionViewCell {
     func dataBind(_ itemData: OrderFilterData, itemRow: Int) {
         filterImageView.image = itemData.image
         filterTitleLabel.text = itemData.label
+        contentView.backgroundColor = itemData.isSelected
+            ? UIColor.appColor(.new500)
+        : .white
         self.itemRow = itemRow
         applyStyle(selected: isSelected)
     }

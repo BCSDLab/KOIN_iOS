@@ -9,7 +9,8 @@ import UIKit
 
 final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSource {
     
-    private var itemData = OrderShop.dummy()
+//    private var itemData = OrderShop.dummy()
+    private var orderShop: [OrderShop] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flow = UICollectionViewFlowLayout()
@@ -30,13 +31,29 @@ final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSourc
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updateShop(_ orderShop: [OrderShop]) {
+        self.orderShop = orderShop
+        self.reloadData()
+    }
+    
+    func updateSeletecButtonColor(_ standard: FetchOrderShopListRequest) {
+        guard let filterView = self.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionHeader,
+            at: IndexPath(item: 0, section: 0)
+        ) as? FilterCollectionView else {
+            return
+        }
+        filterView.updateButtonState(standard)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemData.count
+        print("아이템 개수: ", orderShop.count)
+        return orderShop.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OrderShopCollectionViewCell.identifier, for: indexPath) as? OrderShopCollectionViewCell else { return UICollectionViewCell() }
-        cell.dataBind(itemData[indexPath.item], itemRow: indexPath.item)
+        cell.dataBind(orderShop[indexPath.item], itemRow: indexPath.item)
         return cell
     }
     

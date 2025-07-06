@@ -117,6 +117,7 @@ final class OrderHomeViewController: UIViewController {
         configureView()
         setAddTarget()
         bind()
+        print("OrderHomeViewController viewDidLoad")
         inputSubject.send(.viewDidLoad)
     }
     
@@ -125,8 +126,13 @@ final class OrderHomeViewController: UIViewController {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
+            case let .changeFilteredOrderShops(Ordershops, id):
+                self?.updateFilteredOrderShops(Ordershops)
+                self?.updateFilteredOrderShopsCategory(id)
             case let .putImage(response):
                 self?.putImage(data: response)
+            case let .updateSeletecButtonColor(standard):
+                self?.orderShopCollectionView.updateSeletecButtonColor(standard)
             }
         }.store(in: &subscriptions)
 
@@ -180,6 +186,17 @@ extension OrderHomeViewController {
         }
         present(bottomSheetViewController, animated: true)
     }
+    
+    private func updateFilteredOrderShops(_ shops: [OrderShop]) {
+        orderShopCollectionView.updateShop(shops)
+        orderShopCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
+        }
+    }
+    
+    private func updateFilteredOrderShopsCategory(_ id: Int) {
+        categoryCollectionView.updateCategory(id)
+    }
 }
 
 extension OrderHomeViewController {
@@ -220,6 +237,7 @@ extension OrderHomeViewController {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
+            $0.height.equalTo(128)
         }
     }
     

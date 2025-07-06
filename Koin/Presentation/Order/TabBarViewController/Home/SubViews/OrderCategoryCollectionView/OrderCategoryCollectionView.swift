@@ -17,7 +17,8 @@ final class OrderCategoryCollectionView: UICollectionView,
 
     // MARK: Data
     private var shopCategories: [ShopCategory] = []
-    private var selectedId: Int?
+    let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
+    private var selectedId = 0
 
     // MARK: Init
     override init(frame: CGRect, collectionViewLayout _: UICollectionViewLayout) {
@@ -49,8 +50,19 @@ final class OrderCategoryCollectionView: UICollectionView,
     // MARK: - External API
     func updateCategories(_ categories: [ShopCategory]) {
         shopCategories = categories.sorted { $0.id < $1.id }
-        if selectedId == nil { selectedId = shopCategories.first?.id }
         reloadData()
+    }
+    
+    func updateCategory(_ id: Int) {
+        selectedId = id
+        for case let cell as OrderCategoryCollectionViewCell in visibleCells {
+            if let indexPath = indexPath(for: cell) {
+                let category = shopCategories[indexPath.row]
+                let isSelected = category.id == id
+                cell.configure(info: category, isSelected)
+            }
+        }
+        selectedCategoryPublisher.send(selectedId)
     }
 
     // MARK: - UICollectionViewDataSource

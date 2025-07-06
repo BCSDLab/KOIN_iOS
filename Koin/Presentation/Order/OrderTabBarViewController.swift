@@ -47,12 +47,15 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     private func configureController() {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
+        let orderService = DefaultOrderService()
+        let orderRepository = DefaultOrderShopRepository(service: orderService)
         
         let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar),
             rootViewController: OrderHomeViewController(
                 viewModel: OrderHomeViewModel(
-                    fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                    fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
+                    fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), selectedId: 0
                 )
             ),
             title: "홈"
