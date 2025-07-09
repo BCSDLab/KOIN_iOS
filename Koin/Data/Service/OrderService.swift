@@ -15,7 +15,6 @@ protocol OrderService {
 final class DefaultOrderService: OrderService {
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
-        print("OrderService: fetchOrderShopList called")
         return request(.fetchOrderShopList(requestModel))
     }
 

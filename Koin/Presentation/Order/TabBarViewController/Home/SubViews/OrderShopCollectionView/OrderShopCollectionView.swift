@@ -37,7 +37,6 @@ final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("아이템 개수: ", orderShop.count)
         return orderShop.count
     }
     

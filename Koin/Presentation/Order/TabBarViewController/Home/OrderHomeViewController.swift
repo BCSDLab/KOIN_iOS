@@ -156,7 +156,9 @@ final class OrderHomeViewController: UIViewController {
 extension OrderHomeViewController {
     @objc private func searchBarButtonTapped() {
         let searchVC = OrderSearchViewController()
-        navigationController?.pushViewController(searchVC, animated: true)
+        let navController = UINavigationController(rootViewController: searchVC)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true, completion: nil)
     }
     
     private func putImage(data: ShopCategoryDTO) {

@@ -49,14 +49,11 @@ final class OrderHomeViewModel: ViewModelProtocol {
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
-            print("OrderHomeViewModel transform input:", input)
             switch input {
             case .viewDidLoad:
-                print("OrderHomeViewModel: viewDidLoad input received")
                 self?.getShopCategory()
                 self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             case .getOrderShopInfo:
-                print("OrderHomeViewModel: viewDidLoad input received")
                 self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             case let .filtersDidChange(filters):
                 let filterTypes = filters.compactMap { $0.fetchFilterType }
@@ -89,7 +86,6 @@ extension OrderHomeViewModel {
     }
 
     private func getOrderShopInfo(id: Int) {
-        print("OrderHomeViewModel: getOrderShopInfo called with id: \(id)")
         fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
