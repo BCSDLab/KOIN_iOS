@@ -10,9 +10,8 @@ import SnapKit
 
 final class FilterCollectionViewCell: UICollectionViewCell {
         
-    private var itemRow: Int?
     private let selectedBackgroundColor = UIColor.appColor(.new500)
-    private let unselectedBackgroundColor   = UIColor.white
+    private let unselectedBackgroundColor = UIColor.white
     private let selectedTitleColor = UIColor.white
     private let unselectedTitleColor = UIColor.appColor(.neutral400)
     
@@ -26,33 +25,27 @@ final class FilterCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureView()
         
-        contentView.layer.cornerRadius = 20
+        contentView.layer.cornerRadius = 17
         contentView.layer.masksToBounds = true
         
-        contentView.layer.shadowColor   = UIColor.black.cgColor
-        contentView.layer.shadowOffset  = CGSize(width: 0, height: 2)
-        contentView.layer.shadowRadius  = 4
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowRadius = 4
         contentView.layer.shadowOpacity = 0.04
+        
+        setUpLayouts()
+        setUpConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func dataBind(_ itemData: OrderFilterData, itemRow: Int) {
-        filterImageView.image = itemData.image
-        filterTitleLabel.text = itemData.label
-        contentView.backgroundColor = itemData.isSelected
-            ? UIColor.appColor(.new500)
-        : .white
-        self.itemRow = itemRow
+    func configure(with filter: ShopFilter, isSelected: Bool) {
+        filterImageView.image = filter.image
+        filterTitleLabel.text = filter.title
         applyStyle(selected: isSelected)
-    }
-    
-    override var isSelected: Bool {
-        didSet { applyStyle(selected: isSelected) }
     }
 
     private func applyStyle(selected: Bool) {
@@ -82,9 +75,5 @@ extension FilterCollectionViewCell {
             $0.trailing.equalToSuperview().inset(8)
         }
     }
-    
-    private func configureView() {
-        setUpLayouts()
-        setUpConstraints()
-    }
 }
+
