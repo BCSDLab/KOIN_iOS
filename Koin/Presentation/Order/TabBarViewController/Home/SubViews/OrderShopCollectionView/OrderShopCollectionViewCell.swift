@@ -13,7 +13,6 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         
     private var itemRow: Int?
     
-    // 프로퍼티로만 보유
     private var shopId: Int = 0
     private var orderableShopId: Int = 0
     private var minimumOrderLabel: Int = 0
@@ -92,13 +91,11 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         
         shopTitleLabel.text = info.name
         
-        // 별점
         starImageView.image = info.ratingAverage > 0
             ? UIImage.appImage(asset: .star)
             : UIImage.appImage(asset: .emptyStar)
         ratingLabel.text = String(format: "%.1f", info.ratingAverage)
         
-        // 리뷰 개수
         switch info.reviewCount {
         case 0:
             reviewCountLabel.text = "첫 번째 리뷰를 작성해보세요 :)"
@@ -108,15 +105,16 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
             reviewCountLabel.text = "(리뷰 10+개)"
         }
         
-        // 배달 정보
         if info.isDeliveryAvailable {
-            deliveryLabel.text = "배달비 \(info.minimumDeliveryTip)원~\(info.maximumDeliveryTip)원"
+            if info.minimumDeliveryTip == 0 && info.maximumDeliveryTip == 0 {
+                deliveryLabel.text = "배달비 무료"
+            } else {
+                deliveryLabel.text = "배달비 \(info.minimumDeliveryTip)원~\(info.maximumDeliveryTip)원"
+            }
         } else {
             deliveryLabel.text = "배달 불가"
         }
         
-        // MARK: - mock 데이터 넣기
-        // 아래 프로퍼티들에만 세팅 (뷰에는 아직 추가되지 않음)
         minimumOrderLabel = Int(info.minimumOrderAmount)
         statusView.isHidden  = info.isOpen
         statusLabel.isHidden = info.isOpen
