@@ -9,12 +9,12 @@ import Alamofire
 import Combine
 
 protocol OrderService {
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
 }
 
 final class DefaultOrderService: OrderService {
     
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error> {
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         print("OrderService: fetchOrderShopList called")
         return request(.fetchOrderShopList(requestModel))
     }

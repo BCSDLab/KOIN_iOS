@@ -34,7 +34,10 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList: break
+        case .fetchOrderShopList:
+            if let token = KeychainWorker.shared.read(key: .access) {
+                baseHeaders["Authorization"] = "Bearer \(token)"
+            }
         default:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"

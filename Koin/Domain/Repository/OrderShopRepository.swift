@@ -11,5 +11,3 @@ import Combine
 protocol OrderShopRepository {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
 }
-
-

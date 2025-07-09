@@ -131,11 +131,14 @@ final class OrderHomeViewController: UIViewController {
                 self?.updateFilteredOrderShopsCategory(id)
             case let .putImage(response):
                 self?.putImage(data: response)
-            case let .updateSeletecButtonColor(standard):
-                self?.orderShopCollectionView.updateSeletecButtonColor(standard)
             }
         }.store(in: &subscriptions)
-
+        
+        filterCollectionView.filtersDidChange
+            .sink { [weak self] filters in
+                self?.inputSubject.send(.filtersDidChange(filters))
+            }
+            .store(in: &subscriptions)
     }
     
     private func setAddTarget() {

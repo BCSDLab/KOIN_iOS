@@ -66,3 +66,33 @@ enum OrderDayOfWeek: String, Decodable {
     case tuesday = "TUESDAY"
     case wednesday = "WEDNESDAY"
 }
+
+extension OrderShop {
+    init(dto: OrderShopDTO) {
+        shopId = dto.shopId
+        orderableShopId = dto.orderableShopId
+        name = dto.name
+        isDeliveryAvailable = dto.isDeliveryAvailable
+        isTakeoutAvailable = dto.isTakeoutAvailable
+        minimumOrderAmount = dto.minimumOrderAmount
+        ratingAverage = dto.ratingAverage
+        reviewCount = dto.reviewCount
+        minimumDeliveryTip = dto.minimumDeliveryTip
+        maximumDeliveryTip = dto.maximumDeliveryTip
+        isOpen = dto.isOpen
+        categoryIds = dto.categoryIds
+        imageUrls = dto.imageUrls
+        orderShopOpen = dto.open.map { OrderOpen(dto: $0) }
+        openStatus = dto.openStatus
+    }
+}
+
+extension OrderOpen {
+    init(dto: OpenInfoDTO) {
+        dayOfWeek = OrderDayOfWeek(rawValue: dto.dayOfWeek) ?? .monday // 기본값 필요 시 조정
+        closed = dto.closed
+        openTime = dto.openTime ?? ""
+        closeTime = dto.closeTime ?? ""
+    }
+}
+

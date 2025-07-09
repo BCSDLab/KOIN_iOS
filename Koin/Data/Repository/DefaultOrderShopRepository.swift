@@ -16,8 +16,11 @@ final class DefaultOrderShopRepository: OrderShopRepository{
         self.service = service
     }
 
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], any Error> {
-        print("OrderShopRepository: fetchOrderShopList called")
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error> {
         return service.fetchOrderShopList(requestModel: requestModel)
+            .map { dtos in
+                dtos.map(OrderShop.init)
+            }
+            .eraseToAnyPublisher()
     }
 }

@@ -10,6 +10,13 @@ import Foundation
 struct FetchOrderShopListRequest: Encodable {
     var sorter: FetchOrderShopSortType
     var filter: [FetchOrderShopFilterType]
+    var minimumOrderAmount: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case sorter
+        case filter
+        case minimumOrderAmount = "minimum_order_amount"
+    }
 }
 
 enum FetchOrderShopFilterType: String, Encodable {
