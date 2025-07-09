@@ -15,6 +15,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case getOrderShopInfo
         case filtersDidChange(Set<ShopFilter>)
         case sortDidChange(FetchOrderShopSortType)
+        case categoryDidChange(Int)
     }
     
     enum Output {
@@ -30,6 +31,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
             getOrderShopInfo(id: selectedId)
         }
     }
+    
     private (set) var selectedId: Int {
         didSet {
             getOrderShopInfo(id: selectedId)
@@ -52,15 +54,17 @@ final class OrderHomeViewModel: ViewModelProtocol {
             case .viewDidLoad:
                 print("OrderHomeViewModel: viewDidLoad input received")
                 self?.getShopCategory()
-                self?.getOrderShopInfo(id: self?.selectedId ?? 0)
+                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             case .getOrderShopInfo:
                 print("OrderHomeViewModel: viewDidLoad input received")
-                self?.getOrderShopInfo(id: self?.selectedId ?? 0)
+                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             case let .filtersDidChange(filters):
                 let filterTypes = filters.compactMap { $0.fetchFilterType }
                 self?.sortStandard.filter = filterTypes
             case let .sortDidChange(sort):
                 self?.sortStandard.sorter = sort
+            case let .categoryDidChange(id):
+                self?.selectedId = id
             }
             
         }.store(in: &subscriptions)
@@ -85,7 +89,7 @@ extension OrderHomeViewModel {
     }
 
     private func getOrderShopInfo(id: Int) {
-        print("OrderHomeViewModel: getOrderShopInfo called")
+        print("OrderHomeViewModel: getOrderShopInfo called with id: \(id)")
         fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {

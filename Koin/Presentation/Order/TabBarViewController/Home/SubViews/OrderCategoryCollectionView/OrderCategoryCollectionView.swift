@@ -18,7 +18,8 @@ final class OrderCategoryCollectionView: UICollectionView,
     // MARK: Data
     private var shopCategories: [ShopCategory] = []
     let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
-    private var selectedId = 0
+    var selectedId = 1
+    private var previousSelectedId = 1
 
     // MARK: Init
     override init(frame: CGRect, collectionViewLayout _: UICollectionViewLayout) {
@@ -44,7 +45,7 @@ final class OrderCategoryCollectionView: UICollectionView,
                  forCellWithReuseIdentifier: OrderCategoryCollectionViewCell.identifier)
 
         dataSource = self
-        delegate   = self
+        delegate = self
     }
 
     // MARK: - External API
@@ -89,8 +90,23 @@ final class OrderCategoryCollectionView: UICollectionView,
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
 
-        selectedId = shopCategories[indexPath.row].id
-        collectionView.reloadData()
+        let newlySelectedId = shopCategories[indexPath.row].id
+        
+        if newlySelectedId != selectedId {
+            previousSelectedId = selectedId
+            selectedId = newlySelectedId
+            
+            var indexPathsToReload: [IndexPath] = []
+            if let previousIndex = shopCategories.firstIndex(where: { $0.id == previousSelectedId }) {
+                indexPathsToReload.append(IndexPath(row: previousIndex, section: 0))
+            }
+            if let newIndex = shopCategories.firstIndex(where: { $0.id == selectedId }) {
+                indexPathsToReload.append(IndexPath(row: newIndex, section: 0))
+            }
+            
+            collectionView.reloadItems(at: indexPathsToReload)
+        }
+        selectedCategoryPublisher.send(selectedId)
     }
 }
 

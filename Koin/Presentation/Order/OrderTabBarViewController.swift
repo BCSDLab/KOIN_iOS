@@ -55,7 +55,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             rootViewController: OrderHomeViewController(
                 viewModel: OrderHomeViewModel(
                     fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-                    fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), selectedId: 0
+                    fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), selectedId: 1
                 )
             ),
             title: "홈"

@@ -139,6 +139,12 @@ final class OrderHomeViewController: UIViewController {
                 self?.inputSubject.send(.filtersDidChange(filters))
             }
             .store(in: &subscriptions)
+
+        categoryCollectionView.selectedCategoryPublisher
+            .sink { [weak self] id in
+                self?.inputSubject.send(.categoryDidChange(id))
+            }
+            .store(in: &subscriptions)
     }
     
     private func setAddTarget() {
