@@ -15,6 +15,7 @@ final class OrderHomeViewController: UIViewController {
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    private var currentSortType: SortType = .basic
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then { _ in
@@ -117,7 +118,6 @@ final class OrderHomeViewController: UIViewController {
         configureView()
         setAddTarget()
         bind()
-        print("OrderHomeViewController viewDidLoad")
         inputSubject.send(.viewDidLoad)
     }
     
@@ -160,10 +160,12 @@ extension OrderHomeViewController {
     @objc private func sortButtonTapped() {
         guard presentedViewController == nil else { return }
         
-        let bottomSheetViewController = SortOptionSheetViewController()
+        let bottomSheetViewController = SortOptionSheetViewController(current: self.currentSortType)
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
             guard let self = self else { return }
             
+            self.currentSortType = sort
+
             var config = self.sortButton.configuration ?? .plain()
             
             var attribute = AttributedString(sort.title)
@@ -172,6 +174,8 @@ extension OrderHomeViewController {
             
             config.attributedTitle = attribute
             self.sortButton.configuration = config
+            
+            self.inputSubject.send(.sortDidChange(sort.fetchSortType))
         }
         
         bottomSheetViewController.modalPresentationStyle = .pageSheet
@@ -250,4 +254,3 @@ extension OrderHomeViewController {
         self.view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
-

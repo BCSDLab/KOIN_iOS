@@ -20,12 +20,24 @@ enum SortType: CaseIterable {
         case .basic:  return "기본순"
         }
     }
+
+    var fetchSortType: FetchOrderShopSortType {
+        switch self {
+        case .rating:
+            return .ratingDesc
+        case .review:
+            return .countDesc
+        case .basic:
+            return .none
+        }
+    }
 }
 
 final class SortOptionSheetViewController: UIViewController {
     
     // MARK: - Properties
     var onOptionSelected: ((SortType) -> Void)?
+    private var current: SortType
     
     // MARK: UI Component
     private let titleLabel = UILabel().then {
@@ -55,10 +67,17 @@ final class SortOptionSheetViewController: UIViewController {
         $0.alignment = .fill
         $0.distribution = .fillEqually
     }
-    
-    private var current: SortType = .basic
-    
+        
     // MARK: Lifecycle
+    init(current: SortType) {
+        self.current = current
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()

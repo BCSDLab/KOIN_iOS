@@ -14,6 +14,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case viewDidLoad
         case getOrderShopInfo
         case filtersDidChange(Set<ShopFilter>)
+        case sortDidChange(FetchOrderShopSortType)
     }
     
     enum Output {
@@ -58,6 +59,8 @@ final class OrderHomeViewModel: ViewModelProtocol {
             case let .filtersDidChange(filters):
                 let filterTypes = filters.compactMap { $0.fetchFilterType }
                 self?.sortStandard.filter = filterTypes
+            case let .sortDidChange(sort):
+                self?.sortStandard.sorter = sort
             }
             
         }.store(in: &subscriptions)
