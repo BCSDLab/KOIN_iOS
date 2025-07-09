@@ -36,16 +36,6 @@ final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSourc
         self.reloadData()
     }
     
-    func updateSeletecButtonColor(_ standard: FetchOrderShopListRequest) {
-        guard let filterView = self.supplementaryView(
-            forElementKind: UICollectionView.elementKindSectionHeader,
-            at: IndexPath(item: 0, section: 0)
-        ) as? FilterCollectionView else {
-            return
-        }
-        filterView.updateButtonState(standard)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         print("아이템 개수: ", orderShop.count)
         return orderShop.count
