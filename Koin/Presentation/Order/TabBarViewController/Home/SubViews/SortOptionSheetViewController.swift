@@ -126,9 +126,21 @@ final class SortOptionSheetViewController: UIViewController {
             
             var config = button.configuration ?? .plain()
             config.attributedTitle = attribute
-            config.image = isSelected ? UIImage.appImage(asset: .check)?.withRenderingMode(.alwaysTemplate) : nil
             button.configuration = config
             button.tintColor = .appColor(.new500)
+            
+            button.subviews.filter { $0 is UIImageView }.forEach { $0.removeFromSuperview() }
+
+            if isSelected {
+                let checkImageView = UIImageView(image: UIImage.appImage(asset: .check)?.withRenderingMode(.alwaysTemplate))
+                checkImageView.tintColor = .appColor(.new500)
+                button.addSubview(checkImageView)
+                checkImageView.snp.makeConstraints {
+                    $0.trailing.equalToSuperview().offset(-32)
+                    $0.centerY.equalToSuperview()
+                    $0.width.height.equalTo(24)
+                }
+            }
         }
     }
     
