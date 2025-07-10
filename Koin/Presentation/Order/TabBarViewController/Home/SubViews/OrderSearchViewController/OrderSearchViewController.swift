@@ -6,10 +6,16 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class OrderSearchViewController: UIViewController {
     
+    // MARK: - Properties
+    private let viewModel: OrderHomeViewModel
+    private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
+    private var subscriptions: Set<AnyCancellable> = []
+
     // MARK: - UI Components
     private let searchTextField = UITextField().then {
         let placeholder = NSAttributedString(
@@ -31,7 +37,7 @@ final class OrderSearchViewController: UIViewController {
             .withRenderingMode(.alwaysTemplate)
         let leftImageView = UIImageView(image: icon)
         leftImageView.contentMode = .center
-        leftImageView.tintColor = .appColor(.neutral500) 
+        leftImageView.tintColor = .appColor(.neutral500)
         leftImageView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
 
         let leftContainer = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 40))
@@ -53,7 +59,32 @@ final class OrderSearchViewController: UIViewController {
         $0.layer.masksToBounds = false
     }
     
+    private let dimView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.8)
+    }
+    
+    private let searchedOrderShopCollectionView: RelatedShopCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        let screenWidth = UIScreen.main.bounds.width
+        let cellWidth = screenWidth - 32
+        let collectionView = RelatedShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 48)
+        flowLayout.minimumLineSpacing = 0
+        collectionView.isScrollEnabled = false
+        collectionView.isHidden = true
+        return collectionView
+    }()
+    
     // MARK: - Initialization
+    init(viewModel: OrderHomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -62,6 +93,7 @@ final class OrderSearchViewController: UIViewController {
         configureView()
         bind()
         setAddTarget()
+        setDelegate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,14 +104,36 @@ final class OrderSearchViewController: UIViewController {
     
     // MARK: - Bind
     private func bind() {
-
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                guard let self = self else { return }
+                switch output {
+                case .showSearchedResult(let keywords):
+                    self.searchedOrderShopCollectionView.updateShop(keywords: keywords)
+                default:
+                    break
+                }
+            }
+            .store(in: &subscriptions)
     }
 
     private func setAddTarget() {
     }
+    
+    private func setDelegate() {
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        searchTextField.delegate = self
+    }
 }
 
 extension OrderSearchViewController {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        searchedOrderShopCollectionView.isHidden = false
+        dimView.isHidden = true
+        inputSubject.send(.searchTextChanged(text))
+    }
     
     @objc private func backButtonTapped() {
         dismiss(animated: true, completion: nil)
@@ -93,7 +147,9 @@ extension OrderSearchViewController {
 extension OrderSearchViewController {
     
     private func setUpLayOuts() {
-        [searchTextField].forEach {
+        [searchTextField,
+         dimView,
+         searchedOrderShopCollectionView].forEach {
             view.addSubview($0)
         }
 
@@ -104,6 +160,18 @@ extension OrderSearchViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.height.equalTo(40)
+        }
+        
+        dimView.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        searchedOrderShopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     

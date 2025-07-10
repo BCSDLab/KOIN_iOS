@@ -10,4 +10,5 @@ import Combine
 
 protocol OrderShopRepository {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
 }

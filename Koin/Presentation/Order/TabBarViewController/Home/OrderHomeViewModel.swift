@@ -16,11 +16,14 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case filtersDidChange(Set<ShopFilter>)
         case sortDidChange(FetchOrderShopSortType)
         case categoryDidChange(Int)
+        case searchTextChanged(String)
     }
     
     enum Output {
         case putImage(ShopCategoryDTO)
         case changeFilteredOrderShops([OrderShop], Int)
+        case changeFilteredShops([OrderShop], Int)
+        case showSearchedResult([Keyword])
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -40,10 +43,12 @@ final class OrderHomeViewModel: ViewModelProtocol {
 
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
+    private let searchOrderShopUseCase: SearchOrderShopUseCase
     
-    init(fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, fetchOrderShopListUseCase: FetchOrderShopListUseCase, selectedId: Int) {
+    init(fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, fetchOrderShopListUseCase: FetchOrderShopListUseCase, searchOrderShopUseCase: SearchOrderShopUseCase, selectedId: Int) {
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
+        self.searchOrderShopUseCase = searchOrderShopUseCase
         self.selectedId = selectedId
     }
     
@@ -62,6 +67,9 @@ final class OrderHomeViewModel: ViewModelProtocol {
                 self?.sortStandard.sorter = sort
             case let .categoryDidChange(id):
                 self?.selectedId = id
+            case let .searchTextChanged(text):
+                self?.searchOrderShop(text)
+                self?.searchOrderShops(text)
             }
             
         }.store(in: &subscriptions)
@@ -106,5 +114,20 @@ extension OrderHomeViewModel {
                 }
                 self.orderShopList = response
             }).store(in: &subscriptions)
+    }
+    
+    private func searchOrderShop(_ text: String) {
+        searchOrderShopUseCase.execute(text: text).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showSearchedResult(response.keywords ?? []))
+        }.store(in: &subscriptions)
+    }
+    
+    private func searchOrderShops(_ text: String) {
+        let orderShops = orderShopList.filter { $0.name.contains(text) }
+        outputSubject.send(.changeFilteredShops(orderShops, selectedId))
     }
 }

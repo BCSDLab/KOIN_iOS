@@ -592,6 +592,7 @@
 		D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */; };
 		D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */; };
 		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
+		D8AECD042E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */; };
 		D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */; };
 		D8C0485D2E047A8C00129B14 /* OrderCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */; };
 		D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */; };
@@ -1240,6 +1241,7 @@
 		D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewController.swift; sourceTree = "<group>"; };
 		D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewModel.swift; sourceTree = "<group>"; };
 		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
+		D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOrderShopUseCase.swift; sourceTree = "<group>"; };
 		D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		D8C0485C2E047A8C00129B14 /* OrderCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartViewController.swift; sourceTree = "<group>"; };
 		D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSearchViewController.swift; sourceTree = "<group>"; };
@@ -3468,6 +3470,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C24A032E1A9D0C008D8ABA /* FetchOrderShopListUseCase.swift */,
+				D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4216,6 +4219,7 @@
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
+				D8AECD042E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,

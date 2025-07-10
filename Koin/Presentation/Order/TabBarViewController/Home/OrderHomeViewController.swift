@@ -131,6 +131,10 @@ final class OrderHomeViewController: UIViewController {
                 self?.updateFilteredOrderShopsCategory(id)
             case let .putImage(response):
                 self?.putImage(data: response)
+            case let .showSearchedResult(keywords):
+                break
+            case let .changeFilteredShops(shops, id):
+                break
             }
         }.store(in: &subscriptions)
         
@@ -155,9 +159,19 @@ final class OrderHomeViewController: UIViewController {
 
 extension OrderHomeViewController {
     @objc private func searchBarButtonTapped() {
-        let searchVC = OrderSearchViewController()
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        let orderService = DefaultOrderService()
+        let orderRepository = DefaultOrderShopRepository(service: orderService)
+        
+        let searchVC = OrderSearchViewController(viewModel: OrderHomeViewModel(fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository), fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository), selectedId: 1))
+        
         let navController = UINavigationController(rootViewController: searchVC)
-        navController.modalPresentationStyle = .fullScreen
+        if #available(iOS 13.0, *) {
+            navController.modalPresentationStyle = .fullScreen
+        } else {
+            navController.modalPresentationStyle = .overFullScreen
+        }
         present(navController, animated: true, completion: nil)
     }
     

@@ -9,11 +9,10 @@ import Alamofire
 
 enum OrderAPI {
     case fetchOrderShopList(FetchOrderShopListRequest)
+    case searchShop(String)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
-    
-    
     
     public var baseURL: String {
         return Bundle.main.baseUrl
@@ -22,6 +21,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchOrderShopList: return "/order/shops"
+        case .searchShop(let text): return "/shops/search/related/\(text)"
         }
     }
     
@@ -38,6 +38,8 @@ extension OrderAPI: Router, URLRequestConvertible {
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
+        case .searchShop:
+            break
         default:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
@@ -54,17 +56,18 @@ extension OrderAPI: Router, URLRequestConvertible {
                 parameters["filter"] = filterItem.rawValue
             }
             return parameters
+        case .searchShop:
+            return nil
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchOrderShopList:
+        case .fetchOrderShopList, .searchShop:
             return URLEncoding.default
         default:
             return URLEncoding.default
         }
     }
-    
 }
 

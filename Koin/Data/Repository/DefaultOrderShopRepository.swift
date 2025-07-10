@@ -23,4 +23,8 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             }
             .eraseToAnyPublisher()
     }
+    
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+        return service.searchRelatedShops(text: text)
+    }
 }
