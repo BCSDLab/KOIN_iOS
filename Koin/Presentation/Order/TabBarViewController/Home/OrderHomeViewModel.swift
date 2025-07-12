@@ -130,4 +130,8 @@ extension OrderHomeViewModel {
         let orderShops = orderShopList.filter { $0.name.contains(text) }
         outputSubject.send(.changeFilteredShops(orderShops, selectedId))
     }
+    
+    func getShopId(at index: Int) -> Int {
+        return orderShopList[index].shopId
+    }
 }

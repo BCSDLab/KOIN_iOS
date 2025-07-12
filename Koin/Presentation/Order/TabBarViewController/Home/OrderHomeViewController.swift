@@ -118,6 +118,7 @@ final class OrderHomeViewController: UIViewController {
         configureView()
         setAddTarget()
         bind()
+        orderShopCollectionView.delegate = self
         inputSubject.send(.viewDidLoad)
     }
     
@@ -228,6 +229,16 @@ extension OrderHomeViewController {
     }
 }
 
+extension OrderHomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == orderShopCollectionView {
+            let shopId = viewModel.getShopId(at: indexPath.item)
+            let detailVC = OrderHomeDetailViewController(shopId: shopId)
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+    }
+}
+
 extension OrderHomeViewController {
     
     private func setUpLayOuts() {
@@ -266,7 +277,7 @@ extension OrderHomeViewController {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
             $0.horizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
-            $0.height.equalTo(128)
+            $0.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
         }
     }
     

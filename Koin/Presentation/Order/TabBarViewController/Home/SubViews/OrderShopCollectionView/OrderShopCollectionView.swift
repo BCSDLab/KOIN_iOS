@@ -9,7 +9,6 @@ import UIKit
 
 final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSource {
     
-//    private var itemData = OrderShop.dummy()
     private var orderShop: [OrderShop] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
