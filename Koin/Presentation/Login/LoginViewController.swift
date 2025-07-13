@@ -204,11 +204,13 @@ extension LoginViewController {
     @objc private func findIdButtonTapped() {
         let viewController = FindPhoneIdViewController(viewModel: FindIdViewModel())
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "아이디 찾기"))
     }
     
     @objc private func findPasswordButtonTapped() {
         let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "비밀번호 찾기"))
     }
     
     @objc func loginButtonTapped() {
