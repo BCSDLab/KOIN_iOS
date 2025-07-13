@@ -23,10 +23,10 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
-        var text: String = "CAMPUS"
-        if label == "CAMPUS_modal_1" { text = "AB_TEST" }
-        // TODO: 이거 우선 임시로 이렇게.. 나중에 고치기
-        Analytics.logEvent(text, parameters: parameters)
+//        var text: String = "CAMPUS"
+//        if label == "CAMPUS_modal_1" { text = "AB_TEST" }
+//        // TODO: 이거 우선 임시로 이렇게.. 나중에 고치기
+        Analytics.logEvent(name, parameters: parameters)
     }
     
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

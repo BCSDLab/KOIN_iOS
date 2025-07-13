@@ -46,7 +46,7 @@ final class ClubView: UIView {
     
     private let hotClubChevronImageView = UIImageView().then {
         $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
-
+        
     }
     ///
     private let clubListButton = UIButton().then {
@@ -103,7 +103,8 @@ final class ClubView: UIView {
     }
     
     func setupHotClub(club: HotClubDTO) {
-        hotClubImageView.loadImage(from: club.imageUrl)
+        hotClubImageView.loadImageWithSpinner(from: club.imageUrl)
+        hotClubImageView.isHidden = false
         chevronButton.isHidden = false
         hotClubButton.isHidden = false
         clubListButton.isHidden = false
