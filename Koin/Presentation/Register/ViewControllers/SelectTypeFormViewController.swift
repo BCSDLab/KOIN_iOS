@@ -7,11 +7,13 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class SelectTypeFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
 
     enum UserType {
         case student
@@ -96,11 +98,15 @@ extension SelectTypeFormViewController {
     @objc private func studentButtonTapped() {
         viewModel.selectUserType(.student)
         userTypeButtonTapped()
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.createAccount, .click, "학생", customSessionId))
     }
 
     @objc private func generalButtonTapped() {
         viewModel.selectUserType(.general)
         userTypeButtonTapped()
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.createAccount, .click, "외부인", customSessionId))
     }
     
     private func userTypeButtonTapped() {

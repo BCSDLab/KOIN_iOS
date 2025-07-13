@@ -181,6 +181,7 @@ enum EventParameter {
             case userInfo = "user_info"
             case termsAgreement = "terms_agreement"
             case identityVerification = "identity_verification"
+            case createAccount = "create_account"
             var team: String {
                 return "USER"
             }
