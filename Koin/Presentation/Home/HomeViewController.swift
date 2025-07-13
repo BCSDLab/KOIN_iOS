@@ -569,7 +569,7 @@ extension HomeViewController {
             selectedId: id
         )
         
-        if id >= 0 {
+        if id >= 1 {
             let shopViewController = ShopViewControllerA(viewModel: viewModel)
             shopViewController.title = "주변상점"
             navigationController?.pushViewController(shopViewController, animated: true)

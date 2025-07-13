@@ -38,7 +38,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     }
 
     @objc private func didTapCart() {
-        let orderCartViewController = OrderCartViewController()
+        let orderCartViewController = OrderCartWebViewController()
         orderCartViewController.title = "장바구니"
         navigationController?.pushViewController(orderCartViewController, animated: true)
     }

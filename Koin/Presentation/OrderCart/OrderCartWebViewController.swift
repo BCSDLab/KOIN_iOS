@@ -1,19 +1,17 @@
 //
-//  OrderHomeDetailViewController.swift
+//  OrderCartWebViewController.swift
 //  koin
 //
-//  Created by 이은지 on 7/12/25.
+//  Created by 이은지 on 6/20/25.
 //
 
 import Combine
 import UIKit
 import WebKit
 
-final class OrderHomeDetailViewController: UIViewController {
-    private var didSendTokens = false
+final class OrderCartWebViewController: UIViewController, WKUIDelegate {
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let shopId: Int?
 
     private let webView: NoInputAccessoryWKWebView = {
         let contentController = WKUserContentController()
@@ -28,12 +26,11 @@ final class OrderHomeDetailViewController: UIViewController {
     override var inputAccessoryView: UIView? {
         return nil
     }
-
-    init(shopId: Int?) {
-        self.shopId = shopId
+    
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -63,30 +60,29 @@ final class OrderHomeDetailViewController: UIViewController {
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
             setupWebView()
-            loadShopDetailPage()
+            loadCartPage()
         }.store(in: &subscriptions)
     }
-    
-    private func loadShopDetailPage() {
-        guard let shopId = shopId else { return }
-        guard let url = URL(string: "https://order.stage.koreatech.in/shop/\(shopId)") else { return }
+
+    private func loadCartPage() {
+        guard let url = URL(string: "https://order.stage.koreatech.in/cart") else { return }
         let request = URLRequest(url: url)
         webView.load(request)
     }
 }
 
 // MARK: - WKNavigationDelegate
-extension OrderHomeDetailViewController: WKNavigationDelegate {
+extension OrderCartWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("웹 페이지 로딩 완료")
     }
 }
 
 // MARK: - JS 통신 처리
-extension OrderHomeDetailViewController: WKScriptMessageHandler {
+extension OrderCartWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
-        
+
         guard message.name == "tokenBridge" else { return }
         guard let bodyString = message.body as? String,
               let data = bodyString.data(using: .utf8),
@@ -95,8 +91,9 @@ extension OrderHomeDetailViewController: WKScriptMessageHandler {
               let callbackId = payload["callbackId"] as? String else {
             return
         }
-        print(method)
-        print("\(message.body)")
+        
+        print("iOS에서 받은 method: ", method)
+        print("iOS에서 받은 raw 메시지: \(message.body)")
         let args = payload["args"] as? [Any] ?? []
 
         switch method {
@@ -133,7 +130,7 @@ extension OrderHomeDetailViewController: WKScriptMessageHandler {
     }
 }
 
-extension OrderHomeDetailViewController {
+extension OrderCartWebViewController {
     private func setupWebView() {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "tokenBridge")
         webView.configuration.userContentController.add(LeakAvoider(delegate: self), name: "tokenBridge")
