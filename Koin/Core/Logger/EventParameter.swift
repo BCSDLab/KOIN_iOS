@@ -29,6 +29,7 @@ enum EventParameter {
         enum ABTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
             case businessCall = "BUSINESS_call_1"
+            case campusClub1 = "CAMPUS_club_1"
             var team: String {
                 return "AB_TEST"
             }

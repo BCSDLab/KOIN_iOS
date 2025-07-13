@@ -147,9 +147,10 @@ extension HomeViewModel {
             print(abTestResult)
             if abTestResult.variableName == .hot {
                 self?.fetchHotClub()
+                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_B", category: "a/b test 로깅(메인화면 동아리 진입)")
             } else {
                 self?.fetchClubCategories()
-            }
+                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_A", category: "a/b test 로깅(메인화면 동아리 진입)")            }
         }).store(in: &subscriptions)
     }
     private func getBannerAbTest(request: String) {
