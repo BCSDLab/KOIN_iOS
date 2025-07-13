@@ -34,6 +34,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedNickname(String)
         case tryStudentRegister(StudentRegisterFormRequest)
         case tryGeneralRegister(GeneralRegisterFormRequest)
+        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
     enum Output {
@@ -60,8 +61,9 @@ final class RegisterFormViewModel: ViewModelProtocol {
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
     private let registerFormUseCase: RegisterFormUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
-    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, registerFormUseCase: RegisterFormUseCase) {
+    init(checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase, sendVerificationCodeUseCase: SendVerificationCodeUsecase, checkVerificationCodeUseCase: CheckVerificationCodeUsecase, checkDuplicatedIdUseCase: CheckDuplicatedIdUsecase, fetchDeptListUseCase: FetchDeptListUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, registerFormUseCase: RegisterFormUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.checkDuplicatedPhoneNumberUseCase = checkDuplicatedPhoneNumberUseCase
         self.sendVerificationCodeUseCase = sendVerificationCodeUseCase
         self.checkVerificationCodeUseCase = checkVerificationCodeUseCase
@@ -69,6 +71,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.checkDuplicatedNicknameUseCase = checkDuplicatedNicknameUseCase
         self.registerFormUseCase = registerFormUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -90,6 +93,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.studentRegister(registerRequest: request)
             case let .tryGeneralRegister(request):
                 self?.generalRegister(registerRequest: request)
+            case let .logSessionEvent(label, category, value, sessionId):
+                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         
@@ -216,5 +221,9 @@ extension RegisterFormViewModel {
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.succesRegister)
         }.store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }

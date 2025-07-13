@@ -179,6 +179,7 @@ enum EventParameter {
             case startSignUp = "start_sign_up"
             case userOnlyOk = "user_only_ok"
             case userInfo = "user_info"
+            case termsAgreement = "terms_agreement"
             var team: String {
                 return "USER"
             }

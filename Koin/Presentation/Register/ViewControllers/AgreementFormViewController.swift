@@ -7,11 +7,13 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class AgreementFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var agreementItems: [AgreementItemView] = []
     
     // MARK: - UI Components
@@ -185,6 +187,9 @@ extension AgreementFormViewController {
         let viewController = CertificationFormViewController(viewModel: viewModel)
         viewController.title = "회원가입"
         navigationController?.pushViewController(viewController, animated: true)
+
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.termsAgreement, .click, "약관동의", customSessionId))
     }
 }
 
