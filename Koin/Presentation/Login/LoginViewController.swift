@@ -161,15 +161,12 @@ extension LoginViewController {
     }
 
     @objc private func findIdButtonTapped() {
-        if let url = URL(string: "https://portal.koreatech.ac.kr/kut/page/findUser.jsp") {
-            let safariViewController = SFSafariViewController(url: url)
-            present(safariViewController, animated: true)
-        }
+        let viewController = FindPhoneIdViewController(viewModel: FindIdViewModel())
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func findPasswordButtonTapped() {
-        let findPasswordViewController = FindPasswordViewController(viewModel: FindPasswordViewModel(findPasswordUseCase: DefaultFindPasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
-        findPasswordViewController.title = "비밀번호 찾기"
+        let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
     }
     
@@ -184,6 +181,7 @@ extension LoginViewController {
         let timetableRepositoy = DefaultTimetableRepository(service: DefaultTimetableService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+      
         let registerViewController = AgreementFormViewController(
             viewModel: RegisterFormViewModel(
                 checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(

@@ -225,6 +225,29 @@
 		D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
+		D20AD6DE2E012A0F0067760A /* FindPhoneIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */; };
+		D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E12E012A390067760A /* FoundIdViewController.swift */; };
+		D20AD6E42E012A430067760A /* FindIdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E32E012A430067760A /* FindIdViewModel.swift */; };
+		D20AD6E72E012E3B0067760A /* StateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E62E012E3B0067760A /* StateButton.swift */; };
+		D20AD6E92E013E430067760A /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6E82E013E430067760A /* StateView.swift */; };
+		D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */; };
+		D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */; };
+		D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */; };
+		D20AD6F12E029B560067760A /* SendVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */; };
+		D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */; };
+		D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */; };
+		D20AD6F92E02A11D0067760A /* FindIdSmsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */; };
+		D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */; };
+		D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */; };
+		D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */; };
+		D20AD7012E035B880067760A /* FindPasswordCertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7002E035B880067760A /* FindPasswordCertViewController.swift */; };
+		D20AD7032E035B960067760A /* FindPasswordChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7022E035B960067760A /* FindPasswordChangeViewController.swift */; };
+		D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */; };
+		D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */; };
+		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
+		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
+		D20AD70D2E037BEE0067760A /* ChangePasswordSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70C2E037BEE0067760A /* ChangePasswordSuccessViewController.swift */; };
+		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
 		D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */; };
@@ -254,8 +277,6 @@
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
-		D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421382C897D8300E8B480 /* MyProfileViewModel.swift */; };
-		D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */; };
 		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
 		D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */; };
 		D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421442C897ED300E8B480 /* PolicyViewController.swift */; };
@@ -492,7 +513,6 @@
 		D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4225E2BAC2AC600A8AF04 /* UserPutRequest.swift */; };
 		D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */; };
 		D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422652BAFA17200A8AF04 /* FindPasswordViewModel.swift */; };
-		D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422692BAFA18400A8AF04 /* FindPasswordViewController.swift */; };
 		D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4226F2BB1F04300A8AF04 /* UserRegisterRequest.swift */; };
 		D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */; };
 		D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */; };
@@ -856,6 +876,29 @@
 		D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiContentViewController.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
+		D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPhoneIdViewController.swift; sourceTree = "<group>"; };
+		D20AD6E12E012A390067760A /* FoundIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundIdViewController.swift; sourceTree = "<group>"; };
+		D20AD6E32E012A430067760A /* FindIdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdViewModel.swift; sourceTree = "<group>"; };
+		D20AD6E62E012E3B0067760A /* StateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateButton.swift; sourceTree = "<group>"; };
+		D20AD6E82E013E430067760A /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
+		D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsRequest.swift; sourceTree = "<group>"; };
+		D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsResponse.swift; sourceTree = "<group>"; };
+		D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailResponse.swift; sourceTree = "<group>"; };
+		D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsUseCase.swift; sourceTree = "<group>"; };
+		D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD7002E035B880067760A /* FindPasswordCertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordCertViewController.swift; sourceTree = "<group>"; };
+		D20AD7022E035B960067760A /* FindPasswordChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordChangeViewController.swift; sourceTree = "<group>"; };
+		D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsRequest.swift; sourceTree = "<group>"; };
+		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
+		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
+		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
+		D20AD70C2E037BEE0067760A /* ChangePasswordSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordSuccessViewController.swift; sourceTree = "<group>"; };
+		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
@@ -885,8 +928,6 @@
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		D22421382C897D8300E8B480 /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
-		D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		D22421442C897ED300E8B480 /* PolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewController.swift; sourceTree = "<group>"; };
@@ -1124,7 +1165,6 @@
 		D2D4225E2BAC2AC600A8AF04 /* UserPutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPutRequest.swift; sourceTree = "<group>"; };
 		D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingWorker.swift; sourceTree = "<group>"; };
 		D2D422652BAFA17200A8AF04 /* FindPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewModel.swift; sourceTree = "<group>"; };
-		D2D422692BAFA18400A8AF04 /* FindPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewController.swift; sourceTree = "<group>"; };
 		D2D4226F2BB1F04300A8AF04 /* UserRegisterRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRegisterRequest.swift; sourceTree = "<group>"; };
 		D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confirmable.swift; sourceTree = "<group>"; };
 		D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordConfirmer.swift; sourceTree = "<group>"; };
@@ -1858,6 +1898,26 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
+		D20AD6DC2E0128FD0067760A /* FindId */ = {
+			isa = PBXGroup;
+			children = (
+				D20AD6E52E012A480067760A /* ViewControllers */,
+				D20AD6E32E012A430067760A /* FindIdViewModel.swift */,
+				D20AD6E62E012E3B0067760A /* StateButton.swift */,
+				D20AD6E82E013E430067760A /* StateView.swift */,
+			);
+			path = FindId;
+			sourceTree = "<group>";
+		};
+		D20AD6E52E012A480067760A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */,
+				D20AD6E12E012A390067760A /* FoundIdViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1906,16 +1966,6 @@
 				D22421332C897C7100E8B480 /* SettingsViewController.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		D22421372C897D7300E8B480 /* MyProfile */ = {
-			isa = PBXGroup;
-			children = (
-				D22421382C897D8300E8B480 /* MyProfileViewModel.swift */,
-				D224213A2C897D8C00E8B480 /* MyProfileViewController.swift */,
-				D22421712C8A427800E8B480 /* RevokeModalViewController.swift */,
-			);
-			path = MyProfile;
 			sourceTree = "<group>";
 		};
 		D224213C2C897DE300E8B480 /* ChangePassword */ = {
@@ -1967,8 +2017,9 @@
 		D22421732C8A45F400E8B480 /* ChangeMyProfile */ = {
 			isa = PBXGroup;
 			children = (
-				D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */,
 				D22421742C8A461800E8B480 /* ChangeMyProfileViewController.swift */,
+				D22421712C8A427800E8B480 /* RevokeModalViewController.swift */,
+				D22421762C8A462600E8B480 /* ChangeMyProfileViewModel.swift */,
 			);
 			path = ChangeMyProfile;
 			sourceTree = "<group>";
@@ -2239,6 +2290,8 @@
 		D27DD0212BA608310081FD36 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				D2D422642BAFA14A00A8AF04 /* FindPassword */,
+				D20AD6DC2E0128FD0067760A /* FindId */,
 				D2D462552D639E1900C60864 /* ChatList */,
 				D2FFA9792D6200F100EF8E56 /* Chat */,
 				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
@@ -2247,7 +2300,6 @@
 				D26B2EC22CD65A1600BEE07C /* Timetable */,
 				D22421412C897EB700E8B480 /* Policy */,
 				D224213C2C897DE300E8B480 /* ChangePassword */,
-				D22421372C897D7300E8B480 /* MyProfile */,
 				D22421322C897C5E00E8B480 /* Settings */,
 				835B4BE02CB0236400937B66 /* FacilityInfo */,
 				8354BE272C78CEE7009D4D7A /* ManageNoticeKeyWord */,
@@ -2261,7 +2313,6 @@
 				83E770D12D01805900EB3F84 /* BusTimetableData */,
 				83EBB85A2D0FD68700346018 /* BusSearch */,
 				83EBB86C2D0FDD1A00346018 /* BusSearchResult */,
-				D2D422642BAFA14A00A8AF04 /* FindPassword */,
 				0F74C4F52BA8562D00EF4F58 /* Register */,
 				D2D380EE2BA7197B009AD5A9 /* Login */,
 				D2D380E52BA6EB1F009AD5A9 /* ServiceSelect */,
@@ -2692,6 +2743,12 @@
 				D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */,
 				D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */,
 				D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */,
+				D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */,
+				D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */,
+				D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */,
+				D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */,
+				D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */,
+				D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2746,6 +2803,8 @@
 				D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */,
 				D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */,
 				D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */,
+				D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */,
+				D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2808,6 +2867,12 @@
 				D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */,
 				D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */,
 				D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */,
+				D20AD6F22E029F7F0067760A /* SendVerificationEmailUseCase.swift */,
+				D20AD6F42E029F8D0067760A /* CheckVerificationEmailUseCase.swift */,
+				D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */,
+				D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */,
+				D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */,
+				D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2959,7 +3024,9 @@
 			isa = PBXGroup;
 			children = (
 				D2D422652BAFA17200A8AF04 /* FindPasswordViewModel.swift */,
-				D2D422692BAFA18400A8AF04 /* FindPasswordViewController.swift */,
+				D20AD7002E035B880067760A /* FindPasswordCertViewController.swift */,
+				D20AD7022E035B960067760A /* FindPasswordChangeViewController.swift */,
+				D20AD70C2E037BEE0067760A /* ChangePasswordSuccessViewController.swift */,
 			);
 			path = FindPassword;
 			sourceTree = "<group>";
@@ -3564,6 +3631,7 @@
 				D208A7B32CA12D6B007040E7 /* CallBenefitCollectionViewCell.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
 				8354BE2B2C78CFF9009D4D7A /* ManageNoticeKeywordViewModel.swift in Sources */,
+				D20AD6F92E02A11D0067760A /* FindIdSmsResponse.swift in Sources */,
 				D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */,
 				83EBB86B2D0FDB6C00346018 /* BusAreaSelectdViewController.swift in Sources */,
 				D22421702C8A3E5B00E8B480 /* UITableView+.swift in Sources */,
@@ -3608,7 +3676,6 @@
 				D239447C2C3BF48D00048F45 /* ShopReviewViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
-				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
@@ -3664,6 +3731,7 @@
 				D2B7EBC22D36BD0A00EE46B0 /* LostArticleImageCollectionViewCell.swift in Sources */,
 				D283A4E82CECE7F700C238BA /* AddDirectFooterView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
+				D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */,
 				83455FC22C96E16900CEB7A4 /* NoticeAttachmentsTableView.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
 				D22421452C897ED300E8B480 /* PolicyViewController.swift in Sources */,
@@ -3690,7 +3758,6 @@
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
-				D224213B2C897D8C00E8B480 /* MyProfileViewController.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
 				D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
@@ -3705,6 +3772,7 @@
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
+				D20AD6E72E012E3B0067760A /* StateButton.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
@@ -3736,8 +3804,10 @@
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
+				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
+				D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */,
@@ -3764,6 +3834,7 @@
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */,
+				D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */,
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				83EBB88E2D16B41F00346018 /* BusAreaSelectedCollectionView.swift in Sources */,
@@ -3792,16 +3863,20 @@
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */,
+				D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */,
 				D28987582D2FF25C00AA7285 /* PostLostItemViewController.swift in Sources */,
 				8354BE242C78BC30009D4D7A /* RecentSearchTableView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */,
 				D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */,
+				D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */,
 				D2A8F8B82C4A63AB0090C7A4 /* DiningNoticeViewModel.swift in Sources */,
+				D20AD7032E035B960067760A /* FindPasswordChangeViewController.swift in Sources */,
 				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */,
+				D20AD6E42E012A430067760A /* FindIdViewModel.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
@@ -3829,11 +3904,13 @@
 				D208A7C42CAB9A5E007040E7 /* ForceUpdateViewController.swift in Sources */,
 				83E770AA2CFA0AD100EB3F84 /* BusTimetableRouteView.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
+				D20AD70D2E037BEE0067760A /* ChangePasswordSuccessViewController.swift in Sources */,
 				833D9C1D2C6B3F9200982145 /* NoticeListTableViewCell.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
+				D20AD7012E035B880067760A /* FindPasswordCertViewController.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				D283A4DB2CECA2A000C238BA /* AddClassCollectionView.swift in Sources */,
 				8354BE172C7890B6009D4D7A /* NoticeSearchViewModel.swift in Sources */,
@@ -3885,7 +3962,6 @@
 				83EBB85E2D0FD6DF00346018 /* BusSearchViewController.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
-				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */,
 				D2DCB2972CE5EA3E005CABEE /* RelatedShopCollectionView.swift in Sources */,
@@ -3937,12 +4013,14 @@
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
+				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
 				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
 				D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
+				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
@@ -4001,6 +4079,7 @@
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
+				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
 				D224217A2C8A90C800E8B480 /* CertificationView.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
@@ -4013,6 +4092,7 @@
 				D2DCB2892CDF4A99005CABEE /* TimetableCollectionViewCell.swift in Sources */,
 				D22421752C8A461800E8B480 /* ChangeMyProfileViewController.swift in Sources */,
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
+				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
 				D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
@@ -4022,6 +4102,7 @@
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
+				D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */,
 				833D9C142C6B28BB00982145 /* TabBarCollectionViewCell.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
@@ -4034,17 +4115,20 @@
 				D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
 				D2B7EBD22D37E3D700EE46B0 /* DeleteLostItemUseCase.swift in Sources */,
+				D20AD6DE2E012A0F0067760A /* FindPhoneIdViewController.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				83EBB87C2D0FE02900346018 /* BusSearchDatePickerViewController.swift in Sources */,
+				D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
+				D20AD6E92E013E430067760A /* StateView.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
@@ -4107,6 +4191,7 @@
 				D27DD0C72BA608310081FD36 /* UIViewController+.swift in Sources */,
 				D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
+				D20AD6F12E029B560067760A /* SendVerificationEmailRequest.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
@@ -4115,6 +4200,7 @@
 				D23582972BC0F1D800D615DD /* CalendarCollectionView.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
 				D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */,
+				D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */,
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				D2DCB29B2CE5EA71005CABEE /* RelatedShopHeaderView.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
