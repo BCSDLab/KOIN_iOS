@@ -13,7 +13,8 @@ final class ClubView: UIView {
     private var subscriptions: Set<AnyCancellable> = []
     let clubListButtonPublisher = PassthroughSubject<Void, Never>()
     let clubCategoryPublisher = PassthroughSubject<Int, Never>()
-    let hotClubButtonPublisher = PassthroughSubject<Void, Never>()
+    let hotClubButtonPublisher = PassthroughSubject<Int, Never>()
+    private var hotClubId = 0
     
     // MARK: - UI Components
     
@@ -105,6 +106,7 @@ final class ClubView: UIView {
     func setupHotClub(club: HotClubDTO) {
         hotClubImageView.loadImageWithSpinner(from: club.imageUrl)
         hotClubImageView.isHidden = false
+        hotClubId = club.clubId
         chevronButton.isHidden = false
         hotClubButton.isHidden = false
         clubListButton.isHidden = false
@@ -124,7 +126,7 @@ extension ClubView {
         clubListButtonPublisher.send()
     }
     @objc func hotClubButtonTapped() {
-        hotClubButtonPublisher.send()
+        hotClubButtonPublisher.send(hotClubId)
     }
     @objc func clubListButtonTapped() {
         clubListButtonPublisher.send()
