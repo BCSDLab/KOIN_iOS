@@ -182,8 +182,10 @@ final class LoginViewController: UIViewController {
             case let .showErrorMessage(message):
                 self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 실패"))
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 완료"))
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
