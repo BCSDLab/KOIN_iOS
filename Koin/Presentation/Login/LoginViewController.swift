@@ -181,7 +181,7 @@ extension LoginViewController {
         let timetableRepositoy = DefaultTimetableRepository(service: DefaultTimetableService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-        
+      
         let registerViewController = AgreementFormViewController(
             viewModel: RegisterFormViewModel(
                 checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
