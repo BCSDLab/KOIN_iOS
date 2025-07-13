@@ -10,10 +10,11 @@ import Combine
 final class SettingsViewModel: ViewModelProtocol {
     
     // MARK: - Input
-    
     enum Input {
         case checkLogin(MovingScene)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
+    
     // MARK: - Output
     enum Output {
         case showToast(String, Bool, MovingScene, UserType?)
@@ -26,20 +27,26 @@ final class SettingsViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     // MARK: - Initialization
+    init(logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+    }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
             case let .checkLogin(scene):
                 self?.checkLogin(movingScene: scene)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
+        
         return outputSubject.eraseToAnyPublisher()
     }
 }
@@ -56,4 +63,7 @@ extension SettingsViewModel {
         }.store(in: &subscriptions)
     }
     
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
 }

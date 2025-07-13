@@ -178,6 +178,7 @@ enum EventParameter {
             case hamburgerMyInfoWithoutLogin = "hamburger_my_info_without_login"
             case startSignUp = "start_sign_up"
             case userOnlyOk = "user_only_ok"
+            case userInfo
             var team: String {
                 return "USER"
             }

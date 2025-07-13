@@ -121,7 +121,6 @@ final class SettingsViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
-    
     // MARK: - Bind
     
     private func bind() {
@@ -174,14 +173,14 @@ extension SettingsViewController {
         task.resume()
     }
     
-    
-    
     @objc private func profileButtonTapped() {
         inputSubject.send(.checkLogin(.profile))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
     }
     
     @objc private func changePasswordButtonTapped() {
         inputSubject.send(.checkLogin(.changePassword))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
     }
     
     @objc private func notiButtonTapped() {
@@ -230,17 +229,16 @@ extension SettingsViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
+    
     @objc private func inquryButtonTapped() {
         if let url = URL(string:
                             "https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform?usp=sf_link") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-        
     }
 }
 
 extension SettingsViewController {
-    
     
     private func setUpLayOuts() {
         [generalLabel, profileButton, changePasswordButton, notiButton, serviceLabel, personalPolicyButton, koinPolicyButton, licenceButton, versionLabel, nowVersionLabel, recentVersionLabel, inquryButton].forEach {
@@ -332,7 +330,6 @@ extension SettingsViewController {
             button.tintColor = UIColor.appColor(.neutral800)
             button.configuration = configuration
         }
-        
     }
     
     private func configureView() {
