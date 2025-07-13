@@ -7,34 +7,39 @@
 
 import UIKit
 
-final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSource {
+final class OrderShopCollectionView: UICollectionView {
     
     private var orderShop: [OrderShop] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        let flow = UICollectionViewFlowLayout()
-        flow.scrollDirection = .vertical
-        flow.minimumInteritemSpacing = 12
-        super.init(frame: frame, collectionViewLayout: flow)
-
-        backgroundColor = .clear
-        showsVerticalScrollIndicator = false
-        
-        register(OrderShopCollectionViewCell.self,
-                 forCellWithReuseIdentifier: OrderShopCollectionViewCell.identifier)
-        dataSource = self
-        delegate = self
+        super.init(frame: frame, collectionViewLayout: layout)
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        backgroundColor = .clear
+        isScrollEnabled = true
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        contentInset = .zero
+        register(OrderShopCollectionViewCell.self, forCellWithReuseIdentifier: OrderShopCollectionViewCell.identifier)
+        dataSource = self
+        delegate = self
     }
     
     func updateShop(_ orderShop: [OrderShop]) {
         self.orderShop = orderShop
         self.reloadData()
     }
-    
+}
+
+// MARK: - UICollectionViewDataSource
+extension OrderShopCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return orderShop.count
     }
@@ -44,19 +49,11 @@ final class OrderShopCollectionView: UICollectionView, UICollectionViewDataSourc
         cell.dataBind(orderShop[indexPath.item], itemRow: indexPath.item)
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.reloadData()
-    }
 }
 
-// MARK: - FlowLayout
-extension OrderShopCollectionView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = collectionView.bounds.width
-        return CGSize(width: width, height: 128)
+// MARK: - UICollectionViewDelegate
+extension OrderShopCollectionView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.reloadData()
     }
 }

@@ -95,11 +95,21 @@ final class OrderHomeViewController: UIViewController {
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then { collectionView in
     }
-    
-    private let orderShopCollectionView = OrderShopCollectionView(
+
+    private lazy var orderShopCollectionView = OrderShopCollectionView(
         frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    ).then { collectionView in
+        collectionViewLayout: {
+            let flowLayout = UICollectionViewFlowLayout().then {
+                $0.scrollDirection = .vertical
+                $0.minimumLineSpacing = 12
+                let screenWidth = UIScreen.main.bounds.width
+                let cellWidth = screenWidth - 48
+                $0.itemSize = CGSize(width: cellWidth, height: 128)
+            }
+            return flowLayout
+        }()
+    ).then {
+        $0.isScrollEnabled = false
     }
 
     // MARK: - Initialization
@@ -242,14 +252,26 @@ extension OrderHomeViewController: UICollectionViewDelegate {
 extension OrderHomeViewController {
     
     private func setUpLayOuts() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
         [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView].forEach {
-            view.addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
         searchBarButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(40)
         }
@@ -275,9 +297,9 @@ extension OrderHomeViewController {
         
         orderShopCollectionView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
-            $0.horizontalEdges.equalToSuperview().inset(24)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
-            $0.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(24)
+            $0.height.equalTo(0)
         }
     }
     
