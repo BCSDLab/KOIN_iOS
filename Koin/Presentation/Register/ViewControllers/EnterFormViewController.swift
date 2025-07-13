@@ -308,6 +308,8 @@ final class EnterFormViewController: UIViewController {
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
                 self?.navigationController?.pushViewController(viewController, animated: true)
+                let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+                self?.inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.signUpCompleted, .click, "회원가입완료", customSessionId))
             default:
                 break
             }
