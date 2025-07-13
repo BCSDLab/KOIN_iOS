@@ -170,7 +170,6 @@ enum EventParameter {
         enum User: String, EventLabelType {
             // Login
             case completeSignUp = "complete_sign_up"
-            case hamburgerLogin = "hamburger_login"
             case login = "login"
             case autoLogin = "auto_login"
             case loginFindIdId = "login_findId_id"
