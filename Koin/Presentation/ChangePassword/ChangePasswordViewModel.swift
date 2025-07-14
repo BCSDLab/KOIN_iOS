@@ -88,7 +88,7 @@ extension ChangePasswordViewModel {
                 self?.outputSubject.send(.showToast(error.message, false, true))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showEmail(response.email ?? ""))
+            self?.outputSubject.send(.showEmail(response.loginId ?? ""))
             self?.userDTO = response
         }.store(in: &subscriptions)
     }
