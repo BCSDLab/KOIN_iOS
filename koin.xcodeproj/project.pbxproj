@@ -247,7 +247,6 @@
 		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
 		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
 		D20AD70D2E037BEE0067760A /* ChangePasswordSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70C2E037BEE0067760A /* ChangePasswordSuccessViewController.swift */; };
-		D20CFBFF2DA7F5FD00ADEF3B /* RegisterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */; };
 		D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */; };
 		D20CFC042DA7FF3400ADEF3B /* AgreementFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */; };
 		D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */; };
@@ -499,6 +498,7 @@
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
+		D2C163D22E24CB0C00DC68A8 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */; };
 		D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */; };
 		D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DCF2C1CAC550036F02C /* ShopData.swift */; };
 		D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */; };
@@ -898,7 +898,6 @@
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
 		D20AD70C2E037BEE0067760A /* ChangePasswordSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordSuccessViewController.swift; sourceTree = "<group>"; };
-		D20CFBFE2DA7F5FD00ADEF3B /* RegisterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModel.swift; sourceTree = "<group>"; };
 		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
@@ -1150,6 +1149,7 @@
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
+		D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
 		D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollecitonFooterView.swift; sourceTree = "<group>"; };
 		D2CA2DCF2C1CAC550036F02C /* ShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopData.swift; sourceTree = "<group>"; };
 		D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEvent.swift; sourceTree = "<group>"; };
@@ -2367,6 +2367,7 @@
 				D27DD0332BA608310081FD36 /* MenuView */,
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
+				D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -4003,6 +4004,7 @@
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
 				D27DD0A22BA608310081FD36 /* ShopDataViewModel.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
+				D2C163D22E24CB0C00DC68A8 /* ForceModifyUserViewController.swift in Sources */,
 				8354BE312C79A0F1009D4D7A /* MyKeywordCollectionViewCell.swift in Sources */,
 				D2B7EBC02D36BCDB00EE46B0 /* LostArticleImageCollectionView.swift in Sources */,
 				D2B219332D665B1400EAF5B1 /* ChatTextTableViewCell.swift in Sources */,
