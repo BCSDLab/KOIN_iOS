@@ -108,6 +108,8 @@ final class LoginViewController: UIViewController {
         $0.textAlignment = .center
     }
     
+    private let modifyUserModalViewController = ModifyUserModalViewController()
+    
     // MARK: - Initialization
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -141,6 +143,39 @@ final class LoginViewController: UIViewController {
     }
     
     private func bind() {
+        modifyUserModalViewController.cancelButtonPublisher.sink { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }.store(in: &subscriptions)
+        
+        modifyUserModalViewController.navigateButtonPublisher.sink { [weak self] in
+            guard let self = self else { return }
+            let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+            let shopRepository = DefaultShopRepository(service: DefaultShopService())
+            let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+            let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            let dateProvider = DefaultDateProvider()
+            let homeViewModel = HomeViewModel(
+                fetchDiningListUseCase: fetchDiningListUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
+                fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
+                dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()
+            )
+            let homeViewController = HomeViewController(viewModel: homeViewModel)
+            
+            let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+            let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+            let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+            let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase), userType: .student)
+            navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
+            
+        }.store(in: &subscriptions)
+        
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
@@ -152,8 +187,7 @@ final class LoginViewController: UIViewController {
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
-                self?.present(ModifyUserModalViewController(), animated: true)
-                self?.navigationController?.popViewController(animated: true)
+                self?.present(self?.modifyUserModalViewController ?? UIViewController(), animated: true)
             }
         }.store(in: &subscriptions)
     }

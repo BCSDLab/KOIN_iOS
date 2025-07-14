@@ -2370,7 +2370,6 @@
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
 				D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */,
-				D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3002,6 +3001,7 @@
 		D2D380EE2BA7197B009AD5A9 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */,
 				D2D380F12BA7199C009AD5A9 /* LoginViewModel.swift */,
 				D2D380EF2BA71994009AD5A9 /* LoginViewController.swift */,
 			);
