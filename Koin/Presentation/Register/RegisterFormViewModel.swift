@@ -34,7 +34,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedNickname(String)
         case tryStudentRegister(StudentRegisterFormRequest)
         case tryGeneralRegister(GeneralRegisterFormRequest)
-        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
+        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
+
     }
     
     enum Output {
@@ -93,7 +94,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.studentRegister(registerRequest: request)
             case let .tryGeneralRegister(request):
                 self?.generalRegister(registerRequest: request)
-            case let .logSessionEvent(label, category, value, sessionId):
+            case let .logEventWithSessionId(label, category, value, sessionId):
                 self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)

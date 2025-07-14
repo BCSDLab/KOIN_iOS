@@ -13,6 +13,7 @@ final class SelectTypeFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
+    private var subscriptions: Set<AnyCancellable> = []
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
 
     enum UserType {
@@ -81,6 +82,7 @@ final class SelectTypeFormViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         setUpButtonTargets()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +94,18 @@ final class SelectTypeFormViewController: UIViewController {
         studentButton.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
         generalButton.addTarget(self, action: #selector(generalButtonTapped), for: .touchUpInside)
     }
+    
+    private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard self != nil else { return }
+            switch output {
+            default:
+                break
+            }
+        }.store(in: &subscriptions)
+    }
 }
 
 extension SelectTypeFormViewController {
@@ -99,14 +113,14 @@ extension SelectTypeFormViewController {
         viewModel.selectUserType(.student)
         userTypeButtonTapped()
         let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.createAccount, .click, "학생", customSessionId))
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "학생", customSessionId))
     }
 
     @objc private func generalButtonTapped() {
         viewModel.selectUserType(.general)
         userTypeButtonTapped()
         let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.createAccount, .click, "외부인", customSessionId))
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "외부인", customSessionId))
     }
     
     private func userTypeButtonTapped() {

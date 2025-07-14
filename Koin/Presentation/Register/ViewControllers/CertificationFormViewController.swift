@@ -241,7 +241,7 @@ final class CertificationFormViewController: UIViewController {
                 self?.nextButton.backgroundColor = UIColor.appColor(.primary500)
                 self?.nextButton.setTitleColor(.white, for: .normal)
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
-                self?.inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.identityVerification, .click, "인증완료", customSessionId))
+                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증완료", customSessionId))
             default:
                 break
             }
@@ -457,7 +457,7 @@ extension CertificationFormViewController {
         
         inputSubject.send(.sendVerificationCode(phoneNumber))
         let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
     }
     
     private func startTimer() {

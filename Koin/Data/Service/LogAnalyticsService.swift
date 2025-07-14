@@ -10,7 +10,11 @@ import FirebaseAnalytics
 protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
+<<<<<<< HEAD
     func logEvent(name: String, label: String, value: String, category: String)
+=======
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
+>>>>>>> 541667a (log: 세션 기반 로깅 형식 수정)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
@@ -63,5 +67,19 @@ final class GA4AnalyticsService: LogAnalyticsService {
         }
         
         Analytics.logEvent(label.team, parameters: defaultParameters)
+    }
+    
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        let parameters: [String: Any] = [
+            "event_label": label.rawValue,
+            "event_category": category.rawValue,
+            "value": value,
+            "custom_session_id": sessionId,
+            "user_id": UserDataManager.shared.userId,
+            "gender": UserDataManager.shared.gender,
+            "major": UserDataManager.shared.major
+        ]
+        
+        Analytics.logEvent(label.team, parameters: parameters)
     }
 }

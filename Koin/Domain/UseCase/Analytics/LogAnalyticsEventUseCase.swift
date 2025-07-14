@@ -35,13 +35,6 @@ final class DefaultLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
     }
     
     func executeWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        var finalValue: [String: Any]
-        if let dict = value as? [String: Any] {
-            finalValue = dict
-        } else {
-            finalValue = ["value": value]
-        }
-        finalValue["custom_session_id"] = sessionId
-        repository.logEvent(label: label, category: category, value: finalValue)
+        repository.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }
