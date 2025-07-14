@@ -17,9 +17,12 @@ final class HomeViewModel: ViewModelProtocol {
         case categorySelected(DiningPlace)
         case getDiningInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case getAbTestResult(String)
+        case getBannerAbTest(String)
+        case getClubAbTest(String)
     }
     
     // MARK: - Output
@@ -31,13 +34,16 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case showForceModal
+        case updateBanner(BannerDTO, AssignAbTestResponse)
+        case setHotClub(HotClubDTO)
+        case setClubCategories(ClubCategoriesDTO)
     }
     
     // MARK: - Properties
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private let fetchDiningListUseCase: FetchDiningListUseCase
-    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let dateProvider: DateProvider
     private let checkVersionUseCase: CheckVersionUseCase
@@ -46,6 +52,9 @@ final class HomeViewModel: ViewModelProtocol {
     private let assignAbTestUseCase: AssignAbTestUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -86,6 +95,12 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getNoticeBanners(date: date)
             case let .getAbTestResult(abTestTitle):
                 self?.getAbTestResult(abTestTitle: abTestTitle)
+            case .getBannerAbTest(let request):
+                self?.getBannerAbTest(request: request)
+            case let .logEventDirect(name, label, value, category):
+                self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
+            case .getClubAbTest(let request):
+                self?.getClubAbTest(request: request)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -94,6 +109,62 @@ final class HomeViewModel: ViewModelProtocol {
 }
 
 extension HomeViewModel {
+    
+    private func fetchBanner(abTestResult: AssignAbTestResponse) {
+        fetchBannerUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateBanner(response, abTestResult))
+        }.store(in: &subscriptions)
+    }
+    private func fetchHotClub() {
+        fetchHotClubsUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] hotClub in
+            self?.outputSubject.send(.setHotClub(hotClub))
+        }).store(in: &subscriptions)
+    }
+    
+    private func fetchClubCategories() {
+        fetchClubCategoriesUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] categories in
+            self?.outputSubject.send(.setClubCategories(categories))
+        }).store(in: &subscriptions)
+    }
+    private func getClubAbTest(request: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
+            .sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            if abTestResult.variableName == .hot {
+                self?.fetchHotClub()
+                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_B", category: "a/b test 로깅(메인화면 동아리 진입)")
+            } else {
+                self?.fetchClubCategories()
+                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_A", category: "a/b test 로깅(메인화면 동아리 진입)")            }
+        }).store(in: &subscriptions)
+    }
+    private func getBannerAbTest(request: String) {
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
+            .sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            self?.fetchBanner(abTestResult: abTestResult)
+        }).store(in: &subscriptions)
+    }
+                
     private func fetchUserData() {
         fetchUserDataUseCase.execute().sink { completion in
             if case let .failure(error) = completion {

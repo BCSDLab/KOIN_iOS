@@ -12,7 +12,9 @@ extension Bundle {
     var baseUrl: String {
         return object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
     }
-    
+    var isStage: Bool {
+        return baseUrl.contains("stage")
+    }
     var kakaoApiKey: String {
         return object(forInfoDictionaryKey: "KAKAO_API_KEY") as? String ?? ""
     }

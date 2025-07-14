@@ -27,6 +27,10 @@ enum UserAssignType: String, Decodable {
     case bannerNew = "banner_new"
     case callNumber = "call_number"
     case callFloating = "call_floating"
+    case bottomBanner = "bottom_banner"
+    case centerBanner = "center_banner"
+    case category
+    case hot
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

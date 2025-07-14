@@ -143,6 +143,13 @@ enum ImageAsset: String {
     case warningRed
     case findId
     case findPassword
+    case chevronRightBlue
+    case note
+    case club1
+    case club2
+    case club3
+    case club4
+    case club5
 }
 
 enum SFSymbols: String {

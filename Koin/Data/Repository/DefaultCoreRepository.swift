@@ -19,4 +19,15 @@ final class DefaultCoreRepository: CoreRepository {
         return service.fetchVersion()
     }
     
+    func fetBanner() -> AnyPublisher<BannerDTO, Error> {
+        return service.fetchBanner()
+    }
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDTO, Error> {
+        return service.fetchClubCategories()
+    }
+    
+    func fetchHotClubs() -> AnyPublisher<HotClubDTO, Error> {
+        return service.fetchHotClubs()
+    }
+    
 }

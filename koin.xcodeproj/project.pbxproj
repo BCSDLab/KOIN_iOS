@@ -252,6 +252,14 @@
 		D20CFC062DA800CE00ADEF3B /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */; };
 		D20CFC082DA8031F00ADEF3B /* SelectTypeFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */; };
 		D20CFC0A2DA8032D00ADEF3B /* EnterFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */; };
+		D20AD6972DF69EE50067760A /* ClubWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6962DF69EE50067760A /* ClubWebViewController.swift */; };
+		D20AD6C72DFB41D00067760A /* ClubCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */; };
+		D20AD6C92DFB41D80067760A /* ClubCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */; };
+		D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */; };
+		D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */; };
+		D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */; };
+		D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */; };
+		D20AD6D32DFB4A790067760A /* ClubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D22DFB4A790067760A /* ClubView.swift */; };
 		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
@@ -275,6 +283,12 @@
 		D215727F2CEEB2E60061E725 /* ModifySemesterModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */; };
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
+		D223D6142D9BF1FE00C29BE6 /* BannerViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */; };
+		D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */; };
+		D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */; };
+		D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */; };
+		D223D61E2D9C205A00C29BE6 /* BannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */; };
+		D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */; };
 		D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22421332C897C7100E8B480 /* SettingsViewController.swift */; };
 		D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */; };
 		D22421402C897DFF00E8B480 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */; };
@@ -906,6 +920,14 @@
 		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormViewController.swift; sourceTree = "<group>"; };
 		D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormViewController.swift; sourceTree = "<group>"; };
+		D20AD6962DF69EE50067760A /* ClubWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubWebViewController.swift; sourceTree = "<group>"; };
+		D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionViewCell.swift; sourceTree = "<group>"; };
+		D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
+		D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCategoriesDTO.swift; sourceTree = "<group>"; };
+		D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotClubDTO.swift; sourceTree = "<group>"; };
+		D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotClubsUseCase.swift; sourceTree = "<group>"; };
+		D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchClubCategoriesUseCase.swift; sourceTree = "<group>"; };
+		D20AD6D22DFB4A790067760A /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
@@ -929,6 +951,12 @@
 		D215727E2CEEB2E60061E725 /* ModifySemesterModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifySemesterModalViewController.swift; sourceTree = "<group>"; };
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
+		D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerA.swift; sourceTree = "<group>"; };
+		D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerB.swift; sourceTree = "<group>"; };
+		D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerDTO.swift; sourceTree = "<group>"; };
+		D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBannerUseCase.swift; sourceTree = "<group>"; };
+		D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
+		D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		D22421332C897C7100E8B480 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D224213D2C897DF600E8B480 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
 		D224213F2C897DFF00E8B480 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
@@ -1879,6 +1907,9 @@
 			isa = PBXGroup;
 			children = (
 				D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */,
+				D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */,
+				D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */,
+				D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1904,36 +1935,46 @@
 			path = "ㅜㅐ샤";
 			sourceTree = "<group>";
 		};
-		D20AD6DC2E0128FD0067760A /* FindId */ = {
-			isa = PBXGroup;
-			children = (
-				D20AD6E52E012A480067760A /* ViewControllers */,
-				D20AD6E32E012A430067760A /* FindIdViewModel.swift */,
-				D20AD6E62E012E3B0067760A /* StateButton.swift */,
-				D20AD6E82E013E430067760A /* StateView.swift */,
-			);
-			path = FindId;
-			sourceTree = "<group>";
-		};
-		D20AD6E52E012A480067760A /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */,
-				D20AD6E12E012A390067760A /* FoundIdViewController.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		D20CFBFD2DA7F5DD00ADEF3B /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */,
-				D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */,
-				D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */,
-				D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */,
-				D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */,
-			);
-			path = ViewControllers;
+D20AD6DC2E0128FD0067760A /* FindId */ = {
+	isa = PBXGroup;
+	children = (
+		D20AD6E52E012A480067760A /* ViewControllers */,
+		D20AD6E32E012A430067760A /* FindIdViewModel.swift */,
+		D20AD6E62E012E3B0067760A /* StateButton.swift */,
+		D20AD6E82E013E430067760A /* StateView.swift */,
+	);
+	path = FindId;
+	sourceTree = "<group>";
+};
+
+D20AD6E52E012A480067760A /* ViewControllers */ = {
+	isa = PBXGroup;
+	children = (
+		D20AD6DD2E012A0F0067760A /* FindPhoneIdViewController.swift */,
+		D20AD6E12E012A390067760A /* FoundIdViewController.swift */,
+	);
+	path = ViewControllers;
+	sourceTree = "<group>";
+};
+
+D20AD6952DF69ED40067760A /* Club */ = {
+	isa = PBXGroup;
+	children = (
+		D20AD6962DF69EE50067760A /* ClubWebViewController.swift */,
+	);
+	path = Club;
+	sourceTree = "<group>";
+};
+
+D20AD6C52DFB41B90067760A /* ClubCollectionView */ = {
+	isa = PBXGroup;
+	children = (
+		D20AD6C82DFB41D80067760A /* ClubCollectionView.swift */,
+		D20AD6C62DFB41D00067760A /* ClubCollectionViewCell.swift */,
+	);
+	path = ClubCollectionView;
+	sourceTree = "<group>";
+};
 			sourceTree = "<group>";
 		};
 		D215726D2CEE28C30061E725 /* Timetable */ = {
@@ -1963,6 +2004,25 @@
 				D2FCBEA12D07FCB00097A388 /* DeleteFrameModalViewController.swift */,
 			);
 			path = SubViews;
+			sourceTree = "<group>";
+		};
+		D223D60E2D9BEC8100C29BE6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+				D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */,
+				D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		D223D61C2D9C204B00C29BE6 /* BannerCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				D223D61D2D9C205A00C29BE6 /* BannerCollectionView.swift */,
+				D223D61F2D9C206200C29BE6 /* BannerCollectionViewCell.swift */,
+			);
+			path = BannerCollectionView;
 			sourceTree = "<group>";
 		};
 		D22421322C897C5E00E8B480 /* Settings */ = {
@@ -2298,6 +2358,7 @@
 			children = (
 				D2D422642BAFA14A00A8AF04 /* FindPassword */,
 				D20AD6DC2E0128FD0067760A /* FindId */,
+				D20AD6952DF69ED40067760A /* Club */,
 				D2D462552D639E1900C60864 /* ChatList */,
 				D2FFA9792D6200F100EF8E56 /* Chat */,
 				D2FFA9742D61F78200EF8E56 /* ReportLostItem */,
@@ -2367,6 +2428,8 @@
 		D27DD02C2BA608310081FD36 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				D20AD6C52DFB41B90067760A /* ClubCollectionView */,
+				D223D61C2D9C204B00C29BE6 /* BannerCollectionView */,
 				D2F4FD572CBE089C008C91D8 /* ShopCollectionView */,
 				83FA91892C81E2D00090351F /* NoticeListCollectionView */,
 				D27DD0302BA608310081FD36 /* BusView */,
@@ -2374,6 +2437,9 @@
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
 				D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */,
+				D223D6132D9BF1FE00C29BE6 /* BannerViewControllerA.swift */,
+				D223D6152D9BF20B00C29BE6 /* BannerViewControllerB.swift */,
+				D20AD6D22DFB4A790067760A /* ClubView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2579,6 +2645,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				D223D60E2D9BEC8100C29BE6 /* Core */,
 				D2D4625E2D63A78000C60864 /* Chat */,
 				833D9C202C6B4F4C00982145 /* NoticeList */,
 				D29F21EE2C4F611F00994554 /* Noti */,
@@ -2611,6 +2678,8 @@
 		D27DD07E2BA608310081FD36 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
+				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
 				836242352BD9522400845499 /* FirebaseLog.swift */,
 				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
@@ -3205,7 +3274,6 @@
 				D2A8F8B02C4946480090C7A4 /* Bus */,
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
-				D2FB236F2C0412860098BA2B /* Log */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3307,15 +3375,6 @@
 				D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */,
 			);
 			path = Analytics;
-			sourceTree = "<group>";
-		};
-		D2FB236F2C0412860098BA2B /* Log */ = {
-			isa = PBXGroup;
-			children = (
-				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
-				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
-			);
-			path = Log;
 			sourceTree = "<group>";
 		};
 		D2FB23722C04305A0098BA2B /* Service */ = {
@@ -3650,6 +3709,7 @@
 				D29F21D12C4E164C00994554 /* DefaultTimetableRepository.swift in Sources */,
 				D22C54562C68B033000826DA /* WriteReviewRequest.swift in Sources */,
 				D2B7EBD72D38197C00EE46B0 /* ImageScrollCollectionViewCell.swift in Sources */,
+				D20AD6D32DFB4A790067760A /* ClubView.swift in Sources */,
 				835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
 				D27DD0FE2BA629400081FD36 /* LandImageCollectionView.swift in Sources */,
@@ -3672,6 +3732,7 @@
 				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
 				83E770B62CFB5A3B00EB3F84 /* ShuttleTimetableTableView.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
+				D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */,
 				D27DD0E02BA609320081FD36 /* MenuListCollectionViewCell.swift in Sources */,
 				D20AB96D2C573356006BC684 /* DiningNotiContentViewController.swift in Sources */,
 				D2D4625D2D63A46800C60864 /* ChatListTableViewModel.swift in Sources */,
@@ -3778,6 +3839,7 @@
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
+				D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */,
 				D27DD0A32BA608310081FD36 /* GuideLabel.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
@@ -3869,6 +3931,7 @@
 				8354BE352C79C699009D4D7A /* RecommendedKeywordCollectionView.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D27A5DA02C6BFE8500C4275F /* ShopInfoHeaderView.swift in Sources */,
+				D20AD6C92DFB41D80067760A /* ClubCollectionView.swift in Sources */,
 				83EBB8782D0FDE6700346018 /* BusSearchResultTableViewHeader.swift in Sources */,
 				D2D4625B2D63A45300C60864 /* ChatListTableViewController.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
@@ -3902,6 +3965,7 @@
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
+				D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
@@ -3940,6 +4004,7 @@
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
+				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
 				8354BE372C79C6AF009D4D7A /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				83EBB8762D0FDD7700346018 /* BusSearchResultTableViewCell.swift in Sources */,
@@ -3964,6 +4029,7 @@
 				D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */,
+				D223D61E2D9C205A00C29BE6 /* BannerCollectionView.swift in Sources */,
 				D2FB23572BFD50120098BA2B /* DefaultShopRepository.swift in Sources */,
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
@@ -3973,6 +4039,7 @@
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,
 				83EBB85E2D0FD6DF00346018 /* BusSearchViewController.swift in Sources */,
+				D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
@@ -4037,6 +4104,7 @@
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
+				D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */,
 				D27DD0AF2BA608310081FD36 /* ShopViewModel.swift in Sources */,
 				D22C546B2C6926DC000826DA /* ReportDetailView.swift in Sources */,
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
@@ -4108,12 +4176,14 @@
 				D22421692C8A3E0B00E8B480 /* PolicyContentCollectionView.swift in Sources */,
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
 				D20CFC022DA7FD8300ADEF3B /* RegisterFormViewModel.swift in Sources */,
+				D20AD6972DF69EE50067760A /* ClubWebViewController.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
+				D20AD6C72DFB41D00067760A /* ClubCollectionViewCell.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
 				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
 				D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */,
@@ -4172,7 +4242,9 @@
 				D29F21CC2C4E157E00994554 /* FetchDeptListUseCase.swift in Sources */,
 				D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */,
 				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
+				D223D6142D9BF1FE00C29BE6 /* BannerViewControllerA.swift in Sources */,
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
+				D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */,
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
@@ -4196,6 +4268,7 @@
 				D23582A32BC3EF5600D615DD /* MenuBackgronudView.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
+				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,
