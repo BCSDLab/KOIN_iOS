@@ -39,7 +39,6 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     
     private(set) var userData: UserDTO? = nil
     @Published var modifyUserData: UserDTO? = nil
-    
     @Published var phoneNumberSuccess: Bool = true
     @Published var nicknameSuccess: Bool = true
     @Published private(set) var isFormValid: Bool = false
