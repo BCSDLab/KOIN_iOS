@@ -101,7 +101,7 @@ extension HomeViewModel {
             }
         } receiveValue: { [weak self] response in
             UserDataManager.shared.setUserData(userData: response)
-            if UserDefaults.standard.bool(forKey: "forceModal") {
+            if !UserDefaults.standard.bool(forKey: "forceModal") {
                 if response.userType == "STUDENT" {
                     if response.name == nil ||
                         response.phoneNumber == nil ||
@@ -112,7 +112,6 @@ extension HomeViewModel {
                         UserDefaults.standard.set(true, forKey: "forceModal")
                     }
                 }
-                self?.outputSubject.send(.showForceModal)
             }
         }.store(in: &subscriptions)
     }

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class LoginViewModel: ViewModelProtocol {
     
@@ -16,6 +17,8 @@ final class LoginViewModel: ViewModelProtocol {
     enum Output {
         case showErrorMessage(String)
         case loginSuccess
+        case showForceModal
+        case showModifyModal
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -53,7 +56,6 @@ extension LoginViewModel {
         } receiveValue: { [weak self] response in
             KeychainWorker.shared.create(key: .access, token: response.token)
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
-            self?.outputSubject.send(.loginSuccess)
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
             self?.setUserInfo()
         }.store(in: &subscriptions)
@@ -63,8 +65,28 @@ extension LoginViewModel {
             if case .failure(let error) = completion {
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
-        } receiveValue: { userData in
-            UserDataManager.shared.setUserData(userData: userData)
+        } receiveValue: { [weak self] response in
+            UserDataManager.shared.setUserData(userData: response)
+            if response.userType == "STUDENT" {
+                if response.name == nil ||
+                    response.phoneNumber == nil ||
+                    response.gender == nil ||
+                    response.major == nil ||
+                    response.studentNumber == nil {
+                    
+                    if !UserDefaults.standard.bool(forKey: "forceModal") {
+                        self?.outputSubject.send(.showForceModal)
+                        UserDefaults.standard.set(true, forKey: "forceModal")
+                    } else {
+                        self?.outputSubject.send(.showModifyModal)
+                    }
+                    
+                } else {
+                    self?.outputSubject.send(.loginSuccess)
+                }
+            } else {
+                self?.outputSubject.send(.loginSuccess)
+            }
         }.store(in: &subscriptions)
 
     }

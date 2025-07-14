@@ -499,6 +499,7 @@
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
 		D2C163D22E24CB0C00DC68A8 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */; };
+		D2C163D42E24DD7800DC68A8 /* ModifyUserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */; };
 		D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */; };
 		D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DCF2C1CAC550036F02C /* ShopData.swift */; };
 		D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */; };
@@ -1150,6 +1151,7 @@
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
 		D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
+		D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUserModalViewController.swift; sourceTree = "<group>"; };
 		D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollecitonFooterView.swift; sourceTree = "<group>"; };
 		D2CA2DCF2C1CAC550036F02C /* ShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopData.swift; sourceTree = "<group>"; };
 		D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEvent.swift; sourceTree = "<group>"; };
@@ -2368,6 +2370,7 @@
 				D2908C922BB580480008F908 /* LogoView.swift */,
 				D20AB9662C572003006BC684 /* CancelableImageView.swift */,
 				D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */,
+				D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3957,6 +3960,7 @@
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
+				D2C163D42E24DD7800DC68A8 /* ModifyUserModalViewController.swift in Sources */,
 				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,

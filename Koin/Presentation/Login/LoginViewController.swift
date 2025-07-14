@@ -149,6 +149,11 @@ final class LoginViewController: UIViewController {
                 self?.passwordWarningLabel.text = message
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
+            case .showForceModal:
+                self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
+            case .showModifyModal:
+                self?.present(ModifyUserModalViewController(), animated: true)
+                self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
     }
