@@ -171,7 +171,7 @@ final class LoginViewController: UIViewController {
             let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
             let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
             let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-            let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase), userType: .student)
+            let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase), userType: .student)
             navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
             
         }.store(in: &subscriptions)
@@ -182,8 +182,10 @@ final class LoginViewController: UIViewController {
             case let .showErrorMessage(message):
                 self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 실패"))
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 완료"))
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
@@ -202,11 +204,13 @@ extension LoginViewController {
     @objc private func findIdButtonTapped() {
         let viewController = FindPhoneIdViewController(viewModel: FindIdViewModel())
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "아이디 찾기"))
     }
     
     @objc private func findPasswordButtonTapped() {
         let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "비밀번호 찾기"))
     }
     
     @objc func loginButtonTapped() {
@@ -219,8 +223,8 @@ extension LoginViewController {
     @objc func registerButtonTapped() {
         let timetableRepositoy = DefaultTimetableRepository(service: DefaultTimetableService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-      
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+
         let registerViewController = AgreementFormViewController(
             viewModel: RegisterFormViewModel(
                 checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
@@ -243,13 +247,15 @@ extension LoginViewController {
                 ),
                 registerFormUseCase: DefaultRegisterFormUseCase(
                     userRepository: userRepository
-                )
+                ),
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase
             )
         )
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작"))
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작", customSessionId))
     }
 }
 

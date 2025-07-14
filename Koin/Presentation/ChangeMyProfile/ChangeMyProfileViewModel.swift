@@ -16,6 +16,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     }
     enum Input {
         case modifyProfile(UserPutRequest)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case showToastMessage(String, Bool)
@@ -34,10 +35,10 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
     private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
     private lazy var revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private(set) var userData: UserDTO? = nil
     @Published var modifyUserData: UserDTO? = nil
-    
     @Published var phoneNumberSuccess: Bool = true
     @Published var nicknameSuccess: Bool = true
     @Published private(set) var isFormValid: Bool = false
@@ -46,11 +47,12 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     let phoneNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let certNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     
-    init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase) {
+    init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.modifyUseCase = modifyUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.checkDuplicatedNicknameUseCase = checkDuplicatedNicknameUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         bind()
     }
     
@@ -59,6 +61,8 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
             switch input {
             case let .modifyProfile(request):
                 self?.modifyProfile(request: request)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -152,6 +156,7 @@ extension ChangeMyProfileViewModel {
         }.store(in: &subscriptions)
         
     }
+    
     private func bind() {
         Publishers.CombineLatest3($modifyUserData, $phoneNumberSuccess, $nicknameSuccess)
             .map { [weak self] modified, emailOK, nicknameOK in
@@ -159,5 +164,9 @@ extension ChangeMyProfileViewModel {
                 return emailOK && nicknameOK && original != modified
             }
             .assign(to: &$isFormValid)
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

@@ -7,12 +7,15 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class SelectTypeFormViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
-
+    private var subscriptions: Set<AnyCancellable> = []
+    private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
+    
     enum UserType {
         case student
         case general
@@ -37,7 +40,7 @@ final class SelectTypeFormViewController: UIViewController {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.75
-
+        
         NSLayoutConstraint.activate([
             $0.heightAnchor.constraint(equalToConstant: 3)
         ])
@@ -68,27 +71,40 @@ final class SelectTypeFormViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         setUpButtonTargets()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
-
+    
     private func setUpButtonTargets() {
         studentButton.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
         generalButton.addTarget(self, action: #selector(generalButtonTapped), for: .touchUpInside)
+    }
+    
+    private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard self != nil else { return }
+            switch output {
+            default:
+                break
+            }
+        }.store(in: &subscriptions)
     }
 }
 
@@ -96,11 +112,15 @@ extension SelectTypeFormViewController {
     @objc private func studentButtonTapped() {
         viewModel.selectUserType(.student)
         userTypeButtonTapped()
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "학생", customSessionId))
     }
 
     @objc private func generalButtonTapped() {
         viewModel.selectUserType(.general)
         userTypeButtonTapped()
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "외부인", customSessionId))
     }
     
     private func userTypeButtonTapped() {

@@ -33,11 +33,9 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.modalTransitionStyle = .crossDissolve
     }
     
-    private lazy var deptButton: UIButton = {
-        let button = UIButton()
-        button.isHidden = userType == .general ? true : false
-        return button
-    }()
+    private lazy var deptButton = UIButton().then {
+        $0.isHidden = userType == .general ? true : false
+    }
     
     private let deptDropDown: DropDown = {
         let dropDown = DropDown()
@@ -351,7 +349,13 @@ final class ChangeMyProfileViewController: UIViewController {
                 switch request {
                 case .nickname: break
                 case .save:
-                    if success { self?.navigationController?.popViewController(animated: true) }
+                    if success {
+                        self?.navigationController?.popViewController(animated: true)
+                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 완료"))
+                    }
+                    else {
+                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 실패"))
+                    }
                 }
                 self?.showToast(message: message, success: true)
             case let .showToastMessage(message, success):

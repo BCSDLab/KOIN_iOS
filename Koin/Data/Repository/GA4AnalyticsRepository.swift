@@ -26,4 +26,9 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
         
         return service.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)
     }
+    
+    
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        return service.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    }
 }

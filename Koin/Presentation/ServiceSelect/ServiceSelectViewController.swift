@@ -12,6 +12,7 @@ import UIKit
 final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
+    
     private let viewModel: ServiceSelectViewModel
     private let inputSubject: PassthroughSubject<ServiceSelectViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -100,6 +101,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
+    
     private var chatButton: UIBarButtonItem?
     
     // MARK: - Initialization
@@ -115,6 +117,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     }
     
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
@@ -204,7 +207,8 @@ extension ServiceSelectViewController {
     }
     
     @objc private func settingButtonTapped() {
-        let viewController = SettingsViewController(viewModel: SettingsViewModel())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewController = SettingsViewController(viewModel: SettingsViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -214,6 +218,7 @@ extension ServiceSelectViewController {
             showToast(message: "로그인이 필요한 기능입니다.")
             return 
         }
+        
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "쪽지"))
         let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
@@ -230,8 +235,7 @@ extension ServiceSelectViewController {
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
             navigationController?.pushViewController(loginViewController, animated: true)
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerLogin, .click, "햄버거 로그인"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그인 시도"))
         }
     }
     @objc private func timetableSelectButtonTapped() {
@@ -387,6 +391,7 @@ extension ServiceSelectViewController {
         
         let loginAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.inputSubject.send(.logOut)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그아웃"))
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         

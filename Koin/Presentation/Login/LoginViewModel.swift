@@ -13,6 +13,7 @@ final class LoginViewModel: ViewModelProtocol {
     enum Input {
         case login(String, String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     enum Output {
         case showErrorMessage(String)
@@ -39,6 +40,8 @@ final class LoginViewModel: ViewModelProtocol {
                 self?.login(loginId: loginId, loginPw: loginPw)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logSessionEvent(label, category, value, sessionId):
+                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         
@@ -93,6 +96,10 @@ extension LoginViewModel {
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }
 
