@@ -150,10 +150,6 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-   //     print(KeychainWorker.shared.read(key: .access) ?? "")
-        
-     //   print("위가 엑세스 아래가 리프레시")
-     //   print("위가 엑세스 아래가 리프레시")
         inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         scrollView.delegate = self
@@ -209,6 +205,8 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .showForceModal:
+                self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             }
         }.store(in: &subscriptions)
         

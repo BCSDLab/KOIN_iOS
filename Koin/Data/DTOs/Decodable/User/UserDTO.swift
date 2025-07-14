@@ -19,6 +19,7 @@ struct UserDTO: Decodable, Equatable {
     var nickname: String?
     var studentNumber: String?
     var phoneNumber: String?
+    var userType: String?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -27,5 +28,6 @@ struct UserDTO: Decodable, Equatable {
         case email, gender, major, name, nickname
         case phoneNumber = "phone_number"
         case studentNumber = "student_number"
+        case userType = "user_type"
     }
 }

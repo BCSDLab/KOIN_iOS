@@ -15,6 +15,10 @@ final class DefaultUserRepository: UserRepository {
         self.service = service
     }
     
+    func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.changePassword(requestModel: requestModel)
+    }
+    
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.resetPasswordSms(requestModel: requestModel)
     }
