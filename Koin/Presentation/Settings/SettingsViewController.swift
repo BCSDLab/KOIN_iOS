@@ -174,14 +174,14 @@ extension SettingsViewController {
         task.resume()
     }
     
-    
-    
     @objc private func profileButtonTapped() {
         inputSubject.send(.checkLogin(.profile))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
     }
     
     @objc private func changePasswordButtonTapped() {
         inputSubject.send(.checkLogin(.changePassword))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
     }
     
     @objc private func notiButtonTapped() {
