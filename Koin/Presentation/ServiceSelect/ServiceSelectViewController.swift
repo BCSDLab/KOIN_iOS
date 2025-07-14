@@ -204,7 +204,7 @@ extension ServiceSelectViewController {
     }
     
     @objc private func settingButtonTapped() {
-        let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        let viewController = SettingsViewController(viewModel: SettingsViewModel())
         navigationController?.pushViewController(viewController, animated: true)
     }
     

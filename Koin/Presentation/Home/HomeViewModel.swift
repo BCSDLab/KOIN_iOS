@@ -33,6 +33,7 @@ final class HomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
+        case showForceModal
         case updateBanner(BannerDTO, AssignAbTestResponse)
         case setHotClub(HotClubDTO)
         case setClubCategories(ClubCategoriesDTO)
@@ -169,8 +170,20 @@ extension HomeViewModel {
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
-        } receiveValue: { response in
+        } receiveValue: { [weak self] response in
             UserDataManager.shared.setUserData(userData: response)
+            if !UserDefaults.standard.bool(forKey: "forceModal") {
+                if response.userType == "STUDENT" {
+                    if response.name == nil ||
+                        response.phoneNumber == nil ||
+                        response.gender == nil ||
+                        response.major == nil ||
+                        response.studentNumber == nil {
+                        self?.outputSubject.send(.showForceModal)
+                        UserDefaults.standard.set(true, forKey: "forceModal")
+                    }
+                }
+            }
         }.store(in: &subscriptions)
     }
     private func checkVersion() {
@@ -183,9 +196,9 @@ extension HomeViewModel {
                 self?.outputSubject.send(.showForceUpdate(response.1))
             }
         }.store(in: &subscriptions)
-
+        
     }
-
+    
     private func getDiningInformation(diningPlace: DiningPlace = .cornerA) {
         let dateInfo = dateProvider.execute(date: Date())
         
@@ -200,15 +213,15 @@ extension HomeViewModel {
     }
     
     private func getShopCategory() {
-           fetchShopCategoryListUseCase.execute().sink { completion in
-               if case let .failure(error) = completion {
-                   Log.make().error("\(error)")
-               }
-           } receiveValue: { [weak self] response in
-               self?.outputSubject.send(.putImage(response))
-           }.store(in: &subscriptions)
-       }
-
+        fetchShopCategoryListUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.putImage(response))
+        }.store(in: &subscriptions)
+    }
+    
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
@@ -250,19 +263,19 @@ extension HomeViewModel {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
             .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
             .sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                if abTestTitle == "c_keyword_ banner_v1" {
-                    self?.getNoticeBanners(date: nil)
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                    if abTestTitle == "c_keyword_ banner_v1" {
+                        self?.getNoticeBanners(date: nil)
+                    }
                 }
-            }
-        }, receiveValue: { [weak self] abTestResult in
-            print(abTestResult)
-            self?.outputSubject.send(.setAbTestResult(abTestResult))
-            if abTestTitle == "c_main_dining_v1" {
-                self?.getAbTestResult(abTestTitle: "c_keyword_ banner_v1")
-            }
-        }).store(in: &subscriptions)
+            }, receiveValue: { [weak self] abTestResult in
+                print(abTestResult)
+                self?.outputSubject.send(.setAbTestResult(abTestResult))
+                if abTestTitle == "c_main_dining_v1" {
+                    self?.getAbTestResult(abTestTitle: "c_keyword_ banner_v1")
+                }
+            }).store(in: &subscriptions)
     }
 }
 

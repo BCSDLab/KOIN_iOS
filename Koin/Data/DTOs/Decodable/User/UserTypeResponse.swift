@@ -20,10 +20,12 @@ enum UserType: String, Codable {
     case admin = "ADMIN"
     case coop = "COOP"
     case council = "COUNCIL"
+    case general = "GENERAL"
+    case unknown
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
-        self = UserType(rawValue: rawValue) ?? .student
+        self = UserType(rawValue: rawValue) ?? .unknown
     }
 }
