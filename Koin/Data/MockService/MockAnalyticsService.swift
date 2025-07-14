@@ -19,4 +19,8 @@ final class MockAnalyticsService: LogAnalyticsService {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {
         debugPrint("\(label) \(category) \(value) \(previousPage ?? "") \(currentPage ?? "") \(durationTime ?? "")")
     }
+    
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        debugPrint("\(label) \(category) \(value) \(sessionId)")
+    }
 }
