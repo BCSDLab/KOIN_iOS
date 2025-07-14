@@ -33,6 +33,7 @@ enum UserAPI {
     case findIdEmail(FindIdEmailRequest)
     case resetPasswordSms(ResetPasswordSmsRequest)
     case resetPasswordEmail(ResetPasswordEmailRequest)
+    case changePassword(ChangePasswordRequest)
 }
 
 extension UserAPI: Router, URLRequestConvertible {
@@ -68,6 +69,7 @@ extension UserAPI: Router, URLRequestConvertible {
         case .findIdEmail: return "/users/id/find/email"
         case .resetPasswordSms: return "/users/password/reset/sms"
         case .resetPasswordEmail: return "/users/password/reset/email"
+        case .changePassword: return "/users/password"
         }
     }
     
@@ -75,7 +77,7 @@ extension UserAPI: Router, URLRequestConvertible {
         switch self {
         case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdSms, .findIdEmail, .resetPasswordSms, .resetPasswordEmail: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkLogin, .checkDuplicatedId, .fetchGeneralUserData: return .get
-        case .modifyStudentUserData, .modifyGeneralUserData: return .put
+        case .modifyStudentUserData, .modifyGeneralUserData, .changePassword: return .put
         case .revoke: return .delete
         }
     }
@@ -84,13 +86,13 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modifyStudentUserData, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modifyStudentUserData, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchStudentUserData, .revoke, .checkAuth, .checkLogin, .fetchGeneralUserData:
             break
         }
             switch self {
-            case .fetchStudentUserData, .revoke, .modifyStudentUserData, .checkPassword, .checkAuth , .fetchGeneralUserData, .modifyGeneralUserData:
+            case .fetchStudentUserData, .revoke, .modifyStudentUserData, .checkPassword, .checkAuth , .fetchGeneralUserData, .modifyGeneralUserData, .changePassword:
                 if let token = KeychainWorker.shared.read(key: .access) {
                     baseHeaders["Authorization"] = "Bearer \(token)"
                 }
@@ -151,12 +153,14 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .resetPasswordEmail(let request):
             return try? JSONEncoder().encode(request)
+        case .changePassword(let request):
+            return try? JSONEncoder().encode(request)
         }
     }
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modifyStudentUserData, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail: return JSONEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modifyStudentUserData, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword: return JSONEncoding.default
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkDuplicatedId, .fetchGeneralUserData: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken: return nil

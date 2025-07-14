@@ -32,4 +32,5 @@ protocol UserRepository {
     func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse>
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
     func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>
+    func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse>
 }

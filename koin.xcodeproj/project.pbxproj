@@ -500,6 +500,8 @@
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
 		D2C163D22E24CB0C00DC68A8 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */; };
 		D2C163D42E24DD7800DC68A8 /* ModifyUserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */; };
+		D2C163D62E252C1200DC68A8 /* ChangePasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */; };
+		D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */; };
 		D2C4A0C32BF0051900D63717 /* DiningCollecitonFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */; };
 		D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DCF2C1CAC550036F02C /* ShopData.swift */; };
 		D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */; };
@@ -1152,6 +1154,8 @@
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
 		D2C163D12E24CB0C00DC68A8 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
 		D2C163D32E24DD7800DC68A8 /* ModifyUserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUserModalViewController.swift; sourceTree = "<group>"; };
+		D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordRequest.swift; sourceTree = "<group>"; };
+		D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordUseCase.swift; sourceTree = "<group>"; };
 		D2C4A0C22BF0051900D63717 /* DiningCollecitonFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCollecitonFooterView.swift; sourceTree = "<group>"; };
 		D2CA2DCF2C1CAC550036F02C /* ShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopData.swift; sourceTree = "<group>"; };
 		D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEvent.swift; sourceTree = "<group>"; };
@@ -2752,6 +2756,7 @@
 				D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */,
 				D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */,
 				D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */,
+				D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2876,6 +2881,7 @@
 				D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */,
 				D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */,
 				D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */,
+				D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3763,6 +3769,7 @@
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D23582992BC0F1E600D615DD /* CalendarCollectionViewCell.swift in Sources */,
+				D2C163D62E252C1200DC68A8 /* ChangePasswordRequest.swift in Sources */,
 				D2B7EBA92D35370000EE46B0 /* AddLostItemCollectionView.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				83E770E42D035B4900EB3F84 /* ManyBusTimetableTableView.swift in Sources */,
@@ -3888,6 +3895,7 @@
 				D21572762CEE76D80061E725 /* FrameListViewController.swift in Sources */,
 				D2D380F02BA71994009AD5A9 /* LoginViewController.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
+				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDTO.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
