@@ -213,6 +213,8 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .showForceModal:
+                self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .updateBanner(let banner, let abTestResult):
                 self?.showBanner(banner: banner, abTestResult: abTestResult)
             case .setHotClub(let hotClub):

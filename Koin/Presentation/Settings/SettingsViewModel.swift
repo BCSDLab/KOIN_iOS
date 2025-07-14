@@ -13,10 +13,12 @@ final class SettingsViewModel: ViewModelProtocol {
     
     enum Input {
         case checkLogin(MovingScene)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
+    
     // MARK: - Output
     enum Output {
-        case showToast(String, Bool, MovingScene)
+        case showToast(String, Bool, MovingScene, UserType?)
     }
     
     enum MovingScene {
@@ -29,12 +31,13 @@ final class SettingsViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     // MARK: - Initialization
     
-    init(fetchUserDataUseCase: FetchUserDataUseCase) {
-        self.fetchUserDataUseCase = fetchUserDataUseCase
+    init(logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -42,6 +45,8 @@ final class SettingsViewModel: ViewModelProtocol {
             switch input {
             case let .checkLogin(scene):
                 self?.checkLogin(movingScene: scene)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -50,14 +55,17 @@ final class SettingsViewModel: ViewModelProtocol {
 
 extension SettingsViewModel {
     private func checkLogin(movingScene: MovingScene) {
-        fetchUserDataUseCase.execute().sink { [weak self] completion in
+        checkAuthUseCase.execute().sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
-                self?.outputSubject.send(.showToast(error.message, false, movingScene))
+                self?.outputSubject.send(.showToast(error.message, false, movingScene, nil))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showToast("", true, movingScene))
+            self?.outputSubject.send(.showToast("", true, movingScene, response.userType))
         }.store(in: &subscriptions)
     }
     
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
 }
