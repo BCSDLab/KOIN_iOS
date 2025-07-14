@@ -14,6 +14,7 @@ final class AgreementFormViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
+    private var subscriptions: Set<AnyCancellable> = []
     private var agreementItems: [AgreementItemView] = []
     
     // MARK: - UI Components
@@ -106,11 +107,24 @@ final class AgreementFormViewController: UIViewController {
         configureView()
         configureAgreementItems()
         setUpButtonTargets()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+    }
+    
+    private func bind() {
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
+        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard self != nil else { return }
+            switch output {
+            default:
+                break
+            }
+        }.store(in: &subscriptions)
     }
 }
 
@@ -189,7 +203,7 @@ extension AgreementFormViewController {
         navigationController?.pushViewController(viewController, animated: true)
 
         let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.termsAgreement, .click, "약관동의", customSessionId))
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.termsAgreement, .click, "약관동의", customSessionId))
     }
 }
 
