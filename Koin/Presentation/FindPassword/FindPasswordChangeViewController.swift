@@ -102,6 +102,12 @@ final class FindPasswordChangeViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.password = ""
+        viewModel.passwordMatch = ""
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
