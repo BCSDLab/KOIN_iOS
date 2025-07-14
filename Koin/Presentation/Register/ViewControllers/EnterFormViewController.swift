@@ -281,6 +281,8 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700)
                     )
                 self?.checkIdDuplicateButton.updateState(isEnabled: false)
+                let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "아이디 생성", customSessionId))
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case let .showNicknameHttpResult(message, color):
@@ -298,12 +300,16 @@ final class EnterFormViewController: UIViewController {
                     text: "사용 가능한 닉네임입니다.",
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
+                let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
             case let .showUserType(type):
                 self?.configureUserTypeSpecificUI(for: type)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
                 self?.navigationController?.pushViewController(viewController, animated: true)
+                let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.signUpCompleted, .click, "회원가입완료", customSessionId))
             default:
                 break
             }

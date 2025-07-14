@@ -223,8 +223,8 @@ extension LoginViewController {
     @objc func registerButtonTapped() {
         let timetableRepositoy = DefaultTimetableRepository(service: DefaultTimetableService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let logRepoository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-      
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+
         let registerViewController = AgreementFormViewController(
             viewModel: RegisterFormViewModel(
                 checkDuplicatedPhoneNumberUseCase: DefaultCheckDuplicatedPhoneNumberUseCase(
@@ -247,7 +247,8 @@ extension LoginViewController {
                 ),
                 registerFormUseCase: DefaultRegisterFormUseCase(
                     userRepository: userRepository
-                )
+                ),
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase
             )
         )
         registerViewController.title = "회원가입"
