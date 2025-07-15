@@ -16,6 +16,7 @@ final class OrderHomeViewController: UIViewController {
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
+    private var currentMinPrice: Int? = nil
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then { _ in
@@ -160,6 +161,12 @@ final class OrderHomeViewController: UIViewController {
                 self?.inputSubject.send(.categoryDidChange(id))
             }
             .store(in: &subscriptions)
+            
+        filterCollectionView.minPriceCellTapped
+            .sink { [weak self] in
+                self?.minPriceButtonTapped()
+            }
+            .store(in: &subscriptions)
     }
     
     private func setAddTarget() {
@@ -216,6 +223,36 @@ extension OrderHomeViewController {
             if #available(iOS 16.0, *) {
                 let detent = UISheetPresentationController.Detent
                     .custom(identifier: .init("fixed233")) { _ in 233 }
+                sheet.detents = [detent]
+                sheet.selectedDetentIdentifier = detent.identifier
+            } else {
+                sheet.detents = [.medium()]
+            }
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 32
+        }
+        present(bottomSheetViewController, animated: true)
+    }
+    
+    @objc private func minPriceButtonTapped() {
+        guard presentedViewController == nil else { return }
+        
+        let bottomSheetViewController = MinPriceSheetViewController(current: self.currentMinPrice)
+        bottomSheetViewController.onOptionSelected = { [weak self] price in
+            guard let self = self else { return }
+            
+            self.currentMinPrice = price
+            self.filterCollectionView.updateMinPrice(price)
+            
+            // TODO: ViewModel에 최소주문금액 변경 이벤트 전달
+            // self.inputSubject.send(.minPriceDidChange(price))
+        }
+        
+        bottomSheetViewController.modalPresentationStyle = .pageSheet
+        if let sheet = bottomSheetViewController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                let detent = UISheetPresentationController.Detent
+                    .custom(identifier: .init("fixed280")) { _ in 280 }
                 sheet.detents = [detent]
                 sheet.selectedDetentIdentifier = detent.identifier
             } else {

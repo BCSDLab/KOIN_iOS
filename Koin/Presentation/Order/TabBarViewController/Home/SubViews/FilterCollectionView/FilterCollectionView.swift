@@ -18,6 +18,18 @@ enum ShopFilter: String, CaseIterable {
     var title: String {
         return self.rawValue
     }
+    
+    func title(for price: Int?) -> String {
+        if self == .MIN_PRICE {
+            if let price = price {
+                return "최소주문금액 \(price.formattedWithComma)원 이하"
+            } else {
+                return "최소주문금액"
+            }
+        } else {
+            return self.rawValue
+        }
+    }
 
     var image: UIImage? {
         let asset: ImageAsset
@@ -61,8 +73,10 @@ final class FilterCollectionView: UICollectionView {
     
     private let filters = ShopFilter.allCases
     private var selectedFilters: Set<ShopFilter> = [.IS_OPEN]
+    private var currentMinPrice: Int? = nil
     
     let filtersDidChange = PassthroughSubject<Set<ShopFilter>, Never>()
+    let minPriceCellTapped = PassthroughSubject<Void, Never>()
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flow = UICollectionViewFlowLayout()
@@ -107,7 +121,7 @@ extension FilterCollectionView: UICollectionViewDelegate {
         let filter = filters[indexPath.item]
         
         if filter == .MIN_PRICE {
-            print("최소주문금액 선택")
+            minPriceCellTapped.send(())
             return
         }
         
@@ -129,7 +143,7 @@ extension FilterCollectionView: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let filter = filters[indexPath.item]
-        let text = filter.title as NSString
+        let text = filter.title(for: self.currentMinPrice) as NSString
         let font = UIFont.appFont(.pretendardBold, size: 14)
         let textWidth = text.size(withAttributes: [.font: font]).width
         
@@ -151,5 +165,19 @@ extension FilterCollectionView: UICollectionViewDelegateFlowLayout {
 extension FilterCollectionView {
     func getSelectedFilters() -> Set<ShopFilter> {
         return selectedFilters
+    }
+    
+    func updateMinPrice(_ price: Int?) {
+        self.currentMinPrice = price
+        guard let index = filters.firstIndex(of: .MIN_PRICE) else { return }
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        
+        if let cell = self.cellForItem(at: indexPath) as? FilterCollectionViewCell {
+            let title = ShopFilter.MIN_PRICE.title(for: price)
+            cell.updateTitle(text: title)
+        }
+        
+        self.collectionViewLayout.invalidateLayout()
     }
 }

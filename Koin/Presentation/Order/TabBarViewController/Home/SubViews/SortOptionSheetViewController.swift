@@ -188,7 +188,7 @@ private extension SortOptionSheetViewController {
         }
         
         seperateView2.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(34)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }

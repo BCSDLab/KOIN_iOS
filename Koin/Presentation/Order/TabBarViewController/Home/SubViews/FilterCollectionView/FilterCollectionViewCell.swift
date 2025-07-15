@@ -49,6 +49,10 @@ final class FilterCollectionViewCell: UICollectionViewCell {
         updateLayout(for: filter)
     }
 
+    func updateTitle(text: String) {
+        filterTitleLabel.text = text
+    }
+
     private func applyStyle(selected: Bool) {
         contentView.backgroundColor = selected ? selectedBackgroundColor : unselectedBackgroundColor
         filterImageView.tintColor = selected ? selectedTitleColor : unselectedTitleColor
