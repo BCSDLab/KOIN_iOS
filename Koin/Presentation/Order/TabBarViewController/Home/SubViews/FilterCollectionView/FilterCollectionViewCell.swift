@@ -46,12 +46,41 @@ final class FilterCollectionViewCell: UICollectionViewCell {
         filterImageView.image = filter.image
         filterTitleLabel.text = filter.title
         applyStyle(selected: isSelected)
+        updateLayout(for: filter)
     }
 
     private func applyStyle(selected: Bool) {
         contentView.backgroundColor = selected ? selectedBackgroundColor : unselectedBackgroundColor
         filterImageView.tintColor = selected ? selectedTitleColor : unselectedTitleColor
         filterTitleLabel.textColor = selected ? selectedTitleColor : unselectedTitleColor
+    }
+    
+    private func updateLayout(for filter: ShopFilter) {
+        if filter == .MIN_PRICE {
+            filterTitleLabel.snp.remakeConstraints {
+                $0.leading.equalToSuperview().offset(12)
+                $0.centerY.equalToSuperview()
+            }
+            
+            filterImageView.snp.remakeConstraints {
+                $0.leading.equalTo(filterTitleLabel.snp.trailing).offset(6)
+                $0.trailing.equalToSuperview().inset(12)
+                $0.centerY.equalToSuperview()
+                $0.width.height.equalTo(17)
+            }
+        } else {
+            filterImageView.snp.remakeConstraints {
+                $0.leading.equalToSuperview().offset(8)
+                $0.centerY.equalToSuperview()
+                $0.width.height.equalTo(17)
+            }
+            
+            filterTitleLabel.snp.remakeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(filterImageView.snp.trailing).offset(6)
+                $0.trailing.equalToSuperview().inset(8)
+            }
+        }
     }
 }
 

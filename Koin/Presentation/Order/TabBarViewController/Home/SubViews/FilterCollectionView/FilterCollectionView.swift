@@ -13,6 +13,7 @@ enum ShopFilter: String, CaseIterable {
     case DELIVERY_AVAILABLE = "배달가능"
     case TAKEOUT_AVAILABLE = "포장가능"
     case FREE_DELIVERY_TIP = "배달팁무료"
+    case MIN_PRICE = "최소주문금액"
 
     var title: String {
         return self.rawValue
@@ -29,6 +30,8 @@ enum ShopFilter: String, CaseIterable {
             asset = .filterIcon3
         case .FREE_DELIVERY_TIP:
             asset = .filterIcon4
+        case .MIN_PRICE:
+            asset = .arrowDown
         }
         return UIImage.appImage(asset: asset)?.withRenderingMode(.alwaysTemplate)
     }
@@ -39,6 +42,7 @@ enum ShopFilter: String, CaseIterable {
         case .DELIVERY_AVAILABLE: return "DELIVERY_AVAILABLE"
         case .TAKEOUT_AVAILABLE: return "TAKEOUT_AVAILABLE"
         case .FREE_DELIVERY_TIP: return "FREE_DELIVERY_TIP"
+        case .MIN_PRICE: return "MIN_PRICE"
         }
     }
 
@@ -48,6 +52,7 @@ enum ShopFilter: String, CaseIterable {
         case .DELIVERY_AVAILABLE: return .deliveryAvailable
         case .TAKEOUT_AVAILABLE: return .takeoutAvailable
         case .FREE_DELIVERY_TIP: return .freeDeliveryTip
+        case .MIN_PRICE: return nil
         }
     }
 }
@@ -101,6 +106,11 @@ extension FilterCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let filter = filters[indexPath.item]
         
+        if filter == .MIN_PRICE {
+            print("최소주문금액 선택")
+            return
+        }
+        
         if selectedFilters.contains(filter) {
             selectedFilters.remove(filter)
         } else {
@@ -118,10 +128,21 @@ extension FilterCollectionView: UICollectionViewDelegateFlowLayout {
                         layout _: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let text = filters[indexPath.item].title as NSString
+        let filter = filters[indexPath.item]
+        let text = filter.title as NSString
         let font = UIFont.appFont(.pretendardBold, size: 14)
         let textWidth = text.size(withAttributes: [.font: font]).width
-        let width = ceil(textWidth) + 39
+        
+        let extraWidth: CGFloat
+        if filter == .MIN_PRICE {
+            // leading(12) + spacing(6) + image(17) + trailing(12) = 47
+            extraWidth = 47
+        } else {
+            // leading(8) + image(17) + spacing(6) + trailing(8) = 39
+            extraWidth = 39
+        }
+        
+        let width = ceil(textWidth) + extraWidth
         return CGSize(width: width, height: 34)
     }
 }
