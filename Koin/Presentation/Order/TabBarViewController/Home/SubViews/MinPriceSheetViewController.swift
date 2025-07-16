@@ -35,6 +35,12 @@ final class MinPriceSheetViewController: UIViewController {
         $0.tintColor = UIColor.appColor(.new500)
     }
     
+    private let dotStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .equalSpacing
+        $0.alignment = .center
+    }
+    
     private let stepStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
@@ -71,18 +77,6 @@ final class MinPriceSheetViewController: UIViewController {
         configureView()
         addTargets()
         createStepLabels()
-        setupSlider()
-        updateStepLabels(value: priceSlider.value)
-    }
-    
-    private func setupSlider() {
-        let initialStep: Float
-        if let currentPrice = currentPrice, let index = priceSteps.firstIndex(of: currentPrice) {
-            initialStep = Float(index)
-        } else {
-            initialStep = 0 // "전체"
-        }
-        priceSlider.setValue(initialStep, animated: false)
     }
     
     private func addTargets() {
@@ -92,44 +86,36 @@ final class MinPriceSheetViewController: UIViewController {
     }
     
     private func createStepLabels() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+
         for price in priceSteps {
             let label = UILabel()
             if price == 0 {
                 label.text = "전체"
             } else {
-                label.text = "\(price)"
+                label.text = formatter.string(from: NSNumber(value: price))
             }
-            label.font = UIFont.appFont(.pretendardRegular, size: 14)
-            label.textColor = UIColor.appColor(.neutral400)
+            label.font = UIFont.appFont(.pretendardMedium, size: 14)
+            label.textColor = .black
             label.textAlignment = .center
             stepLabels.append(label)
             stepStackView.addArrangedSubview(label)
         }
     }
-    
-    private func updateStepLabels(value: Float) {
-        let step = Int(round(value))
-        
-        for (index, label) in stepLabels.enumerated() {
-            if index == step {
-                label.font = UIFont.appFont(.pretendardBold, size: 16)
-                label.textColor = UIColor.appColor(.neutral800)
-            } else {
-                label.font = UIFont.appFont(.pretendardRegular, size: 14)
-                label.textColor = UIColor.appColor(.neutral400)
-            }
-        }
-    }
-    
+}
+
+extension MinPriceSheetViewController {
     @objc private func sliderValueChanged(_ sender: UISlider) {
-        updateStepLabels(value: sender.value)
+        let step = round(sender.value)
+        sender.setValue(step, animated: false)
     }
     
     @objc private func confirmButtonTapped() {
         let step = Int(round(priceSlider.value))
+        guard priceSteps.indices.contains(step) else { return }
         let price = priceSteps[step]
         let selectedValue = (price == 0) ? nil : price
-        
         dismiss(animated: true) {
             self.onOptionSelected?(selectedValue)
         }
@@ -140,9 +126,9 @@ final class MinPriceSheetViewController: UIViewController {
     }
 }
 
-private extension MinPriceSheetViewController {
+extension MinPriceSheetViewController {
     private func setUpLayOuts() {
-        [titleLabel, closeButton, seperateView1, priceSlider, stepStackView, confirmButton, seperateView2].forEach {
+        [titleLabel, closeButton, seperateView1, dotStackView, priceSlider, stepStackView, confirmButton, seperateView2].forEach {
             view.addSubview($0)
         }
     }
@@ -163,16 +149,22 @@ private extension MinPriceSheetViewController {
         seperateView1.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1)
+            $0.height.equalTo(0.5)
+        }
+        
+        dotStackView.snp.makeConstraints {
+            $0.leading.trailing.equalTo(priceSlider)
+            $0.centerY.equalTo(priceSlider)
         }
         
         priceSlider.snp.makeConstraints {
             $0.top.equalTo(seperateView1.snp.bottom).offset(38)
             $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(8)
         }
         
         stepStackView.snp.makeConstraints {
-            $0.top.equalTo(priceSlider.snp.bottom).offset(8)
+            $0.top.equalTo(priceSlider.snp.bottom).offset(24)
             $0.leading.trailing.equalTo(priceSlider)
         }
         
@@ -185,13 +177,55 @@ private extension MinPriceSheetViewController {
         seperateView2.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1)
+            $0.height.equalTo(0.5)
         }
+    }
+    
+    // Slider UI
+    private func setupSlider() {
+        let initialStep: Float
+        if let currentPrice = currentPrice, let index = priceSteps.firstIndex(of: currentPrice) {
+            initialStep = Float(index)
+        } else {
+            initialStep = 0
+        }
+        priceSlider.setValue(initialStep, animated: false)
+
+        let minTrackImage = roundedImageWithColor(color: UIColor.appColor(.new500))
+        let maxTrackImage = roundedImageWithColor(color: UIColor.appColor(.neutral200))
+        priceSlider.setMinimumTrackImage(minTrackImage, for: .normal)
+        priceSlider.setMaximumTrackImage(maxTrackImage, for: .normal)
+        let customThumbImage = UIImage.appImage(asset: .bcsdSymbolLogo)
+        priceSlider.setThumbImage(customThumbImage, for: .normal)
+    }
+    
+    private func setupDots() {
+        dotStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        let dotCount = priceSteps.count
+        for _ in 0..<dotCount {
+            let dot = UIView()
+            dot.backgroundColor = .white
+            dot.layer.cornerRadius = 2
+            dot.snp.makeConstraints { $0.size.equalTo(4) }
+            dotStackView.addArrangedSubview(dot)
+        }
+    }
+    
+    private func roundedImageWithColor(color: UIColor, size: CGSize = CGSize(width: 8, height: 8)) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        color.setFill()
+        UIRectFill(CGRect(origin: .zero, size: size))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image ?? UIImage()
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+        setupSlider()
+        setupDots()
         view.backgroundColor = .white
     }
 }
