@@ -1,5 +1,5 @@
 //
-//  OrderHomeDetailViewController.swift
+//  OrderHomeDetailWebViewController.swift
 //  koin
 //
 //  Created by 이은지 on 7/12/25.
@@ -9,7 +9,7 @@ import Combine
 import UIKit
 import WebKit
 
-final class OrderHomeDetailViewController: UIViewController {
+final class OrderHomeDetailWebViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let shopId: Int?
@@ -106,7 +106,7 @@ final class OrderHomeDetailViewController: UIViewController {
 }
 
 // MARK: - WebView 세팅
-extension OrderHomeDetailViewController {
+extension OrderHomeDetailWebViewController {
     private func setupWebView() {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "tokenBridge")
         webView.configuration.userContentController.add(LeakAvoider(delegate: self), name: "tokenBridge")
@@ -123,14 +123,14 @@ extension OrderHomeDetailViewController {
 }
 
 // MARK: - WKNavigationDelegate (필요 없으면 비워둬도 됨)
-extension OrderHomeDetailViewController: WKNavigationDelegate {
+extension OrderHomeDetailWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("웹 페이지 로딩 완료")
     }
 }
 
 // MARK: - JS 통신 처리 (navigateBack 등만 남김)
-extension OrderHomeDetailViewController: WKScriptMessageHandler {
+extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard message.name == "tokenBridge",
               let bodyString = message.body as? String,
