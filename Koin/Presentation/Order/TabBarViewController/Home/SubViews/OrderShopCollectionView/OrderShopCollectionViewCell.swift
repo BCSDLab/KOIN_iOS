@@ -12,10 +12,10 @@ import Kingfisher
 final class OrderShopCollectionViewCell: UICollectionViewCell {
         
     private var itemRow: Int?
-    
     private var shopId: Int = 0
     private var orderableShopId: Int = 0
     private var minimumOrderLabel: Int = 0
+    private var shopTitleLabelTopConstraint: Constraint?
     
     private let shopImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -158,6 +158,15 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         freeDeliveryLabel.isHidden = !(info.minimumDeliveryTip == 0 && info.maximumDeliveryTip == 0)
         takeoutAvailableLabel.isHidden = !info.isTakeoutAvailable
         serviceEventLabel.isHidden = !info.serviceEvent
+        
+        let shouldChangeTop = !freeDeliveryLabel.isHidden || !takeoutAvailableLabel.isHidden || !serviceEventLabel.isHidden
+
+        shopTitleLabel.snp.remakeConstraints {
+            $0.leading.equalTo(shopImageView.snp.trailing).offset(20)
+            $0.top.equalToSuperview().offset(shouldChangeTop ? 15 : 25)
+            $0.height.equalTo(26)
+        }
+        self.contentView.layoutIfNeeded()
     }
 }
 
@@ -178,13 +187,7 @@ extension OrderShopCollectionViewCell {
             $0.verticalEdges.equalToSuperview()
             $0.width.equalTo(shopImageView.snp.height)
         }
-        
-        shopTitleLabel.snp.makeConstraints {
-            $0.leading.equalTo(shopImageView.snp.trailing).offset(20)
-            $0.top.equalToSuperview().offset(15)
-            $0.height.equalTo(26)
-        }
-        
+
         starImageView.snp.makeConstraints {
             $0.leading.equalTo(shopTitleLabel.snp.leading)
             $0.top.equalTo(shopTitleLabel.snp.bottom).offset(5.5)
