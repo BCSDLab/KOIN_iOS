@@ -13,6 +13,7 @@ struct OrderShop {
     let name: String
     let isDeliveryAvailable: Bool
     let isTakeoutAvailable: Bool
+    let serviceEvent: Bool
     let minimumOrderAmount: Int
     let ratingAverage: Double
     let reviewCount: Int
@@ -30,6 +31,7 @@ struct OrderShop {
         case name
         case isDeliveryAvailable = "is_delivery_available"
         case isTakeoutAvailable = "is_takeout_available"
+        case serviceEvent = "service_event"
         case minimumOrderAmount = "minimum_order_amount"
         case ratingAverage = "rating_average"
         case reviewCount = "review_count"
@@ -74,6 +76,7 @@ extension OrderShop {
         name = dto.name
         isDeliveryAvailable = dto.isDeliveryAvailable
         isTakeoutAvailable = dto.isTakeoutAvailable
+        serviceEvent = dto.serviceEvent
         minimumOrderAmount = dto.minimumOrderAmount
         ratingAverage = dto.ratingAverage
         reviewCount = dto.reviewCount

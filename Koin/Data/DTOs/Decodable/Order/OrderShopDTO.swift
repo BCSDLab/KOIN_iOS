@@ -13,6 +13,7 @@ struct OrderShopDTO: Codable {
     let name: String
     let isDeliveryAvailable: Bool
     let isTakeoutAvailable: Bool
+    let serviceEvent: Bool
     let minimumOrderAmount: Int
     let ratingAverage: Double
     let reviewCount: Int
@@ -30,6 +31,7 @@ struct OrderShopDTO: Codable {
         case name
         case isDeliveryAvailable = "is_delivery_available"
         case isTakeoutAvailable = "is_takeout_available"
+        case serviceEvent = "service_event"
         case minimumOrderAmount = "minimum_order_amount"
         case ratingAverage = "rating_average"
         case reviewCount = "review_count"

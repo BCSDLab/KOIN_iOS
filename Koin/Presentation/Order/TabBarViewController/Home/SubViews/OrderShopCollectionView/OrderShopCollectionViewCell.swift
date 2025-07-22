@@ -49,6 +49,42 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral600)
     }
+
+    private let infoStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 8
+        $0.distribution = .fillProportionally
+    }
+
+    private let freeDeliveryLabel = UILabel().then {
+        $0.text = "배달비 무료"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+
+    private let takeoutAvailableLabel = UILabel().then {
+        $0.text = "픽업가능"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+
+    private let serviceEventLabel = UILabel().then {
+        $0.text = "서비스 증정"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
     
     private let statusView = UIView().then {
         $0.backgroundColor = .black
@@ -118,13 +154,21 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         minimumOrderLabel = Int(info.minimumOrderAmount)
         statusView.isHidden  = info.isOpen
         statusLabel.isHidden = info.isOpen
+
+        freeDeliveryLabel.isHidden = !(info.minimumDeliveryTip == 0 && info.maximumDeliveryTip == 0)
+        takeoutAvailableLabel.isHidden = !info.isTakeoutAvailable
+        serviceEventLabel.isHidden = !info.serviceEvent
     }
 }
 
 extension OrderShopCollectionViewCell {
     private func setUpLayouts() {
-        [shopImageView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, deliveryImageView, deliveryLabel, statusView, statusLabel].forEach {
+        [shopImageView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, deliveryImageView, deliveryLabel, infoStackView, statusView, statusLabel].forEach {
             contentView.addSubview($0)
+        }
+
+        [freeDeliveryLabel, takeoutAvailableLabel, serviceEventLabel].forEach {
+            infoStackView.addArrangedSubview($0)
         }
     }
     
@@ -169,6 +213,27 @@ extension OrderShopCollectionViewCell {
             $0.leading.equalTo(deliveryImageView.snp.trailing).offset(4)
             $0.centerY.equalTo(deliveryImageView.snp.centerY)
             $0.height.equalTo(19)
+        }
+
+        infoStackView.snp.makeConstraints {
+            $0.leading.equalTo(deliveryImageView.snp.leading)
+            $0.top.equalTo(deliveryLabel.snp.bottom).offset(8)
+            $0.height.equalTo(20)
+        }
+        
+        freeDeliveryLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(66)
+            $0.height.equalTo(20)
+        }
+        
+        takeoutAvailableLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(55)
+            $0.height.equalTo(20)
+        }
+        
+        serviceEventLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(66)
+            $0.height.equalTo(20)
         }
         
         statusView.snp.makeConstraints {

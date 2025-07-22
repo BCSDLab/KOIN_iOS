@@ -21,7 +21,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .clear)
+        configureNavigationBar(style: .order)
     }
     
     // MARK: - Navigation Right Bar Button
