@@ -90,7 +90,7 @@ final class FilterCollectionView: UICollectionView {
         register(FilterCollectionViewCell.self,
                  forCellWithReuseIdentifier: FilterCollectionViewCell.identifier)
         dataSource = self
-        delegate   = self
+        delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -149,10 +149,8 @@ extension FilterCollectionView: UICollectionViewDelegateFlowLayout {
         
         let extraWidth: CGFloat
         if filter == .MIN_PRICE {
-            // leading(12) + spacing(6) + image(17) + trailing(12) = 47
             extraWidth = 47
         } else {
-            // leading(8) + image(17) + spacing(6) + trailing(8) = 39
             extraWidth = 39
         }
         
@@ -170,14 +168,21 @@ extension FilterCollectionView {
     func updateMinPrice(_ price: Int?) {
         self.currentMinPrice = price
         guard let index = filters.firstIndex(of: .MIN_PRICE) else { return }
-        
         let indexPath = IndexPath(item: index, section: 0)
-        
+
+        if let price = price {
+            selectedFilters.insert(.MIN_PRICE)
+        } else {
+            selectedFilters.remove(.MIN_PRICE)
+        }
+
         if let cell = self.cellForItem(at: indexPath) as? FilterCollectionViewCell {
             let title = ShopFilter.MIN_PRICE.title(for: price)
             cell.updateTitle(text: title)
         }
-        
+
         self.collectionViewLayout.invalidateLayout()
+        reloadItems(at: [indexPath])
+        filtersDidChange.send(selectedFilters)
     }
 }

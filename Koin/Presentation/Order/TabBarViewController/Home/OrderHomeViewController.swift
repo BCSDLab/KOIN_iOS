@@ -52,9 +52,9 @@ final class OrderHomeViewController: UIViewController {
         $0.configuration = config
         $0.tintColor = .appColor(.neutral500)
         
-        $0.layer.shadowColor   = UIColor.black.cgColor
-        $0.layer.shadowOffset  = CGSize(width: 0, height: 2)
-        $0.layer.shadowRadius  = 4
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
+        $0.layer.shadowRadius = 4
         $0.layer.shadowOpacity = 0.04
         $0.layer.masksToBounds = false
     }
@@ -126,10 +126,11 @@ final class OrderHomeViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        orderShopCollectionView.delegate = self
+
         configureView()
         setAddTarget()
         bind()
-        orderShopCollectionView.delegate = self
         inputSubject.send(.viewDidLoad)
     }
     
@@ -143,9 +144,7 @@ final class OrderHomeViewController: UIViewController {
                 self?.updateFilteredOrderShopsCategory(id)
             case let .putImage(response):
                 self?.putImage(data: response)
-            case let .showSearchedResult(keywords):
-                break
-            case let .changeFilteredShops(shops, id):
+            default:
                 break
             }
         }.store(in: &subscriptions)

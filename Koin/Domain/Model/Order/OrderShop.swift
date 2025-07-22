@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderShop: Decodable {
+struct OrderShop {
     let shopId: Int
     let orderableShopId: Int
     let name: String
@@ -43,7 +43,7 @@ struct OrderShop: Decodable {
     }
 }
 
-struct OrderOpen: Decodable {
+struct OrderOpen {
     let dayOfWeek: OrderDayOfWeek
     let closed: Bool
     let openTime: String
@@ -57,7 +57,7 @@ struct OrderOpen: Decodable {
     }
 }
 
-enum OrderDayOfWeek: String, Decodable {
+enum OrderDayOfWeek: String {
     case friday = "FRIDAY"
     case monday = "MONDAY"
     case saturday = "SATURDAY"
@@ -89,7 +89,7 @@ extension OrderShop {
 
 extension OrderOpen {
     init(dto: OpenInfoDTO) {
-        dayOfWeek = OrderDayOfWeek(rawValue: dto.dayOfWeek) ?? .monday // 기본값 필요 시 조정
+        dayOfWeek = OrderDayOfWeek(rawValue: dto.dayOfWeek) ?? .monday
         closed = dto.closed
         openTime = dto.openTime ?? ""
         closeTime = dto.closeTime ?? ""

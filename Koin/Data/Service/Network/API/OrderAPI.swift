@@ -38,12 +38,8 @@ extension OrderAPI: Router, URLRequestConvertible {
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
-        case .searchShop:
-            break
         default:
-            if let token = KeychainWorker.shared.read(key: .access) {
-                baseHeaders["Authorization"] = "Bearer \(token)"
-            }
+            break
         }
         return baseHeaders
     }
@@ -51,9 +47,14 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var parameters: Any? {
         switch self {
         case .fetchOrderShopList(let request):
-            var parameters: [String: Any] = ["sorter": request.sorter.rawValue]
-            for filterItem in request.filter {
-                parameters["filter"] = filterItem.rawValue
+            var parameters: [String: Any] = [
+                "sorter": request.sorter.rawValue
+            ]
+            if !request.filter.isEmpty {
+                parameters["filter"] = request.filter.map { $0.rawValue }
+            }
+            if let minimumOrderAmount = request.minimumOrderAmount {
+                parameters["minimum_order_amount"] = minimumOrderAmount
             }
             return parameters
         case .searchShop:
@@ -63,8 +64,6 @@ extension OrderAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchOrderShopList, .searchShop:
-            return URLEncoding.default
         default:
             return URLEncoding.default
         }
