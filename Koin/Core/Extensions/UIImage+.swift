@@ -151,6 +151,7 @@ enum ImageAsset: String {
     case filterIcon4
     case delivery
     case bcsdSymbolLogo
+    case orderEmptyLogo
 }
 
 enum SFSymbols: String {

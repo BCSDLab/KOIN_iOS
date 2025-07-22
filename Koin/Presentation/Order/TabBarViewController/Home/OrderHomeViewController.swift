@@ -113,6 +113,45 @@ final class OrderHomeViewController: UIViewController {
         $0.isScrollEnabled = false
     }
 
+    private let emptyResultImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .orderEmptyLogo)
+    }
+
+    private let emptyResultLabel = UILabel().then {
+        let firstLine = "이용 가능한 가게가 없어요"
+        let secondLine = "조건을 변경하고 다시 검색해주세요"
+        let text = "\(firstLine)\n\(secondLine)"
+
+        let attributedText = NSMutableAttributedString(string: text)
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 6
+        paragraphStyle.alignment = .center
+
+        attributedText.addAttribute(.font, value: UIFont.appFont(.pretendardBold, size: 18), range: NSRange(location: 0, length: firstLine.count))
+        attributedText.addAttribute(.foregroundColor, value: UIColor.appColor(.new500), range: NSRange(location: 0, length: firstLine.count))
+
+        let secondLineRange = NSRange(location: firstLine.count + 1, length: secondLine.count)
+        attributedText.addAttribute(.font, value: UIFont.appFont(.pretendardMedium, size: 14), range: secondLineRange)
+        attributedText.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral600), range: secondLineRange)
+
+        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
+
+        $0.attributedText = attributedText
+        $0.numberOfLines = 0
+        $0.textAlignment = .center
+    }
+
+    private lazy var emptyResultStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [emptyResultImageView, emptyResultLabel])
+        stack.axis = .vertical
+        stack.spacing = 16
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        stack.isHidden = true
+        return stack
+    }()
+
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
         self.viewModel = viewModel
@@ -262,9 +301,16 @@ extension OrderHomeViewController {
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
-        orderShopCollectionView.updateShop(shops)
-        orderShopCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
+        if shops.isEmpty {
+            orderShopCollectionView.isHidden = true
+            emptyResultStackView.isHidden = false
+        } else {
+            orderShopCollectionView.isHidden = false
+            emptyResultStackView.isHidden = true
+            orderShopCollectionView.updateShop(shops)
+            orderShopCollectionView.snp.updateConstraints { make in
+                make.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
+            }
         }
     }
     
@@ -289,7 +335,7 @@ extension OrderHomeViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView].forEach {
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -334,6 +380,10 @@ extension OrderHomeViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(24)
             $0.height.equalTo(0)
+        }
+
+        emptyResultStackView.snp.makeConstraints {
+            $0.center.equalTo(orderShopCollectionView)
         }
     }
     
