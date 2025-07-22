@@ -242,9 +242,7 @@ extension OrderHomeViewController {
             
             self.currentMinPrice = price
             self.filterCollectionView.updateMinPrice(price)
-            
-            // TODO: ViewModel에 최소주문금액 변경 이벤트 전달
-            // self.inputSubject.send(.minPriceDidChange(price))
+            self.inputSubject.send(.minPriceDidChange(price))
         }
         
         bottomSheetViewController.modalPresentationStyle = .pageSheet

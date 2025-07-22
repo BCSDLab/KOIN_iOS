@@ -42,21 +42,31 @@ final class FilterCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with filter: ShopFilter, isSelected: Bool) {
+    func configure(with filter: ShopFilter, isSelected: Bool, price: Int?) {
         filterImageView.image = filter.image
-        filterTitleLabel.text = filter.title
+        
+        let attributedString = NSMutableAttributedString(attributedString: filter.title(for: price))
+        let fullRange = NSRange(location: 0, length: attributedString.length)
+        let color = isSelected ? selectedTitleColor : unselectedTitleColor
+        attributedString.addAttribute(.foregroundColor, value: color, range: fullRange)
+
+        if filter == .MIN_PRICE, let price = price {
+            let range = (attributedString.string as NSString).range(of: "\(price.formattedWithComma)원 이하")
+            attributedString.addAttribute(.foregroundColor, value: isSelected ? selectedTitleColor : UIColor.appColor(.new500), range: range)
+        }
+
+        filterTitleLabel.attributedText = attributedString
         applyStyle(selected: isSelected)
         updateLayout(for: filter)
     }
 
-    func updateTitle(text: String) {
-        filterTitleLabel.text = text
+    func updateTitle(text: NSAttributedString) {
+        filterTitleLabel.attributedText = text
     }
 
     private func applyStyle(selected: Bool) {
         contentView.backgroundColor = selected ? selectedBackgroundColor : unselectedBackgroundColor
         filterImageView.tintColor = selected ? selectedTitleColor : unselectedTitleColor
-        filterTitleLabel.textColor = selected ? selectedTitleColor : unselectedTitleColor
     }
     
     private func updateLayout(for filter: ShopFilter) {

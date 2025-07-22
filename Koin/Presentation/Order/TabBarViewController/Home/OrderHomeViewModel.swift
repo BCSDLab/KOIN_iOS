@@ -17,6 +17,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case sortDidChange(FetchOrderShopSortType)
         case categoryDidChange(Int)
         case searchTextChanged(String)
+        case minPriceDidChange(Int?)
     }
     
     enum Output {
@@ -29,7 +30,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []
-    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen]) {
+    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], minimumOrderAmount: nil) {
         didSet {
             getOrderShopInfo(id: selectedId)
         }
@@ -70,6 +71,8 @@ final class OrderHomeViewModel: ViewModelProtocol {
             case let .searchTextChanged(text):
                 self?.searchOrderShop(text)
                 self?.searchOrderShops(text)
+            case let .minPriceDidChange(price):
+                self?.sortStandard.minimumOrderAmount = price
             }
             
         }.store(in: &subscriptions)
@@ -94,7 +97,7 @@ extension OrderHomeViewModel {
     }
 
     private func getOrderShopInfo(id: Int) {
-        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
+        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter, minimumOrderAmount: sortStandard.minimumOrderAmount))
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
@@ -103,8 +106,16 @@ extension OrderHomeViewModel {
                 guard let self = self else { return }
                 var filteredShops = response
 
+                if self.sortStandard.filter.contains(.isOpen) {
+                    filteredShops = filteredShops.filter { $0.isOpen }
+                }
+
                 if self.sortStandard.filter.contains(.deliveryAvailable) {
                     filteredShops = filteredShops.filter { $0.isDeliveryAvailable }
+                }
+                
+                if let minPrice = self.sortStandard.minimumOrderAmount {
+                    filteredShops = filteredShops.filter { $0.minimumOrderAmount ?? 0 <= minPrice }
                 }
 
                 if self.selectedId != 0 {

@@ -19,16 +19,18 @@ enum ShopFilter: String, CaseIterable {
         return self.rawValue
     }
     
-    func title(for price: Int?) -> String {
+    func title(for price: Int?) -> NSAttributedString {
+        let text: String
         if self == .MIN_PRICE {
             if let price = price {
-                return "최소주문금액 \(price.formattedWithComma)원 이하"
+                text = "최소주문금액 \(price.formattedWithComma)원 이하"
             } else {
-                return "최소주문금액"
+                text = "최소주문금액"
             }
         } else {
-            return self.rawValue
+            text = self.rawValue
         }
+        return NSAttributedString(string: text)
     }
 
     var image: UIImage? {
@@ -110,7 +112,7 @@ extension FilterCollectionView: UICollectionViewDataSource {
         }
         let filter = filters[indexPath.item]
         let isSelected = selectedFilters.contains(filter)
-        cell.configure(with: filter, isSelected: isSelected)
+        cell.configure(with: filter, isSelected: isSelected, price: currentMinPrice)
         return cell
     }
 }
@@ -143,9 +145,9 @@ extension FilterCollectionView: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let filter = filters[indexPath.item]
-        let text = filter.title(for: self.currentMinPrice) as NSString
+        let text = filter.title(for: self.currentMinPrice).string as NSString
         let font = UIFont.appFont(.pretendardBold, size: 14)
-        let textWidth = text.size(withAttributes: [.font: font]).width
+        let textWidth = text.size(withAttributes: [NSAttributedString.Key.font: font]).width
         
         let extraWidth: CGFloat
         if filter == .MIN_PRICE {
@@ -176,12 +178,6 @@ extension FilterCollectionView {
             selectedFilters.remove(.MIN_PRICE)
         }
 
-        if let cell = self.cellForItem(at: indexPath) as? FilterCollectionViewCell {
-            let title = ShopFilter.MIN_PRICE.title(for: price)
-            cell.updateTitle(text: title)
-        }
-
-        self.collectionViewLayout.invalidateLayout()
         reloadItems(at: [indexPath])
         filtersDidChange.send(selectedFilters)
     }
