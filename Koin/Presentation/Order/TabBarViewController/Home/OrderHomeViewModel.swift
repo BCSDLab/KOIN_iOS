@@ -123,7 +123,7 @@ extension OrderHomeViewModel {
                 } else {
                     self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
                 }
-                self.orderShopList = response
+                self.orderShopList = filteredShops
             }).store(in: &subscriptions)
     }
     
@@ -140,9 +140,14 @@ extension OrderHomeViewModel {
     private func searchOrderShops(_ text: String) {
         let orderShops = orderShopList.filter { $0.name.contains(text) }
         outputSubject.send(.changeFilteredShops(orderShops, selectedId))
+        self.orderShopList = orderShops
     }
     
     func getShopId(at index: Int) -> Int {
         return orderShopList[index].shopId
+    }
+
+    func getOrderableShopId(at index: Int) -> Int {
+        return orderShopList[index].orderableShopId
     }
 }

@@ -322,8 +322,8 @@ extension OrderHomeViewController {
 extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
-            let shopId = viewModel.getShopId(at: indexPath.item)
-            let detailVC = OrderHomeDetailViewController(shopId: shopId)
+            let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
+            let detailVC = OrderHomeDetailViewController(shopId: orderableShopId)
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }
