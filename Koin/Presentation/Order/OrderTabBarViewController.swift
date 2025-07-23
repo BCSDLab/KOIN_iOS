@@ -8,6 +8,19 @@
 import UIKit
 
 final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
+    
+    private var selectedShopID: Int?
+    private var initialTabIndex: Int
+    
+    init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
+        self.selectedShopID = selectedShopID
+        self.initialTabIndex = initialTabIndex
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -16,7 +29,9 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         setupNavigationRightButton()
         configureController()
         setupTabBarAppearance()
-        updateNavigationTitle(for: 0)
+        
+        selectedIndex = initialTabIndex
+        updateNavigationTitle(for: initialTabIndex)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,35 +65,36 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
         
+        let orderHomeViewModel = OrderHomeViewModel(
+            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
+            fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
+            searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository),
+            selectedId: initialTabIndex == 0 ? selectedShopID ?? 1 : 1
+        )
+        
         let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar),
-            rootViewController: OrderHomeViewController(
-                viewModel: OrderHomeViewModel(
-                    fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-                    fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
-                    searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository), selectedId: 1
-                )
-            ),
+            rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
             title: "홈"
+        )
+        
+        let shopViewModel = ShopViewModel(
+            fetchShopListUseCase: DefaultFetchShopListUseCase(shopRepository: shopRepository),
+            fetchEventListUseCase: DefaultFetchEventListUseCase(shopRepository: shopRepository),
+            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
+            searchShopUseCase: DefaultSearchShopUseCase(shopRepository: shopRepository),
+            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+            ),
+            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
+            fetchShopBenefitUseCase: DefaultFetchShopBenefitUseCase(shopRepository: shopRepository),
+            fetchBeneficialShopUseCase: DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository),
+            selectedId: initialTabIndex == 1 ? selectedShopID ?? 0 : 0
         )
         
         let shopViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .shopTabBar),
-            rootViewController: ShopViewControllerA(
-                viewModel: ShopViewModel(
-                    fetchShopListUseCase: DefaultFetchShopListUseCase(shopRepository: shopRepository),
-                    fetchEventListUseCase: DefaultFetchEventListUseCase(shopRepository: shopRepository),
-                    fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-                    searchShopUseCase: DefaultSearchShopUseCase(shopRepository: shopRepository),
-                    logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                        repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-                    ),
-                    getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
-                    fetchShopBenefitUseCase: DefaultFetchShopBenefitUseCase(shopRepository: shopRepository),
-                    fetchBeneficialShopUseCase: DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository),
-                    selectedId: 0
-                )
-            ),
+            rootViewController: ShopViewControllerA(viewModel: shopViewModel),
             title: "주변상점"
         )
 

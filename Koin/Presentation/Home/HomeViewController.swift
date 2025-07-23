@@ -547,45 +547,19 @@ extension HomeViewController {
     }
     
     func didTapCell(at id: Int) {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: id
-        )
-        
-        if id == 1 {
-            let orderTabBarViewController = OrderTabBarViewController()
+        let orderableCategoryIds = [0, 1, 2, 3, 5, 6] // 전체, 치킨, 중국집, 한식, 피자/버거, 족발
+
+        if orderableCategoryIds.contains(id) {
+            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: id, initialTabIndex: 0)
             navigationController?.pushViewController(orderTabBarViewController, animated: true)
-        } else if id >= 2 {
-            let shopViewController = ShopViewControllerA(viewModel: viewModel)
-            shopViewController.title = "주변상점"
-            navigationController?.pushViewController(shopViewController, animated: true)
-            
-            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-            inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
+        } else {
+            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: id, initialTabIndex: 1)
+            navigationController?.pushViewController(orderTabBarViewController, animated: true)
         }
     }
     
     @objc private func refresh() {
         inputSubject.send(.categorySelected(getDiningPlace()))
-        
         refreshControl.endRefreshing()
     }
     
