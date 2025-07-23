@@ -278,7 +278,7 @@ extension ServiceSelectViewController {
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
+        let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
         

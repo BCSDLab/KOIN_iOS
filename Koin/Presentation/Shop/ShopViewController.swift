@@ -1,15 +1,15 @@
 //
-//  ShopViewControllerA.swift
+//  ShopViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 10/3/24.
 //
 
-
 import Combine
 import UIKit
+import SnapKit
 
-final class ShopViewControllerA: UIViewController {
+final class ShopViewController: UIViewController {
     
     private let viewModel: ShopViewModel
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
@@ -18,10 +18,8 @@ final class ShopViewControllerA: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     private let categoryCollectionView: CategoryCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -29,48 +27,39 @@ final class ShopViewControllerA: UIViewController {
         return collectionView
     }()
     
-    private let shopGuideView: ShopGuideView = {
-        let view = ShopGuideView(frame: .zero)
-        return view
-    }()
-    
-    private let eventShopCollectionView: EventShopCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 80)
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = EventShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isHidden = true
-        return collectionView
-    }()
-    
-    private let eventIndexLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.textColor = UIColor.appColor(.neutral0)
-        label.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.6)
-        label.layer.cornerRadius = 5
-        label.layer.masksToBounds = true
-        label.textAlignment = .center
-        label.isHidden = true
-        return label
-    }()
-    
     private let searchTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "검색어를 입력해주세요."
         textField.font = UIFont.appFont(.pretendardRegular, size: 14)
         textField.tintColor = UIColor.appColor(.neutral500)
-        textField.backgroundColor = UIColor.appColor(.neutral100)
-        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 20))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        let imageView = UIImageView(image: UIImage.appImage(asset: .search))
+        textField.textColor = UIColor.appColor(.neutral800)
+        textField.backgroundColor = .white
+        textField.layer.cornerRadius = 12
+        textField.layer.masksToBounds = true
+        
+        let imageView = UIImageView(image: UIImage.appImage(asset: .search)?.withRenderingMode(.alwaysTemplate))
+        imageView.tintColor = UIColor.appColor(.neutral500)
         imageView.contentMode = .scaleAspectFit
-        let iconContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 12, height: 24))
-        imageView.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        iconContainerView.addSubview(imageView)
-        textField.rightView = iconContainerView
+        imageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        
+        let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        iconContainer.addSubview(imageView)
+        imageView.center = iconContainer.center
+        
+        textField.leftView = iconContainer
+        textField.leftViewMode = .always
+        
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 32))
+        textField.rightView = paddingView
         textField.rightViewMode = .always
+        
+        textField.layer.shadowColor = UIColor.black.cgColor
+        textField.layer.shadowOffset = CGSize(width: 0, height: 2)
+        textField.layer.shadowRadius = 4
+        textField.layer.shadowOpacity = 0.04
+        textField.layer.masksToBounds = false
+        
+        textField.setNeedsLayout()
         return textField
     }()
     
@@ -94,19 +83,117 @@ final class ShopViewControllerA: UIViewController {
         return view
     }()
     
-    private let reviewTooltipImageView = CancelableImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.setUpImage(image: UIImage.appImage(asset: .reviewTooltip) ?? UIImage())
-        $0.isHidden = true
+    private let sortButton = UIButton(type: .system).then {
+        var config = UIButton.Configuration.plain()
+
+        var titleAttribute = AttributedString("기본순")
+        titleAttribute.font = UIFont.appFont(.pretendardBold, size: 14)
+        titleAttribute.foregroundColor = UIColor.appColor(.new500)
+        config.attributedTitle = titleAttribute
+
+        if let img = UIImage.appImage(asset: .chevronDown)?.withRenderingMode(.alwaysTemplate) {
+            config.image = img
+            config.imagePlacement = .trailing
+            config.imagePadding = 6
+        }
+
+        config.contentInsets = .init(top: 6, leading: 8, bottom: 6, trailing: 8)
+
+        config.background.backgroundColor = UIColor.appColor(.newBackground)
+        config.background.cornerRadius = 24
+        config.background.strokeWidth = 1
+        config.background.strokeColor = UIColor.appColor(.new500)
+
+        $0.configuration = config
+        $0.tintColor = .appColor(.new500)
+        $0.sizeToFit()
     }
+    
+    private let openShopToggleButton: UIButton = {
+        let button = UIButton(type: .custom)
+
+        let selectedBackgroundColor = UIColor.appColor(.new500)
+        let unselectedBackgroundColor = UIColor.white
+        let selectedTitleColor = UIColor.white
+        let unselectedTitleColor = UIColor.appColor(.neutral400)
+        let filterImage = UIImage.appImage(asset: .filterIcon1)?.withRenderingMode(.alwaysTemplate)
+
+        var config = UIButton.Configuration.plain()
+        config.image = filterImage
+        config.baseForegroundColor = unselectedTitleColor
+        config.title = "영업중"
+        config.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
+            .font: UIFont.appFont(.pretendardBold, size: 14),
+            .foregroundColor: unselectedTitleColor
+        ]))
+        config.imagePadding = 6
+        config.imagePlacement = .leading
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+
+        config.background.backgroundColor = unselectedBackgroundColor
+        config.background.cornerRadius = 17
+        config.background.strokeWidth = 0 // 외곽선 없앰
+        config.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
+            return button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+        }
+
+        button.configuration = config
+
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        button.layer.shadowOpacity = 0.04
+        button.layer.cornerRadius = 17
+        button.layer.masksToBounds = false
+
+        button.addAction(UIAction { _ in
+            button.isSelected.toggle()
+            let color = button.isSelected ? selectedTitleColor : unselectedTitleColor
+
+            var config = button.configuration
+            config?.baseForegroundColor = color
+            config?.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
+                .font: UIFont.appFont(.pretendardBold, size: 14),
+                .foregroundColor: color
+            ]))
+            config?.background.backgroundColor = button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+            config?.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
+                return button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+            }
+            button.configuration = config
+        }, for: .touchUpInside)
+
+        return button
+    }()
+
+    private let eventShopCollectionView: EventShopCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 80)
+        flowLayout.scrollDirection = .horizontal
+        let collectionView = EventShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.isHidden = true
+        return collectionView
+    }()
+    
+    private let eventIndexLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.appFont(.pretendardRegular, size: 10)
+        label.textColor = UIColor.appColor(.neutral0)
+        label.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.6)
+        label.layer.cornerRadius = 5
+        label.layer.masksToBounds = true
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
     
     private lazy var shopCollectionView: ShopInfoCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         let screenWidth = UIScreen.main.bounds.width
-        let cellWidth = screenWidth - 40
+        let cellWidth = screenWidth - 48
         let collectionView = ShopInfoCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: 72)
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 128)
         flowLayout.minimumLineSpacing = 8
         collectionView.isScrollEnabled = false
         return collectionView
@@ -133,7 +220,6 @@ final class ShopViewControllerA: UIViewController {
         configureView()
         inputSubject.send(.viewDidLoad)
         hideKeyboardWhenTappedAround()
-        checkAndShowTooltip()
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
@@ -193,8 +279,8 @@ final class ShopViewControllerA: UIViewController {
                 self?.putImage(data: response)
             case let .updateEventShops(eventShops):
                 self?.updateEventShops(eventShops)
-            case let .updateSeletecButtonColor(standard):
-                self?.shopCollectionView.updateSeletecButtonColor(standard)
+//            case let .updateSeletecButtonColor(standard):
+//                self?.shopCollectionView.updateSeletecButtonColor(standard)
             case .updateShopBenefits:
                 break
             case .updateBeneficialShops(_):
@@ -244,12 +330,6 @@ final class ShopViewControllerA: UIViewController {
             self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
         }.store(in: &subscriptions)
         
-        reviewTooltipImageView.onXButtonTapped = { [weak self] in
-            self?.reviewTooltipImageView.isHidden = true
-            UserDefaults.standard.set(true, forKey: "hasShownReviewTooltip")
-            print(UserDefaults.standard.bool(forKey: "hasShownReviewTooltip"))
-        }
-        
         categoryCollectionView.publisher.sink { [weak self] in
             let shopService = DefaultShopService()
             let shopRepository = DefaultShopRepository(service: shopService)
@@ -274,29 +354,20 @@ final class ShopViewControllerA: UIViewController {
             )
             
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBenefit, .click, "혜택이 있는 상점 모아보기"))
-//            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
-//            self?.navigationController?.pushViewController(shopViewController, animated: true)
 
         }.store(in: &subscriptions)
 
     }
 }
 
-extension ShopViewControllerA {
+extension ShopViewController {
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         searchedShopCollectionView.isHidden = false
         dimView.isHidden = false
         inputSubject.send(.searchTextChanged(text))
     }
-    
-    private func checkAndShowTooltip() {
-        let hasShownTooltip = UserDefaults.standard.bool(forKey: "hasShownReviewTooltip")
-        if !hasShownTooltip {
-            reviewTooltipImageView.isHidden = false
-        }
         
-    }
     private func filterToggleLogEvent(toggleType: Int) {
         var value = ""
         switch toggleType {
@@ -309,11 +380,11 @@ extension ShopViewControllerA {
         default:
             value = "check_delivery"
         }
+        
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCan, .click, value))
     }
     
     private func updateEventShops(_ eventShops: [EventDTO]) {
-        
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
@@ -330,7 +401,7 @@ extension ShopViewControllerA {
     }
 }
 
-extension ShopViewControllerA: UIScrollViewDelegate {
+extension ShopViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
@@ -354,7 +425,7 @@ extension ShopViewControllerA: UIScrollViewDelegate {
     }
 }
 
-extension ShopViewControllerA {
+extension ShopViewController {
     
     private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
@@ -396,95 +467,96 @@ extension ShopViewControllerA {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
-    
     @objc private func textFieldClicked(_ textField: UITextField) {
         self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
     }
 }
-extension ShopViewControllerA {
+extension ShopViewController {
     
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        [categoryCollectionView, shopGuideView, eventShopCollectionView, searchTextField, shopCollectionView, eventIndexLabel, reviewTooltipImageView, searchedShopCollectionView, dimView].forEach {
-            scrollView.addSubview($0)
+        scrollView.addSubview(contentView)
+        [categoryCollectionView, searchTextField, searchedShopCollectionView, dimView, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView].forEach {
+            contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
         
-        scrollView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+
+        searchTextField.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(40)
+        }
+
+        searchedShopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(200)
+        }
+
+        dimView.snp.makeConstraints {
+            $0.top.equalTo(searchedShopCollectionView.snp.bottom)
+            $0.leading.trailing.equalTo(searchedShopCollectionView)
+            $0.bottom.equalToSuperview()
+        }
+
+        categoryCollectionView.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(193)
+        }
+
+        sortButton.snp.makeConstraints {
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(16)
+            $0.width.greaterThanOrEqualTo(75)
+            $0.height.equalTo(34)
+        }
+
+        openShopToggleButton.snp.makeConstraints {
+            $0.leading.equalTo(sortButton.snp.trailing).offset(16)
+            $0.centerY.equalTo(sortButton)
+            $0.height.equalTo(34)
+            $0.width.greaterThanOrEqualTo(74)
+        }
+
+        eventShopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.height.equalTo(100)
         }
         
-        searchTextField.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(16)
-            make.leading.equalTo(scrollView.snp.leading).offset(16)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
-            make.height.equalTo(44)
+        eventIndexLabel.snp.makeConstraints {
+            $0.bottom.equalTo(eventShopCollectionView.snp.bottom).offset(-7)
+            $0.trailing.equalTo(eventShopCollectionView.snp.trailing).offset(-6)
+            $0.width.equalTo(37)
+            $0.height.equalTo(14)
         }
         
-        searchedShopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
+        shopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.height.equalTo(1)
+            $0.bottom.equalToSuperview().offset(-32)
         }
-        dimView.snp.makeConstraints { make in
-            make.top.equalTo(searchedShopCollectionView.snp.bottom)
-            make.leading.trailing.equalTo(searchedShopCollectionView)
-            make.bottom.equalTo(view.snp.bottom)
-        }
-        
-        categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(16)
-            make.leading.equalTo(scrollView.snp.leading)
-            make.trailing.equalTo(scrollView.snp.trailing)
-            make.height.equalTo(193)
-        }
-        
-        shopGuideView.snp.makeConstraints { make in
-            make.top.equalTo(categoryCollectionView.snp.bottom)
-            make.leading.equalTo(scrollView.snp.leading)
-            make.width.equalTo(view.snp.width)
-            make.height.equalTo(32)
-            make.trailing.equalTo(scrollView.snp.trailing)
-        }
-        
-        eventShopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(12)
-            make.leading.equalTo(scrollView.snp.leading).offset(20)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-            make.height.equalTo(63)
-        }
-        
-        eventIndexLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(eventShopCollectionView.snp.bottom).offset(-7)
-            make.trailing.equalTo(eventShopCollectionView.snp.trailing).offset(-6)
-            make.width.equalTo(37)
-            make.height.equalTo(14)
-        }
-        
-        shopCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopGuideView.snp.bottom).offset(14)
-            make.leading.equalTo(scrollView.snp.leading).offset(20)
-            make.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-            make.height.equalTo(1)
-            make.bottom.equalTo(scrollView.snp.bottom)
-        }
-        
-        reviewTooltipImageView.snp.makeConstraints { make in
-            make.width.equalTo(249)
-            make.height.equalTo(60)
-            make.leading.equalTo(shopCollectionView.snp.leading).offset(16)
-            make.bottom.equalTo(shopCollectionView.snp.top)
-        }
-        
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 

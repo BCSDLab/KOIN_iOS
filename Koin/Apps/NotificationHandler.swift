@@ -168,7 +168,7 @@ final class NotificationHandler {
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
+        let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         return shopViewController
     }

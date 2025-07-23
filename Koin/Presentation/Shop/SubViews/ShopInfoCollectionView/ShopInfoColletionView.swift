@@ -34,7 +34,7 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         showsVerticalScrollIndicator = false
         contentInset = .zero
         register(ShopInfoCollectionViewCell.self, forCellWithReuseIdentifier: ShopInfoCollectionViewCell.identifier)
-        register(ShopInfoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ShopInfoHeaderView.identifier)
+//        register(ShopInfoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ShopInfoHeaderView.identifier)
         dataSource = self
         delegate = self
     }
@@ -49,12 +49,12 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         self.reloadData()
     }
     
-    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
-        guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ShopInfoHeaderView else {
-            return
-        }
-        headerView.updateButtonState(standard)
-    }
+//    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
+//        guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ShopInfoHeaderView else {
+//            return
+//        }
+//        headerView.updateButtonState(standard)
+//    }
     
     private func makeAnalyticsForClickStoreList(_ storeName: String) {
         let makeEvent = MakeParamsForLog()
@@ -74,22 +74,22 @@ extension ShopInfoCollectionView {
             return isHeaderHidden ? CGSize.zero : CGSize(width: collectionView.bounds.width, height: 25)
         }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
-                return UICollectionReusableView()
-            }
-            cancellables.removeAll()
-            headerView.shopSortStandardPublisher.sink { [weak self] standard in
-                self?.shopSortStandardPublisher.send(standard)
-            }.store(in: &cancellables)
-            headerView.shopFilterTogglePublisher.sink { [weak self] tag in
-                self?.shopFilterTogglePublisher.send(tag)
-            }.store(in: &cancellables)
-            return headerView
-        }
-        return UICollectionReusableView()
-    }
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if kind == UICollectionView.elementKindSectionHeader {
+//            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
+//                return UICollectionReusableView()
+//            }
+//            cancellables.removeAll()
+//            headerView.shopSortStandardPublisher.sink { [weak self] standard in
+//                self?.shopSortStandardPublisher.send(standard)
+//            }.store(in: &cancellables)
+//            headerView.shopFilterTogglePublisher.sink { [weak self] tag in
+//                self?.shopFilterTogglePublisher.send(tag)
+//            }.store(in: &cancellables)
+//            return headerView
+//        }
+//        return UICollectionReusableView()
+//    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shops.count

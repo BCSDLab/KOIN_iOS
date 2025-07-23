@@ -26,7 +26,7 @@ final class ShopViewModel: ViewModelProtocol {
     enum Output {
         case putImage(ShopCategoryDTO)
         case changeFilteredShops([Shop], Int)
-        case updateSeletecButtonColor(FetchShopListRequest)
+//        case updateSeletecButtonColor(FetchShopListRequest)
         case updateEventShops([EventDTO])
         case updateShopBenefits(ShopBenefitsDTO)
         case updateBeneficialShops([Shop])
@@ -168,7 +168,7 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
+//                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
                 if self.selectedId != 0 {
                     self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
                 } else {

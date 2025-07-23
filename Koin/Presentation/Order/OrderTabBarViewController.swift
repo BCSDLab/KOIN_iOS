@@ -94,7 +94,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         
         let shopViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .shopTabBar),
-            rootViewController: ShopViewControllerA(viewModel: shopViewModel),
+            rootViewController: ShopViewController(viewModel: shopViewModel),
             title: "주변상점"
         )
 
@@ -174,7 +174,6 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     }
 }
 
-// 루트의 Navigation Bar 숨기고 push 되면 자동으로 노출되는 클래스
 final class RootHidingNavigationController: UINavigationController,
                                             UINavigationControllerDelegate {
 

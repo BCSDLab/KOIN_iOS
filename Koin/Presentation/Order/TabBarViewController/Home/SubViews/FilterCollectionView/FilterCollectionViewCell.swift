@@ -16,7 +16,8 @@ final class FilterCollectionViewCell: UICollectionViewCell {
     private let unselectedTitleColor = UIColor.appColor(.neutral400)
     
     private let filterImageView = UIImageView().then {
-        $0.layer.masksToBounds = true
+        $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFit
     }
     
     private let filterTitleLabel = UILabel().then {
@@ -109,7 +110,7 @@ extension FilterCollectionViewCell {
         filterImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(8)
             $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(17)
+            $0.width.height.equalTo(32)
         }
         
         filterTitleLabel.snp.makeConstraints {

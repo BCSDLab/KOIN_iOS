@@ -19,8 +19,7 @@ final class OrderHomeViewController: UIViewController {
     private var currentMinPrice: Int? = nil
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView().then { _ in
-    }
+    private let scrollView = UIScrollView()
     
     private let contentView = UIView()
     

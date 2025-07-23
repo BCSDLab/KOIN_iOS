@@ -207,7 +207,7 @@
 		D208A7D12CABD018007040E7 /* UpdateModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D02CABD018007040E7 /* UpdateModelViewController.swift */; };
 		D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */; };
 		D208A7D52CAE7754007040E7 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7D42CAE7754007040E7 /* HomeViewController.swift */; };
-		D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */; };
+		D208A7E32CAE7C9C007040E7 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7E22CAE7C9C007040E7 /* ShopViewController.swift */; };
 		D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */; };
 		D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9402C550746006BC684 /* RevokeUseCase.swift */; };
 		D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9422C550751006BC684 /* ModifyUseCase.swift */; };
@@ -857,7 +857,7 @@
 		D208A7D42CAE7754007040E7 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
-		D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewControllerA.swift; sourceTree = "<group>"; };
+		D208A7E22CAE7C9C007040E7 /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -2488,7 +2488,7 @@
 			children = (
 				D27DD04F2BA608310081FD36 /* SubViews */,
 				D27DD0582BA608310081FD36 /* ShopViewModel.swift */,
-				D208A7E22CAE7C9C007040E7 /* ShopViewControllerA.swift */,
+				D208A7E22CAE7C9C007040E7 /* ShopViewController.swift */,
 				D27DD05A2BA608310081FD36 /* ShopViewControllerB.swift */,
 			);
 			path = Shop;
@@ -3944,7 +3944,7 @@
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
-				D208A7E32CAE7C9C007040E7 /* ShopViewControllerA.swift in Sources */,
+				D208A7E32CAE7C9C007040E7 /* ShopViewController.swift in Sources */,
 				83E770D32D01809100EB3F84 /* BusTimetableDataViewController.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,

@@ -39,7 +39,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
         showsVerticalScrollIndicator = false
         contentInset = .zero
         register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
-        register(CategoryFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryFooterView.identifier)
+//        register(CategoryFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryFooterView.identifier)
 
         dataSource = self
         delegate = self
@@ -89,29 +89,29 @@ extension CategoryCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
           return isFooterEnabled ? CGSize(width: collectionView.bounds.width, height: 35) : .zero 
       }
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionFooter {
-            guard isFooterEnabled,
-                  let footerView = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: CategoryFooterView.identifier,
-                    for: indexPath
-                  ) as? CategoryFooterView else {
-                return UICollectionReusableView()
-            }
-            footerCancellables.removeAll()
-            // Footer 이벤트 연결
-            footerView.buttonTapPublisher
-                .sink { [weak self] _ in
-                    self?.publisher.send()
-                }
-                .store(in: &footerCancellables) // CategoryCollectionView의 구독 관리
-
-            return footerView
-        }
-
-        return UICollectionReusableView()
-    }
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if kind == UICollectionView.elementKindSectionFooter {
+//            guard isFooterEnabled,
+//                  let footerView = collectionView.dequeueReusableSupplementaryView(
+//                    ofKind: kind,
+//                    withReuseIdentifier: CategoryFooterView.identifier,
+//                    for: indexPath
+//                  ) as? CategoryFooterView else {
+//                return UICollectionReusableView()
+//            }
+//            footerCancellables.removeAll()
+//            // Footer 이벤트 연결
+//            footerView.buttonTapPublisher
+//                .sink { [weak self] _ in
+//                    self?.publisher.send()
+//                }
+//                .store(in: &footerCancellables) // CategoryCollectionView의 구독 관리
+//
+//            return footerView
+//        }
+//
+//        return UICollectionReusableView()
+//    }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 44, height: 67)

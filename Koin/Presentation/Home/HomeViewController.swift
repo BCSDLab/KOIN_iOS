@@ -354,7 +354,7 @@ extension HomeViewController {
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                     selectedId: 0
                 )
-                let shopViewController = ShopViewControllerA(viewModel: viewModel)
+                let shopViewController = ShopViewController(viewModel: viewModel)
                 navigationController?.pushViewController(shopViewController, animated: true)
             } else if redirect == "dining" {
                 dismiss(animated: true)
