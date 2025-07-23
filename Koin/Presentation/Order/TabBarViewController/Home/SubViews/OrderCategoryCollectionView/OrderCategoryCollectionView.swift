@@ -22,8 +22,7 @@ final class OrderCategoryCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout _: UICollectionViewLayout) {
         let flow = UICollectionViewFlowLayout()
         flow.scrollDirection = .horizontal
-        flow.minimumInteritemSpacing = 24
-        flow.minimumLineSpacing = 0
+        flow.minimumInteritemSpacing = 48
         super.init(frame: frame, collectionViewLayout: flow)
         commonInit()
     }
@@ -113,6 +112,6 @@ extension OrderCategoryCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }
 }

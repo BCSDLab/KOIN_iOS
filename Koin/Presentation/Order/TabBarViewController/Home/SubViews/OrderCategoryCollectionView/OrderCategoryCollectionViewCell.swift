@@ -18,6 +18,7 @@ final class OrderCategoryCollectionViewCell: UICollectionViewCell {
     
     private let imageView = UIImageView().then {
         $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFit
     }
 
     private let titleLabel = UILabel().then {
