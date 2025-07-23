@@ -21,68 +21,61 @@ final class ShopViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let categoryCollectionView: CategoryCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
-    }()
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    private let searchTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "검색어를 입력해주세요."
-        textField.font = UIFont.appFont(.pretendardRegular, size: 14)
-        textField.tintColor = UIColor.appColor(.neutral500)
-        textField.textColor = UIColor.appColor(.neutral800)
-        textField.backgroundColor = .white
-        textField.layer.cornerRadius = 12
-        textField.layer.masksToBounds = true
-        
+    private let searchTextField = UITextField().then {
+        $0.placeholder = "검색어를 입력해주세요."
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.tintColor = UIColor.appColor(.neutral500)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 12
+        $0.layer.masksToBounds = true
+
         let imageView = UIImageView(image: UIImage.appImage(asset: .search)?.withRenderingMode(.alwaysTemplate))
         imageView.tintColor = UIColor.appColor(.neutral500)
         imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        
+
         let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
         iconContainer.addSubview(imageView)
         imageView.center = iconContainer.center
-        
-        textField.leftView = iconContainer
-        textField.leftViewMode = .always
-        
+
+        $0.leftView = iconContainer
+        $0.leftViewMode = .always
+
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 32))
-        textField.rightView = paddingView
-        textField.rightViewMode = .always
-        
-        textField.layer.shadowColor = UIColor.black.cgColor
-        textField.layer.shadowOffset = CGSize(width: 0, height: 2)
-        textField.layer.shadowRadius = 4
-        textField.layer.shadowOpacity = 0.04
-        textField.layer.masksToBounds = false
-        
-        textField.setNeedsLayout()
-        return textField
-    }()
-    
-    private let searchedShopCollectionView: RelatedShopCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
+        $0.rightView = paddingView
+        $0.rightViewMode = .always
+
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
+        $0.layer.shadowRadius = 4
+        $0.layer.shadowOpacity = 0.04
+        $0.layer.masksToBounds = false
+
+        $0.setNeedsLayout()
+    }
+
+    private let searchedShopCollectionView = RelatedShopCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then {
+        guard let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        layout.scrollDirection = .vertical
         let screenWidth = UIScreen.main.bounds.width
         let cellWidth = screenWidth - 32
-        let collectionView = RelatedShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: 40)
-        flowLayout.minimumLineSpacing = 0
-        collectionView.isScrollEnabled = false
-        collectionView.isHidden = true
-        return collectionView
-    }()
-    
-    private let dimView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
-        view.isHidden = true
-        return view
-    }()
-    
+        layout.itemSize = CGSize(width: cellWidth, height: 40)
+        layout.minimumLineSpacing = 0
+        $0.isScrollEnabled = false
+        $0.isHidden = true
+    }
+
+    private let dimView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        $0.isHidden = true
+    }
+
     private let sortButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
 
@@ -108,10 +101,8 @@ final class ShopViewController: UIViewController {
         $0.tintColor = .appColor(.new500)
         $0.sizeToFit()
     }
-    
-    private let openShopToggleButton: UIButton = {
-        let button = UIButton(type: .custom)
 
+    private let openShopToggleButton = UIButton(type: .custom).then { button in
         let selectedBackgroundColor = UIColor.appColor(.new500)
         let unselectedBackgroundColor = UIColor.white
         let selectedTitleColor = UIColor.white
@@ -132,9 +123,10 @@ final class ShopViewController: UIViewController {
 
         config.background.backgroundColor = unselectedBackgroundColor
         config.background.cornerRadius = 17
-        config.background.strokeWidth = 0 // 외곽선 없앰
+        config.background.strokeWidth = 0
+
         config.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
-            return button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+            unselectedBackgroundColor
         }
 
         button.configuration = config
@@ -146,7 +138,8 @@ final class ShopViewController: UIViewController {
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = false
 
-        button.addAction(UIAction { _ in
+        button.addAction(UIAction { [weak button] _ in
+            guard let button = button else { return }
             button.isSelected.toggle()
             let color = button.isSelected ? selectedTitleColor : unselectedTitleColor
 
@@ -157,47 +150,35 @@ final class ShopViewController: UIViewController {
                 .foregroundColor: color
             ]))
             config?.background.backgroundColor = button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+
             config?.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
                 return button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
             }
             button.configuration = config
         }, for: .touchUpInside)
+    }
 
-        return button
-    }()
+    private let eventShopCollectionView = EventShopCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then {
+        guard let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 100)
+        layout.scrollDirection = .horizontal
+        $0.isHidden = true
+    }
 
-    private let eventShopCollectionView: EventShopCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 80)
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = EventShopCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isHidden = true
-        return collectionView
-    }()
-    
-    private let eventIndexLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.textColor = UIColor.appColor(.neutral0)
-        label.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.6)
-        label.layer.cornerRadius = 5
-        label.layer.masksToBounds = true
-        label.textAlignment = .center
-        label.isHidden = true
-        return label
-    }()
-    
-    private lazy var shopCollectionView: ShopInfoCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        let screenWidth = UIScreen.main.bounds.width
-        let cellWidth = screenWidth - 48
-        let collectionView = ShopInfoCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        flowLayout.itemSize = CGSize(width: cellWidth, height: 128)
-        flowLayout.minimumLineSpacing = 8
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
+    private let eventIndexLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.textColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.6)
+        $0.layer.cornerRadius = 5
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.isHidden = true
+    }
+
+    private let shopCollectionView = ShopInfoCollectionView()
     
     // MARK: - Initialization
     
@@ -232,6 +213,7 @@ final class ShopViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
     }
+    
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
         // 터치된 위치가 searchTextField 외부인지 확인하여 컬렉션 뷰를 숨기고 키보드를 내림
         if !searchTextField.frame.contains(sender.location(in: view)) {
@@ -240,6 +222,7 @@ final class ShopViewController: UIViewController {
             searchTextField.resignFirstResponder() // 키보드 내리기
         }
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         eventShopCollectionView.stopAutoScroll()
@@ -356,7 +339,6 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBenefit, .click, "혜택이 있는 상점 모아보기"))
 
         }.store(in: &subscriptions)
-
     }
 }
 
@@ -388,21 +370,21 @@ extension ShopViewController {
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
-            shopCollectionView.snp.remakeConstraints { make in
-                make.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
-                make.leading.equalTo(scrollView.snp.leading).offset(16)
-                make.trailing.equalTo(scrollView.snp.trailing).offset(-16)
-                make.height.equalTo(shopCollectionView.calculateDynamicHeight())
-                make.bottom.equalTo(scrollView.snp.bottom)
+            shopCollectionView.snp.remakeConstraints {
+                $0.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
+                $0.leading.equalToSuperview().offset(24)
+                $0.trailing.equalToSuperview().offset(-24)
+                $0.height.equalTo(1)
+                $0.bottom.equalToSuperview().offset(-32)
             }
+            
             eventShopCollectionView.setEventShops(eventShops)
-            eventIndexLabel.text = "1/\(eventShops.count)"
+            eventIndexLabel.text = "< 1/\(eventShops.count) >"
         }
     }
 }
 
 extension ShopViewController: UIScrollViewDelegate {
-    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
         if velocity.y > 0 {
@@ -426,7 +408,6 @@ extension ShopViewController: UIScrollViewDelegate {
 }
 
 extension ShopViewController {
-    
     private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -471,8 +452,8 @@ extension ShopViewController {
         self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
     }
 }
+
 extension ShopViewController {
-    
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -482,7 +463,6 @@ extension ShopViewController {
     }
     
     private func setUpConstraints() {
-        
         scrollView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -532,20 +512,19 @@ extension ShopViewController {
 
         eventShopCollectionView.snp.makeConstraints {
             $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(100)
         }
         
         eventIndexLabel.snp.makeConstraints {
-            $0.bottom.equalTo(eventShopCollectionView.snp.bottom).offset(-7)
-            $0.trailing.equalTo(eventShopCollectionView.snp.trailing).offset(-6)
-            $0.width.equalTo(37)
+            $0.bottom.equalTo(eventShopCollectionView.snp.bottom).offset(-12)
+            $0.trailing.equalToSuperview().offset(-44)
+            $0.width.greaterThanOrEqualTo(40)
             $0.height.equalTo(14)
         }
         
         shopCollectionView.snp.makeConstraints {
-            $0.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
+            $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(1)
