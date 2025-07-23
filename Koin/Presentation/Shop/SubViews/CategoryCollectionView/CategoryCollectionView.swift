@@ -46,7 +46,7 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
     }
     
     func updateCategories(_ categories: [ShopCategory]) {
-        self.shopCategories = categories
+        self.shopCategories = categories.filter { $0.id != -1 }
         self.reloadData()
     }
     
@@ -67,12 +67,8 @@ final class CategoryCollectionView: UICollectionView, UICollectionViewDataSource
             return UICollectionViewCell()
         }
         let category = shopCategories[indexPath.row]
-        if shopCategories.contains(where: { $0.id == -1 }) {
-            cell.configure(info: category, false)
-        } else {
-            let isSelected = category.id == selectedId
-            cell.configure(info: category, isSelected)
-        }
+        let isSelected = category.id == selectedId
+        cell.configure(info: category, isSelected)
         return cell
     }
     

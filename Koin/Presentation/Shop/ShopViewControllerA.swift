@@ -274,8 +274,8 @@ final class ShopViewControllerA: UIViewController {
             )
             
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBenefit, .click, "혜택이 있는 상점 모아보기"))
-            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
-            self?.navigationController?.pushViewController(shopViewController, animated: true)
+//            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
+//            self?.navigationController?.pushViewController(shopViewController, animated: true)
 
         }.store(in: &subscriptions)
 

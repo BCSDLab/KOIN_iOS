@@ -569,7 +569,10 @@ extension HomeViewController {
             selectedId: id
         )
         
-        if id >= 1 {
+        if id == 1 {
+            let orderTabBarViewController = OrderTabBarViewController()
+            navigationController?.pushViewController(orderTabBarViewController, animated: true)
+        } else if id >= 2 {
             let shopViewController = ShopViewControllerA(viewModel: viewModel)
             shopViewController.title = "주변상점"
             navigationController?.pushViewController(shopViewController, animated: true)
@@ -577,10 +580,6 @@ extension HomeViewController {
             let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
             inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
-        } else if id == -1 {
-            let orderTabBarViewController = OrderTabBarViewController()
-//            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .leaveVC, .mainShopCategories))
-            navigationController?.pushViewController(orderTabBarViewController, animated: true)
         }
     }
     
