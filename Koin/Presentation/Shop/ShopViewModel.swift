@@ -16,6 +16,7 @@ final class ShopViewModel: ViewModelProtocol {
         case changeCategory(Int)
         case searchTextChanged(String)
         case changeSortStandard(Any)
+        case sortDidChange(FetchShopSortType)
         case filterOpenShops(Bool)
         case getShopInfo
         case getShopBenefits
@@ -86,6 +87,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.searchShops(text)
             case let .changeSortStandard(standard):
                 self?.changeSortStandard(standard)
+            case let .sortDidChange(sortType):
+                self?.changeSortStandard(sortType)
             case .getShopInfo:
                 self?.getShopInfo(id: self?.selectedId ?? 0)
             case .getShopBenefits:

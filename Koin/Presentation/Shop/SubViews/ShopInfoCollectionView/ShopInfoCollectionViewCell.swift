@@ -58,7 +58,8 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         if let urlString = info.images.first, let url = URL(string: urlString), urlString != "https://testimage.com/" {
             shopImageView.kf.setImage(
                 with: url,
-                placeholder: UIImage.appImage(asset: .defaultMenuImage)
+                placeholder: UIImage.appImage(asset: .defaultMenuImage),
+                options: [.transition(.fade(0.2))]
             )
         } else {
             shopImageView.image = UIImage.appImage(asset: .defaultMenuImage)

@@ -15,6 +15,7 @@ final class ShopViewController: UIViewController {
     private let inputSubject: PassthroughSubject<ShopViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var scrollDirection: ScrollLog = .scrollToDown
+    private var currentSortType: ShopSortType = .basic
     
     // MARK: - UI Components
     
@@ -186,7 +187,6 @@ final class ShopViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         searchTextField.delegate = self
-        searchTextField.addTarget(self, action: #selector(textFieldClicked), for: .editingDidBegin)
         categoryCollectionView.enableFooter(true)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView))
         tapGesture.cancelsTouchesInView = false // 텍스트 필드 터치 방해하지 않도록 설정
@@ -195,6 +195,7 @@ final class ShopViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
+        sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
         // FIXME: - 이쁘게 다듬기
         openShopToggleButton.addAction(UIAction { [weak self] _ in
@@ -344,6 +345,43 @@ final class ShopViewController: UIViewController {
 
         }.store(in: &subscriptions)
     }
+    
+    @objc private func sortButtonTapped() {
+        guard presentedViewController == nil else { return }
+        
+        let bottomSheetViewController = ShopSortOptionSheetViewController(current: self.currentSortType)
+        bottomSheetViewController.onOptionSelected = { [weak self] sort in
+            guard let self = self else { return }
+            
+            self.currentSortType = sort
+
+            var config = self.sortButton.configuration ?? .plain()
+            
+            var attribute = AttributedString(sort.title)
+            attribute.font = UIFont.appFont(.pretendardBold, size: 14)
+            attribute.foregroundColor = UIColor.appColor(.new500)
+            
+            config.attributedTitle = attribute
+            self.sortButton.configuration = config
+            
+            self.inputSubject.send(.changeSortStandard(sort.fetchSortType))
+        }
+        
+        bottomSheetViewController.modalPresentationStyle = .pageSheet
+        if let sheet = bottomSheetViewController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                let detent = UISheetPresentationController.Detent
+                    .custom(identifier: .init("fixed233")) { _ in 233 }
+                sheet.detents = [detent]
+                sheet.selectedDetentIdentifier = detent.identifier
+            } else {
+                sheet.detents = [.medium()]
+            }
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 32
+        }
+        present(bottomSheetViewController, animated: true)
+    }
 }
 
 extension ShopViewController {
@@ -424,7 +462,7 @@ extension ShopViewController {
         shopCollectionView.updateShop(shops)
         
         shopCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(shopCollectionView.calculateDynamicHeight())
+            make.height.equalTo(shopCollectionView.calculateShopListHeight())
         }
     }
     
@@ -434,10 +472,6 @@ extension ShopViewController {
     
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
-    }
-    
-    @objc private func textFieldClicked(_ textField: UITextField) {
-        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesSearch, EventParameter.EventCategory.click, "search in \(MakeParamsForLog().makeValueForLogAboutStoreId(id: viewModel.selectedId))"))
     }
 }
 

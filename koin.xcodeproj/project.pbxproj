@@ -594,6 +594,8 @@
 		D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */; };
 		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
 		D8AECD042E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */; };
+		D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B1A9EB2E321E7800943535 /* ShopSortType.swift */; };
+		D8B1A9EE2E321EB300943535 /* ShopSortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B1A9ED2E321EB300943535 /* ShopSortOptionSheetViewController.swift */; };
 		D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */; };
 		D8C0485D2E047A8C00129B14 /* OrderCartWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0485C2E047A8C00129B14 /* OrderCartWebViewController.swift */; };
 		D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */; };
@@ -1245,6 +1247,8 @@
 		D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewModel.swift; sourceTree = "<group>"; };
 		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
 		D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOrderShopUseCase.swift; sourceTree = "<group>"; };
+		D8B1A9EB2E321E7800943535 /* ShopSortType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortType.swift; sourceTree = "<group>"; };
+		D8B1A9ED2E321EB300943535 /* ShopSortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortOptionSheetViewController.swift; sourceTree = "<group>"; };
 		D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		D8C0485C2E047A8C00129B14 /* OrderCartWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartWebViewController.swift; sourceTree = "<group>"; };
 		D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSearchViewController.swift; sourceTree = "<group>"; };
@@ -2504,6 +2508,7 @@
 				D2078BFF2BC5DCF500A39861 /* EventShopCollectionView */,
 				D27DD0502BA608310081FD36 /* ShopGuideView.swift */,
 				D289870F2D0FD6CE00AA7285 /* CenterFlowLayout.swift */,
+				D8B1A9ED2E321EB300943535 /* ShopSortOptionSheetViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2943,6 +2948,7 @@
 				D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */,
 				D23944832C3C3ABC00048F45 /* ShopReview.swift */,
 				D27A5D9D2C6BE8B700C4275F /* Shop.swift */,
+				D8B1A9EB2E321E7800943535 /* ShopSortType.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -4054,6 +4060,7 @@
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				D21572712CEE504F0061E725 /* LectureView.swift in Sources */,
 				83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */,
+				D8B1A9EE2E321EB300943535 /* ShopSortOptionSheetViewController.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
@@ -4198,6 +4205,7 @@
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				83EBB88A2D154A1F00346018 /* BusTimetableTableViewFooterView.swift in Sources */,
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
+				D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,

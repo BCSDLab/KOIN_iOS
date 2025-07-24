@@ -94,3 +94,34 @@ extension ShopInfoCollectionView: UICollectionViewDelegate {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension ShopInfoCollectionView: UICollectionViewDelegateFlowLayout {
 }
+
+extension ShopInfoCollectionView {
+    func calculateShopListHeight() -> CGFloat {
+        let cellHeight: CGFloat = 128
+        let spacing: CGFloat = 12
+        let numberOfCells = CGFloat(shops.count)
+
+        if numberOfCells == 0 {
+            return 0
+        }
+        return (cellHeight * numberOfCells) + (spacing * (numberOfCells - 1))
+    }
+}
+
+extension ShopInfoCollectionView {
+    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
+        
+    }
+}
+
+extension ShopInfoCollectionView {
+    func filterToggleLogEvent(toggleType: Int) {
+        shopFilterTogglePublisher.send(toggleType)
+    }
+}
+
+extension ShopInfoCollectionView {
+    func updateShopSortStandard(_ standard: Any) {
+        shopSortStandardPublisher.send(standard)
+    }
+}
