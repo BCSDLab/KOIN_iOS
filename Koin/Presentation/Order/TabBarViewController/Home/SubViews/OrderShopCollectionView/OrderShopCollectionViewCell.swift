@@ -116,7 +116,10 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
         shopId = info.shopId
         orderableShopId = info.orderableShopId
         
-        if let urlString = info.imageUrls.first, let url = URL(string: urlString) {
+        let thumbnailURL = info.images?.first(where: { $0.isThumbnail })?.imageUrl
+        let imageURL = thumbnailURL ?? info.images?.first?.imageUrl
+
+        if let urlString = imageURL, let url = URL(string: urlString) {
             shopImageView.kf.setImage(
                 with: url,
                 placeholder: UIImage.appImage(asset: .defaultMenuImage)

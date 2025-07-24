@@ -21,7 +21,7 @@ struct OrderShop {
     let maximumDeliveryTip: Int
     let isOpen: Bool
     let categoryIds: [Int]
-    let imageUrls: [String]
+    let images: [OrderImage]?
     let orderShopOpen: [OrderOpen]
     let openStatus: String
 
@@ -39,10 +39,15 @@ struct OrderShop {
         case maximumDeliveryTip = "maximum_delivery_tip"
         case isOpen = "is_open"
         case categoryIds = "category_ids"
-        case imageUrls = "image_urls"
+        case images
         case orderShopOpen = "open"
         case openStatus = "open_status"
     }
+}
+
+struct OrderImage {
+    let imageUrl: String
+    let isThumbnail: Bool
 }
 
 struct OrderOpen {
@@ -84,9 +89,16 @@ extension OrderShop {
         maximumDeliveryTip = dto.maximumDeliveryTip
         isOpen = dto.isOpen
         categoryIds = dto.categoryIds
-        imageUrls = dto.imageUrls
+        images = dto.images?.map { OrderImage(dto: $0) }
         orderShopOpen = dto.open.map { OrderOpen(dto: $0) }
         openStatus = dto.openStatus
+    }
+}
+
+extension OrderImage {
+    init(dto: OrderImageDTO) {
+        imageUrl = dto.imageUrl
+        isThumbnail = dto.isThumbnail
     }
 }
 

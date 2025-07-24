@@ -21,7 +21,7 @@ struct OrderShopDTO: Codable {
     let maximumDeliveryTip: Int
     let isOpen: Bool
     let categoryIds: [Int]
-    let imageUrls: [String]
+    let images: [OrderImageDTO]?
     let open: [OpenInfoDTO]
     let openStatus: String
 
@@ -39,9 +39,19 @@ struct OrderShopDTO: Codable {
         case maximumDeliveryTip = "maximum_delivery_tip"
         case isOpen = "is_open"
         case categoryIds = "category_ids"
-        case imageUrls = "image_urls"
+        case images
         case open
         case openStatus = "open_status"
+    }
+}
+
+struct OrderImageDTO: Codable {
+    let imageUrl: String
+    let isThumbnail: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case imageUrl = "image_url"
+        case isThumbnail = "is_thumbnail"
     }
 }
 

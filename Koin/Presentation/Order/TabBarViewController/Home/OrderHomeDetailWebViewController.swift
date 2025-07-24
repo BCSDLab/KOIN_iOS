@@ -139,9 +139,9 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
               let method = payload["method"] as? String else { return }
 
         switch method {
-        case "navigateBack", "finish", "backButtonTapped":
+        case "navigateBack":
             DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
+                self.dismissView()
             }
         default:
             print("지원되지 않는 메서드: \(method)")
