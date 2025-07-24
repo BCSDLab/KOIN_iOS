@@ -138,24 +138,7 @@ final class ShopViewController: UIViewController {
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = false
 
-        button.addAction(UIAction { [weak button] _ in
-            guard let button = button else { return }
-            button.isSelected.toggle()
-            let color = button.isSelected ? selectedTitleColor : unselectedTitleColor
-
-            var config = button.configuration
-            config?.baseForegroundColor = color
-            config?.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
-                .font: UIFont.appFont(.pretendardBold, size: 14),
-                .foregroundColor: color
-            ]))
-            config?.background.backgroundColor = button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
-
-            config?.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
-                return button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
-            }
-            button.configuration = config
-        }, for: .touchUpInside)
+        
     }
 
     private let eventShopCollectionView = EventShopCollectionView(
@@ -212,6 +195,31 @@ final class ShopViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.scrollView.delegate = self
+        
+        // FIXME: - 이쁘게 다듬기
+        openShopToggleButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            self.openShopToggleButton.isSelected.toggle()
+            let selectedBackgroundColor = UIColor.appColor(.new500)
+            let unselectedBackgroundColor = UIColor.white
+            let selectedTitleColor = UIColor.white
+            let unselectedTitleColor = UIColor.appColor(.neutral400)
+            let color = self.openShopToggleButton.isSelected ? selectedTitleColor : unselectedTitleColor
+
+            var config = self.openShopToggleButton.configuration
+            config?.baseForegroundColor = color
+            config?.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
+                .font: UIFont.appFont(.pretendardBold, size: 14),
+                .foregroundColor: color
+            ]))
+            config?.background.backgroundColor = self.openShopToggleButton.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+
+            config?.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
+                return self.openShopToggleButton.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+            }
+            self.openShopToggleButton.configuration = config
+            self.inputSubject.send(.filterOpenShops(self.openShopToggleButton.isSelected))
+        }, for: .touchUpInside)
     }
     
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
@@ -304,11 +312,7 @@ final class ShopViewController: UIViewController {
         shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
             self?.inputSubject.send(.changeSortStandard(standard))
         }.store(in: &subscriptions)
-        
-        shopCollectionView.shopFilterTogglePublisher.sink { [weak self] toggleType in
-            self?.filterToggleLogEvent(toggleType: toggleType)
-        }.store(in: &subscriptions)
-        
+
         searchedShopCollectionView.selectedShopIdPublisher.sink { [weak self] shopId in
             self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
         }.store(in: &subscriptions)
@@ -348,22 +352,6 @@ extension ShopViewController {
         searchedShopCollectionView.isHidden = false
         dimView.isHidden = false
         inputSubject.send(.searchTextChanged(text))
-    }
-        
-    private func filterToggleLogEvent(toggleType: Int) {
-        var value = ""
-        switch toggleType {
-        case 0:
-            value = "check_review"
-        case 1:
-            value = "check_star"
-        case 2:
-            value = "check_open"
-        default:
-            value = "check_delivery"
-        }
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCan, .click, value))
     }
     
     private func updateEventShops(_ eventShops: [EventDTO]) {
