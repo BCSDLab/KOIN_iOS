@@ -106,7 +106,7 @@ final class SortOptionSheetViewController: UIViewController {
             
             button.configuration = config
             button.tintColor = .appColor(.new500)
-            button.snp.makeConstraints { $0.height.equalTo(36) }
+            
             
             button.addTarget(self, action: #selector(optionTapped(_:)), for: .touchUpInside)
             optionStackView.addArrangedSubview(button)
