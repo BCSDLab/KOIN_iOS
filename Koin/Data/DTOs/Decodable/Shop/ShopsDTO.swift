@@ -25,13 +25,14 @@ struct ShopDTO: Decodable {
     let name: String
     let shopOpen: [Open]?
     let payBank, payCard: Bool
-    let phone: String?
+    let phone: String
     let isEvent: Bool
     let isOpen: Bool
     let averageRate: Double
     let reviewCount: Int
     let benefitDetails: [String?]?
     let benefitDetail: String?
+    let images: [String]
 
     enum CodingKeys: String, CodingKey {
         case categoryIds = "category_ids"
@@ -46,12 +47,13 @@ struct ShopDTO: Decodable {
         case reviewCount = "review_count"
         case benefitDetails = "benefit_details"
         case benefitDetail = "benefit_detail"
+        case images
     }
 }
 
 extension ShopDTO {
     func toDomain() -> Shop {
-        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails?.compactMap { $0 } ?? [], benefitDetail: benefitDetail)
+        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, phone: phone, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails?.compactMap { $0 } ?? [], benefitDetail: benefitDetail, images: images)
     }
 }
 

@@ -40,7 +40,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchShopBenefits: return "/benefit/categories"
         case .fetchBeneficialShops(let id): return "/benefit/\(id)/shops"
-        case .fetchShopList: return "/v2/shops"
+        case .fetchShopList: return "/v3/shops"
         case .fetchEventList: return "/shops/events"
         case .fetchShopCategoryList: return "/shops/categories"
         case .fetchShopData(let request): return "/shops/\(request.shopId)"

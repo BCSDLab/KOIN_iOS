@@ -7,8 +7,15 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class ShopInfoCollectionViewCell: UICollectionViewCell {
+    
+    private let shopImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+    }
     
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
@@ -27,6 +34,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     private let reviewCountLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral400)
+        $0.numberOfLines = 0
     }
     
     private let shopReadyView = ShopReadyView().then {
@@ -46,6 +54,15 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(info: Shop) {
+        if let urlString = info.images.first, let url = URL(string: urlString) {
+            shopImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage.appImage(asset: .defaultMenuImage)
+            )
+        } else {
+            shopImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+        }
+        
         shopTitleLabel.text = info.name
         shopReadyView.setShopTitle(text: info.name)
         shopReadyView.isHidden = info.isOpen
@@ -61,15 +78,21 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
 
 extension ShopInfoCollectionViewCell {
     private func setUpLayouts() {
-        [shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView].forEach {
+        [shopImageView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        shopImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.verticalEdges.equalToSuperview()
+            $0.width.equalTo(shopImageView.snp.height)
+        }
+        
         shopTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(39.5)
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalTo(shopImageView.snp.trailing).offset(20)
             $0.height.equalTo(26)
         }
         
@@ -85,8 +108,9 @@ extension ShopInfoCollectionViewCell {
         }
         
         reviewCountLabel.snp.makeConstraints {
-            $0.centerY.equalTo(starImageView)
+            $0.top.equalTo(starImageView.snp.top)
             $0.leading.equalTo(ratingLabel.snp.trailing).offset(4)
+            $0.trailing.equalToSuperview().inset(20)
         }
         
         shopReadyView.snp.makeConstraints {

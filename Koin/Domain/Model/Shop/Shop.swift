@@ -14,10 +14,12 @@ struct Shop {
     let name: String
     let payBank: Bool
     let payCard: Bool
+    let phone: String
     let isEvent: Bool
     let isOpen: Bool
     let reviewCount: Int
     let averageRate: Double
     let benefitDetails: [String]
     let benefitDetail: String?
+    let images: [String]
 }
