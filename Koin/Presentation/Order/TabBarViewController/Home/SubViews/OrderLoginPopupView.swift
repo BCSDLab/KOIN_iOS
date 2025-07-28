@@ -9,8 +9,9 @@ import UIKit
 import SnapKit
 
 final class OrderLoginPopupView: UIView {
-    
+
     // MARK: - Properties
+    var loginButtonAction: (() -> Void)?
     
     // MARK: - UI Components
     private let backgroundView = UIView().then {
@@ -23,17 +24,43 @@ final class OrderLoginPopupView: UIView {
     }
     
     private let loginInfoTitleLabel = UILabel().then {
-        $0.text = "코인 주문을 이용하기 위해선\n로그인이 필요해요."
-        $0.textColor = UIColor.appColor(.neutral600)
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+
+        paragraphStyle.lineSpacing = 8
+
+        let font = UIFont.appFont(.pretendardMedium, size: 18)
+        let attributedString = NSAttributedString(
+            string: "코인 주문을 이용하기 위해선\n로그인이 필요해요.",
+            attributes: [
+                .font: font,
+                .foregroundColor: UIColor.appColor(.neutral600),
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+
+        $0.attributedText = attributedString
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
     
     private let loginInfoSubtitleLabel = UILabel().then {
-        $0.text = "로그인 후 코인의 주문 기능을\n이용해보세요!"
-        $0.textColor = UIColor.appColor(.neutral600)
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+
+        let font = UIFont.appFont(.pretendardRegular, size: 14)
+        paragraphStyle.lineSpacing = font.lineHeight * 0.4
+
+        let attributedString = NSAttributedString(
+            string: "로그인 후 코인의 주문 기능을\n이용해보세요!",
+            attributes: [
+                .font: font,
+                .foregroundColor: UIColor.appColor(.neutral600),
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+
+        $0.attributedText = attributedString
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
@@ -64,29 +91,28 @@ final class OrderLoginPopupView: UIView {
         configureView()
         setAddTarget()
     }
-    
+
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        configureView()
-        setAddTarget()
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Set Add Target
     private func setAddTarget(){
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        goToLoginButton.addTarget(self, action: #selector(goToLoginButtonTapped), for: .touchUpInside)
     }
 }
 
 // MARK: - @objc
 extension OrderLoginPopupView {
+    @objc private func closeButtonTapped() {
+        self.removeFromSuperview()
+    }
     
-//    @objc private func confirmButtonTapped() {
-//
-//        hide()
-//    }
-//    
-//    @objc private func cancelButtonTapped() {
-//        hide()
-//    }
+    @objc private func goToLoginButtonTapped() {
+        self.removeFromSuperview()
+        loginButtonAction?()
+    }
 }
 
 // MARK: - Configure View
@@ -96,7 +122,7 @@ extension OrderLoginPopupView {
             addSubview($0)
         }
 
-        [loginInfoTitleLabel, loginInfoSubtitleLabel, closeButton, goToLoginButton].forEach {
+        [loginInfoSubtitleLabel, loginInfoTitleLabel, closeButton, goToLoginButton].forEach {
             containerView.addSubview($0)
         }
     }
@@ -105,23 +131,20 @@ extension OrderLoginPopupView {
         backgroundView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
         containerView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview()
+            $0.centerX.centerY.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(44)
-            $0.height.greaterThanOrEqualTo(300)
         }
         
         loginInfoSubtitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
-            $0.height.equalTo(44)
         }
         
         loginInfoTitleLabel.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(32)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(loginInfoSubtitleLabel.snp.top).offset(8)
-            $0.height.equalTo(58)
+            $0.top.equalToSuperview().offset(24)
+            $0.bottom.equalTo(loginInfoSubtitleLabel.snp.top).offset(-8)
         }
         
         closeButton.snp.makeConstraints {
@@ -130,12 +153,13 @@ extension OrderLoginPopupView {
             $0.trailing.equalTo(self.snp.centerX).offset(-4)
             $0.height.equalTo(48)
         }
-        
+
         goToLoginButton.snp.makeConstraints {
             $0.top.equalTo(loginInfoSubtitleLabel.snp.bottom).offset(24)
             $0.leading.equalTo(self.snp.centerX).offset(4)
             $0.trailing.equalTo(loginInfoTitleLabel.snp.trailing)
             $0.height.equalTo(48)
+            $0.bottom.equalToSuperview().inset(24)
         }
     }
     

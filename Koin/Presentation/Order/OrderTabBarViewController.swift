@@ -53,9 +53,39 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     }
 
     @objc private func didTapCart() {
-        let orderCartWebViewController = OrderCartWebViewController()
-        orderCartWebViewController.title = "장바구니"
-        navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        if UserDataManager.shared.userId.isEmpty {
+            let popupView = OrderLoginPopupView()
+
+            if let windowScene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive }),
+               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+
+                popupView.frame = window.bounds
+
+                popupView.loginButtonAction = {
+                    let loginViewController = LoginViewController(
+                        viewModel: LoginViewModel(
+                            loginUseCase: DefaultLoginUseCase(
+                                userRepository: DefaultUserRepository(service: DefaultUserService())
+                            ),
+                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                            )
+                        )
+                    )
+                    loginViewController.title = "로그인"
+                    self.navigationController?.pushViewController(loginViewController, animated: true)
+                }
+
+                window.addSubview(popupView)
+            }
+
+        } else {
+            let orderCartWebViewController = OrderCartWebViewController()
+            orderCartWebViewController.title = "장바구니"
+            navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        }
     }
 
     // MARK: - Configure TabBar
