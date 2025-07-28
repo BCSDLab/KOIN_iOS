@@ -612,18 +612,36 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
+		D80BBC762E37B5F7003E224A /* OrderLoginPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */; };
 		D80C99DC2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */; };
 		D80E7FA62E1C06D4008D5C26 /* OrderShopDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */; };
 		D815DD992E082179004A72BE /* OrderFilterDataList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815DD982E082179004A72BE /* OrderFilterDataList.swift */; };
 		D82F22572E12C6C700CD81C3 /* OrderShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F22562E12C6C700CD81C3 /* OrderShopCollectionView.swift */; };
 		D82F22592E12C6CB00CD81C3 /* OrderShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F22582E12C6CB00CD81C3 /* OrderShopCollectionViewCell.swift */; };
 		D82F225B2E12CBE000CD81C3 /* OrderShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F225A2E12CBE000CD81C3 /* OrderShop.swift */; };
+		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
+		D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */; };
+		D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939722DC1037200CE4CB2 /* UIButton+.swift */; };
+		D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */; };
+		D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */; };
+		D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */; };
+		D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */; };
+		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
+		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
+		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
+		D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */; };
+		D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */; };
+		D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */; };
 		D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */; };
 		D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */; };
 		D89E8B3C2E03BD9100624C30 /* OrderTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */; };
+		D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */; };
+		D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F8FDA2DF12847000265DC /* StatefulButton.swift */; };
 		D8AECD042E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */; };
 		D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B1A9EB2E321E7800943535 /* ShopSortType.swift */; };
 		D8B1A9EE2E321EB300943535 /* ShopSortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B1A9ED2E321EB300943535 /* ShopSortOptionSheetViewController.swift */; };
+		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
+		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 		D8C0485A2E046BF400129B14 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */; };
 		D8C0485D2E047A8C00129B14 /* OrderCartWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C0485C2E047A8C00129B14 /* OrderCartWebViewController.swift */; };
 		D8C048662E0489EB00129B14 /* OrderSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */; };
@@ -639,23 +657,6 @@
 		D8C24A0C2E1ACA4D008D8ABA /* OrderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C24A0B2E1ACA4D008D8ABA /* OrderAPI.swift */; };
 		D8E51DA52E2FB5CD005A5A07 /* MinPriceSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E51DA22E2FB5CD005A5A07 /* MinPriceSheetViewController.swift */; };
 		D8E51DA62E2FB5CD005A5A07 /* SortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E51DA32E2FB5CD005A5A07 /* SortOptionSheetViewController.swift */; };
-		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
-		D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */; };
-		D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939722DC1037200CE4CB2 /* UIButton+.swift */; };
-		D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */; };
-		D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */; };
-		D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */; };
-		D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */; };
-		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
-		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
-		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
-		D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */; };
-		D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */; };
-		D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */; };
-		D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */; };
-		D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F8FDA2DF12847000265DC /* StatefulButton.swift */; };
-		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
-		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1314,18 +1315,37 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
+		D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLoginPopupView.swift; sourceTree = "<group>"; };
 		D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeDetailWebViewController.swift; sourceTree = "<group>"; };
 		D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDTO.swift; sourceTree = "<group>"; };
 		D815DD982E082179004A72BE /* OrderFilterDataList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilterDataList.swift; sourceTree = "<group>"; };
+		D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletionViewController.swift; sourceTree = "<group>"; };
 		D82F22562E12C6C700CD81C3 /* OrderShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopCollectionView.swift; sourceTree = "<group>"; };
 		D82F22582E12C6CB00CD81C3 /* OrderShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		D82F225A2E12CBE000CD81C3 /* OrderShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShop.swift; sourceTree = "<group>"; };
+		D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManager.swift; sourceTree = "<group>"; };
+		D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
+		D85939722DC1037200CE4CB2 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedIdUsecase.swift; sourceTree = "<group>"; };
+		D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedIdRequest.swift; sourceTree = "<group>"; };
+		D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberUseCase.swift; sourceTree = "<group>"; };
+		D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberRequest.swift; sourceTree = "<group>"; };
+		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
+		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
+		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
+		D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralRegisterFormRequest.swift; sourceTree = "<group>"; };
+		D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRegisterFormRequest.swift; sourceTree = "<group>"; };
+		D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormUseCase.swift; sourceTree = "<group>"; };
 		D89E8A9B2E03B48B00624C30 /* OrderHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewController.swift; sourceTree = "<group>"; };
 		D89E8A9D2E03B4D600624C30 /* OrderHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeViewModel.swift; sourceTree = "<group>"; };
 		D89E8B3B2E03BD9100624C30 /* OrderTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTabBarViewController.swift; sourceTree = "<group>"; };
+		D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTextField.swift; sourceTree = "<group>"; };
+		D89F8FDA2DF12847000265DC /* StatefulButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulButton.swift; sourceTree = "<group>"; };
 		D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOrderShopUseCase.swift; sourceTree = "<group>"; };
 		D8B1A9EB2E321E7800943535 /* ShopSortType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortType.swift; sourceTree = "<group>"; };
 		D8B1A9ED2E321EB300943535 /* ShopSortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortOptionSheetViewController.swift; sourceTree = "<group>"; };
+		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
+		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		D8C0485C2E047A8C00129B14 /* OrderCartWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartWebViewController.swift; sourceTree = "<group>"; };
 		D8C048642E0489EB00129B14 /* OrderSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSearchViewController.swift; sourceTree = "<group>"; };
@@ -1341,24 +1361,6 @@
 		D8C24A0B2E1ACA4D008D8ABA /* OrderAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderAPI.swift; sourceTree = "<group>"; };
 		D8E51DA22E2FB5CD005A5A07 /* MinPriceSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinPriceSheetViewController.swift; sourceTree = "<group>"; };
 		D8E51DA32E2FB5CD005A5A07 /* SortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOptionSheetViewController.swift; sourceTree = "<group>"; };
-		D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletionViewController.swift; sourceTree = "<group>"; };
-		D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManager.swift; sourceTree = "<group>"; };
-		D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
-		D85939722DC1037200CE4CB2 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
-		D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedIdUsecase.swift; sourceTree = "<group>"; };
-		D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedIdRequest.swift; sourceTree = "<group>"; };
-		D874DB482DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberUseCase.swift; sourceTree = "<group>"; };
-		D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberRequest.swift; sourceTree = "<group>"; };
-		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
-		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
-		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
-		D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralRegisterFormRequest.swift; sourceTree = "<group>"; };
-		D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRegisterFormRequest.swift; sourceTree = "<group>"; };
-		D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormUseCase.swift; sourceTree = "<group>"; };
-		D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTextField.swift; sourceTree = "<group>"; };
-		D89F8FDA2DF12847000265DC /* StatefulButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulButton.swift; sourceTree = "<group>"; };
-		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
-		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3600,6 +3602,7 @@
 				D8C048672E05376700129B14 /* OrderCategoryCollectionView */,
 				D8C048652E0489EB00129B14 /* OrderSearchViewController */,
 				D8E51DA42E2FB5CD005A5A07 /* BottomSheets */,
+				D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3980,7 +3983,6 @@
 				D8E51DA62E2FB5CD005A5A07 /* SortOptionSheetViewController.swift in Sources */,
 				D2078C0E2BC7A89F00A39861 /* MenuSectionHeaderView.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
-				D22421392C897D8300E8B480 /* MyProfileViewModel.swift in Sources */,
 				D815DD992E082179004A72BE /* OrderFilterDataList.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D422662BAFA17200A8AF04 /* FindPasswordViewModel.swift in Sources */,
@@ -4285,7 +4287,6 @@
 				D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D8C24A0A2E1AC9D2008D8ABA /* OrderService.swift in Sources */,
-				D2D4226A2BAFA18400A8AF04 /* FindPasswordViewController.swift in Sources */,
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */,
@@ -4304,6 +4305,7 @@
 				D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */,
 				D80E7FA62E1C06D4008D5C26 /* OrderShopDTO.swift in Sources */,
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
+				D80BBC762E37B5F7003E224A /* OrderLoginPopupView.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,

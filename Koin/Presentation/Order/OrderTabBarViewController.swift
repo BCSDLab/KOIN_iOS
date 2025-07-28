@@ -73,7 +73,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         )
         
         let orderHomeViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderHomeTabBar),
+            image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
             title: "홈"
         )
@@ -93,13 +93,13 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         )
         
         let shopViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .shopTabBar),
+            image: UIImage.appImage(asset: .shopTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: ShopViewController(viewModel: shopViewModel),
             title: "주변상점"
         )
 
         let historyViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderDetailTabBar),
+            image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHistoryViewController(),
             title: "주문내역"
         )
