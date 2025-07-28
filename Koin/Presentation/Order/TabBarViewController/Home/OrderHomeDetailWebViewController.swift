@@ -38,7 +38,8 @@ final class OrderHomeDetailWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.appColor(.newBackground)
-        checkLogin()
+        setupWebView()
+        checkLoginAndLoadPage()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,16 +52,16 @@ final class OrderHomeDetailWebViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    private func checkLogin() {
+    private func checkLoginAndLoadPage() {
         checkLoginUseCase.execute()
-            .sink { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
+            .sink { [weak self] completion in
+                // 실패 시(토큰 없음)에도 그냥 페이지 로드
+                if case .failure = completion {
+                    self?.loadShopDetailPage() // 토큰 없이 로드
                 }
             } receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                self.setupWebView()
-                self.setTokenCookieAndLoadPage()
+                // 성공 시(토큰 있음)에는 쿠키 세팅 후 로드
+                self?.setTokenCookieAndLoadPage()
             }
             .store(in: &subscriptions)
     }
@@ -69,24 +70,27 @@ final class OrderHomeDetailWebViewController: UIViewController {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
 
-        // accessToken 쿠키 세팅
+        guard !access.isEmpty, !refresh.isEmpty else {
+            loadShopDetailPage()
+            return
+        }
+
         let accessCookie = HTTPCookie(properties: [
             .domain: "order.stage.koreatech.in",
             .path: "/",
             .name: "AUTH_TOKEN_KEY",
             .value: access,
             .secure: "TRUE",
-            .expires: NSDate(timeIntervalSinceNow: 60 * 60) // 1시간 후 만료
+            .expires: NSDate(timeIntervalSinceNow: 60 * 60)
         ])!
 
-        // refreshToken 쿠키 세팅
         let refreshCookie = HTTPCookie(properties: [
             .domain: "order.stage.koreatech.in",
             .path: "/",
             .name: "refreshToken",
             .value: refresh,
             .secure: "TRUE",
-            .expires: NSDate(timeIntervalSinceNow: 60 * 60 * 24 * 14) // 2주 후 만료
+            .expires: NSDate(timeIntervalSinceNow: 60 * 60 * 24 * 14)
         ])!
 
         let cookieStore = WKWebsiteDataStore.default().httpCookieStore
@@ -140,9 +144,7 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
 
         switch method {
         case "navigateBack":
-            DispatchQueue.main.async {
-                self.dismissView()
-            }
+            dismissView()
         default:
             print("지원되지 않는 메서드: \(method)")
         }

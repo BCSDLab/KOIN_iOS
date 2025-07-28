@@ -138,8 +138,6 @@ final class ShopViewController: UIViewController {
         button.layer.shadowOpacity = 0.04
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = false
-
-        
     }
 
     private let eventShopCollectionView = EventShopCollectionView(
@@ -221,6 +219,17 @@ final class ShopViewController: UIViewController {
             self.openShopToggleButton.configuration = config
             self.inputSubject.send(.filterOpenShops(self.openShopToggleButton.isSelected))
         }, for: .touchUpInside)
+        
+        shopCollectionView.cellTapPublisher
+            .sink { [weak self] shopId, shopName in
+                guard let self = self else { return }
+                let detailVC = OrderHomeDetailWebViewController(shopId: shopId)
+                print("shopId: ", shopId)
+                let nav = UINavigationController(rootViewController: detailVC)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
+            }
+            .store(in: &subscriptions)
     }
     
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
@@ -279,8 +288,10 @@ final class ShopViewController: UIViewController {
                 break
             case let .showSearchedResult(result):
                 self?.searchedShopCollectionView.updateShop(keywords: result)
-            case let .navigateToShopData(shopId, shopName, categoryId):
-                self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
+//            case let .navigateToShopData(shopId, shopName, categoryId):
+//                self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName, categoryId: categoryId)
+            default:
+                break
             }
         }.store(in: &subscriptions)
         
@@ -302,7 +313,7 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
         
         eventShopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
-            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName)
+//            self?.navigateToShopDataViewController(shopId: shopId, shopName: shopName)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesEvent, EventParameter.EventCategory.click, shopName))
         }.store(in: &subscriptions)
         
@@ -314,9 +325,9 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.changeSortStandard(standard))
         }.store(in: &subscriptions)
 
-        searchedShopCollectionView.selectedShopIdPublisher.sink { [weak self] shopId in
-            self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
-        }.store(in: &subscriptions)
+//        searchedShopCollectionView.selectedShopIdPublisher.sink { [weak self] shopId in
+//            self?.navigateToShopDataViewController(shopId: shopId, shopName: "")
+//        }.store(in: &subscriptions)
         
         categoryCollectionView.publisher.sink { [weak self] in
             let shopService = DefaultShopService()
@@ -434,29 +445,29 @@ extension ShopViewController: UIScrollViewDelegate {
 }
 
 extension ShopViewController {
-    private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-        let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: shopRepository)
-        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
-        let fetchShopReviewListUsecase = DefaultFetchShopReviewListUseCase(shopRepository: shopRepository)
-        let postCallNotificationUseCase = DefaultPostCallNotificationUseCase(shopRepository: shopRepository)
-        let fetchMyReviewUseCase = DefaultFetchMyReviewUseCase(shopRepository: shopRepository)
-        let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
-        
-        let shopDataViewController: UIViewController
-        if viewModel.userAssignType == .callNumber {
-            shopDataViewController = ShopDataViewControllerA(viewModel: shopDataViewModel)
-        } else {
-            shopDataViewController = ShopDataViewControllerB(viewModel: shopDataViewModel)
-        }
-        shopDataViewController.title = "주변상점"
-        navigationController?.pushViewController(shopDataViewController, animated: true)
-    }
+//    private func navigateToShopDataViewController(shopId: Int, shopName: String, categoryId: Int? = nil) {
+//        let shopService = DefaultShopService()
+//        let shopRepository = DefaultShopRepository(service: shopService)
+//        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
+//        let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: shopRepository)
+//        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
+//        let fetchShopReviewListUsecase = DefaultFetchShopReviewListUseCase(shopRepository: shopRepository)
+//        let postCallNotificationUseCase = DefaultPostCallNotificationUseCase(shopRepository: shopRepository)
+//        let fetchMyReviewUseCase = DefaultFetchMyReviewUseCase(shopRepository: shopRepository)
+//        let deleteReviewUseCase = DefaultDeleteReviewUseCase(shopRepository: shopRepository)
+//        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+//        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+//        let shopDataViewModel = ShopDataViewModel(fetchShopDataUseCase: fetchShopDataUseCase, fetchShopMenuListUseCase: fetchShopMenuListUseCase, fetchShopEventListUseCase: fetchShopEventListUseCase, fetchShopReviewListUseCase: fetchShopReviewListUsecase, fetchMyReviewUseCase: fetchMyReviewUseCase, deleteReviewUseCase: deleteReviewUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase, postCallNotificationUseCase: postCallNotificationUseCase, shopId: shopId, shopName: shopName, categoryId: categoryId, enterByShopCallBenefit: false)
+//        
+//        let shopDataViewController: UIViewController
+//        if viewModel.userAssignType == .callNumber {
+//            shopDataViewController = ShopDataViewControllerA(viewModel: shopDataViewModel)
+//        } else {
+//            shopDataViewController = ShopDataViewControllerB(viewModel: shopDataViewModel)
+//        }
+//        shopDataViewController.title = "주변상점"
+//        navigationController?.pushViewController(shopDataViewController, animated: true)
+//    }
     
     private func updateFilteredShops(_ shops: [Shop]) {
         shopCollectionView.updateShop(shops)

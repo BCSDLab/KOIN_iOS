@@ -261,4 +261,8 @@ extension ShopViewModel {
         isFilteringOpenShops = isOpen
         getShopInfo(id: selectedId)
     }
+    
+    func getShopId(at index: Int) -> Int {
+        return shopList[index].id
+    }
 }
