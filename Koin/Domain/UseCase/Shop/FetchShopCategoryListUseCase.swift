@@ -29,7 +29,6 @@ final class DefaultFetchShopCategoryListUseCase: FetchShopCategoryListUseCase {
         var shopCategory = shopCategoryDTO
         if shopCategory.shopCategories.count > 1 {
             shopCategory.totalCount -= 1
-            shopCategory.shopCategories.remove(at: 0)
         }
         return shopCategory
     }

@@ -134,6 +134,33 @@ enum ImageAsset: String {
     case block
     case gallery
     case send
+    case checkEmptyCircle
+    case checkFilledCircle
+    case cancelNeutral500
+    case circlePrimary500
+    case circleCheckedPrimary500
+    case checkGreenCircle
+    case warningRed
+    case findId
+    case findPassword
+    case chevronRightBlue
+    case note
+    case club1
+    case club2
+    case club3
+    case club4
+    case club5
+    case orderHomeTabBar
+    case shopTabBar
+    case orderDetailTabBar
+    case shoppingCart
+    case filterIcon1
+    case filterIcon2
+    case filterIcon3
+    case filterIcon4
+    case delivery
+    case bcsdSymbolLogo
+    case orderEmptyLogo
 }
 
 enum SFSymbols: String {
@@ -150,7 +177,6 @@ enum SFSymbols: String {
 }
 
 extension UIImage {
-    
     static func appImage(asset: ImageAsset) -> UIImage? {
         return UIImage(named: asset.rawValue)
     }
@@ -159,4 +185,9 @@ extension UIImage {
         return UIImage(systemName: symbol.rawValue)
     }
     
+    func resize(to size: CGSize) -> UIImage? {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
 }

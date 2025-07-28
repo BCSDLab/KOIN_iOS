@@ -16,6 +16,8 @@ final class ShopViewModel: ViewModelProtocol {
         case changeCategory(Int)
         case searchTextChanged(String)
         case changeSortStandard(Any)
+        case sortDidChange(FetchShopSortType)
+        case filterOpenShops(Bool)
         case getShopInfo
         case getShopBenefits
         case getBeneficialShops(Int)
@@ -26,7 +28,6 @@ final class ShopViewModel: ViewModelProtocol {
     enum Output {
         case putImage(ShopCategoryDTO)
         case changeFilteredShops([Shop], Int)
-        case updateSeletecButtonColor(FetchShopListRequest)
         case updateEventShops([EventDTO])
         case updateShopBenefits(ShopBenefitsDTO)
         case updateBeneficialShops([Shop])
@@ -47,6 +48,7 @@ final class ShopViewModel: ViewModelProtocol {
     
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
+    private var isFilteringOpenShops = false
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
         didSet {
             getShopInfo(id: selectedId)
@@ -85,6 +87,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.searchShops(text)
             case let .changeSortStandard(standard):
                 self?.changeSortStandard(standard)
+            case let .sortDidChange(sortType):
+                self?.changeSortStandard(sortType)
             case .getShopInfo:
                 self?.getShopInfo(id: self?.selectedId ?? 0)
             case .getShopBenefits:
@@ -95,6 +99,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+            case let .filterOpenShops(isOpen):
+                self?.filterOpenShops(isOpen)
             case .viewDidLoadB:
                 self?.fetchShopBenefits()
                 self?.getEventShopList()
@@ -168,11 +174,15 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
+//                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
+                var shops = response
+                if self.isFilteringOpenShops {
+                    shops = shops.filter { $0.isOpen }
+                }
                 if self.selectedId != 0 {
-                    self.outputSubject.send(.changeFilteredShops(response.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
+                    self.outputSubject.send(.changeFilteredShops(shops.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
                 } else {
-                    self.outputSubject.send(.changeFilteredShops(response, self.selectedId))
+                    self.outputSubject.send(.changeFilteredShops(shops, self.selectedId))
                 }
                 self.shopList = response
             }).store(in: &subscriptions)
@@ -245,5 +255,14 @@ extension ShopViewModel {
     
     private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+    
+    private func filterOpenShops(_ isOpen: Bool) {
+        isFilteringOpenShops = isOpen
+        getShopInfo(id: selectedId)
+    }
+    
+    func getShopId(at index: Int) -> Int {
+        return shopList[index].id
     }
 }

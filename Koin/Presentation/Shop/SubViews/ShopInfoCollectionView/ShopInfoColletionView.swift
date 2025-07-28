@@ -9,12 +9,11 @@ import Combine
 import UIKit
 import FirebaseAnalytics
 
-final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+final class ShopInfoCollectionView: UICollectionView {
     
     private var shops: [Shop] = []
     weak var shopDelegate: CollectionViewDelegate?
     private var cancellables = Set<AnyCancellable>()
-    private var isHeaderHidden: Bool = false
     let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
@@ -23,9 +22,21 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
+    }
+    
+    convenience init() {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        let screenWidth = UIScreen.main.bounds.width
+        let cellWidth = screenWidth - 48
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 128)
+        flowLayout.minimumLineSpacing = 12
+        self.init(frame: .zero, collectionViewLayout: flowLayout)
+        self.isScrollEnabled = false
     }
     
     private func commonInit() {
@@ -33,8 +44,8 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
+        backgroundColor = UIColor.appColor(.newBackground)
         register(ShopInfoCollectionViewCell.self, forCellWithReuseIdentifier: ShopInfoCollectionViewCell.identifier)
-        register(ShopInfoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ShopInfoHeaderView.identifier)
         dataSource = self
         delegate = self
     }
@@ -42,18 +53,6 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     func updateShop(_ shops: [Shop]) {
         self.shops = shops
         self.reloadData()
-    }
-    
-    func setHeaderVisibility(isHidden: Bool) {
-        isHeaderHidden = isHidden
-        self.reloadData()
-    }
-    
-    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
-        guard let headerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? ShopInfoHeaderView else {
-            return
-        }
-        headerView.updateButtonState(standard)
     }
     
     private func makeAnalyticsForClickStoreList(_ storeName: String) {
@@ -68,29 +67,8 @@ final class ShopInfoCollectionView: UICollectionView, UICollectionViewDataSource
     }
 }
 
-extension ShopInfoCollectionView {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            return isHeaderHidden ? CGSize.zero : CGSize(width: collectionView.bounds.width, height: 25)
-        }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
-                return UICollectionReusableView()
-            }
-            cancellables.removeAll()
-            headerView.shopSortStandardPublisher.sink { [weak self] standard in
-                self?.shopSortStandardPublisher.send(standard)
-            }.store(in: &cancellables)
-            headerView.shopFilterTogglePublisher.sink { [weak self] tag in
-                self?.shopFilterTogglePublisher.send(tag)
-            }.store(in: &cancellables)
-            return headerView
-        }
-        return UICollectionReusableView()
-    }
-
+// MARK: - UICollectionViewDataSource
+extension ShopInfoCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shops.count
     }
@@ -103,8 +81,47 @@ extension ShopInfoCollectionView {
         cell.configure(info: shopItem)
         return cell
     }
+}
+
+// MARK: - UICollectionViewDelegate
+extension ShopInfoCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.makeAnalyticsForClickStoreList(shops[indexPath.row].name)
         cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension ShopInfoCollectionView: UICollectionViewDelegateFlowLayout {
+}
+
+extension ShopInfoCollectionView {
+    func calculateShopListHeight() -> CGFloat {
+        let cellHeight: CGFloat = 128
+        let spacing: CGFloat = 12
+        let numberOfCells = CGFloat(shops.count)
+
+        if numberOfCells == 0 {
+            return 0
+        }
+        return (cellHeight * numberOfCells) + (spacing * (numberOfCells - 1))
+    }
+}
+
+extension ShopInfoCollectionView {
+    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
+        
+    }
+}
+
+extension ShopInfoCollectionView {
+    func filterToggleLogEvent(toggleType: Int) {
+        shopFilterTogglePublisher.send(toggleType)
+    }
+}
+
+extension ShopInfoCollectionView {
+    func updateShopSortStandard(_ standard: Any) {
+        shopSortStandardPublisher.send(standard)
     }
 }
