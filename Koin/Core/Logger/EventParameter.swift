@@ -29,6 +29,7 @@ enum EventParameter {
         enum ABTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
             case businessCall = "BUSINESS_call_1"
+            case campusClub1 = "CAMPUS_club_1"
             var team: String {
                 return "AB_TEST"
             }
@@ -169,7 +170,6 @@ enum EventParameter {
         enum User: String, EventLabelType {
             // Login
             case completeSignUp = "complete_sign_up"
-            case hamburgerLogin = "hamburger_login"
             case login = "login"
             case autoLogin = "auto_login"
             case loginFindIdId = "login_findId_id"
@@ -178,6 +178,11 @@ enum EventParameter {
             case hamburgerMyInfoWithoutLogin = "hamburger_my_info_without_login"
             case startSignUp = "start_sign_up"
             case userOnlyOk = "user_only_ok"
+            case userInfo = "user_info"
+            case termsAgreement = "terms_agreement"
+            case identityVerification = "identity_verification"
+            case createAccount = "create_account"
+            case signUpCompleted = "sign_up_completed"
             var team: String {
                 return "USER"
             }

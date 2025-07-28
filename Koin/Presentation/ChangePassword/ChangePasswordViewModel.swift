@@ -34,6 +34,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let checkPasswordUseCase: CheckPasswordUseCase
     private let modifyUseCase: ModifyUseCase
+    private let changePasswordUseCase = DefaultChangePasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private (set)var currentStep: Int = 1
     private var userDTO: UserDTO? = nil
     var isCompleted: (Bool, Bool) = (false, false) {
@@ -70,7 +71,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
 extension ChangePasswordViewModel {
     
     private func changePassword(password: String) {
-        modifyUseCase.execute(requestModel: UserPutRequest(gender: userDTO?.gender, identity: nil, isGraduated: false, major: userDTO?.major, name: userDTO?.name, nickname: userDTO?.nickname, password: password, phoneNumber: userDTO?.phoneNumber, studentNumber: userDTO?.studentNumber)).sink { [weak self] completion in
+        changePasswordUseCase.execute(requestModel: .init(newPassword: EncodingWorker().sha256(text: password))).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
                 self?.outputSubject.send(.showToast(error.message, false, false))
@@ -87,7 +88,7 @@ extension ChangePasswordViewModel {
                 self?.outputSubject.send(.showToast(error.message, false, true))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showEmail(response.email ?? ""))
+            self?.outputSubject.send(.showEmail(response.loginId ?? ""))
             self?.userDTO = response
         }.store(in: &subscriptions)
     }

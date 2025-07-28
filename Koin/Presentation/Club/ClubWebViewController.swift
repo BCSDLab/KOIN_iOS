@@ -30,7 +30,7 @@ final class ClubWebViewController: UIViewController {
     private var didSendTokens = false
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let parameter: String?
+    private let parameter: String
     
     private let webView: NoInputAccessoryWKWebView = {
         let contentController = WKUserContentController()
@@ -44,7 +44,7 @@ final class ClubWebViewController: UIViewController {
     override var inputAccessoryView: UIView? {
         return nil
     }
-    init(parameter: String?) {
+    init(parameter: String) {
         self.parameter = parameter
         super.init(nibName: nil, bundle: nil)
     }
@@ -83,25 +83,14 @@ final class ClubWebViewController: UIViewController {
     }
     
     private func loadClubPage() {
-        guard var components = URLComponents(string: Bundle.main.baseUrl) else {
-            return
-        }
-        if let originalHost = components.host {
-            let updatedHost = originalHost.replacingOccurrences(of: "api.", with: "")
-            components.host = updatedHost
-        }
 
-        components.path = "/clubs"
-
-        components.queryItems = [
-            URLQueryItem(name: "categoryId", value: parameter)
-        ]
-        guard let url = components.url else {
-            return
-        }
-        let request = URLRequest(url: url)
-        webView.load(request)
-    }
+           let base = Bundle.main.baseUrl.replacingOccurrences(of: "api.", with: "")
+           let fullURL = base + parameter
+           if let url = URL(string: fullURL) {
+               let request = URLRequest(url: url)
+               webView.load(request)
+           }
+       }
 }
 
 // MARK: - WKNavigationDelegate

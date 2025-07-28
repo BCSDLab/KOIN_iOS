@@ -11,6 +11,7 @@ protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
     func logEvent(name: String, label: String, value: String, category: String)
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
@@ -23,10 +24,10 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
-        var text: String = "CAMPUS"
-        if label == "CAMPUS_modal_1" { text = "AB_TEST" }
-        // TODO: 이거 우선 임시로 이렇게.. 나중에 고치기
-        Analytics.logEvent(text, parameters: parameters)
+//        var text: String = "CAMPUS"
+//        if label == "CAMPUS_modal_1" { text = "AB_TEST" }
+//        // TODO: 이거 우선 임시로 이렇게.. 나중에 고치기
+        Analytics.logEvent(name, parameters: parameters)
     }
     
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
@@ -63,5 +64,19 @@ final class GA4AnalyticsService: LogAnalyticsService {
         }
         
         Analytics.logEvent(label.team, parameters: defaultParameters)
+    }
+    
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        let parameters: [String: Any] = [
+            "event_label": label.rawValue,
+            "event_category": category.rawValue,
+            "value": value,
+            "custom_session_id": sessionId,
+            "user_id": UserDataManager.shared.userId,
+            "gender": UserDataManager.shared.gender,
+            "major": UserDataManager.shared.major
+        ]
+
+        Analytics.logEvent(label.team, parameters: parameters)
     }
 }
