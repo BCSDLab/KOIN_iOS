@@ -123,7 +123,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         )
         
         let shopViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .shopTabBar)?.withRenderingMode(.alwaysTemplate),
+            image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: ShopViewController(viewModel: shopViewModel),
             title: "주변상점"
         )
@@ -152,31 +152,29 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
 
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-        
-        let selectedTitleAttrs: [NSAttributedString.Key: Any] = [
+        let selectedColor = UIColor.appColor(.new500)
+        let unselectedColor = UIColor.appColor(.neutral300)
+
+        let selectedAttrs: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.black,
             .font: UIFont.appFont(.pretendardBold, size: 12)
         ]
-        let normalTitleAttrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.appColor(.neutral300),
+        let normalAttrs: [NSAttributedString.Key: Any] = [
+            .foregroundColor: unselectedColor,
             .font: UIFont.appFont(.pretendardBold, size: 12)
         ]
-        
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = selectedTitleAttrs
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes   = normalTitleAttrs
 
-        appearance.inlineLayoutAppearance.selected.titleTextAttributes  = selectedTitleAttrs
-        appearance.inlineLayoutAppearance.normal.titleTextAttributes    = normalTitleAttrs
-        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = selectedTitleAttrs
-        appearance.compactInlineLayoutAppearance.normal.titleTextAttributes   = normalTitleAttrs
+        for style in [appearance.stackedLayoutAppearance,
+                      appearance.inlineLayoutAppearance,
+                      appearance.compactInlineLayoutAppearance] {
+            style.selected.iconColor = selectedColor
+            style.normal.iconColor = unselectedColor
+            style.selected.titleTextAttributes = selectedAttrs
+            style.normal.titleTextAttributes = normalAttrs
+        }
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        
-        tabBar.tintColor = UIColor.appColor(.new500)
-        tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
     }
 
     // MARK: - Helper

@@ -151,7 +151,7 @@ enum ImageAsset: String {
     case club4
     case club5
     case orderHomeTabBar
-    case shopTabBar
+    case orderShopTabBar
     case orderDetailTabBar
     case shoppingCart
     case filterIcon1
