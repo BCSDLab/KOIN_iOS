@@ -380,11 +380,11 @@ extension ShopViewController {
         searchedShopCollectionView.snp.makeConstraints {
             $0.top.equalTo(searchTextField.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(200)
+            $0.bottom.equalToSuperview()
         }
 
         dimView.snp.makeConstraints {
-            $0.top.equalTo(searchedShopCollectionView.snp.bottom)
+            $0.top.equalTo(searchTextField.snp.bottom)
             $0.leading.trailing.equalTo(searchedShopCollectionView)
             $0.bottom.equalToSuperview()
         }
