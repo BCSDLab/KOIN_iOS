@@ -22,7 +22,6 @@ struct OrderShop {
     let isOpen: Bool
     let categoryIds: [Int]
     let images: [OrderImage]?
-    let orderShopOpen: [OrderOpen]
     let openStatus: String
 
     enum CodingKeys: String, CodingKey {
@@ -40,7 +39,6 @@ struct OrderShop {
         case isOpen = "is_open"
         case categoryIds = "category_ids"
         case images
-        case orderShopOpen = "open"
         case openStatus = "open_status"
     }
 }
@@ -90,7 +88,6 @@ extension OrderShop {
         isOpen = dto.isOpen
         categoryIds = dto.categoryIds
         images = dto.images?.map { OrderImage(dto: $0) }
-        orderShopOpen = dto.open.map { OrderOpen(dto: $0) }
         openStatus = dto.openStatus
     }
 }

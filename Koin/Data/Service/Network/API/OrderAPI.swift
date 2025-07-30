@@ -56,6 +56,9 @@ extension OrderAPI: Router, URLRequestConvertible {
             if let minimumOrderAmount = request.minimumOrderAmount {
                 parameters["minimum_order_amount"] = minimumOrderAmount
             }
+            if let categoryFilter = request.categoryFilter {
+                parameters["category_filter"] = categoryFilter
+            }
             return parameters
         case .searchShop:
             return nil

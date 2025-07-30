@@ -31,7 +31,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []
-    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], minimumOrderAmount: nil) {
+    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], categoryFilter: nil, minimumOrderAmount: nil) {
         didSet {
             getOrderShopInfo(id: selectedId)
         }
@@ -76,6 +76,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
                 self?.sortStandard.sorter = sort
             case let .categoryDidChange(id):
                 self?.selectedId = id
+                self?.sortStandard.categoryFilter = id
             case let .searchTextChanged(text):
                 self?.searchOrderShop(text)
                 self?.searchOrderShops(text)
