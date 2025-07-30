@@ -24,6 +24,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case changeFilteredOrderShops([OrderShop], Int)
         case changeFilteredShops([OrderShop], Int)
+        case updateEventShops([EventDTO])
         case showSearchedResult([Keyword])
     }
     
@@ -42,11 +43,17 @@ final class OrderHomeViewModel: ViewModelProtocol {
         }
     }
 
+    private let fetchEventListUseCase: FetchEventListUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
     private let searchOrderShopUseCase: SearchOrderShopUseCase
     
-    init(fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, fetchOrderShopListUseCase: FetchOrderShopListUseCase, searchOrderShopUseCase: SearchOrderShopUseCase, selectedId: Int) {
+    init(fetchEventListUseCase: FetchEventListUseCase,
+         fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
+         fetchOrderShopListUseCase: FetchOrderShopListUseCase,
+         searchOrderShopUseCase: SearchOrderShopUseCase,
+         selectedId: Int) {
+        self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
         self.searchOrderShopUseCase = searchOrderShopUseCase
@@ -58,6 +65,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 self?.getShopCategory()
+                self?.getEventShopList()
                 self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             case .getOrderShopInfo:
                 self?.getOrderShopInfo(id: self?.selectedId ?? 1)
@@ -94,6 +102,17 @@ extension OrderHomeViewModel {
                 self?.outputSubject.send(.putImage(response))
             })
             .store(in: &subscriptions)
+    }
+    
+    private func getEventShopList() {
+        fetchEventListUseCase.execute()
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { [weak self] response in
+                self?.outputSubject.send(.updateEventShops(response.events ?? []))
+            }).store(in: &subscriptions)
     }
 
     private func getOrderShopInfo(id: Int) {

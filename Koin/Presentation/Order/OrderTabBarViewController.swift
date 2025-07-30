@@ -94,9 +94,10 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         
         let orderHomeViewModel = OrderHomeViewModel(
-            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
+            fetchEventListUseCase: fetchEventListUseCase, fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
             fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
             searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository),
             selectedId: initialTabIndex == 0 ? selectedShopID ?? 1 : 1
