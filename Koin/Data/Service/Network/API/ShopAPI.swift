@@ -95,10 +95,13 @@ extension ShopAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchShopList(let request):
             var parameters: [String: Any] = ["sorter": request.sorter.rawValue]
-            for filterItem in request.filter {
-                           parameters["filter"] = filterItem.rawValue
-                       }
-               return parameters
+            if !request.filter.isEmpty {
+                parameters["filter"] = request.filter.map { $0.rawValue }
+            }
+            if let query = request.query {
+                parameters["query"] = query
+            }
+            return parameters
         case .fetchReviewList(let request):
             return [
                 "limit": request.limit,

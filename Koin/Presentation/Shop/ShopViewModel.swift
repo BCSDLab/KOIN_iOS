@@ -45,7 +45,7 @@ final class ShopViewModel: ViewModelProtocol {
     private var shopList: [Shop] = []
     private var isFilteringOpenShops = false
     
-    private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
+    private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil) {
         didSet {
             getShopInfo(id: selectedId)
         }
@@ -84,6 +84,8 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.changeCategory(id)
                 
             case let .searchTextChanged(text):    // 주변 상점
+                self?.sortStandard.query = text
+                self?.getShopInfo(id: self?.selectedId ?? 0)
                 self?.searchShop(text)
                 self?.searchShops(text)
                 
@@ -156,7 +158,7 @@ extension ShopViewModel {
     }
     
     private func getShopInfo(id: Int) {
-        fetchShopListUseCase.execute(requestModel: FetchShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
+        fetchShopListUseCase.execute(requestModel: sortStandard)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
