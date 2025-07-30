@@ -333,7 +333,6 @@ extension HomeViewController {
         }
         
         if let redirect = banner.redirectLink {
-            // redirect 로직
             if redirect == "shop" {
                 dismiss(animated: true)
                 let shopService = DefaultShopService()
@@ -345,14 +344,12 @@ extension HomeViewController {
                 let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
                 let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
                 let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-                
+
                 let viewModel = ShopViewModel(
                     fetchShopListUseCase: fetchShopListUseCase,
                     fetchEventListUseCase: fetchEventListUseCase,
-                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-                    logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+                    searchShopUseCase: searchShopUseCase,
                     fetchShopBenefitUseCase: fetchShopBenefitUseCase,
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                     selectedId: 0

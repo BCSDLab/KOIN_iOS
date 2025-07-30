@@ -28,7 +28,6 @@ final class NotificationHandler {
             }
         }
     
-    
     private func handleDiningNavigation(date: String, type: String, place: String, rootViewController: UIViewController?) {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
@@ -77,6 +76,7 @@ final class NotificationHandler {
             navigateToScene(category: category, rootViewController: rootViewController)
         }
     }
+    
     private func handleKeywordNotification(userInfo: [AnyHashable: Any], rootViewController: UINavigationController?) {
         guard let schemeUri = userInfo["schemeUri"] as? String else {
             print("No schemeUri found")
@@ -109,6 +109,7 @@ final class NotificationHandler {
             )
         }
     }
+    
     func navigateToScene(category: String, rootViewController: UINavigationController?) {
         switch category {
         case "dining":
@@ -156,14 +157,12 @@ final class NotificationHandler {
         let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
         let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: 0

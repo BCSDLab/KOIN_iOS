@@ -113,10 +113,6 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchEventListUseCase: DefaultFetchEventListUseCase(shopRepository: shopRepository),
             fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
             searchShopUseCase: DefaultSearchShopUseCase(shopRepository: shopRepository),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-            ),
-            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
             fetchShopBenefitUseCase: DefaultFetchShopBenefitUseCase(shopRepository: shopRepository),
             fetchBeneficialShopUseCase: DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository),
             selectedId: initialTabIndex == 1 ? selectedShopID ?? 0 : 0

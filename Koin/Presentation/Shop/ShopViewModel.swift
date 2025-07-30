@@ -21,8 +21,6 @@ final class ShopViewModel: ViewModelProtocol {
         case getShopInfo
         case getShopBenefits
         case getBeneficialShops(Int)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
-        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
     
     enum Output {
@@ -40,35 +38,36 @@ final class ShopViewModel: ViewModelProtocol {
     private let fetchEventListUseCase: FetchEventListUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let searchShopUseCase: SearchShopUseCase
-    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
     private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
-    private let assignAbTestUseCase: AssignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
     
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
     private var isFilteringOpenShops = false
+    
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: []) {
         didSet {
             getShopInfo(id: selectedId)
         }
     }
+    
     private (set) var selectedId: Int {
         didSet {
             getShopInfo(id: selectedId)
         }
     }
     
-    private(set) var userAssignType: UserAssignType = .callFloating
-    
-    init(fetchShopListUseCase: FetchShopListUseCase, fetchEventListUseCase: FetchEventListUseCase, fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, searchShopUseCase: SearchShopUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, fetchShopBenefitUseCase: FetchShopBenefitUseCase, fetchBeneficialShopUseCase: FetchBeneficialShopUseCase, selectedId: Int) {
+    init(fetchShopListUseCase: FetchShopListUseCase,
+         fetchEventListUseCase: FetchEventListUseCase,
+         fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
+         searchShopUseCase: SearchShopUseCase,
+         fetchShopBenefitUseCase: FetchShopBenefitUseCase,
+         fetchBeneficialShopUseCase: FetchBeneficialShopUseCase,
+         selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.searchShopUseCase = searchShopUseCase
-        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
         self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
@@ -95,10 +94,6 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.fetchShopBenefits()
             case let .getBeneficialShops(id):
                 self?.fetchBeneficialShops(id: id)
-            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
-            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
-                self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .filterOpenShops(isOpen):
                 self?.filterOpenShops(isOpen)
             case .viewDidLoadB:
@@ -113,24 +108,11 @@ final class ShopViewModel: ViewModelProtocol {
 }
 
 extension ShopViewModel {
-    
-    func assignShopAbTest(shopId: Int, shopName: String, categoryId: Int) {
-        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "business_call")).sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.outputSubject.send(.navigateToShopData(shopId, shopName, categoryId))
-            }
-        }, receiveValue: { [weak self] abTestResult in
-            self?.userAssignType = abTestResult.variableName
-            print(abTestResult)
-            self?.outputSubject.send(.navigateToShopData(shopId, shopName, categoryId))
-        }).store(in: &subscriptions)
-    }
-    
     private func searchShops(_ text: String) {
         let shops = shopList.filter { $0.name.contains(text) }
         outputSubject.send(.changeFilteredShops(shops, selectedId))
     }
+    
     private func fetchShopBenefits() {
         fetchShopBenefitUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
@@ -166,6 +148,7 @@ extension ShopViewModel {
             }
         }
     }
+    
     private func getShopInfo(id: Int) {
         fetchShopListUseCase.execute(requestModel: FetchShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter))
             .sink(receiveCompletion: { completion in
@@ -174,7 +157,6 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-//                self.outputSubject.send(.updateSeletecButtonColor(self.sortStandard))
                 var shops = response
                 if self.isFilteringOpenShops {
                     shops = shops.filter { $0.isOpen }
@@ -211,6 +193,7 @@ extension ShopViewModel {
                 self?.getShopInfo(id: strongSelf.selectedId)
             }).store(in: &subscriptions)
     }
+    
     private func searchShop(_ text: String) {
         searchShopUseCase.execute(text: text).sink { completion in
             if case let .failure(error) = completion {
@@ -219,42 +202,11 @@ extension ShopViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showSearchedResult(response.keywords ?? []))
         }.store(in: &subscriptions)
-        
-        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearch, category: .click, value: selectedId)
     }
     
     private func changeCategory(_ id: Int) {
         if selectedId == id { selectedId = 0 }
         else { selectedId = id }
-    }
-    
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
-        if let currentPage = currentPage {
-            if eventLabelNeededDuration == .shopCategories {
-                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-                let selectedNewShopName = categoryName == currentPage ? MakeParamsForLog().makeValueForLogAboutStoreId(id: 0) : currentPage
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: selectedNewShopName, previousPage: categoryName, currentPage: selectedNewShopName, durationTime: "\(durationTime)")
-            }
-            else {
-                let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-                logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
-            }
-        }
-        else {
-            if label.rawValue == EventParameter.EventLabel.Business.shopCan.rawValue {
-                let categoryName = MakeParamsForLog().makeValueForLogAboutStoreId(id: selectedId)
-                let newValue = "\(value)_\(categoryName)"
-                logAnalyticsEventUseCase.execute(label: label, category: category, value: newValue)
-            }
-            else {
-                logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-            }
-        }
-    }
-    
-    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
     }
     
     private func filterOpenShops(_ isOpen: Bool) {
