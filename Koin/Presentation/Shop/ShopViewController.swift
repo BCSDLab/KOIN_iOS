@@ -346,7 +346,7 @@ extension ShopViewController {
                 $0.bottom.equalToSuperview().offset(-32)
             }
             eventShopCollectionView.setEventShops(eventShops)
-            eventIndexLabel.text = "< 1/\(eventShops.count) >"
+            eventIndexLabel.text = "1/\(eventShops.count)"
         }
     }
 }

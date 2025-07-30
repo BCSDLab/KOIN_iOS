@@ -15,6 +15,15 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
     var shopId: Int?
 
     // MARK: - UI Components
+    private let koinEventLabel = UILabel().then {
+        $0.text = "코인전용"
+        $0.textColor = UIColor.appColor(.warning500)
+        $0.font = UIFont.appFont(.pretendardBold, size: 12)
+        $0.backgroundColor = .orange
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 9.5
+        $0.layer.masksToBounds = true
+    }
 
     private let eventImageView = UIImageView().then {
         $0.image = UIImage.appImage(asset: .defaultMenuImage)
@@ -25,15 +34,12 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
     private let eventTextLabel = UILabel().then {
         $0.numberOfLines = 2
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapCell))
         self.addGestureRecognizer(tapGesture)
-        contentView.layer.cornerRadius = 16
-        contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .white
     }
 
     required init?(coder: NSCoder) {
@@ -62,26 +68,21 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        eventImageView.layer.sublayers?.first?.frame = eventImageView.bounds
-    }
-
     @objc private func didTapCell() {
         onTap?(shopId ?? 0)
     }
 
     private func updateEventText(shopName: String) {
         let shopAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.appFont(.pretendardBold, size: 18),
+            .font: UIFont.appFont(.pretendardBold, size: 20),
             .foregroundColor: UIColor.appColor(.neutral800)
         ]
         let eventAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.appFont(.pretendardMedium, size: 15),
+            .font: UIFont.appFont(.pretendardBold, size: 14),
             .foregroundColor: UIColor.appColor(.neutral800)
         ]
         let storeTitle = NSMutableAttributedString(string: shopName, attributes: shopAttributes)
-        let eventText = NSMutableAttributedString(string: "에서\n할인 혜택을 받아보세요!", attributes: eventAttributes)
+        let eventText = NSMutableAttributedString(string: "에서\n코인 전용 할인혜택 받기!", attributes: eventAttributes)
         storeTitle.append(eventText)
         eventTextLabel.attributedText = storeTitle
     }
@@ -89,42 +90,34 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
 
 extension EventShopCollectionViewCell {
     private func setUpLayouts() {
-        [eventImageView, eventTextLabel].forEach {
+        [koinEventLabel, eventImageView, eventTextLabel].forEach {
             contentView.addSubview($0)
         }
     }
 
     private func setUpConstraints() {
-        eventImageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        koinEventLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalToSuperview().offset(16)
+            $0.width.equalTo(54)
+            $0.height.equalTo(19)
         }
 
         eventTextLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.top.equalTo(eventImageView.snp.top).offset(15)
+            $0.leading.equalTo(koinEventLabel.snp.leading)
+            $0.top.equalTo(koinEventLabel.snp.bottom).offset(2)
         }
-    }
-
-    private func addGradientBackground() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = eventImageView.bounds
-
-        let whiteColor = UIColor.appColor(.neutral100).withAlphaComponent(0.0).cgColor
-        let blackColor40 = UIColor.black.withAlphaComponent(0.4).cgColor
-        let blackColor50 = UIColor.black.withAlphaComponent(0.5).cgColor
-
-        gradientLayer.colors = [whiteColor, blackColor40, blackColor50]
-        gradientLayer.locations = [0.0, 0.4, 1.0]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-
-        eventImageView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        eventImageView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-19)
+            $0.width.height.equalTo(100)
+        }
     }
 
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        addGradientBackground()
         contentView.clipsToBounds = true
         contentView.backgroundColor = UIColor.appColor(.neutral100)
         contentView.layer.cornerRadius = 16
