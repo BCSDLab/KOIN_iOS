@@ -11,13 +11,13 @@ import Foundation
 final class ShopViewModel: ViewModelProtocol {
     
     enum Input {
-        case viewDidLoad
+        case viewDidLoad    // 주변상점
         case viewDidLoadB
         case changeCategory(Int)
-        case searchTextChanged(String)
-        case changeSortStandard(Any)
+        case searchTextChanged(String)      // 주변상점
+        case changeSortStandard(Any)        // 주변상점
         case sortDidChange(FetchShopSortType)
-        case filterOpenShops(Bool)
+        case filterOpenShops(Bool)      // 주변상점
         case getShopInfo
         case getShopBenefits
         case getBeneficialShops(Int)
@@ -76,16 +76,20 @@ final class ShopViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .viewDidLoad:
+            case .viewDidLoad:  // 주변 상점
                 self?.getShopCategory()
                 self?.getEventShopList()
+                
             case let .changeCategory(id):
                 self?.changeCategory(id)
-            case let .searchTextChanged(text):
+                
+            case let .searchTextChanged(text):    // 주변 상점
                 self?.searchShop(text)
                 self?.searchShops(text)
-            case let .changeSortStandard(standard):
+                
+            case let .changeSortStandard(standard):   // 주변 상점
                 self?.changeSortStandard(standard)
+                
             case let .sortDidChange(sortType):
                 self?.changeSortStandard(sortType)
             case .getShopInfo:
@@ -94,8 +98,10 @@ final class ShopViewModel: ViewModelProtocol {
                 self?.fetchShopBenefits()
             case let .getBeneficialShops(id):
                 self?.fetchBeneficialShops(id: id)
-            case let .filterOpenShops(isOpen):
+                
+            case let .filterOpenShops(isOpen):    // 주변 상점
                 self?.filterOpenShops(isOpen)
+                
             case .viewDidLoadB:
                 self?.fetchShopBenefits()
                 self?.getEventShopList()

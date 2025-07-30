@@ -21,7 +21,7 @@ final class ShopViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let categoryCollectionView = OrderCategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     private let searchTextField = UITextField().then {
         $0.placeholder = "검색어를 입력해주세요."
@@ -392,7 +392,7 @@ extension ShopViewController {
         categoryCollectionView.snp.makeConstraints {
             $0.top.equalTo(searchTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(193)
+            $0.height.equalTo(71)
         }
 
         sortButton.snp.makeConstraints {

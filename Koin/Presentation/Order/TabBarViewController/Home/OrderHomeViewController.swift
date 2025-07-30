@@ -60,9 +60,7 @@ final class OrderHomeViewController: UIViewController {
     
     private let categoryCollectionView = OrderCategoryCollectionView(
         frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    ).then { collectionView in
-    }
+        collectionViewLayout: UICollectionViewFlowLayout())
     
     private let sortButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
