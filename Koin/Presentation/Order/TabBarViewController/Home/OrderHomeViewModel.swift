@@ -26,6 +26,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case changeFilteredShops([OrderShop], Int)
         case updateEventShops([EventDTO])
         case showSearchedResult([Keyword])
+        case errorOccurred(Error)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -117,10 +118,11 @@ extension OrderHomeViewModel {
     }
 
     private func getOrderShopInfo(id: Int) {
-        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter, minimumOrderAmount: sortStandard.minimumOrderAmount))
-            .sink(receiveCompletion: { completion in
+        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter, categoryFilter: sortStandard.categoryFilter, minimumOrderAmount: sortStandard.minimumOrderAmount))
+            .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
+                    self?.outputSubject.send(.errorOccurred(error))
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
@@ -138,11 +140,7 @@ extension OrderHomeViewModel {
                     filteredShops = filteredShops.filter { $0.minimumOrderAmount ?? 0 <= minPrice }
                 }
 
-                if self.selectedId != 0 {
-                    self.outputSubject.send(.changeFilteredOrderShops(filteredShops.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
-                } else {
-                    self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
-                }
+                self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
                 self.orderShopList = filteredShops
             }).store(in: &subscriptions)
     }

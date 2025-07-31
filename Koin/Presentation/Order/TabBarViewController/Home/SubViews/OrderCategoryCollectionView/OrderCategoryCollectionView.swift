@@ -13,8 +13,8 @@ final class OrderCategoryCollectionView: UICollectionView {
     // MARK: - Combine & Data
     private var subscriptions = Set<AnyCancellable>()
     private var shopCategories: [ShopCategory] = []
-    let cellTapPublisher = PassthroughSubject<Int, Never>() // ✅ 카테고리 탭 이벤트
-    let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0) // ✅ 선택된 카테고리 ID
+    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let selectedCategoryPublisher = PassthroughSubject<Int, Never>()
     private var selectedId = 0
 
     // MARK: - Init
@@ -83,9 +83,7 @@ extension OrderCategoryCollectionView: UICollectionViewDataSource {
 extension OrderCategoryCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let category = shopCategories[indexPath.row]
-        selectedId = category.id
-        cellTapPublisher.send(selectedId)
-        reloadData()
+        updateCategory(category.id)
     }
 }
 

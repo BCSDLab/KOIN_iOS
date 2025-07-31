@@ -523,10 +523,7 @@ extension HomeViewController {
     }
     
     private func putImage(data: ShopCategoryDTO) {
-        var categories = data.shopCategories
-        let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://ifh.cc/g/M4raFL.png")
-        categories.insert(newCategory, at: 0)
-        categoryCollectionView.updateCategories(categories)
+        categoryCollectionView.updateCategories(data.shopCategories)
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
@@ -547,13 +544,14 @@ extension HomeViewController {
     }
     
     func didTapCell(at id: Int) {
-        let orderableCategoryIds = [0, 1, 2, 3, 5, 6] // 전체, 치킨, 중국집, 한식, 피자/버거, 족발
+        let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
+        let categoryId = id == 0 ? 1 : id
 
-        if orderableCategoryIds.contains(id) {
-            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: id, initialTabIndex: 0)
+        if orderableCategoryIds.contains(categoryId) {
+            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: 0)
             navigationController?.pushViewController(orderTabBarViewController, animated: true)
         } else {
-            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: id, initialTabIndex: 1)
+            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: 1)
             navigationController?.pushViewController(orderTabBarViewController, animated: true)
         }
     }

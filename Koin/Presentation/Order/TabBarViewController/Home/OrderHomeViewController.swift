@@ -202,6 +202,13 @@ final class OrderHomeViewController: UIViewController {
                 self?.updateEventShops(eventShops)
             case let .putImage(response):
                 self?.putImage(data: response)
+            case .errorOccurred(let error):
+                if let serverError = error as? ServerErrorDTO {
+                    self?.showAlert(serverError.message)
+                } else {
+                    self?.showAlert(error.localizedDescription)
+                }
+
             default:
                 break
             }
@@ -214,6 +221,7 @@ final class OrderHomeViewController: UIViewController {
             .store(in: &subscriptions)
 
         categoryCollectionView.selectedCategoryPublisher
+            .removeDuplicates()
             .sink { [weak self] id in
                 self?.inputSubject.send(.categoryDidChange(id))
             }
@@ -239,6 +247,13 @@ final class OrderHomeViewController: UIViewController {
 }
 
 extension OrderHomeViewController {
+    // FIXME: - 지워
+    private func showAlert(_ message: String) {
+        let alert = UIAlertController(title: "에러", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
+    
     @objc private func searchBarButtonTapped() {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -334,8 +349,9 @@ extension OrderHomeViewController {
             orderShopCollectionView.isHidden = false
             emptyResultStackView.isHidden = true
             orderShopCollectionView.updateShop(shops)
+            let dynamicHeight = orderShopCollectionView.calculateCollectionViewHeight()
             orderShopCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
+                make.height.equalTo(dynamicHeight)
             }
         }
     }
@@ -352,7 +368,6 @@ extension OrderHomeViewController {
                 $0.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
                 $0.leading.equalToSuperview().offset(24)
                 $0.trailing.equalToSuperview().offset(-24)
-                $0.height.equalTo(1)
                 $0.bottom.equalToSuperview().offset(-32)
             }
             eventShopCollectionView.setEventShops(eventShops)

@@ -8,6 +8,13 @@
 import Alamofire
 import Combine
 
+// FIXME: 임시 디버깅용 struct
+struct ServerErrorDTO: Decodable, Error {
+    let code: String
+    let message: String
+    let errorTraceId: String?
+}
+
 protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
@@ -17,6 +24,7 @@ final class DefaultOrderService: OrderService {
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         return request(.fetchOrderShopList(requestModel))
+            .eraseToAnyPublisher()
     }
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
@@ -25,8 +33,26 @@ final class DefaultOrderService: OrderService {
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                let decoder = JSONDecoder()
+                switch response.result {
+                case .success(let data):
+                    do {
+                        return try decoder.decode(T.self, from: data)
+                    } catch {
+                        throw error
+                    }
+                case .failure(let afError):
+                    if let data = response.data {
+                        if let serverError = try? decoder.decode(ServerErrorDTO.self, from: data) {
+                            throw serverError
+                        }
+                    }
+                    throw afError
+                }
+            }
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }

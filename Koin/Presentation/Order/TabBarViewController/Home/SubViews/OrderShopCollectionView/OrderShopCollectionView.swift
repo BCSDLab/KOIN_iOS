@@ -36,6 +36,18 @@ final class OrderShopCollectionView: UICollectionView {
         self.orderShop = orderShop
         self.reloadData()
     }
+
+    func calculateCollectionViewHeight() -> CGFloat {
+        let itemHeight: CGFloat = 128
+        let spacing: CGFloat = 12
+        let numberOfItems = CGFloat(orderShop.count)
+        
+        if numberOfItems == 0 {
+            return 0
+        }
+        
+        return (itemHeight * numberOfItems) + (spacing * (numberOfItems - 1))
+    }
 }
 
 // MARK: - UICollectionViewDataSource

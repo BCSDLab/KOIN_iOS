@@ -43,7 +43,7 @@ final class CategoryCollectionView: UICollectionView {
 
     // MARK: - Public
     func updateCategories(_ categories: [ShopCategory]) {
-        self.shopCategories = categories.filter { $0.id != -1 }
+        self.shopCategories = categories
         self.reloadData()
     }
 

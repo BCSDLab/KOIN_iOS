@@ -100,7 +100,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchEventListUseCase: fetchEventListUseCase, fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
             fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
             searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository),
-            selectedId: initialTabIndex == 0 ? selectedShopID ?? 1 : 1
+            selectedId: selectedShopID ?? 1
         )
         
         let orderHomeViewController = tabBarNavigationController(

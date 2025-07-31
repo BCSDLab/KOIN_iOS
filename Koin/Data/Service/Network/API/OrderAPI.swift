@@ -67,6 +67,8 @@ extension OrderAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
+        case .fetchOrderShopList:
+            return URLEncoding(arrayEncoding: .noBrackets)
         default:
             return URLEncoding.default
         }
