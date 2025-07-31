@@ -94,7 +94,7 @@ final class OrderHomeViewController: UIViewController {
     ).then { collectionView in
     }
     
-    private let eventShopCollectionView = EventShopCollectionView(
+    private let eventOrderShopCollectionView = EventOrderShopCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then {
@@ -233,7 +233,7 @@ final class OrderHomeViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        eventShopCollectionView.scrollPublisher
+        eventOrderShopCollectionView.scrollPublisher
             .sink { [weak self] index in
                 self?.eventIndexLabel.text = index
             }
@@ -259,10 +259,22 @@ extension OrderHomeViewController {
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        
-        let searchVC = OrderSearchViewController(viewModel: OrderHomeViewModel(fetchEventListUseCase: fetchEventListUseCase, fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository), fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository), selectedId: 1))
-        
+
+        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
+        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+
+        let searchVC = OrderSearchViewController(
+            viewModel: OrderHomeViewModel(
+                fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
+                fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+                fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+                searchOrderShopUseCase: searchOrderShopUseCase,
+                selectedId: 1
+            )
+        )
+
         let navController = UINavigationController(rootViewController: searchVC)
         if #available(iOS 13.0, *) {
             navController.modalPresentationStyle = .fullScreen
@@ -271,6 +283,7 @@ extension OrderHomeViewController {
         }
         present(navController, animated: true, completion: nil)
     }
+
     
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
@@ -360,18 +373,18 @@ extension OrderHomeViewController {
         categoryCollectionView.updateCategory(id)
     }
     
-    private func updateEventShops(_ eventShops: [EventDTO]) {
-        eventShopCollectionView.isHidden = eventShops.isEmpty
+    private func updateEventShops(_ eventShops: [OrderShopEvent]) {
+        eventOrderShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
             orderShopCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(eventShopCollectionView.snp.bottom).offset(14)
+                $0.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
                 $0.leading.equalToSuperview().offset(24)
                 $0.trailing.equalToSuperview().offset(-24)
                 $0.bottom.equalToSuperview().offset(-32)
             }
-            eventShopCollectionView.setEventShops(eventShops)
-            eventIndexLabel.text = "1/\(eventShops.count)"   // 초기 인덱스
+            eventOrderShopCollectionView.setEventShops(eventShops)
+            eventIndexLabel.text = "1/\(eventShops.count)"
         }
     }
 }
@@ -394,7 +407,7 @@ extension OrderHomeViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, eventShopCollectionView, eventIndexLabel, orderShopCollectionView, emptyResultStackView].forEach {
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, eventOrderShopCollectionView, eventIndexLabel, orderShopCollectionView, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -434,14 +447,14 @@ extension OrderHomeViewController {
             $0.trailing.equalToSuperview().inset(16)
         }
         
-        eventShopCollectionView.snp.makeConstraints {
+        eventOrderShopCollectionView.snp.makeConstraints {
             $0.top.equalTo(filterCollectionView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(100)
         }
 
         eventIndexLabel.snp.makeConstraints {
-            $0.bottom.equalTo(eventShopCollectionView.snp.bottom).offset(-12)
+            $0.bottom.equalTo(eventOrderShopCollectionView.snp.bottom).offset(-12)
             $0.trailing.equalToSuperview().offset(-44)
             $0.width.greaterThanOrEqualTo(40)
             $0.height.equalTo(14)

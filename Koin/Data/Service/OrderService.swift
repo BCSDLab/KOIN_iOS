@@ -17,6 +17,7 @@ struct ServerErrorDTO: Decodable, Error {
 
 protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
 }
 
@@ -24,6 +25,14 @@ final class DefaultOrderService: OrderService {
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         return request(.fetchOrderShopList(requestModel))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
+        request(.fetchOrderEventShop)
+            .map { (response: OrderShopEventListResponseDTO) in
+                response.shopEvents
+            }
             .eraseToAnyPublisher()
     }
     

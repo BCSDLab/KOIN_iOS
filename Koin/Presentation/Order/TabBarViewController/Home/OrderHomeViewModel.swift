@@ -24,7 +24,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case changeFilteredOrderShops([OrderShop], Int)
         case changeFilteredShops([OrderShop], Int)
-        case updateEventShops([EventDTO])
+        case updateEventShops([OrderShopEvent])
         case showSearchedResult([Keyword])
         case errorOccurred(Error)
     }
@@ -32,6 +32,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []
+    
     private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], categoryFilter: nil, minimumOrderAmount: nil) {
         didSet {
             getOrderShopInfo(id: selectedId)
@@ -44,17 +45,17 @@ final class OrderHomeViewModel: ViewModelProtocol {
         }
     }
 
-    private let fetchEventListUseCase: FetchEventListUseCase
+    private let fetchOrderEventShopUseCase: FetchOrderEventShopUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
     private let searchOrderShopUseCase: SearchOrderShopUseCase
-    
-    init(fetchEventListUseCase: FetchEventListUseCase,
+
+    init(fetchOrderEventShopUseCase: FetchOrderEventShopUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          fetchOrderShopListUseCase: FetchOrderShopListUseCase,
          searchOrderShopUseCase: SearchOrderShopUseCase,
          selectedId: Int) {
-        self.fetchEventListUseCase = fetchEventListUseCase
+        self.fetchOrderEventShopUseCase = fetchOrderEventShopUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
         self.searchOrderShopUseCase = searchOrderShopUseCase
@@ -84,9 +85,8 @@ final class OrderHomeViewModel: ViewModelProtocol {
             case let .minPriceDidChange(price):
                 self?.sortStandard.minimumOrderAmount = price
             }
-            
         }.store(in: &subscriptions)
-        
+
         return outputSubject.eraseToAnyPublisher()
     }
 }
@@ -107,13 +107,13 @@ extension OrderHomeViewModel {
     }
     
     private func getEventShopList() {
-        fetchEventListUseCase.execute()
+        fetchOrderEventShopUseCase.execute()
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateEventShops(response.events ?? []))
+            }, receiveValue: { [weak self] events in
+                self?.outputSubject.send(.updateEventShops(events))
             }).store(in: &subscriptions)
     }
 

@@ -24,6 +24,12 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .eraseToAnyPublisher()
     }
     
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEvent], Error> {
+        service.fetchOrderEventShop()
+            .map { $0.map(OrderShopEvent.init) }
+            .eraseToAnyPublisher()
+    }
+    
     func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
         return service.searchRelatedShops(text: text)
     }

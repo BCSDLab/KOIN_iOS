@@ -94,31 +94,40 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        
+
+        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
+        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+
         let orderHomeViewModel = OrderHomeViewModel(
-            fetchEventListUseCase: fetchEventListUseCase, fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-            fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
-            searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository),
+            fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+            searchOrderShopUseCase: searchOrderShopUseCase,
             selectedId: selectedShopID ?? 1
         )
-        
         let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
             title: "홈"
         )
-        
+
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchShopEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+
         let shopViewModel = ShopViewModel(
-            fetchShopListUseCase: DefaultFetchShopListUseCase(shopRepository: shopRepository),
-            fetchEventListUseCase: DefaultFetchEventListUseCase(shopRepository: shopRepository),
-            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-            searchShopUseCase: DefaultSearchShopUseCase(shopRepository: shopRepository),
-            fetchShopBenefitUseCase: DefaultFetchShopBenefitUseCase(shopRepository: shopRepository),
-            fetchBeneficialShopUseCase: DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository),
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchShopEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            searchShopUseCase: searchShopUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: initialTabIndex == 1 ? selectedShopID ?? 0 : 0
         )
-        
         let shopViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: ShopViewController(viewModel: shopViewModel),
@@ -132,7 +141,6 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         )
 
         viewControllers = [orderHomeViewController, shopViewController, historyViewController]
-
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
     }
