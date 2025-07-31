@@ -47,8 +47,10 @@ final class EventOrderShopCollectionView: UICollectionView, UICollectionViewData
 }
 
 extension EventOrderShopCollectionView {
-    func startAutoScroll() {
-        timer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
+    func startAutoScroll(interval: TimeInterval = 4.0) {
+        stopAutoScroll()
+        guard eventShops.count > 1 else { return }
+        timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
     }
     
     func stopAutoScroll() {

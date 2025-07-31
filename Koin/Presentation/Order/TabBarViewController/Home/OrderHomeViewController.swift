@@ -355,17 +355,22 @@ extension OrderHomeViewController {
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
-        if shops.isEmpty {
-            orderShopCollectionView.isHidden = true
-            emptyResultStackView.isHidden = false
-        } else {
-            orderShopCollectionView.isHidden = false
-            emptyResultStackView.isHidden = true
-            orderShopCollectionView.updateShop(shops)
-            let dynamicHeight = orderShopCollectionView.calculateCollectionViewHeight()
-            orderShopCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(dynamicHeight)
+        let dynamicHeight = shops.isEmpty ? 0 : orderShopCollectionView.calculateCollectionViewHeight()
+        orderShopCollectionView.snp.remakeConstraints {
+            if eventOrderShopCollectionView.isHidden {
+                $0.top.equalTo(sortButton.snp.bottom).offset(24)
+            } else {
+                $0.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
             }
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-32)
+            $0.height.equalTo(dynamicHeight)
+        }
+        orderShopCollectionView.isHidden = shops.isEmpty
+        emptyResultStackView.isHidden = !shops.isEmpty
+        if !shops.isEmpty {
+            orderShopCollectionView.updateShop(shops)
         }
     }
     
@@ -374,18 +379,52 @@ extension OrderHomeViewController {
     }
     
     private func updateEventShops(_ eventShops: [OrderShopEvent]) {
-        eventOrderShopCollectionView.isHidden = eventShops.isEmpty
-        eventIndexLabel.isHidden = eventShops.isEmpty
-        if !eventShops.isEmpty {
-            orderShopCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
-                $0.leading.equalToSuperview().offset(24)
-                $0.trailing.equalToSuperview().offset(-24)
-                $0.bottom.equalToSuperview().offset(-32)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+
+        let now = Date()
+        let ongoingEvents = eventShops.filter { event in
+            guard let start = dateFormatter.date(from: event.startDate),
+                  let end = dateFormatter.date(from: event.endDate) else {
+                return false
             }
-            eventOrderShopCollectionView.setEventShops(eventShops)
-            eventIndexLabel.text = "1/\(eventShops.count)"
+            return start <= now && now <= end
         }
+        let limitedEvents = Array(ongoingEvents.prefix(10))
+        let isEmpty = limitedEvents.isEmpty
+
+        eventOrderShopCollectionView.isHidden = isEmpty
+        eventIndexLabel.isHidden = isEmpty
+
+        orderShopCollectionView.snp.remakeConstraints {
+            if isEmpty {
+                $0.top.equalTo(sortButton.snp.bottom).offset(24)
+            } else {
+                $0.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
+            }
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-32)
+        }
+
+        if isEmpty {
+            eventOrderShopCollectionView.stopAutoScroll()
+            return
+        }
+        eventOrderShopCollectionView.setEventShops(limitedEvents)
+        eventIndexLabel.text = "1/\(limitedEvents.count)"
+        eventOrderShopCollectionView.startAutoScroll(interval: 4.0)
+
+        eventOrderShopCollectionView.cellTapPublisher
+            .sink { [weak self] (shopId, _) in
+                let detailVC = OrderHomeDetailWebViewController(shopId: shopId)
+                let nav = UINavigationController(rootViewController: detailVC)
+                nav.modalPresentationStyle = .fullScreen
+                self?.present(nav, animated: true)
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -407,7 +446,7 @@ extension OrderHomeViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, eventOrderShopCollectionView, eventIndexLabel, orderShopCollectionView, emptyResultStackView].forEach {
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, eventOrderShopCollectionView, eventIndexLabel, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
     }
