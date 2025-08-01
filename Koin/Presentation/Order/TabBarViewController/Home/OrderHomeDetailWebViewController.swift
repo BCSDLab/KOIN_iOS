@@ -126,14 +126,14 @@ extension OrderHomeDetailWebViewController {
     }
 }
 
-// MARK: - WKNavigationDelegate (필요 없으면 비워둬도 됨)
+// MARK: - WKNavigationDelegate
 extension OrderHomeDetailWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("웹 페이지 로딩 완료")
     }
 }
 
-// MARK: - JS 통신 처리 (navigateBack 등만 남김)
+// MARK: - JS 통신 처리
 extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard message.name == "tokenBridge",
@@ -144,9 +144,17 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
 
         switch method {
         case "navigateBack":
-            dismissView()
+            navigateBackButtonTapped()
         default:
             print("지원되지 않는 메서드: \(method)")
+        }
+    }
+    
+    private func navigateBackButtonTapped() {
+        if let nav = navigationController, nav.viewControllers.first != self {
+            nav.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

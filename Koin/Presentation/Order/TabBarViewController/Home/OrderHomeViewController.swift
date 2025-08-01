@@ -159,15 +159,14 @@ final class OrderHomeViewController: UIViewController {
         $0.textAlignment = .center
     }
 
-    private lazy var emptyResultStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [emptyResultImageView, emptyResultLabel])
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        stack.isHidden = true
-        return stack
-    }()
+    private lazy var emptyResultStackView = UIStackView(arrangedSubviews: [emptyResultImageView, emptyResultLabel]).then {
+        $0.axis = .vertical
+        $0.spacing = 16
+        $0.alignment = .center
+        $0.distribution = .equalSpacing
+        $0.isHidden = true
+        $0.backgroundColor = UIColor.appColor(.newBackground)
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
@@ -371,6 +370,15 @@ extension OrderHomeViewController {
         emptyResultStackView.isHidden = !shops.isEmpty
         if !shops.isEmpty {
             orderShopCollectionView.updateShop(shops)
+        } else {
+            emptyResultStackView.snp.remakeConstraints { make in
+                if eventOrderShopCollectionView.isHidden {
+                    make.top.equalTo(sortButton.snp.bottom).offset(24)
+                } else {
+                    make.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
+                }
+                make.centerX.equalToSuperview()
+            }
         }
     }
     
@@ -507,7 +515,8 @@ extension OrderHomeViewController {
         }
 
         emptyResultStackView.snp.makeConstraints {
-            $0.center.equalTo(orderShopCollectionView)
+            $0.top.equalTo(sortButton.snp.bottom).offset(24)
+            $0.centerX.equalToSuperview()
         }
     }
     
