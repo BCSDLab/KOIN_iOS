@@ -94,7 +94,8 @@ final class HomeViewModel: ViewModelProtocol {
             case let .getNoticeBanner(date):
                 self?.getNoticeBanners(date: date)
             case let .getAbTestResult(abTestTitle):
-                self?.getAbTestResult(abTestTitle: abTestTitle)
+                break
+                // self?.getAbTestResult(abTestTitle: abTestTitle)
             case .getBannerAbTest(let request):
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
@@ -259,6 +260,7 @@ extension HomeViewModel {
         }.store(in: &subscriptions)
     }
     
+    /*
     private func getAbTestResult(abTestTitle: String) {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
             .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
@@ -277,6 +279,7 @@ extension HomeViewModel {
                 }
             }).store(in: &subscriptions)
     }
+*/
 }
 
 

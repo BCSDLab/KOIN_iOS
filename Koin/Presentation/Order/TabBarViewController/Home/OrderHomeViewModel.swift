@@ -84,6 +84,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
                 self?.searchOrderShops(text)
             case let .minPriceDidChange(price):
                 self?.sortStandard.minimumOrderAmount = price
+                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
             }
         }.store(in: &subscriptions)
 
@@ -136,8 +137,8 @@ extension OrderHomeViewModel {
                     filteredShops = filteredShops.filter { $0.isDeliveryAvailable }
                 }
                 
-                if let minPrice = self.sortStandard.minimumOrderAmount {
-                    filteredShops = filteredShops.filter { $0.minimumOrderAmount ?? 0 <= minPrice }
+                if let minPrice = self.sortStandard.minimumOrderAmount, minPrice > 0 {
+                    filteredShops = filteredShops.filter { ($0.minimumOrderAmount ?? 0) >= minPrice }
                 }
 
                 self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
