@@ -32,9 +32,13 @@ final class OrderShopCollectionView: UICollectionView {
         delegate = self
     }
     
-    func updateShop(_ orderShop: [OrderShop]) {
+    func updateShop(_ orderShop: [OrderShop], completion: (() -> Void)? = nil) {
         self.orderShop = orderShop
         self.reloadData()
+
+        DispatchQueue.main.async {
+            completion?()
+        }
     }
 
     func calculateCollectionViewHeight() -> CGFloat {

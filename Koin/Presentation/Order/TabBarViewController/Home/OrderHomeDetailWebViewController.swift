@@ -9,10 +9,6 @@ import Combine
 import UIKit
 import WebKit
 
-import Combine
-import UIKit
-import WebKit
-
 final class OrderHomeDetailWebViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
@@ -22,10 +18,16 @@ final class OrderHomeDetailWebViewController: UIViewController {
     private let webView: NoInputAccessoryWKWebView = {
         let contentController = WKUserContentController()
         let config = WKWebViewConfiguration()
+
+        let pagePreferences = WKWebpagePreferences()
+        pagePreferences.allowsContentJavaScript = true
+        config.defaultWebpagePreferences = pagePreferences
+
         config.userContentController = contentController
+        config.allowsInlineMediaPlayback = true
+
         let webView = NoInputAccessoryWKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.configuration.allowsInlineMediaPlayback = true
         return webView
     }()
 
@@ -60,12 +62,20 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
     private func checkLoginAndLoadPage() {
         checkLoginUseCase.execute()
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 if case .failure = completion {
+                    print("🔓 비로그인 상태 (오류)로 웹뷰 로드")
                     self?.loadShopDetailPage(withCookies: [])
                 }
-            }, receiveValue: { [weak self] _ in
-                self?.setTokenCookieAndLoadPage()
+            }, receiveValue: { [weak self] isLoggedIn in
+                if isLoggedIn {
+                    print("🔐 로그인 상태")
+                    self?.setTokenCookieAndLoadPage()
+                } else {
+                    print("🔓 비로그인 상태 (정상 응답)")
+                    self?.loadShopDetailPage(withCookies: [])
+                }
             })
             .store(in: &subscriptions)
     }
@@ -97,31 +107,36 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
     private func loadShopDetailPage(withCookies cookies: [HTTPCookie]) {
         guard let shopId = shopId else { return }
-        let urlString: String
-        if isFromOrder {
-            urlString = "https://order.stage.koreatech.in/shop/true/\(shopId)"
-        } else {
-            urlString = "https://order.stage.koreatech.in/shop/false/\(shopId)"
-        }
+        let urlString = isFromOrder
+            ? "https://order.stage.koreatech.in/shop/true/\(shopId)"
+            : "https://order.stage.koreatech.in/shop/false/\(shopId)"
+        print("웹뷰 URL: ", urlString)
         
         guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
         if cookies.isEmpty {
-            webView.load(request)
+            print("🍪 쿠키 없이 로딩 (비로그인)")
+            DispatchQueue.main.async {
+                self.webView.load(request)
+            }
             return
         }
 
         let group = DispatchGroup()
         for cookie in cookies {
             group.enter()
-            cookieStore.setCookie(cookie) { group.leave() }
+            cookieStore.setCookie(cookie) {
+                group.leave()
+            }
         }
 
         group.notify(queue: .main) {
+            print("🍪 쿠키 설정 완료 후 로딩")
             self.webView.load(request)
         }
+        
     }
 }
 
@@ -183,12 +198,20 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
     private func sendTokensToWebView() {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
-        let script = "window.postMessage({ \"type\": \"TOKEN_RESPONSE\", \"payload\": { \"accessToken\": \"\(access)\", \"refreshToken\": \"\(refresh)\" } }, \"*\");"
+
+        let script = """
+        if (window.onReceiveTokens) {
+            window.onReceiveTokens({
+                accessToken: "\(access)",
+                refreshToken: "\(refresh)"
+            });
+        }
+        """
         webView.evaluateJavaScript(script) { result, error in
             if let error = error {
                 print("토큰 전달 실패: \(error)")
             } else {
-                print("토큰 전달 성공")
+                print("✅ 토큰 전달 성공")
             }
         }
     }

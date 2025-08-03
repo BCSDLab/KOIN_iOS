@@ -91,8 +91,7 @@ final class OrderHomeViewController: UIViewController {
     private let filterCollectionView = FilterCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
-    ).then { collectionView in
-    }
+    )
     
     private let eventOrderShopCollectionView = EventOrderShopCollectionView(
         frame: .zero,
@@ -354,34 +353,44 @@ extension OrderHomeViewController {
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
-        let dynamicHeight = shops.isEmpty ? 0 : orderShopCollectionView.calculateCollectionViewHeight()
-        orderShopCollectionView.snp.remakeConstraints {
-            if eventOrderShopCollectionView.isHidden {
-                $0.top.equalTo(sortButton.snp.bottom).offset(24)
-            } else {
-                $0.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
-            }
-            $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalToSuperview().offset(-24)
-            $0.bottom.equalToSuperview().offset(-32)
-            $0.height.equalTo(dynamicHeight)
-        }
-        orderShopCollectionView.isHidden = shops.isEmpty
-        emptyResultStackView.isHidden = !shops.isEmpty
-        if !shops.isEmpty {
-            orderShopCollectionView.updateShop(shops)
-        } else {
-            emptyResultStackView.snp.remakeConstraints { make in
-                if eventOrderShopCollectionView.isHidden {
-                    make.top.equalTo(sortButton.snp.bottom).offset(24)
+        orderShopCollectionView.updateShop(shops) { [weak self] in
+            guard let self else { return }
+
+            let dynamicHeight = self.orderShopCollectionView.calculateCollectionViewHeight()
+
+            self.orderShopCollectionView.snp.remakeConstraints {
+                if self.eventOrderShopCollectionView.isHidden {
+                    $0.top.equalTo(self.sortButton.snp.bottom).offset(24)
                 } else {
-                    make.top.equalTo(eventOrderShopCollectionView.snp.bottom).offset(14)
+                    $0.top.equalTo(self.eventOrderShopCollectionView.snp.bottom).offset(14)
                 }
-                make.centerX.equalToSuperview()
+                $0.leading.equalToSuperview().offset(24)
+                $0.trailing.equalToSuperview().offset(-24)
+                $0.bottom.equalToSuperview().offset(-32)
+                $0.height.equalTo(dynamicHeight)
+            }
+
+            self.orderShopCollectionView.isHidden = shops.isEmpty
+            self.emptyResultStackView.isHidden = !shops.isEmpty
+
+            if shops.isEmpty {
+                self.emptyResultStackView.snp.remakeConstraints { make in
+                    if self.eventOrderShopCollectionView.isHidden {
+                        make.top.equalTo(self.sortButton.snp.bottom).offset(24)
+                    } else {
+                        make.top.equalTo(self.eventOrderShopCollectionView.snp.bottom).offset(14)
+                    }
+                    make.centerX.equalToSuperview()
+                }
+            }
+
+            UIView.animate(withDuration: 0.2) {
+                self.contentView.layoutIfNeeded()
+                self.scrollView.layoutIfNeeded()
             }
         }
     }
-    
+
     private func updateFilteredOrderShopsCategory(_ id: Int) {
         categoryCollectionView.updateCategory(id)
     }
