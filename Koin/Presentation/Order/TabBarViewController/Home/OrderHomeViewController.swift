@@ -427,7 +427,7 @@ extension OrderHomeViewController {
 
         eventOrderShopCollectionView.cellTapPublisher
             .sink { [weak self] (shopId, _) in
-                let detailVC = OrderHomeDetailWebViewController(shopId: shopId)
+                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: true)
                 let nav = UINavigationController(rootViewController: detailVC)
                 nav.modalPresentationStyle = .fullScreen
                 self?.present(nav, animated: true)
@@ -440,7 +440,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId)
+            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId, isFromOrder: true)
             let nav = UINavigationController(rootViewController: detailVC)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true)

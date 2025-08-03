@@ -9,10 +9,15 @@ import Combine
 import UIKit
 import WebKit
 
+import Combine
+import UIKit
+import WebKit
+
 final class OrderHomeDetailWebViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let shopId: Int?
+    private let isFromOrder: Bool
 
     private let webView: NoInputAccessoryWKWebView = {
         let contentController = WKUserContentController()
@@ -26,8 +31,9 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
     override var inputAccessoryView: UIView? { nil }
 
-    init(shopId: Int?) {
+    init(shopId: Int?, isFromOrder: Bool) {
         self.shopId = shopId
+        self.isFromOrder = isFromOrder
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,26 +60,19 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
     private func checkLoginAndLoadPage() {
         checkLoginUseCase.execute()
-            .sink { [weak self] completion in
-                // 실패 시(토큰 없음)에도 그냥 페이지 로드
+            .sink(receiveCompletion: { [weak self] completion in
                 if case .failure = completion {
-                    self?.loadShopDetailPage() // 토큰 없이 로드
+                    self?.loadShopDetailPage(withCookies: [])
                 }
-            } receiveValue: { [weak self] response in
-                // 성공 시(토큰 있음)에는 쿠키 세팅 후 로드
+            }, receiveValue: { [weak self] _ in
                 self?.setTokenCookieAndLoadPage()
-            }
+            })
             .store(in: &subscriptions)
     }
 
     private func setTokenCookieAndLoadPage() {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
-
-        guard !access.isEmpty, !refresh.isEmpty else {
-            loadShopDetailPage()
-            return
-        }
 
         let accessCookie = HTTPCookie(properties: [
             .domain: "order.stage.koreatech.in",
@@ -93,19 +92,36 @@ final class OrderHomeDetailWebViewController: UIViewController {
             .expires: NSDate(timeIntervalSinceNow: 60 * 60 * 24 * 14)
         ])!
 
-        let cookieStore = WKWebsiteDataStore.default().httpCookieStore
-        cookieStore.setCookie(accessCookie) {
-            cookieStore.setCookie(refreshCookie) { [weak self] in
-                self?.loadShopDetailPage()
-            }
-        }
+        loadShopDetailPage(withCookies: [accessCookie, refreshCookie])
     }
 
-    private func loadShopDetailPage() {
-        guard let shopId = shopId,
-              let url = URL(string: "https://order.stage.koreatech.in/shop/\(shopId)") else { return }
+    private func loadShopDetailPage(withCookies cookies: [HTTPCookie]) {
+        guard let shopId = shopId else { return }
+        let urlString: String
+        if isFromOrder {
+            urlString = "https://order.stage.koreatech.in/shop/true/\(shopId)"
+        } else {
+            urlString = "https://order.stage.koreatech.in/shop/false/\(shopId)"
+        }
+        
+        guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
-        webView.load(request)
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+
+        if cookies.isEmpty {
+            webView.load(request)
+            return
+        }
+
+        let group = DispatchGroup()
+        for cookie in cookies {
+            group.enter()
+            cookieStore.setCookie(cookie) { group.leave() }
+        }
+
+        group.notify(queue: .main) {
+            self.webView.load(request)
+        }
     }
 }
 
@@ -131,6 +147,10 @@ extension OrderHomeDetailWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("웹 페이지 로딩 완료")
     }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("웹 페이지 로딩 실패: \(error.localizedDescription)")
+    }
 }
 
 // MARK: - JS 통신 처리
@@ -145,6 +165,8 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
         switch method {
         case "navigateBack":
             navigateBackButtonTapped()
+        case "getUserTokens":
+            sendTokensToWebView()
         default:
             print("지원되지 않는 메서드: \(method)")
         }
@@ -155,6 +177,19 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
             nav.popViewController(animated: true)
         } else {
             dismiss(animated: true, completion: nil)
+        }
+    }
+
+    private func sendTokensToWebView() {
+        let access = KeychainWorker.shared.read(key: .access) ?? ""
+        let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
+        let script = "window.postMessage({ \"type\": \"TOKEN_RESPONSE\", \"payload\": { \"accessToken\": \"\(access)\", \"refreshToken\": \"\(refresh)\" } }, \"*\");"
+        webView.evaluateJavaScript(script) { result, error in
+            if let error = error {
+                print("토큰 전달 실패: \(error)")
+            } else {
+                print("토큰 전달 성공")
+            }
         }
     }
 }

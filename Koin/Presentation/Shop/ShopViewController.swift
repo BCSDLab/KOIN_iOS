@@ -239,7 +239,7 @@ final class ShopViewController: UIViewController {
 
         shopCollectionView.cellTapPublisher
             .sink { [weak self] shopId, _ in
-                let detailVC = OrderHomeDetailWebViewController(shopId: shopId)
+                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: false)
                 let nav = UINavigationController(rootViewController: detailVC)
                 nav.modalPresentationStyle = .fullScreen
                 self?.present(nav, animated: true)
