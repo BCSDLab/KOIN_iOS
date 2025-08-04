@@ -64,33 +64,58 @@ final class OrderHomeDetailWebViewController: UIViewController {
         checkLoginUseCase.execute()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
                 if case .failure = completion {
                     print("🔓 비로그인 상태 (오류)로 웹뷰 로드")
-                    self?.loadShopDetailPage(withCookies: [])
+                    self.clearWebViewCacheAndLoad()
                 }
             }, receiveValue: { [weak self] isLoggedIn in
+                guard let self else { return }
                 if isLoggedIn {
                     print("🔐 로그인 상태")
-                    self?.setTokenCookieAndLoadPage()
+                    self.setTokenCookieAndLoadPage()
                 } else {
                     print("🔓 비로그인 상태 (정상 응답)")
-                    self?.loadShopDetailPage(withCookies: [])
+                    self.clearWebViewCacheAndLoad()
                 }
             })
             .store(in: &subscriptions)
+    }
+
+    private func clearWebViewCacheAndLoad() {
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: dataTypes) { records in
+            if records.isEmpty {
+                print("ℹ️ WebView 캐시에 삭제할 항목이 없음")
+                self.loadShopDetailPage()
+            } else {
+                print("🔧 캐시 삭제 중, 항목 수: \(records.count)")
+                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, for: records) {
+                    print("✅ WebView 캐시 삭제 완료")
+                    self.loadShopDetailPage()
+                }
+            }
+        }
     }
 
     private func setTokenCookieAndLoadPage() {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
 
+        // 💡 비로그인(토큰 없음)도 진입 허용: 쿠키 세팅 없이 바로 로드
+        if access.isEmpty || refresh.isEmpty {
+            print("⚠️ 토큰 없음, 쿠키 세팅 없이 바로 로드")
+            loadShopDetailPage()
+            return
+        }
+
         let accessCookie = HTTPCookie(properties: [
             .domain: "order.stage.koreatech.in",
             .path: "/",
             .name: "AUTH_TOKEN_KEY",
             .value: access,
-            .secure: "TRUE",
-            .expires: NSDate(timeIntervalSinceNow: 60 * 60)
+            .secure: true,
+            .expires: Date(timeIntervalSinceNow: 60 * 60)
         ])!
 
         let refreshCookie = HTTPCookie(properties: [
@@ -98,33 +123,14 @@ final class OrderHomeDetailWebViewController: UIViewController {
             .path: "/",
             .name: "refreshToken",
             .value: refresh,
-            .secure: "TRUE",
-            .expires: NSDate(timeIntervalSinceNow: 60 * 60 * 24 * 14)
+            .secure: true,
+            .expires: Date(timeIntervalSinceNow: 60 * 60 * 24 * 14)
         ])!
 
-        loadShopDetailPage(withCookies: [accessCookie, refreshCookie])
-    }
-
-    private func loadShopDetailPage(withCookies cookies: [HTTPCookie]) {
-        guard let shopId = shopId else { return }
-        let urlString = isFromOrder
-            ? "https://order.stage.koreatech.in/shop/true/\(shopId)"
-            : "https://order.stage.koreatech.in/shop/false/\(shopId)"
-        print("웹뷰 URL: ", urlString)
-        
-        guard let url = URL(string: urlString) else { return }
-        let request = URLRequest(url: url)
+        let cookies = [accessCookie, refreshCookie]
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
-
-        if cookies.isEmpty {
-            print("🍪 쿠키 없이 로딩 (비로그인)")
-            DispatchQueue.main.async {
-                self.webView.load(request)
-            }
-            return
-        }
-
         let group = DispatchGroup()
+
         for cookie in cookies {
             group.enter()
             cookieStore.setCookie(cookie) {
@@ -132,15 +138,29 @@ final class OrderHomeDetailWebViewController: UIViewController {
             }
         }
 
-        group.notify(queue: .main) {
-            print("🍪 쿠키 설정 완료 후 로딩")
+        group.notify(queue: .main) { [weak self] in
+            print("🍪 쿠키 세팅 완료 → 웹뷰 로드")
+            self?.loadShopDetailPage()
+        }
+    }
+
+    private func loadShopDetailPage() {
+        guard let shopId = shopId else { return }
+        // TODO: - URL 변경 예정
+        let urlString = isFromOrder
+            ? "https://order.stage.koreatech.in/shop/5"
+            : "https://order.stage.koreatech.in/shop/5"
+        print("웹뷰 URL: ", urlString)
+        
+        guard let url = URL(string: urlString) else { return }
+        let request = URLRequest(url: url)
+
+        DispatchQueue.main.async {
             self.webView.load(request)
         }
-        
     }
 }
 
-// MARK: - WebView 세팅
 extension OrderHomeDetailWebViewController {
     private func setupWebView() {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "tokenBridge")
@@ -199,6 +219,11 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
 
+        guard !access.isEmpty, !refresh.isEmpty else {
+            print("❌ 토큰 없음, JS 전달 생략")
+            return
+        }
+
         let script = """
         if (window.onReceiveTokens) {
             window.onReceiveTokens({
@@ -207,6 +232,7 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
             });
         }
         """
+        
         webView.evaluateJavaScript(script) { result, error in
             if let error = error {
                 print("토큰 전달 실패: \(error)")

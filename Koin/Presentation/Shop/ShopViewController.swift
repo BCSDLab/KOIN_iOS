@@ -182,8 +182,6 @@ final class ShopViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setAddTarget()
         searchTextField.delegate = self
-        
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissCollectionView)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
