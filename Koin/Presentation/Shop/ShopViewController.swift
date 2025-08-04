@@ -226,6 +226,10 @@ final class ShopViewController: UIViewController {
         shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
             self?.inputSubject.send(.changeSortStandard(standard))
         }.store(in: &subscriptions)
+
+        categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
+            self?.inputSubject.send(.changeCategory(categoryId))
+        }.store(in: &subscriptions)
     }
     
     private func setAddTarget() {

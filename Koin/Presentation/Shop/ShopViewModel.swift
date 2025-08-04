@@ -43,7 +43,6 @@ final class ShopViewModel: ViewModelProtocol {
     
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
-    private var isFilteringOpenShops = false
     
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil) {
         didSet {
@@ -166,9 +165,6 @@ extension ShopViewModel {
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 var shops = response
-                if self.isFilteringOpenShops {
-                    shops = shops.filter { $0.isOpen }
-                }
                 if self.selectedId != 0 {
                     self.outputSubject.send(.changeFilteredShops(shops.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
                 } else {
@@ -213,12 +209,21 @@ extension ShopViewModel {
     }
     
     private func changeCategory(_ id: Int) {
-        if selectedId == id { selectedId = 0 }
-        else { selectedId = id }
+        if selectedId != id {
+            selectedId = id
+        }
     }
     
     private func filterOpenShops(_ isOpen: Bool) {
-        isFilteringOpenShops = isOpen
+        if isOpen {
+            if !sortStandard.filter.contains(.open) {
+                sortStandard.filter.append(.open)
+            }
+        } else {
+            if let index = sortStandard.filter.firstIndex(of: .open) {
+                sortStandard.filter.remove(at: index)
+            }
+        }
         getShopInfo(id: selectedId)
     }
     

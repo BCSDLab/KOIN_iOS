@@ -15,7 +15,7 @@ final class OrderCategoryCollectionView: UICollectionView {
     private var shopCategories: [ShopCategory] = []
     let cellTapPublisher = PassthroughSubject<Int, Never>()
     let selectedCategoryPublisher = PassthroughSubject<Int, Never>()
-    private var selectedId = 0
+    private var selectedId = 1
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout _: UICollectionViewLayout) {
@@ -51,14 +51,7 @@ final class OrderCategoryCollectionView: UICollectionView {
 
     func updateCategory(_ id: Int) {
         selectedId = id
-        for case let cell as OrderCategoryCollectionViewCell in visibleCells {
-            if let indexPath = indexPath(for: cell) {
-                let category = shopCategories[indexPath.row]
-                let isSelected = category.id == id
-                cell.configure(info: category, isSelected)
-            }
-        }
-        selectedCategoryPublisher.send(selectedId)
+        reloadData()
     }
 }
 
@@ -83,7 +76,7 @@ extension OrderCategoryCollectionView: UICollectionViewDataSource {
 extension OrderCategoryCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let category = shopCategories[indexPath.row]
-        updateCategory(category.id)
+        selectedCategoryPublisher.send(category.id)
     }
 }
 
