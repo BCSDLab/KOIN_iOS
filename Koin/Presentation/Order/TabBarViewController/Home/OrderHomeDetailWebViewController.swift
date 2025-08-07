@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import Combine
 
-final class OrderHomeDetailWebViewController: UIViewController {
+final class OrderHomeDetailWebViewController: UIViewController, UIGestureRecognizerDelegate {
     private var subscriptions: Set<AnyCancellable> = []
     private weak var originalPopGestureDelegate: UIGestureRecognizerDelegate?
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
@@ -55,15 +55,20 @@ final class OrderHomeDetailWebViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: animated)
-        originalPopGestureDelegate = self.navigationController?.interactivePopGestureRecognizer?.delegate
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.navigationController?.setNavigationBarHidden(false, animated: animated)
-        self.tabBarController?.tabBar.isHidden = false
+        if self.isMovingFromParent {
+            self.tabBarController?.navigationController?.setNavigationBarHidden(false, animated: animated)
+            self.tabBarController?.tabBar.isHidden = false
+        }
         self.navigationController?.interactivePopGestureRecognizer?.delegate = originalPopGestureDelegate
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 
     private func checkLoginAndLoadPage() {
@@ -198,6 +203,16 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
             self.navigationController?.popViewController(animated: true)
         case "getUserTokens":
             sendTokensToWebView(callbackId: payload["callbackId"] as? String)
+        case "redirectToLogin":
+            let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+            loginViewController.title = "로그인"
+            loginViewController.completion = { [weak self] in
+                guard let self = self else { return }
+                let orderCartWebViewController = OrderCartWebViewController()
+                orderCartWebViewController.title = "장바구니"
+                self.navigationController?.pushViewController(orderCartWebViewController, animated: true)
+            }
+            navigationController?.pushViewController(loginViewController, animated: true)
         default:
             print("지원되지 않는 메서드: \(method)")
         }

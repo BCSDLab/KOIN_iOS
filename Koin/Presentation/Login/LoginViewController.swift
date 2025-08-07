@@ -11,6 +11,7 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     
+    var completion: (() -> Void)?
     // MARK: - Properties
     private let viewModel: LoginViewModel
     private let inputSubject: PassthroughSubject<LoginViewModel.Input, Never> = .init()
@@ -186,6 +187,7 @@ final class LoginViewController: UIViewController {
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 완료"))
+                self?.completion?()
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:

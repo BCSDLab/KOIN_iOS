@@ -11,13 +11,13 @@ import Foundation
 final class ShopViewModel: ViewModelProtocol {
     
     enum Input {
-        case viewDidLoad    // 주변상점
+        case viewDidLoad
         case viewDidLoadB
         case changeCategory(Int)
-        case searchTextChanged(String)      // 주변상점
-        case changeSortStandard(Any)        // 주변상점
+        case searchTextChanged(String)
+        case changeSortStandard(Any)
         case sortDidChange(FetchShopSortType)
-        case filterOpenShops(Bool)      // 주변상점
+        case filterOpenShops(Bool)
         case getShopInfo
         case getShopBenefits
         case getBeneficialShops(Int)
@@ -44,17 +44,8 @@ final class ShopViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
     
-    private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil) {
-        didSet {
-            getShopInfo(id: selectedId)
-        }
-    }
-    
-    private (set) var selectedId: Int {
-        didSet {
-            getShopInfo(id: selectedId)
-        }
-    }
+    private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil)
+    private(set) var selectedId: Int
     
     init(fetchShopListUseCase: FetchShopListUseCase,
          fetchEventListUseCase: FetchEventListUseCase,
@@ -74,39 +65,38 @@ final class ShopViewModel: ViewModelProtocol {
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let self = self else { return }
             switch input {
             case .viewDidLoad:  // 주변 상점
-                self?.getShopCategory()
-                self?.getEventShopList()
-                
+                self.getShopCategory()
+                self.getEventShopList()
             case let .changeCategory(id):
-                self?.changeCategory(id)
-                
-            case let .searchTextChanged(text):    // 주변 상점
-                self?.sortStandard.query = text
-                self?.getShopInfo(id: self?.selectedId ?? 0)
-                self?.searchShop(text)
-                self?.searchShops(text)
-                
-            case let .changeSortStandard(standard):   // 주변 상점
-                self?.changeSortStandard(standard)
-                
+                if self.selectedId != id {
+                    self.selectedId = id
+                    self.getShopInfo(id: self.selectedId)
+                }
+            case let .searchTextChanged(text):
+                self.sortStandard.query = text
+                self.getShopInfo(id: self.selectedId)
+                self.searchShop(text)
+                self.searchShops(text)
+            case let .changeSortStandard(standard):
+                self.changeSortStandard(standard)
             case let .sortDidChange(sortType):
-                self?.changeSortStandard(sortType)
+                self.sortStandard.sorter = sortType
+                self.getShopInfo(id: self.selectedId)
             case .getShopInfo:
-                self?.getShopInfo(id: self?.selectedId ?? 0)
+                self.getShopInfo(id: self.selectedId)
             case .getShopBenefits:
-                self?.fetchShopBenefits()
+                self.fetchShopBenefits()
             case let .getBeneficialShops(id):
-                self?.fetchBeneficialShops(id: id)
-                
-            case let .filterOpenShops(isOpen):    // 주변 상점
-                self?.filterOpenShops(isOpen)
-                
+                self.fetchBeneficialShops(id: id)
+            case let .filterOpenShops(isOpen):
+                self.filterOpenShops(isOpen)
             case .viewDidLoadB:
-                self?.fetchShopBenefits()
-                self?.getEventShopList()
-                self?.fetchBeneficialShops(id: 1)
+                self.fetchShopBenefits()
+                self.getEventShopList()
+                self.fetchBeneficialShops(id: 1)
             }
         }.store(in: &subscriptions)
         
@@ -164,7 +154,7 @@ extension ShopViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                var shops = response
+                let shops = response
                 if self.selectedId != 0 {
                     self.outputSubject.send(.changeFilteredShops(shops.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
                 } else {
@@ -176,25 +166,17 @@ extension ShopViewModel {
     
     private func getEventShopList() {
         fetchEventListUseCase.execute()
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            }, receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateEventShops(response.events ?? []))
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                self.outputSubject.send(.updateEventShops(response.events ?? []))
+                self.getShopInfo(id: self.selectedId)
             }).store(in: &subscriptions)
     }
     
     private func getShopCategory() {
         fetchShopCategoryListUseCase.execute()
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            }, receiveValue: { [weak self] response in
-                guard let strongSelf = self else { return }
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
                 self?.outputSubject.send(.putImage(response))
-                self?.getShopInfo(id: strongSelf.selectedId)
             }).store(in: &subscriptions)
     }
     
