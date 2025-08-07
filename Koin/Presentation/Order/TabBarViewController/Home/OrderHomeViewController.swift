@@ -384,9 +384,8 @@ extension OrderHomeViewController {
                 }
             }
 
-            UIView.animate(withDuration: 0.2) {
-                self.contentView.layoutIfNeeded()
-                self.scrollView.layoutIfNeeded()
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
             }
         }
     }
