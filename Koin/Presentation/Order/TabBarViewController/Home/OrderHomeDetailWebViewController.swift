@@ -28,6 +28,7 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
         let webView = NoInputAccessoryWKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.allowsBackForwardNavigationGestures = true
         return webView
     }()
 
