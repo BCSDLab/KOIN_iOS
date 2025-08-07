@@ -218,7 +218,12 @@ final class RootHidingNavigationController: UINavigationController,
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
-        let isRoot = viewController === viewControllers.first
-        setNavigationBarHidden(isRoot, animated: animated)
+
+        if viewController is OrderHomeDetailWebViewController {
+            setNavigationBarHidden(true, animated: animated)
+        } else {
+            let isRoot = viewController === viewControllers.first
+            setNavigationBarHidden(isRoot, animated: animated)
+        }
     }
 }

@@ -241,10 +241,10 @@ final class ShopViewController: UIViewController {
 
         shopCollectionView.cellTapPublisher
             .sink { [weak self] shopId, _ in
+                guard let self = self else { return }
                 let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: false)
-                let nav = UINavigationController(rootViewController: detailVC)
-                nav.modalPresentationStyle = .fullScreen
-                self?.present(nav, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
+                self.navigationController?.pushViewController(detailVC, animated: true)
             }
             .store(in: &subscriptions)
     }

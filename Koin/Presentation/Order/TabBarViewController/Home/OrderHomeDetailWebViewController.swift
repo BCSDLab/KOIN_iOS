@@ -11,6 +11,7 @@ import Combine
 
 final class OrderHomeDetailWebViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
+    private weak var originalPopGestureDelegate: UIGestureRecognizerDelegate?
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let shopId: Int?
     private let isFromOrder: Bool
@@ -53,12 +54,16 @@ final class OrderHomeDetailWebViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: animated)
+        originalPopGestureDelegate = self.navigationController?.interactivePopGestureRecognizer?.delegate
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        self.tabBarController?.navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = originalPopGestureDelegate
     }
 
     private func checkLoginAndLoadPage() {
@@ -190,19 +195,11 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
               let method = payload["method"] as? String else { return }
         switch method {
         case "navigateBack":
-            navigateBackButtonTapped()
+            self.navigationController?.popViewController(animated: true)
         case "getUserTokens":
             sendTokensToWebView(callbackId: payload["callbackId"] as? String)
         default:
             print("지원되지 않는 메서드: \(method)")
-        }
-    }
-    
-    private func navigateBackButtonTapped() {
-        if let nav = navigationController, nav.viewControllers.first != self {
-            nav.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
         }
     }
     

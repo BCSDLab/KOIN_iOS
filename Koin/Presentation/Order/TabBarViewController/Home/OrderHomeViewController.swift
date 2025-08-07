@@ -436,10 +436,11 @@ extension OrderHomeViewController {
 
         eventOrderShopCollectionView.cellTapPublisher
             .sink { [weak self] (shopId, _) in
+                guard let self = self else { return }
                 let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: true)
-                let nav = UINavigationController(rootViewController: detailVC)
-                nav.modalPresentationStyle = .fullScreen
-                self?.present(nav, animated: true)
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                self.navigationController?.pushViewController(detailVC, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
             }
             .store(in: &subscriptions)
     }
@@ -450,9 +451,8 @@ extension OrderHomeViewController: UICollectionViewDelegate {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
             let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId, isFromOrder: true)
-            let nav = UINavigationController(rootViewController: detailVC)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
+            navigationController?.pushViewController(detailVC, animated: true)
         }
     }
 }
@@ -530,8 +530,8 @@ extension OrderHomeViewController {
     }
     
     private func configureView() {
+        self.view.backgroundColor = UIColor.appColor(.newBackground)
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
