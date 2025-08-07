@@ -5,9 +5,9 @@
 //  Created by 이은지 on 7/12/25.
 //
 
-import Combine
 import UIKit
 import WebKit
+import Combine
 
 final class OrderHomeDetailWebViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
@@ -66,16 +66,13 @@ final class OrderHomeDetailWebViewController: UIViewController {
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 if case .failure = completion {
-                    print("🔓 비로그인 상태 (오류)로 웹뷰 로드")
                     self.clearWebViewCacheAndLoad()
                 }
             }, receiveValue: { [weak self] isLoggedIn in
                 guard let self else { return }
                 if isLoggedIn {
-                    print("🔐 로그인 상태")
                     self.setTokenCookieAndLoadPage()
                 } else {
-                    print("🔓 비로그인 상태 (정상 응답)")
                     self.clearWebViewCacheAndLoad()
                 }
             })
@@ -86,12 +83,9 @@ final class OrderHomeDetailWebViewController: UIViewController {
         let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: dataTypes) { records in
             if records.isEmpty {
-                print("ℹ️ WebView 캐시에 삭제할 항목이 없음")
                 self.loadShopDetailPage()
             } else {
-                print("🔧 캐시 삭제 중, 항목 수: \(records.count)")
                 WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, for: records) {
-                    print("✅ WebView 캐시 삭제 완료")
                     self.loadShopDetailPage()
                 }
             }
@@ -102,9 +96,8 @@ final class OrderHomeDetailWebViewController: UIViewController {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
 
-        // 💡 비로그인(토큰 없음)도 진입 허용: 쿠키 세팅 없이 바로 로드
         if access.isEmpty || refresh.isEmpty {
-            print("⚠️ 토큰 없음, 쿠키 세팅 없이 바로 로드")
+            print("비로그인 상태")
             loadShopDetailPage()
             return
         }
@@ -139,18 +132,16 @@ final class OrderHomeDetailWebViewController: UIViewController {
         }
 
         group.notify(queue: .main) { [weak self] in
-            print("🍪 쿠키 세팅 완료 → 웹뷰 로드")
             self?.loadShopDetailPage()
         }
     }
 
     private func loadShopDetailPage() {
         guard let shopId = shopId else { return }
-        // TODO: - URL 변경 예정
+
         let urlString = isFromOrder
-            ? "https://order.stage.koreatech.in/shop/5"
-            : "https://order.stage.koreatech.in/shop/5"
-        print("웹뷰 URL: ", urlString)
+            ? "https://order.stage.koreatech.in/shop/true/\(shopId)"
+            : "https://order.stage.koreatech.in/shop/false/\(shopId)"
         
         guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
@@ -196,12 +187,11 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
               let data = bodyString.data(using: .utf8),
               let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let method = payload["method"] as? String else { return }
-
         switch method {
         case "navigateBack":
             navigateBackButtonTapped()
         case "getUserTokens":
-            sendTokensToWebView()
+            sendTokensToWebView(callbackId: payload["callbackId"] as? String)
         default:
             print("지원되지 않는 메서드: \(method)")
         }
@@ -214,30 +204,30 @@ extension OrderHomeDetailWebViewController: WKScriptMessageHandler {
             dismiss(animated: true, completion: nil)
         }
     }
-
-    private func sendTokensToWebView() {
+    
+    private func sendTokensToWebView(callbackId: String?) {
         let access = KeychainWorker.shared.read(key: .access) ?? ""
         let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
-
-        guard !access.isEmpty, !refresh.isEmpty else {
-            print("❌ 토큰 없음, JS 전달 생략")
-            return
-        }
-
-        let script = """
-        if (window.onReceiveTokens) {
-            window.onReceiveTokens({
-                accessToken: "\(access)",
-                refreshToken: "\(refresh)"
-            });
-        }
-        """
+     
+        guard let callbackId else { return }
+        let resultDict: [String: Any] = [
+            "access": access,
+            "refresh": refresh,
+        ]
+        let resultData = try? JSONSerialization.data(withJSONObject: resultDict)
+        let resultString = resultData.flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
         
+        let script = """
+                    if (window.onNativeCallback) {
+                    window.onNativeCallback('\(callbackId)', \(resultString));
+                    }
+                    """
+       
         webView.evaluateJavaScript(script) { result, error in
             if let error = error {
                 print("토큰 전달 실패: \(error)")
             } else {
-                print("✅ 토큰 전달 성공")
+                print("토큰 전달 성공 (callbackId: \(callbackId))")
             }
         }
     }
