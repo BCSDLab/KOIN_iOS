@@ -1,4 +1,9 @@
-
+//
+//  MinPriceSheetViewController.swift
+//  koin
+//
+//  Created by 이은지 on 6/19/25.
+//
 
 import UIKit
 import SnapKit
@@ -10,6 +15,8 @@ final class MinPriceSheetViewController: UIViewController {
     private var currentPrice: Int?
     private let priceSteps = [5000, 10000, 15000, 20000, 0]
     private var stepLabels: [UILabel] = []
+    
+    private var isLayoutConfigured = false
 
     // MARK: UI Component
     private let titleLabel = UILabel().then {
@@ -28,7 +35,7 @@ final class MinPriceSheetViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
-    private let priceSlider = UISlider().then {
+    private let priceSlider = TrackPaddedSlider().then {
         $0.minimumValue = 0
         $0.maximumValue = 4
         $0.isContinuous = true
@@ -77,6 +84,15 @@ final class MinPriceSheetViewController: UIViewController {
         configureView()
         addTargets()
         createStepLabels()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if !isLayoutConfigured && priceSlider.bounds != .zero {
+            alignStacksToSliderTrack()
+            isLayoutConfigured = true
+        }
     }
     
     private func addTargets() {
@@ -128,7 +144,7 @@ extension MinPriceSheetViewController {
 
 extension MinPriceSheetViewController {
     private func setUpLayOuts() {
-        [titleLabel, closeButton, seperateView1, dotStackView, priceSlider, stepStackView, confirmButton, seperateView2].forEach {
+        [titleLabel, closeButton, seperateView1, priceSlider, dotStackView, stepStackView, confirmButton, seperateView2].forEach {
             view.addSubview($0)
         }
     }
@@ -154,7 +170,7 @@ extension MinPriceSheetViewController {
         
         dotStackView.snp.makeConstraints {
             $0.leading.trailing.equalTo(priceSlider)
-            $0.centerY.equalTo(priceSlider)
+            $0.centerY.equalTo(priceSlider.snp.centerY)
         }
         
         priceSlider.snp.makeConstraints {
@@ -165,7 +181,8 @@ extension MinPriceSheetViewController {
         
         stepStackView.snp.makeConstraints {
             $0.top.equalTo(priceSlider.snp.bottom).offset(24)
-            $0.leading.trailing.equalTo(priceSlider)
+            $0.leading.equalTo(priceSlider.snp.leading).offset(14)
+            $0.trailing.equalTo(priceSlider.snp.trailing).inset(20)
         }
         
         confirmButton.snp.makeConstraints {
@@ -181,7 +198,22 @@ extension MinPriceSheetViewController {
         }
     }
     
-    // Slider UI
+    private func alignStacksToSliderTrack() {
+        let trackRect = priceSlider.trackRect(forBounds: priceSlider.bounds)
+        
+        dotStackView.snp.remakeConstraints {
+            $0.leading.equalTo(priceSlider.snp.leading).offset(trackRect.origin.x)
+            $0.trailing.equalTo(priceSlider.snp.leading).offset(trackRect.origin.x + trackRect.size.width)
+            $0.centerY.equalTo(priceSlider).offset(1)
+        }
+        
+        stepStackView.snp.remakeConstraints {
+            $0.leading.equalTo(priceSlider.snp.leading).offset(5)
+            $0.trailing.equalTo(priceSlider.snp.trailing).inset(8)
+            $0.top.equalTo(priceSlider.snp.bottom).offset(24)
+        }
+    }
+
     private func setupSlider() {
         let initialStep: Float
         if let currentPrice = currentPrice, let index = priceSteps.firstIndex(of: currentPrice) {
@@ -191,10 +223,11 @@ extension MinPriceSheetViewController {
         }
         priceSlider.setValue(initialStep, animated: false)
 
-        let minTrackImage = roundedImageWithColor(color: UIColor.appColor(.new500))
-        let maxTrackImage = roundedImageWithColor(color: UIColor.appColor(.neutral200))
+        let minTrackImage = imageWithColor(color: UIColor.appColor(.new500))
+        let maxTrackImage = imageWithColor(color: UIColor.appColor(.neutral200))
         priceSlider.setMinimumTrackImage(minTrackImage, for: .normal)
         priceSlider.setMaximumTrackImage(maxTrackImage, for: .normal)
+        
         let customThumbImage = UIImage.appImage(asset: .bcsdSymbolLogo)
         priceSlider.setThumbImage(customThumbImage, for: .normal)
     }
@@ -212,21 +245,22 @@ extension MinPriceSheetViewController {
         }
     }
     
-    private func roundedImageWithColor(color: UIColor, size: CGSize = CGSize(width: 8, height: 8)) -> UIImage {
+    private func imageWithColor(color: UIColor, size: CGSize = CGSize(width: 1, height: 8)) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         color.setFill()
-        UIRectFill(CGRect(origin: .zero, size: size))
+        UIRectFill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image ?? UIImage()
     }
     
     private func configureView() {
+        view.backgroundColor = .white
         setUpLayOuts()
         setUpConstraints()
         setupSlider()
         setupDots()
-        view.backgroundColor = .white
     }
 }
 

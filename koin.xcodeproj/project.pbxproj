@@ -629,6 +629,7 @@
 		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
 		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
 		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
+		D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */; };
 		D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */; };
 		D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */; };
 		D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */; };
@@ -1338,6 +1339,7 @@
 		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
+		D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPaddedSlider.swift; sourceTree = "<group>"; };
 		D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralRegisterFormRequest.swift; sourceTree = "<group>"; };
 		D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRegisterFormRequest.swift; sourceTree = "<group>"; };
 		D89BAA3C2DCA6483006D3BB7 /* RegisterFormUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormUseCase.swift; sourceTree = "<group>"; };
@@ -3150,6 +3152,7 @@
 				D289873D2D21B30D00AA7285 /* DebouncedButton.swift */,
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
+				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4480,6 +4483,7 @@
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */,
 				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
 				D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */,
+				D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */,
 				83BB83112CEC724300946623 /* KeywordNotiCollectionViewCell.swift in Sources */,
 				D22421342C897C7100E8B480 /* SettingsViewController.swift in Sources */,
 				83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */,
