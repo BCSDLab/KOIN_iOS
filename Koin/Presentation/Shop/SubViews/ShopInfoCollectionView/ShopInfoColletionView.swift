@@ -12,11 +12,10 @@ final class ShopInfoCollectionView: UICollectionView {
 
     // MARK: - Properties
     private var shops: [Shop] = []
-    weak var shopDelegate: CollectionViewDelegate?
     private var cancellables = Set<AnyCancellable>()
-    let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
+    
+    let sortOptionDidChangePublisher = PassthroughSubject<ShopSortType, Never>()
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
-    let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -63,10 +62,6 @@ final class ShopInfoCollectionView: UICollectionView {
         let numberOfCells = CGFloat(shops.count)
         if numberOfCells == 0 { return 0 }
         return (cellHeight * numberOfCells) + (spacing * (numberOfCells - 1))
-    }
-
-    func updateShopSortStandard(_ standard: Any) {
-        shopSortStandardPublisher.send(standard)
     }
 }
 

@@ -15,7 +15,6 @@ final class ShopViewController: UIViewController {
     private let viewModel: ShopViewModel
     private let inputSubject = PassthroughSubject<ShopViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    private var currentSortType: ShopSortType = .basic
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -214,6 +213,13 @@ final class ShopViewController: UIViewController {
                 self.updateEventShops(eventShops)
             case let .showSearchedResult(result):
                 self.searchedShopCollectionView.updateShop(keywords: result)
+            case let .updateSortButtonTitle(newTitle):
+                var config = self.sortButton.configuration ?? .plain()
+                var attribute = AttributedString(newTitle)
+                attribute.font = UIFont.appFont(.pretendardBold, size: 14)
+                attribute.foregroundColor = UIColor.appColor(.new500)
+                config.attributedTitle = attribute
+                self.sortButton.configuration = config
             default: break
             }
         }.store(in: &subscriptions)
@@ -222,8 +228,8 @@ final class ShopViewController: UIViewController {
             self?.eventIndexLabel.text = index
         }.store(in: &subscriptions)
 
-        shopCollectionView.shopSortStandardPublisher.sink { [weak self] standard in
-            self?.inputSubject.send(.changeSortStandard(standard))
+        shopCollectionView.sortOptionDidChangePublisher.sink { [weak self] sortType in
+            self?.inputSubject.send(.sortOptionDidChange(sortType))
         }.store(in: &subscriptions)
 
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
@@ -269,17 +275,10 @@ extension ShopViewController {
     @objc private func sortButtonTapped() {
         guard presentedViewController == nil else { return }
         
-        let bottomSheetViewController = ShopSortOptionSheetViewController(current: currentSortType)
+        let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
+        
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
-            guard let self = self else { return }
-            self.currentSortType = sort
-            var config = self.sortButton.configuration ?? .plain()
-            var attribute = AttributedString(sort.title)
-            attribute.font = UIFont.appFont(.pretendardBold, size: 14)
-            attribute.foregroundColor = UIColor.appColor(.new500)
-            config.attributedTitle = attribute
-            self.sortButton.configuration = config
-            self.inputSubject.send(.changeSortStandard(sort.fetchSortType))
+            self?.inputSubject.send(.sortOptionDidChange(sort))
         }
         
         bottomSheetViewController.modalPresentationStyle = .pageSheet

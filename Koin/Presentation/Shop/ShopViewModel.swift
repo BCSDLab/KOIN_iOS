@@ -15,8 +15,7 @@ final class ShopViewModel: ViewModelProtocol {
         case viewDidLoadB
         case changeCategory(Int)
         case searchTextChanged(String)
-        case changeSortStandard(Any)
-        case sortDidChange(FetchShopSortType)
+        case sortOptionDidChange(ShopSortType)
         case filterOpenShops(Bool)
         case getShopInfo
         case getShopBenefits
@@ -31,6 +30,7 @@ final class ShopViewModel: ViewModelProtocol {
         case updateBeneficialShops([Shop])
         case showSearchedResult([Keyword])
         case navigateToShopData(Int, String, Int)
+        case updateSortButtonTitle(String)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -46,7 +46,8 @@ final class ShopViewModel: ViewModelProtocol {
     
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil)
     private(set) var selectedId: Int
-    
+    private(set) var currentSortType: ShopSortType = .basic
+
     init(fetchShopListUseCase: FetchShopListUseCase,
          fetchEventListUseCase: FetchEventListUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
@@ -67,7 +68,7 @@ final class ShopViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self = self else { return }
             switch input {
-            case .viewDidLoad:  // 주변 상점
+            case .viewDidLoad:
                 self.getShopCategory()
                 self.getEventShopList()
             case let .changeCategory(id):
@@ -80,10 +81,10 @@ final class ShopViewModel: ViewModelProtocol {
                 self.getShopInfo(id: self.selectedId)
                 self.searchShop(text)
                 self.searchShops(text)
-            case let .changeSortStandard(standard):
-                self.changeSortStandard(standard)
-            case let .sortDidChange(sortType):
-                self.sortStandard.sorter = sortType
+            case let .sortOptionDidChange(newSortType):
+                self.currentSortType = newSortType
+                self.sortStandard.sorter = newSortType.fetchSortType
+                self.outputSubject.send(.updateSortButtonTitle(newSortType.title))
                 self.getShopInfo(id: self.selectedId)
             case .getShopInfo:
                 self.getShopInfo(id: self.selectedId)
@@ -128,22 +129,6 @@ extension ShopViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.updateBeneficialShops(response))
         }.store(in: &subscriptions)
-    }
-    
-    private func changeSortStandard(_ standard: Any) {
-        if let sortType = standard as? FetchShopSortType {
-            if sortStandard.sorter == sortType {
-                sortStandard.sorter = .none
-            } else {
-                sortStandard.sorter = sortType
-            }
-        } else if let filterType = standard as? FetchShopFilterType {
-            if let index = sortStandard.filter.firstIndex(of: filterType) {
-                sortStandard.filter.remove(at: index)
-            } else {
-                sortStandard.filter.append(filterType)
-            }
-        }
     }
     
     private func getShopInfo(id: Int) {
