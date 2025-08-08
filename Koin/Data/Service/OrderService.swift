@@ -8,13 +8,6 @@
 import Alamofire
 import Combine
 
-// FIXME: 임시 디버깅용 struct
-struct ServerErrorDTO: Decodable, Error {
-    let code: String
-    let message: String
-    let errorTraceId: String?
-}
-
 protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
@@ -54,11 +47,6 @@ final class DefaultOrderService: OrderService {
                         throw error
                     }
                 case .failure(let afError):
-                    if let data = response.data {
-                        if let serverError = try? decoder.decode(ServerErrorDTO.self, from: data) {
-                            throw serverError
-                        }
-                    }
                     throw afError
                 }
             }

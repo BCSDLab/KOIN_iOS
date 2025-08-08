@@ -114,7 +114,7 @@ extension OrderHomeViewModel {
     }
 
     private func getOrderShopInfo(id: Int) {
-        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter, categoryFilter: sortStandard.categoryFilter, minimumOrderAmount: sortStandard.minimumOrderAmount))
+        fetchOrderShopListUseCase.execute(requestModel: self.sortStandard)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
@@ -122,22 +122,9 @@ extension OrderHomeViewModel {
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                var filteredShops = response
-
-                if self.sortStandard.filter.contains(.isOpen) {
-                    filteredShops = filteredShops.filter { $0.isOpen }
-                }
-
-                if self.sortStandard.filter.contains(.deliveryAvailable) {
-                    filteredShops = filteredShops.filter { $0.isDeliveryAvailable }
-                }
                 
-                if let minPrice = self.sortStandard.minimumOrderAmount, minPrice > 0 {
-                    filteredShops = filteredShops.filter { ($0.minimumOrderAmount) >= minPrice }
-                }
-
-                self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
-                self.orderShopList = filteredShops
+                self.outputSubject.send(.changeFilteredOrderShops(response, self.selectedId))
+                self.orderShopList = response
             }).store(in: &subscriptions)
     }
     
