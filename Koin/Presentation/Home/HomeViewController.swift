@@ -543,17 +543,14 @@ extension HomeViewController {
         }
     }
     
-    func didTapCell(at id: Int) {
+    private func didTapCell(at id: Int) {
         let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
         let categoryId = id == 0 ? 1 : id
 
-        if orderableCategoryIds.contains(categoryId) {
-            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: 0)
-            navigationController?.pushViewController(orderTabBarViewController, animated: true)
-        } else {
-            let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: 1)
-            navigationController?.pushViewController(orderTabBarViewController, animated: true)
-        }
+        let initialTabIndex = orderableCategoryIds.contains(categoryId) ? 0 : 1
+        
+        let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: initialTabIndex)
+        navigationController?.pushViewController(orderTabBarViewController, animated: true)
     }
     
     @objc private func refresh() {

@@ -103,39 +103,38 @@ final class ShopViewController: UIViewController {
     }
     
     private let openShopToggleButton = UIButton(type: .custom).then { button in
-        let selectedBackgroundColor = UIColor.appColor(.new500)
-        let unselectedBackgroundColor = UIColor.white
-        let selectedTitleColor = UIColor.white
-        let unselectedTitleColor = UIColor.appColor(.neutral400)
-        let filterImage = UIImage.appImage(asset: .filterIcon1)?.withRenderingMode(.alwaysTemplate)
-        
         var config = UIButton.Configuration.plain()
-        config.image = filterImage
-        config.baseForegroundColor = unselectedTitleColor
-        config.title = "영업중"
-        config.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardBold, size: 14),
-            .foregroundColor: unselectedTitleColor
-        ]))
+        config.image = UIImage.appImage(asset: .filterIcon1)?.withRenderingMode(.alwaysTemplate)
         config.imagePadding = 6
         config.imagePlacement = .leading
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        
-        config.background.backgroundColor = unselectedBackgroundColor
-        config.background.cornerRadius = 17
-        config.background.strokeWidth = 0
-        
-        config.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
-            unselectedBackgroundColor
-        }
-        
         button.configuration = config
+        
+        button.configurationUpdateHandler = { button in
+            let selectedBackgroundColor = UIColor.appColor(.new500)
+            let unselectedBackgroundColor = UIColor.white
+            let selectedTitleColor = UIColor.white
+            let unselectedTitleColor = UIColor.appColor(.neutral400)
+            
+            var newConfig = button.configuration
+            let color = button.isSelected ? selectedTitleColor : unselectedTitleColor
+            
+            newConfig?.background.backgroundColor = button.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
+            newConfig?.baseForegroundColor = color
+            newConfig?.background.cornerRadius = 17
+            
+            newConfig?.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
+                .font: UIFont.appFont(.pretendardBold, size: 14),
+                .foregroundColor: color
+            ]))
+            
+            button.configuration = newConfig
+        }
         
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 0, height: 2)
         button.layer.shadowRadius = 4
         button.layer.shadowOpacity = 0.04
-        button.layer.cornerRadius = 17
         button.layer.masksToBounds = false
     }
     
@@ -302,24 +301,6 @@ extension ShopViewController {
 extension ShopViewController {
     private func handleOpenShopToggle() {
         openShopToggleButton.isSelected.toggle()
-        let selectedBackgroundColor = UIColor.appColor(.new500)
-        let unselectedBackgroundColor = UIColor.white
-        let selectedTitleColor = UIColor.white
-        let unselectedTitleColor = UIColor.appColor(.neutral400)
-        let color = openShopToggleButton.isSelected ? selectedTitleColor : unselectedTitleColor
-        
-        var config = openShopToggleButton.configuration
-        config?.baseForegroundColor = color
-        config?.attributedTitle = AttributedString("영업중", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardBold, size: 14),
-            .foregroundColor: color
-        ]))
-        
-        config?.background.backgroundColor = openShopToggleButton.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
-        config?.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in
-            self.openShopToggleButton.isSelected ? selectedBackgroundColor : unselectedBackgroundColor
-        }
-        openShopToggleButton.configuration = config
         inputSubject.send(.filterOpenShops(openShopToggleButton.isSelected))
     }
 

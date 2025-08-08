@@ -9,11 +9,11 @@ import UIKit
 
 final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
-    private var selectedShopID: Int?
+    private var selectedShopId: Int?
     private var initialTabIndex: Int
     
     init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
-        self.selectedShopID = selectedShopID
+        self.selectedShopId = selectedShopID
         self.initialTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
     }
@@ -105,7 +105,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             fetchOrderShopListUseCase: fetchOrderShopListUseCase,
             searchOrderShopUseCase: searchOrderShopUseCase,
-            selectedId: selectedShopID ?? 1
+            selectedId: selectedShopId ?? 1
         )
         let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
@@ -126,7 +126,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: initialTabIndex == 1 ? selectedShopID ?? 0 : 0
+            selectedId: initialTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
         let shopViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),

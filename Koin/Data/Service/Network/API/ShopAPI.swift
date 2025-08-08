@@ -118,12 +118,14 @@ extension ShopAPI: Router, URLRequestConvertible {
     }
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .fetchShopList, .searchShop:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .searchShop:
             return URLEncoding.default
         case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
             return URLEncoding.queryString
         case .postReview, .modifyReview, .reportReview:
-            return JSONEncoding.default  
+            return JSONEncoding.default
+        case .fetchShopList:
+            return URLEncoding(arrayEncoding: .noBrackets)
         default:
             return URLEncoding.default
         }

@@ -51,6 +51,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
         self.searchOrderShopUseCase = searchOrderShopUseCase
         self.selectedId = selectedId
+        self.sortStandard.categoryFilter = selectedId
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
