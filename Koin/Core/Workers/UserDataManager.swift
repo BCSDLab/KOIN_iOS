@@ -29,14 +29,14 @@ final class UserDataManager {
         }
         self.id = id
 
-        if let studentNumber = userData.studentNumber, !studentNumber.isEmpty {
-            userId = "\(String(studentNumber.prefix(6)))_\(id)"
+        if let studentNumberValue = userData.studentNumber, !studentNumberValue.isEmpty {
+            userId = "\(String(studentNumberValue.prefix(6)))_\(id)"
         } else {
             userId = "anonymous_\(id)"
         }
 
-        if let g = userData.gender {
-            gender = (g == 0) ? "0" : (g == 1) ? "1" : ""
+        if let genderValue = userData.gender {
+            gender = (genderValue == 0) ? "0" : (genderValue == 1) ? "1" : ""
         } else {
             gender = ""
         }
