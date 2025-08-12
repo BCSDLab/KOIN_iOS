@@ -5,6 +5,8 @@
 //  Created by 김나훈 on 3/6/25.
 //
 
+import FirebaseAnalytics
+
 final class UserDataManager {
     static let shared = UserDataManager()
     private(set) var userId: String = ""
@@ -22,6 +24,7 @@ final class UserDataManager {
             self.gender = ""
             self.nickname = userData.nickname ?? userData.anonymousNickname ?? ""
             self.major = userData.major ?? ""
+            Analytics.setUserID(self.userId)
             return
         }
         self.id = id
@@ -39,15 +42,16 @@ final class UserDataManager {
         }
         nickname = userData.nickname ?? userData.anonymousNickname ?? ""
         major = userData.major ?? ""
+        Analytics.setUserID(self.userId)
     }
 
-    
     func resetUserData() {
         userId = ""
         id = 0
         gender = ""
         major = ""
         nickname = ""
+        Analytics.setUserID(nil)
     }
     
 }
