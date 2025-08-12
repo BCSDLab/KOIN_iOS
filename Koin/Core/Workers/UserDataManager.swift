@@ -5,7 +5,6 @@
 //  Created by 김나훈 on 3/6/25.
 //
 
-
 final class UserDataManager {
     static let shared = UserDataManager()
     private(set) var userId: String = ""
@@ -14,30 +13,41 @@ final class UserDataManager {
     private(set) var major: String = ""
     private(set) var nickname: String = ""
     
-    
     private init() {}
     
     func setUserData(userData: UserDTO) {
-        if let studentNumber = userData.studentNumber, !studentNumber.isEmpty {
-            userId = "\(studentNumber.prefix(6))_\(userData.id)"
-        } else {
-            userId = "anonymous_\(userData.id)"
+        guard let id = userData.id else {
+            self.id = 0
+            self.userId = "anonymous"
+            self.gender = ""
+            self.nickname = userData.nickname ?? userData.anonymousNickname ?? ""
+            self.major = userData.major ?? ""
+            return
         }
-        if let genderValue = userData.gender {
-            gender = (genderValue == 0) ? "0" : (genderValue == 1) ? "1" : ""
+        self.id = id
+
+        if let studentNumber = userData.studentNumber, !studentNumber.isEmpty {
+            userId = "\(String(studentNumber.prefix(6)))_\(id)"
+        } else {
+            userId = "anonymous_\(id)"
+        }
+
+        if let g = userData.gender {
+            gender = (g == 0) ? "0" : (g == 1) ? "1" : ""
         } else {
             gender = ""
         }
         nickname = userData.nickname ?? userData.anonymousNickname ?? ""
-        if let id = userData.id {
-            self.id = id
-        }
         major = userData.major ?? ""
     }
+
+    
     func resetUserData() {
         userId = ""
+        id = 0
         gender = ""
         major = ""
+        nickname = ""
     }
     
 }
