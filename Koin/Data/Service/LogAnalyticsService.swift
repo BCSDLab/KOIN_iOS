@@ -20,7 +20,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "event_label": label,
             "event_category": category,
             "value": value,
-            "user_id": UserDataManager.shared.userId,
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
@@ -35,7 +34,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "event_label": label.rawValue,
             "event_category": category.rawValue,
             "value": value,
-            "user_id": UserDataManager.shared.userId,
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
@@ -47,10 +45,10 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "event_label": label.rawValue,
             "event_category": category.rawValue,
             "value": value,
-            "user_id": UserDataManager.shared.userId,
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
+        
         if let previousPage = previousPage {
             defaultParameters["previous_page"] = previousPage
         }
@@ -72,7 +70,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
             "event_category": category.rawValue,
             "value": value,
             "custom_session_id": sessionId,
-            "user_id": UserDataManager.shared.userId,
             "gender": UserDataManager.shared.gender,
             "major": UserDataManager.shared.major
         ]
