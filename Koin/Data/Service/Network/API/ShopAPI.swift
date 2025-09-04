@@ -95,10 +95,13 @@ extension ShopAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchShopList(let request):
             var parameters: [String: Any] = ["sorter": request.sorter.rawValue]
-            for filterItem in request.filter {
-                           parameters["filter"] = filterItem.rawValue
-                       }
-               return parameters
+            if !request.filter.isEmpty {
+                parameters["filter"] = request.filter.map { $0.rawValue }
+            }
+            if let query = request.query {
+                parameters["query"] = query
+            }
+            return parameters
         case .fetchReviewList(let request):
             return [
                 "limit": request.limit,
@@ -115,12 +118,14 @@ extension ShopAPI: Router, URLRequestConvertible {
     }
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .fetchShopList, .searchShop:
+        case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .searchShop:
             return URLEncoding.default
         case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
             return URLEncoding.queryString
         case .postReview, .modifyReview, .reportReview:
-            return JSONEncoding.default  
+            return JSONEncoding.default
+        case .fetchShopList:
+            return URLEncoding(arrayEncoding: .noBrackets)
         default:
             return URLEncoding.default
         }

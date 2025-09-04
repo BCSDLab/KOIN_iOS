@@ -22,7 +22,6 @@ struct OrderShopDTO: Codable {
     let isOpen: Bool
     let categoryIds: [Int]
     let images: [OrderImageDTO]?
-    let open: [OpenInfoDTO]
     let openStatus: String
 
     enum CodingKeys: String, CodingKey {
@@ -40,7 +39,6 @@ struct OrderShopDTO: Codable {
         case isOpen = "is_open"
         case categoryIds = "category_ids"
         case images
-        case open
         case openStatus = "open_status"
     }
 }

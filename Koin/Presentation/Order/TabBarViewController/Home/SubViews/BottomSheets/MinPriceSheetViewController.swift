@@ -1,4 +1,9 @@
-
+//
+//  MinPriceSheetViewController.swift
+//  koin
+//
+//  Created by 이은지 on 6/19/25.
+//
 
 import UIKit
 import SnapKit
@@ -10,6 +15,8 @@ final class MinPriceSheetViewController: UIViewController {
     private var currentPrice: Int?
     private let priceSteps = [5000, 10000, 15000, 20000, 0]
     private var stepLabels: [UILabel] = []
+    
+    private var isLayoutConfigured = false
 
     // MARK: UI Component
     private let titleLabel = UILabel().then {
@@ -28,16 +35,22 @@ final class MinPriceSheetViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
-    private let priceSlider = UISlider().then {
+    private let thumbOverlayView = UIImageView()
+    
+    private let priceSlider = TrackPaddedSlider().then {
         $0.minimumValue = 0
         $0.maximumValue = 4
         $0.isContinuous = true
         $0.tintColor = UIColor.appColor(.new500)
     }
     
+    private var dotViews: [UIView] = []
+    private var dotCenterXConstraints: [NSLayoutConstraint] = []
+    private let stepExtraInset: CGFloat = 8
+    
     private let dotStackView = UIStackView().then {
         $0.axis = .horizontal
-        $0.distribution = .equalSpacing
+        $0.distribution = .fill
         $0.alignment = .center
     }
     
@@ -79,6 +92,16 @@ final class MinPriceSheetViewController: UIViewController {
         createStepLabels()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if !isLayoutConfigured && priceSlider.bounds != .zero {
+            alignStacksToSliderTrack()
+            isLayoutConfigured = true
+        }
+        layoutDotsToThumbCenters()
+        layoutThumbOverlay()
+    }
+    
     private func addTargets() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
@@ -103,12 +126,25 @@ final class MinPriceSheetViewController: UIViewController {
             stepStackView.addArrangedSubview(label)
         }
     }
+    
+    private func innerMetrics() -> (innerMinX: CGFloat, innerWidth: CGFloat, track: CGRect) {
+        let track = priceSlider.trackRect(forBounds: priceSlider.bounds)
+        let cap = track.height / 2
+        let maxExtra = max(0, track.width/2 - cap - 1)
+        let extra = min(stepExtraInset, maxExtra)
+
+        let innerMinX = track.minX + cap + extra
+        let innerWidth = track.width - 2 * (cap + extra)
+        return (innerMinX, innerWidth, track)
+    }
 }
 
 extension MinPriceSheetViewController {
     @objc private func sliderValueChanged(_ sender: UISlider) {
         let step = round(sender.value)
         sender.setValue(step, animated: false)
+        layoutDotsToThumbCenters()
+        layoutThumbOverlay()
     }
     
     @objc private func confirmButtonTapped() {
@@ -128,7 +164,7 @@ extension MinPriceSheetViewController {
 
 extension MinPriceSheetViewController {
     private func setUpLayOuts() {
-        [titleLabel, closeButton, seperateView1, dotStackView, priceSlider, stepStackView, confirmButton, seperateView2].forEach {
+        [titleLabel, closeButton, seperateView1, priceSlider, dotStackView, stepStackView, confirmButton, seperateView2, thumbOverlayView].forEach {
             view.addSubview($0)
         }
     }
@@ -154,7 +190,8 @@ extension MinPriceSheetViewController {
         
         dotStackView.snp.makeConstraints {
             $0.leading.trailing.equalTo(priceSlider)
-            $0.centerY.equalTo(priceSlider)
+            $0.centerY.equalTo(priceSlider.snp.centerY)
+            $0.height.equalTo(8)
         }
         
         priceSlider.snp.makeConstraints {
@@ -165,7 +202,8 @@ extension MinPriceSheetViewController {
         
         stepStackView.snp.makeConstraints {
             $0.top.equalTo(priceSlider.snp.bottom).offset(24)
-            $0.leading.trailing.equalTo(priceSlider)
+            $0.leading.equalTo(priceSlider.snp.leading).offset(14)
+            $0.trailing.equalTo(priceSlider.snp.trailing).inset(20)
         }
         
         confirmButton.snp.makeConstraints {
@@ -181,7 +219,23 @@ extension MinPriceSheetViewController {
         }
     }
     
-    // Slider UI
+    private func alignStacksToSliderTrack() {
+        let m = innerMetrics()
+
+        dotStackView.snp.remakeConstraints {
+            $0.leading.equalTo(priceSlider.snp.leading).offset(m.innerMinX)
+            $0.trailing.equalTo(priceSlider.snp.leading).offset(m.innerMinX + m.innerWidth)
+            $0.centerY.equalTo(priceSlider).offset(1)
+            $0.height.equalTo(8)
+        }
+
+        stepStackView.snp.remakeConstraints {
+            $0.leading.equalTo(dotStackView.snp.leading).offset(-18)
+            $0.trailing.equalTo(dotStackView.snp.trailing).offset(12)
+            $0.top.equalTo(priceSlider.snp.bottom).offset(24)
+        }
+    }
+
     private func setupSlider() {
         let initialStep: Float
         if let currentPrice = currentPrice, let index = priceSteps.firstIndex(of: currentPrice) {
@@ -191,43 +245,100 @@ extension MinPriceSheetViewController {
         }
         priceSlider.setValue(initialStep, animated: false)
 
-        let minTrackImage = roundedImageWithColor(color: UIColor.appColor(.new500))
-        let maxTrackImage = roundedImageWithColor(color: UIColor.appColor(.neutral200))
+        let minTrackImage = imageWithColor(color: UIColor.appColor(.new500))
+        let maxTrackImage = imageWithColor(color: UIColor.appColor(.neutral200))
         priceSlider.setMinimumTrackImage(minTrackImage, for: .normal)
         priceSlider.setMaximumTrackImage(maxTrackImage, for: .normal)
-        let customThumbImage = UIImage.appImage(asset: .bcsdSymbolLogo)
-        priceSlider.setThumbImage(customThumbImage, for: .normal)
+
+        let transparentThumb = imageWithColor(color: .clear, size: CGSize(width: 1, height: 1))
+        priceSlider.setThumbImage(transparentThumb, for: .normal)
+        priceSlider.setThumbImage(transparentThumb, for: .highlighted)
+
+        if let img = UIImage.appImage(asset: .bcsdSymbolLogo) {
+            thumbOverlayView.image = img
+            thumbOverlayView.frame.size = img.size
+        }
+
+        view.bringSubviewToFront(thumbOverlayView)
+        view.layoutIfNeeded()
+        layoutDotsToThumbCenters()
+        layoutThumbOverlay()
+    }
+
+    private func layoutThumbOverlay() {
+        guard !priceSlider.bounds.isEmpty else { return }
+
+        let m = innerMetrics()
+        let last = max(priceSteps.count - 1, 1)
+        let step = CGFloat(round(priceSlider.value))
+        let t = step / CGFloat(last)
+        let xInSlider = m.innerMinX + t * m.innerWidth
+
+        let thumbRectY = priceSlider.thumbRect(forBounds: priceSlider.bounds,
+                                               trackRect: m.track,
+                                               value: priceSlider.value)
+        let centerInSlider = CGPoint(x: xInSlider, y: thumbRectY.midY)
+        let centerInView = priceSlider.convert(centerInSlider, to: view)
+        thumbOverlayView.center = centerInView
     }
     
     private func setupDots() {
-        dotStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        dotViews.forEach { $0.removeFromSuperview() }
+        dotViews.removeAll()
+        dotCenterXConstraints.removeAll()
 
         let dotCount = priceSteps.count
         for _ in 0..<dotCount {
             let dot = UIView()
             dot.backgroundColor = .white
             dot.layer.cornerRadius = 2
-            dot.snp.makeConstraints { $0.size.equalTo(4) }
-            dotStackView.addArrangedSubview(dot)
+            dot.translatesAutoresizingMaskIntoConstraints = false
+            dotStackView.addSubview(dot)
+            
+            let w = dot.widthAnchor.constraint(equalToConstant: 4)
+            let h = dot.heightAnchor.constraint(equalToConstant: 4)
+            let cy = dot.centerYAnchor.constraint(equalTo: dotStackView.centerYAnchor, constant: 0)
+            let cx = dot.centerXAnchor.constraint(equalTo: dotStackView.leadingAnchor, constant: 0)
+            
+            NSLayoutConstraint.activate([w, h, cy, cx])
+            dotViews.append(dot)
+            dotCenterXConstraints.append(cx)
         }
     }
     
-    private func roundedImageWithColor(color: UIColor, size: CGSize = CGSize(width: 8, height: 8)) -> UIImage {
+    private func layoutDotsToThumbCenters() {
+        guard priceSteps.count == dotViews.count,
+              !dotStackView.bounds.isEmpty,
+              !priceSlider.bounds.isEmpty else { return }
+
+        let m = innerMetrics()
+        let last = max(dotViews.count - 1, 1)
+
+        for (idx, cx) in dotCenterXConstraints.enumerated() {
+            let t = CGFloat(idx) / CGFloat(last)
+            cx.constant = t * m.innerWidth
+        }
+        dotStackView.layoutIfNeeded()
+    }
+
+
+    private func imageWithColor(color: UIColor, size: CGSize = CGSize(width: 1, height: 8)) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         color.setFill()
-        UIRectFill(CGRect(origin: .zero, size: size))
+        UIRectFill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image ?? UIImage()
     }
     
     private func configureView() {
+        view.backgroundColor = .white
         setUpLayOuts()
         setUpConstraints()
         setupSlider()
         setupDots()
-        view.backgroundColor = .white
+        dotStackView.isUserInteractionEnabled = false
+        thumbOverlayView.isUserInteractionEnabled = false
     }
 }
-
-

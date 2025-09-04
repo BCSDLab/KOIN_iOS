@@ -10,15 +10,14 @@ import Combine
 
 final class OrderCategoryCollectionView: UICollectionView {
 
-    // MARK: Combine
-    private var cancellables = Set<AnyCancellable>()
-
-    // MARK: Data
+    // MARK: - Combine & Data
+    private var subscriptions = Set<AnyCancellable>()
     private var shopCategories: [ShopCategory] = []
-    let selectedCategoryPublisher = CurrentValueSubject<Int, Never>(0)
-    private var selectedIndex = 0
+    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let selectedCategoryPublisher = PassthroughSubject<Int, Never>()
+    private var selectedId = 1
 
-    // MARK: Init
+    // MARK: - Init
     override init(frame: CGRect, collectionViewLayout _: UICollectionViewLayout) {
         let flow = UICollectionViewFlowLayout()
         flow.scrollDirection = .horizontal
@@ -26,7 +25,7 @@ final class OrderCategoryCollectionView: UICollectionView {
         super.init(frame: frame, collectionViewLayout: flow)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
@@ -38,77 +37,57 @@ final class OrderCategoryCollectionView: UICollectionView {
         contentInset = .zero
         backgroundColor = .clear
 
-        register(OrderCategoryCollectionViewCell.self,
-                 forCellWithReuseIdentifier: OrderCategoryCollectionViewCell.identifier)
+        register(OrderCategoryCollectionViewCell.self, forCellWithReuseIdentifier: OrderCategoryCollectionViewCell.identifier)
 
         dataSource = self
         delegate = self
     }
 
-    // MARK: - External API
+    // MARK: - API
     func updateCategories(_ categories: [ShopCategory]) {
-        shopCategories = categories.sorted { $0.id < $1.id }
-        selectedIndex = 0
-        reloadData()
-        if !shopCategories.isEmpty {
-            selectedCategoryPublisher.send(shopCategories[selectedIndex].id)
-        }
+        self.shopCategories = categories.filter { $0.id != -1 }
+        self.reloadData()
     }
-    
-    func updateCategory(_ id: Int) {
-        guard let newIndex = shopCategories.firstIndex(where: { $0.id == id }) else { return }
-        let previousIndex = selectedIndex
-        selectedIndex = newIndex
 
-        reloadItems(at: [IndexPath(row: previousIndex, section: 0), IndexPath(row: newIndex, section: 0)])
-        selectedCategoryPublisher.send(shopCategories[selectedIndex].id)
+    func updateCategory(_ id: Int) {
+        selectedId = id
+        reloadData()
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension OrderCategoryCollectionView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         shopCategories.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: OrderCategoryCollectionViewCell.identifier,
-            for: indexPath
-        ) as? OrderCategoryCollectionViewCell else { return UICollectionViewCell() }
-
-        let info = shopCategories[indexPath.row]
-        let isSelected = indexPath.row == selectedIndex
-        cell.configure(info: info, isSelected)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OrderCategoryCollectionViewCell.identifier, for: indexPath) as? OrderCategoryCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        let category = shopCategories[indexPath.row]
+        let isSelected = category.id == selectedId
+        cell.configure(info: category, isSelected)
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension OrderCategoryCollectionView: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
-        guard indexPath.row != selectedIndex else { return }
-
-        let previousIndex = selectedIndex
-        selectedIndex = indexPath.row
-        reloadItems(at: [IndexPath(row: previousIndex, section: 0), IndexPath(row: selectedIndex, section: 0)])
-
-        selectedCategoryPublisher.send(shopCategories[selectedIndex].id)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let category = shopCategories[indexPath.row]
+        selectedCategoryPublisher.send(category.id)
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout\
 extension OrderCategoryCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 48, height: 67)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {

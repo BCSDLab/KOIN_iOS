@@ -1,14 +1,14 @@
 //
-//  EventShopCollectionViewCell.swift
+//  EventOrderShopCollectionViewCell.swift
 //  koin
 //
-//  Created by 김나훈 on 4/10/24.
+//  Created by 이은지 on 7/31/25.
 //
 
 import UIKit
 import SnapKit
 
-final class EventShopCollectionViewCell: UICollectionViewCell {
+final class EventOrderShopCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
     var onTap: ((Int) -> Void)?
@@ -52,15 +52,11 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
         eventTextLabel.text = ""
     }
 
-    func configure(_ shop: EventDTO) {
+    func configure(_ shop: OrderShopEvent) {
         updateEventText(shopName: shop.shopName)
         shopId = shop.shopId
 
-        guard let imageList = shop.thumbnailImages else {
-            eventImageView.image = UIImage.appImage(asset: .defaultMenuImage)
-            return
-        }
-
+        let imageList = shop.thumbnailImages
         if !imageList.isEmpty {
             eventImageView.loadImage(from: imageList[0])
         } else {
@@ -88,7 +84,7 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension EventShopCollectionViewCell {
+extension EventOrderShopCollectionViewCell {
     private func setUpLayouts() {
         [koinEventLabel, eventImageView, eventTextLabel].forEach {
             contentView.addSubview($0)

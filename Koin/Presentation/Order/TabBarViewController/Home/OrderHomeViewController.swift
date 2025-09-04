@@ -60,9 +60,7 @@ final class OrderHomeViewController: UIViewController {
     
     private let categoryCollectionView = OrderCategoryCollectionView(
         frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    ).then { collectionView in
-    }
+        collectionViewLayout: UICollectionViewFlowLayout())
     
     private let sortButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
@@ -93,7 +91,26 @@ final class OrderHomeViewController: UIViewController {
     private let filterCollectionView = FilterCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
-    ).then { collectionView in
+    )
+    
+    private let eventOrderShopCollectionView = EventOrderShopCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then {
+        guard let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 100)
+        layout.scrollDirection = .horizontal
+        $0.isHidden = true
+    }
+
+    private let eventIndexLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.6)
+        $0.layer.cornerRadius = 5
+        $0.layer.masksToBounds = true
+        $0.textAlignment = .center
+        $0.isHidden = true
     }
 
     private lazy var orderShopCollectionView = OrderShopCollectionView(
@@ -141,15 +158,15 @@ final class OrderHomeViewController: UIViewController {
         $0.textAlignment = .center
     }
 
-    private lazy var emptyResultStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [emptyResultImageView, emptyResultLabel])
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        stack.isHidden = true
-        return stack
-    }()
+    private lazy var emptyResultStackView = UIStackView(arrangedSubviews: [emptyResultImageView, emptyResultLabel]).then {
+        $0.axis = .vertical
+        $0.spacing = 16
+        $0.alignment = .center
+        $0.distribution = .equalSpacing
+        $0.isHidden = true
+        $0.backgroundColor = UIColor.appColor(.newBackground)
+        $0.isUserInteractionEnabled = false
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
@@ -176,12 +193,17 @@ final class OrderHomeViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self else { return }
             switch output {
             case let .changeFilteredOrderShops(Ordershops, id):
-                self?.updateFilteredOrderShops(Ordershops)
-                self?.updateFilteredOrderShopsCategory(id)
+                self.updateFilteredOrderShops(Ordershops)
+                self.updateFilteredOrderShopsCategory(id)
+            case let .updateEventShops(eventShops):
+                self.updateEventShops(eventShops)
             case let .putImage(response):
-                self?.putImage(data: response)
+                self.putImage(data: response)
+            case .errorOccurred(let error):
+                print("error: ", error)
             default:
                 break
             }
@@ -194,6 +216,7 @@ final class OrderHomeViewController: UIViewController {
             .store(in: &subscriptions)
 
         categoryCollectionView.selectedCategoryPublisher
+            .removeDuplicates()
             .sink { [weak self] id in
                 self?.inputSubject.send(.categoryDidChange(id))
             }
@@ -202,6 +225,12 @@ final class OrderHomeViewController: UIViewController {
         filterCollectionView.minPriceCellTapped
             .sink { [weak self] in
                 self?.minPriceButtonTapped()
+            }
+            .store(in: &subscriptions)
+        
+        eventOrderShopCollectionView.scrollPublisher
+            .sink { [weak self] index in
+                self?.eventIndexLabel.text = index
             }
             .store(in: &subscriptions)
     }
@@ -218,9 +247,22 @@ extension OrderHomeViewController {
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-        
-        let searchVC = OrderSearchViewController(viewModel: OrderHomeViewModel(fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository), fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository), searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository), selectedId: 1))
-        
+
+        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
+        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+
+        let searchVC = OrderSearchViewController(
+            viewModel: OrderHomeViewModel(
+                fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
+                fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+                fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+                searchOrderShopUseCase: searchOrderShopUseCase,
+                selectedId: 1
+            )
+        )
+
         let navController = UINavigationController(rootViewController: searchVC)
         if #available(iOS 13.0, *) {
             navController.modalPresentationStyle = .fullScreen
@@ -229,6 +271,7 @@ extension OrderHomeViewController {
         }
         present(navController, animated: true, completion: nil)
     }
+
     
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
@@ -300,21 +343,91 @@ extension OrderHomeViewController {
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
-        if shops.isEmpty {
-            orderShopCollectionView.isHidden = true
-            emptyResultStackView.isHidden = false
-        } else {
-            orderShopCollectionView.isHidden = false
-            emptyResultStackView.isHidden = true
-            orderShopCollectionView.updateShop(shops)
-            orderShopCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(orderShopCollectionView.calculateDynamicHeight())
-            }
+        orderShopCollectionView.isHidden = shops.isEmpty
+        emptyResultStackView.isHidden = !shops.isEmpty
+
+        orderShopCollectionView.updateShop(shops) { [weak self] in
+            self?.updateLayout(animated: false)
         }
     }
-    
+
     private func updateFilteredOrderShopsCategory(_ id: Int) {
         categoryCollectionView.updateCategory(id)
+    }
+    
+    private func updateEventShops(_ eventShops: [OrderShopEvent]) {
+        // FIXME: - 로직 고치기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+
+        let now = Date()
+        let ongoingEvents = eventShops.filter { event in
+            guard let start = dateFormatter.date(from: event.startDate),
+                  let end = dateFormatter.date(from: event.endDate) else {
+                return false
+            }
+            return start <= now && now <= end
+        }
+        let limitedEvents = Array(ongoingEvents.prefix(10))
+        let isEmpty = limitedEvents.isEmpty
+
+        eventOrderShopCollectionView.isHidden = isEmpty
+        eventIndexLabel.isHidden = isEmpty
+
+        updateLayout(animated: false)
+
+        if isEmpty {
+            eventOrderShopCollectionView.stopAutoScroll()
+        } else {
+            eventOrderShopCollectionView.setEventShops(limitedEvents)
+            eventIndexLabel.text = "1/\(limitedEvents.count)"
+            eventOrderShopCollectionView.startAutoScroll(interval: 4.0)
+        }
+
+        eventOrderShopCollectionView.cellTapPublisher
+            .sink { [weak self] (shopId, _) in
+                guard let self = self else { return }
+                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: true)
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                self.navigationController?.pushViewController(detailVC, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func updateLayout(animated: Bool) {
+        let topAnchorView = eventOrderShopCollectionView.isHidden ? sortButton : eventOrderShopCollectionView
+        let topOffset = eventOrderShopCollectionView.isHidden ? 24.0 : 14.0
+
+        orderShopCollectionView.snp.remakeConstraints { make in
+            make.top.equalTo(topAnchorView.snp.bottom).offset(topOffset)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            
+            if !orderShopCollectionView.isHidden {
+                let dynamicHeight = orderShopCollectionView.calculateCollectionViewHeight()
+                make.height.equalTo(dynamicHeight)
+                make.bottom.equalToSuperview().offset(-32)
+            }
+        }
+
+        emptyResultStackView.snp.remakeConstraints { make in
+            if !emptyResultStackView.isHidden {
+                make.top.equalTo(topAnchorView.snp.bottom).offset(topOffset)
+                make.centerX.equalToSuperview()
+                make.bottom.equalToSuperview().offset(-32)
+            }
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            self.view.layoutIfNeeded()
+        }
     }
 }
 
@@ -322,10 +435,9 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId)
-            let nav = UINavigationController(rootViewController: detailVC)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true)
+            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId, isFromOrder: true)
+            self.tabBarController?.tabBar.isHidden = true
+            navigationController?.pushViewController(detailVC, animated: true)
         }
     }
 }
@@ -336,7 +448,7 @@ extension OrderHomeViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, emptyResultStackView].forEach {
+        [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, eventOrderShopCollectionView, eventIndexLabel, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -376,6 +488,19 @@ extension OrderHomeViewController {
             $0.trailing.equalToSuperview().inset(16)
         }
         
+        eventOrderShopCollectionView.snp.makeConstraints {
+            $0.top.equalTo(filterCollectionView.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(100)
+        }
+
+        eventIndexLabel.snp.makeConstraints {
+            $0.bottom.equalTo(eventOrderShopCollectionView.snp.bottom).offset(-12)
+            $0.trailing.equalToSuperview().offset(-44)
+            $0.width.greaterThanOrEqualTo(40)
+            $0.height.equalTo(14)
+        }
+        
         orderShopCollectionView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
             $0.horizontalEdges.equalToSuperview()
@@ -384,13 +509,14 @@ extension OrderHomeViewController {
         }
 
         emptyResultStackView.snp.makeConstraints {
-            $0.center.equalTo(orderShopCollectionView)
+            $0.top.equalTo(sortButton.snp.bottom).offset(24)
+            $0.centerX.equalToSuperview()
         }
     }
     
     private func configureView() {
+        self.view.backgroundColor = UIColor.appColor(.newBackground)
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }

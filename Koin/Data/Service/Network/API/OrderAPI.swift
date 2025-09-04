@@ -9,6 +9,7 @@ import Alamofire
 
 enum OrderAPI {
     case fetchOrderShopList(FetchOrderShopListRequest)
+    case fetchOrderEventShop
     case searchShop(String)
 }
 
@@ -21,6 +22,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchOrderShopList: return "/order/shops"
+        case .fetchOrderEventShop: return "/order/shops/events"
         case .searchShop(let text): return "/shops/search/related/\(text)"
         }
     }
@@ -56,14 +58,19 @@ extension OrderAPI: Router, URLRequestConvertible {
             if let minimumOrderAmount = request.minimumOrderAmount {
                 parameters["minimum_order_amount"] = minimumOrderAmount
             }
+            if let categoryFilter = request.categoryFilter {
+                parameters["category_filter"] = categoryFilter
+            }
             return parameters
-        case .searchShop:
+        default:
             return nil
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
+        case .fetchOrderShopList:
+            return URLEncoding(arrayEncoding: .noBrackets)
         default:
             return URLEncoding.default
         }

@@ -24,59 +24,65 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDTO)
         case changeFilteredOrderShops([OrderShop], Int)
         case changeFilteredShops([OrderShop], Int)
+        case updateEventShops([OrderShopEvent])
         case showSearchedResult([Keyword])
+        case errorOccurred(Error)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []
-    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], minimumOrderAmount: nil) {
-        didSet {
-            getOrderShopInfo(id: selectedId)
-        }
-    }
     
-    private (set) var selectedId: Int {
-        didSet {
-            getOrderShopInfo(id: selectedId)
-        }
-    }
+    private var sortStandard: FetchOrderShopListRequest = .init(sorter: .none, filter: [.isOpen], categoryFilter: nil, minimumOrderAmount: nil)
+    private(set) var selectedId: Int
 
+    private let fetchOrderEventShopUseCase: FetchOrderEventShopUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
     private let searchOrderShopUseCase: SearchOrderShopUseCase
-    
-    init(fetchShopCategoryListUseCase: FetchShopCategoryListUseCase, fetchOrderShopListUseCase: FetchOrderShopListUseCase, searchOrderShopUseCase: SearchOrderShopUseCase, selectedId: Int) {
+
+    init(fetchOrderEventShopUseCase: FetchOrderEventShopUseCase,
+         fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
+         fetchOrderShopListUseCase: FetchOrderShopListUseCase,
+         searchOrderShopUseCase: SearchOrderShopUseCase,
+         selectedId: Int) {
+        self.fetchOrderEventShopUseCase = fetchOrderEventShopUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
         self.searchOrderShopUseCase = searchOrderShopUseCase
         self.selectedId = selectedId
+        self.sortStandard.categoryFilter = selectedId
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let self = self else { return }
             switch input {
             case .viewDidLoad:
-                self?.getShopCategory()
-                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
+                self.getShopCategory()
+                self.getEventShopList()
             case .getOrderShopInfo:
-                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
+                self.getOrderShopInfo(id: self.selectedId)
             case let .filtersDidChange(filters):
                 let filterTypes = filters.compactMap { $0.fetchFilterType }
-                self?.sortStandard.filter = filterTypes
+                self.sortStandard.filter = filterTypes
+                self.getOrderShopInfo(id: self.selectedId)
             case let .sortDidChange(sort):
-                self?.sortStandard.sorter = sort
+                self.sortStandard.sorter = sort
+                self.getOrderShopInfo(id: self.selectedId)
             case let .categoryDidChange(id):
-                self?.selectedId = id
-            case let .searchTextChanged(text):
-                self?.searchOrderShop(text)
-                self?.searchOrderShops(text)
+                self.selectedId = id
+                self.sortStandard.categoryFilter = id
+                self.getOrderShopInfo(id: self.selectedId)
             case let .minPriceDidChange(price):
-                self?.sortStandard.minimumOrderAmount = price
+                self.sortStandard.minimumOrderAmount = price
+                self.getOrderShopInfo(id: self.selectedId)
+            case let .searchTextChanged(text):
+                self.searchOrderShop(text)
+                self.searchOrderShops(text)
             }
-            
         }.store(in: &subscriptions)
-        
+
         return outputSubject.eraseToAnyPublisher()
     }
 }
@@ -95,35 +101,31 @@ extension OrderHomeViewModel {
             })
             .store(in: &subscriptions)
     }
-
-    private func getOrderShopInfo(id: Int) {
-        fetchOrderShopListUseCase.execute(requestModel: FetchOrderShopListRequest(sorter: sortStandard.sorter, filter: sortStandard.filter, minimumOrderAmount: sortStandard.minimumOrderAmount))
+    
+    private func getEventShopList() {
+        fetchOrderEventShopUseCase.execute()
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
+            }, receiveValue: { [weak self] events in
+                self?.outputSubject.send(.updateEventShops(events))
+                self?.getOrderShopInfo(id: self?.selectedId ?? 1)
+            }).store(in: &subscriptions)
+    }
+
+    private func getOrderShopInfo(id: Int) {
+        fetchOrderShopListUseCase.execute(requestModel: self.sortStandard)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                    self?.outputSubject.send(.errorOccurred(error))
+                }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                var filteredShops = response
-
-                if self.sortStandard.filter.contains(.isOpen) {
-                    filteredShops = filteredShops.filter { $0.isOpen }
-                }
-
-                if self.sortStandard.filter.contains(.deliveryAvailable) {
-                    filteredShops = filteredShops.filter { $0.isDeliveryAvailable }
-                }
                 
-                if let minPrice = self.sortStandard.minimumOrderAmount {
-                    filteredShops = filteredShops.filter { $0.minimumOrderAmount ?? 0 <= minPrice }
-                }
-
-                if self.selectedId != 0 {
-                    self.outputSubject.send(.changeFilteredOrderShops(filteredShops.filter { $0.categoryIds.contains(self.selectedId) }, self.selectedId))
-                } else {
-                    self.outputSubject.send(.changeFilteredOrderShops(filteredShops, self.selectedId))
-                }
-                self.orderShopList = filteredShops
+                self.outputSubject.send(.changeFilteredOrderShops(response, self.selectedId))
+                self.orderShopList = response
             }).store(in: &subscriptions)
     }
     

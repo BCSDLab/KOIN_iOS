@@ -10,6 +10,7 @@ import Combine
 
 protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
 }
 
@@ -17,6 +18,15 @@ final class DefaultOrderService: OrderService {
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         return request(.fetchOrderShopList(requestModel))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
+        request(.fetchOrderEventShop)
+            .map { (response: OrderShopEventListResponseDTO) in
+                response.shopEvents
+            }
+            .eraseToAnyPublisher()
     }
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
@@ -25,8 +35,21 @@ final class DefaultOrderService: OrderService {
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                let decoder = JSONDecoder()
+                switch response.result {
+                case .success(let data):
+                    do {
+                        return try decoder.decode(T.self, from: data)
+                    } catch {
+                        throw error
+                    }
+                case .failure(let afError):
+                    throw afError
+                }
+            }
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }

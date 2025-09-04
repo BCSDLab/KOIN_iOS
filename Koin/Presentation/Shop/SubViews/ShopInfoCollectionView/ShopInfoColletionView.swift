@@ -7,27 +7,27 @@
 
 import Combine
 import UIKit
-import FirebaseAnalytics
 
 final class ShopInfoCollectionView: UICollectionView {
-    
+
+    // MARK: - Properties
     private var shops: [Shop] = []
-    weak var shopDelegate: CollectionViewDelegate?
     private var cancellables = Set<AnyCancellable>()
-    let shopSortStandardPublisher = PassthroughSubject<Any, Never>()
-    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
-    let shopFilterTogglePublisher = PassthroughSubject<Int, Never>()
     
+    let sortOptionDidChangePublisher = PassthroughSubject<ShopSortType, Never>()
+    let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
+
+    // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     convenience init() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -38,7 +38,7 @@ final class ShopInfoCollectionView: UICollectionView {
         self.init(frame: .zero, collectionViewLayout: flowLayout)
         self.isScrollEnabled = false
     }
-    
+
     private func commonInit() {
         isScrollEnabled = true
         showsHorizontalScrollIndicator = false
@@ -49,30 +49,28 @@ final class ShopInfoCollectionView: UICollectionView {
         dataSource = self
         delegate = self
     }
-    
+
+    // MARK: - Public
     func updateShop(_ shops: [Shop]) {
         self.shops = shops
         self.reloadData()
     }
-    
-    private func makeAnalyticsForClickStoreList(_ storeName: String) {
-        let makeEvent = MakeParamsForLog()
-        let event = makeEvent.makeEventNameAction(name: .business)
-        let parameters = [
-            "event_label": makeEvent.makeEventTitle(title: .store_click),
-            "event_category": makeEvent.makeEventCategory(category: .click),
-            "value": "\(storeName)"
-        ]
-        Analytics.logEvent(event, parameters: parameters)
+
+    func calculateShopListHeight() -> CGFloat {
+        let cellHeight: CGFloat = 128
+        let spacing: CGFloat = 12
+        let numberOfCells = CGFloat(shops.count)
+        if numberOfCells == 0 { return 0 }
+        return (cellHeight * numberOfCells) + (spacing * (numberOfCells - 1))
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension ShopInfoCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return shops.count
+        shops.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopInfoCollectionViewCell.identifier, for: indexPath) as? ShopInfoCollectionViewCell else {
             return UICollectionViewCell()
@@ -86,42 +84,11 @@ extension ShopInfoCollectionView: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension ShopInfoCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.makeAnalyticsForClickStoreList(shops[indexPath.row].name)
         cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension ShopInfoCollectionView: UICollectionViewDelegateFlowLayout {
-}
-
-extension ShopInfoCollectionView {
-    func calculateShopListHeight() -> CGFloat {
-        let cellHeight: CGFloat = 128
-        let spacing: CGFloat = 12
-        let numberOfCells = CGFloat(shops.count)
-
-        if numberOfCells == 0 {
-            return 0
-        }
-        return (cellHeight * numberOfCells) + (spacing * (numberOfCells - 1))
-    }
-}
-
-extension ShopInfoCollectionView {
-    func updateSeletecButtonColor(_ standard: FetchShopListRequest) {
-        
-    }
-}
-
-extension ShopInfoCollectionView {
-    func filterToggleLogEvent(toggleType: Int) {
-        shopFilterTogglePublisher.send(toggleType)
-    }
-}
-
-extension ShopInfoCollectionView {
-    func updateShopSortStandard(_ standard: Any) {
-        shopSortStandardPublisher.send(standard)
-    }
+    // 커스텀 레이아웃 메서드 넣어도 됨
 }

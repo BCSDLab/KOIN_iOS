@@ -1,12 +1,3 @@
-//
-//  ShopSortType.swift
-//  koin
-//
-//  Created by 이은지 on 7/24/25.
-//
-
-import Foundation
-
 enum ShopSortType: CaseIterable {
     case rating
     case review

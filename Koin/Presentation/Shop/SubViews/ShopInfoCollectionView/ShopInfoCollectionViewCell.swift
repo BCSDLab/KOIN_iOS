@@ -55,7 +55,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     
     // FIXME: - 이 "testimage.com"가 왜 로그에 뜨는지 모르겠음. 서버에도 없는데?!
     func configure(info: Shop) {
-        if let urlString = info.images.first, let url = URL(string: urlString), urlString != "https://testimage.com/" {
+        if let urlString = info.images.first, let url = URL(string: urlString) {
             shopImageView.kf.setImage(
                 with: url,
                 placeholder: UIImage.appImage(asset: .defaultMenuImage),

@@ -9,11 +9,11 @@ import UIKit
 
 final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
-    private var selectedShopID: Int?
+    private var selectedShopId: Int?
     private var initialTabIndex: Int
     
     init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
-        self.selectedShopID = selectedShopID
+        self.selectedShopId = selectedShopID
         self.initialTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,9 +53,39 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     }
 
     @objc private func didTapCart() {
-        let orderCartWebViewController = OrderCartWebViewController()
-        orderCartWebViewController.title = "장바구니"
-        navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        if UserDataManager.shared.userId.isEmpty {
+            let popupView = OrderLoginPopupView()
+
+            if let windowScene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive }),
+               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+
+                popupView.frame = window.bounds
+
+                popupView.loginButtonAction = {
+                    let loginViewController = LoginViewController(
+                        viewModel: LoginViewModel(
+                            loginUseCase: DefaultLoginUseCase(
+                                userRepository: DefaultUserRepository(service: DefaultUserService())
+                            ),
+                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                            )
+                        )
+                    )
+                    loginViewController.title = "로그인"
+                    self.navigationController?.pushViewController(loginViewController, animated: true)
+                }
+
+                window.addSubview(popupView)
+            }
+
+        } else {
+            let orderCartWebViewController = OrderCartWebViewController()
+            orderCartWebViewController.title = "장바구니"
+            navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        }
     }
 
     // MARK: - Configure TabBar
@@ -64,48 +94,53 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-        
+
+        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
+        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+
         let orderHomeViewModel = OrderHomeViewModel(
-            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-            fetchOrderShopListUseCase: DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository),
-            searchOrderShopUseCase: DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository),
-            selectedId: initialTabIndex == 0 ? selectedShopID ?? 1 : 1
+            fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+            searchOrderShopUseCase: searchOrderShopUseCase,
+            selectedId: selectedShopId ?? 1
         )
-        
         let orderHomeViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderHomeTabBar),
+            image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
             title: "홈"
         )
-        
+
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchShopEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+
         let shopViewModel = ShopViewModel(
-            fetchShopListUseCase: DefaultFetchShopListUseCase(shopRepository: shopRepository),
-            fetchEventListUseCase: DefaultFetchEventListUseCase(shopRepository: shopRepository),
-            fetchShopCategoryListUseCase: DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository),
-            searchShopUseCase: DefaultSearchShopUseCase(shopRepository: shopRepository),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-            ),
-            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
-            fetchShopBenefitUseCase: DefaultFetchShopBenefitUseCase(shopRepository: shopRepository),
-            fetchBeneficialShopUseCase: DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository),
-            selectedId: initialTabIndex == 1 ? selectedShopID ?? 0 : 0
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchShopEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            searchShopUseCase: searchShopUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            selectedId: initialTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
-        
         let shopViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .shopTabBar),
+            image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: ShopViewController(viewModel: shopViewModel),
             title: "주변상점"
         )
 
         let historyViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderDetailTabBar),
+            image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHistoryViewController(),
             title: "주문내역"
         )
 
         viewControllers = [orderHomeViewController, shopViewController, historyViewController]
-
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
     }
@@ -122,31 +157,29 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
 
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-        
-        let selectedTitleAttrs: [NSAttributedString.Key: Any] = [
+        let selectedColor = UIColor.appColor(.new500)
+        let unselectedColor = UIColor.appColor(.neutral300)
+
+        let selectedAttrs: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.black,
             .font: UIFont.appFont(.pretendardBold, size: 12)
         ]
-        let normalTitleAttrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.appColor(.neutral300),
+        let normalAttrs: [NSAttributedString.Key: Any] = [
+            .foregroundColor: unselectedColor,
             .font: UIFont.appFont(.pretendardBold, size: 12)
         ]
-        
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = selectedTitleAttrs
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes   = normalTitleAttrs
 
-        appearance.inlineLayoutAppearance.selected.titleTextAttributes  = selectedTitleAttrs
-        appearance.inlineLayoutAppearance.normal.titleTextAttributes    = normalTitleAttrs
-        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = selectedTitleAttrs
-        appearance.compactInlineLayoutAppearance.normal.titleTextAttributes   = normalTitleAttrs
+        for style in [appearance.stackedLayoutAppearance,
+                      appearance.inlineLayoutAppearance,
+                      appearance.compactInlineLayoutAppearance] {
+            style.selected.iconColor = selectedColor
+            style.normal.iconColor = unselectedColor
+            style.selected.titleTextAttributes = selectedAttrs
+            style.normal.titleTextAttributes = normalAttrs
+        }
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        
-        tabBar.tintColor = UIColor.appColor(.new500)
-        tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
     }
 
     // MARK: - Helper
@@ -185,7 +218,12 @@ final class RootHidingNavigationController: UINavigationController,
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
-        let isRoot = viewController === viewControllers.first
-        setNavigationBarHidden(isRoot, animated: animated)
+
+        if viewController is OrderHomeDetailWebViewController {
+            setNavigationBarHidden(true, animated: animated)
+        } else {
+            let isRoot = viewController === viewControllers.first
+            setNavigationBarHidden(isRoot, animated: animated)
+        }
     }
 }
