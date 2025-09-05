@@ -11,9 +11,15 @@ import SnapKit
 
 final class ShopViewController: UIViewController {
     
+    enum Output {
+        case shopTapped(shopID: Int, isFromOrder: Bool)
+    }
+    
     // MARK: - Properties
     private let viewModel: ShopViewModel
     private let inputSubject = PassthroughSubject<ShopViewModel.Input, Never>()
+    let outputSubject = PassthroughSubject<Output, Never>()
+    
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -235,6 +241,11 @@ final class ShopViewController: UIViewController {
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
+        
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
+            self?.outputSubject.send(Output.shopTapped(shopID: shopId, isFromOrder: false))
+        }
+        .store(in: &subscriptions)
     }
     
     private func setAddTarget() {
@@ -243,15 +254,6 @@ final class ShopViewController: UIViewController {
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
         openShopToggleButton.addAction(UIAction { [weak self] _ in self?.handleOpenShopToggle() }, for: .touchUpInside)
-
-        shopCollectionView.cellTapPublisher
-            .sink { [weak self] shopId, _ in
-                guard let self = self else { return }
-                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: false)
-                self.tabBarController?.tabBar.isHidden = true
-                self.navigationController?.pushViewController(detailVC, animated: true)
-            }
-            .store(in: &subscriptions)
     }
 }
 

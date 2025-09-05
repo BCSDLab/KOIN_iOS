@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     private var selectedShopId: Int?
     private var initialTabIndex: Int
+    private var subscriptions: Set<AnyCancellable> = []
     
     init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopID
@@ -29,6 +31,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         setupNavigationRightButton()
         configureController()
         setupTabBarAppearance()
+        bind()
         
         selectedIndex = initialTabIndex
         updateNavigationTitle(for: initialTabIndex)
@@ -38,6 +41,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
     }
+
     
     // MARK: - Navigation Right Bar Button
     private func setupNavigationRightButton() {
@@ -107,11 +111,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             searchOrderShopUseCase: searchOrderShopUseCase,
             selectedId: selectedShopId ?? 1
         )
-        let orderHomeViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
-            title: "홈"
-        )
+        let orderHomeViewController = OrderHomeViewController(viewModel: orderHomeViewModel)
 
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchShopEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
@@ -128,21 +128,22 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: initialTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
-        let shopViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: ShopViewController(viewModel: shopViewModel),
-            title: "주변상점"
-        )
-
-        let historyViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: OrderHistoryViewController(),
-            title: "주문내역"
-        )
-
+        let shopViewController = ShopViewController(viewModel: shopViewModel)
+        
+        let historyViewController = OrderHistoryViewController()
+        
         viewControllers = [orderHomeViewController, shopViewController, historyViewController]
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
+        
+        
+        tabBar.items?[0].image = UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate)
+        tabBar.items?[1].image = UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate)
+        tabBar.items?[2].image = UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate)
+        
+        tabBar.items?[0].title = "홈"
+        tabBar.items?[1].title = "주변상점"
+        tabBar.items?[2].title = "주문내역"
     }
     
     // MARK: - UITabBarControllerDelegate
@@ -150,7 +151,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
                           didSelect viewController: UIViewController) {
         updateNavigationTitle(for: selectedIndex)
     }
-
+    
     // MARK: - Appearance
     private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()
@@ -181,49 +182,36 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
     }
-
-    // MARK: - Helper
-    private func tabBarNavigationController(
-        image: UIImage?,
-        rootViewController: UIViewController,
-        title: String
-    ) -> UINavigationController {
-        let nav = RootHidingNavigationController(rootViewController: rootViewController)
-
-        let template = (image ?? UIImage()).withRenderingMode(.alwaysTemplate)
-        nav.tabBarItem = UITabBarItem(title: title,
-                                      image: template,
-                                      selectedImage: template)
-        return nav
+    // MARK: - Bind
+    private func bind() {
+        guard let orderHomeViewController = viewControllers?[0] as? OrderHomeViewController else { fatalError("orderTapBarVC Bind Error") }
+        orderHomeViewController.outputSubject.sink { [weak self] output in
+            if case .shopTapped(let shopId, let isFromOrder) = output {
+                let viewModel = ShopDetailViewModel()
+                let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: isFromOrder)
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+        .store(in: &subscriptions)
+        
+        guard let shopViewController = viewControllers?[1] as? ShopViewController else { fatalError("orderTapBarVC Bind Error") }
+        shopViewController.outputSubject.sink { [weak self] output in
+            if case .shopTapped(let shopId, let isFromOrder) = output {
+                let viewModel = ShopDetailViewModel()
+                let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: isFromOrder)
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+        .store(in: &subscriptions)
     }
-    
+
+    // MARK: - updateNavigationTitle
     private func updateNavigationTitle(for index: Int) {
         switch index {
         case 0: navigationItem.title = "주문"
         case 1: navigationItem.title = "주변 상점"
         case 2: navigationItem.title = "주문 내역"
         default: break
-        }
-    }
-}
-
-final class RootHidingNavigationController: UINavigationController,
-                                            UINavigationControllerDelegate {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        delegate = self
-    }
-
-    func navigationController(_ navigationController: UINavigationController,
-                              willShow viewController: UIViewController,
-                              animated: Bool) {
-
-        if viewController is OrderHomeDetailWebViewController {
-            setNavigationBarHidden(true, animated: animated)
-        } else {
-            let isRoot = viewController === viewControllers.first
-            setNavigationBarHidden(isRoot, animated: animated)
         }
     }
 }

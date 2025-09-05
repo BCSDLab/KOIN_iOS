@@ -11,9 +11,15 @@ import Combine
 
 final class OrderHomeViewController: UIViewController {
     
+    enum Output {
+    case shopTapped(shopId: Int, isFromOrder: Bool)
+    }
+    
     // MARK: - Properties
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
+    let outputSubject = PassthroughSubject<Output, Never>()
+    
     private var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
     private var currentMinPrice: Int? = nil
@@ -435,9 +441,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId, isFromOrder: true)
-            self.tabBarController?.tabBar.isHidden = true
-            navigationController?.pushViewController(detailVC, animated: true)
+            outputSubject.send(Output.shopTapped(shopId: orderableShopId, isFromOrder: true))
         }
     }
 }
