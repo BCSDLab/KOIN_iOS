@@ -7,93 +7,84 @@
 
 import Combine
 import UIKit
+import SnapKit
+import Lottie
 
 final class ForceUpdateViewController: UIViewController {
-    // MARK: - Properties
     
+    // MARK: - Properties
     private let viewModel: ForceUpdateViewModel
     private let inputSubject: PassthroughSubject<ForceUpdateViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-    
-    private let scrollView = UIScrollView().then { scrollView in
+    private let logoAnimationView = LottieAnimationView().then {
+        $0.animation = LottieAnimation.named("waveLogo")
+        $0.loopMode = .loop
+        $0.animationSpeed = 1.0
     }
     
-    private let logoImageView = UIImageView().then { imageView in
-        imageView.image = UIImage.appImage(asset: .koinBigLogo)
-    }
-    
-    private let titleLabel = UILabel().then { label in
+    private let titleLabel = UILabel().then {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
         
         let attributedText = NSMutableAttributedString(
-            string: "코인을 사용하기 위해\n업데이트가 꼭 필요해요.",
+            string: "코인을 사용하기 위해\n업데이트가 필요해요",
             attributes: [
                 .font: UIFont.appFont(.pretendardBold, size: 20),
                 .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.appColor(.neutral0)
+                .foregroundColor: UIColor.appColor(.neutral700)
             ]
         )
-        label.attributedText = attributedText
-        label.textAlignment = .center
-        label.numberOfLines = 2
+        $0.attributedText = attributedText
+        $0.textAlignment = .center
+        $0.numberOfLines = 2
     }
     
-    private let descriptionLabel = UILabel().then { label in
+    private let descriptionLabel = UILabel().then {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 5
         let attributedText = NSMutableAttributedString(
-            string: "코인 앱을 실행해 주셔서 감사합니다!\n코인을 사용하기 위해 아래 버튼을 눌러\n스토어에서 업데이트를 진행해 주세요.",
+            string: "코인을 사용하기 위해 아래 버튼을 눌러\n스토어에서 업데이트를 진행해 주세요.",
             attributes: [
                 .font: UIFont.appFont(.pretendardRegular, size: 14),
                 .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.appColor(.neutral0)
+                .foregroundColor: UIColor.appColor(.neutral700)
             ]
         )
-        label.attributedText = attributedText
-        label.textAlignment = .center
-        label.numberOfLines = 3
+        $0.attributedText = attributedText
+        $0.textAlignment = .center
+        $0.numberOfLines = 2
     }
     
-    
-    private let updateButton = UIButton().then { button in
-        button.setTitle("업데이트하기", for: .normal)
-        button.backgroundColor = UIColor.appColor(.sub500)
-        button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 18)
+    private let updateButton = UIButton().then {
+        $0.setTitle("업데이트하기", for: .normal)
+        $0.backgroundColor = UIColor.appColor(.new500)
+        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 15)
+        $0.layer.cornerRadius = 8
     }
     
-    private let errorCheckButton = UIButton().then { button in
+    private let errorCheckButton = UIButton().then {
         let attributedTitle = NSAttributedString(
             string: "이미 업데이트를 하셨나요?",
             attributes: [
-                .font: UIFont.appFont(.pretendardMedium, size: 12),
-                .foregroundColor: UIColor.appColor(.neutral0),
+                .font: UIFont.appFont(.pretendardRegular, size: 12),
+                .foregroundColor: UIColor.appColor(.new800),
                 .underlineStyle: NSUnderlineStyle.single.rawValue // 여기에 'none' 값을 주어도 기본 설정은 밑줄 없음
             ]
         )
         
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.backgroundColor = .clear
+        $0.setAttributedTitle(attributedTitle, for: .normal)
+        $0.backgroundColor = .clear
     }
     
-    private let companyLabel = UILabel().then { label in
-        label.text = "Copyright 2024. BCSD Lab. All right reserved."
-        label.textColor = UIColor.appColor(.neutral0)
-        label.font = UIFont.appFont(.pretendardMedium, size: 12)
+    private let updateModalViewController = UpdateModelViewController().then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
     }
-    
-    private let updateModalViewController: UpdateModelViewController = {
-        let viewController = UpdateModelViewController()
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        return viewController
-    }()
     
     // MARK: - Initialization
-    
     init(viewModel: ForceUpdateViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -108,23 +99,23 @@ final class ForceUpdateViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         bind()
-        updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
-        errorCheckButton.addTarget(self, action: #selector(errorCheckButtonTapped), for: .touchUpInside)
+        setAddTarget()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         navigationController?.navigationBar.isHidden = true
+        logoAnimationView.play()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         navigationController?.navigationBar.isHidden = false
+        logoAnimationView.stop()
     }
     
     private func bind() {
@@ -161,16 +152,19 @@ final class ForceUpdateViewController: UIViewController {
         updateModalViewController.cancelButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
         }.store(in: &subscriptions)
-        
     }
     
+    private func setAddTarget() {
+        updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
+        errorCheckButton.addTarget(self, action: #selector(errorCheckButtonTapped), for: .touchUpInside)
+    }
 }
 
 extension ForceUpdateViewController {
-    
     private func dismiss() {
         dismiss(animated: true, completion: nil)
     }
+    
     @objc private func closeButtonTapped() {
         navigationController?.popViewController(animated: false)
     }
@@ -193,59 +187,52 @@ extension ForceUpdateViewController {
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
-    
 }
 
 extension ForceUpdateViewController {
     
     private func setUpLayOuts() {
-        view.addSubview(scrollView)
-        [logoImageView, titleLabel, descriptionLabel, updateButton, errorCheckButton, companyLabel].forEach {
-            scrollView.addSubview($0)
+        [logoAnimationView, titleLabel, descriptionLabel, errorCheckButton, updateButton].forEach {
+            view.addSubview($0)
         }
     }
+    
     private func setUpConstraints() {
-        
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(71.73)
-            make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(150)
-            make.height.equalTo(200)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(72)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(48)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        updateButton.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(72)
-            make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(191)
-            make.height.equalTo(48)
-        }
-        errorCheckButton.snp.makeConstraints { make in
-            make.top.equalTo(updateButton.snp.bottom).offset(16)
-            make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(191)
-            make.height.equalTo(48)
-        }
-        companyLabel.snp.makeConstraints { make in
-            make.top.equalTo(errorCheckButton.snp.bottom).offset(103)
-            make.centerX.equalTo(view.snp.centerX)
-            make.bottom.equalTo(scrollView.snp.bottom)
+        logoAnimationView.snp.makeConstraints {
+            $0.top.lessThanOrEqualTo(view.snp.top).offset(230.5)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.width.equalTo(237)
+            $0.height.equalTo(100)
         }
         
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(logoAnimationView.snp.bottom).offset(16)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        updateButton.snp.makeConstraints {
+            $0.bottom.equalTo(errorCheckButton.snp.top).offset(-10)
+            $0.centerX.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.height.equalTo(46)
+        }
+        
+        errorCheckButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-14)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.width.equalTo(234)
+            $0.height.greaterThanOrEqualTo(19)
+        }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = UIColor.appColor(.primary600)
+        view.backgroundColor = UIColor.appColor(.neutral0)
     }
 }
