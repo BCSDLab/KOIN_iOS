@@ -22,6 +22,8 @@ final class ForceUpdateViewController: UIViewController {
         $0.animation = LottieAnimation.named("waveLogo")
         $0.loopMode = .loop
         $0.animationSpeed = 1.0
+        $0.contentMode = .scaleAspectFit
+        $0.backgroundColor = .clear
     }
     
     private let titleLabel = UILabel().then {
@@ -95,6 +97,8 @@ final class ForceUpdateViewController: UIViewController {
     }
     
     deinit {
+        logoAnimationView.stop()
+        logoAnimationView.animation = nil
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -107,15 +111,15 @@ final class ForceUpdateViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        super.viewDidAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        logoAnimationView.play()
+        startLottieAnimation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
+        super.viewDidDisappear(animated)
         navigationController?.navigationBar.isHidden = false
-        logoAnimationView.stop()
+        stopLottieAnimation()
     }
     
     private func bind() {
@@ -123,7 +127,6 @@ final class ForceUpdateViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let.isLowVersion(isLow):
-                
                 if !isLow {
                     self?.dismiss()
                 }
@@ -134,14 +137,20 @@ final class ForceUpdateViewController: UIViewController {
             self?.openStore()
         }.store(in: &subscriptions)
         
+        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
+            self?.openStore()
+        }.store(in: &subscriptions)
+        
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
+                self?.pauseLottieAnimation()    // 백그라운드 진입 시 Lottie 일시 정지
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
             }.store(in: &subscriptions)
         
         // 포그라운드로 돌아올 시 알림
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { [weak self] _ in
+                self?.startLottieAnimation()    // 포그라운드 진입 시 애니메이션 재시작
                 self?.inputSubject.send(.checkVersion)
             }.store(in: &subscriptions)
         
@@ -157,6 +166,22 @@ final class ForceUpdateViewController: UIViewController {
     private func setAddTarget() {
         updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
         errorCheckButton.addTarget(self, action: #selector(errorCheckButtonTapped), for: .touchUpInside)
+    }
+    
+    private func startLottieAnimation() {
+        guard logoAnimationView.animation != nil else {
+            print("Warning: Lottie animation 'waveLogo' not found")
+            return
+        }
+        logoAnimationView.play()
+    }
+    
+    private func stopLottieAnimation() {
+        logoAnimationView.stop()
+    }
+    
+    private func pauseLottieAnimation() {
+        logoAnimationView.pause()
     }
 }
 
@@ -190,7 +215,6 @@ extension ForceUpdateViewController {
 }
 
 extension ForceUpdateViewController {
-    
     private func setUpLayOuts() {
         [logoAnimationView, titleLabel, descriptionLabel, errorCheckButton, updateButton].forEach {
             view.addSubview($0)
