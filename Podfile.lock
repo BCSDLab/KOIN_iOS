@@ -130,6 +130,7 @@ PODS:
   - KakaoSDKTemplate (2.22.2):
     - KakaoSDKCommon/Common (= 2.22.2)
   - Kingfisher (7.11.0)
+  - lottie-ios (4.5.2)
   - Moya (15.0.0):
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
@@ -170,6 +171,7 @@ DEPENDENCIES:
   - KakaoSDKShare
   - KakaoSDKTemplate
   - Kingfisher
+  - lottie-ios
   - Moya
   - NMapsMap
   - RxCocoa (~> 6.6)
@@ -198,6 +200,7 @@ SPEC REPOS:
     - KakaoSDKShare
     - KakaoSDKTemplate
     - Kingfisher
+    - lottie-ios
     - Moya
     - nanopb
     - NMapsGeometry
@@ -231,6 +234,7 @@ SPEC CHECKSUMS:
   KakaoSDKShare: 360ff4141060f056d45d8e47c749d35830f83ce9
   KakaoSDKTemplate: c54cf8ba8708688514ffcd08d13e8c97d15b2bb9
   Kingfisher: b9c985d864d43515f404f1ef4a8ce7d802ace3ac
+  lottie-ios: 96784afc26ea031d3e2b6cae342a4b8915072489
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
@@ -247,6 +251,6 @@ SPEC CHECKSUMS:
   SwiftStomp: 13fed4c82f587fb4b59a98fba1b05f205a0f6158
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 79e0050f04bf2dad143bae975202471883514f1e
+PODFILE CHECKSUM: 584014f145a055e811d97598b766e4aeb59ad38d
 
 COCOAPODS: 1.16.2
