@@ -49,6 +49,7 @@ enum ImageAsset: String {
     case ownerReadyImage
     case recommandMenu
     case titleMenu
+    case speaker
     case setMenu
     case sideMenu
     case arrowUp
@@ -74,6 +75,7 @@ enum ImageAsset: String {
     case nonReview
     case reportedImageView
     case nonMenuWeekendImage
+    case newChevronRight
     case chevronRight
     case chevronUp
     case visibility
