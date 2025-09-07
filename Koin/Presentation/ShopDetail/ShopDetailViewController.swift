@@ -32,6 +32,7 @@ class ShopDetailViewController: UIViewController {
         $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
     }
+    let infoView = ShopDetailInfoView()
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
@@ -68,6 +69,8 @@ extension ShopDetailViewController {
             case .updateImagesUrls(let urls):
                 self?.imagesCollectionView.bind(urls: urls)
                 self?.imagesPageControl.numberOfPages = urls.count
+            case .updateInfoView(let orderShop):
+                self?.infoView.bind(rate: orderShop.ratingAverage, review: orderShop.reviewCount, isDelieveryAvailable: orderShop.isDeliveryAvailable, isTakeoutAvailable: orderShop.isTakeoutAvailable, minOrder: orderShop.minimumOrderAmount, minTip: orderShop.minimumDeliveryTip, maxTip: orderShop.maximumDeliveryTip, introduction: "안녕하세요 안녕하세요 반갑습니다 반갑습니다") // introduction ??
             }
         }
         .store(in: &subscriptions)
@@ -87,7 +90,7 @@ extension ShopDetailViewController {
     private func setUpLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl].forEach {
+        [imagesCollectionView, imagesPageControl, infoView].forEach {
             contentView.addSubview( $0 )
         }
     }
@@ -106,6 +109,10 @@ extension ShopDetailViewController {
         imagesPageControl.snp.makeConstraints {
             $0.centerX.equalTo(imagesCollectionView)
             $0.bottom.equalTo(imagesCollectionView).offset(-15)
+        }
+        infoView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(imagesCollectionView.snp.bottom)
         }
     }
     private func configureView(){
