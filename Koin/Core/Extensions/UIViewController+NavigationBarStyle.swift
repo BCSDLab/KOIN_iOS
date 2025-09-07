@@ -45,7 +45,7 @@ extension UIViewController {
         case .orderTransparent:
             appearance.backgroundColor = UIColor.clear
             appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.clear,
+                .foregroundColor: UIColor.appColor(.neutral0),
                 .font: UIFont.appFont(.pretendardSemiBold, size: 18)
             ]
         }
@@ -53,6 +53,12 @@ extension UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = style == .fill ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
+        
+        switch style {
+        case .fill, .orderTransparent:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral0)
+        default:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral800)
+        }
     }
 }
