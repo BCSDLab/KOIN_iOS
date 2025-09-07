@@ -17,6 +17,22 @@ class ShopDetailViewController: UIViewController {
     private let shopId: Int?
     private let isFromOrder: Bool
     
+    // MARK: - Components
+    let scrollView = UIScrollView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+    }
+    let contentView = UIView()
+    let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+        $0.scrollDirection = .horizontal
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
+        $0.minimumLineSpacing = 0
+    })
+    let imagesPageControl = UIPageControl().then {
+        $0.currentPage = 0
+        $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
+        $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
+    }
+    
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
         self.viewModel = viewModel
@@ -31,25 +47,70 @@ class ShopDetailViewController: UIViewController {
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        view.backgroundColor = UIColor.appColor(.newBackground)
         bind()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)), style: .plain, target: self, action: #selector(navigationButtonTapped))
+        inputSubject.send(.viewDidLoad)
+        configureRightBarButton()
     }
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
+        configureView()
     }
 }
 
 extension ShopDetailViewController {
     
-    // MARK: - Function
+    // MARK: - bind
     private func bind() {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        output.sink { output in
+        output.sink { [weak self] output in
             switch output {
-            case .someOutput: return
+            case .updateImagesUrls(let urls):
+                self?.imagesCollectionView.bind(urls: urls)
+                self?.imagesPageControl.numberOfPages = urls.count
             }
         }
         .store(in: &subscriptions)
+        
+        imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
+            self?.imagesPageControl.currentPage = currentPage
+        }
+        .store(in: &subscriptions)
+    }
+    
+    // MARK: - configureRightBarButton
+    private func configureRightBarButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)), style: .plain, target: self, action: #selector(navigationButtonTapped))
+    }
+    
+    // MARK: - ConfigureView
+    private func setUpLayout() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [imagesCollectionView, imagesPageControl].forEach {
+            contentView.addSubview( $0 )
+        }
+    }
+    private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview() //필요할까?
+        }
+        imagesCollectionView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.height.equalTo(UIScreen.main.bounds.width / 1.21)
+        }
+        imagesPageControl.snp.makeConstraints {
+            $0.centerX.equalTo(imagesCollectionView)
+            $0.bottom.equalTo(imagesCollectionView).offset(-15)
+        }
+    }
+    private func configureView(){
+        setUpLayout()
+        setUpConstraints()
     }
     
     // MARK: - @objc

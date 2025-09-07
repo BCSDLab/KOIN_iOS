@@ -165,6 +165,8 @@
 		B4B582582E6D604A0035A861 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4B582572E6D604A0035A861 /* Pretendard-SemiBold.otf */; };
 		B4B582592E6D604A0035A861 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4B582572E6D604A0035A861 /* Pretendard-SemiBold.otf */; };
 		B4B5825A2E6D604A0035A861 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B4B582572E6D604A0035A861 /* Pretendard-SemiBold.otf */; };
+		B4B582652E6D687E0035A861 /* ShopDetailImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B582632E6D687E0035A861 /* ShopDetailImagesCollectionView.swift */; };
+		B4B582662E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B582642E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
 		D2078BE82BC4273200A39861 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BE72BC4273200A39861 /* CALayer.swift */; };
@@ -873,6 +875,8 @@
 		B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
 		B48BFD6A2E6AA072002D3A3D /* ShopDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewModel.swift; sourceTree = "<group>"; };
 		B4B582572E6D604A0035A861 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		B4B582632E6D687E0035A861 /* ShopDetailImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailImagesCollectionView.swift; sourceTree = "<group>"; };
+		B4B582642E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		BD57BB3B5E9F197B5CD7BFE1 /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 		C9FFF0C5D99748F6E1CC1203 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D083EDCD04E89B69DC3F4E /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1920,10 +1924,28 @@
 		B48BFD672E6A9E82002D3A3D /* ShopDetail */ = {
 			isa = PBXGroup;
 			children = (
+				B4B5825B2E6D67810035A861 /* Subviews */,
 				B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */,
 				B48BFD6A2E6AA072002D3A3D /* ShopDetailViewModel.swift */,
 			);
 			path = ShopDetail;
+			sourceTree = "<group>";
+		};
+		B4B5825B2E6D67810035A861 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				B4B582632E6D687E0035A861 /* ShopDetailImagesCollectionView.swift */,
+				B4B582642E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift */,
+			);
+			path = ShopDetailImagesCollectionView;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -4393,6 +4415,8 @@
 				D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */,
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
+				B4B582652E6D687E0035A861 /* ShopDetailImagesCollectionView.swift in Sources */,
+				B4B582662E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
