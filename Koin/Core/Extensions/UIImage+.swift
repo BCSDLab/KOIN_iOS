@@ -59,6 +59,7 @@ enum ImageAsset: String {
     case emptyStar
     case coopInfo
     case arrowBack
+    case arrowBackWhite
     case heart
     case heartFill
     case share
@@ -154,6 +155,7 @@ enum ImageAsset: String {
     case orderShopTabBar
     case orderDetailTabBar
     case shoppingCart
+    case shoppingCartWhite
     case filterIcon1
     case filterIcon2
     case filterIcon3
