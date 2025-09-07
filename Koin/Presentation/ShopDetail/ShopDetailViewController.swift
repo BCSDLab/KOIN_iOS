@@ -32,6 +32,10 @@ class ShopDetailViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         bind()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)), style: .plain, target: self, action: #selector(navigationButtonTapped))
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        configureNavigationBar(style: .orderTransparent)
     }
 }
 
@@ -46,6 +50,11 @@ extension ShopDetailViewController {
             }
         }
         .store(in: &subscriptions)
+    }
+    
+    // MARK: - @objc
+    @objc private func navigationButtonTapped() {
+        navigationController?.pushViewController(UIViewController(), animated: true)
     }
 }
 
