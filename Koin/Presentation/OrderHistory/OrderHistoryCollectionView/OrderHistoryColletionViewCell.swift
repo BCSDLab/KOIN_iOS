@@ -47,7 +47,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     private let menuImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(systemName: "questionmark")
+        iv.image = UIImage.appImage(asset: .defaultMenuImage)
         return iv
     }()
     

@@ -64,6 +64,15 @@ final class OrderHistoryViewController: UIViewController {
         return OrderHistoryCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
+    private let orderPrepareCollectionView: OrderPrepareCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = .zero
+        return OrderPrepareCollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
+    
  
     
     //MARK: - SearchBar
@@ -183,7 +192,7 @@ final class OrderHistoryViewController: UIViewController {
 extension OrderHistoryViewController {
     
     private func setUpLayOuts() {
-        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView].forEach {
+        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView,orderPrepareCollectionView].forEach {
             view.addSubview($0)
         }
         
@@ -259,8 +268,12 @@ extension OrderHistoryViewController {
             $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
             $0.bottom.equalToSuperview()
         }
-
-
+        
+        orderPrepareCollectionView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview()
+        }
         
     }
     
@@ -299,6 +312,8 @@ extension OrderHistoryViewController {
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
             orderHistoryCollectionView.reloadData()
+        } else {
+            orderPrepareCollectionView.reloadData()
         }
     }
 }
@@ -359,6 +374,9 @@ extension OrderHistoryViewController {
         searchCancelButton.isHidden = !isHistory
         filterButtonRow.isHidden = !isHistory
         orderHistoryCollectionView.isHidden = !isHistory
+        
+        orderPrepareCollectionView.isHidden = isHistory
+
 
         if isHistory {
             topToFilter?.deactivate()
