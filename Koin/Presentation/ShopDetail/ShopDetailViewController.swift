@@ -16,6 +16,7 @@ class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let shopId: Int?
     private let isFromOrder: Bool
+    private var menuGroupName: [String] = []
     
     // MARK: - Components
     let scrollView = UIScrollView().then {
@@ -33,6 +34,9 @@ class ShopDetailViewController: UIViewController {
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
     }
     let infoView = ShopDetailInfoView()
+    let separatorView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral100)
+    }
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
@@ -107,11 +111,16 @@ extension ShopDetailViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(imagesCollectionView.snp.bottom)
         }
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(infoView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(8)
+        }
     }
     private func setUpLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl, infoView].forEach {
+        [imagesCollectionView, imagesPageControl, infoView, separatorView].forEach {
             contentView.addSubview( $0 )
         }
     }

@@ -16,6 +16,7 @@ class ShopDetailViewModel {
     enum Output {
     case updateImagesUrls([String])
     case updateInfoView(OrderShop)
+    case updateMenus()
     }
     
     // MARK: - Properties
