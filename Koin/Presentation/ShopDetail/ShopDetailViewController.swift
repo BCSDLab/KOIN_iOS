@@ -16,7 +16,6 @@ class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let shopId: Int?
     private let isFromOrder: Bool
-    private var menuGroupName: [String] = []
     
     // MARK: - Components
     let scrollView = UIScrollView().then {
@@ -36,6 +35,15 @@ class ShopDetailViewController: UIViewController {
     let infoView = ShopDetailInfoView()
     let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral100)
+    }
+    let menuGroupNameCollectionView = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+        $0.minimumInteritemSpacing = 4
+        $0.scrollDirection = .horizontal
+    }).then {
+        $0.backgroundColor = .clear
+        $0.contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        $0.showsHorizontalScrollIndicator = false
+        $0.layer.masksToBounds = false
     }
     
     // MARK: - Initializer
@@ -75,6 +83,12 @@ extension ShopDetailViewController {
                 self?.imagesPageControl.numberOfPages = urls.count
             case .updateInfoView(let orderShop):
                 self?.infoView.bind(rate: orderShop.ratingAverage, review: orderShop.reviewCount, isDelieveryAvailable: orderShop.isDeliveryAvailable, isTakeoutAvailable: orderShop.isTakeoutAvailable, minOrder: orderShop.minimumOrderAmount, minTip: orderShop.minimumDeliveryTip, maxTip: orderShop.maximumDeliveryTip, introduction: "안녕하세요 안녕하세요 반갑습니다 반갑습니다") // introduction ??
+            case .updateMenus(let orderShopMenus):
+                var menuGroupName: [String] = []
+                orderShopMenus.forEach {
+                    menuGroupName.append($0.menuGroupName)
+                }
+                self?.menuGroupNameCollectionView.bind(menuGroupName: menuGroupName)
             }
         }
         .store(in: &subscriptions)
@@ -116,11 +130,16 @@ extension ShopDetailViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(8)
         }
+        menuGroupNameCollectionView.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(34)
+        }
     }
     private func setUpLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl, infoView, separatorView].forEach {
+        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView].forEach {
             contentView.addSubview( $0 )
         }
     }
@@ -134,5 +153,3 @@ extension ShopDetailViewController {
         navigationController?.pushViewController(UIViewController(), animated: true)
     }
 }
-
-
