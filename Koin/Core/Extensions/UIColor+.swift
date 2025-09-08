@@ -18,7 +18,7 @@ enum SceneColorAsset {
     case bus1, bus2, bus3
     case yellow
     case gray
-    case newBackground, new500
+    case newBackground, new500 , new100
 }
 
 enum TimetableColorAsset {
@@ -148,6 +148,7 @@ extension UIColor {
             
         case .newBackground: return UIColor(hexCode: "F8F8FA")
         case .new500: return UIColor(hexCode: "B611F5")
+        case .new100: return UIColor(hexCode: "EAD3FE")
         }
     }
     
