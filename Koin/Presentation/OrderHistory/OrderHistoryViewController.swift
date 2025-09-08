@@ -19,7 +19,7 @@ final class OrderHistoryViewController: UIViewController {
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
     
-    // MARK: - UI Components
+    // MARK: - UI Components    
     private let orderHistorySegment: UISegmentedControl = {
         let segment = UISegmentedControl()
         segment.insertSegment(withTitle: "지난 주문", at: 0, animated: true)
@@ -53,7 +53,16 @@ final class OrderHistoryViewController: UIViewController {
         return view
     }()
     
+    private let orderHistoryCollectionView: OrderHistoryCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = .zero
+        return OrderHistoryCollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
     
+ 
     
     //MARK: - SearchBar
     
@@ -138,6 +147,7 @@ final class OrderHistoryViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
+
     // MARK: - Bind
     private func bind() {
         
@@ -170,7 +180,7 @@ final class OrderHistoryViewController: UIViewController {
 extension OrderHistoryViewController {
     
     private func setUpLayOuts() {
-        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView].forEach {
+        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView].forEach {
             view.addSubview($0)
         }
         
@@ -241,6 +251,13 @@ extension OrderHistoryViewController {
         
         self.barTrailingToSuperview.activate()
         self.barTrailingToCancel?.deactivate()
+        
+        orderHistoryCollectionView.snp.makeConstraints{
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview()
+            
+        }
 
 
         
