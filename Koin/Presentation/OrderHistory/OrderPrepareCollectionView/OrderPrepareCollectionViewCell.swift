@@ -7,6 +7,9 @@
 
 import UIKit
 
-class OrderPrepareCollectionViewCell: UICollectionViewCell {
+final class OrderPrepareCollectionViewCell: UICollectionViewCell {
+    
+    static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
     
 }
+
