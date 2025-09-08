@@ -27,6 +27,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case updateEventShops([OrderShopEvent])
         case showSearchedResult([Keyword])
         case errorOccurred(Error)
+        case updateFloatingButton(OrderTrackingInfo)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -40,16 +41,19 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
     private let searchOrderShopUseCase: SearchOrderShopUseCase
+    private let fetchOrderTrackingUseCase: FetchOrderTrackingUseCase
 
     init(fetchOrderEventShopUseCase: FetchOrderEventShopUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          fetchOrderShopListUseCase: FetchOrderShopListUseCase,
+         fetchOrderTrackingUseCase: FetchOrderTrackingUseCase,
          searchOrderShopUseCase: SearchOrderShopUseCase,
          selectedId: Int) {
         self.fetchOrderEventShopUseCase = fetchOrderEventShopUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.fetchOrderShopListUseCase = fetchOrderShopListUseCase
         self.searchOrderShopUseCase = searchOrderShopUseCase
+        self.fetchOrderTrackingUseCase = fetchOrderTrackingUseCase
         self.selectedId = selectedId
         self.sortStandard.categoryFilter = selectedId
     }
@@ -61,6 +65,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
             case .viewDidLoad:
                 self.getShopCategory()
                 self.getEventShopList()
+                self.getFloatingButtonStatus()
             case .getOrderShopInfo:
                 self.getOrderShopInfo(id: self.selectedId)
             case let .filtersDidChange(filters):
@@ -151,5 +156,17 @@ extension OrderHomeViewModel {
 
     func getOrderableShopId(at index: Int) -> Int {
         return orderShopList[index].orderableShopId
+    }
+    
+    private func getFloatingButtonStatus() {
+        fetchOrderTrackingUseCase.execute()
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { [weak self] trackingInfo in
+                self?.outputSubject.send(.updateFloatingButton(trackingInfo))
+            })
+            .store(in: &subscriptions)
     }
 }

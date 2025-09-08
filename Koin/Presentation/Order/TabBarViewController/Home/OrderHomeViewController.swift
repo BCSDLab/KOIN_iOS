@@ -220,6 +220,8 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
                 self.updateEventShops(eventShops)
             case let .putImage(response):
                 self.putImage(data: response)
+            case let .updateFloatingButton(trackingInfo):
+                self.updateFloatingButton(with: trackingInfo)
             case .errorOccurred(let error):
                 print("error: ", error)
             default:
@@ -270,12 +272,13 @@ extension OrderHomeViewController {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
         let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+        let fetchOrderTrackingUseCase = DefaultFetchOrderTrackingUseCase(orderShopRepository: orderRepository)
 
         let searchVC = OrderSearchViewController(
             viewModel: OrderHomeViewModel(
                 fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
                 fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-                fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+                fetchOrderShopListUseCase: fetchOrderShopListUseCase, fetchOrderTrackingUseCase: fetchOrderTrackingUseCase,
                 searchOrderShopUseCase: searchOrderShopUseCase,
                 selectedId: 1
             )
@@ -290,9 +293,21 @@ extension OrderHomeViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
+    }
+    
+    private func updateFloatingButton(with info: OrderTrackingInfo) {
+        if case .unknown = info.status {
+            orderFloatingButton.isHidden = true
+            return
+        }
+        
+        orderFloatingButton.isHidden = false
+        orderFloatingButton.titleText = info.titleText
+        orderFloatingButton.subtitleText = info.subtitleText
+        
+        startLottieAnimation()
     }
     
     @objc private func sortButtonTapped() {
