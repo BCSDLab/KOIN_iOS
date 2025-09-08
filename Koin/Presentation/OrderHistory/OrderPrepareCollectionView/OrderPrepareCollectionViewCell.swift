@@ -38,6 +38,28 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
         return b
     }()
     
+    private let estimatedTimeLabel: UILabel = {
+        let l = UILabel()
+        l.font = UIFont.appFont(.pretendardMedium, size: 12)
+        l.textColor = UIColor.appColor(.new500)
+        l.textAlignment = .center
+        return l
+    }()
+    
+    
+    
+    
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     
     
     
