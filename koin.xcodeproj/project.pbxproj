@@ -612,6 +612,9 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
+		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
+		D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
+		D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80BBC762E37B5F7003E224A /* OrderLoginPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */; };
 		D80C99DC2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */; };
 		D80E7FA62E1C06D4008D5C26 /* OrderShopDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */; };
@@ -1321,6 +1324,7 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
+		D80AD4E32E6C6BC30061334B /* waveLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = waveLogo.json; sourceTree = "<group>"; };
 		D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLoginPopupView.swift; sourceTree = "<group>"; };
 		D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeDetailWebViewController.swift; sourceTree = "<group>"; };
 		D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDTO.swift; sourceTree = "<group>"; };
@@ -2671,9 +2675,10 @@
 		D27DD05B2BA608310081FD36 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D80AD4E22E6C6B9C0061334B /* Lottie */,
 				83D5E9BB2CCB6A2A00C6D4CD /* Gif */,
-				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
 				D27DD05D2BA608310081FD36 /* Fonts */,
+				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3537,6 +3542,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		D80AD4E22E6C6B9C0061334B /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				D80AD4E32E6C6BC30061334B /* waveLogo.json */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
 		D80E7FA52E1C06D4008D5C26 /* Order */ = {
 			isa = PBXGroup;
 			children = (
@@ -3841,6 +3854,7 @@
 				D2078BF22BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */,
+				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3849,6 +3863,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF02BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */,
 				D2078BFB2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF32BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 			);
@@ -3859,6 +3874,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF12BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */,
 				D2078BFC2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF42BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 			);
