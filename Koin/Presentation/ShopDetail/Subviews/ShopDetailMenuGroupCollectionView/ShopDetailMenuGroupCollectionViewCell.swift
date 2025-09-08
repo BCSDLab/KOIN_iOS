@@ -31,8 +31,10 @@ extension ShopDetailMenuGroupCollectionViewCell {
     }
     
     private func configureView() {
-        layer.cornerRadius = 17
         backgroundColor = .appColor(.neutral0)
+        layer.cornerRadius = 17
+        layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 1)
+        layer.shadowRadius = 17
         
         [label].forEach {
             addSubview($0)

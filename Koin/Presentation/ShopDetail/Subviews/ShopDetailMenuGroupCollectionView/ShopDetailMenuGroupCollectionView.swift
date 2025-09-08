@@ -59,7 +59,6 @@ extension ShopDetailMenuGroupCollectionView {
             return UICollectionViewCell()
         }
         cell.bind(menuGroupName[indexPath.row])
-        cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -80,6 +79,7 @@ extension ShopDetailMenuGroupCollectionView {
         cell.label.textColor = .appColor(.new500)
         cell.layer.borderColor = UIColor.appColor(.new500).cgColor
         cell.layer.borderWidth = 1
+        cell.layer.applySketchShadow(color: .clear, alpha: 0, x: 0, y: 0, blur: 0, spread: 0)
     }
     private func configureDeselectedCell(_ indexPath: IndexPath) {
         guard let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
@@ -88,5 +88,7 @@ extension ShopDetailMenuGroupCollectionView {
         cell.label.textColor = .appColor(.neutral400)
         cell.layer.borderColor = .none
         cell.layer.borderWidth = 0
+        cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 1)
+        cell.layer.shadowRadius = 17
     }
 }
