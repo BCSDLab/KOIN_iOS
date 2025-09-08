@@ -65,9 +65,10 @@ extension ShopDetailInfoView {
             .font : UIFont.appFont(.pretendardSemiBold, size: 13),
             .foregroundColor : UIColor.appColor(.neutral800)
         ]), for: .normal)
-        setUpIsAvailableView(isDelieveryAvailable, isTakeoutAvailable)
         orderAmountDelieveryTipView.bind(minOrderAmount: minOrder, minDeliveryTip: minTip, maxDelieveryTip: maxTip)
         introductionView.bind(introduction: introduction)
+        
+        setUpIsAvailableView(isDelieveryAvailable, isTakeoutAvailable)
     }
     
     private func setUpIsAvailableView(_ isDelieveryAvailable: Bool, _ isTakeoutAvailable: Bool) {
@@ -164,7 +165,7 @@ extension ShopDetailInfoView {
             $0.top.equalTo(orderAmountDelieveryTipView)
             $0.height.equalTo(orderAmountDelieveryTipView)
             $0.width.equalTo(orderAmountDelieveryTipView)
-            $0.bottom.equalToSuperview().offset(18)
+            $0.bottom.equalToSuperview().offset(-18)
         }
     }
     private func setUpShadows(){

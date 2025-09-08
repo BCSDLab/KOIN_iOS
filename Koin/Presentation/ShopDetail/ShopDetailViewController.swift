@@ -87,13 +87,6 @@ extension ShopDetailViewController {
     }
     
     // MARK: - ConfigureView
-    private func setUpLayout() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl, infoView].forEach {
-            contentView.addSubview( $0 )
-        }
-    }
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -113,6 +106,13 @@ extension ShopDetailViewController {
         infoView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(imagesCollectionView.snp.bottom)
+        }
+    }
+    private func setUpLayout() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [imagesCollectionView, imagesPageControl, infoView].forEach {
+            contentView.addSubview( $0 )
         }
     }
     private func configureView(){
