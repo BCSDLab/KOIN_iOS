@@ -666,6 +666,9 @@
 		D8F56E5C2E3B8A2400EDC22A /* ShopEventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */; };
 		D8F56E5E2E3B8A8B00EDC22A /* OrderShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */; };
 		D8F56E602E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */; };
+		D8F5C5462E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
+		D8F5C5472E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
+		D8F5C5482E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1377,6 +1380,7 @@
 		D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEventDTO.swift; sourceTree = "<group>"; };
 		D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopEvent.swift; sourceTree = "<group>"; };
 		D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderEventShopUseCase.swift; sourceTree = "<group>"; };
+		D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3545,6 +3549,7 @@
 		D80AD4E22E6C6B9C0061334B /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */,
 				D80AD4E32E6C6BC30061334B /* waveLogo.json */,
 			);
 			path = Lottie;
@@ -3847,6 +3852,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				832FCC932CD667AC0044AF23 /* diningShare.gif in Resources */,
+				D8F5C5462E6EF3A600FB6708 /* floatingLogo.json in Resources */,
 				D2078BFA2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
@@ -3863,6 +3869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF02BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D8F5C5482E6EF3A600FB6708 /* floatingLogo.json in Resources */,
 				D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */,
 				D2078BFB2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF32BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
@@ -3874,6 +3881,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF12BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D8F5C5472E6EF3A600FB6708 /* floatingLogo.json in Resources */,
 				D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */,
 				D2078BFC2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF42BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
