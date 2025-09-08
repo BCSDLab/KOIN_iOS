@@ -163,6 +163,7 @@ enum ImageAsset: String {
     case orderEmptyLogo
     case refresh
     case delivery2
+    case pakaging
 }
 
 enum SFSymbols: String {
