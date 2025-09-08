@@ -19,11 +19,13 @@ final class OrderHistoryViewController: UIViewController {
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
     
-    // MARK: - UI Components    
+    
+    // MARK: - UI Components
     private let orderHistorySegment: UISegmentedControl = {
         let segment = UISegmentedControl()
         segment.insertSegment(withTitle: "지난 주문", at: 0, animated: true)
         segment.insertSegment(withTitle: "준비 중", at: 1, animated: true)
+        segment.selectedSegmentIndex = 0 
         
         segment.setTitleTextAttributes([
             .foregroundColor: UIColor.appColor(.neutral500),
@@ -140,6 +142,7 @@ final class OrderHistoryViewController: UIViewController {
         configureView()
         bind()
         render()
+        updateSearchVisibility(animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -190,7 +193,6 @@ extension OrderHistoryViewController {
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
             $0.snp.makeConstraints { $0.height.equalTo(34) }
         }
-        
     }
     
     private func setUpConstraints() {
@@ -256,7 +258,6 @@ extension OrderHistoryViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
             $0.bottom.equalToSuperview()
-            
         }
 
 
@@ -296,6 +297,9 @@ extension OrderHistoryViewController {
         stateInfoButton.applyFilter(infoTitle != "주문 상태 · 정보")
         
         updateResetVisibility()
+        if orderHistorySegment.selectedSegmentIndex == 0 {
+            orderHistoryCollectionView.reloadData()
+        }
     }
 }
 
@@ -349,22 +353,20 @@ extension OrderHistoryViewController {
     }
     
     private func updateSearchVisibility(animated: Bool = true) {
-        let hide = (orderHistorySegment.selectedSegmentIndex == 1)
+        let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
 
-        searchBar.isHidden = hide
-        searchCancelButton.isHidden = hide
+        searchBar.isHidden = !isHistory
+        searchCancelButton.isHidden = !isHistory
+        filterButtonRow.isHidden = !isHistory
+        orderHistoryCollectionView.isHidden = !isHistory
 
-        if hide {
-            topToSearch.deactivate()
-            topToFilter?.activate()
-        } else {
+        if isHistory {
             topToFilter?.deactivate()
             topToSearch.activate()
-        }
-
-        guard animated else { return }
-        UIView.animate(withDuration: 0.5) {
-            self.view.layoutIfNeeded()
+        } else {
+            cancelButtonTapped()
+            topToSearch.deactivate()
+            topToFilter?.activate()
         }
     }
     

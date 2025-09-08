@@ -1387,6 +1387,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3B2DEC772E6EFBA30059D37E /* pagenation */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = pagenation; sourceTree = "<group>"; };
 		3B2DEC782E6EFBD30059D37E /* OrderHistoryCollectionView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OrderHistoryCollectionView; sourceTree = "<group>"; };
+		3B2DEC7D2E6F44CF0059D37E /* OrderPrepareCollectionView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OrderPrepareCollectionView; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3590,6 +3591,7 @@
 		D8C048582E046BDA00129B14 /* OrderHistory */ = {
 			isa = PBXGroup;
 			children = (
+				3B2DEC7D2E6F44CF0059D37E /* OrderPrepareCollectionView */,
 				3B2DEC782E6EFBD30059D37E /* OrderHistoryCollectionView */,
 				3B2DEC772E6EFBA30059D37E /* pagenation */,
 				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
@@ -3755,6 +3757,7 @@
 			fileSystemSynchronizedGroups = (
 				3B2DEC772E6EFBA30059D37E /* pagenation */,
 				3B2DEC782E6EFBD30059D37E /* OrderHistoryCollectionView */,
+				3B2DEC7D2E6F44CF0059D37E /* OrderPrepareCollectionView */,
 			);
 			name = koin;
 			productName = koin;
