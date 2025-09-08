@@ -14,6 +14,11 @@ final class OrderHistoryViewController: UIViewController {
         didSet { render() }
     }
     
+    private var topToSearch: Constraint!
+    private var topToFilter: Constraint!
+    private var barTrailingToSuperview: Constraint!
+    private var barTrailingToCancel: Constraint!
+    
     // MARK: - UI Components
     private let orderHistorySegment: UISegmentedControl = {
         let segment = UISegmentedControl()
@@ -46,6 +51,40 @@ final class OrderHistoryViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .appColor(.new500)
         return view
+    }()
+    
+    
+    
+    //MARK: - SearchBar
+    
+    private let searchBar: OrderHistoryCustomSearchBar = {
+        let field = OrderHistoryCustomSearchBar()
+        return field
+    }()
+    
+    private lazy var searchDimView: UIControl = {
+        let v = UIControl()
+        v.backgroundColor = UIColor.black.withAlphaComponent(0)
+        v.isHidden = false
+        v.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        return v
+    }()
+    
+    private let searchCancelButton: UIButton = {
+        var cf = UIButton.Configuration.plain()
+
+        var title = AttributedString("취소")
+        title.font = UIFont.appFont(.pretendardBold, size: 14)
+        title.foregroundColor = UIColor.appColor(.neutral500)
+        cf.attributedTitle = title
+
+        cf.baseForegroundColor = UIColor.appColor(.neutral500)
+        cf.contentInsets = .zero
+
+        let b = UIButton(configuration: cf)
+        b.setContentHuggingPriority(.required, for: .horizontal)
+        b.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return b
     }()
     
     private let filterButtonRow: UIStackView = {
@@ -94,6 +133,11 @@ final class OrderHistoryViewController: UIViewController {
         render()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.layoutIfNeeded()
+    }
+    
     // MARK: - Bind
     private func bind() {
         
@@ -103,14 +147,30 @@ final class OrderHistoryViewController: UIViewController {
             $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)
         }
         resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
+        
+        searchBar.textField.delegate = self
+        
+        
+        searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
 
+        
+        searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+
+        searchBar.textField.delegate = self
+
+        searchBar.onTextChanged = { text in
+            print("검색어: \(text)")
+        }
+        
+        updateSearchVisibility(animated: false)
     }
+    
 }
 
 extension OrderHistoryViewController {
     
     private func setUpLayOuts() {
-        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow].forEach {
+        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView].forEach {
             view.addSubview($0)
         }
         
@@ -144,11 +204,46 @@ extension OrderHistoryViewController {
         }
         
         filterButtonRow.snp.makeConstraints {
-            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(24)
+            self.topToSearch = $0.top.equalTo(searchBar.snp.bottom).offset(16).constraint
+            $0.leading.equalToSuperview().offset(16)
             $0.trailing.lessThanOrEqualToSuperview().inset(24)
             $0.height.equalTo(34)
         }
+        
+        self.topToFilter = filterButtonRow.snp.prepareConstraints{
+            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
+        }.first
+        
+        searchBar.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
+            $0.height.equalTo(40)
+            barTrailingToSuperview = $0.trailing.equalToSuperview().inset(16).constraint
+        }
+        
+        barTrailingToCancel = searchBar.snp.prepareConstraints {
+            $0.trailing.equalToSuperview().inset(57.5)
+        }.first
+        
+        searchCancelButton.isHidden = true
+        searchCancelButton.alpha = 0
+        searchCancelButton.snp.makeConstraints {
+            $0.centerY.equalTo(searchBar)
+            $0.leading.equalTo(searchBar.snp.trailing)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(searchBar.snp.height)
+        }
+        
+        searchDimView.snp.makeConstraints {
+            $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        self.barTrailingToSuperview.activate()
+        self.barTrailingToCancel?.deactivate()
+
+
+        
     }
     
     private func configureView() {
@@ -198,6 +293,7 @@ extension OrderHistoryViewController {
             self.orderHistoryUnderLineView.snp.updateConstraints {
                 $0.leading.equalTo(self.orderHistorySegment.snp.leading).offset(leadingDistance)
             }
+            self.updateSearchVisibility(animated: false)
             self.view.layoutIfNeeded()
         })
     }
@@ -234,4 +330,79 @@ extension OrderHistoryViewController {
     @objc private func resetFilterTapped() {
         currentFilter = .empty
     }
+    
+    private func updateSearchVisibility(animated: Bool = true) {
+        let hide = (orderHistorySegment.selectedSegmentIndex == 1)
+
+        searchBar.isHidden = hide
+        searchCancelButton.isHidden = hide
+
+        if hide {
+            topToSearch.deactivate()
+            topToFilter?.activate()
+        } else {
+            topToFilter?.deactivate()
+            topToSearch.activate()
+        }
+
+        guard animated else { return }
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+    @objc private func searchTapped(_ sender: UITextField) {
+        barTrailingToSuperview.deactivate()
+        barTrailingToCancel?.activate()
+        
+        view.bringSubviewToFront(searchDimView)
+        view.bringSubviewToFront(searchBar)
+        view.bringSubviewToFront(searchCancelButton)
+
+        searchCancelButton.isHidden = false
+        searchDimView.isHidden = false
+        searchBar.focus()
+        
+        
+        searchBar.becomeFirstResponder()
+
+        
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+                self.searchCancelButton.alpha = 1
+                self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+
+    @objc private func cancelButtonTapped() {
+        searchBar.unfocus()
+        
+        barTrailingToCancel?.deactivate()
+        barTrailingToSuperview.activate()
+        
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+            self.searchCancelButton.alpha = 0
+            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.searchCancelButton.isHidden = true
+            self.searchDimView.isHidden = true
+        }
+        
+    }
+    
 }
+
+extension OrderHistoryViewController {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == searchBar.textField && searchCancelButton.isHidden {
+            print("터치입력됨")
+            
+        }
+        return true
+    }
+}
+
