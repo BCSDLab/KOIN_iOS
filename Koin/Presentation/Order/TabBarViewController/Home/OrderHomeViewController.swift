@@ -5,18 +5,23 @@
 //  Created by 이은지 on 6/19/25.
 //
 
+import Combine
 import UIKit
 import SnapKit
-import Combine
+import Lottie
 
-final class OrderHomeViewController: UIViewController {
+final class OrderHomeViewController: UIViewController, LottieAnimationManageable {
     
     // MARK: - Properties
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
-    private var subscriptions: Set<AnyCancellable> = []
+    var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
     private var currentMinPrice: Int? = nil
+    
+    var lottieAnimationView: LottieAnimationView {
+        return orderFloatingButton.lottieView
+    }
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then {
@@ -174,7 +179,6 @@ final class OrderHomeViewController: UIViewController {
         $0.titleText = "오후 9시 40분 도착예정"
         $0.subtitleText = "맛있는 족발 - 병천점"
         $0.setLottieAnimation(named: "floatingLogo")
-        $0.playLottieAnimation()
     }
 
     // MARK: - Initialization
@@ -187,6 +191,10 @@ final class OrderHomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        clearLottieAnimation()
+    }
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -194,6 +202,7 @@ final class OrderHomeViewController: UIViewController {
 
         configureView()
         setAddTarget()
+        setupLottieObservers()
         bind()
         inputSubject.send(.viewDidLoad)
     }

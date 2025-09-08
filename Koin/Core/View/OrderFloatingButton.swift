@@ -38,7 +38,7 @@ final class OrderFloatingButton: UIControl {
         $0.layer.shadowOpacity = 0.2
     }
     
-    private let lottieView = LottieAnimationView().then {
+    let lottieView = LottieAnimationView().then {
         $0.contentMode = .scaleAspectFit
         $0.loopMode = .loop
     }
@@ -158,5 +158,11 @@ extension OrderFloatingButton {
     private func configureView() {
         setUpLayout()
         setUpConstraints()
+    }
+}
+
+extension OrderFloatingButton {
+    var lottieAnimationView: LottieAnimationView {
+        return lottieView
     }
 }

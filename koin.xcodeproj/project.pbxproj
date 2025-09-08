@@ -670,6 +670,7 @@
 		D8F5C5472E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
 		D8F5C5482E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
+		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1383,6 +1384,7 @@
 		D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderEventShopUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
+		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2794,6 +2796,7 @@
 			children = (
 				D27DD0812BA608310081FD36 /* ViewModelProtocol.swift */,
 				D27DD0822BA608310081FD36 /* CollectionViewDelegate.swift */,
+				D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -4590,6 +4593,7 @@
 				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
+				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,
 				83E770FA2D05B5EC00EB3F84 /* BusNoticeDTO.swift in Sources */,
