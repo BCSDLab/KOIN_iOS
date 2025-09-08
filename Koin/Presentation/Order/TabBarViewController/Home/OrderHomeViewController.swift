@@ -169,6 +169,13 @@ final class OrderHomeViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.newBackground)
         $0.isUserInteractionEnabled = false
     }
+    
+    private let orderFloatingButton = OrderFloatingButton().then {
+        $0.titleText = "오후 9시 40분 도착예정"
+        $0.subtitleText = "맛있는 족발 - 병천점"
+        $0.setLottieAnimation(named: "floatingLogo")
+        $0.playLottieAnimation()
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel) {
@@ -453,6 +460,8 @@ extension OrderHomeViewController {
         [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, eventOrderShopCollectionView, eventIndexLabel, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
+        
+        view.addSubview(orderFloatingButton)
     }
     
     private func setUpConstraints() {
@@ -513,6 +522,13 @@ extension OrderHomeViewController {
         emptyResultStackView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
+        }
+        
+        orderFloatingButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.greaterThanOrEqualTo(286)
+            $0.height.equalTo(64)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-12)
         }
     }
     

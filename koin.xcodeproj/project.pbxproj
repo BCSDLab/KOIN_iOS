@@ -669,6 +669,7 @@
 		D8F5C5462E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
 		D8F5C5472E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
 		D8F5C5482E6EF3A600FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */; };
+		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1381,6 +1382,7 @@
 		D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopEvent.swift; sourceTree = "<group>"; };
 		D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderEventShopUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5452E6EF3A600FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
+		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3162,6 +3164,7 @@
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
 				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
+				D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4011,6 +4014,7 @@
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
+				D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */,
 				D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */,
 				D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */,
 				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
