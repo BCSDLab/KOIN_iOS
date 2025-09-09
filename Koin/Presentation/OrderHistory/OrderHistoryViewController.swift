@@ -77,9 +77,54 @@ final class OrderHistoryViewController: UIViewController {
     
     private let emptyStateView: UIView = {
         let v = UIView()
-        
-        
+        v.backgroundColor = .appColor(.newBackground)
         return v
+    }()
+    
+    private let symbolImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage.appImage(asset: .emptyBcsdSymbolLogo)
+        return iv
+    }()
+    
+    private let ZzzImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage.appImage(asset: .Zzz)
+        return iv
+    }()
+    
+    private let noOrderHistoryLabel: UILabel = {
+        let l = UILabel()
+        l.text = "주문 내역이 없어요"
+        l.font = UIFont.appFont(.pretendardBold, size: 18)
+        l.textColor = .appColor(.neutral500)
+        l.textAlignment = .center
+        return l
+    }()
+    
+    private let seeOrderHistoryButton: UIButton = {
+        var cf = UIButton.Configuration.plain()
+        cf.attributedTitle = AttributedString("과거 주문 내역 보기", attributes: .init([
+            .font: UIFont.appFont(.pretendardBold, size: 13)
+        ]))
+        cf.baseForegroundColor = UIColor.appColor(.neutral500)
+        var bg = UIBackgroundConfiguration.clear()
+        bg.cornerRadius = 8
+                
+        bg.backgroundColor = UIColor.appColor(.neutral0)
+        cf.background = bg
+        
+        cf.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+
+        let b = UIButton(configuration: cf)
+        
+        b.layer.masksToBounds = false
+        b.layer.shadowColor   = UIColor.black.cgColor
+        b.layer.shadowOpacity = 0.2
+        b.layer.shadowOffset  = CGSize(width: 0, height: 2)
+        b.layer.shadowRadius  = 4
+        
+        return b
     }()
     
     
@@ -162,6 +207,7 @@ final class OrderHistoryViewController: UIViewController {
         bind()
         render()
         updateSearchVisibility(animated: false)
+        updateEmptyState()
         
     }
     
@@ -203,11 +249,15 @@ final class OrderHistoryViewController: UIViewController {
 extension OrderHistoryViewController {
     
     private func setUpLayOuts() {
-        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView,orderPrepareCollectionView].forEach {
+        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView,orderPrepareCollectionView, emptyStateView].forEach {
             view.addSubview($0)
         }
         
+        emptyStateView.isHidden = true
         
+        [symbolImageView, ZzzImageView, noOrderHistoryLabel, seeOrderHistoryButton].forEach{
+            emptyStateView.addSubview($0)
+        }
         
         [resetButton, periodButton, stateInfoButton].forEach {
             filterButtonRow.addArrangedSubview($0)
@@ -289,8 +339,39 @@ extension OrderHistoryViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(12)
             $0.bottom.equalToSuperview().offset(-12)
-            
         }
+        
+        emptyStateView.snp.makeConstraints{
+            $0.top.equalTo(orderHistorySeperateView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        symbolImageView.snp.makeConstraints {
+            $0.centerX.equalTo(self.view)
+            $0.centerY.equalTo(self.view)
+            $0.width.equalTo(95)
+            $0.height.equalTo(75)
+        }
+        
+        ZzzImageView.snp.makeConstraints{
+            $0.top.equalTo(symbolImageView.snp.top)
+            $0.leading.equalTo(symbolImageView.snp.leading).offset(-3)
+            $0.height.width.equalTo(25)
+        }
+        
+        noOrderHistoryLabel.snp.makeConstraints{
+            $0.top.equalTo(symbolImageView.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(204)
+        }
+        
+        seeOrderHistoryButton.snp.makeConstraints {
+            $0.top.equalTo(noOrderHistoryLabel.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(35)
+        }
+        
         
     }
     
@@ -332,8 +413,8 @@ extension OrderHistoryViewController {
             
         } else {
             orderPrepareCollectionView.reloadData()
-            
         }
+        updateEmptyState()
     }
 }
 
@@ -349,6 +430,7 @@ extension OrderHistoryViewController {
                 $0.leading.equalTo(self.orderHistorySegment.snp.leading).offset(leadingDistance)
             }
             self.updateSearchVisibility(animated: false)
+            self.updateEmptyState()
             self.view.layoutIfNeeded()
         })
     }
@@ -460,5 +542,34 @@ extension OrderHistoryViewController {
         }
         return true
     }
+    
+    private func updateEmptyState() {
+        let isHistoryTab = (orderHistorySegment.selectedSegmentIndex == 0)
+        let isEmptyHistory   = orderHistoryCollectionView.totalItemCount == 0
+        let isEmptyPreparing = orderPrepareCollectionView.totalItemCount == 0
+        let shouldShowEmpty  = isHistoryTab ? isEmptyHistory : isEmptyPreparing
+
+        noOrderHistoryLabel.text = isHistoryTab ? "주문 내역이 없어요" : "준비 중인 음식이 없어요"
+        seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty
+
+        emptyStateView.isHidden = !shouldShowEmpty
+
+        if isHistoryTab {
+            searchBar.isHidden = shouldShowEmpty
+            filterButtonRow.isHidden = shouldShowEmpty
+            orderHistoryCollectionView.isHidden = shouldShowEmpty
+
+            if shouldShowEmpty { cancelButtonTapped() }
+        } else {
+
+            orderPrepareCollectionView.isHidden = shouldShowEmpty
+        }
+    }
+
 }
 
+private extension UICollectionView {
+    var totalItemCount: Int {
+        (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
+    }
+}
