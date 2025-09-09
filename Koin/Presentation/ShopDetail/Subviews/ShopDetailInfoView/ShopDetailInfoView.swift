@@ -11,7 +11,7 @@ class ShopDetailInfoView: UIView {
     
     // MARK: - Components
     private let shopTitleLabel = UILabel().then {
-        $0.text = "KOREATECH"
+        $0.text = ""
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 20)
         $0.numberOfLines = 0
@@ -59,7 +59,8 @@ class ShopDetailInfoView: UIView {
 extension ShopDetailInfoView {
     
     // MARK: - bind
-    func bind(rate: Double, review: Int, isDelieveryAvailable: Bool, isTakeoutAvailable: Bool, minOrder: Int, minTip: Int, maxTip: Int, introduction: String) {
+    func bind(shopTitle: String, rate: Double, review: Int, isDelieveryAvailable: Bool, isTakeoutAvailable: Bool, minOrder: Int, minTip: Int, maxTip: Int, introduction: String) {
+        shopTitleLabel.text = shopTitle
         ratingLabel.text = String(rate)
         reviewButton.setAttributedTitle(NSAttributedString(string: "\(review)개", attributes: [
             .font : UIFont.appFont(.pretendardSemiBold, size: 13),

@@ -91,13 +91,14 @@ extension ShopDetailViewController {
                 self?.imagesCollectionView.bind(urls: urls)
                 self?.imagesPageControl.numberOfPages = urls.count
             case .updateInfoView(let orderShop):
-                self?.infoView.bind(rate: orderShop.ratingAverage, review: orderShop.reviewCount, isDelieveryAvailable: orderShop.isDeliveryAvailable, isTakeoutAvailable: orderShop.isTakeoutAvailable, minOrder: orderShop.minimumOrderAmount, minTip: orderShop.minimumDeliveryTip, maxTip: orderShop.maximumDeliveryTip, introduction: "안녕하세요 안녕하세요 반갑습니다 반갑습니다") // introduction ??
+                self?.infoView.bind(shopTitle: orderShop.name ,rate: orderShop.ratingAverage, review: orderShop.reviewCount, isDelieveryAvailable: orderShop.isDeliveryAvailable, isTakeoutAvailable: orderShop.isTakeoutAvailable, minOrder: orderShop.minimumOrderAmount, minTip: orderShop.minimumDeliveryTip, maxTip: orderShop.maximumDeliveryTip, introduction: "안녕하세요 안녕하세요 반갑습니다 반갑습니다") // introduction ??
             case .updateMenus(let orderShopMenus):
                 var menuGroupName: [String] = []
                 orderShopMenus.forEach {
                     menuGroupName.append($0.menuGroupName)
                 }
                 self?.menuGroupNameCollectionView.bind(menuGroupName: menuGroupName)
+                self?.menuGroupNameCollectionViewSticky.bind(menuGroupName: menuGroupName)
                 self?.menuGroupTableView.bind(orderShopMenusGroups: orderShopMenus)
                 self?.updateTableViewHeight(orderShopMenusGroups: orderShopMenus)
             }
@@ -151,14 +152,13 @@ extension ShopDetailViewController {
         menuGroupNameCollectionView.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(34)
+            $0.height.equalTo(66)//34)
         }
         menuGroupTableView.snp.makeConstraints {
             $0.top.equalTo(menuGroupNameCollectionView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().offset( -20 + (UIApplication.hasHomeButton() ? -72 : -106 ))
         }
-        
         bottomSheet.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
