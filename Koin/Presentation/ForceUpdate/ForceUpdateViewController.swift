@@ -10,12 +10,17 @@ import UIKit
 import SnapKit
 import Lottie
 
-final class ForceUpdateViewController: UIViewController {
+final class ForceUpdateViewController: UIViewController, LottieAnimationManageable {
+    
+    // MARK: - LottieAnimationManageable Protocol
+    var lottieAnimationView: LottieAnimationView {
+        return logoAnimationView
+    }
     
     // MARK: - Properties
     private let viewModel: ForceUpdateViewModel
     private let inputSubject: PassthroughSubject<ForceUpdateViewModel.Input, Never> = .init()
-    private var subscriptions: Set<AnyCancellable> = []
+    var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let logoAnimationView = LottieAnimationView().then {
@@ -73,7 +78,7 @@ final class ForceUpdateViewController: UIViewController {
             attributes: [
                 .font: UIFont.appFont(.pretendardRegular, size: 12),
                 .foregroundColor: UIColor.appColor(.new800),
-                .underlineStyle: NSUnderlineStyle.single.rawValue // 여기에 'none' 값을 주어도 기본 설정은 밑줄 없음
+                .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
         )
         
@@ -97,9 +102,7 @@ final class ForceUpdateViewController: UIViewController {
     }
     
     deinit {
-        logoAnimationView.stop()
-        logoAnimationView.animation = nil
-        NotificationCenter.default.removeObserver(self)
+        clearLottieAnimation()
     }
     
     // MARK: - Life Cycle
@@ -108,18 +111,17 @@ final class ForceUpdateViewController: UIViewController {
         configureView()
         bind()
         setAddTarget()
+        setupLottieObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        startLottieAnimation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.navigationBar.isHidden = false
-        stopLottieAnimation()
     }
     
     private func bind() {
@@ -137,22 +139,7 @@ final class ForceUpdateViewController: UIViewController {
             self?.openStore()
         }.store(in: &subscriptions)
         
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.openStore()
-        }.store(in: &subscriptions)
-        
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                self?.pauseLottieAnimation()    // 백그라운드 진입 시 Lottie 일시 정지
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
-            }.store(in: &subscriptions)
-        
-        // 포그라운드로 돌아올 시 알림
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { [weak self] _ in
-                self?.startLottieAnimation()    // 포그라운드 진입 시 애니메이션 재시작
-                self?.inputSubject.send(.checkVersion)
-            }.store(in: &subscriptions)
+        setupCustomNotificationObservers()
         
         updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
@@ -168,20 +155,18 @@ final class ForceUpdateViewController: UIViewController {
         errorCheckButton.addTarget(self, action: #selector(errorCheckButtonTapped), for: .touchUpInside)
     }
     
-    private func startLottieAnimation() {
-        guard logoAnimationView.animation != nil else {
-            print("Warning: Lottie animation 'waveLogo' not found")
-            return
-        }
-        logoAnimationView.play()
-    }
-    
-    private func stopLottieAnimation() {
-        logoAnimationView.stop()
-    }
-    
-    private func pauseLottieAnimation() {
-        logoAnimationView.pause()
+    private func setupCustomNotificationObservers() {
+        // 백그라운드 진입 시
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
+            }.store(in: &subscriptions)
+        
+        // 포그라운드 복귀 시
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { [weak self] _ in
+                self?.inputSubject.send(.checkVersion)
+            }.store(in: &subscriptions)
     }
 }
 
@@ -196,7 +181,6 @@ extension ForceUpdateViewController {
     
     @objc private func updateButtonTapped() {
         openStore()
-        
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
     }
     
@@ -209,7 +193,6 @@ extension ForceUpdateViewController {
     
     @objc private func errorCheckButtonTapped() {
         present(updateModalViewController, animated: true, completion: nil)
-        
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }
