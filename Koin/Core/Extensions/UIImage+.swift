@@ -165,6 +165,17 @@ enum ImageAsset: String {
     case delivery
     case bcsdSymbolLogo
     case orderEmptyLogo
+    case countIcon0
+    case countIcon1
+    case countIcon2
+    case countIcon3
+    case countIcon4
+    case countIcon5
+    case countIcon6
+    case countIcon7
+    case countIcon8
+    case countIcon9
+    case countIcon9Plus
 }
 
 enum SFSymbols: String {
