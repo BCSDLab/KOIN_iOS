@@ -670,7 +670,7 @@
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 		D8F5C54E2E6F0E8A00FB6708 /* OrderInProgressDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */; };
 		D8F5C5502E6F0EE600FB6708 /* OrderInProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */; };
-		D8F5C5522E6F122100FB6708 /* FetchOrderTrackingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */; };
+		D8F5C5522E6F122100FB6708 /* FetchOrderInProgressUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */; };
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
@@ -1389,7 +1389,7 @@
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInProgressDTO.swift; sourceTree = "<group>"; };
 		D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInProgress.swift; sourceTree = "<group>"; };
-		D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderTrackingUseCase.swift; sourceTree = "<group>"; };
+		D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderInProgressUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3695,7 +3695,7 @@
 				D8C24A032E1A9D0C008D8ABA /* FetchOrderShopListUseCase.swift */,
 				D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */,
 				D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */,
-				D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */,
+				D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4429,7 +4429,7 @@
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
-				D8F5C5522E6F122100FB6708 /* FetchOrderTrackingUseCase.swift in Sources */,
+				D8F5C5522E6F122100FB6708 /* FetchOrderInProgressUseCase.swift in Sources */,
 				D82F22592E12C6CB00CD81C3 /* OrderShopCollectionViewCell.swift in Sources */,
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
