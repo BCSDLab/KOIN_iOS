@@ -14,6 +14,7 @@ class ShopDetailViewController: UIViewController {
     let viewModel: ShopDetailViewModel
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    
     private let shopId: Int?
     private let isFromOrder: Bool
     
@@ -45,6 +46,13 @@ class ShopDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.layer.masksToBounds = false
     }
+    let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
+        $0.isScrollEnabled = false
+        $0.backgroundColor = .clear
+        $0.sectionHeaderTopPadding = .zero
+        $0.sectionFooterHeight = .zero
+        $0.separatorStyle = .none
+    }
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
@@ -63,10 +71,10 @@ class ShopDetailViewController: UIViewController {
         view.backgroundColor = UIColor.appColor(.newBackground)
         bind()
         inputSubject.send(.viewDidLoad)
-        configureRightBarButton()
     }
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
+        configureRightBarButton()
         configureView()
     }
 }
@@ -89,6 +97,8 @@ extension ShopDetailViewController {
                     menuGroupName.append($0.menuGroupName)
                 }
                 self?.menuGroupNameCollectionView.bind(menuGroupName: menuGroupName)
+                self?.menuGroupTableView.bind(orderShopMenusGroups: orderShopMenus)
+                self?.updateTableViewHeight(orderShopMenusGroups: orderShopMenus)
             }
         }
         .store(in: &subscriptions)
@@ -104,14 +114,49 @@ extension ShopDetailViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)), style: .plain, target: self, action: #selector(navigationButtonTapped))
     }
     
+    // MARK: - updateTableViewHeight
+    private func updateTableViewHeight(orderShopMenusGroups: [OrderShopMenusGroup]) {
+        menuGroupTableView.snp.makeConstraints {
+            $0.height.equalTo(tableViewHeight(orderShopMenusGroups))
+        }
+    }
+    private func tableViewHeight(_ orderShopMenusGroups: [OrderShopMenusGroup]) -> Int {
+        let groupNameHeight = 56
+        let minimumRowHeight = 112
+        let nameHeight = 29
+        let descriptionHeight = 19
+        let priceHeight = 22
+        let priceTopPadding = 4
+        let insetHeight = 24
+        
+        var tableViewHeight = 0
+        orderShopMenusGroups.forEach {
+            var sectionHeight = 0
+            sectionHeight += groupNameHeight
+            $0.menus.forEach {
+                var rowHeight = 0
+                rowHeight += nameHeight
+                rowHeight += $0.description != nil ? descriptionHeight : 0
+                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
+                rowHeight += $0.prices.count * priceHeight
+                rowHeight += insetHeight
+                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
+            }
+            tableViewHeight += sectionHeight
+        }
+        return tableViewHeight
+    }
+
     // MARK: - ConfigureView
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.leading.trailing.top.equalToSuperview()
             $0.width.equalToSuperview() //필요할까?
+            //$0.bottom.equalTo(menuGroupTableView.snp.bottom)
+            $0.bottom.equalToSuperview().offset(-50)
         }
         imagesCollectionView.snp.makeConstraints {
             $0.leading.trailing.top.equalToSuperview()
@@ -135,11 +180,16 @@ extension ShopDetailViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(34)
         }
+        menuGroupTableView.snp.makeConstraints {
+            $0.top.equalTo(menuGroupNameCollectionView.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview()
+        }
     }
     private func setUpLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView].forEach {
+        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView].forEach {
             contentView.addSubview( $0 )
         }
     }
