@@ -16,43 +16,43 @@ final class FilteringButton: UIButton {
         super.init(frame: frame)
         titleLabel?.numberOfLines = 1
     
-        var cf = UIButton.Configuration.plain()
-        cf.imagePlacement = .trailing
-        cf.imagePadding = 6
-        cf.contentInsets = .init(top: 6, leading: 8, bottom: 6, trailing: 8)
-        cf.attributedTitle = AttributedString("필터", attributes: .init([
+        var config = UIButton.Configuration.plain()
+        config.imagePlacement = .trailing
+        config.imagePadding = 6
+        config.contentInsets = .init(top: 6, leading: 8, bottom: 6, trailing: 8)
+        config.attributedTitle = AttributedString("필터", attributes: .init([
             .font: UIFont.appFont(.pretendardBold, size: 14)
         ]))
 
-        var bg = UIBackgroundConfiguration.clear()
-        bg.backgroundColor = UIColor.appColor(.neutral0)
-        bg.cornerRadius = 24
-        bg.strokeWidth = 0.5
-        bg.strokeColor = UIColor.appColor(.neutral300)
-        cf.background = bg
+        var background = UIBackgroundConfiguration.clear()
+        background.backgroundColor = UIColor.appColor(.neutral0)
+        background.cornerRadius = 24
+        background.strokeWidth = 0.5
+        background.strokeColor = UIColor.appColor(.neutral300)
+        config.background = background
 
-        cf.image = UIImage.appImage(asset: .chevronDown)
-        cf.baseForegroundColor = UIColor.appColor(.neutral500)
+        config.image = UIImage.appImage(asset: .chevronDown)
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
 
-        self.configuration = cf
+        self.configuration = config
 
         self.configurationUpdateHandler = { [weak self] button in
-            guard let self = self, var cfg = button.configuration else { return }
-            var bg = cfg.background
+            guard let self = self, var config = button.configuration else { return }
+            var background = config.background
             let on = self.forcedOn ?? button.isSelected
             if on {
-                bg.backgroundColor = UIColor.appColor(.new500)
-                bg.strokeWidth = 0
-                bg.strokeColor = nil
-                cfg.baseForegroundColor = UIColor.appColor(.neutral0)
+                background.backgroundColor = UIColor.appColor(.new500)
+                background.strokeWidth = 0
+                background.strokeColor = nil
+                config.baseForegroundColor = UIColor.appColor(.neutral0)
             } else {
-                bg.backgroundColor = UIColor.appColor(.neutral0)
-                bg.strokeWidth = 0.5
-                bg.strokeColor = UIColor.appColor(.neutral300)
-                cfg.baseForegroundColor = UIColor.appColor(.neutral500)
+                background.backgroundColor = UIColor.appColor(.neutral0)
+                background.strokeWidth = 0.5
+                background.strokeColor = UIColor.appColor(.neutral300)
+                config.baseForegroundColor = UIColor.appColor(.neutral500)
             }
-            cfg.background = bg
-            button.configuration = cfg
+            config.background = background
+            button.configuration = config
         }
 
         addTarget(self, action: #selector(handleTap), for: .touchUpInside)
@@ -61,26 +61,26 @@ final class FilteringButton: UIButton {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     func setTitle(_ text: String) {
-        guard var cfg = configuration else { return }
-        cfg.attributedTitle = AttributedString(text, attributes: .init([
+        guard var config = configuration else { return }
+        config.attributedTitle = AttributedString(text, attributes: .init([
             .font: UIFont.appFont(.pretendardBold, size: 14)
         ]))
-        configuration = cfg
+        configuration = config
     }
 
     func set(title: String, iconRight: UIImage? = nil, showsChevron: Bool = false) {
-        guard var cfg = configuration else { return }
-        cfg.attributedTitle = AttributedString(title, attributes: .init([
+        guard var config = configuration else { return }
+        config.attributedTitle = AttributedString(title, attributes: .init([
             .font: UIFont.appFont(.pretendardBold, size: 14)
         ]))
         if showsChevron {
-            cfg.image = UIImage.appImage(asset: .chevronDown)
+            config.image = UIImage.appImage(asset: .chevronDown)
         } else {
-            cfg.image = iconRight?.withRenderingMode(.alwaysTemplate)
+            config.image = iconRight?.withRenderingMode(.alwaysTemplate)
         }
-        cfg.imagePlacement = .trailing
-        cfg.imagePadding = (cfg.image == nil) ? 0 : 6
-        configuration = cfg
+        config.imagePlacement = .trailing
+        config.imagePadding = (config.image == nil) ? 0 : 6
+        configuration = config
         setNeedsUpdateConfiguration()
     }
 
@@ -100,3 +100,4 @@ final class FilteringButton: UIButton {
         }
     }
 }
+

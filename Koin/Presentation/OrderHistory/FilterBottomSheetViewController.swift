@@ -330,9 +330,9 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - Function
 
     private func render() {
-        m3Button.applyFilter(work.period == .m3)
-        m6Button.applyFilter(work.period == .m6)
-        y1Button.applyFilter(work.period == .y1)
+        m3Button.applyFilter(work.period == .threeMonths)
+        m6Button.applyFilter(work.period == .sixMonths)
+        y1Button.applyFilter(work.period == .oneYear)
 
         deliveryButton.applyFilter(work.method == .delivery)
         takeoutButton.applyFilter(work.method == .takeout)
@@ -362,9 +362,9 @@ final class FilterBottomSheetViewController: UIViewController {
     
     @objc private func periodTapped(_ sender: FilteringButton) {
         let cur = work.period
-        if sender === m3Button { work.period = (cur == .m3) ? nil : .m3 }
-        if sender === m6Button { work.period = (cur == .m6) ? nil : .m6 }
-        if sender === y1Button { work.period = (cur == .y1) ? nil : .y1 }
+        if sender === m3Button { work.period = (cur == .threeMonths) ? nil : .threeMonths }
+        if sender === m6Button { work.period = (cur == .sixMonths) ? nil : .sixMonths }
+        if sender === y1Button { work.period = (cur == .oneYear) ? nil : .oneYear }
         render()
     }
     

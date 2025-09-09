@@ -49,6 +49,7 @@ final class OrderHistoryCustomSearchBar: UIView {
         super.init(frame: frame)
         setupUI()
         setupActions()
+        setDelegate()
         makeConstraints()
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -89,6 +90,9 @@ final class OrderHistoryCustomSearchBar: UIView {
 
     private func setupActions() {
         textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+    }
+    
+    private func setDelegate(){
         textField.delegate = self
     }
 

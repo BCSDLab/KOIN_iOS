@@ -8,7 +8,7 @@
 import Foundation
 
 struct OrderFilter: Equatable {
-    enum Period  { case m3, m6, y1 }
+    enum Period  { case threeMonths, sixMonths, oneYear }
     enum Method  { case delivery, takeout }
     struct Info: OptionSet {
         let rawValue: Int
