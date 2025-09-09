@@ -18,9 +18,9 @@ final class OrderHistoryViewController: UIViewController {
     private var topToFilter: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
-    
-    
+
     // MARK: - UI Components
+    
     private let orderHistorySegment: UISegmentedControl = {
         let segment = UISegmentedControl()
         segment.insertSegment(withTitle: "지난 주문", at: 0, animated: true)
@@ -72,6 +72,16 @@ final class OrderHistoryViewController: UIViewController {
         layout.sectionInset = .zero
         return OrderPrepareCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
+    
+    //MARK: - emptyState
+    
+    private let emptyStateView: UIView = {
+        let v = UIView()
+        
+        
+        return v
+    }()
+    
     
  
     
@@ -152,6 +162,7 @@ final class OrderHistoryViewController: UIViewController {
         bind()
         render()
         updateSearchVisibility(animated: false)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -196,12 +207,15 @@ extension OrderHistoryViewController {
             view.addSubview($0)
         }
         
+        
+        
         [resetButton, periodButton, stateInfoButton].forEach {
             filterButtonRow.addArrangedSubview($0)
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
             $0.snp.makeConstraints { $0.height.equalTo(34) }
         }
+
     }
     
     private func setUpConstraints() {
@@ -234,7 +248,7 @@ extension OrderHistoryViewController {
         self.topToFilter = filterButtonRow.snp.prepareConstraints{
             $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
         }.first
-        
+                
         searchBar.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
@@ -263,16 +277,19 @@ extension OrderHistoryViewController {
         self.barTrailingToSuperview.activate()
         self.barTrailingToCancel?.deactivate()
         
+        
         orderHistoryCollectionView.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
-            $0.bottom.equalToSuperview()
+            $0.top.equalTo(filterButtonRow.snp.bottom).offset(12)
+            $0.bottom.equalToSuperview().offset(-12)
+            
         }
         
         orderPrepareCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
-            $0.bottom.equalToSuperview()
+            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(12)
+            $0.bottom.equalToSuperview().offset(-12)
+            
         }
         
     }
@@ -312,8 +329,10 @@ extension OrderHistoryViewController {
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
             orderHistoryCollectionView.reloadData()
+            
         } else {
             orderPrepareCollectionView.reloadData()
+            
         }
     }
 }
@@ -381,6 +400,7 @@ extension OrderHistoryViewController {
         if isHistory {
             topToFilter?.deactivate()
             topToSearch.activate()
+        
         } else {
             cancelButtonTapped()
             topToSearch.deactivate()
@@ -428,7 +448,6 @@ extension OrderHistoryViewController {
             self.searchCancelButton.isHidden = true
             self.searchDimView.isHidden = true
         }
-        
     }
     
 }
