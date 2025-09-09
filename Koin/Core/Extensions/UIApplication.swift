@@ -24,7 +24,7 @@ extension UIApplication {
         return base
     }
     
-    static func hasHomeIndicator() -> Bool {
+    static func hasHomeButton() -> Bool {
         let window = UIApplication.shared
                     .connectedScenes
                     .compactMap { $0 as? UIWindowScene }
