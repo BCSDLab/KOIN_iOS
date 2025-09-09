@@ -48,7 +48,7 @@ final class OrderHistoryCollectionView: UICollectionView {
 extension OrderHistoryCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return items.count
-        return 5
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

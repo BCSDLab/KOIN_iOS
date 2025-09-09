@@ -10,18 +10,19 @@ import SnapKit
 
 final class FilterBottomSheetViewController: UIViewController {
 
+    //MARK: - properties
     var initial: OrderFilter
     var onApply: ((OrderFilter) -> Void)?
     
     private var work: OrderFilter
-    
-    private let backdrop = UIControl()
-    private let container = UIView()
     private var bottomConstraint: Constraint!
     
+    // MARK: - UI Components
+
+    private let backdrop = UIControl()
+    private let container = UIView()
     private let body = UIStackView()
     private let bottomBar = UIStackView()
-        
     private let m3Button = FilteringButton()
     private let m6Button = FilteringButton()
     private let y1Button = FilteringButton()
@@ -30,130 +31,105 @@ final class FilterBottomSheetViewController: UIViewController {
     private let doneButton = FilteringButton()
     private let cancelButton = FilteringButton()
     
-    private let periodRow: UIStackView = {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.alignment = .leading
-        row.distribution = .fill
-        row.spacing = 12
-        return row
-    }()
-    
-    private let stateRow: UIStackView = {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.alignment = .leading
-        row.distribution = .fill
-        row.spacing = 12
-        return row
-    }()
-    
-    private let infoRow: UIStackView = {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.alignment = .leading
-        row.distribution = .fill
-        row.spacing = 12
-        return row
-    }()
-    
-    
-    private let filterUnderLineView: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.appColor(.neutral300)
-        return v
-    }()
-    
-    private let periodUnderLineView: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.appColor(.neutral300)
-        return v
-    }()
-    
-    private let containerUnderLineView: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.appColor(.neutral300)
-        return v
-    }()
-    
-    private let resetButton: UIButton = {
+    private let periodRow = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.distribution = .fill
+        $0.spacing = 12
+    }
+
+    private let stateRow = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.distribution = .fill
+        $0.spacing = 12
+    }
+
+    private let infoRow = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.distribution = .fill
+        $0.spacing = 12
+    }
+
+    private let filterUnderLineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+
+    private let periodUnderLineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+
+    private let containerUnderLineView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral300)
+    }
+
+    private let resetButton = UIButton(configuration: {
         var config = UIButton.Configuration.plain()
         config.title = "초기화"
         config.baseForegroundColor = UIColor.appColor(.neutral500)
         config.attributedTitle?.font = UIFont.appFont(.pretendardBold, size: 16)
-
+        
         let icon = UIImage.appImage(asset: .refresh)
         config.image = icon
         config.imagePlacement = .trailing
         config.imagePadding = 8
-
+        
         config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 16)
         config.background.strokeColor = UIColor.appColor(.neutral400)
         config.background.strokeWidth = 1
         config.background.cornerRadius = 12
+        return config
+    }())
 
-        let b = UIButton(configuration: config)
-        return b
-    }()
-    
-    private let applyButton: UIButton = {
+    private let applyButton = UIButton(configuration: {
         var config = UIButton.Configuration.filled()
         config.title = "적용하기"
         config.baseForegroundColor = UIColor.appColor(.neutral0)
         config.baseBackgroundColor = UIColor.appColor(.new500)
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 80, bottom: 11, trailing: 80)
+        return config
+    }()).then {
+        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
+    }
 
-        let b = UIButton(configuration: config)
-        b.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
-        return b
-    }()
-    
-    private let closeButton: UIButton = {
-        let b = UIButton(type: .system)
+    private let closeButton = UIButton(type: .system).then {
         let icon = UIImage.appImage(asset: .delete)
-        b.setImage(icon, for: .normal)
-        b.setPreferredSymbolConfiguration(
+        $0.setImage(icon, for: .normal)
+        $0.setPreferredSymbolConfiguration(
             UIImage.SymbolConfiguration(pointSize: 24, weight: .bold),
             forImageIn: .normal
         )
-        
-        b.tintColor = UIColor.appColor(.neutral800)
-        b.backgroundColor = .clear
-        return b
-    }()
-    
-    private let periodLabel: UILabel = {
-        let l = UILabel()
-        l.text = "조회 기간"
-        l.font = UIFont.appFont(.pretendardBold, size: 16)
-        l.textColor = UIColor.appColor(.neutral600)
-        return l
-    }()
-    
-    private let stateLabel: UILabel = {
-        let l = UILabel()
-        l.text = "주문 상태"
-        l.font = UIFont.appFont(.pretendardBold, size: 16)
-        l.textColor = UIColor.appColor(.neutral600)
-        return l
-    }()
-    
-    private let infoLabel: UILabel = {
-        let l = UILabel()
-        l.text = "주문 정보"
-        l.font = UIFont.appFont(.pretendardBold, size: 16)
-        l.textColor = UIColor.appColor(.neutral600)
-        return l
-    }()
-    
-    private let titleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "필터"
-        l.font = UIFont.appFont(.pretendardBold, size: 18)
-        l.textColor = UIColor.appColor(.new500)
-        return l
-    }()
+        $0.tintColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = .clear
+    }
+
+    private let periodLabel = UILabel().then {
+        $0.text = "조회 기간"
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
+
+    private let stateLabel = UILabel().then {
+        $0.text = "주문 상태"
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
+
+    private let infoLabel = UILabel().then {
+        $0.text = "주문 정보"
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
+
+    private let titleLabel = UILabel().then {
+        $0.text = "필터"
+        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.textColor = UIColor.appColor(.new500)
+    }
+
+    // MARK: - Initialize
     
     init(initial: OrderFilter) {
         self.initial = initial
@@ -166,7 +142,8 @@ final class FilterBottomSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    
+    // MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -176,6 +153,8 @@ final class FilterBottomSheetViewController: UIViewController {
         super.viewWillAppear(animated)
         animatePresent()
     }
+    
+    // MARK: - UI Function
     
     private func configureButtons(){
         m3Button.setTitle("최근 3개월")
@@ -320,6 +299,8 @@ final class FilterBottomSheetViewController: UIViewController {
         bind()
     }
     
+    //MARK: - Bind
+    
     private func bind() {
         [m3Button, m6Button, y1Button].forEach {
             $0.addTarget(self, action: #selector(periodTapped(_:)), for: .touchUpInside)
@@ -331,6 +312,7 @@ final class FilterBottomSheetViewController: UIViewController {
             $0.addTarget(self, action: #selector(infoTapped(_:)), for: .touchUpInside)
         }
 
+        // 3개월, 6개월 , 1년
         [m3Button, m6Button, y1Button,
          deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
             $0.setContentHuggingPriority(.required, for: .horizontal)
@@ -342,10 +324,11 @@ final class FilterBottomSheetViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         backdrop.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
 
-        
         render()
     }
-    
+
+    // MARK: - Function
+
     private func render() {
         m3Button.applyFilter(work.period == .m3)
         m6Button.applyFilter(work.period == .m6)
@@ -359,7 +342,7 @@ final class FilterBottomSheetViewController: UIViewController {
     }
     
     
-    //MARK: -Button
+    //MARK: - @objc
     
     @objc private func closeTapped() {
         animateDismiss()
@@ -400,6 +383,9 @@ final class FilterBottomSheetViewController: UIViewController {
         }
         render()
     }
+}
+
+extension FilterBottomSheetViewController {
     
     private func animatePresent() {
         view.layoutIfNeeded()

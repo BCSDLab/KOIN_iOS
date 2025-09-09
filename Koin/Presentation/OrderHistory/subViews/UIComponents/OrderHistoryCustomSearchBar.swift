@@ -10,37 +10,35 @@ import SnapKit
 
 final class OrderHistoryCustomSearchBar: UIView {
 
+    //MARK: - CallBack
     var onTextChanged: ((String) -> Void)?
     var onReturn: ((String) -> Void)?
 
     // MARK: - UI
-    private let iconView: UIImageView = {
-        let v = UIImageView()
-        v.image = UIImage.appImage(asset: .search)?.withRenderingMode(.alwaysTemplate)
-        v.tintColor = UIColor.appColor(.neutral500)
-        v.contentMode = .scaleAspectFit
-        return v
-    }()
+    private let iconView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .search)?.withRenderingMode(.alwaysTemplate)
+        $0.tintColor = UIColor.appColor(.neutral500)
+        $0.contentMode = .scaleAspectFit
+    }
 
-    let textField: UITextField = {
-        let tf = UITextField()
-        tf.clearButtonMode = .whileEditing
-        tf.returnKeyType = .search
-        tf.autocapitalizationType = .none
-        tf.clearButtonMode = .never
-        tf.autocorrectionType = .no
-        tf.spellCheckingType = .no
-        tf.font = UIFont.appFont(.pretendardRegular, size: 14)
-        tf.textColor = .label
-        tf.attributedPlaceholder = NSAttributedString(
+    let textField = UITextField().then {
+        
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .search
+        $0.autocapitalizationType = .none
+        $0.clearButtonMode = .never
+        $0.autocorrectionType = .no
+        $0.spellCheckingType = .no
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = .label
+        $0.attributedPlaceholder = NSAttributedString(
             string: "주문한 메뉴/매장을 찾아보세요",
             attributes: [
                 .foregroundColor: UIColor.appColor(.neutral400),
                 .font: UIFont.appFont(.pretendardRegular, size: 14)
             ]
         )
-        return tf
-    }()
+    }
 
     // MARK: - Layout Config
     var contentInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12) { didSet { remakeConstraints() } }

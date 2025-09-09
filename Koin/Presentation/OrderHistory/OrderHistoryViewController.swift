@@ -10,206 +10,174 @@ import SnapKit
 
 final class OrderHistoryViewController: UIViewController {
     
+    // MARK: - Properties
     private var currentFilter: OrderFilter = .empty {
         didSet { render() }
     }
-    
     private var topToSearch: Constraint!
     private var topToFilter: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
+    private var shadowTopToFilter: Constraint!
+    private var shadowTopToSeparator: Constraint!
     
     private var shadowAlpha: CGFloat = 0
 
     // MARK: - UI Components
     
-    private let orderHistorySegment: UISegmentedControl = {
-        let segment = UISegmentedControl()
-        segment.insertSegment(withTitle: "지난 주문", at: 0, animated: true)
-        segment.insertSegment(withTitle: "준비 중", at: 1, animated: true)
-        segment.selectedSegmentIndex = 0 
+    private let orderHistorySegment = UISegmentedControl().then {
+        $0.insertSegment(withTitle: "지난 주문", at: 0, animated: true)
+        $0.insertSegment(withTitle: "준비 중", at: 1, animated: true)
+        $0.selectedSegmentIndex = 0
         
-        segment.setTitleTextAttributes([
+        $0.setTitleTextAttributes([
             .foregroundColor: UIColor.appColor(.neutral500),
             .font: UIFont.appFont(.pretendardBold, size: 16)
         ], for: .normal)
         
-        segment.setTitleTextAttributes([
+        $0.setTitleTextAttributes([
             .foregroundColor: UIColor.appColor(.new500),
             .font: UIFont.appFont(.pretendardBold, size: 16),
         ], for: .selected)
         
-        segment.selectedSegmentTintColor = .clear
-        segment.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        segment.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        return segment
-    }()
+        $0.selectedSegmentTintColor = .clear
+        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        $0.setDividerImage(UIImage(),
+                           forLeftSegmentState: .normal,
+                           rightSegmentState: .normal,
+                           barMetrics: .default)
+    }
     
-    private let orderHistorySeperateView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .appColor(.neutral400)
-        return view
-    }()
+    private let orderHistorySeperateView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral400)
+    }
     
-    private let orderHistoryUnderLineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .appColor(.new500)
-        return view
-    }()
+    private let orderHistoryUnderLineView = UIView().then {
+        $0.backgroundColor = .appColor(.new500)
+    }
     
-    private let orderHistoryCollectionView: OrderHistoryCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = .zero
-        return OrderHistoryCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
+    private let orderHistoryCollectionView = OrderHistoryCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then {
+        if let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero
+        }
+    }
     
-    private let orderPrepareCollectionView: OrderPrepareCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = .zero
-        return OrderPrepareCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
+    private let orderPrepareCollectionView = OrderPrepareCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
+        if let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero
+        }
+    }
+            
+    //MARK: - emptyState UI
     
-    //MARK: - emptyState
+    private let emptyStateView = UIView().then{
+        $0.backgroundColor = .appColor(.newBackground)
+    }
     
-    private let emptyStateView: UIView = {
-        let v = UIView()
-        v.backgroundColor = .appColor(.newBackground)
-        return v
-    }()
+    private let symbolImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .sleepBcsdSymbol)
+    }
     
-    private let symbolImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage.appImage(asset: .emptyBcsdSymbolLogo)
-        return iv
-    }()
+    private let noOrderHistoryLabel = UILabel().then {
+        $0.text = "주문 내역이 없어요"
+        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.textColor = .appColor(.new500)
+        $0.textAlignment = .center
+    }
     
-    private let ZzzImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage.appImage(asset: .Zzz)
-        return iv
-    }()
-    
-    private let noOrderHistoryLabel: UILabel = {
-        let l = UILabel()
-        l.text = "주문 내역이 없어요"
-        l.font = UIFont.appFont(.pretendardBold, size: 18)
-        l.textColor = .appColor(.neutral500)
-        l.textAlignment = .center
-        return l
-    }()
-    
-    private let seeOrderHistoryButton: UIButton = {
-        var cf = UIButton.Configuration.plain()
-        cf.attributedTitle = AttributedString("과거 주문 내역 보기", attributes: .init([
-            .font: UIFont.appFont(.pretendardBold, size: 13)
-        ]))
-        cf.baseForegroundColor = UIColor.appColor(.neutral500)
-        var bg = UIBackgroundConfiguration.clear()
-        bg.cornerRadius = 8
-                
-        bg.backgroundColor = UIColor.appColor(.neutral0)
-        cf.background = bg
+    private let seeOrderHistoryButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            cf.attributedTitle = AttributedString("과거 주문 내역 보기", attributes: .init([
+                .font: UIFont.appFont(.pretendardBold, size: 13)
+            ]))
+            cf.baseForegroundColor = UIColor.appColor(.neutral500)
+            
+            var bg = UIBackgroundConfiguration.clear()
+            bg.cornerRadius = 8
+            bg.backgroundColor = UIColor.appColor(.neutral0)
+            cf.background = bg
+            
+            cf.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+            return cf
+        }()
+    ).then {
+        $0.layer.masksToBounds = false
+        $0.layer.shadowColor   = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.2
+        $0.layer.shadowOffset  = CGSize(width: 0, height: 2)
+        $0.layer.shadowRadius  = 4
+    }
         
-        cf.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+    private let topShadowView = UIView().then {
+        $0.isUserInteractionEnabled = false
+        $0.alpha = 0
+    }
+    
+    private let searchBar = OrderHistoryCustomSearchBar()
+    
+    private lazy var searchDimView = UIControl().then{
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0)
+        $0.isHidden = false
+    }
+    
+    private let searchCancelButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            
+            var title = AttributedString("취소")
+            title.font = UIFont.appFont(.pretendardBold, size: 14)
+            title.foregroundColor = UIColor.appColor(.neutral500)
+            cf.attributedTitle = title
+            
+            cf.baseForegroundColor = UIColor.appColor(.neutral500)
+            cf.contentInsets = .zero
+            return cf
+        }()
+    ).then {
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+    
+    private let filterButtonRow = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.distribution = .fill
+        $0.spacing = 8
+    }
+    
+    private let periodButton = FilteringButton().then {
+        $0.set(title: "조회 기간", showsChevron: true)
+        $0.setSelectable(false)
+        $0.applyFilter(false)
+    }
 
-        let b = UIButton(configuration: cf)
-        
-        b.layer.masksToBounds = false
-        b.layer.shadowColor   = UIColor.black.cgColor
-        b.layer.shadowOpacity = 0.2
-        b.layer.shadowOffset  = CGSize(width: 0, height: 2)
-        b.layer.shadowRadius  = 4
-        
-        return b
-    }()
-    
-    
-    // MARK: - Shadow
-    private let topShadowView: UIView = {
-        let v = UIView()
-        v.isUserInteractionEnabled = false
-        v.alpha = 0
-        return v
-    }()
+    private let stateInfoButton = FilteringButton().then {
+        $0.set(title: "주문 상태 · 정보", showsChevron: true)
+        $0.setSelectable(false)
+        $0.applyFilter(false)
+    }
 
-    private var shadowTopToFilter: Constraint!
-    private var shadowTopToSeparator: Constraint!
-    
-    //MARK: - SearchBar
-    
-    private let searchBar: OrderHistoryCustomSearchBar = {
-        let field = OrderHistoryCustomSearchBar()
-        return field
-    }()
-    
-    private lazy var searchDimView: UIControl = {
-        let v = UIControl()
-        v.backgroundColor = UIColor.black.withAlphaComponent(0)
-        v.isHidden = false
-        v.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        return v
-    }()
-    
-    private let searchCancelButton: UIButton = {
-        var cf = UIButton.Configuration.plain()
-
-        var title = AttributedString("취소")
-        title.font = UIFont.appFont(.pretendardBold, size: 14)
-        title.foregroundColor = UIColor.appColor(.neutral500)
-        cf.attributedTitle = title
-
-        cf.baseForegroundColor = UIColor.appColor(.neutral500)
-        cf.contentInsets = .zero
-
-        let b = UIButton(configuration: cf)
-        b.setContentHuggingPriority(.required, for: .horizontal)
-        b.setContentCompressionResistancePriority(.required, for: .horizontal)
-        return b
-    }()
-    
-    private let filterButtonRow: UIStackView = {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.alignment = .leading
-        row.distribution = .fill
-        row.spacing = 8
-        return row
-    }()
-    
-    private let periodButton: FilteringButton = {
-        let b = FilteringButton()
-        b.set(title: "조회 기간", showsChevron: true)
-        b.setSelectable(false)
-        b.applyFilter(false)
-        return b
-    }()
-
-    private let stateInfoButton: FilteringButton = {
-        let b = FilteringButton()
-        b.set(title: "주문 상태 · 정보", showsChevron: true)
-        b.setSelectable(false)
-        b.applyFilter(false)
-        return b
-    }()
-
-    private let resetButton: FilteringButton = {
-        let b = FilteringButton()
+    private let resetButton = FilteringButton().then {
         let icon = UIImage.appImage(asset: .refresh)
-        b.set(title: "초기화", iconRight: icon, showsChevron: false)
-        b.setSelectable(false)
-        b.applyFilter(false)
-        b.isHidden = true
-        b.alpha = 0
-        return b
-    }()
+        $0.set(title: "초기화", iconRight: icon, showsChevron: false)
+        $0.setSelectable(false)
+        $0.applyFilter(false)
+        $0.isHidden = true
+        $0.alpha = 0
+    }
     
     // MARK: - Initialization
+    
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -255,39 +223,25 @@ final class OrderHistoryViewController: UIViewController {
     private func bind() {
         
         orderHistorySegment.addTarget(self, action: #selector(changeSegmentLine(_:)), for: .valueChanged)
-        
         [periodButton, stateInfoButton].forEach {
-            $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)
-        }
+            $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)        }
         resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
-        
+        searchDimView.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         searchBar.textField.delegate = self
-        
-        
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
-
-        
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-
-        searchBar.textField.delegate = self
-
-        searchBar.onTextChanged = { text in
-            print("검색어: \(text)")
-        }
+//
+//        searchBar.onTextChanged = { text in
+//            print("검색어: \(text)")
+//        }
         
+        searchBar.textField.delegate = self
         orderHistoryCollectionView.delegate = self
         orderPrepareCollectionView.delegate = self
-        
         orderHistoryCollectionView.alwaysBounceVertical = true
         orderPrepareCollectionView.alwaysBounceVertical = true
-
-        
-        
         updateSearchVisibility(animated: false)
-        
-        
     }
-    
 }
 
 extension OrderHistoryViewController {
@@ -299,7 +253,7 @@ extension OrderHistoryViewController {
         
         emptyStateView.isHidden = true
         
-        [symbolImageView, ZzzImageView, noOrderHistoryLabel, seeOrderHistoryButton].forEach{
+        [symbolImageView , noOrderHistoryLabel, seeOrderHistoryButton].forEach{
             emptyStateView.addSubview($0)
         }
         
@@ -398,12 +352,6 @@ extension OrderHistoryViewController {
             $0.height.equalTo(75)
         }
         
-        ZzzImageView.snp.makeConstraints{
-            $0.top.equalTo(symbolImageView.snp.top)
-            $0.leading.equalTo(symbolImageView.snp.leading).offset(-3)
-            $0.height.width.equalTo(25)
-        }
-        
         noOrderHistoryLabel.snp.makeConstraints{
             $0.top.equalTo(symbolImageView.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
@@ -421,8 +369,6 @@ extension OrderHistoryViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(filterButtonRow.snp.bottom).offset(12)
         }
-        
-        
     }
     
     private func configureView() {
@@ -430,7 +376,9 @@ extension OrderHistoryViewController {
         setUpConstraints()
         self.view.backgroundColor = UIColor.appColor(.newBackground)
     }
-    
+}
+
+extension OrderHistoryViewController{
     private func render() {
         if let period = currentFilter.period {
             switch period {
@@ -467,38 +415,6 @@ extension OrderHistoryViewController {
         updateEmptyState()
         refreshShadowForCurrentTab()
     }
-}
-
-
-
-extension OrderHistoryViewController {
-    @objc private func changeSegmentLine(_ segment: UISegmentedControl){
-        let segmentCount = CGFloat(segment.numberOfSegments)
-        let leadingDistance: CGFloat = CGFloat(segment.selectedSegmentIndex) * (UIScreen.main.bounds.width / segmentCount) + 7.5
-        
-        UIView.animate(withDuration:0.2, animations: {
-            self.orderHistoryUnderLineView.snp.updateConstraints {
-                $0.leading.equalTo(self.orderHistorySegment.snp.leading).offset(leadingDistance)
-            }
-            self.updateSearchVisibility(animated: false)
-            self.updateEmptyState()
-            self.view.layoutIfNeeded()
-            self.refreshShadowForCurrentTab()
-        })
-    }
-    
-    @objc private func showFilterSheet(){
-        guard presentedViewController == nil else {return}
-        
-        let sheet = FilterBottomSheetViewController(initial: currentFilter)
-        sheet.onApply = { [weak self] filter in
-            self?.currentFilter = filter
-            
-        }
-        
-        sheet.modalPresentationStyle = .overFullScreen
-        present(sheet, animated: false)
-    }
     
     private func updateResetVisibility() {
         let show = (currentFilter != .empty)
@@ -515,11 +431,7 @@ extension OrderHistoryViewController {
             }
         }
     }
-    
-    @objc private func resetFilterTapped() {
-        currentFilter = .empty
-    }
-    
+
     private func updateSearchVisibility(animated: Bool = true) {
         let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
 
@@ -527,9 +439,7 @@ extension OrderHistoryViewController {
         searchCancelButton.isHidden = !isHistory
         filterButtonRow.isHidden = !isHistory
         orderHistoryCollectionView.isHidden = !isHistory
-        
         orderPrepareCollectionView.isHidden = isHistory
-
 
         if isHistory {
             topToFilter?.deactivate()
@@ -545,59 +455,6 @@ extension OrderHistoryViewController {
         topShadowView.alpha = 0
         
         refreshShadowForCurrentTab()
-    }
-    
-    
-    @objc private func searchTapped(_ sender: UITextField) {
-        barTrailingToSuperview.deactivate()
-        barTrailingToCancel?.activate()
-        
-        view.bringSubviewToFront(searchDimView)
-        view.bringSubviewToFront(searchBar)
-        view.bringSubviewToFront(searchCancelButton)
-
-        searchCancelButton.isHidden = false
-        searchDimView.isHidden = false
-        searchBar.focus()
-        
-        
-        searchBar.becomeFirstResponder()
-
-        
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
-                self.searchCancelButton.alpha = 1
-                self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-
-    @objc private func cancelButtonTapped() {
-        searchBar.unfocus()
-        
-        barTrailingToCancel?.deactivate()
-        barTrailingToSuperview.activate()
-        
-        UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
-            self.searchCancelButton.alpha = 0
-            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            self.searchCancelButton.isHidden = true
-            self.searchDimView.isHidden = true
-        }
-    }
-    
-}
-
-extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == searchBar.textField && searchCancelButton.isHidden {
-            print("터치입력됨")
-            
-        }
-        return true
     }
     
     private func updateEmptyState() {
@@ -626,7 +483,97 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         }
     }
     
+}
+
+
+
+// MARK: - @objc
+
+extension OrderHistoryViewController {
     
+    @objc private func changeSegmentLine(_ segment: UISegmentedControl){
+        let segmentCount = CGFloat(segment.numberOfSegments)
+        let leadingDistance: CGFloat = CGFloat(segment.selectedSegmentIndex) * (UIScreen.main.bounds.width / segmentCount) + 7.5
+        
+        UIView.animate(withDuration:0.2, animations: {
+            self.orderHistoryUnderLineView.snp.updateConstraints {
+                $0.leading.equalTo(self.orderHistorySegment.snp.leading).offset(leadingDistance)
+            }
+            self.updateSearchVisibility(animated: false)
+            self.updateEmptyState()
+            self.view.layoutIfNeeded()
+            self.refreshShadowForCurrentTab()
+        })
+    }
+    
+    @objc private func showFilterSheet(){
+        guard presentedViewController == nil else {return}
+        
+        let sheet = FilterBottomSheetViewController(initial: currentFilter)
+        sheet.onApply = { [weak self] filter in
+            self?.currentFilter = filter
+            
+        }
+        
+        sheet.modalPresentationStyle = .overFullScreen
+        present(sheet, animated: false)
+    }
+        
+    @objc private func resetFilterTapped() {
+        currentFilter = .empty
+    }
+    
+    @objc private func searchTapped(_ sender: UITextField) {
+        barTrailingToSuperview.deactivate()
+        barTrailingToCancel?.activate()
+        
+        view.bringSubviewToFront(searchDimView)
+        view.bringSubviewToFront(searchBar)
+        view.bringSubviewToFront(searchCancelButton)
+
+        searchCancelButton.isHidden = false
+        searchDimView.isHidden = false
+        searchBar.focus()
+        
+        searchBar.becomeFirstResponder()
+
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+                self.searchCancelButton.alpha = 1
+                self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+
+    @objc private func cancelButtonTapped() {
+        searchBar.unfocus()
+        
+        barTrailingToCancel?.deactivate()
+        barTrailingToSuperview.activate()
+        
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+            self.searchCancelButton.alpha = 0
+            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.searchCancelButton.isHidden = true
+            self.searchDimView.isHidden = true
+        }
+    }
+    
+}
+
+
+
+extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == searchBar.textField && searchCancelButton.isHidden {
+            print("터치입력됨")
+        }
+        return true
+    }
+        
     //MARK: - ScrollSet
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -656,7 +603,6 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         topShadowView.alpha = shadowAlpha
     }
     
-    
     //MARK: - CollectionView ItemSize
     
     func collectionView(_ collectionView: UICollectionView,
@@ -671,7 +617,6 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     }
 
 }
-
 
 // 셀 확인
 

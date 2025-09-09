@@ -164,8 +164,7 @@ enum ImageAsset: String {
     case refresh
     case delivery2
     case packaging
-    case emptyBcsdSymbolLogo
-    case Zzz
+    case sleepBcsdSymbol
 }
 
 enum SFSymbols: String {

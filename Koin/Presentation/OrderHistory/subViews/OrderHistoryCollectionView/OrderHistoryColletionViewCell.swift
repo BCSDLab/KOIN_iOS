@@ -16,10 +16,11 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     
     private enum ReorderState {
-        case available
-        case beforeOpen
+        case available // 재주문 가능
+        case beforeOpen // 오픈전 (불가능)
     }
 
+    //MARK: - Properties
     private var reorderState: ReorderState = .available {
         didSet { reorderButton.setNeedsUpdateConfiguration() }
     }
@@ -28,117 +29,106 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     //MARK: - UI
     
-    private let stateLabel: UILabel = {
-        let l = UILabel()
-        l.text = "default"
-        l.textColor = .appColor(.new500)
-        l.font = .appFont(.pretendardBold, size: 16)
-        return l
-    }()
+    private let stateLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = .appColor(.new500)
+        $0.font = .appFont(.pretendardBold, size: 16)
+    }
     
-    private let dayLabel: UILabel = {
-        let l = UILabel()
-        l.text = "??월 ??일 (?)"
-        l.textColor = .appColor(.new500)
-        l.font = .appFont(.pretendardRegular, size: 12)
-        return l
-    }()
+    private let dayLabel = UILabel().then {
+        $0.text = "??월 ??일 (?)"
+        $0.textColor = .appColor(.new500)
+        $0.font = .appFont(.pretendardRegular, size: 12)
+    }
     
-    private let menuImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
-        iv.image = UIImage.appImage(asset: .defaultMenuImage)
-        return iv
-    }()
+    private let menuImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = UIImage.appImage(asset: .defaultMenuImage)
+    }
     
-    private let storeNameLabel: UILabel = {
-        let l = UILabel()
-        l.text = "default"
-        l.textColor = .appColor(.neutral800)
-        l.font = .appFont(.pretendardBold, size: 16)
-        return l
-    }()
+    private let storeNameLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = .appColor(.neutral800)
+        $0.font = .appFont(.pretendardBold, size: 16)
+    }
     
-    private let stateLabelUnderView: UIView = {
-        let v = UIView()
-        v.backgroundColor = .appColor(.neutral200)
-        return v
-    }()
+    private let stateLabelUnderView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral200)
+    }
     
-    private let menuNameLabel: UILabel = {
-        let l = UILabel()
-        l.text = "default"
-        l.textColor = .appColor(.neutral800)
-        l.font = .appFont(.pretendardMedium, size: 14)
-        return l
-    }()
-    
-    private let menuPriceLabel: UILabel = {
-        let l = UILabel()
-        l.text = "default"
-        l.textColor = .appColor(.neutral800)
-        l.font = .appFont(.pretendardBold, size: 14)
-        return l
-    }()
-    
-    private let orderInfoButton: UIButton = {
-        var cf = UIButton.Configuration.plain()
-        cf.attributedTitle = AttributedString("주문상세", attributes: .init([
-            .font: UIFont.appFont(.pretendardMedium, size: 12)
-        ]))
-        cf.baseForegroundColor = UIColor.appColor(.neutral500)
-        cf.imagePlacement = .trailing
-        cf.imagePadding = 4
-        cf.contentInsets = .init(top: 4, leading: 6, bottom: 4, trailing: 6)
-
-        let base = UIImage.appImage(asset: .chevronRight)?.withRenderingMode(.alwaysTemplate)
-        let small = base?.preparingThumbnail(of: CGSize(width: 12, height: 12)) ?? base
-        cf.image = small
-
-        let b = UIButton(configuration: cf)
-        b.imageView?.contentMode = .scaleAspectFit
-        b.setContentHuggingPriority(.required, for: .horizontal)
-        b.setContentCompressionResistancePriority(.required, for: .horizontal)
-        return b
-    }()
-
-    
-    
-    private let reviewButton: UIButton = {
-        var cf = UIButton.Configuration.plain()
-        cf.attributedTitle = AttributedString("리뷰쓰기", attributes: .init([
-            .font: UIFont.appFont(.pretendardBold, size: 14)
-        ]))
-        cf.baseForegroundColor = UIColor.appColor(.neutral600)
-        var bg = UIBackgroundConfiguration.clear()
-        bg.cornerRadius = 8
-        bg.backgroundColor = UIColor.appColor(.neutral0)
-        bg.strokeColor = UIColor.appColor(.neutral300)
-        bg.strokeWidth = 1
-        cf.background = bg
+    private let menuNameLabel = UILabel().then {
         
-//        cf.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 121, bottom: 11, trailing: 121)
-
-        let b = UIButton(configuration: cf)
-        return b
-    }()
+        $0.text = "default"
+        $0.textColor = .appColor(.neutral800)
+        $0.font = .appFont(.pretendardMedium, size: 14)
+    }
     
-    private let reorderButton: UIButton = {
-        var cf = UIButton.Configuration.plain()
-        cf.attributedTitle = AttributedString("같은 메뉴 담기", attributes: .init([
-            .font: UIFont.appFont(.pretendardBold, size: 14)
-        ]))
-        cf.baseForegroundColor = UIColor.appColor(.neutral0)
-        var bg = UIBackgroundConfiguration.clear()
-        bg.cornerRadius = 8
-        bg.backgroundColor = UIColor.appColor(.new500)
-        cf.background = bg
-//        cf.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 121, bottom: 11, trailing: 121)
+    private let menuPriceLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = .appColor(.neutral800)
+        $0.font = .appFont(.pretendardBold, size: 14)
+    }
+    
+    private let orderInfoButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            cf.attributedTitle = AttributedString("주문상세", attributes: .init([
+                .font: UIFont.appFont(.pretendardMedium, size: 12)
+            ]))
+            cf.baseForegroundColor = UIColor.appColor(.neutral500)
+            cf.imagePlacement = .trailing
+            cf.imagePadding = 4
+            cf.contentInsets = .init(top: 4, leading: 6, bottom: 4, trailing: 6)
 
-        let b = UIButton(configuration: cf)
-        return b
-        
-    }()
+            let base = UIImage.appImage(asset: .chevronRight)?.withRenderingMode(.alwaysTemplate)
+            let small = base?.preparingThumbnail(of: CGSize(width: 12, height: 12)) ?? base
+            cf.image = small
+
+            return cf
+        }()
+    ).then {
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    private let reviewButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            cf.attributedTitle = AttributedString("리뷰쓰기", attributes: .init([
+                .font: UIFont.appFont(.pretendardBold, size: 14)
+            ]))
+            cf.baseForegroundColor = UIColor.appColor(.neutral600)
+            
+            var bg = UIBackgroundConfiguration.clear()
+            bg.cornerRadius = 8
+            bg.backgroundColor = UIColor.appColor(.neutral0)
+            bg.strokeColor = UIColor.appColor(.neutral300)
+            bg.strokeWidth = 1
+            cf.background = bg
+            
+            return cf
+        }()
+    )
+    
+    private let reorderButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            cf.attributedTitle = AttributedString("같은 메뉴 담기", attributes: .init([
+                .font: UIFont.appFont(.pretendardBold, size: 14)
+            ]))
+            cf.baseForegroundColor = UIColor.appColor(.neutral0)
+            
+            var bg = UIBackgroundConfiguration.clear()
+            bg.cornerRadius = 8
+            bg.backgroundColor = UIColor.appColor(.new500)
+            cf.background = bg
+            
+            return cf
+        }()
+    )
+    
+    // MARK: - Initialize
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -152,6 +142,8 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
 }
 
+
+// MARK: - Set UI Function
 
 
 extension OrderHistoryColletionViewCell {
@@ -239,7 +231,7 @@ extension OrderHistoryColletionViewCell {
         }
     }
     
-    
+    // MARK: - UI Function
     
     private func setupReorderButtonStateHandler() {
         reorderButton.configurationUpdateHandler = { [weak self] btn in
