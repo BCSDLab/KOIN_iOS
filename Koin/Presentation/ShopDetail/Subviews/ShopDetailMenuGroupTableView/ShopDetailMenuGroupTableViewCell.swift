@@ -90,7 +90,7 @@ class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         } else if (isLastRow && !isFirstRow) {
             setBottomCornerRadius()
         } else if (isFirstRow && isLastRow) {
-            setCornerRadius()
+            setAllCornerRadius()
         }
         if (isLastRow) {
             separatorView.isHidden = true
@@ -124,8 +124,9 @@ extension ShopDetailMenuGroupTableViewCell {
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
         backgroundView = bgView
+        setUpShadow()
     }
-    private func setCornerRadius() {
+    private func setAllCornerRadius() {
         let bgView = UIView().then {
             $0.backgroundColor = .appColor(.neutral0)
             $0.layer.cornerRadius = 24
@@ -134,6 +135,11 @@ extension ShopDetailMenuGroupTableViewCell {
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
         backgroundView = bgView
+        setUpShadow()
+    }
+    private func setUpShadow() {
+        layer.masksToBounds = false
+        layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
 }
 extension ShopDetailMenuGroupTableViewCell {
