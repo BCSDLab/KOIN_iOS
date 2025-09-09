@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
-		3B6E30EC2E6C05F9006CD0E1 /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EB2E6C05F9006CD0E1 /* FilteringButton.swift */; };
 		3B6E30EE2E6C11ED006CD0E1 /* OrderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
-		3B6E30F22E6DE1FF006CD0E1 /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30F12E6DE1FF006CD0E1 /* OrderHistoryCustomSearchBar.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -709,10 +707,8 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
-		3B6E30EB2E6C05F9006CD0E1 /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
 		3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilter.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
-		3B6E30F12E6DE1FF006CD0E1 /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
 		6CCC0E0747FEA60867679C70 /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F90C502B389B591DC01BD71 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		7F1C723EB43A223B8E2052EC /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
@@ -3591,10 +3587,8 @@
 			children = (
 				3B2DEC822E701FCF0059D37E /* subViews */,
 				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
-				3B6E30EB2E6C05F9006CD0E1 /* FilteringButton.swift */,
 				3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */,
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
-				3B6E30F12E6DE1FF006CD0E1 /* OrderHistoryCustomSearchBar.swift */,
 			);
 			path = OrderHistory;
 			sourceTree = "<group>";
@@ -4167,7 +4161,6 @@
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
 				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
-				3B6E30EC2E6C05F9006CD0E1 /* FilteringButton.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D20AD6E22E012A390067760A /* FoundIdViewController.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
@@ -4331,7 +4324,6 @@
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
 				D2C163D42E24DD7800DC68A8 /* ModifyUserModalViewController.swift in Sources */,
 				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
-				3B6E30F22E6DE1FF006CD0E1 /* OrderHistoryCustomSearchBar.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,
 				83EBB85E2D0FD6DF00346018 /* BusSearchViewController.swift in Sources */,

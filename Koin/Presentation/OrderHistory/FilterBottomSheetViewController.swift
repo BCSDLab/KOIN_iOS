@@ -77,43 +77,35 @@ final class FilterBottomSheetViewController: UIViewController {
     }()
     
     private let resetButton: UIButton = {
-        let b = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.title = "초기화"
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
+        config.attributedTitle?.font = UIFont.appFont(.pretendardBold, size: 16)
 
-        b.setTitle("초기화", for: .normal)
-        b.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        b.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
-
-        b.tintColor = UIColor.appColor(.neutral500)
         let icon = UIImage.appImage(asset: .refresh)
-        b.setImage(icon, for: .normal)
+        config.image = icon
+        config.imagePlacement = .trailing
+        config.imagePadding = 8
 
-        b.setPreferredSymbolConfiguration(
-            UIImage.SymbolConfiguration(pointSize: 16, weight: .regular),
-            forImageIn: .normal
-        )
+        config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 16)
+        config.background.strokeColor = UIColor.appColor(.neutral400)
+        config.background.strokeWidth = 1
+        config.background.cornerRadius = 12
 
-        b.semanticContentAttribute = .forceRightToLeft
-        b.contentEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
-        b.imageEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
-
-        b.layer.cornerRadius = 12
-        b.layer.borderWidth = 1
-        b.layer.borderColor = UIColor.appColor(.neutral400).cgColor
-
-        b.addTarget(self, action: #selector(resetTapped), for: .touchUpInside)
+        let b = UIButton(configuration: config)
         return b
     }()
     
     private let applyButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setTitle("적용하기", for: .normal)
+        var config = UIButton.Configuration.filled()
+        config.title = "적용하기"
+        config.baseForegroundColor = UIColor.appColor(.neutral0)
+        config.baseBackgroundColor = UIColor.appColor(.new500)
+        config.cornerStyle = .medium
+        config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 80, bottom: 11, trailing: 80)
+
+        let b = UIButton(configuration: config)
         b.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
-        b.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        
-        b.backgroundColor = UIColor.appColor(.new500)
-        b.layer.cornerRadius = 12
-        b.contentEdgeInsets = .init(top: 11, left: 80, bottom: 11, right: 80)
-        b.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
         return b
     }()
     
@@ -128,7 +120,6 @@ final class FilterBottomSheetViewController: UIViewController {
         
         b.tintColor = UIColor.appColor(.neutral800)
         b.backgroundColor = .clear
-        b.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         return b
     }()
     
@@ -197,7 +188,7 @@ final class FilterBottomSheetViewController: UIViewController {
 
         [m3Button, m6Button, y1Button,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
                 $0.applyFilter(false)
-                styleSheetButton($0)
+                changeSheetInButton($0)
             }
     }
     
@@ -230,9 +221,6 @@ final class FilterBottomSheetViewController: UIViewController {
         
     }
     
-    private func buttonAction(){
-        backdrop.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-    }
     
     private func setUpConstraints(){
         backdrop.snp.makeConstraints {
@@ -326,7 +314,6 @@ final class FilterBottomSheetViewController: UIViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        buttonAction()
         configureButtons()
         view.backgroundColor = .clear
         container.backgroundColor = UIColor.appColor(.neutral0)
@@ -349,6 +336,13 @@ final class FilterBottomSheetViewController: UIViewController {
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
+        
+        resetButton.addTarget(self, action: #selector(resetTapped), for: .touchUpInside)
+        applyButton.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        backdrop.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+
+        
         render()
     }
     
@@ -363,6 +357,9 @@ final class FilterBottomSheetViewController: UIViewController {
         doneButton.applyFilter(work.info.contains(.completed))
         cancelButton.applyFilter(work.info.contains(.canceled))
     }
+    
+    
+    //MARK: -Button
     
     @objc private func closeTapped() {
         animateDismiss()
@@ -425,16 +422,15 @@ final class FilterBottomSheetViewController: UIViewController {
         }
     }
     
-    private func styleSheetButton(_ b: FilteringButton) {
-        b.setImage(nil, for: .normal)
-        if var cf = b.configuration {
-            cf.image = nil
-            cf.imagePadding = 0
-            cf.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
-            b.configuration = cf
-        } else {
-            b.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-        }
+    private func changeSheetInButton(_ b: FilteringButton) {
+        var config = b.configuration ?? .plain()
+        config.image = nil
+        config.imagePadding = 0
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: 8, leading: 12, bottom: 8, trailing: 12
+        )
+        b.configuration = config
+
         b.setContentHuggingPriority(.required, for: .horizontal)
         b.setContentCompressionResistancePriority(.required, for: .horizontal)
     }

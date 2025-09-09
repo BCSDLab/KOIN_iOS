@@ -18,6 +18,8 @@ final class OrderHistoryViewController: UIViewController {
     private var topToFilter: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
+    
+    private var shadowAlpha: CGFloat = 0
 
     // MARK: - UI Components
     
@@ -624,10 +626,13 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         }
     }
     
+    
+    //MARK: - ScrollSet
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let y = max(scrollView.contentOffset.y, 0)
-        let ratio = min(y / 12.0, 1.0)
-        topShadowView.alpha = ratio
+        let target = min(y / 12.0, 1.0)
+        setShadowAlphaSmooth(to: target)
     }
     
     private func refreshShadowForCurrentTab() {
@@ -641,8 +646,18 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
 
         topShadowView.isHidden = false
         let y = max(orderHistoryCollectionView.contentOffset.y, 0)
-        topShadowView.alpha = min(y / 12.0, 1.0)
+        let target = min(y / 12.0, 1.0)
+        setShadowAlphaSmooth(to: target)
     }
+    
+    private func setShadowAlphaSmooth(to target: CGFloat) {
+        let t = min(max(target, 0), 1)
+        shadowAlpha += (t - shadowAlpha) * 0.20
+        topShadowView.alpha = shadowAlpha
+    }
+    
+    
+    //MARK: - CollectionView ItemSize
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
