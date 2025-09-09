@@ -118,46 +118,18 @@ extension ShopDetailViewController {
     // MARK: - updateTableViewHeight
     private func updateTableViewHeight(orderShopMenusGroups: [OrderShopMenusGroup]) {
         menuGroupTableView.snp.makeConstraints {
-            $0.height.equalTo(tableViewHeight(orderShopMenusGroups))
+            $0.height.equalTo(menuGroupTableView.contentSize.height + 100) // FIXME: 100정도 높이가 부족해요ㅠㅠ 왜죠ㅠㅠ
         }
     }
-    private func tableViewHeight(_ orderShopMenusGroups: [OrderShopMenusGroup]) -> Int {
-        let groupNameHeight = 56
-        let minimumRowHeight = 112
-        let nameHeight = 29
-        let descriptionHeight = 19
-        let priceHeight = 22
-        let priceTopPadding = 4
-        let insetHeight = 24
-        
-        var tableViewHeight = 0
-        orderShopMenusGroups.forEach {
-            var sectionHeight = 0
-            sectionHeight += groupNameHeight
-            $0.menus.forEach {
-                var rowHeight = 0
-                rowHeight += nameHeight
-                rowHeight += $0.description != nil ? descriptionHeight : 0
-                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
-                rowHeight += $0.prices.count * priceHeight
-                rowHeight += insetHeight
-                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
-            }
-            tableViewHeight += sectionHeight
-        }
-        return tableViewHeight
-    }
-
+    
     // MARK: - ConfigureView
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         contentView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.width.equalToSuperview() //필요할까?
-            //$0.bottom.equalTo(menuGroupTableView.snp.bottom)
-            $0.bottom.equalToSuperview().offset(-50)
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
         }
         imagesCollectionView.snp.makeConstraints {
             $0.leading.trailing.top.equalToSuperview()
@@ -184,7 +156,7 @@ extension ShopDetailViewController {
         menuGroupTableView.snp.makeConstraints {
             $0.top.equalTo(menuGroupNameCollectionView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().offset( -20 + (UIApplication.hasHomeButton() ? -72 : -106 ))
         }
         
         bottomSheet.snp.makeConstraints {
