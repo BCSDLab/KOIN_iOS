@@ -275,4 +275,17 @@ extension String {
         let regex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
     }
+    
+    // 오후 h시 mm분 변환
+    static func koreanTimeString(hour: Int, minute: Int) -> String {
+        var h = hour
+        let m = minute
+        
+        let isPM = h >= 12
+        if h > 12 { h -= 12 }
+        if h == 0 { h = 12 }
+        
+        let period = isPM ? "오후" : "오전"
+        return String(format: "%@ %d시 %02d분", period, h, m)
+    }
 }

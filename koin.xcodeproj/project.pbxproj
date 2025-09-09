@@ -668,8 +668,8 @@
 		D8F56E602E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */; };
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
-		D8F5C54E2E6F0E8A00FB6708 /* OrderTrackingDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */; };
-		D8F5C5502E6F0EE600FB6708 /* OrderTrackingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */; };
+		D8F5C54E2E6F0E8A00FB6708 /* OrderInProgressDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */; };
+		D8F5C5502E6F0EE600FB6708 /* OrderInProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */; };
 		D8F5C5522E6F122100FB6708 /* FetchOrderTrackingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */; };
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
@@ -1387,8 +1387,8 @@
 		D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderEventShopUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
-		D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTrackingDTO.swift; sourceTree = "<group>"; };
-		D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTrackingInfo.swift; sourceTree = "<group>"; };
+		D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInProgressDTO.swift; sourceTree = "<group>"; };
+		D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInProgress.swift; sourceTree = "<group>"; };
 		D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderTrackingUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
@@ -3572,7 +3572,7 @@
 			children = (
 				D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */,
 				D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */,
-				D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */,
+				D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3583,7 +3583,7 @@
 				D815DD982E082179004A72BE /* OrderFilterDataList.swift */,
 				D82F225A2E12CBE000CD81C3 /* OrderShop.swift */,
 				D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */,
-				D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */,
+				D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4279,7 +4279,7 @@
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */,
-				D8F5C5502E6F0EE600FB6708 /* OrderTrackingInfo.swift in Sources */,
+				D8F5C5502E6F0EE600FB6708 /* OrderInProgress.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
@@ -4446,7 +4446,7 @@
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
-				D8F5C54E2E6F0E8A00FB6708 /* OrderTrackingDTO.swift in Sources */,
+				D8F5C54E2E6F0E8A00FB6708 /* OrderInProgressDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,

@@ -297,7 +297,7 @@ extension OrderHomeViewController {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
-    private func updateFloatingButton(with info: OrderTrackingInfo) {
+    private func updateFloatingButton(with info: OrderInProgress) {
         if case .unknown = info.status {
             orderFloatingButton.isHidden = true
             return

@@ -27,7 +27,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case updateEventShops([OrderShopEvent])
         case showSearchedResult([Keyword])
         case errorOccurred(Error)
-        case updateFloatingButton(OrderTrackingInfo)
+        case updateFloatingButton(OrderInProgress)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

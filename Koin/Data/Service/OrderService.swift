@@ -12,7 +12,7 @@ protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingDTO, Error>
+    func fetchOrderTrackingInfo() -> AnyPublisher<OrderInProgressDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -56,8 +56,8 @@ final class DefaultOrderService: OrderService {
     }
     
     // TODO: - 임시
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingDTO, Error> {
-        let mockDTO = OrderTrackingDTO(
+    func fetchOrderTrackingInfo() -> AnyPublisher<OrderInProgressDTO, Error> {
+        let mockDTO = OrderInProgressDTO(
             shopName: "써니 숯불도시락",
             orderType: "DELIVERY",
             orderStatus: "DELIVERING",

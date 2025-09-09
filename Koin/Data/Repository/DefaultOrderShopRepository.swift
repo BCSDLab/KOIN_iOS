@@ -35,10 +35,10 @@ final class DefaultOrderShopRepository: OrderShopRepository{
     }
     
     // TODO: - 임시
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingInfo, Error> {
+    func fetchOrderTrackingInfo() -> AnyPublisher<OrderInProgress, Error> {
         return service.fetchOrderTrackingInfo()
             .tryMap { dto in
-                guard let entity = OrderTrackingInfo(from: dto) else {
+                guard let entity = OrderInProgress(from: dto) else {
                     throw MappingError.invalidData
                 }
                 return entity

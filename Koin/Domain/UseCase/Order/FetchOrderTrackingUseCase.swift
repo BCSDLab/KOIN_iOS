@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchOrderTrackingUseCase {
-    func execute() -> AnyPublisher<OrderTrackingInfo, Error>
+    func execute() -> AnyPublisher<OrderInProgress, Error>
 }
 final class DefaultFetchOrderTrackingUseCase: FetchOrderTrackingUseCase {
     
@@ -18,7 +18,7 @@ final class DefaultFetchOrderTrackingUseCase: FetchOrderTrackingUseCase {
         self.orderShopRepository = orderShopRepository
     }
     
-    func execute() -> AnyPublisher<OrderTrackingInfo, Error> {
+    func execute() -> AnyPublisher<OrderInProgress, Error> {
         return orderShopRepository.fetchOrderTrackingInfo()
     }
 }
