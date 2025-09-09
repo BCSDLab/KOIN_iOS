@@ -46,6 +46,16 @@ class ShopDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.layer.masksToBounds = false
     }
+    let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+        $0.minimumInteritemSpacing = 4
+        $0.scrollDirection = .horizontal
+    }).then {
+        $0.backgroundColor = .appColor(.newBackground)
+        $0.contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        $0.showsHorizontalScrollIndicator = false
+        $0.layer.masksToBounds = false
+        $0.isHidden = true
+    }
     let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
         $0.isScrollEnabled = false
         $0.backgroundColor = .clear
@@ -72,11 +82,11 @@ class ShopDetailViewController: UIViewController {
         view.backgroundColor = UIColor.appColor(.newBackground)
         bind()
         inputSubject.send(.viewDidLoad)
+        configureView()
     }
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
         configureRightBarButton()
-        configureView()
     }
 }
 
@@ -119,7 +129,7 @@ extension ShopDetailViewController {
     // MARK: - updateTableViewHeight
     private func updateTableViewHeight(orderShopMenusGroups: [OrderShopMenusGroup]) {
         menuGroupTableView.snp.makeConstraints {
-            $0.height.equalTo(menuGroupTableView.contentSize.height + 100) // FIXME: 100정도 높이가 부족해요ㅠㅠ 왜죠ㅠㅠ
+            $0.height.equalTo(tableViewHeight(orderShopMenusGroups))
         }
     }
     
@@ -163,9 +173,14 @@ extension ShopDetailViewController {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
         }
+        menuGroupNameCollectionViewSticky.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(66)
+        }
     }
     private func setUpLayout() {
-        [scrollView, bottomSheet].forEach {
+        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
@@ -181,5 +196,36 @@ extension ShopDetailViewController {
     // MARK: - @objc
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+}
+
+extension ShopDetailViewController {
+    
+    // MARK: - helper
+    private func tableViewHeight(_ orderShopMenusGroups: [OrderShopMenusGroup]) -> Int {
+        let groupNameHeight = 56
+        let minimumRowHeight = 112
+        let nameHeight = 29
+        let descriptionHeight = 19
+        let priceHeight = 22
+        let priceTopPadding = 4
+        let insetHeight = 24
+        
+        var tableViewHeight = 0
+        orderShopMenusGroups.forEach {
+            var sectionHeight = 0
+            sectionHeight += groupNameHeight
+            $0.menus.forEach {
+                var rowHeight = 0
+                rowHeight += nameHeight
+                rowHeight += $0.description != nil ? descriptionHeight : 0
+                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
+                rowHeight += $0.prices.count * priceHeight
+                rowHeight += insetHeight
+                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
+            }
+            tableViewHeight += sectionHeight
+        }
+        return tableViewHeight
     }
 }
