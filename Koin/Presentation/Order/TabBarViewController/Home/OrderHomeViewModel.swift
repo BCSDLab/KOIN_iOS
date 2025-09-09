@@ -28,6 +28,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case showSearchedResult([Keyword])
         case errorOccurred(Error)
         case updateFloatingButton(OrderInProgress)
+        case hideFloatingButton
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -41,12 +42,12 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let fetchOrderShopListUseCase: FetchOrderShopListUseCase
     private let searchOrderShopUseCase: SearchOrderShopUseCase
-    private let fetchOrderTrackingUseCase: FetchOrderTrackingUseCase
+    private let fetchOrderTrackingUseCase: FetchOrderInProgressUseCase
 
     init(fetchOrderEventShopUseCase: FetchOrderEventShopUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          fetchOrderShopListUseCase: FetchOrderShopListUseCase,
-         fetchOrderTrackingUseCase: FetchOrderTrackingUseCase,
+         fetchOrderTrackingUseCase: FetchOrderInProgressUseCase,
          searchOrderShopUseCase: SearchOrderShopUseCase,
          selectedId: Int) {
         self.fetchOrderEventShopUseCase = fetchOrderEventShopUseCase
@@ -160,12 +161,20 @@ extension OrderHomeViewModel {
     
     private func getFloatingButtonStatus() {
         fetchOrderTrackingUseCase.execute()
+            .map { orders in
+                orders.first { $0.status == .confirming || $0.status == .cooking }
+            }
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     Log.make().error("\(error)")
                 }
-            }, receiveValue: { [weak self] trackingInfo in
-                self?.outputSubject.send(.updateFloatingButton(trackingInfo))
+            }, receiveValue: { [weak self] matched in
+                guard let self = self else { return }
+                if let info = matched {
+                    self.outputSubject.send(.updateFloatingButton(info))
+                } else {
+                    self.outputSubject.send(.hideFloatingButton)
+                }
             })
             .store(in: &subscriptions)
     }
