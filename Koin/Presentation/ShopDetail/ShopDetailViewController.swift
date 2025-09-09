@@ -18,6 +18,10 @@ class ShopDetailViewController: UIViewController {
     private let shopId: Int?
     private let isFromOrder: Bool
     
+    private var shouldShowSticky: Bool = false
+    private var isNavigationBarOpaque: Bool = false
+    
+    
     // MARK: - Components
     let scrollView = UIScrollView().then {
         $0.contentInsetAdjustmentBehavior = .never
@@ -64,6 +68,10 @@ class ShopDetailViewController: UIViewController {
         $0.separatorStyle = .none
     }
     let bottomSheet = ShopDetailBottomSheet()
+    let navigationBarLikeView = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+        $0.layer.opacity = 0
+    }
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
@@ -179,9 +187,16 @@ extension ShopDetailViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(66)
         }
+        navigationBarLikeView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(
+                UIApplication.topSafeAreaHeight()
+                + (navigationController?.navigationBar.bounds.height ?? 0)
+            )
+        }
     }
     private func setUpLayout() {
-        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky].forEach {
+        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
@@ -207,12 +222,32 @@ extension ShopDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
         let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
+        let imagesBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: view).maxY
+        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
+        
         let shouldShowSticky = collectionViewTop < naviBottom
-        menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
-    
-        view.layoutIfNeeded()
+        let isNavigationBarOpaque = imagesBottom < naviBottom
+        let opacity = 1 - (imagesBottom - naviBottom)/100
+        
+        if shouldShowSticky != self.shouldShowSticky {
+            self.shouldShowSticky = shouldShowSticky
+            menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
+        }
+        if isNavigationBarOpaque != self.isNavigationBarOpaque {
+            self.isNavigationBarOpaque = isNavigationBarOpaque
+            if (isNavigationBarOpaque) {
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
+                    self?.configureNavigationBar(style: .order)
+                })
+            }
+            else {
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
+                    self?.configureNavigationBar(style: .orderTransparent)
+                })
+            }
+        }
+        navigationBarLikeView.layer.opacity = Float(opacity)
     }
 }
 
