@@ -614,6 +614,9 @@
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
+		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
+		D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
+		D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80BBC762E37B5F7003E224A /* OrderLoginPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */; };
 		D80C99DC2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */; };
 		D80E7FA62E1C06D4008D5C26 /* OrderShopDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */; };
@@ -665,6 +668,14 @@
 		D8F56E5C2E3B8A2400EDC22A /* ShopEventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */; };
 		D8F56E5E2E3B8A8B00EDC22A /* OrderShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */; };
 		D8F56E602E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */; };
+		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
+		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
+		D8F5C54E2E6F0E8A00FB6708 /* OrderTrackingDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */; };
+		D8F5C5502E6F0EE600FB6708 /* OrderTrackingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */; };
+		D8F5C5522E6F122100FB6708 /* FetchOrderTrackingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */; };
+		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
+		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
+		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1325,6 +1336,7 @@
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
+		D80AD4E32E6C6BC30061334B /* waveLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = waveLogo.json; sourceTree = "<group>"; };
 		D80BBC752E37B5F7003E224A /* OrderLoginPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderLoginPopupView.swift; sourceTree = "<group>"; };
 		D80C99DB2E222AFF003CE1C2 /* OrderHomeDetailWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHomeDetailWebViewController.swift; sourceTree = "<group>"; };
 		D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDTO.swift; sourceTree = "<group>"; };
@@ -1377,6 +1389,12 @@
 		D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEventDTO.swift; sourceTree = "<group>"; };
 		D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopEvent.swift; sourceTree = "<group>"; };
 		D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderEventShopUseCase.swift; sourceTree = "<group>"; };
+		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
+		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
+		D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTrackingDTO.swift; sourceTree = "<group>"; };
+		D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTrackingInfo.swift; sourceTree = "<group>"; };
+		D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderTrackingUseCase.swift; sourceTree = "<group>"; };
+		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2679,9 +2697,10 @@
 		D27DD05B2BA608310081FD36 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D80AD4E22E6C6B9C0061334B /* Lottie */,
 				83D5E9BB2CCB6A2A00C6D4CD /* Gif */,
-				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
 				D27DD05D2BA608310081FD36 /* Fonts */,
+				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2791,6 +2810,7 @@
 			children = (
 				D27DD0812BA608310081FD36 /* ViewModelProtocol.swift */,
 				D27DD0822BA608310081FD36 /* CollectionViewDelegate.swift */,
+				D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -3161,6 +3181,7 @@
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
 				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
+				D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3545,11 +3566,21 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		D80AD4E22E6C6B9C0061334B /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				D8F5C5532E6F144300FB6708 /* floatingLogo.json */,
+				D80AD4E32E6C6BC30061334B /* waveLogo.json */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
 		D80E7FA52E1C06D4008D5C26 /* Order */ = {
 			isa = PBXGroup;
 			children = (
 				D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */,
 				D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */,
+				D8F5C54D2E6F0E8A00FB6708 /* OrderTrackingDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3560,6 +3591,7 @@
 				D815DD982E082179004A72BE /* OrderFilterDataList.swift */,
 				D82F225A2E12CBE000CD81C3 /* OrderShop.swift */,
 				D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */,
+				D8F5C54F2E6F0EE600FB6708 /* OrderTrackingInfo.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3674,6 +3706,7 @@
 				D8C24A032E1A9D0C008D8ABA /* FetchOrderShopListUseCase.swift */,
 				D8AECD032E1F5F2C009EEF84 /* SearchOrderShopUseCase.swift */,
 				D8F56E5F2E3B8E3100EDC22A /* FetchOrderEventShopUseCase.swift */,
+				D8F5C5512E6F122100FB6708 /* FetchOrderTrackingUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3854,7 +3887,9 @@
 				D2078BEF2BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
 				D2078BF22BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
+				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
 				D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */,
+				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3863,6 +3898,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF02BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */,
+				D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */,
 				D2078BFB2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF32BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 			);
@@ -3873,6 +3910,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2078BF12BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
+				D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */,
+				D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */,
 				D2078BFC2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D2078BF42BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 			);
@@ -4001,6 +4040,7 @@
 				D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */,
 				D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */,
 				D27DD0DA2BA609050081FD36 /* MenuImageCollectionView.swift in Sources */,
+				D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */,
 				D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */,
 				D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */,
 				D27DD0B12BA608310081FD36 /* ShopViewControllerB.swift in Sources */,
@@ -4253,6 +4293,7 @@
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				D223D6202D9C206200C29BE6 /* BannerCollectionViewCell.swift in Sources */,
+				D8F5C5502E6F0EE600FB6708 /* OrderTrackingInfo.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
@@ -4403,6 +4444,7 @@
 				D249CD322C14733E000813F9 /* DiningOperatingTimeCollectionView.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponse.swift in Sources */,
+				D8F5C5522E6F122100FB6708 /* FetchOrderTrackingUseCase.swift in Sources */,
 				D82F22592E12C6CB00CD81C3 /* OrderShopCollectionViewCell.swift in Sources */,
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
@@ -4419,6 +4461,7 @@
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
+				D8F5C54E2E6F0E8A00FB6708 /* OrderTrackingDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
@@ -4578,6 +4621,7 @@
 				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
+				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,
 				83E770FA2D05B5EC00EB3F84 /* BusNoticeDTO.swift in Sources */,

@@ -99,14 +99,16 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
         let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+        let fetchOrderTrackingUseCase = DefaultFetchOrderTrackingUseCase(orderShopRepository: orderRepository)
 
         let orderHomeViewModel = OrderHomeViewModel(
             fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             fetchOrderShopListUseCase: fetchOrderShopListUseCase,
-            searchOrderShopUseCase: searchOrderShopUseCase,
+            fetchOrderTrackingUseCase: fetchOrderTrackingUseCase, searchOrderShopUseCase: searchOrderShopUseCase,
             selectedId: selectedShopId ?? 1
         )
+        
         let orderHomeViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate),
             rootViewController: OrderHomeViewController(viewModel: orderHomeViewModel),
