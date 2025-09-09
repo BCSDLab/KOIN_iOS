@@ -83,6 +83,7 @@ class ShopDetailViewController: UIViewController {
         bind()
         inputSubject.send(.viewDidLoad)
         configureView()
+        setDelegate()
     }
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
@@ -192,10 +193,26 @@ extension ShopDetailViewController {
         setUpLayout()
         setUpConstraints()
     }
+    private func setDelegate() {
+        scrollView.delegate = self
+    }
     
     // MARK: - @objc
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+}
+
+extension ShopDetailViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
+        let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
+        let shouldShowSticky = collectionViewTop < naviBottom
+        menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
+    
+        view.layoutIfNeeded()
     }
 }
 

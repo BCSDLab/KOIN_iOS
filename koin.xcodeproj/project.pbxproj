@@ -2491,6 +2491,7 @@
 				D249CD302C146900000813F9 /* SubViews */,
 				D2A8F8B72C4A63AB0090C7A4 /* DiningNoticeViewModel.swift */,
 				D249CD2E2C1466D3000813F9 /* DiningNoticeViewController.swift */,
+				D27DD05D2BA608310081FD36 /* Fonts */,
 			);
 			path = DiningNotice;
 			sourceTree = "<group>";
@@ -2777,7 +2778,6 @@
 			children = (
 				83D5E9BB2CCB6A2A00C6D4CD /* Gif */,
 				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
-				D27DD05D2BA608310081FD36 /* Fonts */,
 			);
 			path = Resources;
 			sourceTree = "<group>";

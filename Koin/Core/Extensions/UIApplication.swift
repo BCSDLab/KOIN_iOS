@@ -35,4 +35,16 @@ extension UIApplication {
                 }
                 return safeAreaBottom <= 0
     }
+    
+    static func topSafeAreaHeight() -> CGFloat {
+        let window = UIApplication.shared
+                    .connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .flatMap { $0.windows }
+                    .first { $0.isKeyWindow }
+                guard let safeAreaTop =  window?.safeAreaInsets.top else {
+                    return 0
+                }
+                return safeAreaTop
+    }
 }
