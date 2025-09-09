@@ -128,7 +128,16 @@ final class OrderHistoryViewController: UIViewController {
     }()
     
     
- 
+    // MARK: - Shadow
+    private let topShadowView: UIView = {
+        let v = UIView()
+        v.isUserInteractionEnabled = false
+        v.alpha = 0
+        return v
+    }()
+
+    private var shadowTopToFilter: Constraint!
+    private var shadowTopToSeparator: Constraint!
     
     //MARK: - SearchBar
     
@@ -208,7 +217,30 @@ final class OrderHistoryViewController: UIViewController {
         render()
         updateSearchVisibility(animated: false)
         updateEmptyState()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
+        view.bringSubviewToFront(topShadowView)
+
+        topShadowView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0,
+                                 y: 0,
+                                 width: topShadowView.bounds.width,
+                                 height: 1)
+        topBorder.backgroundColor = UIColor.black.withAlphaComponent(0.08).cgColor
+        topShadowView.layer.addSublayer(topBorder)
+
+        let bottomBorder = CALayer()
+        bottomBorder.frame = CGRect(x: 0,
+                                    y: topShadowView.bounds.height - 1,
+                                    width: topShadowView.bounds.width,
+                                    height: 1)
+        bottomBorder.backgroundColor = UIColor.black.withAlphaComponent(0.08).cgColor
+        topShadowView.layer.addSublayer(bottomBorder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -241,7 +273,17 @@ final class OrderHistoryViewController: UIViewController {
             print("검색어: \(text)")
         }
         
+        orderHistoryCollectionView.delegate = self
+        orderPrepareCollectionView.delegate = self
+        
+        orderHistoryCollectionView.alwaysBounceVertical = true
+        orderPrepareCollectionView.alwaysBounceVertical = true
+
+        
+        
         updateSearchVisibility(animated: false)
+        
+        
     }
     
 }
@@ -249,7 +291,7 @@ final class OrderHistoryViewController: UIViewController {
 extension OrderHistoryViewController {
     
     private func setUpLayOuts() {
-        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView,orderPrepareCollectionView, emptyStateView].forEach {
+        [orderHistorySegment, orderHistorySeperateView, orderHistoryUnderLineView, filterButtonRow, searchBar, searchCancelButton, searchDimView,orderHistoryCollectionView,orderPrepareCollectionView, emptyStateView, topShadowView].forEach {
             view.addSubview($0)
         }
         
@@ -372,6 +414,12 @@ extension OrderHistoryViewController {
             $0.height.equalTo(35)
         }
         
+        topShadowView.snp.makeConstraints{
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(filterButtonRow.snp.bottom).offset(12)
+        }
+        
         
     }
     
@@ -415,6 +463,7 @@ extension OrderHistoryViewController {
             orderPrepareCollectionView.reloadData()
         }
         updateEmptyState()
+        refreshShadowForCurrentTab()
     }
 }
 
@@ -432,6 +481,7 @@ extension OrderHistoryViewController {
             self.updateSearchVisibility(animated: false)
             self.updateEmptyState()
             self.view.layoutIfNeeded()
+            self.refreshShadowForCurrentTab()
         })
     }
     
@@ -488,6 +538,11 @@ extension OrderHistoryViewController {
             topToSearch.deactivate()
             topToFilter?.activate()
         }
+        
+        topShadowView.isHidden = !isHistory || !emptyStateView.isHidden
+        topShadowView.alpha = 0
+        
+        refreshShadowForCurrentTab()
     }
     
     
@@ -534,7 +589,7 @@ extension OrderHistoryViewController {
     
 }
 
-extension OrderHistoryViewController {
+extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == searchBar.textField && searchCancelButton.isHidden {
             print("터치입력됨")
@@ -553,6 +608,9 @@ extension OrderHistoryViewController {
         seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty
 
         emptyStateView.isHidden = !shouldShowEmpty
+        
+        topShadowView.alpha = shouldShowEmpty ? 0 : topShadowView.alpha
+
 
         if isHistoryTab {
             searchBar.isHidden = shouldShowEmpty
@@ -565,6 +623,37 @@ extension OrderHistoryViewController {
             orderPrepareCollectionView.isHidden = shouldShowEmpty
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let y = max(scrollView.contentOffset.y, 0)
+        let ratio = min(y / 12.0, 1.0)
+        topShadowView.alpha = ratio
+    }
+    
+    private func refreshShadowForCurrentTab() {
+        let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
+
+        guard isHistory, emptyStateView.isHidden else {
+            topShadowView.alpha = 0
+            topShadowView.isHidden = true
+            return
+        }
+
+        topShadowView.isHidden = false
+        let y = max(orderHistoryCollectionView.contentOffset.y, 0)
+        topShadowView.alpha = min(y / 12.0, 1.0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == orderHistoryCollectionView{
+            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 286)
+        } else if collectionView == orderPrepareCollectionView{
+            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 299)
+        }
+        return CGSize(width: 0, height: 0)
+    }
 
 }
 
@@ -573,3 +662,6 @@ private extension UICollectionView {
         (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
     }
 }
+
+
+
