@@ -657,6 +657,9 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
 
 }
 
+
+// 셀 확인
+
 private extension UICollectionView {
     var totalItemCount: Int {
         (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
