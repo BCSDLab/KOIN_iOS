@@ -7,10 +7,11 @@
 
 import Combine
 
-protocol FetchOrderTrackingUseCase {
+protocol FetchOrderInProgressUseCase {
     func execute() -> AnyPublisher<OrderInProgress, Error>
 }
-final class DefaultFetchOrderTrackingUseCase: FetchOrderTrackingUseCase {
+
+final class DefaultFetchOrderTrackingUseCase: FetchOrderInProgressUseCase {
     
     private let orderShopRepository: OrderShopRepository
     
