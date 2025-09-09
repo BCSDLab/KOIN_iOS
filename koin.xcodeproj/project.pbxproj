@@ -165,6 +165,7 @@
 		B49C1CD72E6F1F1600150BE2 /* ShopDetailMenuGroupTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49C1CD62E6F1F1600150BE2 /* ShopDetailMenuGroupTableView.swift */; };
 		B49C1CD92E6F320200150BE2 /* ShopDetailMenuGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49C1CD82E6F320200150BE2 /* ShopDetailMenuGroupTableViewCell.swift */; };
 		B49C1CDB2E6F320E00150BE2 /* ShopDetailMenuGroupTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49C1CDA2E6F320E00150BE2 /* ShopDetailMenuGroupTableViewHeaderView.swift */; };
+		B49C1CE02E7005F900150BE2 /* ShopDetailBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49C1CDF2E7005F900150BE2 /* ShopDetailBottomSheet.swift */; };
 		B4B3EB262E6E7CAD00F8A23A /* OrderShopMenusGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B3EB252E6E7CAD00F8A23A /* OrderShopMenusGroup.swift */; };
 		B4B3EB292E6E83D500F8A23A /* ShopDetailMenuGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B3EB282E6E83D500F8A23A /* ShopDetailMenuGroupCollectionView.swift */; };
 		B4B3EB2B2E6E85A600F8A23A /* ShopDetailMenuGroupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B3EB2A2E6E85A600F8A23A /* ShopDetailMenuGroupCollectionViewCell.swift */; };
@@ -886,6 +887,7 @@
 		B49C1CD62E6F1F1600150BE2 /* ShopDetailMenuGroupTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailMenuGroupTableView.swift; sourceTree = "<group>"; };
 		B49C1CD82E6F320200150BE2 /* ShopDetailMenuGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailMenuGroupTableViewCell.swift; sourceTree = "<group>"; };
 		B49C1CDA2E6F320E00150BE2 /* ShopDetailMenuGroupTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailMenuGroupTableViewHeaderView.swift; sourceTree = "<group>"; };
+		B49C1CDF2E7005F900150BE2 /* ShopDetailBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailBottomSheet.swift; sourceTree = "<group>"; };
 		B4B3EB252E6E7CAD00F8A23A /* OrderShopMenusGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenusGroup.swift; sourceTree = "<group>"; };
 		B4B3EB282E6E83D500F8A23A /* ShopDetailMenuGroupCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailMenuGroupCollectionView.swift; sourceTree = "<group>"; };
 		B4B3EB2A2E6E85A600F8A23A /* ShopDetailMenuGroupCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailMenuGroupCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1959,6 +1961,14 @@
 			path = ShopDetailMenuGroupTableView;
 			sourceTree = "<group>";
 		};
+		B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				B49C1CDF2E7005F900150BE2 /* ShopDetailBottomSheet.swift */,
+			);
+			path = ShopDetailBottomSheet;
+			sourceTree = "<group>";
+		};
 		B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1971,6 +1981,7 @@
 		B4B5825B2E6D67810035A861 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
 				B49C1CD52E6F1F0200150BE2 /* ShopDetailMenuGroupTableView */,
 				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
 				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
@@ -4623,6 +4634,7 @@
 				D27DD08C2BA608310081FD36 /* LandCollectionViewCell.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
 				D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */,
+				B49C1CE02E7005F900150BE2 /* ShopDetailBottomSheet.swift in Sources */,
 				D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */,
 				D27DD0AB2BA608310081FD36 /* ShopInfoColletionView.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,

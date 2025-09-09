@@ -53,6 +53,7 @@ class ShopDetailViewController: UIViewController {
         $0.sectionFooterHeight = .zero
         $0.separatorStyle = .none
     }
+    let bottomSheet = ShopDetailBottomSheet()
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
@@ -185,9 +186,16 @@ extension ShopDetailViewController {
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
         }
+        
+        bottomSheet.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
+        }
     }
     private func setUpLayout() {
-        view.addSubview(scrollView)
+        [scrollView, bottomSheet].forEach {
+            view.addSubview($0)
+        }
         scrollView.addSubview(contentView)
         [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView].forEach {
             contentView.addSubview( $0 )
