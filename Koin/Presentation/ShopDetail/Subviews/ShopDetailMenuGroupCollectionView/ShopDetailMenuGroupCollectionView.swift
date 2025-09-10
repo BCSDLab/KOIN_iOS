@@ -88,7 +88,7 @@ extension ShopDetailMenuGroupCollectionView {
         cell.label.textColor = .appColor(.neutral400)
         cell.layer.borderColor = .none
         cell.layer.borderWidth = 0
-        cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 1)
+        cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 1, spread: 0)
         cell.layer.shadowRadius = 17
     }
 }

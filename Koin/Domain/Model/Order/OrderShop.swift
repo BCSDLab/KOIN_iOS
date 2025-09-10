@@ -5,6 +5,7 @@
 //  Created by 이은지 on 6/30/25.
 //
 
+
 import Foundation
 
 struct OrderShop {
@@ -43,9 +44,14 @@ struct OrderShop {
     }
 }
 
-struct OrderImage {
+struct OrderImage: Codable {
     let imageUrl: String
     let isThumbnail: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case imageUrl = "image_url"
+        case isThumbnail = "is_thumbnail"
+    }
 }
 
 struct OrderOpen {
