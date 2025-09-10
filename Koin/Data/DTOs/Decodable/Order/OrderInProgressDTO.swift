@@ -12,7 +12,7 @@ struct OrderInProgressDTO: Decodable {
     let orderType: OrderInProgressTypeDTO
     let orderableShopName: String
     let orderableShopThumbnail: String
-    let estimatedAt: EstimatedTimeDTO?
+    let estimatedAt: String?
     let orderStatus: OrderInProgressStatusDTO
     let orderTitle: String
     let totalAmount: Int
@@ -24,17 +24,9 @@ struct OrderInProgressDTO: Decodable {
         case orderableShopThumbnail = "orderable_shop_thumbnail"
         case estimatedAt = "estimated_at"
         case orderStatus = "order_status"
-        case orderTitle = "payment_description"
+        case orderTitle = "order_title"
         case totalAmount = "total_amount"
     }
-}
-
-// 예상 시각
-struct EstimatedTimeDTO: Decodable {
-    let hour: Int
-    let minute: Int
-    let second: Int
-    let nano: Int
 }
 
 // 주문 타입
@@ -64,10 +56,9 @@ enum OrderInProgressStatusDTO: String, Decodable {
     case canceled = "CANCELED"
 }
 
-// DTO → Entity 변환
 extension OrderInProgressDTO {
     func toEntity() -> OrderInProgress {
-        let timeText = estimatedAt.map { String.koreanTimeString(hour: $0.hour, minute: $0.minute) } ?? ""
+        let timeText = estimatedAt?.toKoreanTimeString() ?? "시간 미정"
 
         return OrderInProgress(
             id: id,

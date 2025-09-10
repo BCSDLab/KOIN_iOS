@@ -176,6 +176,8 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     }
     
     private let orderFloatingButton = OrderFloatingButton().then {
+        $0.setLottieAnimation(named: "floatingLogo")
+        $0.lottieView.loopMode = .loop
         $0.isHidden = true
     }
 
@@ -296,13 +298,21 @@ extension OrderHomeViewController {
     }
     
     private func updateFloatingButton(with info: OrderInProgress) {
+        let hasTime = !info.estimatedTime.isEmpty
+
         switch (info.type, info.status) {
         case (.delivery, .confirming):
-            orderFloatingButton.titleText = "\(info.estimatedTime) 도착예정"
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 도착예정" : "주문 확인 중"
+
         case (.delivery, .cooking):
             orderFloatingButton.titleText = "주문 확인 중"
+
+        case (.takeout, .confirming):
+            orderFloatingButton.titleText = "주문 확인 중"
+
         case (.takeout, .cooking):
-            orderFloatingButton.titleText = "\(info.estimatedTime) 포장 수령가능"
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 포장 수령가능" : "포장 준비 중"
+
         default:
             orderFloatingButton.isHidden = true
             stopLottieAnimation()
@@ -310,7 +320,7 @@ extension OrderHomeViewController {
         }
 
         orderFloatingButton.isHidden = false
-        orderFloatingButton.subtitleText = info.shopName
+        orderFloatingButton.subtitleText = info.orderableShopName
         startLottieAnimation()
     }
     
