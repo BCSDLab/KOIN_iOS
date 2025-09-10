@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
     private var menuGroup: [MenuGroup] = []
+    let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     
     // MARK: - Initiailizer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -28,6 +30,7 @@ class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDeleg
         
         DispatchQueue.main.async { [weak self] in
             guard menuGroup.count != 0 else { return }
+            
             self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
             self?.configureSelectedCell(IndexPath(row: 0, section: 0))
         }
@@ -67,6 +70,14 @@ extension ShopDetailMenuGroupCollectionView {
             $0.font = .appFont(.pretendardSemiBold, size: 14)
         }
         return CGSize(width: label.intrinsicContentSize.width + 24, height: 34)
+    }
+}
+
+extension ShopDetailMenuGroupCollectionView {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffset = self.contentOffset
+        didScrollPublisher.send(contentOffset)
     }
 }
 

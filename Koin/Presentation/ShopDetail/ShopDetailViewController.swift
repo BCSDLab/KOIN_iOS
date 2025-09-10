@@ -49,6 +49,7 @@ class ShopDetailViewController: UIViewController {
         $0.contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         $0.showsHorizontalScrollIndicator = false
         $0.layer.masksToBounds = false
+        $0.allowsMultipleSelection = false
     }
     let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
@@ -59,6 +60,7 @@ class ShopDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.layer.masksToBounds = false
         $0.isHidden = true
+        $0.allowsMultipleSelection = false
     }
     let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
         $0.isScrollEnabled = false
@@ -122,6 +124,17 @@ extension ShopDetailViewController {
         
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
             self?.imagesPageControl.currentPage = currentPage
+        }
+        .store(in: &subscriptions)
+        
+        menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
+            self?.menuGroupNameCollectionView.contentOffset = contentOffset
+            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
+        }
+        .store(in: &subscriptions)
+        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
+            self?.menuGroupNameCollectionView.contentOffset = contentOffset
+            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
         }
         .store(in: &subscriptions)
     }
