@@ -63,7 +63,6 @@ final class HomeViewController: UIViewController {
     
     private let noticePageControl = UIPageControl(frame: .zero).then {
         $0.currentPage = 0
-        $0.numberOfPages = 4
         $0.currentPageIndicatorTintColor = .appColor(.primary400)
         $0.pageIndicatorTintColor = .appColor(.neutral300)
     }
@@ -523,6 +522,7 @@ extension HomeViewController {
     
     private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
+        noticePageControl.numberOfPages = articles.count
     }
     
     private func putImage(data: ShopCategoryDTO) {
@@ -540,11 +540,9 @@ extension HomeViewController {
             goDiningPageButton.isHidden = false
         }
         else if result.variableName == .bannerNew {
-            noticePageControl.numberOfPages = 5
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            noticePageControl.numberOfPages = 4
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
