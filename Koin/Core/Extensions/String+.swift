@@ -276,16 +276,19 @@ extension String {
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
     }
     
-    // 오후 h시 mm분 변환
-    static func koreanTimeString(hour: Int, minute: Int) -> String {
-        var h = hour
-        let m = minute
-        
-        let isPM = h >= 12
-        if h > 12 { h -= 12 }
-        if h == 0 { h = 12 }
-        
-        let period = isPM ? "오후" : "오전"
-        return String(format: "%@ %d시 %02d분", period, h, m)
+    // hh:mm -> 오후 h시 mm분 변환
+    func toKoreanTimeString() -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "HH:mm"
+
+        guard let date = inputFormatter.date(from: self) else {
+            return self
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        outputFormatter.dateFormat = "a h시 m분"
+
+        return outputFormatter.string(from: date)
     }
 }
