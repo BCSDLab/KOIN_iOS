@@ -10,11 +10,11 @@ import Foundation
 struct OrderInProgress: Hashable {
     let id: Int
     let type: OrderInProgressType
-    let shopName: String
-    let shopThumbnail: String
+    let orderableShopName: String
+    let orderableShopThumbnail: String
     let estimatedTime: String
     let status: OrderInProgressStatus
-    let description: String
+    let orderTitle: String
     let totalAmount: Int
 }
 
@@ -48,6 +48,6 @@ extension OrderInProgress {
     }
 
     var floatingSubtitleText: String {
-        return shopName
+        return orderableShopName
     }
 }

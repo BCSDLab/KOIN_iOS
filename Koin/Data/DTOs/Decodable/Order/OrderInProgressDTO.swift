@@ -8,23 +8,23 @@
 import Foundation
 
 struct OrderInProgressDTO: Decodable {
-    let orderId: Int
+    let id: Int
     let orderType: OrderInProgressTypeDTO
-    let shopName: String
-    let shopThumbnail: String
-    let estimatedAt: EstimatedTimeDTO
+    let orderableShopName: String
+    let orderableShopThumbnail: String
+    let estimatedAt: EstimatedTimeDTO?
     let orderStatus: OrderInProgressStatusDTO
-    let paymentDescription: String
+    let orderTitle: String
     let totalAmount: Int
     
     enum CodingKeys: String, CodingKey {
-        case orderId = "order_id"
+        case id = "id"
         case orderType = "order_type"
-        case shopName = "shop_name"
-        case shopThumbnail = "shop_thumbnail"
+        case orderableShopName = "orderable_shop_name"
+        case orderableShopThumbnail = "orderable_shop_thumbnail"
         case estimatedAt = "estimated_at"
         case orderStatus = "order_status"
-        case paymentDescription = "payment_description"
+        case orderTitle = "payment_description"
         case totalAmount = "total_amount"
     }
 }
@@ -38,9 +38,19 @@ struct EstimatedTimeDTO: Decodable {
 }
 
 // 주문 타입
-enum OrderInProgressTypeDTO: String, Decodable {
-    case delivery = "DELIVERY"
-    case takeout = "TAKEOUT"
+enum OrderInProgressTypeDTO: Decodable {
+    case delivery
+    case takeout
+
+    init(from decoder: Decoder) throws {
+        let raw = try decoder.singleValueContainer().decode(String.self).uppercased()
+        switch raw {
+        case "DELIVERY": self = .delivery
+        case "TAKEOUT", "TAKE_OUT": self = .takeout
+        default:
+            self = .takeout
+        }
+    }
 }
 
 // 주문 상태
@@ -57,14 +67,21 @@ enum OrderInProgressStatusDTO: String, Decodable {
 // DTO → Entity 변환
 extension OrderInProgressDTO {
     func toEntity() -> OrderInProgress {
-        OrderInProgress(
-            id: orderId,
-            type: OrderInProgressType(rawValue: orderType.rawValue) ?? .delivery,
-            shopName: shopName,
-            shopThumbnail: shopThumbnail,
-            estimatedTime: String.koreanTimeString(hour: estimatedAt.hour, minute: estimatedAt.minute),
+        let timeText = estimatedAt.map { String.koreanTimeString(hour: $0.hour, minute: $0.minute) } ?? ""
+
+        return OrderInProgress(
+            id: id,
+            type: OrderInProgressType(rawValue: {
+                switch orderType {
+                case .delivery: return "DELIVERY"
+                case .takeout:  return "TAKEOUT"
+                }
+            }()) ?? .delivery,
+            orderableShopName: orderableShopName,
+            orderableShopThumbnail: orderableShopThumbnail,
+            estimatedTime: timeText,
             status: OrderInProgressStatus(rawValue: orderStatus.rawValue) ?? .confirming,
-            description: paymentDescription,
+            orderTitle: orderTitle,
             totalAmount: totalAmount
         )
     }
