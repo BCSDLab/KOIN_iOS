@@ -14,9 +14,9 @@ class ShopDetailViewModel {
     }
     
     enum Output {
-    case updateImagesUrls([String])
-    case updateInfoView(OrderShop)
-    case updateMenus([OrderShopMenusGroup])
+    case updateInfoView(OrderShopSummary)
+    case updateMenus([OrderShopMenus])
+    case updateMenusGroups(OrderShopMenusGroups)
     }
     
     // MARK: - Properties
@@ -30,9 +30,9 @@ class ShopDetailViewModel {
             switch input {
             case .viewDidLoad:
                 // useCase로 데이터를 호출하고, viewController에 돌려주는 로직
-                self?.outputSubject.send(.updateImagesUrls(ShopDetailDummyModels.urls))
-                self?.outputSubject.send(.updateInfoView(ShopDetailDummyModels.orderShop))
-                self?.outputSubject.send(.updateMenus(ShopDetailDummyModels.orderShopMenusGroup))
+                self?.outputSubject.send(.updateInfoView(ShopDetailDummyModels.orderShopSummary))
+                self?.outputSubject.send(.updateMenus(ShopDetailDummyModels.orderShopMenus))
+                self?.outputSubject.send(.updateMenusGroups(ShopDetailDummyModels.orderShopMenusGroups))
             }
         }
         .store(in: &subscriptions)
