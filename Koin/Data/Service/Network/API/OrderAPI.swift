@@ -11,6 +11,7 @@ enum OrderAPI {
     case fetchOrderShopList(FetchOrderShopListRequest)
     case fetchOrderEventShop
     case searchShop(String)
+    case fetchOrderInProgress
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -24,6 +25,7 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchOrderShopList: return "/order/shops"
         case .fetchOrderEventShop: return "/order/shops/events"
         case .searchShop(let text): return "/shops/search/related/\(text)"
+        case .fetchOrderInProgress: return "/order/in-progress"
         }
     }
     
@@ -36,7 +38,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList:
+        case .fetchOrderShopList, .fetchOrderInProgress:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }

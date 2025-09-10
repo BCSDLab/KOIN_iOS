@@ -12,7 +12,7 @@ protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingDTO, Error>
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -33,6 +33,14 @@ final class DefaultOrderService: OrderService {
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
         return request(.searchShop(text))
     }
+    
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
+        request(.fetchOrderInProgress)
+            .map { (dtos: [OrderInProgressDTO]) in
+                dtos.map { $0.toEntity() }
+            }
+            .eraseToAnyPublisher()
+    }
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
@@ -52,19 +60,6 @@ final class DefaultOrderService: OrderService {
                 }
             }
             .mapError { $0 as Error }
-            .eraseToAnyPublisher()
-    }
-    
-    // TODO: - 임시
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingDTO, Error> {
-        let mockDTO = OrderTrackingDTO(
-            shopName: "써니 숯불도시락",
-            orderType: "DELIVERY",
-            orderStatus: "DELIVERING",
-            expectedAt: "2025-09-08T21:40:00Z"
-        )
-        return Just(mockDTO)
-            .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }
 }

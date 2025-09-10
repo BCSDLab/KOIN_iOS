@@ -99,7 +99,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
         let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
-        let fetchOrderTrackingUseCase = DefaultFetchOrderTrackingUseCase(orderShopRepository: orderRepository)
+        let fetchOrderTrackingUseCase = DefaultFetchOrderInProgressUseCase(orderShopRepository: orderRepository)
 
         let orderHomeViewModel = OrderHomeViewModel(
             fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,

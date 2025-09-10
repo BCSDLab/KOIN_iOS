@@ -176,9 +176,9 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     }
     
     private let orderFloatingButton = OrderFloatingButton().then {
-        $0.titleText = "오후 9시 40분 도착예정"
-        $0.subtitleText = "맛있는 족발 - 병천점"
         $0.setLottieAnimation(named: "floatingLogo")
+        $0.lottieView.loopMode = .loop
+        $0.isHidden = true
     }
 
     // MARK: - Initialization
@@ -272,7 +272,7 @@ extension OrderHomeViewController {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
         let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
-        let fetchOrderTrackingUseCase = DefaultFetchOrderTrackingUseCase(orderShopRepository: orderRepository)
+        let fetchOrderTrackingUseCase = DefaultFetchOrderInProgressUseCase(orderShopRepository: orderRepository)
 
         let searchVC = OrderSearchViewController(
             viewModel: OrderHomeViewModel(
@@ -297,16 +297,30 @@ extension OrderHomeViewController {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
-    private func updateFloatingButton(with info: OrderTrackingInfo) {
-        if case .unknown = info.status {
+    private func updateFloatingButton(with info: OrderInProgress) {
+        let hasTime = !info.estimatedTime.isEmpty
+
+        switch (info.type, info.status) {
+        case (.delivery, .confirming):
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 도착예정" : "주문 확인 중"
+
+        case (.delivery, .cooking):
+            orderFloatingButton.titleText = "주문 확인 중"
+
+        case (.takeout, .confirming):
+            orderFloatingButton.titleText = "주문 확인 중"
+
+        case (.takeout, .cooking):
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 포장 수령가능" : "포장 준비 중"
+
+        default:
             orderFloatingButton.isHidden = true
+            stopLottieAnimation()
             return
         }
-        
+
         orderFloatingButton.isHidden = false
-        orderFloatingButton.titleText = info.titleText
-        orderFloatingButton.subtitleText = info.subtitleText
-        
+        orderFloatingButton.subtitleText = info.orderableShopName
         startLottieAnimation()
     }
     

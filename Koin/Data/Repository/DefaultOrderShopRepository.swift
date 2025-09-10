@@ -34,20 +34,8 @@ final class DefaultOrderShopRepository: OrderShopRepository{
         return service.searchRelatedShops(text: text)
     }
     
-    // TODO: - 임시
-    func fetchOrderTrackingInfo() -> AnyPublisher<OrderTrackingInfo, Error> {
-        return service.fetchOrderTrackingInfo()
-            .tryMap { dto in
-                guard let entity = OrderTrackingInfo(from: dto) else {
-                    throw MappingError.invalidData
-                }
-                return entity
-            }
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
+        service.fetchOrderInProgress()
             .eraseToAnyPublisher()
     }
-}
-
-// TODO: - 임시
-enum MappingError: Error {
-    case invalidData
 }
