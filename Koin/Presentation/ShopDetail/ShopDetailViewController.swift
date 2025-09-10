@@ -109,13 +109,13 @@ extension ShopDetailViewController {
             case .updateInfoView(let orderShopSummary):
                 self?.imagesCollectionView.bind(orderImage: orderShopSummary.images)
                 self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
-                self?.infoView.bind(orderShopSummary: orderShopSummary) // ✅
+                self?.infoView.bind(orderShopSummary: orderShopSummary)
             case .updateMenusGroups(let orderShopMenusGroups):
-                self?.menuGroupNameCollectionView.bind(menuGroup: orderShopMenusGroups.menuGroups) // ✅
-                self?.menuGroupNameCollectionViewSticky.bind(menuGroup: orderShopMenusGroups.menuGroups) // ✅
+                self?.menuGroupNameCollectionView.bind(menuGroup: orderShopMenusGroups.menuGroups)
+                self?.menuGroupNameCollectionViewSticky.bind(menuGroup: orderShopMenusGroups.menuGroups)
             case .updateMenus(let orderShopMenus):
-                self?.menuGroupTableView.bind(orderShopMenus) // ✅
-                self?.updateTableViewHeight(orderShopMenus) // ✅
+                self?.menuGroupTableView.bind(orderShopMenus)
+                self?.updateTableViewHeight(orderShopMenus)
             }
         }
         .store(in: &subscriptions)
@@ -203,6 +203,10 @@ extension ShopDetailViewController {
     private func configureView(){
         setUpLayout()
         setUpConstraints()
+        
+        if(!isFromOrder) {
+            bottomSheet.isHidden = true
+        }
     }
     private func setDelegate() {
         scrollView.delegate = self
