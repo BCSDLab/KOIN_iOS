@@ -11,7 +11,7 @@ import Combine
 class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
-    var urls: [String] = []
+    var orderImages: [OrderImage] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
@@ -24,8 +24,8 @@ class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegate
     }
     
     // MARK: - Bind
-    func bind(urls: [String]){
-        self.urls = urls
+    func bind(orderImage: [OrderImage]){
+        self.orderImages = orderImage
         self.reloadData()
     }
 }
@@ -33,13 +33,13 @@ class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegate
 extension ShopDetailImagesCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return urls.count
+        return orderImages.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailImagesCollectionViewCell.identifier, for: indexPath) as? ShopDetailImagesCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.bind(url: urls[indexPath.row])
+        cell.bind(url: orderImages[indexPath.row].imageUrl)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {

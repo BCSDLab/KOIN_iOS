@@ -106,20 +106,16 @@ extension ShopDetailViewController {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
-            case .updateImagesUrls(let urls):
-                self?.imagesCollectionView.bind(urls: urls)
-                self?.imagesPageControl.numberOfPages = urls.count
-            case .updateInfoView(let orderShop):
-                self?.infoView.bind(shopTitle: orderShop.name ,rate: orderShop.ratingAverage, review: orderShop.reviewCount, isDelieveryAvailable: orderShop.isDeliveryAvailable, isTakeoutAvailable: orderShop.isTakeoutAvailable, minOrder: orderShop.minimumOrderAmount, minTip: orderShop.minimumDeliveryTip, maxTip: orderShop.maximumDeliveryTip, introduction: "안녕하세요 안녕하세요 반갑습니다 반갑습니다") // introduction ??
+            case .updateInfoView(let orderShopSummary):
+                self?.imagesCollectionView.bind(orderImage: orderShopSummary.images)
+                self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
+                self?.infoView.bind(orderShopSummary: orderShopSummary) // ✅
+            case .updateMenusGroups(let orderShopMenusGroups):
+                self?.menuGroupNameCollectionView.bind(menuGroup: orderShopMenusGroups.menuGroups) // ✅
+                self?.menuGroupNameCollectionViewSticky.bind(menuGroup: orderShopMenusGroups.menuGroups) // ✅
             case .updateMenus(let orderShopMenus):
-                var menuGroupName: [String] = []
-                orderShopMenus.forEach {
-                    menuGroupName.append($0.menuGroupName)
-                }
-                self?.menuGroupNameCollectionView.bind(menuGroupName: menuGroupName)
-                self?.menuGroupNameCollectionViewSticky.bind(menuGroupName: menuGroupName)
-                self?.menuGroupTableView.bind(orderShopMenusGroups: orderShopMenus)
-                self?.updateTableViewHeight(orderShopMenusGroups: orderShopMenus)
+                self?.menuGroupTableView.bind(orderShopMenus) // ✅
+                self?.updateTableViewHeight(orderShopMenus) // ✅
             }
         }
         .store(in: &subscriptions)
@@ -136,9 +132,9 @@ extension ShopDetailViewController {
     }
     
     // MARK: - updateTableViewHeight
-    private func updateTableViewHeight(orderShopMenusGroups: [OrderShopMenusGroup]) {
+    private func updateTableViewHeight(_ orderShopMenus: [OrderShopMenus]) {
         menuGroupTableView.snp.makeConstraints {
-            $0.height.equalTo(tableViewHeight(orderShopMenusGroups))
+            $0.height.equalTo(tableViewHeight(orderShopMenus))
         }
     }
     
@@ -254,7 +250,7 @@ extension ShopDetailViewController: UIScrollViewDelegate {
 extension ShopDetailViewController {
     
     // MARK: - helper
-    private func tableViewHeight(_ orderShopMenusGroups: [OrderShopMenusGroup]) -> Int {
+    private func tableViewHeight(_ orderShopMenus: [OrderShopMenus]) -> Int {
         let groupNameHeight = 56
         let minimumRowHeight = 112
         let nameHeight = 29
@@ -264,7 +260,7 @@ extension ShopDetailViewController {
         let insetHeight = 24
         
         var tableViewHeight = 0
-        orderShopMenusGroups.forEach {
+        orderShopMenus.forEach {
             var sectionHeight = 0
             sectionHeight += groupNameHeight
             $0.menus.forEach {

@@ -29,14 +29,14 @@ class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableVie
     }
     
     // MARK: - bind
-    func bind(orderShopMenusGroups: [OrderShopMenusGroup]) {
+    func bind(_ orderShopMenus: [OrderShopMenus]) {
         self.menuGroupName = []
         self.names = []
         self.descriptions = []
         self.prices = []
         self.thumbnailImages = []
         
-        orderShopMenusGroups.forEach {
+        orderShopMenus.forEach {
             self.menuGroupName.append($0.menuGroupName)
             
             var names: [String] = []

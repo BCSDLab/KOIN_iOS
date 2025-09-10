@@ -59,17 +59,17 @@ class ShopDetailInfoView: UIView {
 extension ShopDetailInfoView {
     
     // MARK: - bind
-    func bind(shopTitle: String, rate: Double, review: Int, isDelieveryAvailable: Bool, isTakeoutAvailable: Bool, minOrder: Int, minTip: Int, maxTip: Int, introduction: String) {
-        shopTitleLabel.text = shopTitle
-        ratingLabel.text = String(rate)
-        reviewButton.setAttributedTitle(NSAttributedString(string: "\(review)개", attributes: [
+    
+    func bind(orderShopSummary: OrderShopSummary) {
+        shopTitleLabel.text = orderShopSummary.name
+        ratingLabel.text = String(orderShopSummary.ratingAverage)
+        reviewButton.setAttributedTitle(NSAttributedString(string: "\(orderShopSummary.reviewCount)개", attributes: [
             .font : UIFont.appFont(.pretendardSemiBold, size: 13),
             .foregroundColor : UIColor.appColor(.neutral800)
         ]), for: .normal)
-        orderAmountDelieveryTipView.bind(minOrderAmount: minOrder, minDeliveryTip: minTip, maxDelieveryTip: maxTip)
-        introductionView.bind(introduction: introduction)
-        
-        setUpIsAvailableView(isDelieveryAvailable, isTakeoutAvailable)
+        orderAmountDelieveryTipView.bind(minOrderAmount: orderShopSummary.minimumOrderAmount, minDeliveryTip: orderShopSummary.minimumDeliveryTip, maxDelieveryTip: orderShopSummary.maximumDeliveryTip)
+        introductionView.bind(introduction: orderShopSummary.introduction)        
+        setUpIsAvailableView(orderShopSummary.isDeliveryAvailable, orderShopSummary.isTakeoutAvailable)
     }
     
     private func setUpIsAvailableView(_ isDelieveryAvailable: Bool, _ isTakeoutAvailable: Bool) {

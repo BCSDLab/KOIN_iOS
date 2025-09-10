@@ -10,7 +10,7 @@ import UIKit
 class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
-    private var menuGroupName: [String] = []
+    private var menuGroup: [MenuGroup] = []
     
     // MARK: - Initiailizer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -22,12 +22,12 @@ class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDeleg
     }
     
     // MARK: - bind
-    func bind(menuGroupName: [String]) {
-        self.menuGroupName = menuGroupName
+    func bind(menuGroup: [MenuGroup]) {
+        self.menuGroup = menuGroup
         self.reloadData()
         
         DispatchQueue.main.async { [weak self] in
-            guard !menuGroupName.isEmpty else { return }
+            guard menuGroup.count != 0 else { return }
             self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
             self?.configureSelectedCell(IndexPath(row: 0, section: 0))
         }
@@ -52,18 +52,18 @@ extension ShopDetailMenuGroupCollectionView {
         configureDeselectedCell(indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return menuGroupName.count
+        return menuGroup.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier, for: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.bind(menuGroupName[indexPath.row])
+        cell.bind(menuGroup[indexPath.row].name)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel().then {
-            $0.text = menuGroupName[indexPath.row]
+            $0.text = menuGroup[indexPath.row].name
             $0.font = .appFont(.pretendardSemiBold, size: 14)
         }
         return CGSize(width: label.intrinsicContentSize.width + 24, height: 34)
