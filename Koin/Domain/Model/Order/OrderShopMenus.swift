@@ -6,7 +6,7 @@
 import Foundation
 
 // MARK: - OrderShopMenus
-struct OrderShopMenusGroup: Codable {
+struct OrderShopMenus: Codable {
     let menuGroupID: Int
     let menuGroupName: String
     let menus: [OrderShopMenu]
