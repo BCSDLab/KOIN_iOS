@@ -8,17 +8,15 @@
 import Foundation
 import Combine
 
-final class DefaultOrderHistoryRepository: OrderHistoryRepository{
-    
+final class DefaultOrderHistoryRepository: OrderHistoryRepository {
     private let service: OrderService
-    
+
     init(service: OrderService) {
         self.service = service
     }
-    
-    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<[Order], any Error> {
+
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error> {
         service.fetchOrderHistory(query: query)
     }
-    
-    
 }
+

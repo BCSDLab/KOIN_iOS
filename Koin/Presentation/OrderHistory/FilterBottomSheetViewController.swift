@@ -85,13 +85,16 @@ final class FilterBottomSheetViewController: UIViewController {
     private let applyButton = UIButton(configuration: {
         var config = UIButton.Configuration.filled()
         config.title = "적용하기"
+        config.attributedTitle?.font = UIFont.appFont(.pretendardBold, size: 16)
         config.baseForegroundColor = UIColor.appColor(.neutral0)
+        
         config.baseBackgroundColor = UIColor.appColor(.new500)
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 80, bottom: 11, trailing: 80)
+        
         return config
     }()).then {
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.titleLabel?.numberOfLines = 1
     }
 
     private let closeButton = UIButton(type: .system).then {
@@ -171,7 +174,6 @@ final class FilterBottomSheetViewController: UIViewController {
             }
     }
     
-    
     private func setUpLayOuts(){
         [backdrop, container].forEach {
             view.addSubview($0)
@@ -199,7 +201,6 @@ final class FilterBottomSheetViewController: UIViewController {
         }
         
     }
-    
     
     private func setUpConstraints(){
         backdrop.snp.makeConstraints {
@@ -340,7 +341,6 @@ final class FilterBottomSheetViewController: UIViewController {
         doneButton.applyFilter(work.info.contains(.completed))
         cancelButton.applyFilter(work.info.contains(.canceled))
     }
-    
     
     //MARK: - @objc
     

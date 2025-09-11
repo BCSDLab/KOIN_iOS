@@ -12,6 +12,8 @@ struct OrderHistoryQueryDTO: Encodable {
     let status: String
     let type: String
     let query: String
+    let page: Int
+    let size: Int
 }
 
 extension OrderHistoryQueryDTO {
@@ -35,9 +37,11 @@ extension OrderHistoryQueryDTO {
         case .takeout: type = "TAKE_OUT"
         }
         query = q.keyword
+        page = q.page
+        size = q.size
     }
 
     var asParameters: [String: Any] {
-        ["period": period, "status": status, "type": type, "query": query]
+        ["page": page, "size": size, "period": period, "status": status, "type": type, "query": query]
     }
 }

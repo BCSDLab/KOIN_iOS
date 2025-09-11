@@ -9,11 +9,11 @@ import Foundation
 import Combine
 
 protocol OrderHistoryRepository {
-    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<[Order], Error>
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error>
 }
 
 extension OrderHistoryRepository {
-    func fetchOrderHistory() -> AnyPublisher<[Order], Error> {
+    func fetchOrderHistory() -> AnyPublisher<OrdersPage, Error> {
         fetchOrderHistory(query: OrderHistoryQuery())
     }
 }

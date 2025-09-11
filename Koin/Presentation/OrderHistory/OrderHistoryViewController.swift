@@ -225,6 +225,10 @@ final class OrderHistoryViewController: UIViewController {
             print("prepare loaded ids:", ids)
         }
         
+        orderHistoryCollectionView.onReachEnd = { [weak self] in
+            self?.input.send(.loadNextPage)
+        }
+        
         input.send(.viewDidLoad)
         
     }
@@ -281,6 +285,8 @@ final class OrderHistoryViewController: UIViewController {
             self?.input.send(.search(text))
             self?.dismissSearchOverlay()
         }
+        
+        seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
         
         orderHistoryCollectionView.alwaysBounceVertical = true
         orderPrepareCollectionView.alwaysBounceVertical = true
@@ -368,7 +374,7 @@ extension OrderHistoryViewController {
         }
         
         searchDimView.snp.makeConstraints {
-            $0.top.equalTo(filterButtonRow.snp.bottom).offset(16)
+            $0.top.equalTo(filterButtonRow.snp.bottom).offset(12)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
@@ -516,7 +522,6 @@ extension OrderHistoryViewController{
             ? (isSearching ? "검색 결과가 없어요" : "주문 내역이 없어요")
             : "준비 중인 음식이 없어요"
 
-        // 검색 중에는 '과거 주문 보기' 버튼 숨김
         seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty || isSearching
         emptyStateView.isHidden = !shouldShowEmpty
 
@@ -539,10 +544,6 @@ extension OrderHistoryViewController{
         orderHistoryCollectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
     }
-    
-    
-
-    
 }
 
 
@@ -640,6 +641,15 @@ extension OrderHistoryViewController {
         }
     }
     
+    @objc private func seeOrderHistoryButtonTapped(){
+        if orderHistorySegment.selectedSegmentIndex != 0 {
+            orderHistorySegment.selectedSegmentIndex = 0
+        }
+        changeSegmentLine(orderHistorySegment)
+        dismissSearchOverlay()
+        input.send(.applyFilter(currentFilter))
+    }
+    
 }
 
 
@@ -655,6 +665,15 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     //MARK: - ScrollSet
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if orderHistorySegment.selectedSegmentIndex == 0, scrollView == orderHistoryCollectionView {
+            let y = scrollView.contentOffset.y
+            let h = scrollView.contentSize.height
+            let frameH = scrollView.frame.size.height
+            if h > 0, y > h - frameH - 600 {
+                input.send(.loadNextPage)
+            }
+        }
+        
         let y = max(scrollView.contentOffset.y, 0)
         let target = min(y / 12.0, 1.0)
         setShadowAlphaSmooth(to: target)
@@ -696,8 +715,6 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
 
 }
 
-// 셀 확인
-
 private extension UICollectionView {
     var totalItemCount: Int {
         (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
@@ -719,6 +736,7 @@ extension OrderHistoryViewController {
                     self.items = newItems
                     self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
                     self.updateEmptyState()
+                    
 
                 case .updatePreparing(let newItems):
                     // 준비중 리스트
@@ -739,6 +757,9 @@ extension OrderHistoryViewController {
 
                 case .navigateToOrderDetail:
                     break
+                case .appendOrders(let pageItems):
+                    self.items.append(contentsOf: pageItems)
+                    self.orderHistoryCollectionView.append(pageItems.map { $0.asCollectionItem })
                 }
             }
             .store(in: &cancellables)
@@ -756,6 +777,21 @@ extension OrderHistoryViewController {
             self?.input.send(.tapReorder(orderId))
         }
     }
+    
+#if DEBUG
+    private func autoLoadIfShort() {
+        
+        guard orderHistorySegment.selectedSegmentIndex == 0 else { return }
+        let cv = orderHistoryCollectionView
+        cv.layoutIfNeeded()
+
+        let needsMore = cv.contentSize.height < cv.bounds.height - 100
+        if needsMore {
+            print("autoLoadIfShort → loadNextPage")
+            input.send(.loadNextPage)
+        }
+    }
+#endif
 }
 
 

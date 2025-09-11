@@ -23,6 +23,18 @@ struct OrdersResponseDTO: Decodable {
     }
 }
 
+extension OrdersResponseDTO {
+    func toPageEntity() -> OrdersPage {
+        OrdersPage(
+            totalCount: totalCount,
+            currentCount: currentCount,
+            totalPage: totalPage,
+            currentPage: currentPage,
+            orders: orders.map { $0.toEntity() }
+        )
+    }
+}
+
 struct OrderDTO: Decodable {
     let id: Int
     let paymentId: Int

@@ -72,5 +72,7 @@ struct OrderHistoryQuery {
     var status: OrderHistoryStatus = .none
     var type: OrderHistoryType = .none
     var keyword: String = ""
+    var page: Int = 1
+    var size: Int = 10
 }
 

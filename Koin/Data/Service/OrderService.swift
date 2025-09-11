@@ -14,12 +14,12 @@ protocol OrderService {
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     
-    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<[Order], Error>
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error>
 
 }
 
 final class DefaultOrderService: OrderService {
-    
+ 
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         return request(.fetchOrderShopList(requestModel))
@@ -46,10 +46,10 @@ final class DefaultOrderService: OrderService {
             .eraseToAnyPublisher()
     }
     
-    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<[Order], Error> {
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error> {
         let dto = OrderHistoryQueryDTO(query)
         return request(.fetchOrder(query: dto))
-            .tryMap { (res: OrdersResponseDTO) in res.orders.map { $0.toEntity() } }
+            .map { (res: OrdersResponseDTO) in res.toPageEntity() }
             .eraseToAnyPublisher()
     }
 

@@ -21,8 +21,10 @@ final class OrderHistoryCollectionView: UICollectionView {
         let canReorder: Bool
     }
 
-    var onSelect: ((Int) -> Void)?          // 셀 탭 (orderId)
-    var onTapReorder: ((Int) -> Void)?      // 재주문 버튼
+    var onSelect: ((Int) -> Void)?
+    var onTapReorder: ((Int) -> Void)?
+    var onReachEnd: (() -> Void)?
+
 
     private var items: [Item] = []
 
@@ -45,6 +47,14 @@ final class OrderHistoryCollectionView: UICollectionView {
     func update(_ items: [Item]) {
         self.items = items
         reloadData()
+    }
+    
+    func append(_ more: [Item]) {
+        guard !more.isEmpty else { return }
+        let start = items.count
+        items.append(contentsOf: more)
+        let indexPaths = (start..<(start + more.count)).map { IndexPath(item: $0, section: 0) }
+        performBatchUpdates({ insertItems(at: indexPaths) }, completion: nil)
     }
     
     
@@ -104,6 +114,17 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate {
         
         onSelect?(items[indexPath.item].id)
     }
+    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        willDisplay cell: UICollectionViewCell,
+//                        forItemAt indexPath: IndexPath) {
+//        let last = max(items.count - 1, 0)
+//        if indexPath.item == last {
+//            onReachEnd?()
+//        }
+//    }
+
+    
 }
 
 

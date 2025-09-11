@@ -15,6 +15,7 @@ final class OrderViewModel {
         case refresh
         case applyFilter(OrderFilter)
         case search(String)
+        case loadNextPage
         case selectOrder(Int)
         case tapReorder(Int)
     }
@@ -22,6 +23,7 @@ final class OrderViewModel {
     // MARK: Output
     enum Event {
         case updateOrders([OrderItem])
+        case appendOrders([OrderItem])
         case updatePreparing([PreparingItem])
         case showEmpty(Bool)
         case errorOccurred(Error)
@@ -32,20 +34,20 @@ final class OrderViewModel {
     // 지난 주문 셀 뷰데이터
     struct OrderItem {
         let id: Int
-        let stateText: String        // 배달완료 / 포장완료
-        let dateText: String         // 예: 8월 16일 (토)
-        let storeName: String        // 예: 맛있는 족발 - 병천점
-        let menuName: String         // 예: 족발 + 막국수 set 외 1건
-        let priceText: String        // 예: 32,500 원
+        let stateText: String        // 배달완료, 포장완료
+        let dateText: String         // 8월 16일 (토)
+        let storeName: String        // 맛있는 족발 - 병천점
+        let menuName: String         // 족발 + 막국수 set 외 1건
+        let priceText: String        // 32,500 원
         let imageURL: URL?
         let canReorder: Bool
     }
 
     // 준비중 셀 뷰데이터
     struct PreparingItem {
-        let stateText: String        // 상단 상태 배지: 주문 확인 중/조리 중/배달 출발/배달 완료/수령 가능/주문 취소
+        let stateText: String
         let id: Int
-        let methodText: String       // 배달 / 포장
+        let methodText: String       // 배달,포장
         let estimatedTimeText: String// 오전/오후 h시 m분 도착 예정 / 시간 미정
         let explanationText: String  // 상태 안내문
         let imageURL: URL?
@@ -62,6 +64,13 @@ final class OrderViewModel {
     private var subscriptions = Set<AnyCancellable>()
     private var currentFilter: OrderFilter = .empty
     private var currentKeyword: String = ""
+    
+    // MARK: - Pagination
+    private var historyAccum: [OrderItem] = []
+    private var currentPageIndex: Int = 1
+    private var totalPages: Int = 1
+    private var isLoadingPage: Bool = false
+    private let pageSize: Int = 10
 
     init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService) {
         self.fetchHistory = fetchHistory
@@ -72,51 +81,117 @@ final class OrderViewModel {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Event, Never> {
         let subject = PassthroughSubject<Event, Never>()
 
-        let trigger = input
+        let historyTrigger = input
             .filter {
-                if case .viewDidLoad = $0 { return true }
-                if case .refresh = $0 { return true }
-                if case .applyFilter = $0 { return true }
-                if case .search = $0 { return true }
-                return false
+                switch $0 {
+                case .viewDidLoad, .refresh, .applyFilter, .search, .loadNextPage: return true
+                default: return false
+                }
             }
 
-        // 지난 주문 파이프라인
-        trigger
-            .flatMap { [weak self] event -> AnyPublisher<[Order], Error> in
+        // 첫 로딩, 새로고침
+        let preparingTrigger = input
+            .filter {
+                switch $0 {
+                case .viewDidLoad, .refresh: return true
+                default: return false
+                }
+            }
+
+        // 지난 주문
+        historyTrigger
+            .flatMap { [weak self] event -> AnyPublisher<(OrdersPage, Bool), Error> in
                 guard let self else {
-                    return Fail(error: NSError(domain: "", code: -1)).eraseToAnyPublisher()
+                    return Fail(error: NSError(domain: "OrderVM", code: -1)).eraseToAnyPublisher()
                 }
-                if case .applyFilter(let f) = event { self.currentFilter = f }
-                if case .search(let text) = event {
-                    self.currentKeyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                print("event:", event)
+
+
+                switch event {
+                case .applyFilter(let f):
+                    self.currentFilter = f
+                    fallthrough
+
+                case .viewDidLoad, .refresh, .search:
+                    if case .search(let text) = event {
+                        self.currentKeyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                    // 초기 ,리셋
+                    self.currentPageIndex = 1
+                    self.totalPages = 1
+                    self.historyAccum = []
+                    self.isLoadingPage = true
+
+                    var q = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
+                    q.page = self.currentPageIndex
+                    q.size = self.pageSize
+                    
+                    print("query (reset):", OrderHistoryQueryDTO(q).asParameters)
+
+                    return self.fetchHistory.execute(query: q)
+                        .map { ($0, false) } // replace
+                        .eraseToAnyPublisher()
+
+                case .loadNextPage:
+                    guard !self.isLoadingPage, self.currentPageIndex < self.totalPages else {
+                        return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
+                    }
+                    self.isLoadingPage = true
+
+                    var q = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
+                    q.page = self.currentPageIndex + 1
+                    q.size = self.pageSize
+
+                    
+                    print("query (next):", OrderHistoryQueryDTO(q).asParameters)
+                    
+
+                    return self.fetchHistory.execute(query: q)
+                        .map { ($0, true) } // append
+                        .eraseToAnyPublisher()
+
+                default:
+                    return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
                 }
-
-                let query = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
-                print("history query:", OrderHistoryQueryDTO(query).asParameters)
-
-                return self.fetchHistory.execute(query: query)
             }
-            .map { [weak self] orders -> Event in
+            .map { [weak self] (page, isAppend) -> Event in
                 guard let self else { return .showEmpty(true) }
-                let items = orders.map(self.mapToItem(_:))
-                return items.isEmpty ? .showEmpty(true) : .updateOrders(items)
+
+                // 페이지 메타 갱신
+                self.currentPageIndex = page.currentPage
+                self.totalPages = page.totalPage
+                self.isLoadingPage = false
+
+                let mapped = page.orders.map(self.mapToItem(_:))
+
+                if isAppend {
+                    self.historyAccum.append(contentsOf: mapped)
+                    return .appendOrders(mapped)
+                } else {
+                    self.historyAccum = mapped
+                    return mapped.isEmpty ? .showEmpty(true) : .updateOrders(mapped)
+                }
             }
-            .catch { Just(Event.errorOccurred($0)) }
+            .catch { [weak self] err in
+                self?.isLoadingPage = false
+                return Just(Event.errorOccurred(err))
+            }
             .merge(with: Just(Event.endRefreshing))
             .sink { subject.send($0) }
             .store(in: &subscriptions)
 
-        // 준비중 파이프라인
-        trigger
+        // 준비중
+        preparingTrigger
             .flatMap { [weak self] _ -> AnyPublisher<[OrderInProgress], Error> in
                 guard let self else {
-                    return Fail(error: NSError(domain: "", code: -1)).eraseToAnyPublisher()
+                    return Fail(error: NSError(domain: "OrderVM", code: -2)).eraseToAnyPublisher()
                 }
                 return self.orderService.fetchOrderInProgress()
             }
             .map { [weak self] list -> Event in
                 print("preparing -> entities:", list.count)
+        
                 let vms = list.compactMap { self?.mapToPreparingItem($0) }
                 return .updatePreparing(vms)
             }
@@ -124,7 +199,7 @@ final class OrderViewModel {
             .sink { subject.send($0) }
             .store(in: &subscriptions)
 
-        // 재주문 , 상세 선택
+        // 탭 액션
         input
             .sink { event in
                 switch event {

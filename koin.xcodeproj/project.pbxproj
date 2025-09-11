@@ -15,6 +15,13 @@
 		3B3CAE762E719F1400BBAEEE /* FetchOrderHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE752E719F1400BBAEEE /* FetchOrderHistoryUseCase.swift */; };
 		3B3CAE782E71A05200BBAEEE /* DefaultOrderHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE772E71A05200BBAEEE /* DefaultOrderHistoryRepository.swift */; };
 		3B3CAE7E2E728C5100BBAEEE /* OrderHistoryQueryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE7D2E728C5100BBAEEE /* OrderHistoryQueryDTO.swift */; };
+		3B3CAE8A2E72E2FE00BBAEEE /* OrderHistoryColletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE7F2E72E2FE00BBAEEE /* OrderHistoryColletionView.swift */; };
+		3B3CAE8B2E72E2FE00BBAEEE /* OrderHistoryColletionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE802E72E2FE00BBAEEE /* OrderHistoryColletionViewCell.swift */; };
+		3B3CAE8C2E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE822E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift */; };
+		3B3CAE8D2E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE832E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift */; };
+		3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */; };
+		3B3CAE8F2E72E2FE00BBAEEE /* OrderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE862E72E2FE00BBAEEE /* OrderFilter.swift */; };
+		3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
@@ -733,6 +740,13 @@
 		3B3CAE752E719F1400BBAEEE /* FetchOrderHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderHistoryUseCase.swift; sourceTree = "<group>"; };
 		3B3CAE772E71A05200BBAEEE /* DefaultOrderHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultOrderHistoryRepository.swift; sourceTree = "<group>"; };
 		3B3CAE7D2E728C5100BBAEEE /* OrderHistoryQueryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryQueryDTO.swift; sourceTree = "<group>"; };
+		3B3CAE7F2E72E2FE00BBAEEE /* OrderHistoryColletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryColletionView.swift; sourceTree = "<group>"; };
+		3B3CAE802E72E2FE00BBAEEE /* OrderHistoryColletionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryColletionViewCell.swift; sourceTree = "<group>"; };
+		3B3CAE822E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderPrepareCollectionView.swift; sourceTree = "<group>"; };
+		3B3CAE832E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderPrepareCollectionViewCell.swift; sourceTree = "<group>"; };
+		3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
+		3B3CAE862E72E2FE00BBAEEE /* OrderFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilter.swift; sourceTree = "<group>"; };
+		3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -1410,14 +1424,6 @@
 		F465B4810FBE6CCA1745E078 /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		3B2DEC822E701FCF0059D37E /* subViews */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = subViews;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		839D71132BEB1570001BC7F7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -1459,6 +1465,44 @@
 				D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */,
 			);
 			path = Register;
+			sourceTree = "<group>";
+		};
+		3B3CAE812E72E2FE00BBAEEE /* OrderHistoryCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CAE7F2E72E2FE00BBAEEE /* OrderHistoryColletionView.swift */,
+				3B3CAE802E72E2FE00BBAEEE /* OrderHistoryColletionViewCell.swift */,
+			);
+			path = OrderHistoryCollectionView;
+			sourceTree = "<group>";
+		};
+		3B3CAE842E72E2FE00BBAEEE /* OrderPrepareCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CAE822E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift */,
+				3B3CAE832E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift */,
+			);
+			path = OrderPrepareCollectionView;
+			sourceTree = "<group>";
+		};
+		3B3CAE882E72E2FE00BBAEEE /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */,
+				3B3CAE862E72E2FE00BBAEEE /* OrderFilter.swift */,
+				3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		3B3CAE892E72E2FE00BBAEEE /* subViews */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CAE812E72E2FE00BBAEEE /* OrderHistoryCollectionView */,
+				3B3CAE842E72E2FE00BBAEEE /* OrderPrepareCollectionView */,
+				3B3CAE882E72E2FE00BBAEEE /* UIComponents */,
+			);
+			path = subViews;
 			sourceTree = "<group>";
 		};
 		8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */ = {
@@ -3637,7 +3681,7 @@
 		D8C048582E046BDA00129B14 /* OrderHistory */ = {
 			isa = PBXGroup;
 			children = (
-				3B2DEC822E701FCF0059D37E /* subViews */,
+				3B3CAE892E72E2FE00BBAEEE /* subViews */,
 				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
 				3B3CAE712E719CD500BBAEEE /* OrderHistoryViewModel.swift */,
@@ -3798,9 +3842,6 @@
 			);
 			dependencies = (
 				839D711C2BEB1570001BC7F7 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				3B2DEC822E701FCF0059D37E /* subViews */,
 			);
 			name = koin;
 			productName = koin;
@@ -4187,6 +4228,13 @@
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
 				D20AD6E72E012E3B0067760A /* StateButton.swift in Sources */,
+				3B3CAE8A2E72E2FE00BBAEEE /* OrderHistoryColletionView.swift in Sources */,
+				3B3CAE8B2E72E2FE00BBAEEE /* OrderHistoryColletionViewCell.swift in Sources */,
+				3B3CAE8C2E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift in Sources */,
+				3B3CAE8D2E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift in Sources */,
+				3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */,
+				3B3CAE8F2E72E2FE00BBAEEE /* OrderFilter.swift in Sources */,
+				3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
