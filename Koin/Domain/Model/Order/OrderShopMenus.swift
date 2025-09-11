@@ -32,8 +32,8 @@ struct Price {
 }
 
 enum Name: String {
-    case 대 = "대"
-    case 소 = "소"
-    case 중 = "중"
-    case 특대 = "특대"
+    case small = "소"
+    case medium = "중"
+    case large = "대"
+    case extraLarge = "특대"
 }
