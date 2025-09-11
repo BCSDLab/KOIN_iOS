@@ -160,7 +160,6 @@
 		83EBB88E2D16B41F00346018 /* BusAreaSelectedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB88D2D16B41F00346018 /* BusAreaSelectedCollectionView.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
-		B47838FE2E704D3000D002E3 /* ShopDetailDummyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47838FD2E704D3000D002E3 /* ShopDetailDummyModels.swift */; };
 		B47839052E70FAFE00D002E3 /* OrderShopSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */; };
 		B47839072E70FF2B00D002E3 /* OrderShopMenusGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */; };
 		B48BFD692E6AA000002D3A3D /* ShopDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */; };
@@ -885,7 +884,6 @@
 		A001E2CE2845091F00D6C310 /* koinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		B47838FD2E704D3000D002E3 /* ShopDetailDummyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailDummyModels.swift; sourceTree = "<group>"; };
 		B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopSummary.swift; sourceTree = "<group>"; };
 		B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenusGroups.swift; sourceTree = "<group>"; };
 		B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
@@ -1952,7 +1950,6 @@
 			children = (
 				B4B5825B2E6D67810035A861 /* Subviews */,
 				B48BFD6A2E6AA072002D3A3D /* ShopDetailViewModel.swift */,
-				B47838FD2E704D3000D002E3 /* ShopDetailDummyModels.swift */,
 				B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */,
 			);
 			path = ShopDetail;
@@ -1988,11 +1985,11 @@
 		B4B5825B2E6D67810035A861 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
-				B49C1CD52E6F1F0200150BE2 /* ShopDetailMenuGroupTableView */,
-				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
-				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
 				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
+				B49C1CD52E6F1F0200150BE2 /* ShopDetailMenuGroupTableView */,
+				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -4208,7 +4205,6 @@
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
-				B47838FE2E704D3000D002E3 /* ShopDetailDummyModels.swift in Sources */,
 				D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
