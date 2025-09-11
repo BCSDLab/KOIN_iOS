@@ -20,10 +20,12 @@ final class OrderHistoryViewController: UIViewController {
         !(searchBar.textField.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+    private let initialTab: Int
     
     
-    init(viewModel: OrderViewModel) {
+    init(viewModel: OrderViewModel, initialTab: Int = 0) {
         self.viewModel = viewModel
+        self.initialTab = initialTab
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -221,6 +223,9 @@ final class OrderHistoryViewController: UIViewController {
         updateEmptyState()
         setupRefreshControl()
 
+        orderHistorySegment.selectedSegmentIndex = initialTab
+        changeSegmentLine(orderHistorySegment)
+        
         orderPrepareCollectionView.onLoadedIDs = { ids in
             print("prepare loaded ids:", ids)
         }
