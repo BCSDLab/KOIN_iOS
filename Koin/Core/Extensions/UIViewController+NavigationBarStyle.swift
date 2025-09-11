@@ -57,7 +57,7 @@ extension UIViewController {
         switch style {
         case .fill, .orderTransparent:
             navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral0)
-        default:
+        case .empty, .order:
             navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral800)
         }
     }
