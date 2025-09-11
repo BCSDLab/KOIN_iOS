@@ -29,9 +29,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         super.viewDidLoad()
         delegate = self
         setupNavigationRightButton()
-        configureController()
         setupTabBarAppearance()
-        bind()
         
         selectedIndex = initialTabIndex
         updateNavigationTitle(for: initialTabIndex)
@@ -39,6 +37,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureController()
         configureNavigationBar(style: .order)
     }
 
@@ -111,7 +110,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             searchOrderShopUseCase: searchOrderShopUseCase,
             selectedId: selectedShopId ?? 1
         )
-        let orderHomeViewController = OrderHomeViewController(viewModel: orderHomeViewModel)
+        let orderHomeViewController = OrderHomeViewController(viewModel: orderHomeViewModel, navigationControllerDelegate: navigationController)
 
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchShopEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
@@ -128,7 +127,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: initialTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
-        let shopViewController = ShopViewController(viewModel: shopViewModel)
+        let shopViewController = ShopViewController(viewModel: shopViewModel, navigationControllerDelegate: navigationController)
         
         let historyViewController = OrderHistoryViewController()
         
@@ -181,28 +180,6 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-    }
-    // MARK: - Bind
-    private func bind() {
-        guard let orderHomeViewController = viewControllers?[0] as? OrderHomeViewController else { fatalError("orderTapBarVC Bind Error") }
-        orderHomeViewController.outputSubject.sink { [weak self] output in
-            if case .shopTapped(let shopId, let isFromOrder) = output {
-                let viewModel = ShopDetailViewModel()
-                let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: isFromOrder)
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
-        }
-        .store(in: &subscriptions)
-        
-        guard let shopViewController = viewControllers?[1] as? ShopViewController else { fatalError("orderTapBarVC Bind Error") }
-        shopViewController.outputSubject.sink { [weak self] output in
-            if case .shopTapped(let shopId, let isFromOrder) = output {
-                let viewModel = ShopDetailViewModel()
-                let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: isFromOrder)
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
-        }
-        .store(in: &subscriptions)
     }
 
     // MARK: - updateNavigationTitle

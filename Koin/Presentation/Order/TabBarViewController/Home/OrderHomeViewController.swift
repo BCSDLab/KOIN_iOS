@@ -11,18 +11,15 @@ import Combine
 
 final class OrderHomeViewController: UIViewController {
     
-    enum Output {
-    case shopTapped(shopId: Int, isFromOrder: Bool)
-    }
-    
     // MARK: - Properties
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
-    let outputSubject = PassthroughSubject<Output, Never>()
     
     private var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
     private var currentMinPrice: Int? = nil
+    
+    private let navigationControllerDelegate: UINavigationController?
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -175,8 +172,9 @@ final class OrderHomeViewController: UIViewController {
     }
 
     // MARK: - Initialization
-    init(viewModel: OrderHomeViewModel) {
+    init(viewModel: OrderHomeViewModel, navigationControllerDelegate: UINavigationController? = nil) {
         self.viewModel = viewModel
+        self.navigationControllerDelegate = navigationControllerDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -441,7 +439,9 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            outputSubject.send(Output.shopTapped(shopId: orderableShopId, isFromOrder: true))
+            let viewModel = ShopDetailViewModel()
+            let viewController = ShopDetailViewController(viewModel: viewModel, shopId: orderableShopId, isFromOrder: true)
+            navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
     }
 }
