@@ -146,6 +146,28 @@ extension ShopDetailViewController {
             self?.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
             self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            
+            let section = indexPath.row
+            let defaultCGRect = CGRect(x: 0, y: 0, width: 0, height: 0)
+            let height =
+                UIScreen.main.bounds.height
+                - UIApplication.topSafeAreaHeight()
+                - (self?.navigationController?.navigationBar.bounds.height ?? 0)
+                - (self?.menuGroupNameCollectionView.bounds.height ?? 0)
+
+            guard let sectionHeaderViewMinY = self?.menuGroupTableView.headerView(forSection: section)?.convert(self?.menuGroupTableView.bounds ?? defaultCGRect, to: self?.contentView).minY,
+                  let contentViewMaxY = self?.contentView.convert(self?.contentView.bounds ?? defaultCGRect, to: self?.view).maxY,
+                  let bottomSheetMinY = self?.bottomSheet.convert(self?.bottomSheet.bounds ?? defaultCGRect, to: self?.view).minY else {
+                return
+            }
+            if ( sectionHeaderViewMinY + height < contentViewMaxY) { // 스크롤 범위를 벗어나지 않는 경우
+                let rect = CGRect(x: 0, y: sectionHeaderViewMinY, width: 1, height: height)
+                self?.scrollView.scrollRectToVisible(rect, animated: true)
+            }
+            else { // 스크롤 범위를 벗어나는 경우
+                let rect = CGRect(x: 0, y: contentViewMaxY, width: 1, height: 1)
+                self?.scrollView.scrollRectToVisible(rect, animated: true)
+            }
         }
         .store(in: &subscriptions)
         
@@ -156,6 +178,28 @@ extension ShopDetailViewController {
             self?.menuGroupNameCollectionView.configureSelectedCell(indexPath)
             self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+         
+            let section = indexPath.row
+            let defaultCGRect = CGRect(x: 0, y: 0, width: 0, height: 0)
+            let height =
+                UIScreen.main.bounds.height
+                - UIApplication.topSafeAreaHeight()
+                - (self?.navigationController?.navigationBar.bounds.height ?? 0)
+                - (self?.menuGroupNameCollectionView.bounds.height ?? 0)
+
+            guard let sectionHeaderViewMinY = self?.menuGroupTableView.headerView(forSection: section)?.convert(self?.menuGroupTableView.bounds ?? defaultCGRect, to: self?.contentView).minY,
+                  let contentViewMaxY = self?.contentView.convert(self?.contentView.bounds ?? defaultCGRect, to: self?.view).maxY,
+                  let bottomSheetMinY = self?.bottomSheet.convert(self?.bottomSheet.bounds ?? defaultCGRect, to: self?.view).minY else {
+                return
+            }
+            if ( sectionHeaderViewMinY + height < contentViewMaxY) { // 스크롤 범위를 벗어나지 않는 경우
+                let rect = CGRect(x: 0, y: sectionHeaderViewMinY, width: 1, height: height)
+                self?.scrollView.scrollRectToVisible(rect, animated: true)
+            }
+            else { // 스크롤 범위를 벗어나는 경우
+                let rect = CGRect(x: 0, y: contentViewMaxY, width: 1, height: 1)
+                self?.scrollView.scrollRectToVisible(rect, animated: true)
+            }
         }
         .store(in: &subscriptions)
     }

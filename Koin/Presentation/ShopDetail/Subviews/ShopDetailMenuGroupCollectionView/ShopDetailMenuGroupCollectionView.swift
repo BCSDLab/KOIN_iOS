@@ -34,7 +34,6 @@ class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDeleg
             
             self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
             self?.configureSelectedCell(IndexPath(row: 0, section: 0))
-            self?.didSelectCellPublisher.send(IndexPath(row: 0, section: 0))
         }
     }
 }
