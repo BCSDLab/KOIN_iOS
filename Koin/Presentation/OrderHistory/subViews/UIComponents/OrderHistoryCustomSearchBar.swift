@@ -135,7 +135,6 @@ final class OrderHistoryCustomSearchBar: UIView {
 extension OrderHistoryCustomSearchBar: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         onReturn?(textField.text ?? "")
-        textField.resignFirstResponder()
         return true
     }
 }

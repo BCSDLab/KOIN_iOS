@@ -136,9 +136,21 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             title: "주변상점"
         )
 
+        
+        let fetchOrderHistoryUseCase = DefaultFetchOrderHistoryUseCase(
+            repository: DefaultOrderHistoryRepository(service: orderService)
+        )
+
+        let orderHistoryViewModel = OrderViewModel(
+            fetchHistory: fetchOrderHistoryUseCase,
+            orderService: orderService
+        )
+
+        let orderHistoryVC = OrderHistoryViewController(viewModel: orderHistoryViewModel)
+
         let historyViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: OrderHistoryViewController(),
+            rootViewController: orderHistoryVC,
             title: "주문내역"
         )
 

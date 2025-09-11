@@ -19,6 +19,8 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         case available // 재주문 가능
         case beforeOpen // 오픈전 (불가능)
     }
+    
+    
 
     //MARK: - Properties
     private var reorderState: ReorderState = .available {
@@ -181,7 +183,7 @@ extension OrderHistoryColletionViewCell {
         stateLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(56)
+            
         }
         
         dayLabel.snp.makeConstraints {

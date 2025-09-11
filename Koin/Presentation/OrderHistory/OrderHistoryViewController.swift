@@ -7,8 +7,29 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class OrderHistoryViewController: UIViewController {
+    
+    private let viewModel: OrderViewModel
+    private var cancellables = Set<AnyCancellable>()
+    private var items: [OrderViewModel.OrderItem] = []
+    private let input = PassthroughSubject<OrderViewModel.Input, Never>()
+    
+    private var isSearching: Bool {
+        !(searchBar.textField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    
+    init(viewModel: OrderViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Properties
     private var currentFilter: OrderFilter = .empty {
@@ -51,6 +72,8 @@ final class OrderHistoryViewController: UIViewController {
     private let orderHistorySeperateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral400)
     }
+
+    private let refreshControl = UIRefreshControl()
 
     private let orderHistoryUnderLineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.new500)
@@ -188,12 +211,22 @@ final class OrderHistoryViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureView()
         bind()
+        bindViewModel()
         setDelegate()
         render()
         updateSearchVisibility(animated: false)
         updateEmptyState()
+        setupRefreshControl()
+
+        orderPrepareCollectionView.onLoadedIDs = { ids in
+            print("prepare loaded ids:", ids)
+        }
+        
+        input.send(.viewDidLoad)
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -233,14 +266,21 @@ final class OrderHistoryViewController: UIViewController {
         [periodButton, stateInfoButton].forEach {
             $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)        }
         resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
-        searchDimView.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        
+        searchDimView.addTarget(self, action: #selector(dismissSearchOverlay), for: .touchUpInside)
+
         searchBar.textField.delegate = self
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-//
-//        searchBar.onTextChanged = { text in
-//            print("검색어: \(text)")
-//        }
+
+        searchBar.onTextChanged = { [weak self] text in
+            self?.input.send(.search(text))
+        }
+        
+        searchBar.onReturn = { [weak self] text in
+            self?.input.send(.search(text))
+            self?.dismissSearchOverlay()
+        }
         
         orderHistoryCollectionView.alwaysBounceVertical = true
         orderPrepareCollectionView.alwaysBounceVertical = true
@@ -417,8 +457,7 @@ extension OrderHistoryViewController{
         
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
-            orderHistoryCollectionView.reloadData()
-            
+            input.send(.applyFilter(currentFilter))
         } else {
             orderPrepareCollectionView.reloadData()
         }
@@ -468,30 +507,41 @@ extension OrderHistoryViewController{
     }
     
     private func updateEmptyState() {
-        let isHistoryTab = (orderHistorySegment.selectedSegmentIndex == 0)
-        let isEmptyHistory   = orderHistoryCollectionView.totalItemCount == 0
+        let isHistoryTab   = (orderHistorySegment.selectedSegmentIndex == 0)
+        let isEmptyHistory = orderHistoryCollectionView.totalItemCount == 0
         let isEmptyPreparing = orderPrepareCollectionView.totalItemCount == 0
         let shouldShowEmpty  = isHistoryTab ? isEmptyHistory : isEmptyPreparing
 
-        noOrderHistoryLabel.text = isHistoryTab ? "주문 내역이 없어요" : "준비 중인 음식이 없어요"
-        seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty
+        noOrderHistoryLabel.text = isHistoryTab
+            ? (isSearching ? "검색 결과가 없어요" : "주문 내역이 없어요")
+            : "준비 중인 음식이 없어요"
 
+        // 검색 중에는 '과거 주문 보기' 버튼 숨김
+        seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty || isSearching
         emptyStateView.isHidden = !shouldShowEmpty
-        
+
         topShadowView.alpha = shouldShowEmpty ? 0 : topShadowView.alpha
 
-
         if isHistoryTab {
-            searchBar.isHidden = shouldShowEmpty
-            filterButtonRow.isHidden = shouldShowEmpty
+            searchBar.isHidden = shouldShowEmpty && !isSearching
+            filterButtonRow.isHidden = shouldShowEmpty && !isSearching
             orderHistoryCollectionView.isHidden = shouldShowEmpty
 
-            if shouldShowEmpty { cancelButtonTapped() }
+            if shouldShowEmpty && !isSearching { cancelButtonTapped() }
         } else {
-
             orderPrepareCollectionView.isHidden = shouldShowEmpty
         }
     }
+
+    
+    private func setupRefreshControl() {
+        orderHistoryCollectionView.alwaysBounceVertical = true
+        orderHistoryCollectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    }
+    
+    
+
     
 }
 
@@ -528,6 +578,10 @@ extension OrderHistoryViewController {
         sheet.modalPresentationStyle = .overFullScreen
         present(sheet, animated: false)
     }
+    
+    @objc private func didPullToRefresh() {
+        input.send(.refresh)
+    }
         
     @objc private func resetFilterTapped() {
         currentFilter = .empty
@@ -558,7 +612,21 @@ extension OrderHistoryViewController {
 
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
+        searchBar.textField.text = ""
+        input.send(.search(""))
         
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+            self.searchCancelButton.alpha = 0
+            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.searchCancelButton.isHidden = true
+            self.searchDimView.isHidden = true
+        }
+    }
+    
+    @objc private func dismissSearchOverlay(){
+        searchBar.unfocus()
         barTrailingToCancel?.deactivate()
         barTrailingToSuperview.activate()
         
@@ -636,5 +704,88 @@ private extension UICollectionView {
     }
 }
 
+extension OrderHistoryViewController {
+    
+    private func bindViewModel() {
+        let output = viewModel.transform(with: input.eraseToAnyPublisher())
+
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .updateOrders(let newItems):
+                    // 지난 주문 리스트
+                    self.items = newItems
+                    self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
+                    self.updateEmptyState()
+
+                case .updatePreparing(let newItems):
+                    // 준비중 리스트
+                    print("updatePreparing:", newItems.count)
+                    self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
+                    
+
+                case .showEmpty(let isEmpty):
+                    // 빈 상태 표시
+                    self.emptyStateView.isHidden = !isEmpty
+                    self.orderHistoryCollectionView.isHidden = isEmpty
+
+                case .errorOccurred(let error):
+                    print(error)
+
+                case .endRefreshing:
+                    self.refreshControl.endRefreshing()
+
+                case .navigateToOrderDetail:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        input.send(.viewDidLoad)
+    }
 
 
+    
+    private func bindCollectionViewCallbacks() {
+        orderHistoryCollectionView.onSelect = { [weak self] orderId in
+            self?.input.send(.selectOrder(orderId))
+        }
+        
+        orderHistoryCollectionView.onTapReorder = { [weak self] orderId in
+            self?.input.send(.tapReorder(orderId))
+        }
+    }
+}
+
+
+private extension OrderViewModel.OrderItem {
+    var asCollectionItem: OrderHistoryCollectionView.Item {
+        .init(
+            id: id,
+            stateText: stateText,
+            dateText: dateText,
+            storeName: storeName,
+            menuName: menuName,
+            priceText: priceText,
+            imageURL: imageURL,
+            canReorder: canReorder
+        )
+    }
+}
+
+private extension OrderViewModel.PreparingItem {
+    var asCollectionItem: OrderPrepareCollectionView.Item {
+        .init(
+            id: id,
+            methodText: methodText,
+            estimatedTimeText: estimatedTimeText,
+            explanationText: explanationText,
+            imageURL: imageURL,
+            storeName: storeName,
+            menuName: menuName,
+            priceText: priceText
+        )
+    }
+    
+}

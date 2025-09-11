@@ -12,6 +12,7 @@ enum OrderAPI {
     case fetchOrderEventShop
     case searchShop(String)
     case fetchOrderInProgress
+    case fetchOrder(query: OrderHistoryQueryDTO)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -26,6 +27,7 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchOrderEventShop: return "/order/shops/events"
         case .searchShop(let text): return "/shops/search/related/\(text)"
         case .fetchOrderInProgress: return "/order/in-progress"
+        case .fetchOrder: return "/order"
         }
     }
     
@@ -38,7 +40,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchOrder:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -64,6 +66,8 @@ extension OrderAPI: Router, URLRequestConvertible {
                 parameters["category_filter"] = categoryFilter
             }
             return parameters
+        case .fetchOrder(let queryDTO):
+             return queryDTO.asParameters
         default:
             return nil
         }

@@ -39,7 +39,7 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
                 return cf
             }()
         ).then {
-            $0.imageView?.contentMode = .scaleAspectFit
+            $0.imageView?.contentMode = .scaleToFill
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
@@ -234,8 +234,8 @@ extension OrderPrepareCollectionViewCell {
             chip.image = UIImage.appImage(asset: .packaging)?
                 .withRenderingMode(.alwaysTemplate)
                 .preparingThumbnail(of: CGSize(width: 16, height: 16))
-            chip.baseForegroundColor = .appColor(.neutral700)
-            chip.background.backgroundColor = .appColor(.neutral100)
+            chip.baseForegroundColor = .appColor(.new500)
+            chip.background.backgroundColor = .appColor(.new100)
         }
         
         orderInfoChip.configuration = chip

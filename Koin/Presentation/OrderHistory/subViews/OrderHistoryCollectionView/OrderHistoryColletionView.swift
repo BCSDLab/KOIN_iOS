@@ -10,17 +10,21 @@ import SnapKit
 
 final class OrderHistoryCollectionView: UICollectionView {
 
-//    struct Item {
-//        let stateText: String
-//        let dateText: String
-//        let image: UIImage?
-//        let storeName: String
-//        let menuName: String
-//        let priceText: String
-//        let canReorder: Bool
-//    }
-//
-//    private var items: [Item] = []
+    struct Item: Hashable {
+        let id: Int
+        let stateText: String
+        let dateText: String
+        let storeName: String
+        let menuName: String
+        let priceText: String
+        let imageURL: URL?
+        let canReorder: Bool
+    }
+
+    var onSelect: ((Int) -> Void)?          // 셀 탭 (orderId)
+    var onTapReorder: ((Int) -> Void)?      // 재주문 버튼
+
+    private var items: [Item] = []
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -38,36 +42,71 @@ final class OrderHistoryCollectionView: UICollectionView {
                  forCellWithReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier)
     }
 
-//    func update(_ items: [Item]) {
-//        self.items = items
-//        reloadData()
-//    }
+    func update(_ items: [Item]) {
+        self.items = items
+        reloadData()
+    }
+    
+    
 }
 
 
 extension OrderHistoryCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return items.count
-        return 0
+        
+        items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier, for: indexPath) as? OrderHistoryColletionViewCell else {
             return UICollectionViewCell()
         }
-//        let item = items[indexPath.item]
-//        cell.configure(stateText: item.stateText, dateText: item.dateText, image: item.image,
-//                       storeName: item.storeName, menuName: item.menuName,
-//                       priceText: item.priceText, canReorder: item.canReorder)
+        let item = items[indexPath.item]
+        var image: UIImage? = UIImage.appImage(asset: .defaultMenuImage)
+        
+        if let url = item.imageURL {
+            URLSession.shared.dataTask(with: url){ [weak collectionView] data, _, _ in
+                guard let data, let image = UIImage(data: data)
+                else {return}
+                DispatchQueue.main.async{
+                    if let visible = collectionView?.cellForItem(at: indexPath) as? OrderHistoryColletionViewCell {
+                        visible.configure(
+                            stateText: item.stateText,
+                            dateText: item.dateText,
+                            image: image,
+                            storeName: item.storeName,
+                            menuName: item.menuName,
+                            priceText: item.priceText,
+                            canReorder: item.canReorder
+                        )
+                    }
+                }
+            }.resume()
+        }
+        cell.configure(
+            stateText: item.stateText,
+            dateText: item.dateText,
+            image: image,
+            storeName: item.storeName,
+            menuName: item.menuName,
+            priceText: item.priceText,
+            canReorder: item.canReorder
+        )
+        cell.onTapReorder = { [weak self] in
+            self?.onTapReorder?(item.id)
+        }
         return cell
     }
 }
 
 extension OrderHistoryCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.reloadItems(at: [indexPath])
+        
+        onSelect?(items[indexPath.item].id)
     }
 }
+
+
 
 //extension OrderHistoryCollectionView: UICollectionViewDelegateFlowLayout {
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
