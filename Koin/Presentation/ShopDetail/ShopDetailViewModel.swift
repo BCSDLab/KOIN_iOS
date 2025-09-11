@@ -30,9 +30,9 @@ final class ShopDetailViewModel {
             switch input {
             case .viewDidLoad:
                 // useCase로 데이터를 호출하고, viewController에 돌려주는 로직
-                self?.outputSubject.send(.updateInfoView(ShopDetailDummyModels.orderShopSummary))
-                self?.outputSubject.send(.updateMenus(ShopDetailDummyModels.orderShopMenus))
-                self?.outputSubject.send(.updateMenusGroups(ShopDetailDummyModels.orderShopMenusGroups))
+                self?.outputSubject.send(.updateInfoView(OrderShopSummary.dummy()))
+                self?.outputSubject.send(.updateMenus(OrderShopMenus.dummy()))
+                self?.outputSubject.send(.updateMenusGroups(OrderShopMenusGroups.dummy()))
             }
         }
         .store(in: &subscriptions)
