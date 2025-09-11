@@ -7,42 +7,42 @@
 
 import UIKit
 
-final class ShopDetailCustomButton: UIButton {
+class ShopDetailCustomButton: UIButton {
     
     // MARK: - Components
-    private let minimumOrderLabel = UILabel().then {
+    let minimumOrderLabel = UILabel().then {
         $0.text = "최소주문"
         $0.numberOfLines = 0
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
     }
-    private let deliveryTipLabel = UILabel().then {
+    let deliveryTipLabel = UILabel().then {
         $0.text = "배달금액"
         $0.numberOfLines = 0
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
     }
-    private let minimumOrderSubLabel = UILabel().then {
+    let minimumOrderSubLabel = UILabel().then {
         $0.numberOfLines = 0
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
     }
-    private let deliveryTipSubLabel = UILabel().then {
+    let deliveryTipSubLabel = UILabel().then {
         $0.numberOfLines = 0
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
     }
-    private let introductionLabel = UILabel().then {
+    let introductionLabel = UILabel().then {
         $0.numberOfLines = 2
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
     }
-    private let leftImageView = UIImageView(image: UIImage.appImage(asset: .speaker))
-    private let rightImageView = UIImageView(image: UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate)).then {
+    let leftImageView = UIImageView(image: UIImage.appImage(asset: .speaker))
+    let rightImageView = UIImageView(image: UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate)).then {
         $0.tintColor = .appColor(.neutral500)
     }
     

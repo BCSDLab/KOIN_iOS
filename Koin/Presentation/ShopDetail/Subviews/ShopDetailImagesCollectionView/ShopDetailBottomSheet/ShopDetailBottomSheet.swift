@@ -8,25 +8,25 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailBottomSheet: UIView {
+class ShopDetailBottomSheet: UIView {
     
     // MARK: - Component
-    private let separatorView = UIView().then {
+    let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
-    private let priceLabel = UILabel().then {
+    let priceLabel = UILabel().then {
         $0.text = "0원"
         $0.font = .appFont(.pretendardBold, size: 18)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
     }
-    private let isDeliveryAvailableLabel = UILabel().then {
+    let isDeliveryAvailableLabel = UILabel().then {
         $0.text = "배달 불가"
         $0.font = .appFont(.pretendardMedium, size: 12)
         $0.textColor = .appColor(.neutral500)
         $0.contentMode = .center
     }
-    private let shoppingListButton = UIButton().then {
+    let shoppingListButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePlacement = .leading
         configuration.imagePadding = 10

@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
     private var menuGroup: [MenuGroup] = []

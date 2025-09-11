@@ -8,10 +8,10 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailIsAvailableView: UIView {
+class ShopDetailIsAvailableView: UIView {
     
     // MARK: - Components
-    private let label = UILabel().then {
+    let label = UILabel().then {
         $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
         $0.textColor = UIColor.appColor(.new300)
     }

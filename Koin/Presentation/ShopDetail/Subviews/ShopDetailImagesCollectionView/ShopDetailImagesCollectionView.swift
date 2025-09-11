@@ -8,10 +8,10 @@
 import UIKit
 import Combine
 
-class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+final class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
-    var orderImages: [OrderImage] = []
+    private var orderImages: [OrderImage] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer

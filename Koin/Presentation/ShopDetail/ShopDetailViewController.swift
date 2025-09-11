@@ -8,10 +8,10 @@
 import UIKit
 import Combine
 
-class ShopDetailViewController: UIViewController {
+final class ShopDetailViewController: UIViewController {
     
     // MARK: - Properties
-    let viewModel: ShopDetailViewModel
+    private let viewModel: ShopDetailViewModel
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -22,25 +22,25 @@ class ShopDetailViewController: UIViewController {
     private var isNavigationBarOpaque: Bool = false
     
     // MARK: - Components
-    let scrollView = UIScrollView().then {
+    private let scrollView = UIScrollView().then {
         $0.contentInsetAdjustmentBehavior = .never
     }
-    let contentView = UIView()
-    let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let contentView = UIView()
+    private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
         $0.minimumLineSpacing = 0
     })
-    let imagesPageControl = UIPageControl().then {
+    private let imagesPageControl = UIPageControl().then {
         $0.currentPage = 0
         $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
     }
-    let infoView = ShopDetailInfoView()
-    let separatorView = UIView().then {
+    private let infoView = ShopDetailInfoView()
+    private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral100)
     }
-    let menuGroupNameCollectionView = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let menuGroupNameCollectionView = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
         $0.scrollDirection = .horizontal
     }).then {
@@ -50,7 +50,7 @@ class ShopDetailViewController: UIViewController {
         $0.layer.masksToBounds = false
         $0.allowsMultipleSelection = false
     }
-    let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
         $0.scrollDirection = .horizontal
     }).then {
@@ -61,15 +61,15 @@ class ShopDetailViewController: UIViewController {
         $0.isHidden = true
         $0.allowsMultipleSelection = false
     }
-    let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
+    private let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
         $0.isScrollEnabled = false
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = .zero
         $0.sectionFooterHeight = .zero
         $0.separatorStyle = .none
     }
-    let bottomSheet = ShopDetailBottomSheet()
-    let navigationBarLikeView = UIView().then {
+    private let bottomSheet = ShopDetailBottomSheet()
+    private let navigationBarLikeView = UIView().then {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
     }

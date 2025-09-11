@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
+final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
     
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill

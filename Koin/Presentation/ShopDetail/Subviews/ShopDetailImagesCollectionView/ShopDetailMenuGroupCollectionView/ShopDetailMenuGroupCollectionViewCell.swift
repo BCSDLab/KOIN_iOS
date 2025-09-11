@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
+class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
     
     let label = UILabel().then {
         $0.font = .appFont(.pretendardSemiBold, size: 14)

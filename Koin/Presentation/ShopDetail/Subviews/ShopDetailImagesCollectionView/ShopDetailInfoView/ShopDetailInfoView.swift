@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopDetailInfoView: UIView {
+class ShopDetailInfoView: UIView {
     
     // MARK: - Components
     private let shopTitleLabel = UILabel().then {

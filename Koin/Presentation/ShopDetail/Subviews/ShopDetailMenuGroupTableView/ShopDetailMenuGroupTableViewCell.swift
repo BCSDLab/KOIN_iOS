@@ -8,43 +8,43 @@
 import UIKit
 import SnapKit
 
-class ShopDetailMenuGroupTableViewCell: UITableViewCell {
+final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
     
     // MARK: - Components
-    let labelsStackView = UIStackView()
-    let nameDescriptionStackView = UIStackView().then {
+    private let labelsStackView = UIStackView()
+    private let nameDescriptionStackView = UIStackView().then {
         $0.axis = .vertical
         $0.alignment = .leading
         $0.spacing = 0
     }
-    let nameLabel = UILabel().then {
+    private let nameLabel = UILabel().then {
         $0.numberOfLines = 0
         $0.font = .appFont(.pretendardBold, size: 18)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
         $0.textAlignment = .left
     }
-    let descriptionLabel = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.numberOfLines = 0
         $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.neutral500)
         $0.contentMode = .center
         $0.textAlignment = .left
     }
-    let priceStackViews = UIStackView().then {
+    private let priceStackViews = UIStackView().then {
         $0.axis = .vertical
         $0.spacing = 0
         $0.alignment = .leading
         $0.distribution = .fill
     }
-    var priceNameLabels: [UILabel] = []
-    var priceValueLabels: [UILabel] = []
+    private var priceNameLabels: [UILabel] = []
+    private var priceValueLabels: [UILabel] = []
     
-    let thumbnailImageView = UIImageView().then {
+    private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-    let separatorView = UIView().then {
+    private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
     

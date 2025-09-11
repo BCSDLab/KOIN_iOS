@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class ShopDetailMenuGroupTableViewHeaderView: UITableViewHeaderFooterView {
+final class ShopDetailMenuGroupTableViewHeaderView: UITableViewHeaderFooterView {
     
-    let label = UILabel().then {
+    private let label = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 20)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
