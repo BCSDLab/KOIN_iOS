@@ -12,11 +12,11 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     
     // MARK: - Properties
     private var menuGroupId: [Int] = []
-    private var menuGroupName: [String] = [""]
-    private var names: [[String]] = [[""]]
-    private var descriptions: [[String?]] = [[nil]]
-    private var prices: [[[Price]]] = [[[Price(id: 0, name: nil, price: 0)]]]
-    private var thumbnailImages: [[String?]] = [[nil]]
+    private var menuGroupName: [String] = []
+    private var names: [[String]] = []
+    private var descriptions: [[String?]] = []
+    private var prices: [[[Price]]] = []
+    private var thumbnailImages: [[String?]] = []
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -29,13 +29,14 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     
     // MARK: - bind
     func bind(_ orderShopMenus: [OrderShopMenus]) {
+        /*
         self.menuGroupId = []
         self.menuGroupName = []
         self.names = []
         self.descriptions = []
         self.prices = []
         self.thumbnailImages = []
-        
+        */
         orderShopMenus.forEach {
             self.menuGroupName.append($0.menuGroupName)
             self.menuGroupName.append($0.menuGroupName)

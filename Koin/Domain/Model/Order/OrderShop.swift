@@ -24,34 +24,11 @@ struct OrderShop {
     let categoryIds: [Int]
     let images: [OrderImage]?
     let openStatus: String
-
-    enum CodingKeys: String, CodingKey {
-        case shopId = "shop_id"
-        case orderableShopId = "orderable_shop_id"
-        case name
-        case isDeliveryAvailable = "is_delivery_available"
-        case isTakeoutAvailable = "is_takeout_available"
-        case serviceEvent = "service_event"
-        case minimumOrderAmount = "minimum_order_amount"
-        case ratingAverage = "rating_average"
-        case reviewCount = "review_count"
-        case minimumDeliveryTip = "minimum_delivery_tip"
-        case maximumDeliveryTip = "maximum_delivery_tip"
-        case isOpen = "is_open"
-        case categoryIds = "category_ids"
-        case images
-        case openStatus = "open_status"
-    }
 }
 
 struct OrderImage {
     let imageUrl: String
     let isThumbnail: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case imageUrl = "image_url"
-        case isThumbnail = "is_thumbnail"
-    }
 }
 
 struct OrderOpen {
@@ -59,13 +36,6 @@ struct OrderOpen {
     let closed: Bool
     let openTime: String
     let closeTime: String
-
-    enum CodingKeys: String, CodingKey {
-        case dayOfWeek = "day_of_week"
-        case closed
-        case openTime = "open_time"
-        case closeTime = "close_time"
-    }
 }
 
 enum OrderDayOfWeek: String {
