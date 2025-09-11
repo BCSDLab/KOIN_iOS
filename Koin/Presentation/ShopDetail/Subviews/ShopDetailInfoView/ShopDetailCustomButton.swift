@@ -93,8 +93,8 @@ extension ShopDetailCustomButton {
             $0.centerY.equalTo(minimumOrderLabel)
         }
         deliveryTipSubLabel.snp.makeConstraints {
-            $0.leading.equalTo(deliveryTipLabel.snp.trailing).offset(8)
-            //$0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+            $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
+            $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
     }
