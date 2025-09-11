@@ -21,7 +21,6 @@ class ShopDetailViewController: UIViewController {
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
     
-    
     // MARK: - Components
     let scrollView = UIScrollView().then {
         $0.contentInsetAdjustmentBehavior = .never
@@ -105,6 +104,7 @@ extension ShopDetailViewController {
     
     // MARK: - bind
     private func bind() {
+        // MARK: - viewController
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
@@ -121,20 +121,41 @@ extension ShopDetailViewController {
             }
         }
         .store(in: &subscriptions)
-        
+        // MARK: - imagesCollectionView
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
             self?.imagesPageControl.currentPage = currentPage
         }
         .store(in: &subscriptions)
-        
+        // MARK: - menuGroupCollectionView
         menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
             self?.menuGroupNameCollectionView.contentOffset = contentOffset
             self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
         }
         .store(in: &subscriptions)
+        
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
             self?.menuGroupNameCollectionView.contentOffset = contentOffset
             self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
+        }
+        .store(in: &subscriptions)
+        
+        menuGroupNameCollectionView.didSelectCellPublisher.sink { [weak self] indexPath in
+            self?.menuGroupNameCollectionViewSticky.indexPathsForSelectedItems?.forEach {
+                self?.menuGroupNameCollectionViewSticky.configureDeselectedCell($0)
+            }
+            self?.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
+            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        }
+        .store(in: &subscriptions)
+        
+        menuGroupNameCollectionViewSticky.didSelectCellPublisher.sink { [weak self] indexPath in
+            self?.menuGroupNameCollectionView.indexPathsForSelectedItems?.forEach {
+                self?.menuGroupNameCollectionView.configureDeselectedCell($0)
+            }
+            self?.menuGroupNameCollectionView.configureSelectedCell(indexPath)
+            self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         }
         .store(in: &subscriptions)
     }

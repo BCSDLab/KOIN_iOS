@@ -13,6 +13,7 @@ class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDeleg
     // MARK: - Properties
     private var menuGroup: [MenuGroup] = []
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
+    let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     
     // MARK: - Initiailizer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -33,6 +34,7 @@ class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDeleg
             
             self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
             self?.configureSelectedCell(IndexPath(row: 0, section: 0))
+            self?.didSelectCellPublisher.send(IndexPath(row: 0, section: 0))
         }
     }
 }
@@ -50,6 +52,7 @@ extension ShopDetailMenuGroupCollectionView {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         configureSelectedCell(indexPath)
+        didSelectCellPublisher.send(indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         configureDeselectedCell(indexPath)
@@ -83,7 +86,7 @@ extension ShopDetailMenuGroupCollectionView {
 
 extension ShopDetailMenuGroupCollectionView {
     
-    private func configureSelectedCell(_ indexPath: IndexPath) {
+    func configureSelectedCell(_ indexPath: IndexPath) {
         guard let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
             return
         }
@@ -92,7 +95,7 @@ extension ShopDetailMenuGroupCollectionView {
         cell.layer.borderWidth = 1
         cell.layer.applySketchShadow(color: .clear, alpha: 0, x: 0, y: 0, blur: 0, spread: 0)
     }
-    private func configureDeselectedCell(_ indexPath: IndexPath) {
+    func configureDeselectedCell(_ indexPath: IndexPath) {
         guard let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
             return
         }
