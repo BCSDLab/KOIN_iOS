@@ -8,16 +8,15 @@
 import UIKit
 import Combine
 
-class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
-    var menuGroupName: [String] = [""]
-    var names: [[String]] = [[""]]
-    var descriptions: [[String?]] = [[nil]]
-    var prices: [[[Price]]] = [[[Price(id: 0, name: nil, price: 0)]]]
-    var thumbnailImages: [[String?]] = [[nil]]
-    
-    // MARK: - Components
+    private var menuGroupId: [Int] = []
+    private var menuGroupName: [String] = [""]
+    private var names: [[String]] = [[""]]
+    private var descriptions: [[String?]] = [[nil]]
+    private var prices: [[[Price]]] = [[[Price(id: 0, name: nil, price: 0)]]]
+    private var thumbnailImages: [[String?]] = [[nil]]
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -30,6 +29,7 @@ class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableVie
     
     // MARK: - bind
     func bind(_ orderShopMenus: [OrderShopMenus]) {
+        self.menuGroupId = []
         self.menuGroupName = []
         self.names = []
         self.descriptions = []
@@ -38,17 +38,20 @@ class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableVie
         
         orderShopMenus.forEach {
             self.menuGroupName.append($0.menuGroupName)
+            self.menuGroupName.append($0.menuGroupName)
             
             var names: [String] = []
             var descriptions: [String?] = []
             var prices: [[Price]] = []
             var thumbnailImages: [String?] = []
+            var menuId: [Int] = []
             
             $0.menus.forEach {
                 names.append($0.name)
                 descriptions.append($0.description)
                 prices.append($0.prices)
                 thumbnailImages.append($0.thumbnailImage)
+                menuId.append($0.id)
             }
             self.names.append(names)
             self.descriptions.append(descriptions)
@@ -96,6 +99,8 @@ extension ShopDetailMenuGroupTableView {
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
     }
+    
+    
     // height
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 104
@@ -104,7 +109,7 @@ extension ShopDetailMenuGroupTableView {
 
 extension ShopDetailMenuGroupTableView {
     
-    func setTableView() {
+    private func setTableView() {
         dataSource = self
         delegate = self
         register(ShopDetailMenuGroupTableViewCell.self, forCellReuseIdentifier: ShopDetailMenuGroupTableViewCell.identifier)

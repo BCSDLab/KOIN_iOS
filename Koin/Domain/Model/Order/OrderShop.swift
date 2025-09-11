@@ -44,7 +44,7 @@ struct OrderShop {
     }
 }
 
-struct OrderImage: Codable {
+struct OrderImage {
     let imageUrl: String
     let isThumbnail: Bool
     

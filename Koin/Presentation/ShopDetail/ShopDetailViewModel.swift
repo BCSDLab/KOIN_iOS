@@ -7,7 +7,7 @@
 
 import Combine
 
-class ShopDetailViewModel {
+final class ShopDetailViewModel {
     
     enum Input {
     case viewDidLoad
@@ -21,7 +21,7 @@ class ShopDetailViewModel {
     
     // MARK: - Properties
     let outputSubject = PassthroughSubject<Output, Never>()
-    var subscriptions: Set<AnyCancellable> = []
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: Transform
     
