@@ -17,28 +17,28 @@ struct OrderHistoryQueryDTO: Encodable {
 }
 
 extension OrderHistoryQueryDTO {
-    init(_ q: OrderHistoryQuery) {
-        switch q.period {
+    init(_ query: OrderHistoryQuery) {
+        switch query.period {
         case .none: period = "NONE"
         case .last3Months: period = "LAST_3_MONTHS"
         case .last6Months: period = "LAST_6_MONTHS"
         case .last1Year: period = "LAST_1_YEAR"
         }
 
-        switch q.status {
+        switch query.status {
         case .none: status = "NONE"
         case .completed: status = "COMPLETED"
         case .canceled: status = "CANCELED"
         }
 
-        switch q.type {
+        switch query.type {
         case .none: type = "NONE"
         case .delivery: type = "DELIVERY"
         case .takeout: type = "TAKE_OUT"
         }
-        query = q.keyword
-        page = q.page
-        size = q.size
+        self.query = query.keyword
+        self.page = query.page
+        self.size = query.size
     }
 
     var asParameters: [String: Any] {

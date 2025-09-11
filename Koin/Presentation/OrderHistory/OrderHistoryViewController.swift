@@ -268,15 +268,25 @@ final class OrderHistoryViewController: UIViewController {
         
         orderHistorySegment.addTarget(self, action: #selector(changeSegmentLine(_:)), for: .valueChanged)
         [periodButton, stateInfoButton].forEach {
-            $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)        }
-        resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)
+        }
         
+        resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
         searchDimView.addTarget(self, action: #selector(dismissSearchOverlay), for: .touchUpInside)
-
         searchBar.textField.delegate = self
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-
+        seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
+        
+        updateSearchVisibility(animated: false)
+    }
+    
+    private func setDelegate(){
+        searchBar.textField.delegate = self
+        orderHistoryCollectionView.delegate = self
+        orderPrepareCollectionView.delegate = self
+        orderHistoryCollectionView.alwaysBounceVertical = true
+        orderPrepareCollectionView.alwaysBounceVertical = true
         searchBar.onTextChanged = { [weak self] text in
             self?.input.send(.search(text))
         }
@@ -286,17 +296,6 @@ final class OrderHistoryViewController: UIViewController {
             self?.dismissSearchOverlay()
         }
         
-        seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
-        
-        orderHistoryCollectionView.alwaysBounceVertical = true
-        orderPrepareCollectionView.alwaysBounceVertical = true
-        updateSearchVisibility(animated: false)
-    }
-    
-    private func setDelegate(){
-        searchBar.textField.delegate = self
-        orderHistoryCollectionView.delegate = self
-        orderPrepareCollectionView.delegate = self
     }
 }
 
@@ -708,7 +707,7 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         if collectionView == orderHistoryCollectionView{
             return CGSize(width: UIScreen.main.bounds.width - 48 , height: 286)
         } else if collectionView == orderPrepareCollectionView{
-            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 299)
+            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 321)
         }
         return CGSize(width: 0, height: 0)
     }
@@ -732,20 +731,14 @@ extension OrderHistoryViewController {
                 guard let self = self else { return }
                 switch event {
                 case .updateOrders(let newItems):
-                    // 지난 주문 리스트
                     self.items = newItems
                     self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
                     self.updateEmptyState()
-                    
-
                 case .updatePreparing(let newItems):
-                    // 준비중 리스트
                     print("updatePreparing:", newItems.count)
                     self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
                     
-
                 case .showEmpty(let isEmpty):
-                    // 빈 상태 표시
                     self.emptyStateView.isHidden = !isEmpty
                     self.orderHistoryCollectionView.isHidden = isEmpty
 
@@ -777,21 +770,6 @@ extension OrderHistoryViewController {
             self?.input.send(.tapReorder(orderId))
         }
     }
-    
-#if DEBUG
-    private func autoLoadIfShort() {
-        
-        guard orderHistorySegment.selectedSegmentIndex == 0 else { return }
-        let cv = orderHistoryCollectionView
-        cv.layoutIfNeeded()
-
-        let needsMore = cv.contentSize.height < cv.bounds.height - 100
-        if needsMore {
-            print("autoLoadIfShort → loadNextPage")
-            input.send(.loadNextPage)
-        }
-    }
-#endif
 }
 
 

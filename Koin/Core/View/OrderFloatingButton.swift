@@ -11,7 +11,7 @@ import Then
 import SnapKit
 
 final class OrderFloatingButton: UIControl {
-    
+        
     // MARK: - Properties
     var titleText: String? {
         get { titleLabel.text }

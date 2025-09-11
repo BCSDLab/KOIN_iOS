@@ -31,25 +31,23 @@ final class OrderViewModel {
         case navigateToOrderDetail(Int)
     }
 
-    // 지난 주문 셀 뷰데이터
     struct OrderItem {
         let id: Int
-        let stateText: String        // 배달완료, 포장완료
-        let dateText: String         // 8월 16일 (토)
-        let storeName: String        // 맛있는 족발 - 병천점
-        let menuName: String         // 족발 + 막국수 set 외 1건
-        let priceText: String        // 32,500 원
+        let stateText: String
+        let dateText: String
+        let storeName: String
+        let menuName: String
+        let priceText: String
         let imageURL: URL?
         let canReorder: Bool
     }
 
-    // 준비중 셀 뷰데이터
     struct PreparingItem {
         let stateText: String
         let id: Int
-        let methodText: String       // 배달,포장
-        let estimatedTimeText: String// 오전/오후 h시 m분 도착 예정 / 시간 미정
-        let explanationText: String  // 상태 안내문
+        let methodText: String
+        let estimatedTimeText: String
+        let explanationText: String
         let imageURL: URL?
         let storeName: String
         let menuName: String
@@ -89,7 +87,6 @@ final class OrderViewModel {
                 }
             }
 
-        // 첫 로딩, 새로고침
         let preparingTrigger = input
             .filter {
                 switch $0 {
@@ -97,17 +94,11 @@ final class OrderViewModel {
                 default: return false
                 }
             }
-
-        // 지난 주문
         historyTrigger
             .flatMap { [weak self] event -> AnyPublisher<(OrdersPage, Bool), Error> in
                 guard let self else {
                     return Fail(error: NSError(domain: "OrderVM", code: -1)).eraseToAnyPublisher()
                 }
-                
-                print("event:", event)
-
-
                 switch event {
                 case .applyFilter(let f):
                     self.currentFilter = f
@@ -117,20 +108,18 @@ final class OrderViewModel {
                     if case .search(let text) = event {
                         self.currentKeyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
-                    // 초기 ,리셋
                     self.currentPageIndex = 1
                     self.totalPages = 1
                     self.historyAccum = []
                     self.isLoadingPage = true
 
-                    var q = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
-                    q.page = self.currentPageIndex
-                    q.size = self.pageSize
+                    var query = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
+                    query.page = self.currentPageIndex
+                    query.size = self.pageSize
                     
-                    print("query (reset):", OrderHistoryQueryDTO(q).asParameters)
 
-                    return self.fetchHistory.execute(query: q)
-                        .map { ($0, false) } // replace
+                    return self.fetchHistory.execute(query: query)
+                        .map { ($0, false) }
                         .eraseToAnyPublisher()
 
                 case .loadNextPage:
@@ -139,16 +128,12 @@ final class OrderViewModel {
                     }
                     self.isLoadingPage = true
 
-                    var q = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
-                    q.page = self.currentPageIndex + 1
-                    q.size = self.pageSize
+                    var query = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
+                    query.page = self.currentPageIndex + 1
+                    query.size = self.pageSize
 
-                    
-                    print("query (next):", OrderHistoryQueryDTO(q).asParameters)
-                    
-
-                    return self.fetchHistory.execute(query: q)
-                        .map { ($0, true) } // append
+                    return self.fetchHistory.execute(query: query)
+                        .map { ($0, true) }
                         .eraseToAnyPublisher()
 
                 default:
@@ -157,8 +142,6 @@ final class OrderViewModel {
             }
             .map { [weak self] (page, isAppend) -> Event in
                 guard let self else { return .showEmpty(true) }
-
-                // 페이지 메타 갱신
                 self.currentPageIndex = page.currentPage
                 self.totalPages = page.totalPage
                 self.isLoadingPage = false
@@ -180,8 +163,6 @@ final class OrderViewModel {
             .merge(with: Just(Event.endRefreshing))
             .sink { subject.send($0) }
             .store(in: &subscriptions)
-
-        // 준비중
         preparingTrigger
             .flatMap { [weak self] _ -> AnyPublisher<[OrderInProgress], Error> in
                 guard let self else {
@@ -198,8 +179,6 @@ final class OrderViewModel {
             .catch { _ in Just(Event.updatePreparing([])) }
             .sink { subject.send($0) }
             .store(in: &subscriptions)
-
-        // 탭 액션
         input
             .sink { event in
                 switch event {

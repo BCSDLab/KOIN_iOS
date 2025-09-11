@@ -16,8 +16,8 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     
     private enum ReorderState {
-        case available // 재주문 가능
-        case beforeOpen // 오픈전 (불가능)
+        case available
+        case beforeOpen
     }
     
     
@@ -187,7 +187,7 @@ extension OrderHistoryColletionViewCell {
         }
         
         dayLabel.snp.makeConstraints {
-            $0.leading.equalTo(stateLabel.snp.trailing)
+            $0.leading.equalTo(stateLabel.snp.trailing).offset(5)
             $0.centerY.equalTo(stateLabel)
             $0.width.equalTo(66)
         }
