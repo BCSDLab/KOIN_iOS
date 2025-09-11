@@ -15,7 +15,7 @@ struct OrderShopMenus {
 }
 
 // MARK: - OrderShopMenu
-struct OrderShopMenu: Codable {
+struct OrderShopMenu {
     let id: Int
     let name: String
     let description: String?
@@ -25,15 +25,15 @@ struct OrderShopMenu: Codable {
 }
 
 // MARK: - Price
-struct Price: Codable {
+struct Price {
     let id: Int
     let name: Name?
     let price: Int
 }
 
-enum Name: String, Codable {
+enum Name: String {
+    case 대 = "대"
     case 소 = "소"
     case 중 = "중"
-    case 대 = "대"
     case 특대 = "특대"
 }
