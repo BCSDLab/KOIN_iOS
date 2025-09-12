@@ -65,7 +65,7 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         
         prices.forEach { price in
             priceNameLabels.append(UILabel().then {
-                if let name = price.name { $0.text = "\(name) : " }
+                if let name = price.name?.rawValue { $0.text = "\(name) : " }
                 else { $0.text = nil }
             })
             priceValueLabels.append(UILabel().then {
