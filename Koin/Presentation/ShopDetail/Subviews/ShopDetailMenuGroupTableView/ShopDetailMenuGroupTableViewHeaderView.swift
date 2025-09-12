@@ -32,8 +32,7 @@ final class ShopDetailMenuGroupTableViewHeaderView: UITableViewHeaderFooterView 
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - bind
-    func bind(groupName text: String) {
+    func configure(groupName text: String) {
         label.text = text
     }
 }

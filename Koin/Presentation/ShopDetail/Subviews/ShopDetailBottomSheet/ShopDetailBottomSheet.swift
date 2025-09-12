@@ -26,23 +26,8 @@ final class ShopDetailBottomSheet: UIView {
         $0.textColor = .appColor(.neutral500)
         $0.contentMode = .center
     }
-    private let shoppingListButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.imagePlacement = .leading
-        configuration.imagePadding = 10
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
-        $0.configuration = configuration
-        $0.backgroundColor = .appColor(.new500)
-        $0.setAttributedTitle(NSAttributedString(
-            string: "장바구니 보기",
-            attributes: [
-                .font : UIFont.appFont(.pretendardMedium, size: 14),
-                .foregroundColor : UIColor.appColor(.neutral0)
-            ]), for: .normal)
-        $0.setImage(UIImage.appImage(asset: .countIcon0)?.withRenderingMode(.alwaysOriginal), for: .normal)
-        $0.layer.cornerRadius = 12
-        $0.layer.masksToBounds = true
-    }
+    private let shoppingListButton = UIButton()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,8 +37,7 @@ final class ShopDetailBottomSheet: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - bind
-    func bind(price: Int, isDeliveryAvailable: Bool, numberOfShoppingList: Int) {
+    func configure(price: Int, isDeliveryAvailable: Bool, numberOfShoppingList: Int) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         priceLabel.text = formatter.string(from: NSNumber(value: price)) ?? "-" + "원"
@@ -78,6 +62,26 @@ final class ShopDetailBottomSheet: UIView {
 
 extension ShopDetailBottomSheet {
     
+    private func setUpButton() {
+        var configuration = UIButton.Configuration.plain()
+        configuration.imagePlacement = .leading
+        configuration.imagePadding = 10
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
+        [shoppingListButton].forEach {
+            $0.configuration = configuration
+            $0.backgroundColor = .appColor(.new500)
+            $0.setAttributedTitle(NSAttributedString(
+                string: "장바구니 보기",
+                attributes: [
+                    .font : UIFont.appFont(.pretendardMedium, size: 14),
+                    .foregroundColor : UIColor.appColor(.neutral0)
+                ]), for: .normal)
+            $0.setImage(UIImage.appImage(asset: .countIcon0)?.withRenderingMode(.alwaysOriginal), for: .normal)
+            $0.layer.cornerRadius = 12
+            $0.layer.masksToBounds = true
+        }
+    }
+    
     private func setUpConstraints() {
         if(!UIApplication.hasHomeButton()){
             separatorView.snp.makeConstraints {
@@ -101,7 +105,6 @@ extension ShopDetailBottomSheet {
             $0.trailing.equalToSuperview().offset(-32)
         }
     }
-
     
     private func setUpLayout() {
         [separatorView, priceLabel, isDeliveryAvailableLabel, shoppingListButton].forEach {
@@ -120,6 +123,7 @@ extension ShopDetailBottomSheet {
     }
     
     private func configureView() {
+        setUpButton()
         setUpView()
         setUpLayout()
         setUpConstraints()

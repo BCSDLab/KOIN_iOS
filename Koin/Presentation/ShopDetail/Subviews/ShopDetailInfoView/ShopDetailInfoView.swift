@@ -11,7 +11,6 @@ final class ShopDetailInfoView: UIView {
     
     // MARK: - Components
     private let shopTitleLabel = UILabel().then {
-        $0.text = ""
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 20)
         $0.numberOfLines = 0
@@ -39,9 +38,8 @@ final class ShopDetailInfoView: UIView {
     }
     private let reviewButton = UIButton()
     private let moreInfoButton = UIButton()
-    
-    private let isDeliveryAvailableView = ShopDetailIsAvailableView().then { $0.bind(text: "배달 가능")}
-    private let isTakeoutAvailableView = ShopDetailIsAvailableView().then { $0.bind(text: "포장 가능")}
+    private let isDeliveryAvailableView = UILabel().then { $0.text = "배달 가능" }
+    private let isTakeoutAvailableView = UILabel().then { $0.text = "포장 가능" }
     
     private let orderAmountDelieveryTipView = ShopDetailCustomButton()
     private let introductionView = ShopDetailCustomButton()
@@ -54,24 +52,27 @@ final class ShopDetailInfoView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-extension ShopDetailInfoView {
     
-    // MARK: - bind
+    // MARK: - configure
     
-    func bind(orderShopSummary: OrderShopSummary) {
+    func configure(orderShopSummary: OrderShopSummary) {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
-        reviewButton.setAttributedTitle(NSAttributedString(string: "\(orderShopSummary.reviewCount)개", attributes: [
-            .font : UIFont.appFont(.pretendardSemiBold, size: 13),
-            .foregroundColor : UIColor.appColor(.neutral800)
-        ]), for: .normal)
-        orderAmountDelieveryTipView.bind(minOrderAmount: orderShopSummary.minimumOrderAmount, minDeliveryTip: orderShopSummary.minimumDeliveryTip, maxDelieveryTip: orderShopSummary.maximumDeliveryTip)
-        introductionView.bind(introduction: orderShopSummary.introduction)        
-        setUpIsAvailableView(orderShopSummary.isDeliveryAvailable, orderShopSummary.isTakeoutAvailable)
+        reviewButton.setAttributedTitle(NSAttributedString(
+            string: "\(orderShopSummary.reviewCount)개",
+            attributes: [
+                .font : UIFont.appFont(.pretendardSemiBold, size: 13),
+                .foregroundColor : UIColor.appColor(.neutral800)
+            ]), for: .normal)
+        orderAmountDelieveryTipView.configure(
+            minOrderAmount: orderShopSummary.minimumOrderAmount,
+            minDeliveryTip: orderShopSummary.minimumDeliveryTip,
+            maxDelieveryTip: orderShopSummary.maximumDeliveryTip)
+        introductionView.configure(introduction: orderShopSummary.introduction)
+        
+        setUpIsAvailableView(orderShopSummary.isDeliveryAvailable,
+                             orderShopSummary.isTakeoutAvailable)
     }
-    
     private func setUpIsAvailableView(_ isDelieveryAvailable: Bool, _ isTakeoutAvailable: Bool) {
         
         let isAvailableStackView = UIStackView().then {
@@ -79,14 +80,11 @@ extension ShopDetailInfoView {
             $0.spacing = 8
             $0.alignment = .fill
         }
-        var count: Int = 0
         if(isDelieveryAvailable) {
             isAvailableStackView.addArrangedSubview(isDeliveryAvailableView)
-            count += 1
         }
         if(isTakeoutAvailable) {
             isAvailableStackView.addArrangedSubview(isTakeoutAvailableView)
-            count += 1
         }
         addSubview(isAvailableStackView)
         isAvailableStackView.snp.makeConstraints {
@@ -99,8 +97,7 @@ extension ShopDetailInfoView {
 
 extension ShopDetailInfoView {
     
-    // MARK: - configureView
-    private func configureReviewButton() {
+    private func setUpReviewButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage.appImage(asset: .newChevronRight)
         configuration.imagePadding = 0
@@ -108,8 +105,7 @@ extension ShopDetailInfoView {
         configuration.contentInsets = .zero
         reviewButton.configuration = configuration
     }
-    
-    private func configureMoreInfoButton() {
+    private func setUpMoreInfoButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePadding = 4
         configuration.imagePlacement = .trailing
@@ -129,6 +125,21 @@ extension ShopDetailInfoView {
         
         moreInfoButton.tintColor = .appColor(.neutral400)
     }
+    private func setUpShadows(){
+        [moreInfoButton, isDeliveryAvailableView, isTakeoutAvailableView, orderAmountDelieveryTipView, introductionView].forEach {
+            $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+        }
+    }
+    private func setUpIsAvailableView() {
+        [isDeliveryAvailableView, isTakeoutAvailableView].forEach {
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
+            $0.textColor = UIColor.appColor(.new300)
+            $0.backgroundColor = UIColor.appColor(.neutral0)
+            $0.layer.cornerRadius = 11.5
+            $0.textAlignment = .center
+            $0.clipsToBounds = true
+        }
+    }
     
     private func setUpLayouts() {
         [starImageView, ratingLabel, separatorLabel, reviewLabel, reviewButton].forEach {
@@ -137,8 +148,7 @@ extension ShopDetailInfoView {
         [shopTitleLabel, rateReviewStackView, moreInfoButton, orderAmountDelieveryTipView, introductionView].forEach {
             addSubview($0)
         }
-    }
-    
+    }    
     private func setUpConstraints() {
         shopTitleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
@@ -168,17 +178,22 @@ extension ShopDetailInfoView {
             $0.width.equalTo(orderAmountDelieveryTipView)
             $0.bottom.equalToSuperview().offset(-18)
         }
-    }
-    private func setUpShadows(){
-        [moreInfoButton, isDeliveryAvailableView, isTakeoutAvailableView, orderAmountDelieveryTipView, introductionView].forEach {
-            $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+        isDeliveryAvailableView.snp.makeConstraints {
+            $0.width.equalTo(61)
+            $0.height.equalTo(23)
+        }
+        isTakeoutAvailableView.snp.makeConstraints {
+            $0.width.equalTo(61)
+            $0.height.equalTo(23)
         }
     }
     private func configureView() {
+        setUpReviewButton()
+        setUpMoreInfoButton()
+        setUpShadows()
+        setUpIsAvailableView()
+        
         setUpLayouts()
         setUpConstraints()
-        configureReviewButton()
-        configureMoreInfoButton()
-        setUpShadows()
     }
 }

@@ -24,6 +24,11 @@ final class ShopDetailCustomButton: UIButton {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
     }
+    private let introductionLabel = UILabel().then {
+        $0.numberOfLines = 2
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
     private let minimumOrderSubLabel = UILabel().then {
         $0.numberOfLines = 0
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
@@ -36,11 +41,7 @@ final class ShopDetailCustomButton: UIButton {
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
     }
-    private let introductionLabel = UILabel().then {
-        $0.numberOfLines = 2
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral800)
-    }
+    
     private let leftImageView = UIImageView(image: UIImage.appImage(asset: .speaker))
     private let rightImageView = UIImageView(image: UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate)).then {
         $0.tintColor = .appColor(.neutral500)
@@ -54,29 +55,34 @@ final class ShopDetailCustomButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
 
-extension ShopDetailCustomButton {
-    
-    // MARK: - bind
-    func bind(minOrderAmount: Int? = nil, minDeliveryTip: Int? = nil, maxDelieveryTip: Int? = nil, introduction: String? = nil) {
+    func configure(minOrderAmount: Int? = nil,
+                   minDeliveryTip: Int? = nil,
+                   maxDelieveryTip: Int? = nil,
+                   introduction: String? = nil) {
         
         if let introduction {
             introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction)
-            setUpIntroductionView()
+            configureIntroductionView()
         }
         else if let minOrderAmount, let minDeliveryTip, let maxDelieveryTip {
             minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
             deliveryTipSubLabel.text = "\(minDeliveryTip.formattedWithComma) - \(maxDelieveryTip.formattedWithComma)원"
-            setUpOrderAmountDelieveryTipView()
+            configureOrderAmountDelieveryTipView()
+        }
+        else {
+            print("ShopDetailCustomeButton에서 Configure 오류")
         }
     }
-    
-    // MARK: - configureVuew
-    private func setUpOrderAmountDelieveryTipView() {
+}
+
+extension ShopDetailCustomButton {
+
+    private func configureOrderAmountDelieveryTipView() {
         [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel].forEach {
             addSubview($0)
         }
+        
         minimumOrderLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(12)
             $0.top.equalToSuperview().offset(8)
@@ -99,10 +105,11 @@ extension ShopDetailCustomButton {
         }
     }
     
-    private func setUpIntroductionView() {
+    private func configureIntroductionView() {
         [leftImageView, introductionLabel].forEach {
             addSubview($0)
         }
+        
         leftImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(12)
             $0.centerY.equalToSuperview()

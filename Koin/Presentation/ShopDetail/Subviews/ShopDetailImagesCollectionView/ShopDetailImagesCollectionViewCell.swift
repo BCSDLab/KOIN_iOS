@@ -11,10 +11,12 @@ import Then
 
 final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Component
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
     }
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -22,18 +24,17 @@ final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(url: String) {
+        imageView.loadImage(from: url)
+    }
 }
 
 extension ShopDetailImagesCollectionViewCell {
-    
-    func bind(url: String) {
-        imageView.loadImage(from: url)
-    }
-    
+
     private func configureView() {
-        [imageView].forEach {
-            addSubview($0)
-        }
+        addSubview(imageView)
+        
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

@@ -18,14 +18,13 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
     // MARK: - Initiailizer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
-        setCollectionView()
+        commonInit()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - bind
-    func bind(menuGroup: [MenuGroup]) {
+    func configure(menuGroup: [MenuGroup]) {
         self.menuGroup = menuGroup
         self.reloadData()
         
@@ -35,15 +34,6 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
             self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
             self?.configureSelectedCell(IndexPath(row: 0, section: 0))
         }
-    }
-}
-
-extension ShopDetailMenuGroupCollectionView {
-    
-    private func setCollectionView() {
-        self.delegate = self
-        self.dataSource = self
-        register(ShopDetailMenuGroupCollectionViewCell.self, forCellWithReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier)
     }
 }
 
@@ -63,7 +53,7 @@ extension ShopDetailMenuGroupCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier, for: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.bind(menuGroup[indexPath.row].name)
+        cell.configure(menuGroup[indexPath.row].name)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -103,5 +93,14 @@ extension ShopDetailMenuGroupCollectionView {
         cell.layer.borderWidth = 0
         cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 1, spread: 0)
         cell.layer.shadowRadius = 17
+    }
+}
+
+extension ShopDetailMenuGroupCollectionView {
+    
+    private func commonInit() {
+        self.delegate = self
+        self.dataSource = self
+        register(ShopDetailMenuGroupCollectionViewCell.self, forCellWithReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier)
     }
 }

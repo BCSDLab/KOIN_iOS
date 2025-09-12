@@ -30,7 +30,9 @@ final class ShopDetailViewController: UIViewController {
         $0.scrollDirection = .horizontal
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
         $0.minimumLineSpacing = 0
-    })
+    }).then {
+        $0.showsHorizontalScrollIndicator = false
+    }
     private let imagesPageControl = UIPageControl().then {
         $0.currentPage = 0
         $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
@@ -104,29 +106,31 @@ extension ShopDetailViewController {
     
     // MARK: - bind
     private func bind() {
-        // MARK: - viewController
+        // viewController
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
             case .updateInfoView(let orderShopSummary):
-                self?.imagesCollectionView.bind(orderImage: orderShopSummary.images)
+                self?.imagesCollectionView.configure(orderImage: orderShopSummary.images)
                 self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
-                self?.infoView.bind(orderShopSummary: orderShopSummary)
+                self?.infoView.configure(orderShopSummary: orderShopSummary)
             case .updateMenusGroups(let orderShopMenusGroups):
-                self?.menuGroupNameCollectionView.bind(menuGroup: orderShopMenusGroups.menuGroups)
-                self?.menuGroupNameCollectionViewSticky.bind(menuGroup: orderShopMenusGroups.menuGroups)
+                self?.menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
+                self?.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
             case .updateMenus(let orderShopMenus):
-                self?.menuGroupTableView.bind(orderShopMenus)
+                self?.menuGroupTableView.configure(orderShopMenus)
                 self?.updateTableViewHeight(orderShopMenus)
             }
         }
         .store(in: &subscriptions)
-        // MARK: - imagesCollectionView
+        
+        // imagesCollectionView
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
             self?.imagesPageControl.currentPage = currentPage
         }
         .store(in: &subscriptions)
-        // MARK: - menuGroupCollectionView
+        
+        // menuGroupCollectionView
         menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
             self?.menuGroupNameCollectionView.contentOffset = contentOffset
             self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset

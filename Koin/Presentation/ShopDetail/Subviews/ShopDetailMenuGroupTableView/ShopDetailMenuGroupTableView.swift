@@ -21,22 +21,13 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        setTableView()
+        commonInit()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - bind
-    func bind(_ orderShopMenus: [OrderShopMenus]) {
-        /*
-        self.menuGroupId = []
-        self.menuGroupName = []
-        self.names = []
-        self.descriptions = []
-        self.prices = []
-        self.thumbnailImages = []
-        */
+    func configure(_ orderShopMenus: [OrderShopMenus]) {
         orderShopMenus.forEach {
             self.menuGroupName.append($0.menuGroupName)
             self.menuGroupName.append($0.menuGroupName)
@@ -76,7 +67,7 @@ extension ShopDetailMenuGroupTableView {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: ShopDetailMenuGroupTableViewHeaderView.identifier) as? ShopDetailMenuGroupTableViewHeaderView else {
             return UITableViewHeaderFooterView()
         }
-        view.bind(groupName: menuGroupName[section])
+        view.configure(groupName: menuGroupName[section])
         return view
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -84,7 +75,7 @@ extension ShopDetailMenuGroupTableView {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopDetailMenuGroupTableViewCell.identifier, for: indexPath) as? ShopDetailMenuGroupTableViewCell else {
             return UITableViewCell()
         }
-        cell.bind(name: names[indexPath.section][indexPath.row],
+        cell.configure(name: names[indexPath.section][indexPath.row],
                   description: descriptions[indexPath.section][indexPath.row],
                   prices: prices[indexPath.section][indexPath.row],
                   thumbnailImage: thumbnailImages[indexPath.section][indexPath.row],
@@ -100,8 +91,6 @@ extension ShopDetailMenuGroupTableView {
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-    
-    
     // height
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 104
@@ -110,7 +99,7 @@ extension ShopDetailMenuGroupTableView {
 
 extension ShopDetailMenuGroupTableView {
     
-    private func setTableView() {
+    private func commonInit() {
         dataSource = self
         delegate = self
         register(ShopDetailMenuGroupTableViewCell.self, forCellReuseIdentifier: ShopDetailMenuGroupTableViewCell.identifier)

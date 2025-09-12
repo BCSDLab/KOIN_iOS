@@ -17,14 +17,13 @@ final class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDe
     // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
-        setCollectionView()
+        commonInit()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Bind
-    func bind(orderImage: [OrderImage]){
+    func configure(orderImage: [OrderImage]){
         self.orderImages = orderImage
         self.reloadData()
     }
@@ -39,12 +38,15 @@ extension ShopDetailImagesCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailImagesCollectionViewCell.identifier, for: indexPath) as? ShopDetailImagesCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.bind(url: orderImages[indexPath.row].imageUrl)
+        cell.configure(url: orderImages[indexPath.row].imageUrl)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return false
     }
+}
+
+extension ShopDetailImagesCollectionView {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = self.frame.width
@@ -55,8 +57,7 @@ extension ShopDetailImagesCollectionView {
 
 extension ShopDetailImagesCollectionView {
     
-    private func setCollectionView() {
-        showsHorizontalScrollIndicator = false
+    private func commonInit() {
         isPagingEnabled = true
         dataSource = self
         delegate = self

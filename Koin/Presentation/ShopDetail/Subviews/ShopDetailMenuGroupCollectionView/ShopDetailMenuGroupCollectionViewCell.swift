@@ -22,13 +22,13 @@ final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(_ text: String){
+        label.text = text
+    }
 }
 
 extension ShopDetailMenuGroupCollectionViewCell {
-    
-    func bind(_ text: String){
-        label.text = text
-    }
     
     private func configureView() {
         backgroundColor = .appColor(.neutral0)
@@ -36,9 +36,7 @@ extension ShopDetailMenuGroupCollectionViewCell {
         layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.01, x: 0, y: 1, blur: 1, spread: 0)
         layer.shadowRadius = 17
         
-        [label].forEach {
-            addSubview($0)
-        }
+        addSubview(label)
         label.snp.makeConstraints {
             $0.center.equalToSuperview()
         }

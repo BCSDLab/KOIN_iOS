@@ -57,12 +57,11 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Bind
-    func bind(name: String, description: String?, prices: [Price], thumbnailImage: String?, isFirstRow: Bool, isLastRow: Bool) {
-        nameLabel.text = name
+    func configure(name: String, description: String?, prices: [Price],
+                   thumbnailImage: String?, isFirstRow: Bool, isLastRow: Bool) {
         
-        if let description { descriptionLabel.text = description }
-        else { descriptionLabel.text = nil }
+        nameLabel.text = name
+        descriptionLabel.text = description
         
         prices.forEach { price in
             priceNameLabels.append(UILabel().then {
@@ -98,9 +97,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             separatorView.isHidden = false
         }
     }
-}
-
-extension ShopDetailMenuGroupTableViewCell {
     
     // MARK: - cornerRadius
     private func setTopCornerRadius() {
@@ -137,12 +133,66 @@ extension ShopDetailMenuGroupTableViewCell {
         backgroundView = bgView
         setUpShadow()
     }
+}
+
+extension ShopDetailMenuGroupTableViewCell {
+    
     private func setUpShadow() {
         layer.masksToBounds = false
         layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
-}
-extension ShopDetailMenuGroupTableViewCell {
+    private func setUpLabels() {
+        priceNameLabels.forEach {
+            $0.numberOfLines = 0
+            $0.font = .appFont(.pretendardRegular, size: 14)
+            $0.textColor = .appColor(.neutral800)
+            $0.contentMode = .center
+            $0.textAlignment = .left
+        }
+        priceValueLabels.forEach {
+            $0.numberOfLines = 0
+            $0.font = .appFont(.pretendardBold, size: 14)
+            $0.textColor = .appColor(.neutral800)
+            $0.contentMode = .center
+            $0.textAlignment = .left
+        }
+    }
+    private func setUpStackViews() {
+        for i in (0..<priceValueLabels.count) {
+            priceStackViews.addArrangedSubview(UIStackView().then {
+                $0.alignment = .fill
+                $0.addArrangedSubview(priceNameLabels[i].then {
+                    if $0.text == nil { $0.isHidden = true }
+                    else { $0.isHidden = false }
+                })
+                $0.addArrangedSubview(priceValueLabels[i])
+            })
+        }
+        nameDescriptionStackView.addArrangedSubview(nameLabel.then {
+            if $0.text == nil { $0.isHidden = true }
+            else { $0.isHidden = false }
+        })
+        nameDescriptionStackView.addArrangedSubview(descriptionLabel)
+        
+        [nameDescriptionStackView, priceStackViews].forEach {
+            labelsStackView.addArrangedSubview($0)
+        }
+        
+        labelsStackView.axis = .vertical
+        labelsStackView.alignment = .leading
+        
+        if 1 < priceStackViews.arrangedSubviews.count { labelsStackView.spacing = 4 }
+        else { labelsStackView.spacing = 0 }
+        priceStackViews.arrangedSubviews.forEach {
+            guard let stackView = $0 as? UIStackView else {
+                fatalError()
+            }
+            stackView.axis = .horizontal
+            stackView.spacing = 0
+            stackView.alignment = .fill
+            stackView.distribution = .fill
+        }
+    }
     
     private func setUpLayout() {
         [labelsStackView, thumbnailImageView, separatorView].forEach {
@@ -197,63 +247,10 @@ extension ShopDetailMenuGroupTableViewCell {
         }
     }
     
-    private func configureLabels() {
-        priceNameLabels.forEach {
-            $0.numberOfLines = 0
-            $0.font = .appFont(.pretendardRegular, size: 14)
-            $0.textColor = .appColor(.neutral800)
-            $0.contentMode = .center
-            $0.textAlignment = .left
-        }
-        priceValueLabels.forEach {
-            $0.numberOfLines = 0
-            $0.font = .appFont(.pretendardBold, size: 14)
-            $0.textColor = .appColor(.neutral800)
-            $0.contentMode = .center
-            $0.textAlignment = .left
-        }
-    }
-    private func configureStackViews() {
-        for i in (0..<priceValueLabels.count) {
-            priceStackViews.addArrangedSubview(UIStackView().then {
-                $0.alignment = .fill
-                $0.addArrangedSubview(priceNameLabels[i].then {
-                    if $0.text == nil { $0.isHidden = true }
-                    else { $0.isHidden = false }
-                })
-                $0.addArrangedSubview(priceValueLabels[i])
-            })
-        }
-        nameDescriptionStackView.addArrangedSubview(nameLabel.then {
-            if $0.text == nil { $0.isHidden = true }
-            else { $0.isHidden = false }
-        })
-        nameDescriptionStackView.addArrangedSubview(descriptionLabel)
-        
-        [nameDescriptionStackView, priceStackViews].forEach {
-            labelsStackView.addArrangedSubview($0)
-        }
-        
-        labelsStackView.axis = .vertical
-        labelsStackView.alignment = .leading
-        
-        if 1 < priceStackViews.arrangedSubviews.count { labelsStackView.spacing = 4 }
-        else { labelsStackView.spacing = 0 }
-        priceStackViews.arrangedSubviews.forEach {
-            guard let stackView = $0 as? UIStackView else {
-                fatalError()
-            }
-            stackView.axis = .horizontal
-            stackView.spacing = 0
-            stackView.alignment = .fill
-            stackView.distribution = .fill
-        }
-    }
-    
     private func configureView() {
         backgroundColor = .clear
-        configureStackViews()
-        configureLabels()
+        setUpStackViews()
+        setUpLabels()
         setUpLayout()
         setUpConstaints()
     }
