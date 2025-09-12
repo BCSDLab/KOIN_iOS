@@ -10,18 +10,27 @@ import SnapKit
 import Combine
 
 final class OrderHistoryViewController: UIViewController {
+
+    // MARK: - Properties
     
     private let viewModel: OrderViewModel
     private var cancellables = Set<AnyCancellable>()
     private let inputSubject = PassthroughSubject<OrderViewModel.Input, Never>()
     private var items: [OrderViewModel.OrderItem] = []
     
-    private var isSearching: Bool {
-        !(searchBar.textField.text ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
     private let initialTab: Int
-    
+
+    private var currentFilter: OrderFilter = .empty {
+        didSet { render() }
+    }
+    private var emptyTopToSeparator: Constraint!
+    private var emptyTopToList: Constraint!
+    private var barTrailingToSuperview: Constraint!
+    private var barTrailingToCancel: Constraint!
+    private var appliedQuery: String = ""
+    private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    private var shadowAlpha: CGFloat = 0
+
     
     init(viewModel: OrderViewModel, initialTab: Int = 0) {
         self.viewModel = viewModel
@@ -33,19 +42,6 @@ final class OrderHistoryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Properties
-    private var currentFilter: OrderFilter = .empty {
-        didSet { render() }
-    }
-    private var topToSearch: Constraint!
-    private var topToFilter: Constraint!
-    private var barTrailingToSuperview: Constraint!
-    private var barTrailingToCancel: Constraint!
-    private var shadowTopToFilter: Constraint!
-    private var shadowTopToSeparator: Constraint!
-    
-    private var shadowAlpha: CGFloat = 0
-
     // MARK: - UI Components
     
     private let orderHistorySegment = UISegmentedControl().then {
@@ -216,7 +212,7 @@ final class OrderHistoryViewController: UIViewController {
         setAddTarget()
         setDelegate()
         render()
-        updateSearchVisibility(animated: false)
+        updateSearchVisibility()
         updateEmptyState()
         setupRefreshControl()
 
@@ -224,14 +220,12 @@ final class OrderHistoryViewController: UIViewController {
         changeSegmentLine(orderHistorySegment)
         
         orderPrepareCollectionView.onLoadedIDs = { ids in
-            print("prepare loaded ids:", ids)
+            print("상점 id:", ids)
         }
         
         orderHistoryCollectionView.onReachEnd = { [weak self] in
             self?.inputSubject.send(.loadNextPage)
         }
-        
-        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -263,6 +257,11 @@ final class OrderHistoryViewController: UIViewController {
         bottomBorder.backgroundColor = UIColor.black.withAlphaComponent(0.08).cgColor
         topShadowView.layer.addSublayer(bottomBorder)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        refreshShadowForCurrentTab()
+    }
 
     // MARK: - Bind
     private func bind() {
@@ -277,8 +276,8 @@ final class OrderHistoryViewController: UIViewController {
                     self.items = newItems
                     self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
                     self.updateEmptyState()
+                    self.refreshShadowForCurrentTab()
                 case .updatePreparing(let newItems):
-                    print("updatePreparing:", newItems.count)
                     self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
                     
                 case .showEmpty(let isEmpty):
@@ -300,17 +299,21 @@ final class OrderHistoryViewController: UIViewController {
             }
             .store(in: &cancellables)
         inputSubject.send(.viewDidLoad)
-        
-        searchBar.onTextChanged = { [weak self] text in
-            self?.inputSubject.send(.search(text))
-        }
-        
         searchBar.onReturn = { [weak self] text in
-            self?.inputSubject.send(.search(text))
-            self?.dismissSearchOverlay()
+            guard let self = self else { return }
+                let trimmedQuery = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                self.appliedQuery = trimmedQuery
+                self.inputSubject.send(.search(trimmedQuery))
+
+                self.orderHistoryCollectionView.setContentOffset(.zero, animated: false)
+                self.shadowAlpha = 0
+                self.topShadowView.alpha = 0
+                self.topShadowView.isHidden = true
+                self.deactivateDimOnly()
+                self.updateEmptyState()
         }
         
-        updateSearchVisibility(animated: false)
+        updateSearchVisibility()
     }
     
     private func setAddTarget() {
@@ -328,19 +331,30 @@ final class OrderHistoryViewController: UIViewController {
     }
     
     private func setDelegate() {
-        searchBar.textField.delegate = self
-        searchBar.textField.delegate = self
         orderHistoryCollectionView.delegate = self
         orderPrepareCollectionView.delegate = self
-        
-        // FIXME: -
-        
     }
     
     func setInitialTab(_ idx: Int) {
         orderHistorySegment.selectedSegmentIndex = idx
         changeSegmentLine(orderHistorySegment)
     }
+    
+    private func deactivateDimOnly() {
+        barTrailingToSuperview.deactivate()
+        barTrailingToCancel?.activate()
+        searchCancelButton.isHidden = false
+        searchCancelButton.alpha = 1
+
+        searchBar.unfocus()
+        UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.searchDimView.isHidden = true
+        }
+    }
+
 }
 
 extension OrderHistoryViewController {
@@ -386,16 +400,12 @@ extension OrderHistoryViewController {
         }
         
         filterButtonRow.snp.makeConstraints {
-            self.topToSearch = $0.top.equalTo(searchBar.snp.bottom).offset(16).constraint
+            $0.top.equalTo(searchBar.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.lessThanOrEqualToSuperview().inset(24)
             $0.height.equalTo(34)
         }
         
-        self.topToFilter = filterButtonRow.snp.prepareConstraints{
-            $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
-        }.first
-                
         searchBar.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(16)
@@ -439,7 +449,8 @@ extension OrderHistoryViewController {
         }
         
         emptyStateView.snp.makeConstraints{
-            $0.top.equalTo(orderHistorySeperateView.snp.bottom)
+            self.emptyTopToSeparator = $0.top.equalTo(orderHistorySeperateView.snp.bottom).constraint
+            self.emptyTopToList = $0.top.equalTo(orderHistoryCollectionView.snp.top).constraint
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
@@ -497,10 +508,10 @@ extension OrderHistoryViewController{
         if let method = currentFilter.method {
             infoTitle = (method == .delivery ? "배달" : "포장")
         }
-        if currentFilter.info.contains(.completed) {
+        if currentFilter.info == .completed {
             infoTitle += (infoTitle == "주문 상태 · 정보" ? "완료" : " · 완료")
         }
-        if currentFilter.info.contains(.canceled) {
+        if currentFilter.info == .canceled {
             infoTitle += (infoTitle == "주문 상태 · 정보" ? "취소" : " · 취소")
         }
         stateInfoButton.setTitle(infoTitle)
@@ -532,7 +543,7 @@ extension OrderHistoryViewController{
         }
     }
 
-    private func updateSearchVisibility(animated: Bool = true) {
+    private func updateSearchVisibility() {
         let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
 
         searchBar.isHidden = !isHistory
@@ -542,13 +553,12 @@ extension OrderHistoryViewController{
         orderPrepareCollectionView.isHidden = isHistory
 
         if isHistory {
-            topToFilter?.deactivate()
-            topToSearch.activate()
-        
+            emptyTopToSeparator.deactivate()
+            emptyTopToList.activate()
         } else {
             cancelButtonTapped()
-            topToSearch.deactivate()
-            topToFilter?.activate()
+            emptyTopToList.deactivate()
+            emptyTopToSeparator.activate()
         }
         
         topShadowView.isHidden = !isHistory || !emptyStateView.isHidden
@@ -558,34 +568,65 @@ extension OrderHistoryViewController{
     }
     
     private func updateEmptyState() {
-        let isHistoryTab   = (orderHistorySegment.selectedSegmentIndex == 0)
-        let isEmptyHistory = orderHistoryCollectionView.totalItemCount == 0
+        let isHistoryTab     = (orderHistorySegment.selectedSegmentIndex == 0)
+        let isEmptyHistory   = orderHistoryCollectionView.totalItemCount == 0
         let isEmptyPreparing = orderPrepareCollectionView.totalItemCount == 0
         let shouldShowEmpty  = isHistoryTab ? isEmptyHistory : isEmptyPreparing
 
-        noOrderHistoryLabel.text = isHistoryTab
-            ? (isSearching ? "검색 결과가 없어요" : "주문 내역이 없어요")
-            : "준비 중인 음식이 없어요"
-
-        seeOrderHistoryButton.isHidden = isHistoryTab || !shouldShowEmpty || isSearching
-        emptyStateView.isHidden = !shouldShowEmpty
-
-        topShadowView.alpha = shouldShowEmpty ? 0 : topShadowView.alpha
-
         if isHistoryTab {
-            searchBar.isHidden = shouldShowEmpty && !isSearching
-            filterButtonRow.isHidden = shouldShowEmpty && !isSearching
-            orderHistoryCollectionView.isHidden = shouldShowEmpty
-
-            if shouldShowEmpty && !isSearching { cancelButtonTapped() }
+            if isEmptyHistory {
+                if isSearching {
+                    noOrderHistoryLabel.text = "검색 결과가 없어요"
+                } else {
+                    noOrderHistoryLabel.text = "주문 내역이 없어요"
+                }
+            }
+            seeOrderHistoryButton.isHidden = true
+        } else {
+            if isEmptyPreparing {
+                noOrderHistoryLabel.text = "준비 중인 음식이 없어요"
+            }
+            seeOrderHistoryButton.isHidden = false
+        }
+        
+        if isHistoryTab {
+            if isEmptyHistory {
+                if isSearching {
+                    searchBar.isHidden = false
+                    filterButtonRow.isHidden = false
+                    orderHistoryCollectionView.isHidden = false
+                    emptyStateView.isHidden = false
+                } else {
+                    searchBar.isHidden = true
+                    filterButtonRow.isHidden = true
+                    orderHistoryCollectionView.isHidden = true
+                    emptyStateView.isHidden = false
+                    seeOrderHistoryButton.isHidden = true
+                }
+            } else {
+                searchBar.isHidden = false
+                filterButtonRow.isHidden = false
+                orderHistoryCollectionView.isHidden = false
+                emptyStateView.isHidden = true
+                seeOrderHistoryButton.isHidden = true
+            }
         } else {
             orderPrepareCollectionView.isHidden = shouldShowEmpty
+            emptyStateView.isHidden = !shouldShowEmpty
+            seeOrderHistoryButton.isHidden = false
+        }
+
+        if shouldShowEmpty {
+            shadowAlpha = 0
+            topShadowView.alpha = 0
+            topShadowView.isHidden = true
+        } else {
+            refreshShadowForCurrentTab()
         }
     }
 
     
     private func setupRefreshControl() {
-        orderHistoryCollectionView.alwaysBounceVertical = true
         orderHistoryCollectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
     }
@@ -605,7 +646,7 @@ extension OrderHistoryViewController {
             self.orderHistoryUnderLineView.snp.updateConstraints {
                 $0.leading.equalTo(self.orderHistorySegment.snp.leading).offset(leadingDistance)
             }
-            self.updateSearchVisibility(animated: false)
+            self.updateSearchVisibility()
             self.updateEmptyState()
             self.view.layoutIfNeeded()
             self.refreshShadowForCurrentTab()
@@ -659,6 +700,7 @@ extension OrderHistoryViewController {
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
         searchBar.textField.text = ""
+        appliedQuery = ""
         inputSubject.send(.search(""))
         
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
@@ -668,6 +710,9 @@ extension OrderHistoryViewController {
         } completion: { _ in
             self.searchCancelButton.isHidden = true
             self.searchDimView.isHidden = true
+            self.barTrailingToCancel?.deactivate()
+            self.barTrailingToSuperview.activate()
+            self.refreshShadowForCurrentTab()
         }
     }
     
@@ -700,25 +745,19 @@ extension OrderHistoryViewController {
 
 
 extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == searchBar.textField && searchCancelButton.isHidden {
-            print("터치입력됨")
-        }
-        return true
-    }
-        
+    
     //MARK: - ScrollSet
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if orderHistorySegment.selectedSegmentIndex == 0, scrollView == orderHistoryCollectionView {
-            let y = scrollView.contentOffset.y
-            let h = scrollView.contentSize.height
-            let frameH = scrollView.frame.size.height
-            if h > 0, y > h - frameH - 600 {
-                inputSubject.send(.loadNextPage)
-            }
+        guard orderHistorySegment.selectedSegmentIndex == 0,
+              scrollView === orderHistoryCollectionView else { return }
+
+        guard emptyStateView.isHidden else {
+            topShadowView.alpha = 0
+            topShadowView.isHidden = true
+            return
         }
-        
+
         let y = max(scrollView.contentOffset.y, 0)
         let target = min(y / 12.0, 1.0)
         setShadowAlphaSmooth(to: target)
@@ -726,8 +765,8 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     
     private func refreshShadowForCurrentTab() {
         let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
-
         guard isHistory, emptyStateView.isHidden else {
+            shadowAlpha = 0
             topShadowView.alpha = 0
             topShadowView.isHidden = true
             return
@@ -767,11 +806,6 @@ private extension UICollectionView {
 }
 
 extension OrderHistoryViewController {
-    
-        
-
-
-    
     private func bindCollectionViewCallbacks() {
         orderHistoryCollectionView.onSelect = { [weak self] orderId in
             self?.inputSubject.send(.selectOrder(orderId))

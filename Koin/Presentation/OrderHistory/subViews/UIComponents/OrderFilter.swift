@@ -8,46 +8,45 @@
 import Foundation
 
 struct OrderFilter: Equatable {
-    enum Period  { case threeMonths, sixMonths, oneYear }
-    enum Method  { case delivery, takeout }
-    struct Info: OptionSet {
-        let rawValue: Int
-        static let completed = Info(rawValue: 1 << 0)
-        static let canceled  = Info(rawValue: 1 << 1)
-    }
+    enum Period { case threeMonths, sixMonths, oneYear }
+    enum Method { case delivery, takeout }
+    enum Info { case completed, canceled}
+        
     var period: Period?
     var method: Method?
-    var info: Info = []
-    static let empty = OrderFilter(period: nil, method: nil, info: [])
+    var info: Info?
+    static let empty = OrderFilter(period: nil, method: nil, info: nil)
 }
 
 extension OrderFilter {
     func toDomainQuery(keyword: String) -> OrderHistoryQuery {
-        var q = OrderHistoryQuery()
+        var query = OrderHistoryQuery()
 
-        
-        if let p = period {
-            switch p {
-            case .threeMonths: q.period = .last3Months
-            case .sixMonths:   q.period = .last6Months
-            case .oneYear:     q.period = .last1Year
+        if let period = period {
+            switch period {
+            case .threeMonths: query.period = .last3Months
+            case .sixMonths:   query.period = .last6Months
+            case .oneYear:     query.period = .last1Year
             }
         } else {
-            q.period = .none
+            query.period = .none
         }
         
-        let wantsCompleted = info.contains(.completed)
-        let wantsCanceled  = info.contains(.canceled)
-        if wantsCompleted && !wantsCanceled { q.status = .completed }
-        else if wantsCanceled && !wantsCompleted { q.status = .canceled }
-        else { q.status = .none }
-
-        if let m = method {
-            q.type = (m == .delivery) ? .delivery : .takeout
+        if let info = info {
+            switch info {
+            case .completed: query.status = .completed
+            case .canceled:  query.status = .canceled
+            }
         } else {
-            q.type = .none
+            query.status = .none
         }
-        q.keyword = keyword
-        return q
+        
+        if let method = method {
+            query.type = (method == .delivery) ? .delivery : .takeout
+        } else {
+            query.type = .none
+        }
+        query.keyword = keyword
+        return query
     }
 }

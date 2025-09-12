@@ -16,10 +16,6 @@ extension FetchOrderHistoryUseCase {
     func execute() -> AnyPublisher<OrdersPage, Error> {
         execute(query: OrderHistoryQuery())
     }
-
-//    func executeFlat(query: OrderHistoryQuery) -> AnyPublisher<[Order], Error> {
-//        execute(query: query).map(\.orders).eraseToAnyPublisher()
-//    }
 }
 
 final class DefaultFetchOrderHistoryUseCase: FetchOrderHistoryUseCase {

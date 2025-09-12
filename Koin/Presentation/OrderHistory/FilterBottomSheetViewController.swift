@@ -338,8 +338,8 @@ final class FilterBottomSheetViewController: UIViewController {
         deliveryButton.applyFilter(work.method == .delivery)
         takeoutButton.applyFilter(work.method == .takeout)
 
-        doneButton.applyFilter(work.info.contains(.completed))
-        cancelButton.applyFilter(work.info.contains(.canceled))
+        doneButton.applyFilter(work.info == .completed)
+        cancelButton.applyFilter(work.info == .canceled)
     }
     
     //MARK: - @objc
@@ -376,11 +376,9 @@ final class FilterBottomSheetViewController: UIViewController {
     }
     
     @objc private func infoTapped(_ sender: FilteringButton) {
-        if sender === doneButton {
-            work.info.formSymmetricDifference(.completed)
-        } else {
-            work.info.formSymmetricDifference(.canceled)
-        }
+        let cur = work.info
+        if sender === doneButton    { work.info = (cur == .completed) ? nil : .completed }
+        if sender === cancelButton  { work.info = (cur == .canceled)  ? nil : .canceled }
         render()
     }
 }
@@ -390,8 +388,8 @@ extension FilterBottomSheetViewController {
     private func animatePresent() {
         view.layoutIfNeeded()
         bottomConstraint.update(offset: 0)
-        let d: TimeInterval = UIAccessibility.isReduceMotionEnabled ? 0.0 : 0.22
-        UIView.animate(withDuration: d, delay: 0, options: [.curveEaseOut]) {
+        let dismiss: TimeInterval = UIAccessibility.isReduceMotionEnabled ? 0.0 : 0.22
+        UIView.animate(withDuration: dismiss, delay: 0, options: [.curveEaseOut]) {
             self.backdrop.backgroundColor = UIColor.black.withAlphaComponent(0.7)
             self.view.layoutIfNeeded()
         }
@@ -399,8 +397,8 @@ extension FilterBottomSheetViewController {
     
     private func animateDismiss() {
         bottomConstraint.update(offset: 320)
-        let d: TimeInterval = UIAccessibility.isReduceMotionEnabled ? 0.0 : 0.20
-        UIView.animate(withDuration: d, delay: 0, options: [.curveEaseIn]) {
+        let dismiss: TimeInterval = UIAccessibility.isReduceMotionEnabled ? 0.0 : 0.20
+        UIView.animate(withDuration: dismiss, delay: 0, options: [.curveEaseIn]) {
             self.backdrop.backgroundColor = UIColor.black.withAlphaComponent(0.0)
             self.view.layoutIfNeeded()
         } completion: { _ in
@@ -408,17 +406,17 @@ extension FilterBottomSheetViewController {
         }
     }
     
-    private func changeSheetInButton(_ b: FilteringButton) {
-        var config = b.configuration ?? .plain()
+    private func changeSheetInButton(_ button: FilteringButton) {
+        var config = button.configuration ?? .plain()
         config.image = nil
         config.imagePadding = 0
         config.contentInsets = NSDirectionalEdgeInsets(
             top: 8, leading: 12, bottom: 8, trailing: 12
         )
-        b.configuration = config
+        button.configuration = config
 
-        b.setContentHuggingPriority(.required, for: .horizontal)
-        b.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
 }

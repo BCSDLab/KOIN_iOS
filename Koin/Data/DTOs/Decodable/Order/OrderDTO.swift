@@ -85,22 +85,22 @@ struct OpenStatusAdapter: Decodable {
     let domain: OpenStatus
 
     init(from decoder: Decoder) throws {
-        let c = try decoder.singleValueContainer()
+        let container = try decoder.singleValueContainer()
 
-        if c.decodeNil() {
-            domain = .unknown
+        if container.decodeNil() {
+            self.domain = .unknown
             return
         }
-        if let b = try? c.decode(Bool.self) {
-            domain = b ? .operating : .closed
+        if let boolValue = try? container.decode(Bool.self) {
+            domain = boolValue ? .operating : .closed
             return
         }
-        if let s = try? c.decode(String.self) {
-            let u = s.uppercased()
-            if let mapped = OpenStatus(rawValue: u) {
+        if let stringValue = try? container.decode(String.self) {
+            let uppercasedValue = stringValue.uppercased()
+            if let mapped = OpenStatus(rawValue: uppercasedValue) {
                 domain = mapped
             } else {
-                switch u {
+                switch uppercasedValue {
                 case "OPEN": domain = .operating
                 case "CLOSE": domain = .closed
                 default: domain = .unknown

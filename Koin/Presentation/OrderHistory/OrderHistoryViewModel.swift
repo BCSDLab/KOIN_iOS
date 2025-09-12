@@ -170,9 +170,7 @@ final class OrderViewModel {
                 }
                 return self.orderService.fetchOrderInProgress()
             }
-            .map { [weak self] list -> Event in
-                print("preparing -> entities:", list.count)
-        
+            .map { [weak self] list -> Event in        
                 let vms = list.compactMap { self?.mapToPreparingItem($0) }
                 return .updatePreparing(vms)
             }
@@ -238,14 +236,14 @@ final class OrderViewModel {
     }
 
     // MARK: - Mapping (Preparing)
-    private func mapToPreparingItem(_ e: OrderInProgress) -> PreparingItem {
-        let methodText = (e.type == .delivery) ? "배달" : "포장"
-        let eta = (e.estimatedTime == "시간 미정") ? "시간 미정" : "\(e.estimatedTime) 도착 예정"
+    private func mapToPreparingItem(_ orderInProgress: OrderInProgress) -> PreparingItem {
+        let methodText = (orderInProgress.type == .delivery) ? "배달" : "포장"
+        let eta = (orderInProgress.estimatedTime == "시간 미정") ? "시간 미정" : "\(orderInProgress.estimatedTime) 도착 예정"
 
         let stateText: String = {
-            switch e.type {
+            switch orderInProgress.type {
             case .delivery:
-                switch e.status {
+                switch orderInProgress.status {
                 case .confirming: return "주문 확인 중"
                 case .cooking, .packaged, .pickedUp: return "조리 중"
                 case .delivering: return "배달 출발"
@@ -253,7 +251,7 @@ final class OrderViewModel {
                 case .canceled: return "주문 취소"
                 }
             case .takeout:
-                switch e.status {
+                switch orderInProgress.status {
                 case .confirming: return "주문 확인 중"
                 case .cooking: return "조리 중"
                 case .packaged, .pickedUp, .delivered: return "수령 가능"
@@ -264,9 +262,9 @@ final class OrderViewModel {
         }()
 
         let explanation: String = {
-            switch e.type {
+            switch orderInProgress.type {
             case .delivery:
-                switch e.status {
+                switch orderInProgress.status {
                 case .confirming: return "사장님이 주문을 확인하고 있어요!"
                 case .cooking: return "가게에서 열심히 음식을 조리하고 있어요!"
                 case .delivering: return "열심히 달려가는 중이에요!"
@@ -275,7 +273,7 @@ final class OrderViewModel {
                 case .canceled: return "주문이 취소되었어요."
                 }
             case .takeout:
-                switch e.status {
+                switch orderInProgress.status {
                 case .confirming: return "사장님이 주문을 확인하고 있어요!"
                 case .cooking: return "가게에서 열심히 음식을 조리하고 있어요!"
                 case .packaged, .pickedUp, .delivered: return "준비가 완료되었어요!"
@@ -286,23 +284,23 @@ final class OrderViewModel {
         }()
 
         let priceText: String = {
-            let nf = NumberFormatter()
-            nf.locale = Locale(identifier: "ko_KR")
-            nf.numberStyle = .decimal
-            nf.maximumFractionDigits = 0
-            nf.usesGroupingSeparator = true
-            return "\(nf.string(from: NSNumber(value: e.totalAmount)) ?? "\(e.totalAmount)") 원"
+            let numberFormatter = NumberFormatter()
+            numberFormatter.locale = Locale(identifier: "ko_KR")
+            numberFormatter.numberStyle = .decimal
+            numberFormatter.maximumFractionDigits = 0
+            numberFormatter.usesGroupingSeparator = true
+            return "\(numberFormatter.string(from: NSNumber(value: orderInProgress.totalAmount)) ?? "\(orderInProgress.totalAmount)") 원"
         }()
 
         return PreparingItem(
             stateText: stateText,
-            id: e.id,
+            id: orderInProgress.id,
             methodText: methodText,
             estimatedTimeText: eta,
             explanationText: explanation,
-            imageURL: URL(string: e.orderableShopThumbnail),
-            storeName: e.orderableShopName,
-            menuName: e.orderTitle,
+            imageURL: URL(string: orderInProgress.orderableShopThumbnail),
+            storeName: orderInProgress.orderableShopName,
+            menuName: orderInProgress.orderTitle,
             priceText: priceText
         )
     }
