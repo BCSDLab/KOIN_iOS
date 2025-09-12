@@ -219,6 +219,20 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         default: break
         }
     }
+    
+    func goToHistory(initialSegment: Int) {
+        let historyTabIndex = 2
+        selectedIndex = historyTabIndex
+
+        guard let navigationViewController = viewControllers?[historyTabIndex] as? UINavigationController else { return }
+
+        navigationViewController.popToRootViewController(animated: false)
+
+        if let orderHistoryViewController = navigationViewController.viewControllers.first as? OrderHistoryViewController {
+            orderHistoryViewController.loadViewIfNeeded()
+            orderHistoryViewController.setInitialTab(initialSegment)
+        }
+    }
 }
 
 final class RootHidingNavigationController: UINavigationController,

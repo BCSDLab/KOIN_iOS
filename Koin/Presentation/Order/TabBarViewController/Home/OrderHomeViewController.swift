@@ -258,7 +258,7 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     private func setAddTarget() {
         searchBarButton.addTarget(self, action: #selector(searchBarButtonTapped), for: .touchUpInside)
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
-        orderFloatingButton.addTarget(self, action: #selector(didTapOrderFloatingButton), for: .touchUpInside)
+        orderFloatingButton.addTarget(self, action: #selector(orderFloatingButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -390,17 +390,9 @@ extension OrderHomeViewController {
         present(bottomSheetViewController, animated: true)
     }
     
-    @objc private func didTapOrderFloatingButton() {
-        
-        print("lottie button tapped")
-        let orderService = DefaultOrderService()
-        let historyRepository  = DefaultOrderHistoryRepository(service: orderService)
-        let fetchHistory = DefaultFetchOrderHistoryUseCase(repository: historyRepository)
-        let viewModel = OrderViewModel(fetchHistory: fetchHistory, orderService: orderService)
-
-        let viewController = OrderHistoryViewController(viewModel: viewModel, initialTab: 1)
-        viewController.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(viewController, animated: true)
+    @objc private func orderFloatingButtonTapped() {
+        (tabBarController as? OrderTabBarViewController)?
+            .goToHistory(initialSegment: 1)
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
@@ -586,8 +578,8 @@ extension OrderHomeViewController {
     
     private func configureView() {
         self.view.backgroundColor = UIColor.appColor(.newBackground)
+        view.bringSubviewToFront(orderFloatingButton)
         setUpLayOuts()
         setUpConstraints()
-        view.bringSubviewToFront(orderFloatingButton)
     }
 }

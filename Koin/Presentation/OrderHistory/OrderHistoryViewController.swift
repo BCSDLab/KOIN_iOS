@@ -13,8 +13,8 @@ final class OrderHistoryViewController: UIViewController {
     
     private let viewModel: OrderViewModel
     private var cancellables = Set<AnyCancellable>()
+    private let inputSubject = PassthroughSubject<OrderViewModel.Input, Never>()
     private var items: [OrderViewModel.OrderItem] = []
-    private let input = PassthroughSubject<OrderViewModel.Input, Never>()
     
     private var isSearching: Bool {
         !(searchBar.textField.text ?? "")
@@ -146,7 +146,6 @@ final class OrderHistoryViewController: UIViewController {
         $0.layer.shadowRadius  = 4
     }
 
-
     private let topShadowView = UIView().then {
         $0.isUserInteractionEnabled = false
         $0.alpha = 0
@@ -177,7 +176,6 @@ final class OrderHistoryViewController: UIViewController {
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
-
     private let filterButtonRow = UIStackView().then {
         $0.axis = .horizontal
         $0.alignment = .leading
@@ -205,7 +203,6 @@ final class OrderHistoryViewController: UIViewController {
         $0.isHidden = true
         $0.alpha = 0
     }
-
     
     // MARK: - Initialization
     
@@ -216,7 +213,7 @@ final class OrderHistoryViewController: UIViewController {
         
         configureView()
         bind()
-        bindViewModel()
+        setAddTarget()
         setDelegate()
         render()
         updateSearchVisibility(animated: false)
@@ -231,11 +228,16 @@ final class OrderHistoryViewController: UIViewController {
         }
         
         orderHistoryCollectionView.onReachEnd = { [weak self] in
-            self?.input.send(.loadNextPage)
+            self?.inputSubject.send(.loadNextPage)
         }
         
-        input.send(.viewDidLoad)
-        
+        inputSubject.send(.viewDidLoad)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -261,46 +263,83 @@ final class OrderHistoryViewController: UIViewController {
         bottomBorder.backgroundColor = UIColor.black.withAlphaComponent(0.08).cgColor
         topShadowView.layer.addSublayer(bottomBorder)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        view.layoutIfNeeded()
-    }
-    
 
     // MARK: - Bind
     private func bind() {
+        let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .updateOrders(let newItems):
+                    self.items = newItems
+                    self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
+                    self.updateEmptyState()
+                case .updatePreparing(let newItems):
+                    print("updatePreparing:", newItems.count)
+                    self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
+                    
+                case .showEmpty(let isEmpty):
+                    self.emptyStateView.isHidden = !isEmpty
+                    self.orderHistoryCollectionView.isHidden = isEmpty
+
+                case .errorOccurred(let error):
+                    print(error)
+
+                case .endRefreshing:
+                    self.refreshControl.endRefreshing()
+
+                case .navigateToOrderDetail:
+                    break
+                case .appendOrders(let pageItems):
+                    self.items.append(contentsOf: pageItems)
+                    self.orderHistoryCollectionView.append(pageItems.map { $0.asCollectionItem })
+                }
+            }
+            .store(in: &cancellables)
+        inputSubject.send(.viewDidLoad)
         
+        searchBar.onTextChanged = { [weak self] text in
+            self?.inputSubject.send(.search(text))
+        }
+        
+        searchBar.onReturn = { [weak self] text in
+            self?.inputSubject.send(.search(text))
+            self?.dismissSearchOverlay()
+        }
+        
+        updateSearchVisibility(animated: false)
+    }
+    
+    private func setAddTarget() {
         orderHistorySegment.addTarget(self, action: #selector(changeSegmentLine(_:)), for: .valueChanged)
+        
         [periodButton, stateInfoButton].forEach {
             $0.addTarget(self, action: #selector(showFilterSheet), for: .touchUpInside)
         }
         
         resetButton.addTarget(self, action: #selector(resetFilterTapped), for: .touchUpInside)
         searchDimView.addTarget(self, action: #selector(dismissSearchOverlay), for: .touchUpInside)
-        searchBar.textField.delegate = self
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
-        
-        updateSearchVisibility(animated: false)
     }
     
-    private func setDelegate(){
+    private func setDelegate() {
+        searchBar.textField.delegate = self
         searchBar.textField.delegate = self
         orderHistoryCollectionView.delegate = self
         orderPrepareCollectionView.delegate = self
-        orderHistoryCollectionView.alwaysBounceVertical = true
-        orderPrepareCollectionView.alwaysBounceVertical = true
-        searchBar.onTextChanged = { [weak self] text in
-            self?.input.send(.search(text))
-        }
         
-        searchBar.onReturn = { [weak self] text in
-            self?.input.send(.search(text))
-            self?.dismissSearchOverlay()
-        }
+        // FIXME: -
         
+    }
+    
+    func setInitialTab(_ idx: Int) {
+        orderHistorySegment.selectedSegmentIndex = idx
+        changeSegmentLine(orderHistorySegment)
     }
 }
 
@@ -435,6 +474,8 @@ extension OrderHistoryViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = UIColor.appColor(.newBackground)
+        orderHistoryCollectionView.alwaysBounceVertical = true
+        orderPrepareCollectionView.alwaysBounceVertical = true
     }
 }
 
@@ -467,7 +508,7 @@ extension OrderHistoryViewController{
         
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
-            input.send(.applyFilter(currentFilter))
+            inputSubject.send(.applyFilter(currentFilter))
         } else {
             orderPrepareCollectionView.reloadData()
         }
@@ -585,7 +626,7 @@ extension OrderHistoryViewController {
     }
     
     @objc private func didPullToRefresh() {
-        input.send(.refresh)
+        inputSubject.send(.refresh)
     }
         
     @objc private func resetFilterTapped() {
@@ -618,7 +659,7 @@ extension OrderHistoryViewController {
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
         searchBar.textField.text = ""
-        input.send(.search(""))
+        inputSubject.send(.search(""))
         
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
             self.searchCancelButton.alpha = 0
@@ -651,7 +692,7 @@ extension OrderHistoryViewController {
         }
         changeSegmentLine(orderHistorySegment)
         dismissSearchOverlay()
-        input.send(.applyFilter(currentFilter))
+        inputSubject.send(.applyFilter(currentFilter))
     }
     
 }
@@ -674,7 +715,7 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
             let h = scrollView.contentSize.height
             let frameH = scrollView.frame.size.height
             if h > 0, y > h - frameH - 600 {
-                input.send(.loadNextPage)
+                inputSubject.send(.loadNextPage)
             }
         }
         
@@ -727,52 +768,17 @@ private extension UICollectionView {
 
 extension OrderHistoryViewController {
     
-    private func bindViewModel() {
-        let output = viewModel.transform(with: input.eraseToAnyPublisher())
-
-        output
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] event in
-                guard let self = self else { return }
-                switch event {
-                case .updateOrders(let newItems):
-                    self.items = newItems
-                    self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
-                    self.updateEmptyState()
-                case .updatePreparing(let newItems):
-                    print("updatePreparing:", newItems.count)
-                    self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
-                    
-                case .showEmpty(let isEmpty):
-                    self.emptyStateView.isHidden = !isEmpty
-                    self.orderHistoryCollectionView.isHidden = isEmpty
-
-                case .errorOccurred(let error):
-                    print(error)
-
-                case .endRefreshing:
-                    self.refreshControl.endRefreshing()
-
-                case .navigateToOrderDetail:
-                    break
-                case .appendOrders(let pageItems):
-                    self.items.append(contentsOf: pageItems)
-                    self.orderHistoryCollectionView.append(pageItems.map { $0.asCollectionItem })
-                }
-            }
-            .store(in: &cancellables)
-        input.send(.viewDidLoad)
-    }
+        
 
 
     
     private func bindCollectionViewCallbacks() {
         orderHistoryCollectionView.onSelect = { [weak self] orderId in
-            self?.input.send(.selectOrder(orderId))
+            self?.inputSubject.send(.selectOrder(orderId))
         }
         
         orderHistoryCollectionView.onTapReorder = { [weak self] orderId in
-            self?.input.send(.tapReorder(orderId))
+            self?.inputSubject.send(.tapReorder(orderId))
         }
     }
 }
