@@ -13,7 +13,7 @@ final class OrderViewModel {
     enum Input {
         case viewDidLoad
         case refresh
-        case applyFilter(OrderFilter)
+        case applyFilter(OrderHistoryFilter)
         case search(String)
         case loadNextPage
         case selectOrder(Int)
@@ -61,7 +61,7 @@ final class OrderViewModel {
 
     // MARK: - State
     private var subscriptions = Set<AnyCancellable>()
-    private var currentFilter: OrderFilter = .empty
+    private var currentFilter: OrderHistoryFilter = .empty
     private var currentKeyword: String = ""
     
     // MARK: - Pagination
@@ -195,7 +195,7 @@ final class OrderViewModel {
     }
 
     // MARK: - Mapping (History)
-    private func mapToItem(_ order: Order) -> OrderItem {
+    private func mapToItem(_ order: OrderHistory) -> OrderItem {
         let stateText: String = {
             switch order.status {
             case .delivered: return "배달완료"

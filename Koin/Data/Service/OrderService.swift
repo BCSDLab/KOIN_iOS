@@ -49,7 +49,7 @@ final class DefaultOrderService: OrderService {
     func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error> {
         let dto = OrderHistoryQueryDTO(query)
         return request(.fetchOrder(query: dto))
-            .map { (res: OrdersResponseDTO) in res.toPageEntity() }
+            .map { (res: OrdersHistoryResponseDTO) in res.toPageEntity() }
             .eraseToAnyPublisher()
     }
 

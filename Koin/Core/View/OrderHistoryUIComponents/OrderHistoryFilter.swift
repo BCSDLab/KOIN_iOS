@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderFilter: Equatable {
+struct OrderHistoryFilter: Equatable {
     enum Period { case threeMonths, sixMonths, oneYear }
     enum Method { case delivery, takeout }
     enum Info { case completed, canceled}
@@ -15,10 +15,10 @@ struct OrderFilter: Equatable {
     var period: Period?
     var method: Method?
     var info: Info?
-    static let empty = OrderFilter(period: nil, method: nil, info: nil)
+    static let empty = OrderHistoryFilter(period: nil, method: nil, info: nil)
 }
 
-extension OrderFilter {
+extension OrderHistoryFilter {
     func toDomainQuery(keyword: String) -> OrderHistoryQuery {
         var query = OrderHistoryQuery()
 

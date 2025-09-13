@@ -12,10 +12,10 @@ struct OrdersPage {
     let currentCount: Int
     let totalPage: Int
     let currentPage: Int
-    let orders: [Order]
+    let orders: [OrderHistory]
 }
 
-struct Order {
+struct OrderHistory {
     let id: Int
     let paymentId: Int
     let shopId: Int

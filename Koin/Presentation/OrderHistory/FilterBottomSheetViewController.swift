@@ -11,10 +11,10 @@ import SnapKit
 final class FilterBottomSheetViewController: UIViewController {
 
     //MARK: - properties
-    var initial: OrderFilter
-    var onApply: ((OrderFilter) -> Void)?
+    var initial: OrderHistoryFilter
+    var onApply: ((OrderHistoryFilter) -> Void)?
     
-    private var work: OrderFilter
+    private var work: OrderHistoryFilter
     private var bottomConstraint: Constraint!
     
     // MARK: - UI Components
@@ -134,7 +134,7 @@ final class FilterBottomSheetViewController: UIViewController {
 
     // MARK: - Initialize
     
-    init(initial: OrderFilter) {
+    init(initial: OrderHistoryFilter) {
         self.initial = initial
         self.work = initial
         super.init(nibName: nil, bundle: nil)

@@ -18,7 +18,7 @@ final class OrderHistoryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<OrderViewModel.Input, Never>()
     private var items: [OrderViewModel.OrderItem] = []
     private let initialTab: Int
-    private var currentFilter: OrderFilter = .empty {
+    private var currentFilter: OrderHistoryFilter = .empty {
         didSet { render() }
     }
     

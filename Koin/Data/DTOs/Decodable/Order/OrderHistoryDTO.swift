@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct OrdersResponseDTO: Decodable {
+struct OrdersHistoryResponseDTO: Decodable {
     let totalCount: Int
     let currentCount: Int
     let totalPage: Int
     let currentPage: Int
-    let orders: [OrderDTO]
+    let orders: [OrderHistoryDTO]
 
     enum CodingKeys: String, CodingKey {
         case totalCount = "total_count"
@@ -23,7 +23,7 @@ struct OrdersResponseDTO: Decodable {
     }
 }
 
-extension OrdersResponseDTO {
+extension OrdersHistoryResponseDTO {
     func toPageEntity() -> OrdersPage {
         OrdersPage(
             totalCount: totalCount,
@@ -35,7 +35,7 @@ extension OrdersResponseDTO {
     }
 }
 
-struct OrderDTO: Decodable {
+struct OrderHistoryDTO: Decodable {
     let id: Int
     let paymentId: Int
     let orderableShopId: Int
@@ -61,12 +61,12 @@ struct OrderDTO: Decodable {
     }
 }
 
-extension OrderDTO {
-    func toEntity() -> Order {
+extension OrderHistoryDTO {
+    func toEntity() -> OrderHistory {
         let date = orderDate.toDateFromYYYYMMDD() ?? .distantPast
         let thumbURL = URL(string: orderableShopThumbnail)
 
-        return Order(
+        return OrderHistory(
             id: id,
             paymentId: paymentId,
             shopId: orderableShopId,
