@@ -144,7 +144,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        setupReorderButtonStateHandler()
+        setupReorderButtonState()
     }
     
     required init?(coder: NSCoder) {
@@ -183,7 +183,6 @@ extension OrderHistoryColletionViewCell {
         stateLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
-            
         }
         
         dayLabel.snp.makeConstraints {
@@ -244,7 +243,7 @@ extension OrderHistoryColletionViewCell {
     
     // MARK: - UI Function
     
-    private func setupReorderButtonStateHandler() {
+    private func setupReorderButtonState() {
          reorderButton.configurationUpdateHandler = { [weak self] button in
              guard let self else { return }
              var config = button.configuration ?? .plain()
@@ -296,3 +295,23 @@ extension OrderHistoryColletionViewCell {
          
      }
 }
+
+
+extension OrderHistoryColletionViewCell {
+    static func calculateHeight() -> CGFloat{
+        let topInset: CGFloat = 16
+        let stateLabelH = UIFont.appFont(.pretendardBold, size: 16).lineHeight
+        let underLineInset: CGFloat = 12
+        let underLineH: CGFloat = 1
+        let menuImageTop: CGFloat = 12
+        let menuImageH: CGFloat = 88
+        let reviewButtonTop: CGFloat = 16
+        let reviewButton: CGFloat = 44
+        let reorderButtonTop: CGFloat = 12
+        let reorderButton: CGFloat = 44
+        let bottomInset: CGFloat = 16
+        
+        return topInset + stateLabelH + underLineInset + underLineH + menuImageTop + menuImageH + reviewButtonTop + reviewButton + reorderButtonTop + reorderButton + bottomInset
+    }
+}
+

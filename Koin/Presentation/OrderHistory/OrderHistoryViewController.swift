@@ -80,14 +80,7 @@ final class OrderHistoryViewController: UIViewController {
     private let orderHistoryCollectionView = OrderHistoryCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
-    ).then {
-        if let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 12
-            layout.minimumInteritemSpacing = 0
-            layout.sectionInset = .zero
-        }
-    }
+    )
 
     private let orderPrepareCollectionView = OrderPrepareCollectionView(
         frame: .zero,
@@ -330,8 +323,7 @@ final class OrderHistoryViewController: UIViewController {
     }
     
     private func setDelegate() {
-        orderHistoryCollectionView.delegate = self
-        orderPrepareCollectionView.delegate = self
+        
     }
     
     func setInitialTab(_ idx: Int) {
@@ -785,16 +777,16 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     
     //MARK: - CollectionView ItemSize
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == orderHistoryCollectionView{
-            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 286)
-        } else if collectionView == orderPrepareCollectionView{
-            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 321)
-        }
-        return CGSize(width: 0, height: 0)
-    }
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        if collectionView == orderHistoryCollectionView{
+//            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 286)
+//        } else if collectionView == orderPrepareCollectionView{
+//            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 321)
+//        }
+//        return CGSize(width: 0, height: 0)
+//    }
 
 }
 

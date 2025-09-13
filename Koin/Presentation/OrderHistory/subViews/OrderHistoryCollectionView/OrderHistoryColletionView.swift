@@ -32,6 +32,9 @@ final class OrderHistoryCollectionView: UICollectionView {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
+    
+    
+    
     required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
 
     private func commonInit() {
@@ -39,7 +42,14 @@ final class OrderHistoryCollectionView: UICollectionView {
         showsVerticalScrollIndicator = false
         dataSource = self
         delegate = self
-
+        
+        if let layout = self.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero
+        }
+        
         register(OrderHistoryColletionViewCell.self,
                  forCellWithReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier)
     }
@@ -109,12 +119,21 @@ extension OrderHistoryCollectionView: UICollectionViewDataSource {
     }
 }
 
-extension OrderHistoryCollectionView: UICollectionViewDelegate {
+extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         onSelect?(items[indexPath.item].id)
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = UIScreen.main.bounds.width - 48
+        let height = OrderHistoryColletionViewCell.calculateHeight()
+        return CGSize(width: width, height: height)
+    }
 }
+    
+
 
 
 extension OrderHistoryCollectionView.Item {
@@ -131,3 +150,6 @@ extension OrderHistoryCollectionView.Item {
         )
     }
 }
+
+    
+
