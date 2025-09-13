@@ -11,12 +11,12 @@ import Combine
 final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     private var selectedShopId: Int?
-    private var initialTabIndex: Int
+    private var selectedTabIndex: Int
     private var subscriptions: Set<AnyCancellable> = []
     
     init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopID
-        self.initialTabIndex = initialTabIndex
+        self.selectedTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,14 +31,14 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         setupNavigationRightButton()
         setupTabBarAppearance()
         
-        selectedIndex = initialTabIndex
-        updateNavigationTitle(for: initialTabIndex)
+        updateNavigationTitle(for: selectedTabIndex)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureController()
         configureNavigationBar(style: .order)
+        selectedIndex = selectedTabIndex
     }
 
     
@@ -125,7 +125,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: initialTabIndex == 1 ? selectedShopId ?? 0 : 0
+            selectedId: selectedTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
         let shopViewController = ShopViewController(viewModel: shopViewModel, navigationControllerDelegate: navigationController)
         
@@ -148,6 +148,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     // MARK: - UITabBarControllerDelegate
     func tabBarController(_ tabBarController: UITabBarController,
                           didSelect viewController: UIViewController) {
+        selectedTabIndex = tabBarController.selectedIndex
         updateNavigationTitle(for: selectedIndex)
     }
     
