@@ -16,7 +16,6 @@ final class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private let shopId: Int?
-    private let isFromOrder: Bool
     
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
@@ -80,7 +79,7 @@ final class ShopDetailViewController: UIViewController {
     init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
         self.viewModel = viewModel
         self.shopId = shopId
-        self.isFromOrder = isFromOrder
+        bottomSheet.isHidden = !isFromOrder
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -285,10 +284,6 @@ extension ShopDetailViewController {
     private func configureView(){
         setUpLayout()
         setUpConstraints()
-        
-        if(!isFromOrder) {
-            bottomSheet.isHidden = true
-        }
     }
     private func setDelegate() {
         scrollView.delegate = self
