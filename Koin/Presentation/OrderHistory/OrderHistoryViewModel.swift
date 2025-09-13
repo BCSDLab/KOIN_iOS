@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class OrderViewModel {
+final class OrderHistoryViewModel {
     // MARK: Input
     enum Input {
         case viewDidLoad

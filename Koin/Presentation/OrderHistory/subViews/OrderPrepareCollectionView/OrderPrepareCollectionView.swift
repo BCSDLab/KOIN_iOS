@@ -147,7 +147,7 @@ extension OrderPrepareCollectionView: UICollectionViewDelegate, UICollectionView
 
 
 extension OrderPrepareCollectionView.Item {
-    init(from viewModel: OrderViewModel.PreparingItem) {
+    init(from viewModel: OrderHistoryViewModel.PreparingItem) {
         self.init(
             id: viewModel.id,
             methodText: viewModel.methodText,

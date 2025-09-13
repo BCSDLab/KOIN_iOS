@@ -141,7 +141,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             repository: DefaultOrderHistoryRepository(service: orderService)
         )
 
-        let orderHistoryViewModel = OrderViewModel(
+        let orderHistoryViewModel = OrderHistoryViewModel(
             fetchHistory: fetchOrderHistoryUseCase,
             orderService: orderService
         )

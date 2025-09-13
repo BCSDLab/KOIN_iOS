@@ -160,7 +160,7 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
 
 
 extension OrderHistoryCollectionView.Item {
-    init(from viewModel: OrderViewModel.OrderItem) {
+    init(from viewModel: OrderHistoryViewModel.OrderItem) {
         self.init(
             id: viewModel.id,
             stateText: viewModel.stateText,

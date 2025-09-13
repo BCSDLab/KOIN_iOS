@@ -13,10 +13,10 @@ final class OrderHistoryViewController: UIViewController {
 
     // MARK: - Properties
     
-    private let viewModel: OrderViewModel
+    private let viewModel: OrderHistoryViewModel
     private var cancellables = Set<AnyCancellable>()
-    private let inputSubject = PassthroughSubject<OrderViewModel.Input, Never>()
-    private var items: [OrderViewModel.OrderItem] = []
+    private let inputSubject = PassthroughSubject<OrderHistoryViewModel.Input, Never>()
+    private var items: [OrderHistoryViewModel.OrderItem] = []
     private let initialTab: Int
     private var currentFilter: OrderHistoryFilter = .empty {
         didSet { render() }
@@ -33,7 +33,7 @@ final class OrderHistoryViewController: UIViewController {
     
 
     
-    init(viewModel: OrderViewModel, initialTab: Int = 0) {
+    init(viewModel: OrderHistoryViewModel, initialTab: Int = 0) {
         self.viewModel = viewModel
         self.initialTab = initialTab
         super.init(nibName: nil, bundle: nil)

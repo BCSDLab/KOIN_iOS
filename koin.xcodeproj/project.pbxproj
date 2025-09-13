@@ -1489,8 +1489,8 @@
 			isa = PBXGroup;
 			children = (
 				3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */,
-				3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */,
 				3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */,
+				3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */,
 			);
 			path = OrderHistoryUIComponents;
 			sourceTree = "<group>";
