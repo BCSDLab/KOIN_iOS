@@ -32,11 +32,16 @@ final class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDe
 extension ShopDetailImagesCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if(orderImages.isEmpty) { return 1 }
         return orderImages.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailImagesCollectionViewCell.identifier, for: indexPath) as? ShopDetailImagesCollectionViewCell else {
             return UICollectionViewCell()
+        }
+        if(orderImages.isEmpty) {
+            cell.configure(url: nil)
+            return cell
         }
         cell.configure(url: orderImages[indexPath.row].imageUrl)
         return cell

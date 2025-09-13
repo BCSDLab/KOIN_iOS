@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 import Then
 
 final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
@@ -25,8 +26,15 @@ final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(url: String) {
-        imageView.loadImage(from: url)
+    func configure(url: String?) {
+        guard let url else {
+            imageView.image = UIImage.appImage(asset: .defaultMenuImage)
+            return
+        }
+        imageView.kf.setImage(
+            with: URL(string: url),
+            placeholder: UIImage.appImage(asset: .defaultMenuImage)
+        )
     }
 }
 

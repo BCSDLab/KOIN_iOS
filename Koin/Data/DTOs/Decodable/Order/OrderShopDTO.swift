@@ -43,16 +43,6 @@ struct OrderShopDTO: Codable {
     }
 }
 
-struct OrderImageDTO: Codable {
-    let imageUrl: String
-    let isThumbnail: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case imageUrl = "image_url"
-        case isThumbnail = "is_thumbnail"
-    }
-}
-
 struct OpenInfoDTO: Codable {
     let dayOfWeek: String
     let closed: Bool
