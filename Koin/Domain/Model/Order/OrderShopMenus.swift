@@ -24,15 +24,8 @@ struct OrderShopMenu {
 
 struct Price {
     let id: Int
-    let name: Name?
+    let name: String?
     let price: Int
-}
-
-enum Name: String {
-    case small = "소"
-    case medium = "중"
-    case large = "대"
-    case extraLarge = "특대"
 }
 
 extension OrderShopMenus {
@@ -65,17 +58,5 @@ extension Price {
             Name(from: nameDTO)
         }
         self.price = dto.price
-    }
-}
-
-extension Name {
-    init(from dto: NameDTO) {
-        if let name = Name(rawValue: dto.rawValue) {
-            self = name
-        }
-        else {
-            print("initialzer failed at OrderShopMenus.swift")
-            self = .small
-        }
     }
 }
