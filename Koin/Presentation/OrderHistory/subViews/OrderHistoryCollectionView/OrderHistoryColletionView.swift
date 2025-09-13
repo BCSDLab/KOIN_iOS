@@ -43,12 +43,7 @@ final class OrderHistoryCollectionView: UICollectionView {
         dataSource = self
         delegate = self
         
-        if let layout = self.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 12
-            layout.minimumInteritemSpacing = 0
-            layout.sectionInset = .zero
-        }
+ 
         
         register(OrderHistoryColletionViewCell.self,
                  forCellWithReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier)
@@ -67,7 +62,22 @@ final class OrderHistoryCollectionView: UICollectionView {
         performBatchUpdates({ insertItems(at: indexPaths) }, completion: nil)
     }
     
-    
+   
+    private func calculateHeight() -> CGFloat{
+        let topInset: CGFloat = 16
+        let stateLabelH = UIFont.appFont(.pretendardBold, size: 16).lineHeight
+        let underLineInset: CGFloat = 12
+        let underLineH: CGFloat = 1
+        let menuImageTop: CGFloat = 12
+        let menuImageH: CGFloat = 88
+        let reviewButtonTop: CGFloat = 16
+        let reviewButton: CGFloat = 44
+        let reorderButtonTop: CGFloat = 12
+        let reorderButton: CGFloat = 44
+        let bottomInset: CGFloat = 16
+        
+        return topInset + stateLabelH + underLineInset + underLineH + menuImageTop + menuImageH + reviewButtonTop + reviewButton + reorderButtonTop + reorderButton + bottomInset
+    }
 }
 
 
@@ -128,7 +138,7 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width - 48
-        let height = OrderHistoryColletionViewCell.calculateHeight()
+        let height = calculateHeight()
         return CGSize(width: width, height: height)
     }
 }

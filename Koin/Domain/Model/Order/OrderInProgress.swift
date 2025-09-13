@@ -51,3 +51,14 @@ extension OrderInProgress {
         return orderableShopName
     }
 }
+
+extension OrderInProgressStatus {
+    var showEstimatedTime: Bool {
+        switch self {
+        case .confirming, .cooking, .packaged, .delivering:
+            return true
+        case .pickedUp, .delivered, .canceled:
+            return false
+        }
+    }
+}

@@ -10,7 +10,7 @@ import UIKit
 final class OrderPrepareCollectionView: UICollectionView {
     
     var onLoadedIDs: (([Int]) -> Void)?
-
+    
     struct Item: Hashable {
         let id: Int
         let methodText: String
@@ -20,23 +20,31 @@ final class OrderPrepareCollectionView: UICollectionView {
         let storeName: String
         let menuName: String
         let priceText: String
+        let status: OrderInProgressStatus
     }
     
     private var items: [Item] = []
     
-
+    
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
     required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
-
+    
     private func commonInit() {
         backgroundColor = .clear
         showsVerticalScrollIndicator = false
         dataSource = self
         delegate = self
-
+        
+        if let layout = self.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero
+        }
+        
         register(OrderPrepareCollectionViewCell.self,
                  forCellWithReuseIdentifier: OrderPrepareCollectionViewCell.OrderPrepareIdentifier)
     }
@@ -46,7 +54,36 @@ final class OrderPrepareCollectionView: UICollectionView {
         reloadData()
         onLoadedIDs?(items.map { $0.id })
     }
+    
+    private func calculateHeight(for item: Item) -> CGFloat{
+        let hasETAContent = !item.estimatedTimeText
+            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let showsETA = item.status == .confirming
+        || item.status == .cooking
+        || item.status == .packaged
+        || item.status == .delivered
+        
+        let topInset: CGFloat = 16
+        let chipH: CGFloat = 24
+        let topState: CGFloat = 12
+        let stateH: CGFloat = 32
+        let estimateTimeH: CGFloat   = 32
+        let explainH: CGFloat = 19
+        let underlineTop: CGFloat = 16
+        let underlineH: CGFloat = 1
+        let imageTop: CGFloat = 16
+        let imageH: CGFloat = 88
+        let buttonTop: CGFloat = 16
+        let buttonH: CGFloat = 44
+        let bottomInset: CGFloat = 16
+        
+        var total = topInset + chipH + topState + stateH
+        if showsETA && hasETAContent { total += estimateTimeH }
+        total += explainH + underlineTop + underlineH + imageTop + imageH + buttonTop + buttonH + bottomInset
+        return total
+    }
 }
+    
 
 extension OrderPrepareCollectionView: UICollectionViewDataSource {
     
@@ -78,7 +115,8 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
                             image: fetched,
                             storeName: item.storeName,
                             menuName: item.menuName,
-                            priceText: item.priceText
+                            priceText: item.priceText,
+                            status: item.status
                         )
                     }
                 }
@@ -91,18 +129,25 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
             image: image,
             storeName: item.storeName,
             menuName: item.menuName,
-            priceText: item.priceText
+            priceText: item.priceText,
+            status: item.status
         )
         return cell
     }
 
 }
 
-extension OrderPrepareCollectionView: UICollectionViewDelegate {
+extension OrderPrepareCollectionView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])
-
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let item = items[indexPath.item]
+        let width = UIScreen.main.bounds.width - 48
+        let height = calculateHeight(for: item)
+        return CGSize(width: width, height: height)
+    }
+    
 }
 
 
@@ -116,10 +161,14 @@ extension OrderPrepareCollectionView.Item {
             imageURL: viewModel.imageURL,
             storeName: viewModel.storeName,
             menuName: viewModel.menuName,
-            priceText: viewModel.priceText
+            priceText: viewModel.priceText,
+            status: viewModel.status
         )
     }
 }
+
+
+
 
 //extension OrderPrepareCollectionView: UICollectionViewDelegateFlowLayout {
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -52,6 +52,7 @@ final class OrderViewModel {
         let storeName: String
         let menuName: String
         let priceText: String
+        let status: OrderInProgressStatus
     }
 
     // MARK: - Deps
@@ -301,7 +302,8 @@ final class OrderViewModel {
             imageURL: URL(string: orderInProgress.orderableShopThumbnail),
             storeName: orderInProgress.orderableShopName,
             menuName: orderInProgress.orderTitle,
-            priceText: priceText
+            priceText: priceText,
+            status: orderInProgress.status
         )
     }
 }

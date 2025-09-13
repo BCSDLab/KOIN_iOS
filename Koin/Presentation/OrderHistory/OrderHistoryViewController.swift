@@ -774,36 +774,10 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         shadowAlpha += (t - shadowAlpha) * 0.20
         topShadowView.alpha = shadowAlpha
     }
-    
-    //MARK: - CollectionView ItemSize
-    
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        if collectionView == orderHistoryCollectionView{
-//            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 286)
-//        } else if collectionView == orderPrepareCollectionView{
-//            return CGSize(width: UIScreen.main.bounds.width - 48 , height: 321)
-//        }
-//        return CGSize(width: 0, height: 0)
-//    }
-
 }
 
 private extension UICollectionView {
     var totalItemCount: Int {
         (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
-    }
-}
-
-extension OrderHistoryViewController {
-    private func bindCollectionViewCallbacks() {
-        orderHistoryCollectionView.onSelect = { [weak self] orderId in
-            self?.inputSubject.send(.selectOrder(orderId))
-        }
-        
-        orderHistoryCollectionView.onTapReorder = { [weak self] orderId in
-            self?.inputSubject.send(.tapReorder(orderId))
-        }
     }
 }

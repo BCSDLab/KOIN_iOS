@@ -50,7 +50,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     private let menuImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 4
         $0.image = UIImage.appImage(asset: .defaultMenuImage)
     }
 
@@ -296,22 +296,4 @@ extension OrderHistoryColletionViewCell {
      }
 }
 
-
-extension OrderHistoryColletionViewCell {
-    static func calculateHeight() -> CGFloat{
-        let topInset: CGFloat = 16
-        let stateLabelH = UIFont.appFont(.pretendardBold, size: 16).lineHeight
-        let underLineInset: CGFloat = 12
-        let underLineH: CGFloat = 1
-        let menuImageTop: CGFloat = 12
-        let menuImageH: CGFloat = 88
-        let reviewButtonTop: CGFloat = 16
-        let reviewButton: CGFloat = 44
-        let reorderButtonTop: CGFloat = 12
-        let reorderButton: CGFloat = 44
-        let bottomInset: CGFloat = 16
-        
-        return topInset + stateLabelH + underLineInset + underLineH + menuImageTop + menuImageH + reviewButtonTop + reviewButton + reorderButtonTop + reorderButton + bottomInset
-    }
-}
 

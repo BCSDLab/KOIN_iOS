@@ -12,6 +12,11 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
     static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
     
+    
+    private var showEstimateTimeLabel: Constraint!
+    private var hideEstimateTimeLabel: Constraint!
+
+    
     private enum stateCase {
         case delivery
         case packaging
@@ -65,10 +70,10 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     }
 
     private let menuImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-        $0.image = UIImage.appImage(asset: .defaultMenuImage)
-        $0.layer.cornerRadius = 4
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.image = UIImage.appImage(asset: .defaultMenuImage)
     }
 
     private let storeNameLabel = UILabel().then {
@@ -137,7 +142,7 @@ extension OrderPrepareCollectionViewCell {
     }
     
     private func setUpLayouts() {
-        [orderInfoChip,stateLabel, estimatedTimeLabel, explanationLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView,storeNameLabel ,menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
+        [orderInfoChip,stateLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView,storeNameLabel ,menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
             contentView.addSubview($0)
         }
         self.contentView.backgroundColor = .appColor(.neutral0)
@@ -162,14 +167,15 @@ extension OrderPrepareCollectionViewCell {
         estimatedTimeLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(stateLabel.snp.bottom)
-            $0.height.equalTo(19)
-            
+            $0.height.equalTo(32)
         }
         
         explanationLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(19)
-            $0.top.equalTo(estimatedTimeLabel.snp.bottom)
+            
+            showEstimateTimeLabel = $0.top.equalTo(estimatedTimeLabel.snp.bottom).constraint
+            hideEstimateTimeLabel = $0.top.equalTo(stateLabel.snp.bottom).constraint
         }
         
         underView.snp.makeConstraints {
@@ -206,6 +212,8 @@ extension OrderPrepareCollectionViewCell {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(16)
         }
+        
+        hideEstimateTimeLabel.deactivate()
     }
     
     // MARK: - Function
@@ -217,15 +225,38 @@ extension OrderPrepareCollectionViewCell {
         image: UIImage?,
         storeName: String,
         menuName: String,
-        priceText: String
+        priceText: String,
+        status: OrderInProgressStatus
     ) {
         updateChip(methodText: methodText)
+
+        let estimatedTimeIsEmpty = !estimatedTimeText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let showEstimatedTimeLabel = status.showEstimatedTime && estimatedTimeIsEmpty
+
         estimatedTimeLabel.text = estimatedTimeText
+        setEstimatedLabel(showEstimatedTimeLabel)
+
         explanationLabel.text = explanationText
         storeNameLabel.text = storeName
         menuNameLabel.text = menuName
         menuPriceLabel.text = priceText
         menuImageView.image = image ?? UIImage.appImage(asset: .defaultMenuImage)
+    }
+    
+    private func setEstimatedLabel(_ visible: Bool){
+        estimatedTimeLabel.isHidden = !visible
+        
+        if visible {
+            hideEstimateTimeLabel.deactivate()
+            showEstimateTimeLabel.activate()
+        } else {
+            showEstimateTimeLabel.deactivate()
+            hideEstimateTimeLabel.activate()
+        }
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+        
     }
     
     private func updateChip(methodText: String) {
@@ -256,4 +287,5 @@ extension OrderPrepareCollectionViewCell {
         orderInfoChip.configuration = chip
     }
 }
+
 
