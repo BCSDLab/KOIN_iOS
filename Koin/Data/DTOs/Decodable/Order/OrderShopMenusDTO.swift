@@ -13,7 +13,7 @@ struct OrderShopMenusDTO: Decodable {
     let menus: [OrderShopMenuDTO]
     
     enum CodingKeys: String, CodingKey {
-        case menuGroupId = "menu_groupd_id"
+        case menuGroupId = "menu_group_id"
         case menuGroupName = "menu_group_name"
         case menus
     }
@@ -39,7 +39,7 @@ struct OrderShopMenuDTO: Decodable {
 
 struct PriceDTO: Decodable {
     let id: Int
-    let name: NameDTO?
+    let name: String?
     let price: Int
     
     enum CodingKeys: String, CodingKey {
@@ -47,11 +47,4 @@ struct PriceDTO: Decodable {
         case name
         case price
     }
-}
-
-enum NameDTO: String, Decodable {
-    case small = "소"
-    case medium = "중"
-    case large = "대"
-    case extraLarge = "특대"
 }
