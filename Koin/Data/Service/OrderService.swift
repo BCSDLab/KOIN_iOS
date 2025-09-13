@@ -13,9 +13,9 @@ protocol OrderService {
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     
-    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
-    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
-    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -38,16 +38,16 @@ final class DefaultOrderService: OrderService {
     }
     
     // MARK: - 여기 아래로 세 개 추가함!
-    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
-        return request(.fetchOrderShopMenus(shopId: shopId))
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
+        return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
-    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error> {
-        return request(.fetchOrderShopMenusGroups(shopId: shopId))
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error> {
+        return request(.fetchOrderShopMenusGroups(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
-    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
-        return request(.fetchOrderShopSummary(shopId: shopId))
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
+        return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
 

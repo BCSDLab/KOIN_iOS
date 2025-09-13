@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FetchOrderShopSummaryUseCase {
-    func execute(shopId: Int) -> AnyPublisher<OrderShopSummary, Error>
+    func execute(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error>
 }
 
 final class DefaultFetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase {
@@ -19,8 +19,8 @@ final class DefaultFetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase {
         self.repository = repository
     }
     
-    func execute(shopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
-        return repository.fetchOrderShopSummary(shopId: shopId)
+    func execute(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        return repository.fetchOrderShopSummary(orderableShopId: orderableShopId)
             .eraseToAnyPublisher()
     }
 }

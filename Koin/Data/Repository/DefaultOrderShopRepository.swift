@@ -35,26 +35,26 @@ final class DefaultOrderShopRepository: OrderShopRepository{
     }
     
     // MARK: - 여기 아래로 새로 추가
-    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
-        service.fetchOrderShopMenus(shopId: shopId)
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
+        service.fetchOrderShopMenus(orderableShopId: orderableShopId)
             .map { dto in
                 dto.map { OrderShopMenus(from: $0) }
             }
             .eraseToAnyPublisher()
     }
     
-    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error> {
-        service.fetchOrderShopMenusGroups(shopId: shopId)
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error> {
+        service.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
             .map { dto in
                 OrderShopMenusGroups(from: dto)
             }
             .eraseToAnyPublisher()
     }
     
-    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
-        service.fetchOrderShopSummary(shopId: shopId)
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        service.fetchOrderShopSummary(orderableShopId: orderableShopId)
             .map { dto in
-                OrderShopSummary(from: dto)
+                return OrderShopSummary(from: dto)
             }
             .eraseToAnyPublisher()
     }
