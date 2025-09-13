@@ -29,6 +29,7 @@ final class OrderHistoryViewController: UIViewController {
     private var appliedQuery: String = ""
     private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     private var shadowAlpha: CGFloat = 0
+    private var isRefreshingNow = false
     
 
     
@@ -269,19 +270,22 @@ final class OrderHistoryViewController: UIViewController {
                     self.orderHistoryCollectionView.update(newItems.map { .init(from: $0)})
                     self.updateEmptyState()
                     self.refreshShadowForCurrentTab()
+                    self.endRefreshIfNeeded()
                 case .updatePreparing(let newItems):
                     self.orderPrepareCollectionView.update(newItems.map { .init(from: $0) })
                     
                 case .showEmpty(let isEmpty):
                     self.emptyStateView.isHidden = !isEmpty
                     self.orderHistoryCollectionView.isHidden = isEmpty
+                    self.endRefreshIfNeeded()
 
                 case .errorOccurred(let error):
                     print(error)
 
                 case .endRefreshing:
-                    self.refreshControl.endRefreshing()
-
+                    self.endRefreshIfNeeded()
+                    
+                    
                 case .navigateToOrderDetail:
                     break
                 case .appendOrders(let pageItems):
@@ -425,7 +429,7 @@ extension OrderHistoryViewController {
         orderHistoryCollectionView.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(filterButtonRow.snp.bottom).offset(12)
-            $0.bottom.equalToSuperview().offset(-12)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-12)
             
         }
         
@@ -619,8 +623,18 @@ extension OrderHistoryViewController{
 
     
     private func setupRefreshControl() {
-        orderHistoryCollectionView.addSubview(refreshControl)
+        orderHistoryCollectionView.refreshControl = refreshControl
+
+        refreshControl.removeTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+    }
+    
+    private func endRefreshIfNeeded() {
+        guard refreshControl.isRefreshing || isRefreshingNow else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.refreshControl.endRefreshing()
+            self?.isRefreshingNow = false
+        }
     }
 }
 
@@ -659,6 +673,8 @@ extension OrderHistoryViewController {
     }
     
     @objc private func didPullToRefresh() {
+        guard !isRefreshingNow else { return }
+        isRefreshingNow = true
         inputSubject.send(.refresh)
     }
         

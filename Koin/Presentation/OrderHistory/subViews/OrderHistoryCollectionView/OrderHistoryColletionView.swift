@@ -140,13 +140,19 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
         onDidScroll?(scrollView.contentOffset.y)
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width - 48
         let height = calculateHeight()
         return CGSize(width: width, height: height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard !items.isEmpty else { return }
+        if indexPath.item == items.count - 1 {
+            onReachEnd?()
+        }
+    }
+    
 }
     
 

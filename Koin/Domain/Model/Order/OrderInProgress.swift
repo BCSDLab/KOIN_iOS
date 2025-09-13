@@ -55,9 +55,9 @@ extension OrderInProgress {
 extension OrderInProgressStatus {
     var showEstimatedTime: Bool {
         switch self {
-        case .confirming, .cooking, .packaged, .delivering:
+        case .cooking, .packaged, .delivering:
             return true
-        case .pickedUp, .delivered, .canceled:
+        case .confirming, .pickedUp, .delivered, .canceled:
             return false
         }
     }

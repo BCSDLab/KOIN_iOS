@@ -56,12 +56,9 @@ final class OrderPrepareCollectionView: UICollectionView {
     }
     
     private func calculateHeight(for item: Item) -> CGFloat{
-        let hasETAContent = !item.estimatedTimeText
+        let isEmptyContent = !item.estimatedTimeText
             .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let showsETA = item.status == .confirming
-        || item.status == .cooking
-        || item.status == .packaged
-        || item.status == .delivered
+        let showEstimateTimeLabel = item.status.showEstimatedTime && isEmptyContent
         
         let topInset: CGFloat = 16
         let chipH: CGFloat = 24
@@ -77,9 +74,8 @@ final class OrderPrepareCollectionView: UICollectionView {
         let buttonH: CGFloat = 44
         let bottomInset: CGFloat = 16
         
-        var total = topInset + chipH + topState + stateH
-        if showsETA && hasETAContent { total += estimateTimeH }
-        total += explainH + underlineTop + underlineH + imageTop + imageH + buttonTop + buttonH + bottomInset
+        var total = topInset + chipH + topState + stateH + explainH + underlineTop + underlineH + imageTop + imageH + buttonTop + buttonH + bottomInset
+        if showEstimateTimeLabel { total += estimateTimeH }
         return total
     }
 }
@@ -91,8 +87,7 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
         items.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: OrderPrepareCollectionViewCell.OrderPrepareIdentifier,
             for: indexPath
@@ -166,12 +161,3 @@ extension OrderPrepareCollectionView.Item {
         )
     }
 }
-
-
-
-
-//extension OrderPrepareCollectionView: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: collectionView.frame.width, height: 299)
-//    }
-//}
