@@ -17,7 +17,7 @@ struct OrderShopMenu {
     let id: Int
     let name: String
     let description: String?
-    let thumbnailImage: String
+    let thumbnailImage: String?
     let isSoldOut: Bool
     let prices: [Price]
 }
@@ -54,9 +54,7 @@ extension OrderShopMenu {
 extension Price {
     init(from dto: PriceDTO) {
         self.id = dto.id
-        self.name = dto.name.map { nameDTO in
-            Name(from: nameDTO)
-        }
+        self.name = dto.name
         self.price = dto.price
     }
 }
