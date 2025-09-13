@@ -13,10 +13,14 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     // MARK: - Properties
     private var menuGroupId: [Int] = []
     private var menuGroupName: [String] = []
+    private var ids: [[Int]] = []
     private var names: [[String]] = []
     private var descriptions: [[String?]] = []
-    private var prices: [[[Price]]] = []
     private var thumbnailImages: [[String?]] = []
+    private var isSoldOuts: [[Bool]] = []
+    private var prices: [[[Price]]] = []
+    
+    
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -29,26 +33,30 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     
     func configure(_ orderShopMenus: [OrderShopMenus]) {
         orderShopMenus.forEach {
-            self.menuGroupName.append($0.menuGroupName)
+            self.menuGroupId.append($0.menuGroupId)
             self.menuGroupName.append($0.menuGroupName)
             
+            var ids: [Int] = []
             var names: [String] = []
             var descriptions: [String?] = []
-            var prices: [[Price]] = []
             var thumbnailImages: [String?] = []
-            var menuId: [Int] = []
+            var isSoldOuts: [Bool] = []
+            var prices: [[Price]] = []
             
             $0.menus.forEach {
+                ids.append($0.id)
                 names.append($0.name)
                 descriptions.append($0.description)
-                prices.append($0.prices)
                 thumbnailImages.append($0.thumbnailImage)
-                menuId.append($0.id)
+                isSoldOuts.append($0.isSoldOut)
+                prices.append($0.prices)
             }
+            self.ids.append(ids)
             self.names.append(names)
             self.descriptions.append(descriptions)
-            self.prices.append(prices)
             self.thumbnailImages.append(thumbnailImages)
+            self.isSoldOuts.append(isSoldOuts)
+            self.prices.append(prices)   
         }
         reloadData()
     }
