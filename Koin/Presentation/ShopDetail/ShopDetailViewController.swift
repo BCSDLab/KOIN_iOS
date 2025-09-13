@@ -72,6 +72,7 @@ final class ShopDetailViewController: UIViewController {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
     }
+    private let popUpView = ShopDetailPopUpView()
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
@@ -119,6 +120,20 @@ extension ShopDetailViewController {
             }
         }
         .store(in: &subscriptions)
+        
+        // popUpView
+        popUpView.leftButtonTappedPublisher
+            .sink { [weak self] in
+                self?.popUpView.isHidden = true
+            }
+            .store(in: &subscriptions)
+        
+        popUpView.rightButtonTappedPublisher
+            .sink { //[weak self] in
+                // 장바구니 비우기
+                // 기존에 담기 시도한거 담기!
+            }
+            .store(in: &subscriptions)
         
         // imagesCollectionView
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
@@ -268,9 +283,12 @@ extension ShopDetailViewController {
                 + (navigationController?.navigationBar.bounds.height ?? 0)
             )
         }
+        popUpView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
     private func setUpLayout() {
-        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView].forEach {
+        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
@@ -278,7 +296,14 @@ extension ShopDetailViewController {
             contentView.addSubview( $0 )
         }
     }
+    
+    private func configurePopUpView() {
+        popUpView.configure(message: "장바구니에는 같은 가게 메뉴만\n담을 수 있어요. \n담았던 메뉴는 삭제할까요?",
+                            leftButtonText: "아니오",
+                            rightButtonText: "예")
+    }
     private func configureView(){
+        configurePopUpView()
         setUpLayout()
         setUpConstraints()
     }
