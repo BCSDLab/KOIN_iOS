@@ -203,10 +203,10 @@ final class OrderHistoryViewController: UIViewController {
         configureView()
         bind()
         setAddTarget()
-        setDelegate()
         render()
         updateEmptyState()
         setupRefreshControl()
+        bindCollectionViewScroll()
 
         orderHistorySegment.selectedSegmentIndex = initialTab
         changeSegmentLine(orderHistorySegment)
@@ -320,10 +320,6 @@ final class OrderHistoryViewController: UIViewController {
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setDelegate() {
-        
     }
     
     func setInitialTab(_ idx: Int) {
@@ -735,7 +731,7 @@ extension OrderHistoryViewController {
 
 
 
-extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDelegateFlowLayout {
+extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate {
     
     //MARK: - ScrollSet
     
@@ -773,6 +769,21 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         let t = min(max(target, 0), 1)
         shadowAlpha += (t - shadowAlpha) * 0.20
         topShadowView.alpha = shadowAlpha
+    }
+    
+    private func bindCollectionViewScroll() {
+        orderHistoryCollectionView.onDidScroll = { [weak self] y in
+            guard let self else { return }
+            guard self.orderHistorySegment.selectedSegmentIndex == 0,
+                  self.emptyStateView.isHidden else {
+                self.topShadowView.alpha = 0
+                self.topShadowView.isHidden = true
+                return
+            }
+            let yy = max(y, 0)
+            let target = min(yy / 12.0, 1.0)
+            self.setShadowAlphaSmooth(to: target)
+        }
     }
 }
 

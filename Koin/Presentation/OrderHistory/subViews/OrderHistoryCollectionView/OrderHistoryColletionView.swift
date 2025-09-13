@@ -24,6 +24,8 @@ final class OrderHistoryCollectionView: UICollectionView {
     var onSelect: ((Int) -> Void)?
     var onTapReorder: ((Int) -> Void)?
     var onReachEnd: (() -> Void)?
+    var onDidScroll: ((CGFloat) -> Void)?
+
 
 
     private var items: [Item] = []
@@ -134,6 +136,10 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
         onSelect?(items[indexPath.item].id)
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        onDidScroll?(scrollView.contentOffset.y)
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -143,6 +149,7 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
     }
 }
     
+
 
 
 
