@@ -23,7 +23,7 @@ struct OrderShopMenuDTO: Decodable {
     let id: Int
     let name: String
     let description: String?
-    let thumbnailImage: String
+    let thumbnailImage: String?
     let isSoldOut: Bool
     let prices: [PriceDTO]
     
