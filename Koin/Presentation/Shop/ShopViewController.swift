@@ -243,7 +243,7 @@ final class ShopViewController: UIViewController {
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
             let viewModel = ShopDetailViewModel()
             let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: false)
-            self?.navigationControllerDelegate?.popToViewController(viewController, animated: true)
+            self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
     }
