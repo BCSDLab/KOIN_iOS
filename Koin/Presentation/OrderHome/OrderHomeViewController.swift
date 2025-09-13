@@ -440,15 +440,17 @@ extension OrderHomeViewController: UICollectionViewDelegate {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
             
-            let service = DefaultOrderService()
-            let repository = DefaultOrderShopRepository(service: service)
+            let service = DefaultOrderService() // TODO: Service 구현체 나누기
+            let repository = DefaultOrderShopRepository(service: service) // TODO: Repository 구현체 나누기
             let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
             let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
             let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
-                                                fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase)
-            let viewController = ShopDetailViewController(viewModel: viewModel, shopId: orderableShopId, isFromOrder: true)
+                                                fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
+                                                orderableShopId: orderableShopId,
+                                                shopId: nil)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
     }
