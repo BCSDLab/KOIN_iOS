@@ -241,7 +241,14 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
-            let viewModel = ShopDetailViewModel()
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
+            let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
+            let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
+            let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
+                                                fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
+                                                fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase)
             let viewController = ShopDetailViewController(viewModel: viewModel, shopId: shopId, isFromOrder: false)
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }

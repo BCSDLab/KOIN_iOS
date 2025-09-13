@@ -9,13 +9,18 @@ import Foundation
 import Combine
 
 protocol FetchOrderShopMenusUseCase {
-    func execute() -> AnyPublisher<[OrderShopMenus], Error>
+    func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error>
 }
 
-class DefaultFetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase {
-    func execute() -> AnyPublisher<[OrderShopMenus], Error> {
-        return Just(OrderShopMenus.dummy())
-            .setFailureType(to: Error.self)
+final class DefaultFetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase {
+    private let repository: OrderShopRepository
+    
+    init(repository: OrderShopRepository) {
+        self.repository = repository
+    }
+    
+    func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
+        return repository.fetchOrderShopMenus(shopId: shopId)
             .eraseToAnyPublisher()
     }
 }

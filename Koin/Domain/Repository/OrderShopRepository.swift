@@ -12,4 +12,8 @@ protocol OrderShopRepository {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEvent], Error>
     func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    
+    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error>
+    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
+    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummary, Error>
 }

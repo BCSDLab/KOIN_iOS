@@ -33,4 +33,29 @@ final class DefaultOrderShopRepository: OrderShopRepository{
     func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
         return service.searchRelatedShops(text: text)
     }
+    
+    // MARK: - 여기 아래로 새로 추가
+    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
+        service.fetchOrderShopMenus(shopId: shopId)
+            .map { dto in
+                dto.map { OrderShopMenus(from: $0) }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error> {
+        service.fetchOrderShopMenusGroups(shopId: shopId)
+            .map { dto in
+                OrderShopMenusGroups(from: dto)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        service.fetchOrderShopSummary(shopId: shopId)
+            .map { dto in
+                OrderShopSummary(from: dto)
+            }
+            .eraseToAnyPublisher()
+    }
 }

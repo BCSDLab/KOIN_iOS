@@ -9,13 +9,18 @@ import Foundation
 import Combine
 
 protocol FetchOrderShopSummaryUseCase {
-    func execute() -> AnyPublisher<OrderShopSummary, Error>
+    func execute(shopId: Int) -> AnyPublisher<OrderShopSummary, Error>
 }
 
-class DefaultFetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase {
-    func execute() -> AnyPublisher<OrderShopSummary, Error> {
-        return Just(OrderShopSummary.dummy())
-            .setFailureType(to: Error.self)
+final class DefaultFetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase {
+    let repository: OrderShopRepository
+    
+    init(repository: OrderShopRepository) {
+        self.repository = repository
+    }
+    
+    func execute(shopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        return repository.fetchOrderShopSummary(shopId: shopId)
             .eraseToAnyPublisher()
     }
 }

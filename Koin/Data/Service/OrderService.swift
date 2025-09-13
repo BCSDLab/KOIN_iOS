@@ -12,6 +12,10 @@ protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    
+    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
+    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
+    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -22,7 +26,7 @@ final class DefaultOrderService: OrderService {
     }
     
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
-        request(.fetchOrderEventShop)
+        return request(.fetchOrderEventShop)
             .map { (response: OrderShopEventListResponseDTO) in
                 response.shopEvents
             }
@@ -31,6 +35,20 @@ final class DefaultOrderService: OrderService {
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
         return request(.searchShop(text))
+    }
+    
+    // MARK: - 여기 아래로 세 개 추가함!
+    func fetchOrderShopMenus(shopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
+        return request(.fetchOrderShopMenus(shopId: shopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchOrderShopMenusGroups(shopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error> {
+        return request(.fetchOrderShopMenusGroups(shopId: shopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchOrderShopSummary(shopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
+        return request(.fetchOrderShopSummary(shopId: shopId))
+            .eraseToAnyPublisher()
     }
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
