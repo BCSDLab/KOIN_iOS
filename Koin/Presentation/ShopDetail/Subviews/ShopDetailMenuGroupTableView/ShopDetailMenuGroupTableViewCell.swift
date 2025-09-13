@@ -53,6 +53,17 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
+    private let soldOutDimView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral800)
+        $0.layer.opacity = 0.6
+    }
+    private let soldOutImageView = UIImageView(image: .appImage(asset: .noMeal))
+    private let soldOutLabel = UILabel().then {
+        $0.text = "품절"
+        $0.textAlignment = .center
+        $0.font = .appFont(.pretendardSemiBold, size: 14)
+        $0.textColor = .appColor(.neutral0)
+    }
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -64,7 +75,7 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
     }
     
     func configure(name: String, description: String?, prices: [Price],
-                   thumbnailImage: String?, isFirstRow: Bool, isLastRow: Bool) {
+                   thumbnailImage: String?, isFirstRow: Bool, isLastRow: Bool, isSoldOut: Bool) {
         
         nameLabel.text = name
         
@@ -109,19 +120,27 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             thumbnailImageView.image = nil
         }
         
-        if (isFirstRow && !isLastRow) {
+        if isFirstRow && !isLastRow {
             setTopCornerRadius()
-        } else if (isLastRow && !isFirstRow) {
+        } else if isLastRow && !isFirstRow {
             setBottomCornerRadius()
-        } else if (isFirstRow && isLastRow) {
+        } else if isFirstRow && isLastRow {
             setAllCornerRadius()
         } else {
             setDefaultBackgroundView()
         }
-        if (isLastRow) {
+        
+        if isLastRow {
             separatorView.isHidden = true
         } else {
             separatorView.isHidden = false
+        }
+        
+        if !isSoldOut {
+            [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = true }
+        }
+        else {
+            [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = false }
         }
     }
     
@@ -206,8 +225,6 @@ extension ShopDetailMenuGroupTableViewCell {
             labelsStackView.addArrangedSubview($0)
         }
         
-        
-        
         priceStackViews.arrangedSubviews.forEach {
             guard let stackView = $0 as? UIStackView else {
                 fatalError()
@@ -222,6 +239,9 @@ extension ShopDetailMenuGroupTableViewCell {
     private func setUpLayout() {
         [labelsStackView, thumbnailImageView, separatorView].forEach {
             addSubview($0)
+        }
+        [soldOutDimView, soldOutImageView, soldOutLabel].forEach {
+            thumbnailImageView.addSubview($0)
         }
     }
     
@@ -261,6 +281,20 @@ extension ShopDetailMenuGroupTableViewCell {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        soldOutDimView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        soldOutImageView.snp.makeConstraints {
+            $0.width.height.equalTo(40)
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(12)
+        }
+        soldOutLabel.snp.makeConstraints {
+            $0.leading.trailing.equalTo(soldOutImageView)
+            $0.top.equalTo(soldOutImageView.snp.bottom)
+            $0.height.equalTo(24)
         }
     }
     private func configureView() {

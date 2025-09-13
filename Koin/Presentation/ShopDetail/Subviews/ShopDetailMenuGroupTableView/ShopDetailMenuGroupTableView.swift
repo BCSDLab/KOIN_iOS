@@ -20,8 +20,6 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     private var isSoldOuts: [[Bool]] = []
     private var prices: [[[Price]]] = []
     
-    
-    
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -56,7 +54,7 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
             self.descriptions.append(descriptions)
             self.thumbnailImages.append(thumbnailImages)
             self.isSoldOuts.append(isSoldOuts)
-            self.prices.append(prices)   
+            self.prices.append(prices)
         }
         reloadData()
     }
@@ -88,7 +86,8 @@ extension ShopDetailMenuGroupTableView {
                   prices: prices[indexPath.section][indexPath.row],
                   thumbnailImage: thumbnailImages[indexPath.section][indexPath.row],
                   isFirstRow: indexPath.row == 0,
-                  isLastRow: names[indexPath.section].count - 1 == indexPath.row)
+                  isLastRow: names[indexPath.section].count - 1 == indexPath.row,
+                  isSoldOut: isSoldOuts[indexPath.section][indexPath.row])
         return cell
         
     }
