@@ -26,11 +26,6 @@ struct OrderShop {
     let openStatus: String
 }
 
-struct OrderImage {
-    let imageUrl: String
-    let isThumbnail: Bool
-}
-
 struct OrderOpen {
     let dayOfWeek: OrderDayOfWeek
     let closed: Bool
