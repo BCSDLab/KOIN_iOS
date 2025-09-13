@@ -114,25 +114,20 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate {
         
         onSelect?(items[indexPath.item].id)
     }
-    
-//    func collectionView(_ collectionView: UICollectionView,
-//                        willDisplay cell: UICollectionViewCell,
-//                        forItemAt indexPath: IndexPath) {
-//        let last = max(items.count - 1, 0)
-//        if indexPath.item == last {
-//            onReachEnd?()
-//        }
-//    }
-
-    
 }
 
 
-
-//extension OrderHistoryCollectionView: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: collectionView.frame.width, height: 286)
-//    }
-//}
-
-
+extension OrderHistoryCollectionView.Item {
+    init(from viewModel: OrderViewModel.OrderItem) {
+        self.init(
+            id: viewModel.id,
+            stateText: viewModel.stateText,
+            dateText: viewModel.dateText,
+            storeName: viewModel.storeName,
+            menuName: viewModel.menuName,
+            priceText: viewModel.priceText,
+            imageURL: viewModel.imageURL,
+            canReorder: viewModel.canReorder
+        )
+    }
+}

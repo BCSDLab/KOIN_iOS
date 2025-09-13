@@ -46,8 +46,6 @@ final class OrderPrepareCollectionView: UICollectionView {
         reloadData()
         onLoadedIDs?(items.map { $0.id })
     }
-
-
 }
 
 extension OrderPrepareCollectionView: UICollectionViewDataSource {
@@ -104,6 +102,22 @@ extension OrderPrepareCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])
 
+    }
+}
+
+
+extension OrderPrepareCollectionView.Item {
+    init(from viewModel: OrderViewModel.PreparingItem) {
+        self.init(
+            id: viewModel.id,
+            methodText: viewModel.methodText,
+            estimatedTimeText: viewModel.estimatedTimeText,
+            explanationText: viewModel.explanationText,
+            imageURL: viewModel.imageURL,
+            storeName: viewModel.storeName,
+            menuName: viewModel.menuName,
+            priceText: viewModel.priceText
+        )
     }
 }
 

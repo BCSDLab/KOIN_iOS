@@ -171,8 +171,8 @@ final class OrderViewModel {
                 return self.orderService.fetchOrderInProgress()
             }
             .map { [weak self] list -> Event in        
-                let vms = list.compactMap { self?.mapToPreparingItem($0) }
-                return .updatePreparing(vms)
+                let viewModels = list.compactMap { self?.mapToPreparingItem($0) }
+                return .updatePreparing(viewModels)
             }
             .catch { _ in Just(Event.updatePreparing([])) }
             .sink { subject.send($0) }

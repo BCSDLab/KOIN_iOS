@@ -17,12 +17,11 @@ final class OrderHistoryViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private let inputSubject = PassthroughSubject<OrderViewModel.Input, Never>()
     private var items: [OrderViewModel.OrderItem] = []
-    
     private let initialTab: Int
-
     private var currentFilter: OrderFilter = .empty {
         didSet { render() }
     }
+    
     private var emptyTopToSeparator: Constraint!
     private var emptyTopToList: Constraint!
     private var barTrailingToSuperview: Constraint!
@@ -30,6 +29,7 @@ final class OrderHistoryViewController: UIViewController {
     private var appliedQuery: String = ""
     private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     private var shadowAlpha: CGFloat = 0
+    
 
     
     init(viewModel: OrderViewModel, initialTab: Int = 0) {
@@ -212,7 +212,6 @@ final class OrderHistoryViewController: UIViewController {
         setAddTarget()
         setDelegate()
         render()
-        updateSearchVisibility()
         updateEmptyState()
         setupRefreshControl()
 
@@ -274,11 +273,11 @@ final class OrderHistoryViewController: UIViewController {
                 switch event {
                 case .updateOrders(let newItems):
                     self.items = newItems
-                    self.orderHistoryCollectionView.update(newItems.map { $0.asCollectionItem })
+                    self.orderHistoryCollectionView.update(newItems.map { .init(from: $0)})
                     self.updateEmptyState()
                     self.refreshShadowForCurrentTab()
                 case .updatePreparing(let newItems):
-                    self.orderPrepareCollectionView.update(newItems.map { $0.asCollectionItem })
+                    self.orderPrepareCollectionView.update(newItems.map { .init(from: $0) })
                     
                 case .showEmpty(let isEmpty):
                     self.emptyStateView.isHidden = !isEmpty
@@ -294,7 +293,7 @@ final class OrderHistoryViewController: UIViewController {
                     break
                 case .appendOrders(let pageItems):
                     self.items.append(contentsOf: pageItems)
-                    self.orderHistoryCollectionView.append(pageItems.map { $0.asCollectionItem })
+                    self.orderHistoryCollectionView.append(pageItems.map { .init(from: $0) })
                 }
             }
             .store(in: &cancellables)
@@ -815,36 +814,4 @@ extension OrderHistoryViewController {
             self?.inputSubject.send(.tapReorder(orderId))
         }
     }
-}
-
-
-private extension OrderViewModel.OrderItem {
-    var asCollectionItem: OrderHistoryCollectionView.Item {
-        .init(
-            id: id,
-            stateText: stateText,
-            dateText: dateText,
-            storeName: storeName,
-            menuName: menuName,
-            priceText: priceText,
-            imageURL: imageURL,
-            canReorder: canReorder
-        )
-    }
-}
-
-private extension OrderViewModel.PreparingItem {
-    var asCollectionItem: OrderPrepareCollectionView.Item {
-        .init(
-            id: id,
-            methodText: methodText,
-            estimatedTimeText: estimatedTimeText,
-            explanationText: explanationText,
-            imageURL: imageURL,
-            storeName: storeName,
-            menuName: menuName,
-            priceText: priceText
-        )
-    }
-    
 }
