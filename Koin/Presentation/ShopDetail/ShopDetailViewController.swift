@@ -72,7 +72,9 @@ final class ShopDetailViewController: UIViewController {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
     }
-    private let popUpView = ShopDetailPopUpView()
+    private let popUpView = ShopDetailPopUpView().then {
+        $0.isHidden = true
+    }
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
@@ -124,12 +126,13 @@ extension ShopDetailViewController {
         // popUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in
-                self?.popUpView.isHidden = true
+                self?.hidePopUpView()
             }
             .store(in: &subscriptions)
         
         popUpView.rightButtonTappedPublisher
-            .sink { //[weak self] in
+            .sink { [weak self] in
+                self?.hidePopUpView()
                 // 장바구니 비우기
                 // 기존에 담기 시도한거 담기!
             }
@@ -233,6 +236,15 @@ extension ShopDetailViewController {
     // MARK: - @objc
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+    // MARK: - show/hide popUpView
+    private func showPopUpView() {
+        navigationController?.navigationBar.isHidden = true
+        popUpView.isHidden = false
+    }
+    private func hidePopUpView() {
+        navigationController?.navigationBar.isHidden = false
+        popUpView.isHidden = true
     }
 }
 
