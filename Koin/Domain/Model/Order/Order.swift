@@ -21,7 +21,7 @@ struct Order {
     let shopId: Int
     let shopName: String
     let shopThumbnail: URL?
-    let openStatus: OpenStatus
+    let openStatus: Bool
     let orderDate: Date
     let status: OrderStatus
     let orderTitle: String
@@ -36,13 +36,6 @@ enum OrderStatus: String {
     case packaged = "PACKAGED"
     case pickedUp = "PICKED_UP"
     case delivering = "DELIVERING"
-    case unknown = "UNKNOWN"
-}
-
-enum OpenStatus: String {
-    case operating = "OPERATING"
-    case closed = "CLOSED"
-    case paused = "PAUSED"
     case unknown = "UNKNOWN"
 }
 

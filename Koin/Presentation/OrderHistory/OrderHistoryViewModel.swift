@@ -221,7 +221,7 @@ final class OrderViewModel {
         }()
 
         let canReorder = (order.status == .delivered || order.status == .packaged)
-            && order.openStatus == .operating
+        && order.openStatus == order.openStatus
 
         return OrderItem(
             id: order.id,

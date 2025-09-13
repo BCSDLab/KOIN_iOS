@@ -40,7 +40,7 @@ struct OrderDTO: Decodable {
     let paymentId: Int
     let orderableShopId: Int
     let orderableShopName: String
-    let openStatus: OpenStatusAdapter
+    let openStatus: Bool
     let orderableShopThumbnail: String
     let orderDate: String
     let orderStatus: String
@@ -72,43 +72,12 @@ extension OrderDTO {
             shopId: orderableShopId,
             shopName: orderableShopName,
             shopThumbnail: thumbURL,
-            openStatus: openStatus.domain,
+            openStatus: openStatus,
             orderDate: date,
             status: OrderStatus(rawValue: orderStatus) ?? .unknown,
             orderTitle: orderTitle,
             totalAmount: totalAmount
         )
-    }
-}
-
-struct OpenStatusAdapter: Decodable {
-    let domain: OpenStatus
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        if container.decodeNil() {
-            self.domain = .unknown
-            return
-        }
-        if let boolValue = try? container.decode(Bool.self) {
-            domain = boolValue ? .operating : .closed
-            return
-        }
-        if let stringValue = try? container.decode(String.self) {
-            let uppercasedValue = stringValue.uppercased()
-            if let mapped = OpenStatus(rawValue: uppercasedValue) {
-                domain = mapped
-            } else {
-                switch uppercasedValue {
-                case "OPEN": domain = .operating
-                case "CLOSE": domain = .closed
-                default: domain = .unknown
-                }
-            }
-            return
-        }
-        domain = .unknown
     }
 }
 
