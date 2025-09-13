@@ -1490,7 +1490,6 @@
 			children = (
 				3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */,
 				3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */,
-				3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */,
 			);
 			path = OrderHistoryUIComponents;
 			sourceTree = "<group>";
@@ -3685,6 +3684,7 @@
 				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
 				3B3CAE712E719CD500BBAEEE /* OrderHistoryViewModel.swift */,
+				3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */,
 			);
 			path = OrderHistory;
 			sourceTree = "<group>";
