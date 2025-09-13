@@ -77,7 +77,7 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         }
         
         for index in 0..<prices.count {
-            if let name = prices[index].name?.rawValue {
+            if let name = prices[index].name {
                 priceNameLabels[index].text = "\(name) : "
                 priceNameLabels[index].isHidden = false
                 priceNameLabels[index].snp.updateConstraints {
@@ -115,6 +115,8 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             setBottomCornerRadius()
         } else if (isFirstRow && isLastRow) {
             setAllCornerRadius()
+        } else {
+            setDefaultBackgroundView()
         }
         if (isLastRow) {
             separatorView.isHidden = true
@@ -146,6 +148,12 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         }
         backgroundView = bgView
         setUpShadow()
+    }
+    private func setDefaultBackgroundView() {
+        let bgView = UIView().then {
+            $0.backgroundColor = .appColor(.neutral0)
+        }
+        backgroundView = bgView
     }
     private func setAllCornerRadius() {
         let bgView = UIView().then {
