@@ -491,19 +491,24 @@ extension OrderHistoryViewController{
             periodButton.applyFilter(false)
         }
         
-        var infoTitle = "주문 상태 · 정보"
+        var infoParts: [String] = []
+
         if let method = currentFilter.method {
-            infoTitle = (method == .delivery ? "배달" : "포장")
+            infoParts.append(method == .delivery ? "배달" : "포장")
         }
-        if currentFilter.info == .completed {
-            infoTitle += (infoTitle == "주문 상태 · 정보" ? "완료" : " · 완료")
+        switch currentFilter.info {
+        case .completed:
+            infoParts.append("완료")
+        case .canceled:
+            infoParts.append("취소")
+        default:
+            break
         }
-        if currentFilter.info == .canceled {
-            infoTitle += (infoTitle == "주문 상태 · 정보" ? "취소" : " · 취소")
-        }
+
+        let infoTitle = infoParts.isEmpty ? "주문 상태 · 정보" : infoParts.joined(separator: " · ")
         stateInfoButton.setTitle(infoTitle)
-        stateInfoButton.applyFilter(infoTitle != "주문 상태 · 정보")
-        
+        stateInfoButton.applyFilter(!infoParts.isEmpty)
+
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
             inputSubject.send(.applyFilter(currentFilter))
