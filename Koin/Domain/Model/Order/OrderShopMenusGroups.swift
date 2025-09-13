@@ -7,34 +7,28 @@
 
 import Foundation
 
-// MARK: - CoopShopModel
 struct OrderShopMenusGroups {
     let count: Int
     let menuGroups: [MenuGroup]
 }
 
-// MARK: - MenuGroup
-struct MenuGroup: Codable {
+struct MenuGroup {
     let id: Int
     let name: String
 }
 
 extension OrderShopMenusGroups {
-    
-    static func dummy() -> OrderShopMenusGroups {
-        
-        return OrderShopMenusGroups(
-            count: 0,
-            menuGroups: [
-                MenuGroup(id: 0, name: "메인메뉴"),
-                MenuGroup(id: 1, name: "추천메뉴"),
-                MenuGroup(id: 2, name: "세트메뉴"),
-                MenuGroup(id: 3, name: "사이드"),
-                MenuGroup(id: 4, name: "메인메뉴"),
-                MenuGroup(id: 5, name: "추천메뉴"),
-                MenuGroup(id: 6, name: "세트메뉴"),
-                MenuGroup(id: 7, name: "사이드")
-            ])
+    init(from dto: OrderShopMenusGroupsDTO) {
+        self.count = dto.count
+        self.menuGroups = dto.menuGroups.map { menuGroupDTO in
+            MenuGroup(from: menuGroupDTO)
+        }
     }
 }
 
+extension MenuGroup {
+    init(from dto: MenuGroupDTO) {
+        self.id = dto.id
+        self.name = dto.name
+    }
+}

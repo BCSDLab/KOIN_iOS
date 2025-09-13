@@ -7,7 +7,6 @@
 
 import Foundation
 
-// MARK: - CoopShopModel
 struct OrderShopSummary {
     let shopId: Int
     let orderableShopId: Int
@@ -20,23 +19,23 @@ struct OrderShopSummary {
     let images: [OrderImage]
 }
 
-extension OrderShopSummary {
-    
-    static func dummy() -> OrderShopSummary {
-        
-        return OrderShopSummary(
-            shopId: 0,
-            orderableShopId: 0,
-            name: "굿모닝살로만치킨",
-            introduction: "안녕하세요 굿모닝 살로만 치킨입니다!",
-            isDeliveryAvailable: true,
-            isTakeoutAvailable: false,
-            payCard: true, payBank: true,
-            minimumOrderAmount: 14000,
-            ratingAverage: 4.1,
-            reviewCount: 60,
-            minimumDeliveryTip: 1500,
-            maximumDeliveryTip: 3500,
-            images: [OrderImage(imageUrl: "https://static.koreatech.in/upload/market/2021/05/29/85d5a49a-ecd8-4223-8582-ae316f251e27-1622292361626.jpg",isThumbnail: true),OrderImage(imageUrl: "https://static.koreatech.in/upload/market/2021/05/29/85d5a49a-ecd8-4223-8582-ae316f251e27-1622292361626.jpg",isThumbnail: false),OrderImage(imageUrl: "https://static.koreatech.in/upload/market/2021/05/29/85d5a49a-ecd8-4223-8582-ae316f251e27-1622292361626.jpg",isThumbnail: true)])
-    }        
+extension OrderShopSummary {    
+    init(from dto: OrderShopSummaryDTO) {
+        self.shopId = dto.shopId
+        self.orderableShopId = dto.orderableShopId
+        self.name = dto.name
+        self.introduction = dto.introduction
+        self.isDeliveryAvailable = dto.isDeliveryAvailable
+        self.isTakeoutAvailable = dto.isTakeoutAvailable
+        self.payCard = dto.payCard
+        self.payBank = dto.payBank
+        self.minimumOrderAmount = dto.minimumOrderAmount
+        self.ratingAverage = dto.ratingAverage
+        self.reviewCount = dto.reviewCount
+        self.minimumDeliveryTip = dto.minimumDeliveryTip
+        self.maximumDeliveryTip = dto.maximumDeliveryTip
+        self.images = dto.images.map { orderImages in
+            OrderImage(from: orderImages)
+        }
+    }
 }
