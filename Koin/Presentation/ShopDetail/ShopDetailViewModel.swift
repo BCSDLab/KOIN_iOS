@@ -11,7 +11,7 @@ final class ShopDetailViewModel {
     
     // MARK: - Input
     enum Input {
-    case viewDidLoad(shopId: Int)
+    case viewDidLoad
     }
     
     // MARK: - Output
@@ -28,24 +28,37 @@ final class ShopDetailViewModel {
     private let fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase
     private let fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase
     
+    private let orderableShopId: Int?
+    private let shopId: Int?
+    
     // MARK: - Initializer
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
-         fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase) {
+         fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase,
+         orderableShopId: Int?,
+         shopId: Int?) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
+        self.orderableShopId = orderableShopId
+        self.shopId = shopId
     }
     
     // MARK: Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .viewDidLoad(shopId):
+            case .viewDidLoad:
                 // useCase로 데이터를 호출하고, viewController에 돌려주는 로직
-                self?.fetchOrderShopSummary(shopId)
-                self?.fetchOrderShopMenus(shopId)
-                self?.fetchOrderShopMenusGroups(shopId)
+                if let orderableShopId = self?.orderableShopId {
+                    self?.fetchOrderShopSummary(orderableShopId: orderableShopId)
+                    self?.fetchOrderShopMenus(orderableShopId: orderableShopId)
+                    self?.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+                }
+                else {
+                    print("isFromShop")
+                    print("shopId: \(self?.shopId)")
+                }
             }
         }
         .store(in: &subscriptions)
@@ -55,24 +68,29 @@ final class ShopDetailViewModel {
 
 extension ShopDetailViewModel {
     
-    private func fetchOrderShopSummary(_ shopId: Int) {
-        fetchOrderShopSummaryUseCase.execute(shopId: shopId)
+    private func fetchOrderShopSummary(orderableShopId: Int) {
+        fetchOrderShopSummaryUseCase.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
                   receiveValue: { [weak self] orderShopSummary in
                 self?.outputSubject.send(.updateInfoView(orderShopSummary))
             })
             .store(in: &subscriptions)
     }
-    private func fetchOrderShopMenus(_ shopId: Int) {
-        fetchOrderShopMenusUseCase.execute(shopId: shopId)
-            .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
+    private func fetchOrderShopMenus(orderableShopId: Int) {
+        fetchOrderShopMenusUseCase.execute(orderableShopId: orderableShopId)
+            .sink(receiveCompletion: {
+                /* Log 남기기 ? */
+                if case .failure(let error) = $0 {
+                    print("fetching menus did fail : \(error)")
+                }
+            },
                   receiveValue: { [weak self] orderShopMenus in
                 self?.outputSubject.send(.updateMenus(orderShopMenus))
             })
             .store(in: &subscriptions)
     }
-    private func fetchOrderShopMenusGroups(_ shopId: Int) {
-        fetchOrderShopMenusGroupsUseCase.execute(shopId: shopId)
+    private func fetchOrderShopMenusGroups(orderableShopId: Int) {
+        fetchOrderShopMenusGroupsUseCase.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
                   receiveValue: { [weak self] orderShopMenusGroups in
                 self?.outputSubject.send(.updateMenusGroups(orderShopMenusGroups))

@@ -15,8 +15,6 @@ final class ShopDetailViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private let shopId: Int?
-    
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
     
@@ -76,9 +74,8 @@ final class ShopDetailViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopDetailViewModel, shopId: Int?, isFromOrder: Bool) {
+    init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
         self.viewModel = viewModel
-        self.shopId = shopId
         bottomSheet.isHidden = !isFromOrder
         super.init(nibName: nil, bundle: nil)
     }
