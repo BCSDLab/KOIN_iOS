@@ -103,7 +103,7 @@ extension ShopDetailViewController {
     
     // MARK: - bind
     private func bind() {
-        // viewController
+        // viewModel
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
@@ -230,7 +230,77 @@ extension ShopDetailViewController {
             $0.height.equalTo(tableViewHeight(orderShopMenus))
         }
     }
+    // MARK: - @objc
+    @objc private func navigationButtonTapped() {
+        navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+}
+
+extension ShopDetailViewController: UIScrollViewDelegate {
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
+        let imagesBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: view).maxY
+        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
+        
+        let shouldShowSticky = collectionViewTop < naviBottom
+        let isNavigationBarOpaque = imagesBottom < naviBottom
+        let opacity = 1 - (imagesBottom - naviBottom)/100
+        
+        if shouldShowSticky != self.shouldShowSticky {
+            self.shouldShowSticky = shouldShowSticky
+            menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
+        }
+        if isNavigationBarOpaque != self.isNavigationBarOpaque {
+            self.isNavigationBarOpaque = isNavigationBarOpaque
+            if (isNavigationBarOpaque) {
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
+                    self?.configureNavigationBar(style: .order)
+                })
+            }
+            else {
+                UIView.animate(withDuration: 0.25, animations: { [weak self] in
+                    self?.configureNavigationBar(style: .orderTransparent)
+                })
+            }
+        }
+        navigationBarLikeView.layer.opacity = Float(opacity)
+    }
+}
+
+extension ShopDetailViewController {
+    
+    // MARK: - helper
+    private func tableViewHeight(_ orderShopMenus: [OrderShopMenus]) -> Int {
+        let groupNameHeight = 56
+        let minimumRowHeight = 112
+        let nameHeight = 29
+        let descriptionHeight = 19
+        let priceHeight = 22
+        let priceTopPadding = 4
+        let insetHeight = 24
+        
+        var tableViewHeight = 0
+        orderShopMenus.forEach {
+            var sectionHeight = 0
+            sectionHeight += groupNameHeight
+            $0.menus.forEach {
+                var rowHeight = 0
+                rowHeight += nameHeight
+                rowHeight += $0.description != nil ? descriptionHeight : 0
+                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
+                rowHeight += $0.prices.count * priceHeight
+                rowHeight += insetHeight
+                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
+            }
+            tableViewHeight += sectionHeight
+        }
+        return tableViewHeight
+    }
+}
+
+extension ShopDetailViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
@@ -302,81 +372,15 @@ extension ShopDetailViewController {
                             leftButtonText: "아니오",
                             rightButtonText: "예")
     }
+    
     private func configureView(){
         configurePopUpView()
         setUpLayout()
         setUpConstraints()
     }
+    
+    // MARK: - SetDelegate
     private func setDelegate() {
         scrollView.delegate = self
-    }
-    
-    // MARK: - @objc
-    @objc private func navigationButtonTapped() {
-        navigationController?.pushViewController(UIViewController(), animated: true)
-    }
-}
-
-extension ShopDetailViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
-        let imagesBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: view).maxY
-        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
-        
-        let shouldShowSticky = collectionViewTop < naviBottom
-        let isNavigationBarOpaque = imagesBottom < naviBottom
-        let opacity = 1 - (imagesBottom - naviBottom)/100
-        
-        if shouldShowSticky != self.shouldShowSticky {
-            self.shouldShowSticky = shouldShowSticky
-            menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
-        }
-        if isNavigationBarOpaque != self.isNavigationBarOpaque {
-            self.isNavigationBarOpaque = isNavigationBarOpaque
-            if (isNavigationBarOpaque) {
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    self?.configureNavigationBar(style: .order)
-                })
-            }
-            else {
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    self?.configureNavigationBar(style: .orderTransparent)
-                })
-            }
-        }
-        navigationBarLikeView.layer.opacity = Float(opacity)
-    }
-}
-
-extension ShopDetailViewController {
-    
-    // MARK: - helper
-    private func tableViewHeight(_ orderShopMenus: [OrderShopMenus]) -> Int {
-        let groupNameHeight = 56
-        let minimumRowHeight = 112
-        let nameHeight = 29
-        let descriptionHeight = 19
-        let priceHeight = 22
-        let priceTopPadding = 4
-        let insetHeight = 24
-        
-        var tableViewHeight = 0
-        orderShopMenus.forEach {
-            var sectionHeight = 0
-            sectionHeight += groupNameHeight
-            $0.menus.forEach {
-                var rowHeight = 0
-                rowHeight += nameHeight
-                rowHeight += $0.description != nil ? descriptionHeight : 0
-                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
-                rowHeight += $0.prices.count * priceHeight
-                rowHeight += insetHeight
-                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
-            }
-            tableViewHeight += sectionHeight
-        }
-        return tableViewHeight
     }
 }
