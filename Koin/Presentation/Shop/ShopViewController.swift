@@ -249,7 +249,8 @@ final class ShopViewController: UIViewController {
                                                 fetchOrderShopMenusGroupsUseCase: nil,
                                                 fetchShopSummaryUseCase: fetchShopSummaryUseCase,
                                                 orderableShopId: nil,
-                                                shopId: shopId)
+                                                shopId: shopId,
+                                                isFromOrder: false)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }

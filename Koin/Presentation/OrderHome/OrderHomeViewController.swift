@@ -450,7 +450,8 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
                                                 fetchShopSummaryUseCase: nil,
                                                 orderableShopId: orderableShopId,
-                                                shopId: nil)
+                                                shopId: nil,
+                                                isFromOrder: true)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
