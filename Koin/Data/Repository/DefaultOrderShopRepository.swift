@@ -56,7 +56,7 @@ final class DefaultOrderShopRepository: OrderShopRepository{
                 return OrderShopSummary(from: dto)
             }
             .eraseToAnyPublisher()
-        
+    }
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         service.fetchOrderInProgress()
             .eraseToAnyPublisher()
