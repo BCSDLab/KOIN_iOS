@@ -8,6 +8,7 @@
 import Alamofire
 
 enum ShopAPI {
+    case fetchShopSummary(Int)
     case fetchShopList(FetchShopListRequest)
     case fetchEventList
     case fetchShopCategoryList
@@ -38,6 +39,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var path: String {
         switch self {
+        case .fetchShopSummary(let id): return "/shops/\(id)/summary"
         case .fetchShopBenefits: return "/benefit/categories"
         case .fetchBeneficialShops(let id): return "/benefit/\(id)/shops"
         case .fetchShopList: return "/v3/shops"
@@ -89,7 +91,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop:
+        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()
