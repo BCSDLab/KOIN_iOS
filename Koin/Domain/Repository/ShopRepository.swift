@@ -13,6 +13,7 @@ protocol ShopRepository {
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
     func fetchEventList() -> AnyPublisher<EventsDTO, Error>
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error>
+    func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDTO, Error>
     
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error>
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error>

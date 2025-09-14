@@ -17,6 +17,7 @@ enum ShopAPI {
     case fetchShopEventList(FetchShopDataRequest)
     case fetchShopBenefits
     case fetchBeneficialShops(Int)
+    case fetchShopMenusCategoryList(shopId: Int)
     
     case fetchReviewList(FetchShopReviewRequest)
     case fetchReview(Int, Int)
@@ -48,6 +49,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .fetchShopData(let request): return "/shops/\(request.shopId)"
         case .fetchShopMenuList(let request): return "/shops/\(request.shopId)/menus"
         case .fetchShopEventList(let request): return "/shops/\(request.shopId)/events"
+        case .fetchShopMenusCategoryList(let shopId): return "/shops/\(shopId)/menus/categories"
         case .fetchReviewList(let request): return "/shops/\(request.shopId)/reviews"
         case .fetchReview(let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
         case .fetchMyReviewList(_, let shopId): return "/shops/\(shopId)/reviews/me"
@@ -58,6 +60,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .uploadFiles: return "/shops/upload/files"
         case .postCallNotification(let shopId): return "/shops/\(shopId)/call-notification"
         case .searchShop(let text): return "/shops/search/related/\(text)"
+        
         }
     }
     
@@ -91,7 +94,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop:
+        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop, .fetchShopMenusCategoryList:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()

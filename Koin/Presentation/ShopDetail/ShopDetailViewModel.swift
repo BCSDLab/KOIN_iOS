@@ -30,6 +30,7 @@ final class ShopDetailViewModel {
     private let fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?
     
     private let fetchShopSummaryUseCase: FetchShopSummaryUseCase?
+    private let fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?
     
     private let orderableShopId: Int
     private let shopId: Int
@@ -40,6 +41,7 @@ final class ShopDetailViewModel {
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?,
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
          fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
+         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?,
          orderableShopId: Int?,
          shopId: Int?,
          isFromOrder: Bool) {
@@ -47,6 +49,7 @@ final class ShopDetailViewModel {
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
+        self.fetchShopmenusCategoryListUseCase = fetchShopmenusCategoryListUseCase
         self.orderableShopId = orderableShopId ?? -1
         self.shopId = shopId ?? -1
         self.isFromOrder = isFromOrder
@@ -68,6 +71,7 @@ final class ShopDetailViewModel {
                     print("isFromShop")
                     print("shopId: \(self.shopId)")
                     self.fetchShopSummary(shopId: shopId)
+                    self.fetchShopmenusCategoryList(shopId: shopId)
                 }
             }
         }
@@ -113,13 +117,18 @@ extension ShopDetailViewModel {
     
     private func fetchShopSummary(shopId: Int) {
         fetchShopSummaryUseCase?.execute(id: shopId)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching shopSummary did fail : \(failure)")
-                }
-            },
+            .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 self?.outputSubject.send(.updateInfoView(shopSummary))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchShopmenusCategoryList(shopId: Int) {
+        fetchShopmenusCategoryListUseCase?.execute(shopId: shopId)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] shopMenusCategory in
+                self?.outputSubject.send(.updateMenusGroups(shopMenusCategory))
             })
             .store(in: &subscriptions)
     }

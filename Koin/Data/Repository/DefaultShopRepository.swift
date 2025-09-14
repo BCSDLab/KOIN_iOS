@@ -16,6 +16,10 @@ final class DefaultShopRepository: ShopRepository {
         self.service = service
     }
     
+    func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDTO, Error> {
+        service.fetchShopMenusCategory(shopId: shopId)
+    }
+    
     func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error> {
         service.fetchShopSummary(id: id)
     }

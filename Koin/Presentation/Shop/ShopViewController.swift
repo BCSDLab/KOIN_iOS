@@ -244,10 +244,12 @@ final class ShopViewController: UIViewController {
             let service = DefaultShopService() // TODO: Service 구현체 나누기
             let repository = DefaultShopRepository(service: service) // TODO:  Repository 구현체 나누기
             let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(repository: repository)
+            let fetchShopmenusCategoryListUseCase = DefaultFetchShopmenusCategoryListUseCase(repository: repository)
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: nil,
                                                 fetchOrderShopMenusUseCase: nil,
                                                 fetchOrderShopMenusGroupsUseCase: nil,
                                                 fetchShopSummaryUseCase: fetchShopSummaryUseCase,
+                                                fetchShopmenusCategoryListUseCase: fetchShopmenusCategoryListUseCase,
                                                 orderableShopId: nil,
                                                 shopId: shopId,
                                                 isFromOrder: false)

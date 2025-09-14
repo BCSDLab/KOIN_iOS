@@ -9,6 +9,7 @@ import Alamofire
 import Combine
 
 protocol ShopService {
+    func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDTO, Error>
     func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error>
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
     func fetchEventList() -> AnyPublisher<EventsDTO, Error>
@@ -17,7 +18,7 @@ protocol ShopService {
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error>
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    
+        
     func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse>
     func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse>
     func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse>
@@ -37,6 +38,10 @@ final class DefaultShopService: ShopService {
 
     
     private let networkService = NetworkService()
+    
+    func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDTO, Error> {
+        request(.fetchShopMenusCategoryList(shopId: shopId))
+    }
     
     func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error> {
         request(.fetchShopSummary(id))

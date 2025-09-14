@@ -24,10 +24,20 @@ extension OrderShopMenusGroups {
             MenuGroup(from: menuGroupDTO)
         }
     }
+    init(from dto: ShopMenusCategoryDTO) {
+        self.count = dto.count
+        self.menuGroups = dto.menuCategories.map { menuCategoryDTO in
+            return MenuGroup(from: menuCategoryDTO)
+        }
+    }
 }
 
 extension MenuGroup {
     init(from dto: MenuGroupDTO) {
+        self.id = dto.id
+        self.name = dto.name
+    }
+    init(from dto: ShopMenuCategoryDTO) {
         self.id = dto.id
         self.name = dto.name
     }
