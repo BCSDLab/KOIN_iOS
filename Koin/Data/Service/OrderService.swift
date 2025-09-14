@@ -12,6 +12,9 @@ protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
 }
 
@@ -23,7 +26,7 @@ final class DefaultOrderService: OrderService {
     }
     
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
-        request(.fetchOrderEventShop)
+        return request(.fetchOrderEventShop)
             .map { (response: OrderShopEventListResponseDTO) in
                 response.shopEvents
             }
@@ -34,6 +37,18 @@ final class DefaultOrderService: OrderService {
         return request(.searchShop(text))
     }
     
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
+        return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error> {
+        return request(.fetchOrderShopMenusGroups(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
+        return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         request(.fetchOrderInProgress)
             .map { (dtos: [OrderInProgressDTO]) in

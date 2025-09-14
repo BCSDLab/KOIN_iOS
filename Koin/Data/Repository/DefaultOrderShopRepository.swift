@@ -34,6 +34,29 @@ final class DefaultOrderShopRepository: OrderShopRepository{
         return service.searchRelatedShops(text: text)
     }
     
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
+        service.fetchOrderShopMenus(orderableShopId: orderableShopId)
+            .map { dto in
+                dto.map { OrderShopMenus(from: $0) }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error> {
+        service.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+            .map { dto in
+                OrderShopMenusGroups(from: dto)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        service.fetchOrderShopSummary(orderableShopId: orderableShopId)
+            .map { dto in
+                return OrderShopSummary(from: dto)
+            }
+            .eraseToAnyPublisher()
+    }
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         service.fetchOrderInProgress()
             .eraseToAnyPublisher()

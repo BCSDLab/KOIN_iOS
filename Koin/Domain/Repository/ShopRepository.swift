@@ -9,6 +9,7 @@ import Combine
 import Foundation
 
 protocol ShopRepository {
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error>
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
     func fetchEventList() -> AnyPublisher<EventsDTO, Error>
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error>

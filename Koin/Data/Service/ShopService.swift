@@ -9,6 +9,7 @@ import Alamofire
 import Combine
 
 protocol ShopService {
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error>
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
     func fetchEventList() -> AnyPublisher<EventsDTO, Error>
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error>
@@ -36,6 +37,11 @@ final class DefaultShopService: ShopService {
 
     
     private let networkService = NetworkService()
+    
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDTO, Error> {
+        request(.fetchShopSummary(id))
+        
+    }
     
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error> {
         request(.fetchShopBenefits)

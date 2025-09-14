@@ -11,6 +11,9 @@ enum OrderAPI {
     case fetchOrderShopList(FetchOrderShopListRequest)
     case fetchOrderEventShop
     case searchShop(String)
+    case fetchOrderShopMenusGroups(orderableShopId: Int)
+    case fetchOrderShopMenus(orderableShopId: Int)
+    case fetchOrderShopSummary(orderableShopId: Int)
     case fetchOrderInProgress
 }
 
@@ -25,6 +28,9 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchOrderShopList: return "/order/shops"
         case .fetchOrderEventShop: return "/order/shops/events"
         case .searchShop(let text): return "/shops/search/related/\(text)"
+        case .fetchOrderShopMenusGroups(let orderableShopId): return "/order/shop/\(orderableShopId)/menus/groups"
+        case .fetchOrderShopMenus(let orderableShopId): return "/order/shop/\(orderableShopId)/menus"
+        case .fetchOrderShopSummary(let orderableShopId): return "/order/shop/\(orderableShopId)/summary"
         case .fetchOrderInProgress: return "/order/in-progress"
         }
     }

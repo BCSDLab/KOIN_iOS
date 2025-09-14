@@ -10,6 +10,7 @@ import Combine
 
 final class OrderHomeViewModel: ViewModelProtocol {
     
+    // MARK: - Input
     enum Input {
         case viewDidLoad
         case getOrderShopInfo
@@ -20,6 +21,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case minPriceDidChange(Int?)
     }
     
+    // MARK: - Output
     enum Output {
         case putImage(ShopCategoryDTO)
         case changeFilteredOrderShops([OrderShop], Int)
@@ -31,6 +33,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case hideFloatingButton
     }
     
+    // MARK: - Components
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []
@@ -44,6 +47,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
     private let searchOrderShopUseCase: SearchOrderShopUseCase
     private let fetchOrderTrackingUseCase: FetchOrderInProgressUseCase
 
+    // MARK: - Initializer
     init(fetchOrderEventShopUseCase: FetchOrderEventShopUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          fetchOrderShopListUseCase: FetchOrderShopListUseCase,
@@ -59,6 +63,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         self.sortStandard.categoryFilter = selectedId
     }
     
+    // MARK: - Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             guard let self = self else { return }

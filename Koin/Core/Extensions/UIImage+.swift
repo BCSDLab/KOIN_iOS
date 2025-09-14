@@ -49,6 +49,7 @@ enum ImageAsset: String {
     case ownerReadyImage
     case recommandMenu
     case titleMenu
+    case speaker
     case setMenu
     case sideMenu
     case arrowUp
@@ -59,6 +60,7 @@ enum ImageAsset: String {
     case emptyStar
     case coopInfo
     case arrowBack
+    case arrowBackWhite
     case heart
     case heartFill
     case share
@@ -73,6 +75,7 @@ enum ImageAsset: String {
     case nonReview
     case reportedImageView
     case nonMenuWeekendImage
+    case newChevronRight
     case chevronRight
     case chevronUp
     case visibility
@@ -154,6 +157,7 @@ enum ImageAsset: String {
     case orderShopTabBar
     case orderDetailTabBar
     case shoppingCart
+    case shoppingCartWhite
     case filterIcon1
     case filterIcon2
     case filterIcon3
@@ -161,6 +165,17 @@ enum ImageAsset: String {
     case delivery
     case bcsdSymbolLogo
     case orderEmptyLogo
+    case countIcon0
+    case countIcon1
+    case countIcon2
+    case countIcon3
+    case countIcon4
+    case countIcon5
+    case countIcon6
+    case countIcon7
+    case countIcon8
+    case countIcon9
+    case countIcon9Plus
     case refresh
     case delivery2
     case packaging

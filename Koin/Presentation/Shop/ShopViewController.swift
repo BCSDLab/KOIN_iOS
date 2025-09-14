@@ -14,7 +14,10 @@ final class ShopViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: ShopViewModel
     private let inputSubject = PassthroughSubject<ShopViewModel.Input, Never>()
+    
     private var subscriptions = Set<AnyCancellable>()
+    
+    private let navigationControllerDelegate: UINavigationController?
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -160,8 +163,9 @@ final class ShopViewController: UIViewController {
     private let shopCollectionView = ShopInfoCollectionView()
     
     // MARK: - Initialization
-    init(viewModel: ShopViewModel) {
+    init(viewModel: ShopViewModel, navigationControllerDelegate: UINavigationController? = nil) {
         self.viewModel = viewModel
+        self.navigationControllerDelegate = navigationControllerDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -235,6 +239,22 @@ final class ShopViewController: UIViewController {
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
+        
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
+            let service = DefaultShopService() // TODO: Service 구현체 나누기
+            let repository = DefaultShopRepository(service: service) // TODO:  Repository 구현체 나누기
+            let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(repository: repository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: nil,
+                                                fetchOrderShopMenusUseCase: nil,
+                                                fetchOrderShopMenusGroupsUseCase: nil,
+                                                fetchShopSummaryUseCase: fetchShopSummaryUseCase,
+                                                orderableShopId: nil,
+                                                shopId: shopId,
+                                                isFromOrder: false)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)
+            self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
+        }
+        .store(in: &subscriptions)
     }
     
     private func setAddTarget() {
@@ -243,15 +263,6 @@ final class ShopViewController: UIViewController {
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
         openShopToggleButton.addAction(UIAction { [weak self] _ in self?.handleOpenShopToggle() }, for: .touchUpInside)
-
-        shopCollectionView.cellTapPublisher
-            .sink { [weak self] shopId, _ in
-                guard let self = self else { return }
-                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: false)
-                self.tabBarController?.tabBar.isHidden = true
-                self.navigationController?.pushViewController(detailVC, animated: true)
-            }
-            .store(in: &subscriptions)
     }
 }
 

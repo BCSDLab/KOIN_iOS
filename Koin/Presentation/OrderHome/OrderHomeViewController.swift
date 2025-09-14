@@ -15,9 +15,12 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     // MARK: - Properties
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
+    
     var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
     private var currentMinPrice: Int? = nil
+    
+    private let navigationControllerDelegate: UINavigationController?
     
     var lottieAnimationView: LottieAnimationView {
         return orderFloatingButton.lottieView
@@ -182,8 +185,9 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     }
 
     // MARK: - Initialization
-    init(viewModel: OrderHomeViewModel) {
+    init(viewModel: OrderHomeViewModel, navigationControllerDelegate: UINavigationController? = nil) {
         self.viewModel = viewModel
+        self.navigationControllerDelegate = navigationControllerDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -482,9 +486,21 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            let detailVC = OrderHomeDetailWebViewController(shopId: orderableShopId, isFromOrder: true)
-            self.tabBarController?.tabBar.isHidden = true
-            navigationController?.pushViewController(detailVC, animated: true)
+            
+            let service = DefaultOrderService() // TODO: Service 구현체 나누기
+            let repository = DefaultOrderShopRepository(service: service) // TODO: Repository 구현체 나누기
+            let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
+            let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
+            let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
+                                                fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
+                                                fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
+                                                fetchShopSummaryUseCase: nil,
+                                                orderableShopId: orderableShopId,
+                                                shopId: nil,
+                                                isFromOrder: true)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
     }
 }
