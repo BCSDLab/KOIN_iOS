@@ -5,24 +5,31 @@
 //  Created by 이은지 on 6/19/25.
 //
 
+import Combine
 import UIKit
 import SnapKit
-import Combine
+import Lottie
 
-final class OrderHomeViewController: UIViewController {
+final class OrderHomeViewController: UIViewController, LottieAnimationManageable {
     
     // MARK: - Properties
     private let viewModel: OrderHomeViewModel
     private let inputSubject: PassthroughSubject<OrderHomeViewModel.Input, Never> = .init()
     
-    private var subscriptions: Set<AnyCancellable> = []
+    var subscriptions: Set<AnyCancellable> = []
     private var currentSortType: SortType = .basic
     private var currentMinPrice: Int? = nil
     
     private let navigationControllerDelegate: UINavigationController?
     
+    var lottieAnimationView: LottieAnimationView {
+        return orderFloatingButton.lottieView
+    }
+    
     // MARK: - UI Components
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+    }
     
     private let contentView = UIView()
     
@@ -170,6 +177,12 @@ final class OrderHomeViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.newBackground)
         $0.isUserInteractionEnabled = false
     }
+    
+    private let orderFloatingButton = OrderFloatingButton().then {
+        $0.setLottieAnimation(named: "floatingLogo")
+        $0.lottieView.loopMode = .loop
+        $0.isHidden = true
+    }
 
     // MARK: - Initialization
     init(viewModel: OrderHomeViewModel, navigationControllerDelegate: UINavigationController? = nil) {
@@ -182,6 +195,10 @@ final class OrderHomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        clearLottieAnimation()
+    }
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -189,6 +206,7 @@ final class OrderHomeViewController: UIViewController {
 
         configureView()
         setAddTarget()
+        setupLottieObservers()
         bind()
         inputSubject.send(.viewDidLoad)
     }
@@ -206,6 +224,8 @@ final class OrderHomeViewController: UIViewController {
                 self.updateEventShops(eventShops)
             case let .putImage(response):
                 self.putImage(data: response)
+            case let .updateFloatingButton(trackingInfo):
+                self.updateFloatingButton(with: trackingInfo)
             case .errorOccurred(let error):
                 print("error: ", error)
             default:
@@ -256,12 +276,13 @@ extension OrderHomeViewController {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
         let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
+        let fetchOrderTrackingUseCase = DefaultFetchOrderInProgressUseCase(orderShopRepository: orderRepository)
 
         let searchVC = OrderSearchViewController(
             viewModel: OrderHomeViewModel(
                 fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
                 fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-                fetchOrderShopListUseCase: fetchOrderShopListUseCase,
+                fetchOrderShopListUseCase: fetchOrderShopListUseCase, fetchOrderTrackingUseCase: fetchOrderTrackingUseCase,
                 searchOrderShopUseCase: searchOrderShopUseCase,
                 selectedId: 1
             )
@@ -276,9 +297,35 @@ extension OrderHomeViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    
     private func putImage(data: ShopCategoryDTO) {
         categoryCollectionView.updateCategories(data.shopCategories)
+    }
+    
+    private func updateFloatingButton(with info: OrderInProgress) {
+        let hasTime = !info.estimatedTime.isEmpty
+
+        switch (info.type, info.status) {
+        case (.delivery, .confirming):
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 도착예정" : "주문 확인 중"
+
+        case (.delivery, .cooking):
+            orderFloatingButton.titleText = "주문 확인 중"
+
+        case (.takeout, .confirming):
+            orderFloatingButton.titleText = "주문 확인 중"
+
+        case (.takeout, .cooking):
+            orderFloatingButton.titleText = hasTime ? "\(info.estimatedTime) 포장 수령가능" : "포장 준비 중"
+
+        default:
+            orderFloatingButton.isHidden = true
+            stopLottieAnimation()
+            return
+        }
+
+        orderFloatingButton.isHidden = false
+        orderFloatingButton.subtitleText = info.orderableShopName
+        startLottieAnimation()
     }
     
     @objc private func sortButtonTapped() {
@@ -467,6 +514,8 @@ extension OrderHomeViewController {
         [searchBarButton, categoryCollectionView, sortButton, filterCollectionView, orderShopCollectionView, eventOrderShopCollectionView, eventIndexLabel, emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
+        
+        view.addSubview(orderFloatingButton)
     }
     
     private func setUpConstraints() {
@@ -527,6 +576,13 @@ extension OrderHomeViewController {
         emptyResultStackView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
+        }
+        
+        orderFloatingButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.greaterThanOrEqualTo(286)
+            $0.height.equalTo(64)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-12)
         }
     }
     

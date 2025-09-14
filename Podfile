@@ -31,6 +31,7 @@ pod 'RxSwift', '~> 6.6'
 pod 'RxCocoa', '~> 6.6'
 pod 'StompClientLib'
 pod 'SwiftStomp'
+pod 'lottie-ios'
 end
 
 target 'NotificationService' do

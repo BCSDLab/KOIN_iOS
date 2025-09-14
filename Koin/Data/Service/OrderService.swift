@@ -12,10 +12,10 @@ protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    
     func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
     func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -37,7 +37,6 @@ final class DefaultOrderService: OrderService {
         return request(.searchShop(text))
     }
     
-    // MARK: - 여기 아래로 세 개 추가함!
     func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
         return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
@@ -48,6 +47,13 @@ final class DefaultOrderService: OrderService {
     }
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
         return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
+        request(.fetchOrderInProgress)
+            .map { (dtos: [OrderInProgressDTO]) in
+                dtos.map { $0.toEntity() }
+            }
             .eraseToAnyPublisher()
     }
 

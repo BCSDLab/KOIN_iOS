@@ -176,6 +176,10 @@ enum ImageAsset: String {
     case countIcon8
     case countIcon9
     case countIcon9Plus
+    case refresh
+    case delivery2
+    case packaging
+    case sleepBcsdSymbol
 }
 
 enum SFSymbols: String {

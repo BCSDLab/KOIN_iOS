@@ -15,7 +15,7 @@ final class DefaultOrderShopRepository: OrderShopRepository{
     init(service: OrderService) {
         self.service = service
     }
-
+    
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error> {
         return service.fetchOrderShopList(requestModel: requestModel)
             .map { dtos in
@@ -34,7 +34,6 @@ final class DefaultOrderShopRepository: OrderShopRepository{
         return service.searchRelatedShops(text: text)
     }
     
-    // MARK: - 여기 아래로 새로 추가
     func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
         service.fetchOrderShopMenus(orderableShopId: orderableShopId)
             .map { dto in
@@ -56,6 +55,10 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .map { dto in
                 return OrderShopSummary(from: dto)
             }
+            .eraseToAnyPublisher()
+        
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
+        service.fetchOrderInProgress()
             .eraseToAnyPublisher()
     }
 }
