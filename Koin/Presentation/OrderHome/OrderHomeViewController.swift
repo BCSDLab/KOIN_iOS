@@ -448,6 +448,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
+                                                fetchShopSummaryUseCase: nil,
                                                 orderableShopId: orderableShopId,
                                                 shopId: nil)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
