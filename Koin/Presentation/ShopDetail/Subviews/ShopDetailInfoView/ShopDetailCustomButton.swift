@@ -30,16 +30,23 @@ final class ShopDetailCustomButton: UIButton {
         $0.textColor = UIColor.appColor(.neutral800)
     }
     private let minimumOrderSubLabel = UILabel().then {
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
     }
     private let deliveryTipSubLabel = UILabel().then {
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
+    }
+    private let inorderableLabel = UILabel().then {
+        $0.setLineHeight(lineHeight: 1.60, text: "코인 주문이\n불가능한 매장이예요.")
+        $0.numberOfLines = 0
+        $0.font = .appFont(.pretendardSemiBold, size: 12)
+        $0.textColor = .appColor(.neutral400)
+        $0.textAlignment = .center
     }
     
     private let leftImageView = UIImageView(image: UIImage.appImage(asset: .speaker))
@@ -56,14 +63,10 @@ final class ShopDetailCustomButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(minOrderAmount: Int? = nil,
-                   minDeliveryTip: Int? = nil,
-                   maxDelieveryTip: Int? = nil,
-                   introduction: String? = nil) {
+    func configure(minOrderAmount: Int?, minDeliveryTip: Int?, maxDelieveryTip: Int?, introduction: String?, inorderable: Bool) {
         
-        if let introduction {
-            introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction)
-            configureIntroductionView()
+        if inorderable {
+            configureInorderableLabel()
         }
         else if let minOrderAmount, let minDeliveryTip, let maxDelieveryTip {
             minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
@@ -71,15 +74,26 @@ final class ShopDetailCustomButton: UIButton {
             configureOrderAmountDelieveryTipView()
         }
         else {
-            print("ShopDetailCustomeButton에서 Configure 오류")
+            introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction ?? "공지사항")
+            configureIntroductionView()
         }
     }
 }
 
 extension ShopDetailCustomButton {
+    
+    private func configureInorderableLabel() {
+        [inorderableLabel].forEach {
+            addSubview($0)
+        }
+        inorderableLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(-4)
+        }
+    }
 
     private func configureOrderAmountDelieveryTipView() {
-        [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel].forEach {
+        [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel, rightImageView].forEach {
             addSubview($0)
         }
         
@@ -103,10 +117,15 @@ extension ShopDetailCustomButton {
             $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
+        rightImageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-12)
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(20)
+        }
     }
     
     private func configureIntroductionView() {
-        [leftImageView, introductionLabel].forEach {
+        [leftImageView, introductionLabel, rightImageView].forEach {
             addSubview($0)
         }
         
@@ -119,18 +138,15 @@ extension ShopDetailCustomButton {
             $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalToSuperview().offset(-4)
         }
+        rightImageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-12)
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(20)
+        }
     }
     
     private func configureView() {
         backgroundColor = .appColor(.neutral0)
         layer.cornerRadius = 12
-        
-        [rightImageView].forEach {
-            addSubview($0)
-        }
-        rightImageView.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.centerY.equalToSuperview()
-        }
     }
 }

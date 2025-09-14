@@ -109,10 +109,10 @@ extension ShopDetailViewController {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
-            case .updateInfoView(let orderShopSummary):
+            case .updateInfoView(let orderShopSummary, let inorderable):
                 self?.imagesCollectionView.configure(orderImage: orderShopSummary.images)
                 self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
-                self?.infoView.configure(orderShopSummary: orderShopSummary)
+                self?.infoView.configure(orderShopSummary: orderShopSummary, inorderable: inorderable)
             case .updateMenusGroups(let orderShopMenusGroups):
                 self?.menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
                 self?.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
