@@ -19,6 +19,7 @@ final class ShopDetailViewModel {
     case updateInfoView(OrderShopSummary)
     case updateMenus([OrderShopMenus])
     case updateMenusGroups(OrderShopMenusGroups)
+    case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
     }
     
     // MARK: - Properties
@@ -32,6 +33,7 @@ final class ShopDetailViewModel {
     private let fetchShopSummaryUseCase: FetchShopSummaryUseCase?
     private let fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?
     private let fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?
+    private let fetchShopDataUseCase: DefaultFetchShopDataUseCase?
     
     private let orderableShopId: Int
     private let shopId: Int
@@ -44,6 +46,7 @@ final class ShopDetailViewModel {
          fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
          fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?,
          fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?,
+         fetchShopDataUseCase: DefaultFetchShopDataUseCase?,
          orderableShopId: Int?,
          shopId: Int?,
          isFromOrder: Bool) {
@@ -53,6 +56,7 @@ final class ShopDetailViewModel {
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.fetchShopmenusCategoryListUseCase = fetchShopmenusCategoryListUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
+        self.fetchShopDataUseCase = fetchShopDataUseCase
         self.orderableShopId = orderableShopId ?? -1
         self.shopId = shopId ?? -1
         self.isFromOrder = isFromOrder
@@ -65,7 +69,7 @@ final class ShopDetailViewModel {
             case .viewDidLoad:
                 guard let self else { return }
                 if self.isFromOrder {
-                    self.fetchOrderShopSummary(orderableShopId: orderableShopId)
+                    self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
                 }
@@ -73,6 +77,7 @@ final class ShopDetailViewModel {
                     self.fetchShopSummary(shopId: shopId)
                     self.fetchShopmenusCategoryList(shopId: shopId)
                     self.fetchShopMenuList(shopId: shopId)
+                    self.fetchIsAvailable(shopId: shopId)
                 }
             }
         }
@@ -83,11 +88,12 @@ final class ShopDetailViewModel {
 
 extension ShopDetailViewModel {
     
-    private func fetchOrderShopSummary(orderableShopId: Int) {
+    private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
-                  receiveValue: { [weak self] orderShopSummary in
-                self?.outputSubject.send(.updateInfoView(orderShopSummary))
+                  receiveValue: { [weak self] in
+                self?.outputSubject.send(.updateInfoView($0))
+                self?.outputSubject.send(.updateIsAvailables(delivery: $0.isDeliveryAvailable, takeOut: $0.isTakeoutAvailable, payBank: $0.payBank, payCard: $0.payCard))
             })
             .store(in: &subscriptions)
     }
@@ -134,6 +140,18 @@ extension ShopDetailViewModel {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopMenus in
                 self?.outputSubject.send(.updateMenus(shopMenus))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchIsAvailable(shopId: Int) {
+        fetchShopDataUseCase?.execute(shopId: shopId)
+            .sink(receiveCompletion: { comepltion in
+                if case .failure(let failure) = comepltion {
+                    print("fetching isAvailable did fail: \(failure)")
+                }
+            }, receiveValue: { [weak self] in
+                self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, takeOut: nil, payBank: $0.payBank, payCard: $0.payCard))
             })
             .store(in: &subscriptions)
     }

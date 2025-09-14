@@ -13,7 +13,7 @@ protocol FetchShopSummaryUseCase {
 
 class DefaultFetchShopSummaryUseCase: FetchShopSummaryUseCase {
     let repository: ShopRepository
-    
+        
     init(repository: ShopRepository) {
         self.repository = repository
     }

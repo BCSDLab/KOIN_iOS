@@ -119,6 +119,8 @@ extension ShopDetailViewController {
             case .updateMenus(let orderShopMenus):
                 self?.menuGroupTableView.configure(orderShopMenus)
                 self?.updateTableViewHeight(orderShopMenus)
+            case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
+                self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
             }
         }
         .store(in: &subscriptions)

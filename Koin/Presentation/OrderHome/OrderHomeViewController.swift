@@ -498,6 +498,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 fetchShopSummaryUseCase: nil,
                                                 fetchShopmenusCategoryListUseCase: nil,
                                                 fetchShopMenuListUseCase: nil,
+                                                fetchShopDataUseCase: nil,
                                                 orderableShopId: orderableShopId,
                                                 shopId: nil,
                                                 isFromOrder: true)
