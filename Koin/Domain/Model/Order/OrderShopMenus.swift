@@ -36,6 +36,18 @@ extension OrderShopMenus {
             OrderShopMenu(from: orderShopMenuDTO)
         }
     }
+    init(from dto: MenuCategory) {
+        self.menuGroupId = dto.id
+        self.menuGroupName = dto.name
+        
+        guard let menus = dto.menus else {
+            self.menus = []
+            return
+        }
+        self.menus = menus.map {
+            OrderShopMenu(from: $0)
+        }
+    }
 }
 
 extension OrderShopMenu {
@@ -49,12 +61,34 @@ extension OrderShopMenu {
             Price(from: priceDTO)
         }
     }
+    init(from dto: Menu) {
+        self.id = dto.id
+        self.name = dto.name ?? "" // nil??
+        self.description = dto.description
+        self.thumbnailImage = dto.imageUrls?.first ?? nil
+        self.isSoldOut = false
+        
+        if dto.isSingle, let singlePrice = dto.singlePrice {
+            self.prices = [Price(id: dto.id, name: dto.name, price: singlePrice)]
+        } else if let optionPrices = dto.optionPrices {
+            self.prices = optionPrices.map { optionPrice in
+                Price(from: optionPrice)
+            }
+        } else {
+            fatalError()
+        }
+    }
 }
 
 extension Price {
     init(from dto: PriceDTO) {
         self.id = dto.id
         self.name = dto.name
+        self.price = dto.price
+    }
+    init(from dto: OptionPrice) {
+        self.id = -1
+        self.name = dto.option
         self.price = dto.price
     }
 }

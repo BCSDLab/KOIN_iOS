@@ -21,8 +21,8 @@ struct MenuDTO: Codable {
 // MARK: - MenuCategory
 struct MenuCategory: Codable {
     let id: Int
-    let menus: [Menu]?
     let name: String
+    let menus: [Menu]?
 }
 
 // MARK: - Menu
