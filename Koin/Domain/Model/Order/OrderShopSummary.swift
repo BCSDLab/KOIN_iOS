@@ -38,4 +38,23 @@ extension OrderShopSummary {
             OrderImage(from: orderImages)
         }
     }
+    init(from dto: ShopSummaryDTO) {
+        self.shopId = dto.shopID
+        self.orderableShopId = -1
+        self.name = dto.name
+        self.introduction = dto.introduction
+        self.isDeliveryAvailable = false
+        self.isTakeoutAvailable = false
+        self.payCard = false
+        self.payBank = false
+        self.minimumOrderAmount = 0
+        self.ratingAverage = Double(dto.ratingAverage)
+        self.reviewCount = dto.reviewCount
+        self.minimumDeliveryTip = 0
+        self.maximumDeliveryTip = 0
+        self.images = dto.images.map {
+            OrderImage(imageUrl: $0.imageURL,
+                       isThumbnail: $0.isThumbnail)
+        }
+    }
 }
