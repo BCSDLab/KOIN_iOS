@@ -31,8 +31,9 @@ final class ShopDetailViewModel {
     
     private let fetchShopSummaryUseCase: FetchShopSummaryUseCase?
     
-    private let orderableShopId: Int?
-    private let shopId: Int?
+    private let orderableShopId: Int
+    private let shopId: Int
+    private let isFromOrder: Bool
     
     // MARK: - Initializer
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?,
@@ -40,13 +41,15 @@ final class ShopDetailViewModel {
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
          fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
          orderableShopId: Int?,
-         shopId: Int?) {
+         shopId: Int?,
+         isFromOrder: Bool) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
-        self.orderableShopId = orderableShopId
-        self.shopId = shopId
+        self.orderableShopId = orderableShopId ?? -1
+        self.shopId = shopId ?? -1
+        self.isFromOrder = isFromOrder
     }
     
     // MARK: Transform
@@ -55,18 +58,16 @@ final class ShopDetailViewModel {
             switch input {
             case .viewDidLoad:
                 // useCase로 데이터를 호출하고, viewController에 돌려주는 로직
-                if let orderableShopId = self?.orderableShopId {
-                    self?.fetchOrderShopSummary(orderableShopId: orderableShopId)
-                    self?.fetchOrderShopMenus(orderableShopId: orderableShopId)
-                    self?.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+                guard let self else { return }
+                if self.isFromOrder {
+                    self.fetchOrderShopSummary(orderableShopId: orderableShopId)
+                    self.fetchOrderShopMenus(orderableShopId: orderableShopId)
+                    self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
                 }
-                else if let shopId = self?.shopId {
+                else if !self.isFromOrder {
                     print("isFromShop")
-                    print("shopId: \(self?.shopId)")
-                    self?.fetchShopSummary(shopId: shopId)
-                }
-                else {
-                    fatalError()
+                    print("shopId: \(self.shopId)")
+                    self.fetchShopSummary(shopId: shopId)
                 }
             }
         }
