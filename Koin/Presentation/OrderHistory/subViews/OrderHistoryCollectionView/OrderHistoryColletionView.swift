@@ -12,6 +12,7 @@ final class OrderHistoryCollectionView: UICollectionView {
 
     struct Item: Hashable {
         let id: Int
+        let paymentId: Int
         let stateText: String
         let dateText: String
         let storeName: String
@@ -23,10 +24,9 @@ final class OrderHistoryCollectionView: UICollectionView {
 
     var onSelect: ((Int) -> Void)?
     var onTapReorder: ((Int) -> Void)?
+    var onTapOrderInfoButton: ((Int) -> Void)?
     var onReachEnd: (() -> Void)?
     var onDidScroll: ((CGFloat) -> Void)?
-
-
 
     private var items: [Item] = []
 
@@ -35,9 +35,10 @@ final class OrderHistoryCollectionView: UICollectionView {
         commonInit()
     }
     
-    
-    
-    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
 
     private func commonInit() {
         backgroundColor = .clear
@@ -124,9 +125,15 @@ extension OrderHistoryCollectionView: UICollectionViewDataSource {
             priceText: item.priceText,
             canReorder: item.canReorder
         )
+        
         cell.onTapReorder = { [weak self] in
             self?.onTapReorder?(item.id)
         }
+        
+        cell.onTapOrderInfoButton = { [weak self] in
+            self?.onTapOrderInfoButton?(item.paymentId)
+        }
+        
         return cell
     }
 }
@@ -163,6 +170,7 @@ extension OrderHistoryCollectionView.Item {
     init(from viewModel: OrderHistoryViewModel.OrderItem) {
         self.init(
             id: viewModel.id,
+            paymentId: viewModel.paymentId,
             stateText: viewModel.stateText,
             dateText: viewModel.dateText,
             storeName: viewModel.storeName,
@@ -173,6 +181,3 @@ extension OrderHistoryCollectionView.Item {
         )
     }
 }
-
-    
-

@@ -1,5 +1,5 @@
 //
-//  OrderViewModel.swift
+//  OrderHistoryViewModel.swift
 //  koin
 //
 //  Created by 김성민 on 9/10/25.
@@ -33,6 +33,7 @@ final class OrderHistoryViewModel {
 
     struct OrderItem {
         let id: Int
+        let paymentId: Int
         let stateText: String
         let dateText: String
         let storeName: String
@@ -45,6 +46,7 @@ final class OrderHistoryViewModel {
     struct PreparingItem {
         let stateText: String
         let id: Int
+        let paymentId: Int
         let methodText: String
         let estimatedTimeText: String
         let explanationText: String
@@ -227,6 +229,7 @@ final class OrderHistoryViewModel {
 
         return OrderItem(
             id: order.id,
+            paymentId: order.paymentId,
             stateText: stateText,
             dateText: dateText,
             storeName: order.shopName,
@@ -298,6 +301,7 @@ final class OrderHistoryViewModel {
         return PreparingItem(
             stateText: stateText,
             id: orderInProgress.id,
+            paymentId: orderInProgress.paymentId,
             methodText: methodText,
             estimatedTimeText: eta,
             explanationText: explanation,

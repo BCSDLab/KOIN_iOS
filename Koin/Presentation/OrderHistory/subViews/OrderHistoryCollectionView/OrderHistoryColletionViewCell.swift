@@ -13,6 +13,7 @@ import SnapKit
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     static let orderHistoryIdentifier = "OrderHistoryColletionViewCell"
+    var onTapOrderInfoButton: (() -> Void)?
     
     
     private enum ReorderState {
@@ -151,20 +152,30 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onTapOrderInfoButton = nil
+        onTapReorder = nil
+    }
+    
+    private func setAddTarget() {
+        orderInfoButton.addTarget(self, action: #selector(orderInfoButtonTapped), for: .touchUpInside)
+    }
 }
 
+extension OrderHistoryColletionViewCell {
+    @objc private func orderInfoButtonTapped() {
+        onTapOrderInfoButton?()
+    }
+}
 
 // MARK: - Set UI Function
-
-
 extension OrderHistoryColletionViewCell {
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        
     }
-    
     
     private func setUpLayouts() {
         [stateLabel, dayLabel, orderInfoButton,stateLabelUnderView, menuImageView, storeNameLabel, menuNameLabel, menuPriceLabel, reviewButton, reorderButton].forEach {

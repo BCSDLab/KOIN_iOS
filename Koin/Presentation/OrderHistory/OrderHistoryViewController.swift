@@ -12,7 +12,6 @@ import Combine
 final class OrderHistoryViewController: UIViewController {
 
     // MARK: - Properties
-    
     private let viewModel: OrderHistoryViewModel
     private var cancellables = Set<AnyCancellable>()
     private let inputSubject = PassthroughSubject<OrderHistoryViewModel.Input, Never>()
@@ -30,8 +29,6 @@ final class OrderHistoryViewController: UIViewController {
     private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     private var shadowAlpha: CGFloat = 0
     private var isRefreshingNow = false
-    
-
     
     init(viewModel: OrderHistoryViewModel, initialTab: Int = 0) {
         self.viewModel = viewModel
@@ -194,9 +191,6 @@ final class OrderHistoryViewController: UIViewController {
         $0.alpha = 0
     }
     
-    // MARK: - Initialization
-    
-    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -324,6 +318,24 @@ final class OrderHistoryViewController: UIViewController {
         searchBar.textField.addTarget(self, action: #selector(searchTapped(_:)), for: .editingDidBegin)
         searchCancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
+        
+        orderPrepareCollectionView.onTapOrderDetailButton = { [weak self] paymentId in
+            guard let self else { return }
+            let urlString = "https://order.stage.koreatech.in/result/\(paymentId)"
+            guard let url = URL(string: urlString) else { return }
+            let vc = OrderResultWebViewController(resultURL: url)
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        orderHistoryCollectionView.onTapOrderInfoButton = { [weak self] paymentId in
+            guard let self else { return }
+            let urlString = "https://order.stage.koreatech.in/result/\(paymentId)"
+            guard let url = URL(string: urlString) else { return }
+            let vc = OrderResultWebViewController(resultURL: url)
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func setInitialTab(_ idx: Int) {
@@ -638,8 +650,6 @@ extension OrderHistoryViewController{
     }
 }
 
-
-
 // MARK: - @objc
 
 extension OrderHistoryViewController {
@@ -749,8 +759,6 @@ extension OrderHistoryViewController {
     }
     
 }
-
-
 
 extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDelegate {
     
