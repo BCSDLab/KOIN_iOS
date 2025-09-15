@@ -171,7 +171,9 @@
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B438AEEA2E75D29B00E889C4 /* OrderImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE92E75D29B00E889C4 /* OrderImageDTO.swift */; };
 		B438AEF02E75E18600E889C4 /* ShopDetailPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEEE2E75E18600E889C4 /* ShopDetailPopUpView.swift */; };
-		B458C1032E77B15500AB5BF1 /* FetchCartAddRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1022E77B15500AB5BF1 /* FetchCartAddRequest.swift */; };
+		B458C1052E77BDB000AB5BF1 /* CartSummaryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1042E77BDB000AB5BF1 /* CartSummaryDTO.swift */; };
+		B458C1072E77BE4200AB5BF1 /* CartSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1062E77BE4200AB5BF1 /* CartSummary.swift */; };
+		B458C1092E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1082E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchShopSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchShopSummaryUseCase.swift */; };
 		B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */; };
@@ -916,7 +918,9 @@
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B438AEE92E75D29B00E889C4 /* OrderImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImageDTO.swift; sourceTree = "<group>"; };
 		B438AEEE2E75E18600E889C4 /* ShopDetailPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailPopUpView.swift; sourceTree = "<group>"; };
-		B458C1022E77B15500AB5BF1 /* FetchCartAddRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartAddRequest.swift; sourceTree = "<group>"; };
+		B458C1042E77BDB000AB5BF1 /* CartSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSummaryDTO.swift; sourceTree = "<group>"; };
+		B458C1062E77BE4200AB5BF1 /* CartSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSummary.swift; sourceTree = "<group>"; };
+		B458C1082E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartSummaryUseCase.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDTO.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchShopSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSummaryUseCase.swift; sourceTree = "<group>"; };
 		B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImageDTO.swift; sourceTree = "<group>"; };
@@ -3725,6 +3729,7 @@
 				B438AEDD2E75582F00E889C4 /* OrderShopSummaryDTO.swift */,
 				B438AEE12E75584200E889C4 /* OrderShopMenusGroupsDTO.swift */,
 				D8F5C54D2E6F0E8A00FB6708 /* OrderInProgressDTO.swift */,
+				B458C1042E77BDB000AB5BF1 /* CartSummaryDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3740,6 +3745,7 @@
 				B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */,
 				B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */,
 				D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */,
+				B458C1062E77BE4200AB5BF1 /* CartSummary.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3835,7 +3841,6 @@
 			isa = PBXGroup;
 			children = (
 				D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */,
-				B458C1022E77B15500AB5BF1 /* FetchCartAddRequest.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3850,6 +3855,7 @@
 				B438AED42E75526600E889C4 /* FetchOrderShopMenusUseCase.swift */,
 				B438AED52E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift */,
 				D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */,
+				B458C1082E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4545,6 +4551,7 @@
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
+				B458C1092E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
 				D2B7EC0E2D415B3900EE46B0 /* DeleteArticleModalViewController.swift in Sources */,
@@ -4580,6 +4587,7 @@
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				B4B582652E6D687E0035A861 /* ShopDetailImagesCollectionView.swift in Sources */,
 				B4B582662E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift in Sources */,
+				B458C1052E77BDB000AB5BF1 /* CartSummaryDTO.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
@@ -4725,6 +4733,7 @@
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				D21572732CEE67130061E725 /* DeleteLectureView.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
+				B458C1072E77BE4200AB5BF1 /* CartSummary.swift in Sources */,
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
 				D20AD6E92E013E430067760A /* StateView.swift in Sources */,
@@ -4773,7 +4782,6 @@
 				83EBB8802D0FE86100346018 /* TimeInterval+.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */,
-				B458C1032E77B15500AB5BF1 /* FetchCartAddRequest.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				D2078BF82BC4D9F800A39861 /* ShopReadyView.swift in Sources */,

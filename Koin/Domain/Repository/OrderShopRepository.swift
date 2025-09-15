@@ -16,4 +16,5 @@ protocol OrderShopRepository {
     func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error>
 }

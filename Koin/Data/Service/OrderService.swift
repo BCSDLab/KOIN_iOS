@@ -16,6 +16,7 @@ protocol OrderService {
     func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -54,6 +55,10 @@ final class DefaultOrderService: OrderService {
             .map { (dtos: [OrderInProgressDTO]) in
                 dtos.map { $0.toEntity() }
             }
+            .eraseToAnyPublisher()
+    }
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error> {
+        request(.fetchCartSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
 

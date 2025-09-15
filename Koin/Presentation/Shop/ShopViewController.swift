@@ -254,6 +254,7 @@ final class ShopViewController: UIViewController {
                                                 fetchShopmenusCategoryListUseCase: fetchShopmenusCategoryListUseCase,
                                                 fetchShopMenuListUseCase: fetchShopMenuListUseCase,
                                                 fetchShopDataUseCase: fetchShopDataUseCase,
+                                                fetchCartSummaryUseCase: nil,
                                                 orderableShopId: nil,
                                                 shopId: shopId,
                                                 isFromOrder: false)

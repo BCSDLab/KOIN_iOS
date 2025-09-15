@@ -10,6 +10,12 @@ import SnapKit
 
 final class ShopDetailBottomSheet: UIView {
     
+    // MARK: - Properties
+    var orderableShopId: Int = 0
+    var shopMinimumOrderAmount: Int = 0
+    var cartItemsAmount: Int = 0
+    var isAvailable: Bool = false // 지금 보고있는 가게의 메뉴를 장바구니에 추가할 수 있는가
+    
     // MARK: - Component
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
@@ -37,14 +43,31 @@ final class ShopDetailBottomSheet: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(price: Int, isDeliveryAvailable: Bool, numberOfShoppingList: Int) {
+    func configure(cartSummary: CartSummary) {
+        self.orderableShopId = cartSummary.orderableShopID
+        self.shopMinimumOrderAmount = cartSummary.shopMinimumOrderAmount
+        self.cartItemsAmount = cartSummary.cartItemsAmount
+        self.isAvailable = cartSummary.isAvailable
+        self.updateBottomSheet()
+    }
+}
+
+extension ShopDetailBottomSheet {
+    
+    private func updateBottomSheet() {
+        if isAvailable {
+            isDeliveryAvailableLabel.text = "배달 가능"
+        }
+        else {
+            isDeliveryAvailableLabel.text = "배달 불가"
+        }
+        
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        priceLabel.text = formatter.string(from: NSNumber(value: price)) ?? "-" + "원"
-
-        isDeliveryAvailableLabel.text = isDeliveryAvailable ? "배달 가능" : "배달 불가"
+        let formattedAmount = formatter.string(from: NSNumber(value: cartItemsAmount)) ?? "0"
+        priceLabel.text = "\(formattedAmount)원"
         
-        switch numberOfShoppingList {
+        switch cartItemsAmount {
         case 0: shoppingListButton.setImage(.appImage(asset: .countIcon0), for: .normal)
         case 1: shoppingListButton.setImage(.appImage(asset: .countIcon1), for: .normal)
         case 2: shoppingListButton.setImage(.appImage(asset: .countIcon2), for: .normal)
@@ -61,7 +84,6 @@ final class ShopDetailBottomSheet: UIView {
 }
 
 extension ShopDetailBottomSheet {
-    
     private func setUpButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePlacement = .leading

@@ -57,8 +57,15 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             }
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         service.fetchOrderInProgress()
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error> {
+        service.fetchCartSummary(orderableShopId: orderableShopId)
+            .map { CartSummary(from: $0) }
             .eraseToAnyPublisher()
     }
 }
