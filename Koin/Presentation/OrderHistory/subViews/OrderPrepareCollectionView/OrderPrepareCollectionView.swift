@@ -10,9 +10,11 @@ import UIKit
 final class OrderPrepareCollectionView: UICollectionView {
     
     var onLoadedIDs: (([Int]) -> Void)?
+    var onTapOrderDetailButton: ((Int) -> Void)?
     
     struct Item: Hashable {
         let id: Int
+        let paymentId: Int
         let methodText: String
         let estimatedTimeText: String
         let explanationText: String
@@ -127,6 +129,11 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
             priceText: item.priceText,
             status: item.status
         )
+        
+        cell.onTapOrderDetailButton = { [weak self] in
+            self?.onTapOrderDetailButton?(item.paymentId)
+        }
+        
         return cell
     }
 
@@ -150,6 +157,7 @@ extension OrderPrepareCollectionView.Item {
     init(from viewModel: OrderHistoryViewModel.PreparingItem) {
         self.init(
             id: viewModel.id,
+            paymentId: viewModel.paymentId,
             methodText: viewModel.methodText,
             estimatedTimeText: viewModel.estimatedTimeText,
             explanationText: viewModel.explanationText,

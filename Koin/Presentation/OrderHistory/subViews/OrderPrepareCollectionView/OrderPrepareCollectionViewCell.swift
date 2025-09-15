@@ -10,12 +10,12 @@ import SnapKit
 
 final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
-    static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
+    var onTapOrderDetailButton: (() -> Void)?
     
+    static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
     
     private var showEstimateTimeLabel: Constraint!
     private var hideEstimateTimeLabel: Constraint!
-
     
     private enum stateCase {
         case delivery
@@ -48,7 +48,6 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
         $0.setContentHuggingPriority(.required, for: .horizontal)
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
-    
     
     private let stateLabel = UILabel().then{
         $0.text = "주문 확인 중"
@@ -117,19 +116,32 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
         }()
     )
 
-
-    
     // MARK: - Initialize
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        setAddtarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onTapOrderDetailButton = nil
+    }
+    
+    private func setAddtarget() {
+        detailOrderButton.addTarget(self, action: #selector(detailOrderButtonTapped), for: .touchUpInside)
+    }
+}
+
+extension OrderPrepareCollectionViewCell {
+    @objc private func detailOrderButtonTapped() {
+        onTapOrderDetailButton?()
+    }
 }
 
 extension OrderPrepareCollectionViewCell {
@@ -142,7 +154,7 @@ extension OrderPrepareCollectionViewCell {
     }
     
     private func setUpLayouts() {
-        [orderInfoChip,stateLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView,storeNameLabel ,menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
+        [orderInfoChip,stateLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView, storeNameLabel, menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
             contentView.addSubview($0)
         }
         self.contentView.backgroundColor = .appColor(.neutral0)
