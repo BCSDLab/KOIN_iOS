@@ -18,6 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
+    private var isAddMenuAvailable: Bool = false
     
     // MARK: - Components
     private let scrollView = UIScrollView().then {
@@ -129,11 +130,24 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
         
+        // bottomSheet
+        bottomSheet.isAavailablePublisher
+            .sink { [weak self] isAddMenuAvailable in
+                self?.isAddMenuAvailable = isAddMenuAvailable
+            }
+            .store(in: &subscriptions)
+        
         // tableView
         menuGroupTableView.didTapCellPublisher
-            .sink(receiveValue: { [weak self] menuId in
-                self?.inputSubject.send(.didTapCell(menuId: menuId))
-            })
+            .sink { [weak self] menuId in
+                guard let self, isFromOrder else { return }
+                if self.isAddMenuAvailable {
+                    self.inputSubject.send(.didTapCell(menuId: menuId))
+                }
+                else {
+                    self.showPopUpView()
+                }
+            }
             .store(in: &subscriptions)
         
         // popUpView

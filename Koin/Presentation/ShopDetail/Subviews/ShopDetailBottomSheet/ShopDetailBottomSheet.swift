@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class ShopDetailBottomSheet: UIView {
@@ -15,6 +16,8 @@ final class ShopDetailBottomSheet: UIView {
     var shopMinimumOrderAmount: Int = 0
     var cartItemsAmount: Int = 0
     var isAvailable: Bool = false // 지금 보고있는 가게의 메뉴를 장바구니에 추가할 수 있는가
+    
+    let isAavailablePublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - Component
     private let separatorView = UIView().then {
@@ -49,6 +52,7 @@ final class ShopDetailBottomSheet: UIView {
         self.cartItemsAmount = cartSummary.cartItemsAmount
         self.isAvailable = cartSummary.isAvailable
         self.updateBottomSheet()
+        self.isAavailablePublisher.send(isAvailable)
     }
 }
 

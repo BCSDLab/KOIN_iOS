@@ -99,9 +99,8 @@ final class ShopDetailViewModel {
                     self.fetchIsAvailable(shopId: shopId)
                 }
             case let .didTapCell(menuId):
-                if self.isFromOrder {
-                    self.checkShoppingList(menuId: menuId)
-                }
+                if self.isFromOrder { return }
+                self.checkShoppingList(menuId: menuId)
             }
         }
         .store(in: &subscriptions)
@@ -152,6 +151,7 @@ extension ShopDetailViewModel {
     }
     
     private func checkShoppingList(menuId: Int) {
+        // 바텀시트에서 isAvailable == false 면 팝업
         // TODO: 메뉴 상세 페이지로 이동
         print("menuId: \(menuId)")
     }
