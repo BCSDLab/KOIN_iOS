@@ -20,6 +20,8 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     private var isSoldOuts: [[Bool]] = []
     private var prices: [[[Price]]] = []
     
+    let didTapCellPublisher = PassthroughSubject<Int, Never>()
+    
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -91,12 +93,10 @@ extension ShopDetailMenuGroupTableView {
         return cell
         
     }
-    // select, highlight
+    // select
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didTapCellPublisher.send(ids[indexPath.section][indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return false
     }
     // height
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {

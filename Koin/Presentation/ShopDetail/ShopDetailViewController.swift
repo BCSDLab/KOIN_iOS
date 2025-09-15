@@ -125,6 +125,13 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
         
+        // tableView
+        menuGroupTableView.didTapCellPublisher
+            .sink(receiveValue: { [weak self] menuId in
+                self?.inputSubject.send(.didTapCell(menuId: menuId))
+            })
+            .store(in: &subscriptions)
+        
         // popUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in

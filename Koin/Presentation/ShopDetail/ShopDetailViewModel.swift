@@ -12,6 +12,7 @@ final class ShopDetailViewModel {
     // MARK: - Input
     enum Input {
     case viewDidLoad
+    case didTapCell(menuId: Int)
     }
     
     // MARK: - Output
@@ -65,9 +66,9 @@ final class ShopDetailViewModel {
     // MARK: Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let self else { return }
             switch input {
             case .viewDidLoad:
-                guard let self else { return }
                 if self.isFromOrder {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
@@ -79,6 +80,10 @@ final class ShopDetailViewModel {
                     self.fetchShopMenuList(shopId: shopId)
                     self.fetchIsAvailable(shopId: shopId)
                 }
+            case let .didTapCell(menuId):
+                if self.isFromOrder {
+                    self.checkShoppingList(menuId: menuId)
+                }
             }
         }
         .store(in: &subscriptions)
@@ -87,6 +92,7 @@ final class ShopDetailViewModel {
 }
 
 extension ShopDetailViewModel {
+    // MARK: - Order UseCase
     
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
@@ -114,9 +120,15 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
+    
+    private func checkShoppingList(menuId: Int) {
+        // TODO: 메뉴 상세 페이지로 이동
+        print("menuId: \(menuId)")
+    }
 }
 
 extension ShopDetailViewModel {
+    // MARK: - Shop UseCase
     
     private func fetchShopSummary(shopId: Int) {
         fetchShopSummaryUseCase?.execute(id: shopId)
