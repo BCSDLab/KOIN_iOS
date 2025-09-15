@@ -46,8 +46,6 @@ final class OrderHistoryCollectionView: UICollectionView {
         dataSource = self
         delegate = self
         
- 
-        
         register(OrderHistoryColletionViewCell.self,
                  forCellWithReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier)
     }
@@ -82,7 +80,6 @@ final class OrderHistoryCollectionView: UICollectionView {
         return topInset + stateLabelH + underLineInset + underLineH + menuImageTop + menuImageH + reviewButtonTop + reviewButton + reorderButtonTop + reorderButton + bottomInset
     }
 }
-
 
 extension OrderHistoryCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -161,10 +158,6 @@ extension OrderHistoryCollectionView: UICollectionViewDelegate,UICollectionViewD
     }
     
 }
-    
-
-
-
 
 extension OrderHistoryCollectionView.Item {
     init(from viewModel: OrderHistoryViewModel.OrderItem) {

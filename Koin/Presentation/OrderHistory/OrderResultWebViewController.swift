@@ -22,31 +22,44 @@ final class OrderResultWebViewController: UIViewController, WKNavigationDelegate
         let contentController = WKUserContentController()
         let config = WKWebViewConfiguration()
 
-        let prefs = WKWebpagePreferences()
-        prefs.allowsContentJavaScript = true
-        config.defaultWebpagePreferences = prefs
+        let preferences = WKWebpagePreferences()
+        preferences.allowsContentJavaScript = true
+        config.defaultWebpagePreferences = preferences
 
         config.userContentController = contentController
         config.allowsInlineMediaPlayback = true
 
-        let wv = NoInputAccessoryWKWebView(frame: .zero, configuration: config)
-        wv.translatesAutoresizingMaskIntoConstraints = false
-        wv.allowsBackForwardNavigationGestures = true
-        return wv
+        let webView = NoInputAccessoryWKWebView(frame: .zero, configuration: config)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.allowsBackForwardNavigationGestures = true
+        return webView
     }()
 
     init(resultURL: URL) {
         self.resultURL = resultURL
         super.init(nibName: nil, bundle: nil)
-        title = "주문 상세"
+        self.title = nil
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.appColor(.newBackground)
+        view.backgroundColor = .white
         setupWebView()
         checkLoginAndLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     private func setupWebView() {
@@ -113,8 +126,8 @@ final class OrderResultWebViewController: UIViewController, WKNavigationDelegate
     }
 
     private func loadResultPage() {
-        let req = URLRequest(url: resultURL)
-        webView.load(req)
+        let request = URLRequest(url: resultURL)
+        webView.load(request)
     }
 
     // MARK: WKNavigationDelegate
@@ -137,18 +150,22 @@ final class OrderResultWebViewController: UIViewController, WKNavigationDelegate
 
         switch method {
         case "navigateBack":
-            navigationController?.popViewController(animated: true)
-
+            if presentingViewController != nil {
+                dismiss(animated: true)
+            } else {
+                navigationController?.popViewController(animated: true)
+            }
+            
         case "getUserTokens":
-            let access = KeychainWorker.shared.read(key: .access) ?? ""
-            let refresh = KeychainWorker.shared.read(key: .refresh) ?? ""
+            let accessToken = KeychainWorker.shared.read(key: .access) ?? ""
+            let refreshToken = KeychainWorker.shared.read(key: .refresh) ?? ""
             let callbackId = payload["callbackId"] as? String ?? ""
-            let dict: [String: Any] = ["access": access, "refresh": refresh]
-            let resultData = try? JSONSerialization.data(withJSONObject: dict)
-            let resultStr = resultData.flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
+            let dictionary: [String: Any] = ["access": accessToken, "refresh": refreshToken]
+            let resultData = try? JSONSerialization.data(withJSONObject: dictionary)
+            let resultString = resultData.flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
             let script = """
             if (window.onNativeCallback) {
-              window.onNativeCallback('\(callbackId)', \(resultStr));
+              window.onNativeCallback('\(callbackId)', \(resultString));
             }
             """
             webView.evaluateJavaScript(script, completionHandler: nil)

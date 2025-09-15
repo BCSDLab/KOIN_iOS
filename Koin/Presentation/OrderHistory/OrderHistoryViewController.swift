@@ -320,21 +320,11 @@ final class OrderHistoryViewController: UIViewController {
         seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
         
         orderPrepareCollectionView.onTapOrderDetailButton = { [weak self] paymentId in
-            guard let self else { return }
-            let urlString = "https://order.stage.koreatech.in/result/\(paymentId)"
-            guard let url = URL(string: urlString) else { return }
-            let vc = OrderResultWebViewController(resultURL: url)
-            vc.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(vc, animated: true)
+            self?.presentOrderResultModal(with: paymentId)
         }
-        
+
         orderHistoryCollectionView.onTapOrderInfoButton = { [weak self] paymentId in
-            guard let self else { return }
-            let urlString = "https://order.stage.koreatech.in/result/\(paymentId)"
-            guard let url = URL(string: urlString) else { return }
-            let vc = OrderResultWebViewController(resultURL: url)
-            vc.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(vc, animated: true)
+            self?.presentOrderResultModal(with: paymentId)
         }
     }
     
@@ -358,6 +348,14 @@ final class OrderHistoryViewController: UIViewController {
         }
     }
 
+    private func presentOrderResultModal(with paymentId: Int) {
+        guard let url = URL(string: "https://order.stage.koreatech.in/result/\(paymentId)") else { return }
+        let viewController = OrderResultWebViewController(resultURL: url)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true)
+    }
 }
 
 extension OrderHistoryViewController {

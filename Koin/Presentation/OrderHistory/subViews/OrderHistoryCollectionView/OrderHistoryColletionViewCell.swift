@@ -8,20 +8,15 @@
 import UIKit
 import SnapKit
 
-
-
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     static let orderHistoryIdentifier = "OrderHistoryColletionViewCell"
     var onTapOrderInfoButton: (() -> Void)?
     
-    
     private enum ReorderState {
         case available
         case beforeOpen
     }
-    
-    
 
     //MARK: - Properties
     private var reorderState: ReorderState = .available {
@@ -138,14 +133,13 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
             return config
         }()
     )
-
     
     // MARK: - Initialize
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         setupReorderButtonState()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
