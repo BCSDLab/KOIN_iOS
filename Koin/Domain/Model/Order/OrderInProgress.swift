@@ -31,6 +31,8 @@ enum OrderInProgressStatus: String {
     case delivering = "DELIVERING"
     case delivered = "DELIVERED"
     case canceled = "CANCELED"
+    
+    
 }
 
 extension OrderInProgress {
@@ -55,10 +57,23 @@ extension OrderInProgress {
 extension OrderInProgressStatus {
     var showEstimatedTime: Bool {
         switch self {
-        case .cooking, .packaged, .delivering:
+        case .cooking, .delivering:
             return true
-        case .confirming, .pickedUp, .delivered, .canceled:
+        case .confirming, .pickedUp, .delivered, .canceled, .packaged:
             return false
+        }
+    }
+}
+
+extension OrderInProgressStatus {
+    var statusText: String {
+        switch self {
+        case .confirming: return "주문 확인 중"
+        case .cooking: return "조리 중"
+        case .pickedUp, .packaged: return "수령 가능"
+        case .delivering: return "배달 출발"
+        case .delivered: return "배달 완료"
+        case .canceled: return "주문 취소"
         }
     }
 }

@@ -200,6 +200,7 @@ final class OrderHistoryViewModel {
             switch order.status {
             case .delivered: return "배달완료"
             case .packaged, .pickedUp: return "포장완료"
+            case .canceled: return "취소완료"
             default: return ""
             }
         }()
@@ -246,18 +247,19 @@ final class OrderHistoryViewModel {
             case .delivery:
                 switch orderInProgress.status {
                 case .confirming: return "주문 확인 중"
-                case .cooking, .packaged, .pickedUp: return "조리 중"
+                case .cooking: return "조리 중"
                 case .delivering: return "배달 출발"
                 case .delivered: return "배달 완료"
                 case .canceled: return "주문 취소"
+                default: return ""
                 }
             case .takeout:
                 switch orderInProgress.status {
                 case .confirming: return "주문 확인 중"
                 case .cooking: return "조리 중"
-                case .packaged, .pickedUp, .delivered: return "수령 가능"
-                case .delivering: return "조리 중"
+                case .packaged, .pickedUp: return "수령 가능"
                 case .canceled: return "주문 취소"
+                default: return ""
                 }
             }
         }()

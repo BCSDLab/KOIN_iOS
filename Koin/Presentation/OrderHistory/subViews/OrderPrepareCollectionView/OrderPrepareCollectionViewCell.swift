@@ -233,6 +233,8 @@ extension OrderPrepareCollectionViewCell {
         let estimatedTimeIsEmpty = !estimatedTimeText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let showEstimatedTimeLabel = status.showEstimatedTime && estimatedTimeIsEmpty
 
+        
+        stateLabel.text = status.statusText
         estimatedTimeLabel.text = estimatedTimeText
         setEstimatedLabel(showEstimatedTimeLabel)
 
