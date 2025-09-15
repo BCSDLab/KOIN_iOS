@@ -43,8 +43,8 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         $0.alignment = .leading
         $0.distribution = .fill
     }
-    private var priceNameLabels: [UILabel] = [UILabel(), UILabel(), UILabel(), UILabel()]
-    private var priceValueLabels: [UILabel] = [UILabel(), UILabel(), UILabel(), UILabel()]
+    private var priceNameLabels: [UILabel] = []
+    private var priceValueLabels: [UILabel] = []
     
     private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
@@ -87,7 +87,10 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             descriptionLabel.isHidden = true
         }
         
+        priceNameLabels = []
+        priceValueLabels = []
         for index in 0..<prices.count {
+            priceNameLabels.append(UILabel())
             if let name = prices[index].name {
                 priceNameLabels[index].text = "\(name) : "
                 priceNameLabels[index].isHidden = false
@@ -99,19 +102,18 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
                 priceNameLabels[index].isHidden = true
             }
             
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
+            priceValueLabels.append(UILabel())
+            let formatter = NumberFormatter().then {
+                $0.numberStyle = .decimal
+            }
             let price = formatter.string(from: NSNumber(value: prices[index].price)) ?? ""
             priceValueLabels[index].text = "\(price)원"
-            priceValueLabels[index].isHidden = false
             priceValueLabels[index].snp.updateConstraints {
                 $0.width.equalTo(priceValueLabels[index].intrinsicContentSize.width)
             }
         }
-        for index in prices.count..<4 {
-            priceNameLabels[index].isHidden = true
-            priceValueLabels[index].isHidden = true
-        }
+        setUpLabels()
+        setUpStackViews()
         
         if let url = thumbnailImage {
             thumbnailImageView.loadImageWithSpinner(from: url)
@@ -197,14 +199,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         }
         setUpShadow()
     }
-}
-
-extension ShopDetailMenuGroupTableViewCell {
-    
-    private func setUpShadow() {
-        layer.masksToBounds = false
-        layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
-    }
     private func setUpLabels() {
         priceNameLabels.forEach {
             $0.numberOfLines = 0
@@ -212,6 +206,12 @@ extension ShopDetailMenuGroupTableViewCell {
             $0.textColor = .appColor(.neutral800)
             $0.contentMode = .center
             $0.textAlignment = .left
+            
+            let label = $0
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+                $0.width.equalTo(label.intrinsicContentSize.width)
+            }
         }
         priceValueLabels.forEach {
             $0.numberOfLines = 0
@@ -219,13 +219,19 @@ extension ShopDetailMenuGroupTableViewCell {
             $0.textColor = .appColor(.neutral800)
             $0.contentMode = .center
             $0.textAlignment = .left
+            
+            let label = $0
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+                $0.width.equalTo(label.intrinsicContentSize.width)
+            }
         }
     }
     private func setUpStackViews() {
         [nameLabel, descriptionLabel].forEach {
             nameStackView.addArrangedSubview($0)
         }
-        for i in 0..<4 {
+        for i in 0..<priceValueLabels.count {
             priceStackViews.addArrangedSubview(UIStackView().then {
                 $0.alignment = .fill
                 $0.addArrangedSubview(priceNameLabels[i])
@@ -247,6 +253,14 @@ extension ShopDetailMenuGroupTableViewCell {
             stackView.distribution = .fill
         }
     }
+}
+
+extension ShopDetailMenuGroupTableViewCell {
+    
+    private func setUpShadow() {
+        layer.masksToBounds = false
+        layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+    }
     
     private func setUpLayout() {
         [labelsStackView, thumbnailImageView, separatorView].forEach {
@@ -264,20 +278,7 @@ extension ShopDetailMenuGroupTableViewCell {
         descriptionLabel.snp.makeConstraints {
             $0.height.equalTo(19)
         }
-        priceNameLabels.forEach {
-            let label = $0
-            $0.snp.makeConstraints {
-                $0.height.equalTo(22)
-                $0.width.equalTo(label.intrinsicContentSize.width)
-            }
-        }
-        priceValueLabels.forEach {
-            let label = $0
-            $0.snp.makeConstraints {
-                $0.height.equalTo(22)
-                $0.width.equalTo(label.intrinsicContentSize.width)
-            }
-        }
+        
         labelsStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
@@ -312,7 +313,6 @@ extension ShopDetailMenuGroupTableViewCell {
     private func configureView() {
         backgroundColor = .clear
         setUpStackViews()
-        setUpLabels()
         setUpLayout()
         setUpConstaints()
     }
