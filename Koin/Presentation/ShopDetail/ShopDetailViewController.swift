@@ -12,6 +12,7 @@ final class ShopDetailViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: ShopDetailViewModel
+    private let isFromOrder: Bool
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -79,6 +80,7 @@ final class ShopDetailViewController: UIViewController {
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
         self.viewModel = viewModel
+        self.isFromOrder = isFromOrder
         bottomSheet.isHidden = !isFromOrder
         super.init(nibName: nil, bundle: nil)
     }
@@ -327,7 +329,8 @@ extension ShopDetailViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(isFromOrder ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
         }
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -358,7 +361,7 @@ extension ShopDetailViewController {
         menuGroupTableView.snp.makeConstraints {
             $0.top.equalTo(menuGroupNameCollectionView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().offset( -20 + (UIApplication.hasHomeButton() ? -72 : -106 ))
+            $0.bottom.equalToSuperview().offset(-20)
         }
         bottomSheet.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
