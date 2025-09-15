@@ -177,6 +177,7 @@
 		B458C1202E785F1300AB5BF1 /* CartItemsCountDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C11F2E785F1300AB5BF1 /* CartItemsCountDTO.swift */; };
 		B458C1222E785FDC00AB5BF1 /* CartItemsCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1212E785FDC00AB5BF1 /* CartItemsCount.swift */; };
 		B458C1242E78605500AB5BF1 /* FetchCartItemsCountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1232E78605500AB5BF1 /* FetchCartItemsCountUseCase.swift */; };
+		B458C1262E7874D000AB5BF1 /* ResetCartUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B458C1252E7874D000AB5BF1 /* ResetCartUseCase.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchShopSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchShopSummaryUseCase.swift */; };
 		B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */; };
@@ -927,6 +928,7 @@
 		B458C11F2E785F1300AB5BF1 /* CartItemsCountDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemsCountDTO.swift; sourceTree = "<group>"; };
 		B458C1212E785FDC00AB5BF1 /* CartItemsCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemsCount.swift; sourceTree = "<group>"; };
 		B458C1232E78605500AB5BF1 /* FetchCartItemsCountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartItemsCountUseCase.swift; sourceTree = "<group>"; };
+		B458C1252E7874D000AB5BF1 /* ResetCartUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetCartUseCase.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDTO.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchShopSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSummaryUseCase.swift; sourceTree = "<group>"; };
 		B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImageDTO.swift; sourceTree = "<group>"; };
@@ -3865,6 +3867,7 @@
 				D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */,
 				B458C1082E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift */,
 				B458C1232E78605500AB5BF1 /* FetchCartItemsCountUseCase.swift */,
+				B458C1252E7874D000AB5BF1 /* ResetCartUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4662,6 +4665,7 @@
 				D283A4E42CECE7DE00C238BA /* AddDirectCollectionViewCell.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,
 				83EBB88A2D154A1F00346018 /* BusTimetableTableViewFooterView.swift in Sources */,
+				B458C1262E7874D000AB5BF1 /* ResetCartUseCase.swift in Sources */,
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */,
 				D2078C0A2BC736A800A39861 /* EventListCollectionView.swift in Sources */,

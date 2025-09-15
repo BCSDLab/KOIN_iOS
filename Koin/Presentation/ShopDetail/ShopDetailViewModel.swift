@@ -13,6 +13,7 @@ final class ShopDetailViewModel {
     enum Input {
     case viewDidLoad
     case didTapCell(menuId: Int)
+    case resetCart
     }
     
     // MARK: - Output
@@ -40,6 +41,7 @@ final class ShopDetailViewModel {
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
     private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
+    private let resetCartUseCase: ResetCartUseCase?
     
     private let orderableShopId: Int?
     private let shopId: Int?
@@ -51,12 +53,14 @@ final class ShopDetailViewModel {
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
          fetchCartSummaryUseCase: DefaultFetchCartSummaryUseCase?,
          fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase?,
+         resetCartUseCase: DefaultResetCartUseCase?,
          orderableShopId: Int) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
         self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
         self.fetchCartItemsCountUseCase = fetchCartItemsCountUseCase
+        self.resetCartUseCase = resetCartUseCase
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
         self.fetchShopSummaryUseCase = nil
@@ -81,6 +85,7 @@ final class ShopDetailViewModel {
         self.fetchOrderShopMenusGroupsUseCase = nil
         self.fetchCartSummaryUseCase = nil
         self.fetchCartItemsCountUseCase = nil
+        self.resetCartUseCase = nil
         self.orderableShopId = nil
     }
     
@@ -107,6 +112,8 @@ final class ShopDetailViewModel {
             case let .didTapCell(menuId):
                 if self.isFromOrder { return }
                 self.checkShoppingList(menuId: menuId)
+            case .resetCart:
+                self.resetCart()
             }
         }
         .store(in: &subscriptions)
@@ -164,6 +171,19 @@ extension ShopDetailViewModel {
                 }
             }, receiveValue: { [weak self] count in
                 self?.outputSubject.send(.updateCartItemsCount(count: count))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func resetCart() {
+        resetCartUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("ResetCart Did Fail: \(failure)")
+                }
+            }, receiveValue: { [weak self] in
+                self?.outputSubject.send(.updateCartItemsCount(count: 0))
+                print("did reset cart")
             })
             .store(in: &subscriptions)
     }

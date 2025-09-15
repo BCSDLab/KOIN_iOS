@@ -74,4 +74,9 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .map { CartItemsCount(from: $0) }
             .eraseToAnyPublisher()
     }
+    
+    func resetCart() -> AnyPublisher<Void, Error> {
+        service.resetCart()
+            .eraseToAnyPublisher()
+    }
 }

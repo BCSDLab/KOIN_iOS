@@ -18,7 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
-    private var isAddMenuAvailable: Bool = false
+    private var isAddMenuAvailable: Bool = true
     
     // MARK: - Components
     private let scrollView = UIScrollView().then {
@@ -146,6 +146,7 @@ extension ShopDetailViewController {
         bottomSheet.isAavailablePublisher
             .sink { [weak self] isAddMenuAvailable in
                 self?.isAddMenuAvailable = isAddMenuAvailable
+                print("bottomSheet - isAddMenuAvailable: \(isAddMenuAvailable)")
             }
             .store(in: &subscriptions)
         
@@ -157,7 +158,7 @@ extension ShopDetailViewController {
                     self.inputSubject.send(.didTapCell(menuId: menuId))
                 }
                 else {
-                    self.showPopUpView()
+                    self.showPopUpView(menuId: menuId)
                 }
             }
             .store(in: &subscriptions)
@@ -170,10 +171,10 @@ extension ShopDetailViewController {
             .store(in: &subscriptions)
         
         popUpView.rightButtonTappedPublisher
-            .sink { [weak self] in
+            .sink { [weak self] menuId in
                 self?.hidePopUpView()
-                // 장바구니 비우기
-                // 기존에 담기 시도한거 담기!
+                self?.inputSubject.send(.resetCart)
+                self?.inputSubject.send(.didTapCell(menuId: menuId)) // retry
             }
             .store(in: &subscriptions)
         
@@ -260,10 +261,13 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
     }
+    
     // MARK: - CartItemsCount
     private func updateCartItemsCount(count: Int) {
         if count == 0 {
             cartItemsCountLabel.isHidden = true
+            isAddMenuAvailable = true
+            print("updateCartItemsCount - isAddMenuAvailable: true")
             return
         }
         cartItemsCountLabel.isHidden = false
@@ -288,8 +292,9 @@ extension ShopDetailViewController {
         navigationController?.pushViewController(UIViewController(), animated: true)
     }
     // MARK: - show/hide popUpView
-    private func showPopUpView() {
+    private func showPopUpView(menuId: Int) {
         navigationController?.navigationBar.isHidden = true
+        popUpView.configure(menuId: menuId)
         popUpView.isHidden = false
     }
     private func hidePopUpView() {

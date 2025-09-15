@@ -13,7 +13,9 @@ class ShopDetailPopUpView: UIView {
     
     // MARK: - Properties
     let leftButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let rightButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let rightButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    
+    var menuId: Int? = nil
     
     // MARK: - Components
     let dimView = UIView().then {
@@ -70,6 +72,9 @@ class ShopDetailPopUpView: UIView {
                 .foregroundColor: UIColor.appColor(.neutral0)
             ]), for: .normal)
     }
+    func configure(menuId: Int) {
+        self.menuId = menuId
+    }
 }
 
 extension ShopDetailPopUpView {
@@ -118,6 +123,9 @@ extension ShopDetailPopUpView {
         leftButtonTappedPublisher.send()
     }
     @objc private func rightButtonTapped() {
-        rightButtonTappedPublisher.send()
+        guard let menuId else {
+            return
+        }
+        rightButtonTappedPublisher.send(menuId)
     }
 }
