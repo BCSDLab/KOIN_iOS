@@ -39,35 +39,45 @@ final class ShopDetailViewModel {
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
     
-    private let orderableShopId: Int
-    private let shopId: Int
+    private let orderableShopId: Int?
+    private let shopId: Int?
     private let isFromOrder: Bool
     
     // MARK: - Initializer
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?,
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
-         fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
-         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?,
-         fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?,
-         fetchShopDataUseCase: DefaultFetchShopDataUseCase?,
          fetchCartSummaryUseCase: DefaultFetchCartSummaryUseCase?,
-         orderableShopId: Int?,
-         shopId: Int?,
-         isFromOrder: Bool) {
+         orderableShopId: Int) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
+        self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
+        self.orderableShopId = orderableShopId
+        self.isFromOrder = true
+        self.fetchShopSummaryUseCase = nil
+        self.fetchShopmenusCategoryListUseCase = nil
+        self.fetchShopMenuListUseCase = nil
+        self.fetchShopDataUseCase = nil
+        self.shopId = nil
+    }
+    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
+         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?,
+         fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?,
+         fetchShopDataUseCase: DefaultFetchShopDataUseCase?,
+         shopId: Int?) {
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.fetchShopmenusCategoryListUseCase = fetchShopmenusCategoryListUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
-        self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
-        self.orderableShopId = orderableShopId ?? -1
-        self.shopId = shopId ?? -1
-        self.isFromOrder = isFromOrder
+        self.shopId = shopId
+        self.isFromOrder = false
+        self.fetchOrderShopSummaryUseCase = nil
+        self.fetchOrderShopMenusUseCase = nil
+        self.fetchOrderShopMenusGroupsUseCase = nil
+        self.fetchCartSummaryUseCase = nil
+        self.orderableShopId = nil
     }
-    
     
     // MARK: Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -75,13 +85,13 @@ final class ShopDetailViewModel {
             guard let self else { return }
             switch input {
             case .viewDidLoad:
-                if self.isFromOrder {
+                if let orderableShopId = self.orderableShopId {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
                     self.fetchCartSummary(orderableShopId: orderableShopId)
                 }
-                else if !self.isFromOrder {
+                else if let shopId = shopId {
                     self.fetchShopSummary(shopId: shopId)
                     self.fetchShopmenusCategoryList(shopId: shopId)
                     self.fetchShopMenuList(shopId: shopId)
