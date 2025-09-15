@@ -16,7 +16,7 @@ final class ShopDetailViewModel {
     
     // MARK: - Output
     enum Output {
-    case updateInfoView(OrderShopSummary, inorderable: Bool)
+    case updateInfoView(OrderShopSummary, isFromOrder: Bool)
     case updateMenus([OrderShopMenus])
     case updateMenusGroups(OrderShopMenusGroups)
     case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
@@ -93,7 +93,7 @@ extension ShopDetailViewModel {
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
                   receiveValue: { [weak self] in
                 guard let isFromOrder = self?.isFromOrder else { return }
-                self?.outputSubject.send(.updateInfoView($0, inorderable: !isFromOrder))
+                self?.outputSubject.send(.updateInfoView($0, isFromOrder: isFromOrder))
                 self?.outputSubject.send(.updateIsAvailables(delivery: $0.isDeliveryAvailable, takeOut: $0.isTakeoutAvailable, payBank: $0.payBank, payCard: $0.payCard))
             })
             .store(in: &subscriptions)
@@ -123,7 +123,7 @@ extension ShopDetailViewModel {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 guard let isFromOrder = self?.isFromOrder else { return }
-                self?.outputSubject.send(.updateInfoView(shopSummary, inorderable: !isFromOrder))
+                self?.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })
             .store(in: &subscriptions)
     }

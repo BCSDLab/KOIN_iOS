@@ -63,22 +63,17 @@ final class ShopDetailInfoView: UIView {
     
     // MARK: - configure
     
-    func configure(orderShopSummary: OrderShopSummary, inorderable: Bool) {
+    func configure(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
         setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
+        
         orderAmountDelieveryTipView.configure(
             minOrderAmount: orderShopSummary.minimumOrderAmount,
             minDeliveryTip: orderShopSummary.minimumDeliveryTip,
             maxDelieveryTip: orderShopSummary.maximumDeliveryTip,
-            introduction: nil,
-            inorderable: inorderable)
-        introductionView.configure(
-            minOrderAmount: nil,
-            minDeliveryTip: nil,
-            maxDelieveryTip: nil,
-            introduction: orderShopSummary.introduction,
-            inorderable: false)
+            isFromOrder: isFromOrder)
+        introductionView.configure(introduction: orderShopSummary.introduction)
     }
     func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
         setUpIsAvailableView(isDelieveryAvailable: isDelieveryAvailable,
