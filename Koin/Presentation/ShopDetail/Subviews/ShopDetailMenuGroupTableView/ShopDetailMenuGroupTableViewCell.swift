@@ -94,9 +94,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             if let name = prices[index].name {
                 priceNameLabels[index].text = "\(name) : "
                 priceNameLabels[index].isHidden = false
-                priceNameLabels[index].snp.updateConstraints {
-                    $0.width.equalTo(priceNameLabels[index].intrinsicContentSize.width)
-                }
             }
             else {
                 priceNameLabels[index].isHidden = true
@@ -108,9 +105,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             }
             let price = formatter.string(from: NSNumber(value: prices[index].price)) ?? ""
             priceValueLabels[index].text = "\(price)원"
-            priceValueLabels[index].snp.updateConstraints {
-                $0.width.equalTo(priceValueLabels[index].intrinsicContentSize.width)
-            }
         }
         setUpLabels()
         setUpStackViews()
@@ -156,12 +150,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        selectedBackgroundView = selectedBackgroundView?.then {
-            $0.layer.cornerRadius = 24
-            $0.clipsToBounds = true
-            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        }
-        
     }
     private func setBottomCornerRadius() {
         backgroundView = UIView().then {
@@ -172,18 +160,14 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        selectedBackgroundView = selectedBackgroundView?.then {
-            $0.layer.cornerRadius = 24
-            $0.clipsToBounds = true
-            $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        }
         setUpShadow()
     }
     private func setDefaultBackgroundView() {
-        let bgView = UIView().then {
+        backgroundView = UIView().then {
             $0.backgroundColor = .appColor(.neutral0)
+            $0.frame = bounds
+            $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        backgroundView = bgView
     }
     private func setAllCornerRadius() {
         backgroundView = UIView().then {
@@ -192,10 +176,6 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             $0.clipsToBounds = true
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        }
-        selectedBackgroundView = selectedBackgroundView?.then {
-            $0.layer.cornerRadius = 24
-            $0.clipsToBounds = true
         }
         setUpShadow()
     }
@@ -312,6 +292,7 @@ extension ShopDetailMenuGroupTableViewCell {
     }
     private func configureView() {
         backgroundColor = .clear
+        selectedBackgroundView = UIView()
         setUpStackViews()
         setUpLayout()
         setUpConstaints()
