@@ -9,6 +9,7 @@ import Foundation
 
 struct OrderInProgress: Hashable {
     let id: Int
+    let paymentId: Int
     let type: OrderInProgressType
     let orderableShopName: String
     let orderableShopThumbnail: String
