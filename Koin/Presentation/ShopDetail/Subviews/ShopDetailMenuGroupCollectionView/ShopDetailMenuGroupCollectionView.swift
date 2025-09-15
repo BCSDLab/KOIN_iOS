@@ -26,14 +26,14 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
     
     func configure(menuGroup: [MenuGroup]) {
         self.menuGroup = menuGroup
-        self.reloadData()
         
-        DispatchQueue.main.async { [weak self] in
-            guard menuGroup.count != 0 else { return }
-            
-            self?.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
-            self?.configureSelectedCell(IndexPath(row: 0, section: 0))
-        }
+        self.reloadData()
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+        
+        guard menuGroup.count != 0 else { return }
+        self.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
+        self.configureSelectedCell(IndexPath(row: 0, section: 0))
     }
 }
 
