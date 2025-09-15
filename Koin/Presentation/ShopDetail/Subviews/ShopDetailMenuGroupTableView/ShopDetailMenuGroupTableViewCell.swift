@@ -146,7 +146,7 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
     
     // MARK: - cornerRadius
     private func setTopCornerRadius() {
-        let bgView = UIView().then {
+        backgroundView = UIView().then {
             $0.backgroundColor = .appColor(.neutral0)
             $0.layer.cornerRadius = 24
             $0.clipsToBounds = true
@@ -154,10 +154,15 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        backgroundView = bgView
+        selectedBackgroundView = selectedBackgroundView?.then {
+            $0.layer.cornerRadius = 24
+            $0.clipsToBounds = true
+            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        }
+        
     }
     private func setBottomCornerRadius() {
-        let bgView = UIView().then {
+        backgroundView = UIView().then {
             $0.backgroundColor = .appColor(.neutral0)
             $0.layer.cornerRadius = 24
             $0.clipsToBounds = true
@@ -165,7 +170,11 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        backgroundView = bgView
+        selectedBackgroundView = selectedBackgroundView?.then {
+            $0.layer.cornerRadius = 24
+            $0.clipsToBounds = true
+            $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
         setUpShadow()
     }
     private func setDefaultBackgroundView() {
@@ -175,14 +184,17 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
         backgroundView = bgView
     }
     private func setAllCornerRadius() {
-        let bgView = UIView().then {
+        backgroundView = UIView().then {
             $0.backgroundColor = .appColor(.neutral0)
             $0.layer.cornerRadius = 24
             $0.clipsToBounds = true
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        backgroundView = bgView
+        selectedBackgroundView = selectedBackgroundView?.then {
+            $0.layer.cornerRadius = 24
+            $0.clipsToBounds = true
+        }
         setUpShadow()
     }
 }
