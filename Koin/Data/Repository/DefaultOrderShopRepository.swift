@@ -68,4 +68,10 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .map { CartSummary(from: $0) }
             .eraseToAnyPublisher()
     }
+    
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error> {
+        service.fetchCartItemsCount()
+            .map { CartItemsCount(from: $0) }
+            .eraseToAnyPublisher()
+    }
 }

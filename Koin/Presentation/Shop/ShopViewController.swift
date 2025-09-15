@@ -241,8 +241,8 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
-            let service = DefaultShopService() // TODO: Service 구현체 나누기
-            let repository = DefaultShopRepository(service: service) // TODO:  Repository 구현체 나누기
+            let service = DefaultShopService()
+            let repository = DefaultShopRepository(service: service)
             let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(repository: repository)
             let fetchShopmenusCategoryListUseCase = DefaultFetchShopmenusCategoryListUseCase(repository: repository)
             let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: repository)

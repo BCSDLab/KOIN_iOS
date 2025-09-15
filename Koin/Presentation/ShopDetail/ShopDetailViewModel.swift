@@ -22,6 +22,7 @@ final class ShopDetailViewModel {
     case updateMenusGroups(OrderShopMenusGroups)
     case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
     case updateBottomSheet(cartSummary: CartSummary)
+    case updateCartItemsCount(count: Int)
     }
     
     // MARK: - Properties
@@ -38,6 +39,7 @@ final class ShopDetailViewModel {
     private let fetchShopDataUseCase: DefaultFetchShopDataUseCase?
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
+    private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
     
     private let orderableShopId: Int?
     private let shopId: Int?
@@ -48,11 +50,13 @@ final class ShopDetailViewModel {
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?,
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
          fetchCartSummaryUseCase: DefaultFetchCartSummaryUseCase?,
+         fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase?,
          orderableShopId: Int) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
         self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
+        self.fetchCartItemsCountUseCase = fetchCartItemsCountUseCase
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
         self.fetchShopSummaryUseCase = nil
@@ -76,6 +80,7 @@ final class ShopDetailViewModel {
         self.fetchOrderShopMenusUseCase = nil
         self.fetchOrderShopMenusGroupsUseCase = nil
         self.fetchCartSummaryUseCase = nil
+        self.fetchCartItemsCountUseCase = nil
         self.orderableShopId = nil
     }
     
@@ -90,6 +95,7 @@ final class ShopDetailViewModel {
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
                     self.fetchCartSummary(orderableShopId: orderableShopId)
+                    self.fetchCartItemsCount()
                 }
                 else if let shopId = shopId {
                     self.fetchShopSummary(shopId: shopId)
@@ -146,6 +152,18 @@ extension ShopDetailViewModel {
                 }
             }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateBottomSheet(cartSummary: $0))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchCartItemsCount() {
+        fetchCartItemsCountUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetching CartItemsCount Did Fail : \(failure)")
+                }
+            }, receiveValue: { [weak self] count in
+                self?.outputSubject.send(.updateCartItemsCount(count: count))
             })
             .store(in: &subscriptions)
     }

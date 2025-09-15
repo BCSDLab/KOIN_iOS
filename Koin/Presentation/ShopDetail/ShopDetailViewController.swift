@@ -74,6 +74,16 @@ final class ShopDetailViewController: UIViewController {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
     }
+    private let cartItemsCountLabel = UILabel().then {
+        $0.backgroundColor = .appColor(.new500)
+        $0.textColor = .appColor(.neutral0)
+        $0.font = .appFont(.pretendardMedium, size: 12)
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+        $0.isHidden = true
+        $0.contentMode = .center
+        $0.textAlignment = .center
+    }
     private let popUpView = ShopDetailPopUpView().then {
         $0.isHidden = true
     }
@@ -126,6 +136,8 @@ extension ShopDetailViewController {
                 self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.configure(cartSummary: cartSummary)
+            case let .updateCartItemsCount(count):
+                self?.updateCartItemsCount(count: count)
             }
         }
         .store(in: &subscriptions)
@@ -248,10 +260,21 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
     }
+    // MARK: - CartItemsCount
+    private func updateCartItemsCount(count: Int) {
+        if count == 0 {
+            cartItemsCountLabel.isHidden = true
+            return
+        }
+        cartItemsCountLabel.isHidden = false
+        cartItemsCountLabel.text = "\(count)"
+    }
     
     // MARK: - configureRightBarButton
     private func configureRightBarButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)), style: .plain, target: self, action: #selector(navigationButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
+                                                            style: .plain, target: self, action: #selector(navigationButtonTapped))
+        // TODO: CartItemsCount를 rightButton에 어떻게 붙일까 ㅠ
     }
     
     // MARK: - updateTableViewHeight

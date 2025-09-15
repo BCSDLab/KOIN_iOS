@@ -493,10 +493,12 @@ extension OrderHomeViewController: UICollectionViewDelegate {
             let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
             let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
             let fetchCartSummaryUseCase = DefaultFetchCartSummaryUseCase(repository: repository)
+            let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
                                                 fetchCartSummaryUseCase: fetchCartSummaryUseCase,
+                                                fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 orderableShopId: orderableShopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
             navigationControllerDelegate?.pushViewController(viewController, animated: true)

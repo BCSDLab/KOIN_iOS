@@ -17,6 +17,7 @@ protocol OrderService {
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -59,6 +60,10 @@ final class DefaultOrderService: OrderService {
     }
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error> {
         request(.fetchCartSummary(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error> {
+        request(.fetchCartItemsCount)
             .eraseToAnyPublisher()
     }
 
