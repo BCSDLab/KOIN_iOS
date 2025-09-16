@@ -23,7 +23,7 @@ final class ShopDetailViewModel {
     case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
     case updateBottomSheet(cartSummary: CartSummary)
     case updateIsAddingMenuAvailable(Bool)
-    //case updateCartItemsCount(count: Int)
+    case updateCartItemsCount(count: Int)
     }
     
     // MARK: - Properties
@@ -230,8 +230,7 @@ extension ShopDetailViewModel {
                     print("ResetCart Did Fail: \(failure)")
                 }
             }, receiveValue: { [weak self] in
-               // self?.outputSubject.send(.updateCartItemsCount(count: 0))
-                print("did reset cart")
+                self?.outputSubject.send(.updateCartItemsCount(count: 0))
             })
             .store(in: &subscriptions)
     }

@@ -141,8 +141,11 @@ extension ShopDetailViewController {
                 self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
                 self?.isAddingMenuAvailable = isAddingMenuAvailable
-            //case let .updateCartItemsCount(count):
-            //    self?.updateCartItemsCount(count: count)
+            case let .updateCartItemsCount(count):
+                self?.updateCartItemsCountLabel(count: count)
+                if count == 0 {
+                    self?.isAddingMenuAvailable = true
+                }
             }
         }
         .store(in: &subscriptions)
@@ -273,11 +276,9 @@ extension ShopDetailViewController {
     }
     
     // MARK: - CartItemsCount
-    private func updateCartItemsCount(count: Int) {
+    private func updateCartItemsCountLabel(count: Int) {
         if count == 0 {
             cartItemsCountLabel.isHidden = true
-            isAddingMenuAvailable = true
-            print("updateCartItemsCount - isAddMenuAvailable: true")
             return
         }
         cartItemsCountLabel.isHidden = false

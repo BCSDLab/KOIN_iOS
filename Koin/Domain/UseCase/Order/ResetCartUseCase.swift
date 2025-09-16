@@ -21,9 +21,6 @@ class DefaultResetCartUseCase: ResetCartUseCase {
     
     func execute() -> AnyPublisher<Void, Error> {
         repository.resetCart()
-            .map { _ in
-                return
-            }
             .eraseToAnyPublisher()
     }
 }
