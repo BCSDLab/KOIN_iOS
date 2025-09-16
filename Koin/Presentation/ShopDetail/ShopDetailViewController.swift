@@ -18,7 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
-    private var isAddMenuAvailable: Bool = true
+    private var isAddingMenuAvailable: Bool = true
     
     // MARK: - Components
     private let scrollView = UIScrollView().then {
@@ -138,7 +138,8 @@ extension ShopDetailViewController {
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.configure(cartSummary: cartSummary)
                 self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
-                self?.isAddMenuAvailable = cartSummary.isAvailable
+            case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
+                self?.isAddingMenuAvailable = isAddingMenuAvailable
             //case let .updateCartItemsCount(count):
             //    self?.updateCartItemsCount(count: count)
             }
@@ -148,14 +149,8 @@ extension ShopDetailViewController {
         // tableView
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
-                guard let self = self, self.isFromOrder else { return }
-                if self.isAddMenuAvailable {
-                    self.inputSubject.send(.didTapCell(menuId: menuId))
-                }
-                else {
-                    self.showPopUpView(menuId: menuId)
-                }
-                print("메뉴추가 가능? : \(self.isAddMenuAvailable)")
+                guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
+                self.inputSubject.send(.didTapCell(menuId: menuId)) // Order에서 왔으면 viewModel로 넘긴다
             }
             .store(in: &subscriptions)
         
@@ -258,6 +253,11 @@ extension ShopDetailViewController {
         .store(in: &subscriptions)
     }
     
+    // MARK: - continue adding menu
+    private func continueAddingMenu(menuId: Int) {
+        self.navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+    
     // MARK: - shouldShowBottomSheet
     private func updateBottomSheetConstraint(sholdShowBottomSheet: Bool) {
         scrollView.snp.updateConstraints {
@@ -269,7 +269,7 @@ extension ShopDetailViewController {
     private func updateCartItemsCount(count: Int) {
         if count == 0 {
             cartItemsCountLabel.isHidden = true
-            isAddMenuAvailable = true
+            isAddingMenuAvailable = true
             print("updateCartItemsCount - isAddMenuAvailable: true")
             return
         }

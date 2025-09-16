@@ -79,6 +79,8 @@ extension OrderAPI: Router, URLRequestConvertible {
                 parameters["category_filter"] = categoryFilter
             }
             return parameters
+        case .fetchCart:
+            return ["type":"DELIVERY"]
         default:
             return nil
         }

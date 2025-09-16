@@ -22,8 +22,8 @@ final class ShopDetailViewModel {
     case updateMenusGroups(OrderShopMenusGroups)
     case updateMenus([OrderShopMenus])
     case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
-        
     case updateBottomSheet(cartSummary: CartSummary)
+    case updateIsAddingMenuAvailable(Bool)
     //case updateCartItemsCount(count: Int)
     }
     
@@ -41,6 +41,7 @@ final class ShopDetailViewModel {
     private let fetchShopDataUseCase: DefaultFetchShopDataUseCase?
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
+    private let fetchCartUseCase: FetchCartUseCase?
     
     private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
     private let resetCartUseCase: ResetCartUseCase?
@@ -50,17 +51,19 @@ final class ShopDetailViewModel {
     private let isFromOrder: Bool
     
     // MARK: - Initializer
-    init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?,
-         fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?,
-         fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?,
-         fetchCartSummaryUseCase: DefaultFetchCartSummaryUseCase?,
-         fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase?,
-         resetCartUseCase: DefaultResetCartUseCase?,
+    init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
+         fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
+         fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase,
+         fetchCartSummaryUseCase: DefaultFetchCartSummaryUseCase,
+         fetchCartUseCase: DefaultFetchCartUseCase,
+         fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase,
+         resetCartUseCase: DefaultResetCartUseCase,
          orderableShopId: Int) {
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
         self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
+        self.fetchCartUseCase = fetchCartUseCase
         self.fetchCartItemsCountUseCase = fetchCartItemsCountUseCase
         self.resetCartUseCase = resetCartUseCase
         self.orderableShopId = orderableShopId
@@ -71,11 +74,11 @@ final class ShopDetailViewModel {
         self.fetchShopDataUseCase = nil
         self.shopId = nil
     }
-    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase?,
-         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?,
-         fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?,
-         fetchShopDataUseCase: DefaultFetchShopDataUseCase?,
-         shopId: Int?) {
+    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
+         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase,
+         fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase,
+         fetchShopDataUseCase: DefaultFetchShopDataUseCase,
+         shopId: Int) {
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.fetchShopmenusCategoryListUseCase = fetchShopmenusCategoryListUseCase
         self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
@@ -86,6 +89,7 @@ final class ShopDetailViewModel {
         self.fetchOrderShopMenusUseCase = nil
         self.fetchOrderShopMenusGroupsUseCase = nil
         self.fetchCartSummaryUseCase = nil
+        self.fetchCartUseCase = nil
         self.fetchCartItemsCountUseCase = nil
         self.resetCartUseCase = nil
         self.orderableShopId = nil
@@ -103,6 +107,7 @@ final class ShopDetailViewModel {
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
                     
                     self.fetchCartSummary(orderableShopId: orderableShopId)
+                    self.fetchCart()
                     //self.fetchCartItemsCount()
                 }
                 else if let shopId = shopId {
@@ -112,9 +117,8 @@ final class ShopDetailViewModel {
                     
                     self.fetchIsAvailable(shopId: shopId)
                 }
-            case let .didTapCell(menuId):
-                
-                self.checkShoppingList(menuId: menuId)
+            case let .didTapCell(menuId): return
+                //self.didSelectMenu(menuId: menuId)
             case .resetCart:
                 self.resetCart()
             }
@@ -193,10 +197,17 @@ extension ShopDetailViewModel {
             .store(in: &subscriptions)
     }
     
-    private func checkShoppingList(menuId: Int) {
-        // 바텀시트에서 isAvailable == false 면 팝업
-        // TODO: 메뉴 상세 페이지로 이동
-        print("menuId: \(menuId)")
+    private func fetchCart() {
+         fetchCartUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetching cart Did Fail : \(failure)")
+                }
+            }, receiveValue: { [weak self] cart in
+                let isAddingMenuAvailable = self?.orderableShopId == cart.orderableShopID // 장바구니 가게 == 보고있는 가게 확인
+                self?.outputSubject.send(.updateIsAddingMenuAvailable(isAddingMenuAvailable))
+            })
+            .store(in: &subscriptions)
     }
 }
 

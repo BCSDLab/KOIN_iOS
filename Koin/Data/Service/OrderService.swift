@@ -78,7 +78,7 @@ final class DefaultOrderService: OrderService {
         request(.fetchCart)
             .eraseToAnyPublisher()
     }
-
+    
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .validate(statusCode: 200..<300)
