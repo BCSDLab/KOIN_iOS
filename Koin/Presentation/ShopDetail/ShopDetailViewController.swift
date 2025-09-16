@@ -411,12 +411,12 @@ extension ShopDetailViewController {
             $0.height.equalTo(8)
         }
         menuGroupNameCollectionView.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.top.equalTo(separatorView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(66)//34)
+            $0.height.equalTo(66)
         }
         menuGroupTableView.snp.makeConstraints {
-            $0.top.equalTo(menuGroupNameCollectionView.snp.bottom).offset(16)
+            $0.top.equalTo(menuGroupNameCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().offset(-20)
         }
