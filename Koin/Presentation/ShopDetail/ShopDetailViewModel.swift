@@ -12,6 +12,7 @@ final class ShopDetailViewModel {
     // MARK: - Input
     enum Input {
     case viewDidLoad
+    case viewWillAppear
     case resetCart
     }
     
@@ -104,18 +105,18 @@ final class ShopDetailViewModel {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
-                    
-                    self.fetchCartSummary(orderableShopId: orderableShopId)
-                    self.fetchCart()
-                    //self.fetchCartItemsCount()
                 }
                 else if let shopId = shopId {
                     self.fetchShopSummary(shopId: shopId)
                     self.fetchShopmenusCategoryList(shopId: shopId)
                     self.fetchShopMenuList(shopId: shopId)
-                    
                     self.fetchIsAvailable(shopId: shopId)
                 }
+            case .viewWillAppear:
+                guard let orderableShopId = self.orderableShopId else { return }
+                self.fetchCartSummary(orderableShopId: orderableShopId)
+                self.fetchCart()
+                //self.fetchCartItemsCount()
             case .resetCart:
                 self.resetCart()
             }
