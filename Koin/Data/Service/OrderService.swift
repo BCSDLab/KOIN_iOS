@@ -70,23 +70,28 @@ final class DefaultOrderService: OrderService {
             .eraseToAnyPublisher()
     }
     
-    var temp: Set<AnyCancellable> = []
     func resetCart() -> AnyPublisher<Void, Error> {
-        (requestThatShowErrorMessage(.resetCart) as AnyPublisher<String, Error>)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("failure: \(failure)")
+        let url = Bundle.main.baseUrl + "/cart/reset"
+        var headers = HTTPHeaders()
+        if let token = KeychainWorker.shared.read(key: .access) {
+            headers.add(name: "Authorization", value: "Bearer \(token)")
+        }
+        
+        return AF.request(url, method: .delete, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData(emptyResponseCodes: [200])
+            .tryMap { response in
+                switch response.result {
+                case .success:
+                    print("reset cart : succeeded")
+                    return ()
+                case .failure(let afError):
+                    print("reset cart : failed")
+                    throw afError
                 }
-            }, receiveValue: {
-                print("value: \($0)")
-            })
-            .store(in: &temp)
-        
-        
-        return (requestThatShowErrorMessage(.resetCart) as AnyPublisher<String, Error>)
-            .map { _ in
-                return }
-            .eraseToAnyPublisher( )
+            }
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
     }
     func fetchCartDelivery() -> AnyPublisher<CartDTO, Error> {
         request(.fetchCartDelivery)
@@ -121,7 +126,7 @@ final class DefaultOrderService: OrderService {
     private func requestThatShowErrorMessage<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .validate(statusCode: 200..<300)
-            .publishData()
+            .publishData(emptyResponseCodes: Set([200, 204, 205]))
             .tryMap { response in
                 let decoder = JSONDecoder()
 
