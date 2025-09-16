@@ -19,7 +19,8 @@ protocol OrderService {
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
     func resetCart() -> AnyPublisher<Void, Error>
-    func fetchCart() -> AnyPublisher<CartDTO, Error>
+    func fetchCartDelivery() -> AnyPublisher<CartDTO, Error>
+    func fetchCartTakeOut() -> AnyPublisher<CartDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -68,14 +69,31 @@ final class DefaultOrderService: OrderService {
         request(.fetchCartItemsCount)
             .eraseToAnyPublisher()
     }
+    
+    var temp: Set<AnyCancellable> = []
     func resetCart() -> AnyPublisher<Void, Error> {
-        (request(.resetCart) as AnyPublisher<String, Error>)
+        (requestThatShowErrorMessage(.resetCart) as AnyPublisher<String, Error>)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("failure: \(failure)")
+                }
+            }, receiveValue: {
+                print("value: \($0)")
+            })
+            .store(in: &temp)
+        
+        
+        return (requestThatShowErrorMessage(.resetCart) as AnyPublisher<String, Error>)
             .map { _ in
                 return }
             .eraseToAnyPublisher( )
     }
-    func fetchCart() -> AnyPublisher<CartDTO, Error> {
-        request(.fetchCart)
+    func fetchCartDelivery() -> AnyPublisher<CartDTO, Error> {
+        requestThatShowErrorMessage(.fetchCartDelivery)
+            .eraseToAnyPublisher()
+    }
+    func fetchCartTakeOut() -> AnyPublisher<CartDTO, Error> {
+        requestThatShowErrorMessage(.fetchCartTakeOut)
             .eraseToAnyPublisher()
     }
     
@@ -93,6 +111,40 @@ final class DefaultOrderService: OrderService {
                         throw error
                     }
                 case .failure(let afError):
+                    throw afError
+                }
+            }
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
+    }
+    
+    private func requestThatShowErrorMessage<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
+        return AF.request(api)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                let decoder = JSONDecoder()
+
+                switch response.result {
+                case .success(let data):
+                    do {
+                        return try decoder.decode(T.self, from: data)
+                    } catch {
+                        // 디코딩 실패 시에도 서버 원문 바디 출력
+                        if let raw = String(data: response.data ?? Data(), encoding: .utf8) {
+                            print("Decoding failed. Raw body:", raw)
+                        } else {
+                            print("Decoding failed. Raw body: <\(response.data?.count ?? 0) bytes>")
+                        }
+                        throw error
+                    }
+
+                case .failure(let afError):
+                    // 상태코드·본문 출력
+                    let status = response.response?.statusCode ?? -1
+                    let data = response.data ?? Data()
+                    let body = String(data: data, encoding: .utf8) ?? "<\(data.count) bytes>"
+                    // print("HTTP \(status) error body:", body)
                     throw afError
                 }
             }

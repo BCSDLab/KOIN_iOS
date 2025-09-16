@@ -80,8 +80,13 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .eraseToAnyPublisher()
     }
     
-    func fetchCart() -> AnyPublisher<Cart, Error> {
-        service.fetchCart()
+    func fetchCartDelivery() -> AnyPublisher<Cart, Error> {
+        service.fetchCartDelivery()
+            .map { Cart(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    func fetchCartTakeOut() -> AnyPublisher<Cart, Error> {
+        service.fetchCartTakeOut()
             .map { Cart(from: $0) }
             .eraseToAnyPublisher()
     }

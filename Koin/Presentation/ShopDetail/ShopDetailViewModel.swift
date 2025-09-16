@@ -238,10 +238,10 @@ extension ShopDetailViewModel {
     
     private func fetchCart() {
          fetchCartUseCase?.execute()
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { _ in/*completion in
                 if case .failure(let failure) = completion {
-                    print("fetching cart Did Fail : \(failure)")
-                }
+                    print("fetching cart Did Fail : \(failure)") // 배달가능한 가게에 대해서도 배달 불가능하다고 응답받는다.....(??)
+               }*/
             }, receiveValue: { [weak self] cart in
                 let isAddingMenuAvailable = ( self?.orderableShopId == cart.orderableShopID || cart.orderableShopID == nil )
                 print("isAddingMenuAvailable: \(isAddingMenuAvailable)")
