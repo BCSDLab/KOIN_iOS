@@ -150,7 +150,7 @@ extension ShopDetailViewController {
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
-                self.inputSubject.send(.didTapCell(menuId: menuId)) // Order에서 왔으면 viewModel로 넘긴다
+                self.inputSubject.send(.didSelectMenu(menuId: menuId)) // Order에서 왔으면 viewModel로 넘긴다
             }
             .store(in: &subscriptions)
         

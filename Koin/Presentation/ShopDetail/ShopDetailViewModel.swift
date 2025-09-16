@@ -12,7 +12,7 @@ final class ShopDetailViewModel {
     // MARK: - Input
     enum Input {
     case viewDidLoad
-    case didTapCell(menuId: Int)
+    case didSelectMenu(menuId: Int)
     case resetCart
     }
     
@@ -117,8 +117,8 @@ final class ShopDetailViewModel {
                     
                     self.fetchIsAvailable(shopId: shopId)
                 }
-            case let .didTapCell(menuId): return
-                //self.didSelectMenu(menuId: menuId)
+            case let .didSelectMenu(menuId): return
+                self.didSelectMenu(menuId: menuId)
             case .resetCart:
                 self.resetCart()
             }
@@ -154,58 +154,6 @@ extension ShopDetailViewModel {
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
                   receiveValue: { [weak self] orderShopMenusGroups in
                 self?.outputSubject.send(.updateMenusGroups(orderShopMenusGroups))
-            })
-            .store(in: &subscriptions)
-    }
-    
-    
-    private func fetchCartSummary(orderableShopId: Int) {
-        fetchCartSummaryUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching Cart Summary Did Fail: \(failure)")
-                }
-            }, receiveValue: { [weak self] in
-                self?.outputSubject.send(.updateBottomSheet(cartSummary: $0))
-            })
-            .store(in: &subscriptions)
-    }
-    /*
-    private func fetchCartItemsCount() {
-        fetchCartItemsCountUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching CartItemsCount Did Fail : \(failure)")
-                }
-            }, receiveValue: { [weak self] count in
-                self?.outputSubject.send(.updateCartItemsCount(count: count))
-            })
-            .store(in: &subscriptions)
-    }
-    */
-    
-    private func resetCart() {
-        resetCartUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("ResetCart Did Fail: \(failure)")
-                }
-            }, receiveValue: { [weak self] in
-               // self?.outputSubject.send(.updateCartItemsCount(count: 0))
-                print("did reset cart")
-            })
-            .store(in: &subscriptions)
-    }
-    
-    private func fetchCart() {
-         fetchCartUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching cart Did Fail : \(failure)")
-                }
-            }, receiveValue: { [weak self] cart in
-                let isAddingMenuAvailable = self?.orderableShopId == cart.orderableShopID // 장바구니 가게 == 보고있는 가게 확인
-                self?.outputSubject.send(.updateIsAddingMenuAvailable(isAddingMenuAvailable))
             })
             .store(in: &subscriptions)
     }
@@ -253,4 +201,59 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
+}
+extension ShopDetailViewModel {
+    private func fetchCartSummary(orderableShopId: Int) {
+        fetchCartSummaryUseCase?.execute(orderableShopId: orderableShopId)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetching Cart Summary Did Fail: \(failure)")
+                }
+            }, receiveValue: { [weak self] in
+                self?.outputSubject.send(.updateBottomSheet(cartSummary: $0))
+            })
+            .store(in: &subscriptions)
+    }
+    /*
+    private func fetchCartItemsCount() {
+        fetchCartItemsCountUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetching CartItemsCount Did Fail : \(failure)")
+                }
+            }, receiveValue: { [weak self] count in
+                self?.outputSubject.send(.updateCartItemsCount(count: count))
+            })
+            .store(in: &subscriptions)
+    }
+    */
+    
+    private func resetCart() {
+        resetCartUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("ResetCart Did Fail: \(failure)")
+                }
+            }, receiveValue: { [weak self] in
+               // self?.outputSubject.send(.updateCartItemsCount(count: 0))
+                print("did reset cart")
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchCart() {
+         fetchCartUseCase?.execute()
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetching cart Did Fail : \(failure)")
+                }
+            }, receiveValue: { [weak self] cart in
+                let isAddingMenuAvailable = ( self?.orderableShopId == cart.orderableShopID || cart.orderableShopID == nil )
+                print("isAddingMenuAvailable: \(isAddingMenuAvailable)")
+                self?.outputSubject.send(.updateIsAddingMenuAvailable(isAddingMenuAvailable))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func didSelectMenu(menuId: Int) {}
 }
