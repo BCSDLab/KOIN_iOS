@@ -27,9 +27,7 @@ final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
     }
     func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
         return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDTO in
-            guard let menuCategories = menuDTO.menuCategories else {
-                fatalError()
-            }
+            let menuCategories = menuDTO.menuCategories ?? [] 
             return menuCategories.map {
                 OrderShopMenus(from: $0)
             }

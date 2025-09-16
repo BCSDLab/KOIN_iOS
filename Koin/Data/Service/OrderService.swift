@@ -82,10 +82,8 @@ final class DefaultOrderService: OrderService {
             .tryMap { response in
                 switch response.result {
                 case .success:
-                    print("reset cart : succeeded")
                     return ()
                 case .failure(let afError):
-                    print("reset cart : failed")
                     throw afError
                 }
             }
