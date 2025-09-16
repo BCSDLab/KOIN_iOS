@@ -112,6 +112,7 @@ final class ShopDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
         configureRightBarButton()
+        inputSubject.send(.viewWillAppear)
     }
 }
 
@@ -143,6 +144,7 @@ extension ShopDetailViewController {
                 self?.isAddingMenuAvailable = isAddingMenuAvailable
             case let .updateCartItemsCount(count):
                 self?.updateCartItemsCountLabel(count: count)
+                self?.bottomSheet.configure(count: count)
                 if count == 0 {
                     self?.isAddingMenuAvailable = true
                 }

@@ -116,7 +116,7 @@ final class ShopDetailViewModel {
                 guard let orderableShopId = self.orderableShopId else { return }
                 self.fetchCartSummary(orderableShopId: orderableShopId)
                 self.fetchCart()
-                //self.fetchCartItemsCount()
+                self.fetchCartItemsCount()
             case .resetCart:
                 self.resetCart()
             }
@@ -210,7 +210,7 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
-    /*
+    
     private func fetchCartItemsCount() {
         fetchCartItemsCountUseCase?.execute()
             .sink(receiveCompletion: { completion in
@@ -222,7 +222,7 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
-    */
+    
     
     private func resetCart() {
         resetCartUseCase?.execute()

@@ -56,8 +56,8 @@ final class ShopDetailBottomSheet: UIView {
         
         self.orderableShopId = cartSummary.orderableShopId
     }
-    private func updatePaymentSummary() {
-        switch cartItemsAmount {
+    func configure(count: Int) {
+        switch count {
         case 0: shoppingListButton.setImage(.appImage(asset: .countIcon0), for: .normal)
         case 1: shoppingListButton.setImage(.appImage(asset: .countIcon1), for: .normal)
         case 2: shoppingListButton.setImage(.appImage(asset: .countIcon2), for: .normal)
@@ -70,6 +70,8 @@ final class ShopDetailBottomSheet: UIView {
         case 9: shoppingListButton.setImage(.appImage(asset: .countIcon9), for: .normal)
         default: shoppingListButton.setImage(.appImage(asset: .countIcon9Plus), for: .normal)
         }
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
 
