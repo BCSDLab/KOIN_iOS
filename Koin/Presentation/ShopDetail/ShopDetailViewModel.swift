@@ -186,11 +186,7 @@ extension ShopDetailViewModel {
     
     private func fetchIsAvailable(shopId: Int) {
         fetchShopDataUseCase?.execute(shopId: shopId)
-            .sink(receiveCompletion: { comepltion in
-                if case .failure(let failure) = comepltion {
-                    print("fetching isAvailable did fail: \(failure)")
-                }
-            }, receiveValue: { [weak self] in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, takeOut: nil, payBank: $0.payBank, payCard: $0.payCard))
             })
             .store(in: &subscriptions)
@@ -201,11 +197,7 @@ extension ShopDetailViewModel {
     
     private func fetchCartSummary(orderableShopId: Int) {
         fetchCartSummaryUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching Cart Summary Did Fail: \(failure)")
-                }
-            }, receiveValue: { [weak self] in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateBottomSheet(cartSummary: $0))
             })
             .store(in: &subscriptions)
@@ -213,11 +205,7 @@ extension ShopDetailViewModel {
     
     private func fetchCartItemsCount() {
         fetchCartItemsCountUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching CartItemsCount Did Fail : \(failure)")
-                }
-            }, receiveValue: { [weak self] count in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] count in
                 self?.outputSubject.send(.updateCartItemsCount(count: count))
             })
             .store(in: &subscriptions)
@@ -226,11 +214,7 @@ extension ShopDetailViewModel {
     
     private func resetCart() {
         resetCartUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("ResetCart Did Fail: \(failure)")
-                }
-            }, receiveValue: { [weak self] in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateCartItemsCount(count: 0))
             })
             .store(in: &subscriptions)
@@ -238,11 +222,7 @@ extension ShopDetailViewModel {
     
     private func fetchCart() {
          fetchCartUseCase?.execute()
-            .sink(receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print("fetching cart Did Fail : \(failure)")
-               }
-            }, receiveValue: { [weak self] cart in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] cart in
                 let isAddingMenuAvailable = ( self?.orderableShopId == cart.orderableShopID || cart.orderableShopID == nil )
                 self?.outputSubject.send(.updateIsAddingMenuAvailable(isAddingMenuAvailable))
             })
