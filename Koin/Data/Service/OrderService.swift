@@ -19,8 +19,7 @@ protocol OrderService {
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
     func resetCart() -> AnyPublisher<Void, Error>
-    func fetchCartDelivery() -> AnyPublisher<CartDTO, Error>
-    func fetchCartTakeOut() -> AnyPublisher<CartDTO, Error>
+    func fetchCart(parameter: String) -> AnyPublisher<CartDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -93,12 +92,8 @@ final class DefaultOrderService: OrderService {
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
-    func fetchCartDelivery() -> AnyPublisher<CartDTO, Error> {
-        request(.fetchCartDelivery)
-            .eraseToAnyPublisher()
-    }
-    func fetchCartTakeOut() -> AnyPublisher<CartDTO, Error> {
-        request(.fetchCartTakeOut)
+    func fetchCart(parameter: String) -> AnyPublisher<CartDTO, Error> {
+        request(.fetchCart(parameter: parameter))
             .eraseToAnyPublisher()
     }
     
@@ -116,40 +111,6 @@ final class DefaultOrderService: OrderService {
                         throw error
                     }
                 case .failure(let afError):
-                    throw afError
-                }
-            }
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
-    }
-    
-    private func requestThatShowErrorMessage<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .validate(statusCode: 200..<300)
-            .publishData(emptyResponseCodes: Set([200, 204, 205]))
-            .tryMap { response in
-                let decoder = JSONDecoder()
-
-                switch response.result {
-                case .success(let data):
-                    do {
-                        return try decoder.decode(T.self, from: data)
-                    } catch {
-                        // 디코딩 실패 시에도 서버 원문 바디 출력
-                        if let raw = String(data: response.data ?? Data(), encoding: .utf8) {
-                            print("Decoding failed. Raw body:", raw)
-                        } else {
-                            print("Decoding failed. Raw body: <\(response.data?.count ?? 0) bytes>")
-                        }
-                        throw error
-                    }
-
-                case .failure(let afError):
-                    // 상태코드·본문 출력
-                    let status = response.response?.statusCode ?? -1
-                    let data = response.data ?? Data()
-                    let body = String(data: data, encoding: .utf8) ?? "<\(data.count) bytes>"
-                    // print("HTTP \(status) error body:", body)
                     throw afError
                 }
             }

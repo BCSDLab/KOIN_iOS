@@ -19,6 +19,5 @@ protocol OrderShopRepository {
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error>
     func resetCart() -> AnyPublisher<Void, Error>
-    func fetchCartDelivery() -> AnyPublisher<Cart, Error>
-    func fetchCartTakeOut() -> AnyPublisher<Cart, Error>
+    func fetchCart(parameter: String) -> AnyPublisher<Cart, Error>
 }

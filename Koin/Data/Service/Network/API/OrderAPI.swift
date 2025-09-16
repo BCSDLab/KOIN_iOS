@@ -18,8 +18,7 @@ enum OrderAPI {
     case fetchCartSummary(orderableShopId: Int)
     case fetchCartItemsCount
     case resetCart
-    case fetchCartDelivery
-    case fetchCartTakeOut
+    case fetchCart(parameter: String)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -40,7 +39,7 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchCartSummary(let orderableShopId): return "/cart/summary/\(orderableShopId)"
         case .fetchCartItemsCount: return "/cart/items/count"
         case .resetCart: return "/cart/reset"
-        case .fetchCartDelivery, .fetchCartTakeOut: return "/cart"
+        case .fetchCart: return "/cart"
         }
     }
     
@@ -54,7 +53,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .resetCart, .fetchCartDelivery, .fetchCartTakeOut:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .resetCart, .fetchCart:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -80,10 +79,8 @@ extension OrderAPI: Router, URLRequestConvertible {
                 parameters["category_filter"] = categoryFilter
             }
             return parameters
-        case .fetchCartDelivery:
-            return ["type" : "DELIVERY"]
-        case .fetchCartTakeOut:
-            return ["type" : "TAKE_OUT"]
+        case .fetchCart(let parameter):
+            return ["type" : parameter]
         default:
             return nil
         }
