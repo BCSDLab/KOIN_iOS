@@ -17,6 +17,8 @@ final class ShopDetailBottomSheet: UIView {
     var cartItemsAmount: Int = 0
     var isAvailable: Bool = false
     
+    let isMenuAddablePublisher = PassthroughSubject<Bool, Never>()
+    
     // MARK: - Component
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)

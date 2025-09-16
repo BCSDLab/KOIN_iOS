@@ -138,6 +138,7 @@ extension ShopDetailViewController {
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.configure(cartSummary: cartSummary)
                 self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
+                self?.isAddMenuAvailable = cartSummary.isAvailable
             //case let .updateCartItemsCount(count):
             //    self?.updateCartItemsCount(count: count)
             }
@@ -148,12 +149,13 @@ extension ShopDetailViewController {
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return }
-                if self.bottomSheet.isHidden {
-                    self.showPopUpView(menuId: menuId)
-                }
-                else {
+                if self.isAddMenuAvailable {
                     self.inputSubject.send(.didTapCell(menuId: menuId))
                 }
+                else {
+                    self.showPopUpView(menuId: menuId)
+                }
+                print("메뉴추가 가능? : \(self.isAddMenuAvailable)")
             }
             .store(in: &subscriptions)
         

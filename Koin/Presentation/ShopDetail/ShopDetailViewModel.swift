@@ -113,7 +113,7 @@ final class ShopDetailViewModel {
                     self.fetchIsAvailable(shopId: shopId)
                 }
             case let .didTapCell(menuId):
-                if self.isFromOrder { return }
+                
                 self.checkShoppingList(menuId: menuId)
             case .resetCart:
                 self.resetCart()

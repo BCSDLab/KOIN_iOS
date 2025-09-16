@@ -19,6 +19,7 @@ protocol OrderService {
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
     func resetCart() -> AnyPublisher<Void, Error>
+    func fetchCart() -> AnyPublisher<CartDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -72,6 +73,10 @@ final class DefaultOrderService: OrderService {
             .map { _ in
                 return }
             .eraseToAnyPublisher( )
+    }
+    func fetchCart() -> AnyPublisher<CartDTO, Error> {
+        request(.fetchCart)
+            .eraseToAnyPublisher()
     }
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
