@@ -19,11 +19,12 @@ final class ShopDetailViewModel {
     // MARK: - Output
     enum Output {
     case updateInfoView(OrderShopSummary, isFromOrder: Bool)
-    case updateMenus([OrderShopMenus])
     case updateMenusGroups(OrderShopMenusGroups)
+    case updateMenus([OrderShopMenus])
     case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
+        
     case updateBottomSheet(cartSummary: CartSummary)
-    case updateCartItemsCount(count: Int)
+    //case updateCartItemsCount(count: Int)
     }
     
     // MARK: - Properties
@@ -40,6 +41,7 @@ final class ShopDetailViewModel {
     private let fetchShopDataUseCase: DefaultFetchShopDataUseCase?
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
+    
     private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
     private let resetCartUseCase: ResetCartUseCase?
     
@@ -99,8 +101,9 @@ final class ShopDetailViewModel {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+                    
                     self.fetchCartSummary(orderableShopId: orderableShopId)
-                    self.fetchCartItemsCount()
+                    //self.fetchCartItemsCount()
                 }
                 else if let shopId = shopId {
                     self.fetchShopSummary(shopId: shopId)
@@ -151,6 +154,7 @@ extension ShopDetailViewModel {
             .store(in: &subscriptions)
     }
     
+    
     private func fetchCartSummary(orderableShopId: Int) {
         fetchCartSummaryUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { completion in
@@ -162,7 +166,7 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
-    
+    /*
     private func fetchCartItemsCount() {
         fetchCartItemsCountUseCase?.execute()
             .sink(receiveCompletion: { completion in
@@ -174,6 +178,7 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
+    */
     
     private func resetCart() {
         resetCartUseCase?.execute()
@@ -182,7 +187,7 @@ extension ShopDetailViewModel {
                     print("ResetCart Did Fail: \(failure)")
                 }
             }, receiveValue: { [weak self] in
-                self?.outputSubject.send(.updateCartItemsCount(count: 0))
+               // self?.outputSubject.send(.updateCartItemsCount(count: 0))
                 print("did reset cart")
             })
             .store(in: &subscriptions)

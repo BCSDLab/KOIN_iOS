@@ -8,13 +8,13 @@
 import Foundation
 
 struct CartSummary {
-    let orderableShopID: Int
+    let orderableShopId: Int
     let shopMinimumOrderAmount: Int
     let cartItemsAmount: Int
     let isAvailable: Bool
 
     enum CodingKeys: String, CodingKey {
-        case orderableShopID = "orderable_shop_id"
+        case orderableShopId = "orderable_shop_id"
         case shopMinimumOrderAmount = "shop_minimum_order_amount"
         case cartItemsAmount = "cart_items_amount"
         case isAvailable = "is_available"
@@ -24,7 +24,7 @@ struct CartSummary {
 extension CartSummary {
     
     init(from dto: CartSummaryDTO){
-        self.orderableShopID = dto.orderableShopID
+        self.orderableShopId = dto.orderableShopId
         self.shopMinimumOrderAmount = dto.shopMinimumOrderAmount
         self.cartItemsAmount = dto.cartItemsAmount
         self.isAvailable = dto.isAvailable

@@ -73,6 +73,7 @@ final class ShopDetailViewController: UIViewController {
     private let navigationBarLikeView = UIView().then {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
+        $0.isHidden = true
     }
     private let cartItemsCountLabel = UILabel().then {
         $0.backgroundColor = .appColor(.new500)
@@ -136,29 +137,22 @@ extension ShopDetailViewController {
                 self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.configure(cartSummary: cartSummary)
-            case let .updateCartItemsCount(count):
-                self?.updateCartItemsCount(count: count)
+                self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
+            //case let .updateCartItemsCount(count):
+            //    self?.updateCartItemsCount(count: count)
             }
         }
         .store(in: &subscriptions)
         
-        // bottomSheet
-        bottomSheet.isAavailablePublisher
-            .sink { [weak self] isAddMenuAvailable in
-                self?.isAddMenuAvailable = isAddMenuAvailable
-                print("bottomSheet - isAddMenuAvailable: \(isAddMenuAvailable)")
-            }
-            .store(in: &subscriptions)
-        
         // tableView
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
-                guard let self, isFromOrder else { return }
-                if self.isAddMenuAvailable {
-                    self.inputSubject.send(.didTapCell(menuId: menuId))
+                guard let self = self, self.isFromOrder else { return }
+                if self.bottomSheet.isHidden {
+                    self.showPopUpView(menuId: menuId)
                 }
                 else {
-                    self.showPopUpView(menuId: menuId)
+                    self.inputSubject.send(.didTapCell(menuId: menuId))
                 }
             }
             .store(in: &subscriptions)
@@ -260,6 +254,13 @@ extension ShopDetailViewController {
             }
         }
         .store(in: &subscriptions)
+    }
+    
+    // MARK: - shouldShowBottomSheet
+    private func updateBottomSheetConstraint(sholdShowBottomSheet: Bool) {
+        scrollView.snp.updateConstraints {
+            $0.bottom.equalToSuperview().offset(sholdShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
+        }
     }
     
     // MARK: - CartItemsCount
@@ -372,7 +373,7 @@ extension ShopDetailViewController {
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(isFromOrder ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
+            $0.bottom.equalToSuperview()
         }
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()

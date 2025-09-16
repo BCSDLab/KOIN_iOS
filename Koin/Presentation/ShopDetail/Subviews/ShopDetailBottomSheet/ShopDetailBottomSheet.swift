@@ -15,9 +15,7 @@ final class ShopDetailBottomSheet: UIView {
     var orderableShopId: Int = 0
     var shopMinimumOrderAmount: Int = 0
     var cartItemsAmount: Int = 0
-    var isAvailable: Bool = false // 지금 보고있는 가게의 메뉴를 장바구니에 추가할 수 있는가
-    
-    let isAavailablePublisher = PassthroughSubject<Bool, Never>()
+    var isAvailable: Bool = false
     
     // MARK: - Component
     private let separatorView = UIView().then {
@@ -47,30 +45,23 @@ final class ShopDetailBottomSheet: UIView {
     }
     
     func configure(cartSummary: CartSummary) {
-        self.orderableShopId = cartSummary.orderableShopID
-        self.shopMinimumOrderAmount = cartSummary.shopMinimumOrderAmount
-        self.cartItemsAmount = cartSummary.cartItemsAmount
-        self.isAvailable = cartSummary.isAvailable
-        self.updateBottomSheet()
-        self.isAavailablePublisher.send(isAvailable)
-    }
-}
-
-extension ShopDetailBottomSheet {
-    
-    private func updateBottomSheet() {
-        if isAvailable {
-            isDeliveryAvailableLabel.text = "배달 가능"
-        }
-        else {
-            isDeliveryAvailableLabel.text = "배달 불가"
-        }
-        
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        let formattedAmount = formatter.string(from: NSNumber(value: cartItemsAmount)) ?? "0"
+        let formattedAmount = formatter.string(from: NSNumber(value: cartSummary.cartItemsAmount)) ?? "0"
         priceLabel.text = "\(formattedAmount)원"
         
+        self.isDeliveryAvailableLabel.text = cartSummary.shopMinimumOrderAmount < cartSummary.cartItemsAmount ? "배달 가능" : "배달 불가"
+        
+        self.orderableShopId = cartSummary.orderableShopId
+        
+        if cartSummary.isAvailable {
+            self.isHidden = false
+        }
+        else {
+            self.isHidden = true
+        }
+    }
+    private func updatePaymentSummary() {
         switch cartItemsAmount {
         case 0: shoppingListButton.setImage(.appImage(asset: .countIcon0), for: .normal)
         case 1: shoppingListButton.setImage(.appImage(asset: .countIcon1), for: .normal)
