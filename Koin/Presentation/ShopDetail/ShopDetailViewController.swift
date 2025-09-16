@@ -150,7 +150,13 @@ extension ShopDetailViewController {
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
-                self.inputSubject.send(.didSelectMenu(menuId: menuId)) // Order에서 왔으면 viewModel로 넘긴다
+                if isAddingMenuAvailable {
+                    // 다음 화면 (메뉴 상세페이지) 로 넘어가는 로직 // 담을 수 있으면 게속
+                    navigateToMenuDetail(menuId: menuId)
+                }
+                else {
+                    showPopUpView(menuId: menuId) // 담을 수 없으면 팝업
+                }
             }
             .store(in: &subscriptions)
         
@@ -165,7 +171,7 @@ extension ShopDetailViewController {
             .sink { [weak self] menuId in
                 self?.hidePopUpView()
                 self?.inputSubject.send(.resetCart)
-                self?.inputSubject.send(.didTapCell(menuId: menuId)) // retry
+                self?.navigateToMenuDetail(menuId: menuId)// 메뉴 상세페이지로 넘어가기
             }
             .store(in: &subscriptions)
         
@@ -303,6 +309,10 @@ extension ShopDetailViewController {
     private func hidePopUpView() {
         navigationController?.navigationBar.isHidden = false
         popUpView.isHidden = true
+    }
+    // MARK: - navigate to menu detail
+    private func navigateToMenuDetail(menuId: Int) {
+        print("다음화면으로!")
     }
 }
 

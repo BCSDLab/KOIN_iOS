@@ -12,7 +12,6 @@ final class ShopDetailViewModel {
     // MARK: - Input
     enum Input {
     case viewDidLoad
-    case didSelectMenu(menuId: Int)
     case resetCart
     }
     
@@ -117,8 +116,6 @@ final class ShopDetailViewModel {
                     
                     self.fetchIsAvailable(shopId: shopId)
                 }
-            case let .didSelectMenu(menuId): return
-                self.didSelectMenu(menuId: menuId)
             case .resetCart:
                 self.resetCart()
             }
@@ -130,7 +127,6 @@ final class ShopDetailViewModel {
 
 extension ShopDetailViewModel {
     // MARK: - Order UseCase
-    
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
@@ -157,11 +153,8 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
-}
 
-extension ShopDetailViewModel {
     // MARK: - Shop UseCase
-    
     private func fetchShopSummary(shopId: Int) {
         fetchShopSummaryUseCase?.execute(id: shopId)
             .sink(receiveCompletion: { _ in },
@@ -203,6 +196,8 @@ extension ShopDetailViewModel {
     }
 }
 extension ShopDetailViewModel {
+    // MARK: - Order UseCase (Order에서 진입시에만 쓰는 것들)
+    
     private func fetchCartSummary(orderableShopId: Int) {
         fetchCartSummaryUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { completion in
@@ -254,6 +249,4 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
-    
-    private func didSelectMenu(menuId: Int) {}
 }
