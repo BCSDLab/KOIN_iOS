@@ -55,13 +55,6 @@ final class ShopDetailBottomSheet: UIView {
         self.isDeliveryAvailableLabel.text = cartSummary.shopMinimumOrderAmount < cartSummary.cartItemsAmount ? "배달 가능" : "배달 불가"
         
         self.orderableShopId = cartSummary.orderableShopId
-        
-        if cartSummary.isAvailable {
-            self.isHidden = false
-        }
-        else {
-            self.isHidden = true
-        }
     }
     private func updatePaymentSummary() {
         switch cartItemsAmount {

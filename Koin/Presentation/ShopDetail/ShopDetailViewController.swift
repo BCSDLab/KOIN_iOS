@@ -18,7 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var shouldShowSticky: Bool = false
     private var isNavigationBarOpaque: Bool = false
-    private var isAddingMenuAvailable: Bool = true
+    private var isAddingMenuAvailable: Bool = false
     
     // MARK: - Components
     private let scrollView = UIScrollView().then {
@@ -69,11 +69,12 @@ final class ShopDetailViewController: UIViewController {
         $0.sectionFooterHeight = .zero
         $0.separatorStyle = .none
     }
-    private let bottomSheet = ShopDetailBottomSheet()
+    private let bottomSheet = ShopDetailBottomSheet().then {
+        $0.isHidden = true
+    }
     private let navigationBarLikeView = UIView().then {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
-        $0.isHidden = true
     }
     private let cartItemsCountLabel = UILabel().then {
         $0.backgroundColor = .appColor(.new500)
@@ -93,7 +94,6 @@ final class ShopDetailViewController: UIViewController {
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
-        bottomSheet.isHidden = !isFromOrder
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -136,6 +136,7 @@ extension ShopDetailViewController {
             case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
                 self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
             case let .updateBottomSheet(cartSummary):
+                self?.bottomSheet.isHidden = !cartSummary.isAvailable
                 self?.bottomSheet.configure(cartSummary: cartSummary)
                 self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):

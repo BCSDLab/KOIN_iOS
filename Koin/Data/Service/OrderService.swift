@@ -89,11 +89,11 @@ final class DefaultOrderService: OrderService {
             .eraseToAnyPublisher( )
     }
     func fetchCartDelivery() -> AnyPublisher<CartDTO, Error> {
-        requestThatShowErrorMessage(.fetchCartDelivery)
+        request(.fetchCartDelivery)
             .eraseToAnyPublisher()
     }
     func fetchCartTakeOut() -> AnyPublisher<CartDTO, Error> {
-        requestThatShowErrorMessage(.fetchCartTakeOut)
+        request(.fetchCartTakeOut)
             .eraseToAnyPublisher()
     }
     
