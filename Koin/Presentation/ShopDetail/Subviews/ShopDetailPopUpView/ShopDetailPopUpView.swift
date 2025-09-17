@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-class ShopDetailPopUpView: UIView {
+final class ShopDetailPopUpView: UIView {
     
     // MARK: - Properties
     let leftButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -18,27 +18,27 @@ class ShopDetailPopUpView: UIView {
     var menuId: Int? = nil
     
     // MARK: - Components
-    let dimView = UIView().then {
+    private let dimView = UIView().then {
         $0.backgroundColor = .appColor(.neutral800)
         $0.layer.opacity = 0.7
     }
-    let popUpView = UIView().then {
+    private let popUpView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8
     }
-    let label = UILabel().then {
+    private let label = UILabel().then {
         $0.textColor = .appColor(.neutral600)
         $0.font = .appFont(.pretendardRegular, size: 15)
         $0.numberOfLines = 0
     }
-    let leftButton = UIButton().then {
+    private let leftButton = UIButton().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.borderColor = UIColor.appColor(.neutral400).cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 6
     }
     
-    let rightButton = UIButton().then {
+    private let rightButton = UIButton().then {
         $0.backgroundColor = .appColor(.new500)
         $0.layer.cornerRadius = 6
     }
