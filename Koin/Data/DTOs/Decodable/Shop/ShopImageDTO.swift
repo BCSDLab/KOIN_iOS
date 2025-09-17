@@ -9,11 +9,11 @@ import Foundation
 
 // MARK: - Image
 struct ShopImageDTO: Decodable {
-    let imageURL: String
+    let imageUrl: String
     let isThumbnail: Bool
 
     enum CodingKeys: String, CodingKey {
-        case imageURL = "image_url"
+        case imageUrl = "image_url"
         case isThumbnail = "is_thumbnail"
     }
 }

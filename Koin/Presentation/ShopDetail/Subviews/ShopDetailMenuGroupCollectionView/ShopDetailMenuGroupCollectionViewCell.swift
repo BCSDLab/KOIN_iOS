@@ -10,7 +10,7 @@ import SnapKit
 
 final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
     
-    let label = UILabel().then {
+    private let label = UILabel().then {
         $0.font = .appFont(.pretendardSemiBold, size: 14)
         $0.textColor = .appColor(.neutral400)
     }

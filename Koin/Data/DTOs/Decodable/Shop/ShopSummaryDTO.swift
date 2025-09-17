@@ -8,14 +8,14 @@
 import Foundation
 
 struct ShopSummaryDTO: Decodable {
-    let shopID: Int
+    let shopId: Int
     let name: String
     let introduction: String?
     let ratingAverage, reviewCount: Int
     let images: [ShopImageDTO]
 
     enum CodingKeys: String, CodingKey {
-        case shopID = "shop_id"
+        case shopId = "shop_id"
         case name, introduction
         case ratingAverage = "rating_average"
         case reviewCount = "review_count"

@@ -11,7 +11,7 @@ protocol FetchCartSummaryUseCase {
     func execute(orderableShopId: Int) -> AnyPublisher<CartSummary, Error>
 }
 
-class DefaultFetchCartSummaryUseCase: FetchCartSummaryUseCase {
+final class DefaultFetchCartSummaryUseCase: FetchCartSummaryUseCase {
     
     let repository: OrderShopRepository
     

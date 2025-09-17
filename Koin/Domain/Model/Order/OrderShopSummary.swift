@@ -39,7 +39,7 @@ extension OrderShopSummary {
         }
     }
     init(from dto: ShopSummaryDTO) {
-        self.shopId = dto.shopID
+        self.shopId = dto.shopId
         self.orderableShopId = -1
         self.name = dto.name
         self.introduction = dto.introduction
@@ -53,7 +53,7 @@ extension OrderShopSummary {
         self.minimumDeliveryTip = 0
         self.maximumDeliveryTip = 0
         self.images = dto.images.map {
-            OrderImage(imageUrl: $0.imageURL,
+            OrderImage(imageUrl: $0.imageUrl,
                        isThumbnail: $0.isThumbnail)
         }
     }

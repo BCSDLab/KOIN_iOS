@@ -9,8 +9,8 @@ import Foundation
 
 struct CartDTO: Decodable {
     let shopName: String?
-    let shopThumbnailImageURL: String?
-    let orderableShopID: Int?
+    let shopThumbnailImageUrl: String?
+    let orderableShopId: Int?
     let isDeliveryAvailable, isTakeoutAvailable: Bool
     let shopMinimumOrderAmount: Int
     let items: [CartItemDTO]
@@ -18,8 +18,8 @@ struct CartDTO: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case shopName = "shop_name"
-        case shopThumbnailImageURL = "shop_thumbnail_image_url"
-        case orderableShopID = "orderable_shop_id"
+        case shopThumbnailImageUrl = "shop_thumbnail_image_url"
+        case orderableShopId = "orderable_shop_id"
         case isDeliveryAvailable = "is_delivery_available"
         case isTakeoutAvailable = "is_takeout_available"
         case shopMinimumOrderAmount = "shop_minimum_order_amount"
@@ -32,19 +32,19 @@ struct CartDTO: Decodable {
 }
 
 struct CartItemDTO: Decodable {
-    let cartMenuItemID, orderableShopMenuID: Int
+    let cartMenuItemId, orderableShopMenuId: Int
     let name: String
-    let menuThumbnailImageURL: String
+    let menuThumbnailImageUrl: String
     let quantity, totalAmount: Int
     let price: CartPriceDTO
     let options: [OptionDTO]
     let isModified: Bool
 
     enum CodingKeys: String, CodingKey {
-        case cartMenuItemID = "cart_menu_item_id"
-        case orderableShopMenuID = "orderable_shop_menu_id"
+        case cartMenuItemId = "cart_menu_item_id"
+        case orderableShopMenuId = "orderable_shop_menu_id"
         case name
-        case menuThumbnailImageURL = "menu_thumbnail_image_url"
+        case menuThumbnailImageUrl = "menu_thumbnail_image_url"
         case quantity
         case totalAmount = "total_amount"
         case price, options

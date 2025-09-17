@@ -11,7 +11,7 @@ protocol FetchCartItemsCountUseCase {
     func execute() -> AnyPublisher<Int, Error>
 }
 
-class DefaultFetchCartItemsCountUseCase: FetchCartItemsCountUseCase {
+final class DefaultFetchCartItemsCountUseCase: FetchCartItemsCountUseCase {
     
     let repository: OrderShopRepository
     

@@ -9,17 +9,17 @@ import Foundation
 
 struct Cart {
     let shopName: String?
-    let shopThumbnailImageURL: String?
-    let orderableShopID: Int?
+    let shopThumbnailImageUrl: String?
+    let orderableShopId: Int?
     let isDeliveryAvailable, isTakeoutAvailable: Bool
     let shopMinimumOrderAmount: Int
     let items: [CartItem]
     let itemsAmount, deliveryFee, totalAmount, finalPaymentAmount: Int
 }
 struct CartItem {
-    let cartMenuItemID, orderableShopMenuID: Int
+    let cartMenuItemId, orderableShopMenuId: Int
     let name: String
-    let menuThumbnailImageURL: String
+    let menuThumbnailImageUrl: String
     let quantity, totalAmount: Int
     let price: CartPrice
     let options: [Option]
@@ -38,8 +38,8 @@ struct CartPrice {
 extension Cart {
     init(from dto: CartDTO) {
         self.shopName = dto.shopName
-        self.shopThumbnailImageURL = dto.shopThumbnailImageURL
-        self.orderableShopID = dto.orderableShopID
+        self.shopThumbnailImageUrl = dto.shopThumbnailImageUrl
+        self.orderableShopId = dto.orderableShopId
         self.isDeliveryAvailable = dto.isDeliveryAvailable
         self.isTakeoutAvailable = dto.isTakeoutAvailable
         self.shopMinimumOrderAmount = dto.shopMinimumOrderAmount
@@ -52,10 +52,10 @@ extension Cart {
 }
 extension CartItem {
     init(from dto: CartItemDTO){
-        self.cartMenuItemID = dto.cartMenuItemID
-        self.orderableShopMenuID = dto.orderableShopMenuID
+        self.cartMenuItemId = dto.cartMenuItemId
+        self.orderableShopMenuId = dto.orderableShopMenuId
         self.name = dto.name
-        self.menuThumbnailImageURL = dto.menuThumbnailImageURL
+        self.menuThumbnailImageUrl = dto.menuThumbnailImageUrl
         self.quantity = dto.quantity
         self.totalAmount = dto.totalAmount
         self.price = CartPrice(from: dto.price)

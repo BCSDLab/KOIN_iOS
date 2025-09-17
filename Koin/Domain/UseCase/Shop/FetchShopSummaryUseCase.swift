@@ -11,7 +11,7 @@ protocol FetchShopSummaryUseCase {
     func execute(id: Int) -> AnyPublisher<OrderShopSummary, Error>
 }
 
-class DefaultFetchShopSummaryUseCase: FetchShopSummaryUseCase {
+final class DefaultFetchShopSummaryUseCase: FetchShopSummaryUseCase {
     let repository: ShopRepository
         
     init(repository: ShopRepository) {

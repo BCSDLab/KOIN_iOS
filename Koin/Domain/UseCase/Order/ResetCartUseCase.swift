@@ -11,7 +11,7 @@ protocol ResetCartUseCase {
     func execute() -> AnyPublisher<Void, Error>
 }
 
-class DefaultResetCartUseCase: ResetCartUseCase {
+final class DefaultResetCartUseCase: ResetCartUseCase {
     
     let repository: OrderShopRepository
     

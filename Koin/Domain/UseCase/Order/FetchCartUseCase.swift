@@ -12,7 +12,7 @@ protocol FetchCartUseCase {
     func execute() -> AnyPublisher<Cart, Error>
 }
 
-class DefaultFetchCartUseCase: FetchCartUseCase {
+final class DefaultFetchCartUseCase: FetchCartUseCase {
     
     let repository: OrderShopRepository
     

@@ -11,7 +11,7 @@ protocol FetchShopMenusCategoryListUseCase {
     func execute(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
 }
 
-class DefaultFetchShopmenusCategoryListUseCase: FetchShopMenusCategoryListUseCase {
+final class DefaultFetchShopmenusCategoryListUseCase: FetchShopMenusCategoryListUseCase {
     
     let repository: ShopRepository
     
