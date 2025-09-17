@@ -247,7 +247,7 @@ final class OrderHistoryViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        refreshShadowForCurrentTab()
+        navigationController?.navigationBar.layoutIfNeeded()
     }
 
     // MARK: - Bind
@@ -351,10 +351,9 @@ final class OrderHistoryViewController: UIViewController {
     private func presentOrderResultModal(with paymentId: Int) {
         guard let url = URL(string: "https://order.stage.koreatech.in/result/\(paymentId)") else { return }
         let viewController = OrderResultWebViewController(resultURL: url)
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.modalPresentationStyle = .fullScreen
-        present(navigationController, animated: true)
+        viewController.modalPresentationStyle = .overFullScreen
+        definesPresentationContext = true
+        present(viewController, animated: true)
     }
 }
 
@@ -446,7 +445,7 @@ extension OrderHistoryViewController {
         orderPrepareCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(orderHistorySeperateView.snp.bottom).offset(12)
-            $0.bottom.equalToSuperview().offset(-12)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-12)
         }
         
         emptyStateView.snp.makeConstraints{
@@ -819,3 +818,4 @@ private extension UICollectionView {
         (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
     }
 }
+
