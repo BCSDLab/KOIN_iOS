@@ -255,13 +255,14 @@ extension ShopDetailMenuGroupTableViewCell {
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(29)
         }
-        descriptionLabel.snp.makeConstraints {
-            $0.height.equalTo(19)
-        }
+        //descriptionLabel.snp.makeConstraints {
+            //$0.height.equalTo(19)
+        //}
         
         labelsStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalTo(thumbnailImageView.snp.leading).offset(-12)
             $0.top.greaterThanOrEqualToSuperview().offset(12)
             $0.bottom.lessThanOrEqualToSuperview().offset(-12)
         }
