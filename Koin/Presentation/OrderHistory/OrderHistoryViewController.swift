@@ -331,6 +331,9 @@ final class OrderHistoryViewController: UIViewController {
     func setInitialTab(_ idx: Int) {
         orderHistorySegment.selectedSegmentIndex = idx
         changeSegmentLine(orderHistorySegment)
+        DispatchQueue.main.async { [weak self] in
+            self?.inputSubject.send(.refresh)
+        }
     }
     
     private func deactivateDimOnly() {
