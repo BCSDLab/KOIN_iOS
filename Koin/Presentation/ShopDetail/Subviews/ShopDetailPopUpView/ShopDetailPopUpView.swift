@@ -63,7 +63,7 @@ class ShopDetailPopUpView: UIView {
             string: leftButtonText,
             attributes: [
                 .font: UIFont.appFont(.pretendardMedium, size: 15),
-                .foregroundColor: UIColor.appColor(.neutral400)
+                .foregroundColor: UIColor.appColor(.neutral600)
             ]), for: .normal)
         rightButton.setAttributedTitle(NSAttributedString(
             string: rightButtonText,

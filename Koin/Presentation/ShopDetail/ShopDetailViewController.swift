@@ -286,11 +286,19 @@ extension ShopDetailViewController {
         cartItemsCountLabel.isHidden = false
         cartItemsCountLabel.text = "\(count)"
     }
-    
-    // MARK: - configureRightBarButton
+
+    // MARK: - Navigation Right Bar Button
     private func configureRightBarButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
-                                                            style: .plain, target: self, action: #selector(navigationButtonTapped))
+        let cartImage = UIImage.appImage(asset: .shoppingCart)?
+            .withRenderingMode(.alwaysTemplate)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
+            style: .plain,
+            target: self,
+            action: #selector(didTapCart)
+        )
+        
         // TODO: CartItemsCount를 rightButton에 어떻게 붙일까 ㅠ
     }
     
@@ -303,6 +311,41 @@ extension ShopDetailViewController {
     // MARK: - @objc
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
+    }
+    @objc private func didTapCart() {
+        if UserDataManager.shared.userId.isEmpty {
+            let popupView = OrderLoginPopupView()
+
+            if let windowScene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive }),
+               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+
+                popupView.frame = window.bounds
+
+                popupView.loginButtonAction = {
+                    let loginViewController = LoginViewController(
+                        viewModel: LoginViewModel(
+                            loginUseCase: DefaultLoginUseCase(
+                                userRepository: DefaultUserRepository(service: DefaultUserService())
+                            ),
+                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                            )
+                        )
+                    )
+                    loginViewController.title = "로그인"
+                    self.navigationController?.pushViewController(loginViewController, animated: true)
+                }
+
+                window.addSubview(popupView)
+            }
+
+        } else {
+            let orderCartWebViewController = OrderCartWebViewController()
+            orderCartWebViewController.title = "장바구니"
+            navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        }
     }
     // MARK: - show/hide popUpView
     private func showPopUpView(menuId: Int) {
