@@ -30,6 +30,18 @@ final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
 
 extension ShopDetailMenuGroupCollectionViewCell {
     
+    func setSelected(isSelected: Bool){
+        label.textColor = isSelected ? .appColor(.new500) : .appColor(.neutral400)
+        layer.borderColor = isSelected ? UIColor.appColor(.new500).cgColor : .none
+        layer.borderWidth = isSelected ? 1 : 0
+        layer.applySketchShadow(color: isSelected ? .clear : .appColor(.neutral800),
+                                alpha: 0.04, x: 0, y: 1, blur: 1, spread: 0)
+        layer.shadowRadius = 17
+    }
+}
+
+extension ShopDetailMenuGroupCollectionViewCell {
+    
     private func configureView() {
         backgroundColor = .appColor(.neutral0)
         layer.cornerRadius = 17

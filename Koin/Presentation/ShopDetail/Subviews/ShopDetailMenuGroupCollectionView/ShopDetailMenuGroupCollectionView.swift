@@ -76,23 +76,14 @@ extension ShopDetailMenuGroupCollectionView {
 extension ShopDetailMenuGroupCollectionView {
     
     func configureSelectedCell(_ indexPath: IndexPath) {
-        guard let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
-            return
+        if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
+            cell.setSelected(isSelected: true)
         }
-        cell.label.textColor = .appColor(.new500)
-        cell.layer.borderColor = UIColor.appColor(.new500).cgColor
-        cell.layer.borderWidth = 1
-        cell.layer.applySketchShadow(color: .clear, alpha: 0, x: 0, y: 0, blur: 0, spread: 0)
     }
     func configureDeselectedCell(_ indexPath: IndexPath) {
-        guard let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
-            return
+        if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
+            cell.setSelected(isSelected: false)
         }
-        cell.label.textColor = .appColor(.neutral400)
-        cell.layer.borderColor = .none
-        cell.layer.borderWidth = 0
-        cell.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 1, spread: 0)
-        cell.layer.shadowRadius = 17
     }
 }
 
