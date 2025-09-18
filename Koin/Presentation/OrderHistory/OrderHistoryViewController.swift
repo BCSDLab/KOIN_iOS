@@ -17,7 +17,7 @@ final class OrderHistoryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<OrderHistoryViewModel.Input, Never>()
     private var items: [OrderHistory] = []
     private let initialTab: Int
-    private var currentFilter: OrderHistoryFilter = .empty {
+    private var currentQuery = OrderHistoryQuery(){
         didSet { render() }
     }
     
@@ -25,6 +25,7 @@ final class OrderHistoryViewController: UIViewController {
     private var emptyTopToList: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
+    
     private var appliedQuery: String = ""
     private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     private var shadowAlpha: CGFloat = 0
@@ -504,39 +505,17 @@ extension OrderHistoryViewController {
 
 extension OrderHistoryViewController{
     private func render() {
-        if let period = currentFilter.period {
-            switch period {
-            case .threeMonths: periodButton.setTitle("최근 3개월")
-            case .sixMonths: periodButton.setTitle("최근 6개월")
-            case .oneYear: periodButton.setTitle("최근 1년")
-            }
-            periodButton.applyFilter(true)
-        } else {
-            periodButton.setTitle("조회 기간")
-            periodButton.applyFilter(false)
-        }
-        
-        var infoParts: [String] = []
+        periodButton.setTitle(currentQuery.periodTitle)
+        periodButton.applyFilter(currentQuery.period != .none)
 
-        if let method = currentFilter.method {
-            infoParts.append(method == .delivery ? "배달" : "포장")
-        }
-        switch currentFilter.info {
-        case .completed:
-            infoParts.append("완료")
-        case .canceled:
-            infoParts.append("취소")
-        default:
-            break
-        }
+        stateInfoButton.setTitle(currentQuery.infoTitle)
+        let hasInfo = (currentQuery.type != .none) || (currentQuery.status != .none)
+        stateInfoButton.applyFilter(hasInfo)
 
-        let infoTitle = infoParts.isEmpty ? "주문 상태 · 정보" : infoParts.joined(separator: " · ")
-        stateInfoButton.setTitle(infoTitle)
-        stateInfoButton.applyFilter(!infoParts.isEmpty)
 
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
-            inputSubject.send(.applyFilter(currentFilter))
+            inputSubject.send(.applyQuery(currentQuery))
         } else {
             orderPrepareCollectionView.reloadData()
         }
@@ -545,12 +524,10 @@ extension OrderHistoryViewController{
     }
     
     private func updateResetVisibility() {
-        let show = (currentFilter != .empty)
+        let show = (currentQuery.period != .none) || (currentQuery.type != .none) || (currentQuery.status != .none)
         if show {
             resetButton.isHidden = false
-            UIView.animate(withDuration: 0.18) {
-                self.resetButton.alpha = 1
-            }
+            UIView.animate(withDuration: 0.18) { self.resetButton.alpha = 1 }
         } else {
             UIView.animate(withDuration: 0.18, animations: {
                 self.resetButton.alpha = 0
@@ -684,10 +661,11 @@ extension OrderHistoryViewController {
     @objc private func showFilterSheet(){
         guard presentedViewController == nil else {return}
         
-        let sheet = FilterBottomSheetViewController(initial: currentFilter)
-        sheet.onApply = { [weak self] filter in
-            self?.currentFilter = filter
-            
+        let sheet = FilterBottomSheetViewController(initialQuery: currentQuery)
+        sheet.onApply = { [weak self] newQuery in
+            guard let self = self else {return}
+            self.currentQuery = newQuery
+            self.inputSubject.send(.applyQuery(newQuery))
         }
         
         sheet.modalPresentationStyle = .overFullScreen
@@ -701,7 +679,9 @@ extension OrderHistoryViewController {
     }
         
     @objc private func resetFilterTapped() {
-        currentFilter = .empty
+        currentQuery.resetFilter()
+        inputSubject.send(.applyQuery(currentQuery))
+        
     }
     
     @objc private func searchTapped(_ sender: UITextField) {
@@ -767,7 +747,7 @@ extension OrderHistoryViewController {
         }
         changeSegmentLine(orderHistorySegment)
         dismissSearchOverlay()
-        inputSubject.send(.applyFilter(currentFilter))
+        inputSubject.send(.applyQuery(currentQuery))
     }
     
 }

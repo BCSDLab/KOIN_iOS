@@ -20,7 +20,6 @@
 		3B3CAE8C2E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE822E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift */; };
 		3B3CAE8D2E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE832E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift */; };
 		3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */; };
-		3B3CAE8F2E72E2FE00BBAEEE /* OrderHistoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */; };
 		3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
@@ -746,7 +745,6 @@
 		3B3CAE822E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderPrepareCollectionView.swift; sourceTree = "<group>"; };
 		3B3CAE832E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderPrepareCollectionViewCell.swift; sourceTree = "<group>"; };
 		3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
-		3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryFilter.swift; sourceTree = "<group>"; };
 		3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
@@ -3686,7 +3684,6 @@
 				D8C048592E046BF400129B14 /* OrderHistoryViewController.swift */,
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
 				3B3CAE712E719CD500BBAEEE /* OrderHistoryViewModel.swift */,
-				3B3CAE862E72E2FE00BBAEEE /* OrderHistoryFilter.swift */,
 				D838F2A52E78100C0084C230 /* OrderResultWebViewController.swift */,
 			);
 			path = OrderHistory;
@@ -4240,7 +4237,6 @@
 				3B3CAE8C2E72E2FE00BBAEEE /* OrderPrepareCollectionView.swift in Sources */,
 				3B3CAE8D2E72E2FE00BBAEEE /* OrderPrepareCollectionViewCell.swift in Sources */,
 				3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */,
-				3B3CAE8F2E72E2FE00BBAEEE /* OrderHistoryFilter.swift in Sources */,
 				3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */,
 				D2F4FD6A2CBF3EB1008C91D8 /* ForceUpdateViewModel.swift in Sources */,
 				D27DD0AA2BA608310081FD36 /* ShopInfoCollectionViewCell.swift in Sources */,

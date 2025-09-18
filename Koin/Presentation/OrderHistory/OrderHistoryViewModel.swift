@@ -13,7 +13,7 @@ final class OrderHistoryViewModel {
     enum Input {
         case viewDidLoad
         case refresh
-        case applyFilter(OrderHistoryFilter)
+        case applyQuery(OrderHistoryQuery)
         case search(String)
         case loadNextPage
         case selectOrder(Int)
@@ -37,7 +37,7 @@ final class OrderHistoryViewModel {
 
     // MARK: - State
     private var subscriptions = Set<AnyCancellable>()
-    private var currentFilter: OrderHistoryFilter = .empty
+    private var currentQuery = OrderHistoryQuery()
     private var currentKeyword: String = ""
     
     // MARK: - Pagination
@@ -59,7 +59,7 @@ final class OrderHistoryViewModel {
         let historyTrigger = input
             .filter {
                 switch $0 {
-                case .viewDidLoad, .refresh, .applyFilter, .search, .loadNextPage: return true
+                case .viewDidLoad, .refresh, .applyQuery, .search, .loadNextPage: return true
                 default: return false
                 }
             }
@@ -77,25 +77,30 @@ final class OrderHistoryViewModel {
                     return Fail(error: NSError(domain: "OrderVM", code: -1)).eraseToAnyPublisher()
                 }
                 switch event {
-                case .applyFilter(let f):
-                    self.currentFilter = f
-                    fallthrough
-
+                case .applyQuery(let query):
+                    self.currentQuery = query
+                    self.currentQuery.page = 1
+                    self.currentQuery.size = self.pageSize
+                    self.currentPageIndex = 1
+                    self.historyAccum = []
+                    self.isLoadingPage = true
+                    
+                    return self.fetchHistory.execute(query: self.currentQuery)
+                        .map{($0,false)}
+                        .eraseToAnyPublisher()
+        
                 case .viewDidLoad, .refresh, .search:
                     if case .search(let text) = event {
-                        self.currentKeyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                        self.currentQuery.keyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
+                    self.currentQuery.page = 1
+                    self.currentQuery.size = self.pageSize
                     self.currentPageIndex = 1
                     self.totalPages = 1
                     self.historyAccum = []
                     self.isLoadingPage = true
 
-                    var query = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
-                    query.page = self.currentPageIndex
-                    query.size = self.pageSize
-                    
-
-                    return self.fetchHistory.execute(query: query)
+                    return self.fetchHistory.execute(query: self.currentQuery)
                         .map { ($0, false) }
                         .eraseToAnyPublisher()
 
@@ -104,12 +109,12 @@ final class OrderHistoryViewModel {
                         return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
                     }
                     self.isLoadingPage = true
+                    
+                    self.currentQuery.page = self.currentPageIndex + 1
+                    self.currentQuery.size = self.pageSize
 
-                    var query = self.currentFilter.toDomainQuery(keyword: self.currentKeyword)
-                    query.page = self.currentPageIndex + 1
-                    query.size = self.pageSize
 
-                    return self.fetchHistory.execute(query: query)
+                    return self.fetchHistory.execute(query: self.currentQuery)
                         .map { ($0, true) }
                         .eraseToAnyPublisher()
 

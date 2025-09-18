@@ -11,10 +11,9 @@ import SnapKit
 final class FilterBottomSheetViewController: UIViewController {
 
     //MARK: - properties
-    var initial: OrderHistoryFilter
-    var onApply: ((OrderHistoryFilter) -> Void)?
     
-    private var work: OrderHistoryFilter
+    var onApply: ((OrderHistoryQuery) -> Void)?
+    private var work: OrderHistoryQuery
     private var bottomConstraint: Constraint!
     
     // MARK: - UI Components
@@ -134,9 +133,8 @@ final class FilterBottomSheetViewController: UIViewController {
 
     // MARK: - Initialize
     
-    init(initial: OrderHistoryFilter) {
-        self.initial = initial
-        self.work = initial
+    init(initialQuery: OrderHistoryQuery) {
+        self.work = initialQuery
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
     }
@@ -331,15 +329,15 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - Function
 
     private func render() {
-        m3Button.applyFilter(work.period == .threeMonths)
-        m6Button.applyFilter(work.period == .sixMonths)
-        y1Button.applyFilter(work.period == .oneYear)
+        m3Button.applyFilter(work.period == .last3Months)
+        m6Button.applyFilter(work.period == .last6Months)
+        y1Button.applyFilter(work.period == .last1Year)
 
-        deliveryButton.applyFilter(work.method == .delivery)
-        takeoutButton.applyFilter(work.method == .takeout)
+        deliveryButton.applyFilter(work.type == .delivery)
+        takeoutButton.applyFilter(work.type == .takeout)
 
-        doneButton.applyFilter(work.info == .completed)
-        cancelButton.applyFilter(work.info == .canceled)
+        doneButton.applyFilter(work.status == .completed)
+        cancelButton.applyFilter(work.status == .canceled)
     }
     
     //MARK: - @objc
@@ -349,7 +347,7 @@ final class FilterBottomSheetViewController: UIViewController {
     }
     
     @objc private func resetTapped() {
-        work = .empty
+        work.resetFilter()
         render()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
@@ -361,24 +359,24 @@ final class FilterBottomSheetViewController: UIViewController {
     }
     
     @objc private func periodTapped(_ sender: FilteringButton) {
-        let cur = work.period
-        if sender === m3Button { work.period = (cur == .threeMonths) ? nil : .threeMonths }
-        if sender === m6Button { work.period = (cur == .sixMonths) ? nil : .sixMonths }
-        if sender === y1Button { work.period = (cur == .oneYear) ? nil : .oneYear }
+        let current = work.period
+        if sender === m3Button { work.period = (current == .last3Months) ? .none : .last3Months }
+        if sender === m6Button { work.period = (current == .last6Months) ? .none : .last6Months }
+        if sender === y1Button { work.period = (current == .last1Year)  ? .none : .last1Year  }
         render()
     }
     
     @objc private func methodTapped(_ sender: FilteringButton) {
-        let cur = work.method
-        if sender === deliveryButton { work.method = (cur == .delivery) ? nil : .delivery }
-        if sender === takeoutButton  { work.method = (cur == .takeout)  ? nil : .takeout  }
+        let current = work.type
+        if sender === deliveryButton { work.type = (current == .delivery) ? .none : .delivery }
+        if sender === takeoutButton  { work.type = (current == .takeout)  ? .none : .takeout  }
         render()
     }
     
     @objc private func infoTapped(_ sender: FilteringButton) {
-        let cur = work.info
-        if sender === doneButton    { work.info = (cur == .completed) ? nil : .completed }
-        if sender === cancelButton  { work.info = (cur == .canceled)  ? nil : .canceled }
+        let current = work.status
+        if sender === doneButton   { work.status = (current == .completed) ? .none : .completed }
+        if sender === cancelButton { work.status = (current == .canceled)  ? .none : .canceled  }
         render()
     }
 }
