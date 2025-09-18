@@ -22,25 +22,13 @@ final class OrderHistoryViewModel {
 
     // MARK: Output
     enum Event {
-        case updateOrders([OrderItem])
-        case appendOrders([OrderItem])
+        case updateOrders([OrderHistory])
+        case appendOrders([OrderHistory])
         case updatePreparing([PreparingItem])
         case showEmpty(Bool)
         case errorOccurred(Error)
         case endRefreshing
         case navigateToOrderDetail(Int)
-    }
-
-    struct OrderItem {
-        let id: Int
-        let paymentId: Int
-        let stateText: String
-        let dateText: String
-        let storeName: String
-        let menuName: String
-        let priceText: String
-        let imageURL: URL?
-        let canReorder: Bool
     }
 
     struct PreparingItem {
@@ -67,7 +55,7 @@ final class OrderHistoryViewModel {
     private var currentKeyword: String = ""
     
     // MARK: - Pagination
-    private var historyAccum: [OrderItem] = []
+    private var historyAccum: [OrderHistory] = []
     private var currentPageIndex: Int = 1
     private var totalPages: Int = 1
     private var isLoadingPage: Bool = false
@@ -149,14 +137,14 @@ final class OrderHistoryViewModel {
                 self.totalPages = page.totalPage
                 self.isLoadingPage = false
 
-                let mapped = page.orders.map(self.mapToItem(_:))
+                let list = page.orders
 
                 if isAppend {
-                    self.historyAccum.append(contentsOf: mapped)
-                    return .appendOrders(mapped)
+                    self.historyAccum.append(contentsOf: list)
+                    return .appendOrders(list)
                 } else {
-                    self.historyAccum = mapped
-                    return mapped.isEmpty ? .showEmpty(true) : .updateOrders(mapped)
+                    self.historyAccum = list
+                    return list.isEmpty ? .showEmpty(true) : .updateOrders(list)
                 }
             }
             .catch { [weak self] err in
@@ -194,49 +182,6 @@ final class OrderHistoryViewModel {
             .store(in: &subscriptions)
 
         return subject.eraseToAnyPublisher()
-    }
-
-    // MARK: - Mapping (History)
-    private func mapToItem(_ order: OrderHistory) -> OrderItem {
-        let stateText: String = {
-            switch order.status {
-            case .delivered: return "배달완료"
-            case .pickedUp: return "포장완료"
-            case .canceled: return "취소완료"
-            }
-        }()
-
-        let dateText: String = {
-            let f = DateFormatter()
-            f.locale = Locale(identifier: "ko_KR")
-            f.timeZone = TimeZone(identifier: "Asia/Seoul")
-            f.dateFormat = "M월 d일 (E)"
-            return f.string(from: order.orderDate)
-        }()
-
-        let priceText: String = {
-            let nf = NumberFormatter()
-            nf.locale = Locale(identifier: "ko_KR")
-            nf.numberStyle = .decimal
-            nf.maximumFractionDigits = 0
-            nf.usesGroupingSeparator = true
-            return "\(nf.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)") 원"
-        }()
-
-        let canReorder = (order.status == .delivered || order.status == .pickedUp)
-        && order.openStatus == order.openStatus
-
-        return OrderItem(
-            id: order.id,
-            paymentId: order.paymentId,
-            stateText: stateText,
-            dateText: dateText,
-            storeName: order.shopName,
-            menuName: order.orderTitle,
-            priceText: priceText,
-            imageURL: order.shopThumbnail,
-            canReorder: canReorder
-        )
     }
 
     // MARK: - Mapping (Preparing)
@@ -323,4 +268,25 @@ final class OrderHistoryViewModel {
             status: orderInProgress.status
         )
     }
+}
+
+extension DateFormatter {
+    static let orderKR: DateFormatter = {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "ko_KR")
+        f.timeZone = TimeZone(identifier: "Asia/Seoul")
+        f.dateFormat = "M월 d일 (E)"
+        return f
+    }()
+}
+
+extension NumberFormatter {
+    static let krCurrencyNoFraction: NumberFormatter = {
+        let nf = NumberFormatter()
+        nf.locale = Locale(identifier: "ko_KR")
+        nf.numberStyle = .decimal
+        nf.maximumFractionDigits = 0
+        nf.usesGroupingSeparator = true
+        return nf
+    }()
 }

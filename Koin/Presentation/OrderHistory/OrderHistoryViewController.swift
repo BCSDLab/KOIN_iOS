@@ -15,7 +15,7 @@ final class OrderHistoryViewController: UIViewController {
     private let viewModel: OrderHistoryViewModel
     private var cancellables = Set<AnyCancellable>()
     private let inputSubject = PassthroughSubject<OrderHistoryViewModel.Input, Never>()
-    private var items: [OrderHistoryViewModel.OrderItem] = []
+    private var items: [OrderHistory] = []
     private let initialTab: Int
     private var currentFilter: OrderHistoryFilter = .empty {
         didSet { render() }
@@ -261,10 +261,11 @@ final class OrderHistoryViewController: UIViewController {
                 switch event {
                 case .updateOrders(let newItems):
                     self.items = newItems
-                    self.orderHistoryCollectionView.update(newItems.map { .init(from: $0)})
+                    self.orderHistoryCollectionView.update(newItems)
                     self.updateEmptyState()
                     self.refreshShadowForCurrentTab()
                     self.endRefreshIfNeeded()
+                    
                 case .updatePreparing(let newItems):
                     self.orderPrepareCollectionView.update(newItems.map { .init(from: $0) })
                     
@@ -282,9 +283,10 @@ final class OrderHistoryViewController: UIViewController {
                     
                 case .navigateToOrderDetail:
                     break
+                    
                 case .appendOrders(let pageItems):
                     self.items.append(contentsOf: pageItems)
-                    self.orderHistoryCollectionView.append(pageItems.map { .init(from: $0) })
+                    self.orderHistoryCollectionView.append(pageItems)
                 }
             }
             .store(in: &cancellables)

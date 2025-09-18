@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
@@ -148,6 +149,19 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        stateLabel.text = nil
+        dayLabel.text = nil
+        storeNameLabel.text = nil
+        menuNameLabel.text = nil
+        menuPriceLabel.text = nil
+
+        menuImageView.kf.cancelDownloadTask()
+        menuImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+
+        reorderState = .available
+        reviewButton.isHidden = false
+        reorderButton.isHidden = false
+
         onTapOrderInfoButton = nil
         onTapReorder = nil
     }
@@ -281,24 +295,35 @@ extension OrderHistoryColletionViewCell {
          reorderButton.setNeedsUpdateConfiguration()
      }
     
-    func configure(
-         stateText: String,
-         dateText: String,
-         image: UIImage?,
-         storeName: String,
-         menuName: String,
-         priceText: String,
-         canReorder: Bool
-     ) {
-         stateLabel.text = stateText
-         dayLabel.text = dateText
-         menuImageView.image = image
-         storeNameLabel.text = storeName
-         menuNameLabel.text = menuName
-         menuPriceLabel.text = priceText
-         reorderState = canReorder ? .available : .beforeOpen
-         
-     }
+    private func stateText(_ s: OrderStatus) -> String {
+        switch s {
+        case .delivered: return "배달완료"
+        case .pickedUp:  return "포장완료"
+        case .canceled:  return "취소완료"
+        }
+    }
+    
+    func configure(with order: OrderHistory) {
+        stateLabel.text = stateText(order.status)
+        dayLabel.text = DateFormatter.orderKR.string(from: order.orderDate)
+        
+        storeNameLabel.text = order.shopName
+        menuNameLabel.text  = order.orderTitle
+        menuPriceLabel.text = "\(NumberFormatter.krCurrencyNoFraction.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)") 원"
+
+        menuImageView.kf.setImage(
+            with: order.shopThumbnail,
+            placeholder: UIImage.appImage(asset: .defaultMenuImage),
+            options: [
+                .transition(.fade(0.2)),
+                .cacheOriginalImage,
+                .backgroundDecode
+            ]
+        )
+        
+        reorderState = order.isReorderable ? .available : .beforeOpen
+    }
+    
 }
 
 

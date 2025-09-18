@@ -64,3 +64,9 @@ struct OrderHistoryQuery {
     var size: Int = 10
 }
 
+
+extension OrderHistory {
+    var isReorderable: Bool{
+        (status == .delivered || status == .pickedUp) && openStatus
+    }
+}
