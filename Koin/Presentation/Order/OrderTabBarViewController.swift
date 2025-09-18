@@ -136,9 +136,21 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             title: "주변상점"
         )
 
+        
+        let fetchOrderHistoryUseCase = DefaultFetchOrderHistoryUseCase(
+            repository: DefaultOrderHistoryRepository(service: orderService)
+        )
+
+        let orderHistoryViewModel = OrderHistoryViewModel(
+            fetchHistory: fetchOrderHistoryUseCase,
+            orderService: orderService
+        )
+
+        let orderHistoryVC = OrderHistoryViewController(viewModel: orderHistoryViewModel)
+
         let historyViewController = tabBarNavigationController(
             image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: OrderHistoryViewController(),
+            rootViewController: orderHistoryVC,
             title: "주문내역"
         )
 
@@ -205,6 +217,20 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         case 1: navigationItem.title = "주변 상점"
         case 2: navigationItem.title = "주문 내역"
         default: break
+        }
+    }
+    
+    func goToHistory(initialSegment: Int) {
+        let historyTabIndex = 2
+        selectedIndex = historyTabIndex
+
+        guard let navigationViewController = viewControllers?[historyTabIndex] as? UINavigationController else { return }
+
+        navigationViewController.popToRootViewController(animated: false)
+
+        if let orderHistoryViewController = navigationViewController.viewControllers.first as? OrderHistoryViewController {
+            orderHistoryViewController.loadViewIfNeeded()
+            orderHistoryViewController.setInitialTab(initialSegment)
         }
     }
 }

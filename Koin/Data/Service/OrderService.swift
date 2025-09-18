@@ -13,9 +13,13 @@ protocol OrderService {
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
+    
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error>
+
 }
 
 final class DefaultOrderService: OrderService {
+ 
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
         return request(.fetchOrderShopList(requestModel))
@@ -41,6 +45,13 @@ final class DefaultOrderService: OrderService {
             }
             .eraseToAnyPublisher()
     }
+    
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error> {
+        let dto = OrderHistoryQueryDTO(query)
+        return request(.fetchOrder(query: dto))
+            .map { (res: OrdersHistoryResponseDTO) in res.toPageEntity() }
+            .eraseToAnyPublisher()
+    }
 
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
@@ -61,5 +72,6 @@ final class DefaultOrderService: OrderService {
             }
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
+        
     }
 }

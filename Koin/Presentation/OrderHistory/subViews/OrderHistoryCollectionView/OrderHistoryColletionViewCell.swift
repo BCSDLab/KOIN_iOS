@@ -8,16 +8,14 @@
 import UIKit
 import SnapKit
 
-
-
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     static let orderHistoryIdentifier = "OrderHistoryColletionViewCell"
-    
+    var onTapOrderInfoButton: (() -> Void)?
     
     private enum ReorderState {
-        case available // 재주문 가능
-        case beforeOpen // 오픈전 (불가능)
+        case available
+        case beforeOpen
     }
 
     //MARK: - Properties
@@ -48,7 +46,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
     private let menuImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 4
         $0.image = UIImage.appImage(asset: .defaultMenuImage)
     }
 
@@ -135,34 +133,43 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
             return config
         }()
     )
-
     
     // MARK: - Initialize
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        setupReorderButtonStateHandler()
+        setupReorderButtonState()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onTapOrderInfoButton = nil
+        onTapReorder = nil
+    }
+    
+    private func setAddTarget() {
+        orderInfoButton.addTarget(self, action: #selector(orderInfoButtonTapped), for: .touchUpInside)
+    }
 }
 
+extension OrderHistoryColletionViewCell {
+    @objc private func orderInfoButtonTapped() {
+        onTapOrderInfoButton?()
+    }
+}
 
 // MARK: - Set UI Function
-
-
 extension OrderHistoryColletionViewCell {
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        
     }
-    
     
     private func setUpLayouts() {
         [stateLabel, dayLabel, orderInfoButton,stateLabelUnderView, menuImageView, storeNameLabel, menuNameLabel, menuPriceLabel, reviewButton, reorderButton].forEach {
@@ -181,11 +188,10 @@ extension OrderHistoryColletionViewCell {
         stateLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(56)
         }
         
         dayLabel.snp.makeConstraints {
-            $0.leading.equalTo(stateLabel.snp.trailing)
+            $0.leading.equalTo(stateLabel.snp.trailing).offset(5)
             $0.centerY.equalTo(stateLabel)
             $0.width.equalTo(66)
         }
@@ -242,7 +248,7 @@ extension OrderHistoryColletionViewCell {
     
     // MARK: - UI Function
     
-    private func setupReorderButtonStateHandler() {
+    private func setupReorderButtonState() {
          reorderButton.configurationUpdateHandler = { [weak self] button in
              guard let self else { return }
              var config = button.configuration ?? .plain()
@@ -294,3 +300,5 @@ extension OrderHistoryColletionViewCell {
          
      }
 }
+
+

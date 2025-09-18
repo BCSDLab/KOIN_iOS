@@ -10,7 +10,11 @@ import SnapKit
 
 final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
+    var onTapOrderDetailButton: (() -> Void)?
+    
     static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
+    
+    private var estimatedHeightConstraint: Constraint!
     
     private enum stateCase {
         case delivery
@@ -20,103 +24,123 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     
     private let orderInfoChip = UIButton(
-            configuration: {
-                var cf = UIButton.Configuration.plain()
-                cf.attributedTitle = AttributedString("배달", attributes: .init([
-                    .font: UIFont.appFont(.pretendardMedium, size: 12)
-                ]))
-                cf.baseForegroundColor = UIColor.appColor(.new500)
-                cf.imagePlacement = .leading
-                cf.imagePadding = 5.5
-                cf.contentInsets = .init(top: 2, leading: 6, bottom: 2, trailing: 6)
-                cf.background.backgroundColor = UIColor.appColor(.new100)
-                cf.background.cornerRadius = 4
+        configuration: {
+        var cf = UIButton.Configuration.plain()
+        cf.attributedTitle = AttributedString("배달", attributes: .init([
+            .font: UIFont.appFont(.pretendardMedium, size: 12)
+            ]))
+        cf.baseForegroundColor = UIColor.appColor(.new500)
+        cf.imagePlacement = .leading
+        cf.imagePadding = 5.5
+        cf.contentInsets = .init(top: 2, leading: 6, bottom: 2, trailing: 6)
+        cf.background.backgroundColor = UIColor.appColor(.new100)
+        cf.background.cornerRadius = 4
+            
+        let base = UIImage.appImage(asset: .delivery2)?.withRenderingMode(.alwaysTemplate)
+        let small = base?.preparingThumbnail(of: CGSize(width: 16, height: 16)) ?? base
+        cf.image = small
                 
-                let base = UIImage.appImage(asset: .delivery2)?.withRenderingMode(.alwaysTemplate)
-                let small = base?.preparingThumbnail(of: CGSize(width: 16, height: 16)) ?? base
-                cf.image = small
-                
-                return cf
-            }()
-        ).then {
-            $0.imageView?.contentMode = .scaleAspectFit
-            $0.setContentHuggingPriority(.required, for: .horizontal)
-            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
-        }
-
-        private let estimatedTimeLabel = UILabel().then {
-            $0.text = "오후 8:32 수령 가능"
-            $0.font = UIFont.appFont(.pretendardBold, size: 20)
-            $0.textColor = UIColor.appColor(.new700)
-        }
-
-        private let explanationLabel = UILabel().then {
-            $0.text = "가게에서 열심히 음식을 조리하고있어요!"
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-            $0.textColor = UIColor.appColor(.neutral500)
-        }
-
-        private let menuImageView = UIImageView().then {
-            $0.contentMode = .scaleAspectFit
-            $0.image = UIImage.appImage(asset: .defaultMenuImage)
-            $0.layer.cornerRadius = 4
-            $0.clipsToBounds = true
-        }
-
-        private let storeNameLabel = UILabel().then {
-            $0.text = "default"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardBold, size: 16)
-        }
-
-        private let underView = UIView().then {
-            $0.backgroundColor = UIColor.appColor(.neutral200)
-        }
-
-        private let menuNameLabel = UILabel().then {
-            $0.text = "default"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 14)
-        }
-
-        private let menuPriceLabel = UILabel().then {
-            $0.text = "default"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardBold, size: 14)
-        }
-
-        private let detailOrderButton = UIButton(
-            configuration: {
-                var cf = UIButton.Configuration.plain()
-                cf.attributedTitle = AttributedString("주문 상세 보기", attributes: .init([
-                    .font: UIFont.appFont(.pretendardBold, size: 14)
-                ]))
-                cf.baseForegroundColor = UIColor.appColor(.new500)
-                
-                var bg = UIBackgroundConfiguration.clear()
-                bg.cornerRadius = 8
-                bg.backgroundColor = UIColor.appColor(.neutral0)
-                bg.strokeColor = UIColor.appColor(.new500)
-                bg.strokeWidth = 1
-                cf.background = bg
-                
-                return cf
-            }()
-        )
-
-
+        return cf
+        }()
+    ).then {
+        $0.imageView?.contentMode = .scaleAspectFill
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
     
+    private let stateLabel = UILabel().then{
+        $0.text = "주문 확인 중"
+        $0.font = UIFont.appFont(.pretendardBold, size: 20)
+        $0.textColor = UIColor.appColor(.new500)
+        $0.textAlignment = .left
+    }
+
+    private let estimatedTimeLabel = UILabel().then {
+        $0.text = "오후 8:32 수령 가능"
+        $0.font = UIFont.appFont(.pretendardBold, size: 20)
+        $0.textColor = UIColor.appColor(.new700)
+    }
+
+    private let explanationLabel = UILabel().then {
+        $0.text = "가게에서 열심히 음식을 조리하고있어요!"
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+
+    private let menuImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 4
+        $0.image = UIImage.appImage(asset: .defaultMenuImage)
+    }
+
+    private let storeNameLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+    }
+
+    private let underView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral200)
+    }
+
+    private let menuNameLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+    }
+
+    private let menuPriceLabel = UILabel().then {
+        $0.text = "default"
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.font = UIFont.appFont(.pretendardBold, size: 14)
+    }
+
+    private let detailOrderButton = UIButton(
+        configuration: {
+            var cf = UIButton.Configuration.plain()
+            cf.attributedTitle = AttributedString("주문 상세 보기", attributes: .init([
+                .font: UIFont.appFont(.pretendardBold, size: 14)
+            ]))
+            cf.baseForegroundColor = UIColor.appColor(.new500)
+            
+            var bg = UIBackgroundConfiguration.clear()
+            bg.cornerRadius = 8
+            bg.backgroundColor = UIColor.appColor(.neutral0)
+            bg.strokeColor = UIColor.appColor(.new500)
+            bg.strokeWidth = 1
+            cf.background = bg
+            
+            return cf
+        }()
+    )
+
     // MARK: - Initialize
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        setAddtarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onTapOrderDetailButton = nil
+    }
+    
+    private func setAddtarget() {
+        detailOrderButton.addTarget(self, action: #selector(detailOrderButtonTapped), for: .touchUpInside)
+    }
+}
+
+extension OrderPrepareCollectionViewCell {
+    @objc private func detailOrderButtonTapped() {
+        onTapOrderDetailButton?()
+    }
 }
 
 extension OrderPrepareCollectionViewCell {
@@ -129,7 +153,7 @@ extension OrderPrepareCollectionViewCell {
     }
     
     private func setUpLayouts() {
-        [orderInfoChip, estimatedTimeLabel, explanationLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView,storeNameLabel ,menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
+        [orderInfoChip,stateLabel, estimatedTimeLabel, explanationLabel, underView, menuImageView, storeNameLabel, menuNameLabel, menuPriceLabel, detailOrderButton].forEach{
             contentView.addSubview($0)
         }
         self.contentView.backgroundColor = .appColor(.neutral0)
@@ -145,16 +169,24 @@ extension OrderPrepareCollectionViewCell {
             $0.height.equalTo(24)
         }
         
+        stateLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalTo(orderInfoChip.snp.bottom).offset(12)
+            $0.height.equalTo(32)
+        }
+        
         estimatedTimeLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.height.equalTo(32)
-            $0.top.equalTo(orderInfoChip.snp.bottom).offset(12)
+            $0.top.equalTo(stateLabel.snp.bottom)
+            
+            estimatedHeightConstraint = $0.height.equalTo(32).constraint
         }
         
         explanationLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(19)
             $0.top.equalTo(estimatedTimeLabel.snp.bottom)
+
         }
         
         underView.snp.makeConstraints {
@@ -191,6 +223,7 @@ extension OrderPrepareCollectionViewCell {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(16)
         }
+        
     }
     
     // MARK: - Function
@@ -202,15 +235,33 @@ extension OrderPrepareCollectionViewCell {
         image: UIImage?,
         storeName: String,
         menuName: String,
-        priceText: String
+        priceText: String,
+        status: OrderInProgressStatus
     ) {
         updateChip(methodText: methodText)
+
+        let estimatedTimeIsEmpty = !estimatedTimeText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let showEstimatedTimeLabel = status.showEstimatedTime && estimatedTimeIsEmpty
+
+        
+        stateLabel.text = status.statusText
         estimatedTimeLabel.text = estimatedTimeText
+        setEstimatedLabel(showEstimatedTimeLabel)
+
         explanationLabel.text = explanationText
         storeNameLabel.text = storeName
         menuNameLabel.text = menuName
         menuPriceLabel.text = priceText
         menuImageView.image = image ?? UIImage.appImage(asset: .defaultMenuImage)
+    }
+    
+    private func setEstimatedLabel(_ visible: Bool){
+        estimatedTimeLabel.isHidden = !visible
+        estimatedHeightConstraint.update(offset: visible ? 32 : 0)
+
+        setNeedsLayout()
+        layoutIfNeeded()
+        
     }
     
     private func updateChip(methodText: String) {
@@ -234,11 +285,12 @@ extension OrderPrepareCollectionViewCell {
             chip.image = UIImage.appImage(asset: .packaging)?
                 .withRenderingMode(.alwaysTemplate)
                 .preparingThumbnail(of: CGSize(width: 16, height: 16))
-            chip.baseForegroundColor = .appColor(.neutral700)
-            chip.background.backgroundColor = .appColor(.neutral100)
+            chip.baseForegroundColor = .appColor(.new500)
+            chip.background.backgroundColor = .appColor(.new100)
         }
         
         orderInfoChip.configuration = chip
     }
 }
+
 

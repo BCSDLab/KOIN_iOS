@@ -11,7 +11,7 @@ import Then
 import SnapKit
 
 final class OrderFloatingButton: UIControl {
-    
+        
     // MARK: - Properties
     var titleText: String? {
         get { titleLabel.text }
@@ -71,6 +71,12 @@ final class OrderFloatingButton: UIControl {
         super.init(frame: frame)
         configureView()
         setAddTarget()
+        
+        containerView.isUserInteractionEnabled = false
+        lottieView.isUserInteractionEnabled = false
+        labelStackView.isUserInteractionEnabled = false
+        rightImageView.isUserInteractionEnabled = false
+
     }
     
     required init?(coder: NSCoder) {
