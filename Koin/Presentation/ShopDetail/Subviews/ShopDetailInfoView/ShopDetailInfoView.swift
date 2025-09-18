@@ -44,10 +44,10 @@ final class ShopDetailInfoView: UIView {
         $0.spacing = 8
         $0.alignment = .fill
     }
-    private let isDeliveryAvailableView = UILabel()
-    private let isTakeoutAvailableView = UILabel()
-    private let isPayCardAvailableView = UILabel()
-    private let isPayBankAvailableView = UILabel()
+    private let isDeliveryAvailableLabel = UILabel()
+    private let isTakeoutAvailableLabel = UILabel()
+    private let isPayCardAvailableLabel = UILabel()
+    private let isPayBankAvailableLabel = UILabel()
     
     private let orderAmountDelieveryTipView = ShopDetailCustomButton()
     private let introductionView = ShopDetailCustomButton()
@@ -85,17 +85,17 @@ final class ShopDetailInfoView: UIView {
 extension ShopDetailInfoView {
     
     private func setUpIsAvailableView(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
-        isDeliveryAvailableView.text = isDelieveryAvailable ? "배달 가능" : "배달 불가"
-        isDeliveryAvailableView.textColor = isDelieveryAvailable ? .appColor(.new300) : .appColor(.neutral400)
-        isTakeoutAvailableView.text = isTakeoutAvailable ?? true ? "포장 가능" : "포장 불가"
-        isTakeoutAvailableView.textColor = isTakeoutAvailable ?? true ? .appColor(.new300) : .appColor(.neutral400)
-        isPayCardAvailableView.text = payCard ? "카드가능" : "카드불가"
-        isPayCardAvailableView.textColor = payCard ? .appColor(.new300) : .appColor(.neutral400)
-        isPayBankAvailableView.text = payBank ? "계좌이체가능" : "계좌이체불가"
-        isPayBankAvailableView.textColor = payBank ? .appColor(.new300) : .appColor(.neutral400)
+        isDeliveryAvailableLabel.text = isDelieveryAvailable ? "배달 가능" : "배달 불가"
+        isDeliveryAvailableLabel.textColor = isDelieveryAvailable ? .appColor(.new300) : .appColor(.neutral400)
+        isTakeoutAvailableLabel.text = isTakeoutAvailable ?? true ? "포장 가능" : "포장 불가"
+        isTakeoutAvailableLabel.textColor = isTakeoutAvailable ?? true ? .appColor(.new300) : .appColor(.neutral400)
+        isPayCardAvailableLabel.text = payCard ? "카드가능" : "카드불가"
+        isPayCardAvailableLabel.textColor = payCard ? .appColor(.new300) : .appColor(.neutral400)
+        isPayBankAvailableLabel.text = payBank ? "계좌이체가능" : "계좌이체불가"
+        isPayBankAvailableLabel.textColor = payBank ? .appColor(.new300) : .appColor(.neutral400)
         
         if isTakeoutAvailable == nil {
-            isTakeoutAvailableView.isHidden = true
+            isTakeoutAvailableLabel.isHidden = true
         }
     }
     private func setUpReviewButton(reviewCount: Int) {
@@ -134,12 +134,12 @@ extension ShopDetailInfoView {
         moreInfoButton.tintColor = .appColor(.neutral400)
     }
     private func setUpShadows(){
-        [moreInfoButton, isDeliveryAvailableView, isTakeoutAvailableView, isPayCardAvailableView, isPayBankAvailableView, orderAmountDelieveryTipView, introductionView].forEach {
+        [moreInfoButton, isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel, orderAmountDelieveryTipView, introductionView].forEach {
             $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
         }
     }
     private func setUpIsAvailableView() {
-        [isDeliveryAvailableView, isTakeoutAvailableView, isPayCardAvailableView, isPayBankAvailableView].forEach {
+        [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel].forEach {
             $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
             $0.backgroundColor = UIColor.appColor(.neutral0)
             $0.layer.cornerRadius = 11.5
@@ -155,7 +155,7 @@ extension ShopDetailInfoView {
         [starImageView, ratingLabel, separatorLabel, reviewLabel, reviewButton].forEach {
             rateReviewStackView.addArrangedSubview($0)
         }
-        [isDeliveryAvailableView, isTakeoutAvailableView, isPayCardAvailableView, isPayBankAvailableView].forEach {
+        [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel].forEach {
             isAvailableStackView.addArrangedSubview($0)
         }
         [shopTitleLabel, rateReviewStackView, moreInfoButton, orderAmountDelieveryTipView, introductionView, isAvailableStackView].forEach {
@@ -196,13 +196,13 @@ extension ShopDetailInfoView {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(rateReviewStackView.snp.bottom).offset(16)
         }
-        [isDeliveryAvailableView, isTakeoutAvailableView, isPayCardAvailableView].forEach {
+        [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(23)
                 $0.width.equalTo(61)
             }
         }
-        isPayBankAvailableView.snp.makeConstraints {
+        isPayBankAvailableLabel.snp.makeConstraints {
             $0.height.equalTo(23)
             $0.width.equalTo(79)
         }
