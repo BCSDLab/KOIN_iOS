@@ -12,20 +12,7 @@ final class OrderPrepareCollectionView: UICollectionView {
     var onLoadedIDs: (([Int]) -> Void)?
     var onTapOrderDetailButton: ((Int) -> Void)?
     
-    struct Item: Hashable {
-        let id: Int
-        let paymentId: Int
-        let methodText: String
-        let estimatedTimeText: String
-        let explanationText: String
-        let imageURL: URL?
-        let storeName: String
-        let menuName: String
-        let priceText: String
-        let status: OrderInProgressStatus
-    }
-    
-    private var items: [Item] = []
+    private var items: [OrderInProgress] = []
     
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -51,13 +38,13 @@ final class OrderPrepareCollectionView: UICollectionView {
                  forCellWithReuseIdentifier: OrderPrepareCollectionViewCell.OrderPrepareIdentifier)
     }
     
-    func update(_ items: [Item]) {
+    func update(_ items: [OrderInProgress]) {
         self.items = items
         reloadData()
         onLoadedIDs?(items.map { $0.id })
     }
     
-    private func calculateHeight(for item: Item) -> CGFloat{
+    private func calculateHeight(for item: OrderInProgress) -> CGFloat{
         let isEmptyContent = !item.estimatedTimeText
             .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let showEstimateTimeLabel = item.status.showEstimatedTime && isEmptyContent
@@ -96,44 +83,12 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
         ) as? OrderPrepareCollectionViewCell else {
             return UICollectionViewCell()
         }
+        let order = items[indexPath.item]
+        cell.configure(with: order)
 
-        let item = items[indexPath.item]
-        var image: UIImage? = UIImage.appImage(asset: .defaultMenuImage)
-
-        if let url = item.imageURL {
-            URLSession.shared.dataTask(with: url) { [weak collectionView] data, _, _ in
-                guard let data, let fetched = UIImage(data: data) else { return }
-                DispatchQueue.main.async {
-                    if let visible = collectionView?.cellForItem(at: indexPath) as? OrderPrepareCollectionViewCell {
-                        visible.configure(
-                            methodText: item.methodText,
-                            estimatedTimeText: item.estimatedTimeText,
-                            explanationText: item.explanationText,
-                            image: fetched,
-                            storeName: item.storeName,
-                            menuName: item.menuName,
-                            priceText: item.priceText,
-                            status: item.status
-                        )
-                    }
-                }
-            }.resume()
-        }
-        cell.configure(
-            methodText: item.methodText,
-            estimatedTimeText: item.estimatedTimeText,
-            explanationText: item.explanationText,
-            image: image,
-            storeName: item.storeName,
-            menuName: item.menuName,
-            priceText: item.priceText,
-            status: item.status
-        )
-        
         cell.onTapOrderDetailButton = { [weak self] in
-            self?.onTapOrderDetailButton?(item.paymentId)
+            self?.onTapOrderDetailButton?(order.paymentId)
         }
-        
         return cell
     }
 
@@ -145,24 +100,5 @@ extension OrderPrepareCollectionView: UICollectionViewDelegate, UICollectionView
         let width = UIScreen.main.bounds.width - 48
         let height = calculateHeight(for: item)
         return CGSize(width: width, height: height)
-    }
-    
-}
-
-
-extension OrderPrepareCollectionView.Item {
-    init(from viewModel: OrderHistoryViewModel.PreparingItem) {
-        self.init(
-            id: viewModel.id,
-            paymentId: viewModel.paymentId,
-            methodText: viewModel.methodText,
-            estimatedTimeText: viewModel.estimatedTimeText,
-            explanationText: viewModel.explanationText,
-            imageURL: viewModel.imageURL,
-            storeName: viewModel.storeName,
-            menuName: viewModel.menuName,
-            priceText: viewModel.priceText,
-            status: viewModel.status
-        )
     }
 }

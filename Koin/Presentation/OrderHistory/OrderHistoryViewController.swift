@@ -267,7 +267,7 @@ final class OrderHistoryViewController: UIViewController {
                     self.endRefreshIfNeeded()
                     
                 case .updatePreparing(let newItems):
-                    self.orderPrepareCollectionView.update(newItems.map { .init(from: $0) })
+                    self.orderPrepareCollectionView.update(newItems)
                     
                 case .showEmpty(let isEmpty):
                     self.emptyStateView.isHidden = !isEmpty

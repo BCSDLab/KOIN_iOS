@@ -24,25 +24,11 @@ final class OrderHistoryViewModel {
     enum Event {
         case updateOrders([OrderHistory])
         case appendOrders([OrderHistory])
-        case updatePreparing([PreparingItem])
+        case updatePreparing([OrderInProgress])
         case showEmpty(Bool)
         case errorOccurred(Error)
         case endRefreshing
         case navigateToOrderDetail(Int)
-    }
-
-    struct PreparingItem {
-        let stateText: String
-        let id: Int
-        let paymentId: Int
-        let methodText: String
-        let estimatedTimeText: String
-        let explanationText: String
-        let imageURL: URL?
-        let storeName: String
-        let menuName: String
-        let priceText: String
-        let status: OrderInProgressStatus
     }
 
     // MARK: - Deps
@@ -161,10 +147,7 @@ final class OrderHistoryViewModel {
                 }
                 return self.orderService.fetchOrderInProgress()
             }
-            .map { [weak self] list -> Event in        
-                let viewModels = list.compactMap { self?.mapToPreparingItem($0) }
-                return .updatePreparing(viewModels)
-            }
+            .map { Event.updatePreparing($0) }
             .catch { _ in Just(Event.updatePreparing([])) }
             .sink { subject.send($0) }
             .store(in: &subscriptions)
@@ -182,91 +165,6 @@ final class OrderHistoryViewModel {
             .store(in: &subscriptions)
 
         return subject.eraseToAnyPublisher()
-    }
-
-    // MARK: - Mapping (Preparing)
-    private func mapToPreparingItem(_ orderInProgress: OrderInProgress) -> PreparingItem {
-        let methodText = (orderInProgress.type == .delivery) ? "배달" : "포장"
-        
-        let estimatedTime: String = {
-            if orderInProgress.estimatedTime == "시간 미정" {
-                return "시간 미정"
-            }
-            switch orderInProgress.type {
-            case .delivery:
-                return "\(orderInProgress.estimatedTime) 도착 예정"
-            case .takeout:
-                return "\(orderInProgress.estimatedTime) 수령 가능"
-            }
-        }()
-
-
-        let stateText: String = {
-            switch orderInProgress.type {
-            case .delivery:
-                switch orderInProgress.status {
-                case .confirming: return "주문 확인 중"
-                case .cooking: return "조리 중"
-                case .delivering: return "배달 출발"
-                case .delivered: return "배달 완료"
-                case .canceled: return "주문 취소"
-                default: return ""
-                }
-            case .takeout:
-                switch orderInProgress.status {
-                case .confirming: return "주문 확인 중"
-                case .cooking: return "조리 중"
-                case .packaged, .pickedUp: return "수령 가능"
-                case .canceled: return "주문 취소"
-                default: return ""
-                }
-            }
-        }()
-
-        let explanation: String = {
-            switch orderInProgress.type {
-            case .delivery:
-                switch orderInProgress.status {
-                case .confirming: return "사장님이 주문을 확인하고 있어요!"
-                case .cooking: return "가게에서 열심히 음식을 조리하고 있어요!"
-                case .delivering: return "열심히 달려가는 중이에요!"
-                case .delivered: return "배달이 완료되었어요. 감사합니다!"
-                case .packaged, .pickedUp: return "가게에서 열심히 음식을 조리하고 있어요!"
-                case .canceled: return "주문이 취소되었어요."
-                }
-            case .takeout:
-                switch orderInProgress.status {
-                case .confirming: return "사장님이 주문을 확인하고 있어요!"
-                case .cooking: return "가게에서 열심히 음식을 조리하고 있어요!"
-                case .packaged, .pickedUp, .delivered: return "준비가 완료되었어요!"
-                case .delivering: return "가게에서 열심히 음식을 조리하고 있어요!"
-                case .canceled: return "주문이 취소되었어요."
-                }
-            }
-        }()
-
-        let priceText: String = {
-            let numberFormatter = NumberFormatter()
-            numberFormatter.locale = Locale(identifier: "ko_KR")
-            numberFormatter.numberStyle = .decimal
-            numberFormatter.maximumFractionDigits = 0
-            numberFormatter.usesGroupingSeparator = true
-            return "\(numberFormatter.string(from: NSNumber(value: orderInProgress.totalAmount)) ?? "\(orderInProgress.totalAmount)") 원"
-        }()
-
-        return PreparingItem(
-            stateText: stateText,
-            id: orderInProgress.id,
-            paymentId: orderInProgress.paymentId,
-            methodText: methodText,
-            estimatedTimeText: estimatedTime,
-            explanationText: explanation,
-            imageURL: URL(string: orderInProgress.orderableShopThumbnail),
-            storeName: orderInProgress.orderableShopName,
-            menuName: orderInProgress.orderTitle,
-            priceText: priceText,
-            status: orderInProgress.status
-        )
     }
 }
 

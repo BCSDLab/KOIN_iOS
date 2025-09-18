@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
@@ -130,6 +131,9 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         onTapOrderDetailButton = nil
+
+        menuImageView.kf.cancelDownloadTask()
+        menuImageView.image = UIImage.appImage(asset: .defaultMenuImage)
     }
     
     private func setAddtarget() {
@@ -228,32 +232,31 @@ extension OrderPrepareCollectionViewCell {
     
     // MARK: - Function
 
-    func configure(
-        methodText: String,
-        estimatedTimeText: String,
-        explanationText: String,
-        image: UIImage?,
-        storeName: String,
-        menuName: String,
-        priceText: String,
-        status: OrderInProgressStatus
-    ) {
-        updateChip(methodText: methodText)
+    func configure(with order: OrderInProgress) {
+        updateChip(methodText: order.methodText)
+        stateLabel.text = order.stateText
+        estimatedTimeLabel.text = order.estimatedTimeText
+        explanationLabel.text = order.explanationText
+        storeNameLabel.text = order.orderableShopName
+        menuNameLabel.text = order.orderTitle
+        menuPriceLabel.text = "\(NumberFormatter.krCurrencyNoFraction.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)") 원"
+        setEstimatedLabel(order.status.showEstimatedTime)
 
-        let estimatedTimeIsEmpty = !estimatedTimeText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let showEstimatedTimeLabel = status.showEstimatedTime && estimatedTimeIsEmpty
-
-        
-        stateLabel.text = status.statusText
-        estimatedTimeLabel.text = estimatedTimeText
-        setEstimatedLabel(showEstimatedTimeLabel)
-
-        explanationLabel.text = explanationText
-        storeNameLabel.text = storeName
-        menuNameLabel.text = menuName
-        menuPriceLabel.text = priceText
-        menuImageView.image = image ?? UIImage.appImage(asset: .defaultMenuImage)
+        if let url = URL(string: order.orderableShopThumbnail) {
+            menuImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage.appImage(asset: .defaultMenuImage),
+                options: [
+                    .transition(.fade(0.2)),
+                    .cacheOriginalImage,
+                    .backgroundDecode
+                ]
+            )
+        } else {
+            menuImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+        }
     }
+
     
     private func setEstimatedLabel(_ visible: Bool){
         estimatedTimeLabel.isHidden = !visible
