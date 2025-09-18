@@ -9,7 +9,7 @@ import Foundation
 
 struct OrderShopSummary {
     let shopId: Int
-    let orderableShopId: Int
+    let orderableShopId: Int?
     let name: String
     let introduction: String?
     let isDeliveryAvailable, isTakeoutAvailable, payCard, payBank: Bool
@@ -40,7 +40,7 @@ extension OrderShopSummary {
     }
     init(from dto: ShopSummaryDTO) {
         self.shopId = dto.shopId
-        self.orderableShopId = -1
+        self.orderableShopId = nil
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = false

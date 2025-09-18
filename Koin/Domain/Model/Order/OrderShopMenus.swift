@@ -23,7 +23,7 @@ struct OrderShopMenu {
 }
 
 struct Price {
-    let id: Int
+    let id: Int?
     let name: String?
     let price: Int
 }
@@ -75,7 +75,7 @@ extension OrderShopMenu {
                 Price(from: optionPrice)
             }
         } else {
-            fatalError()
+            self.prices = []
         }
     }
 }
@@ -87,7 +87,7 @@ extension Price {
         self.price = dto.price
     }
     init(from dto: OptionPrice) {
-        self.id = -1
+        self.id = nil
         self.name = dto.option
         self.price = dto.price
     }
