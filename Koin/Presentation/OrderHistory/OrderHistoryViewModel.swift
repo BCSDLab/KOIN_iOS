@@ -201,9 +201,8 @@ final class OrderHistoryViewModel {
         let stateText: String = {
             switch order.status {
             case .delivered: return "배달완료"
-            case .packaged, .pickedUp: return "포장완료"
+            case .pickedUp: return "포장완료"
             case .canceled: return "취소완료"
-            default: return ""
             }
         }()
 
@@ -224,7 +223,7 @@ final class OrderHistoryViewModel {
             return "\(nf.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)") 원"
         }()
 
-        let canReorder = (order.status == .delivered || order.status == .packaged)
+        let canReorder = (order.status == .delivered || order.status == .pickedUp)
         && order.openStatus == order.openStatus
 
         return OrderItem(
@@ -243,7 +242,19 @@ final class OrderHistoryViewModel {
     // MARK: - Mapping (Preparing)
     private func mapToPreparingItem(_ orderInProgress: OrderInProgress) -> PreparingItem {
         let methodText = (orderInProgress.type == .delivery) ? "배달" : "포장"
-        let eta = (orderInProgress.estimatedTime == "시간 미정") ? "시간 미정" : "\(orderInProgress.estimatedTime) 도착 예정"
+        
+        let estimatedTime: String = {
+            if orderInProgress.estimatedTime == "시간 미정" {
+                return "시간 미정"
+            }
+            switch orderInProgress.type {
+            case .delivery:
+                return "\(orderInProgress.estimatedTime) 도착 예정"
+            case .takeout:
+                return "\(orderInProgress.estimatedTime) 수령 가능"
+            }
+        }()
+
 
         let stateText: String = {
             switch orderInProgress.type {
@@ -303,7 +314,7 @@ final class OrderHistoryViewModel {
             id: orderInProgress.id,
             paymentId: orderInProgress.paymentId,
             methodText: methodText,
-            estimatedTimeText: eta,
+            estimatedTimeText: estimatedTime,
             explanationText: explanation,
             imageURL: URL(string: orderInProgress.orderableShopThumbnail),
             storeName: orderInProgress.orderableShopName,

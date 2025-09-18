@@ -74,7 +74,7 @@ extension OrderHistoryDTO {
             shopThumbnail: thumbURL,
             openStatus: openStatus,
             orderDate: date,
-            status: OrderStatus(rawValue: orderStatus) ?? .unknown,
+            status: OrderStatus(rawValue: orderStatus) ?? .canceled,
             orderTitle: orderTitle,
             totalAmount: totalAmount
         )

@@ -452,11 +452,18 @@ extension OrderHistoryViewController {
         }
         
         emptyStateView.snp.makeConstraints{
-            self.emptyTopToSeparator = $0.top.equalTo(orderHistorySeperateView.snp.bottom).constraint
-            self.emptyTopToList = $0.top.equalTo(orderHistoryCollectionView.snp.top).constraint
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            emptyTopToSeparator = emptyStateView.snp.prepareConstraints {
+                $0.top.equalTo(orderHistorySeperateView.snp.bottom)
+            }.first
+
+            emptyTopToList = emptyStateView.snp.prepareConstraints {
+                $0.top.equalTo(orderHistoryCollectionView.snp.top)
+            }.first
+
         }
+        
         
         symbolImageView.snp.makeConstraints {
             $0.centerX.equalTo(self.view)
@@ -568,6 +575,9 @@ extension OrderHistoryViewController{
             emptyTopToList.deactivate()
             emptyTopToSeparator.activate()
         }
+        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
         
         topShadowView.isHidden = !isHistory || !emptyStateView.isHidden
         topShadowView.alpha = 0

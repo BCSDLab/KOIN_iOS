@@ -14,8 +14,7 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
     static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
     
-    private var showEstimateTimeLabel: Constraint!
-    private var hideEstimateTimeLabel: Constraint!
+    private var estimatedHeightConstraint: Constraint!
     
     private enum stateCase {
         case delivery
@@ -179,15 +178,15 @@ extension OrderPrepareCollectionViewCell {
         estimatedTimeLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(stateLabel.snp.bottom)
-            $0.height.equalTo(32)
+            
+            estimatedHeightConstraint = $0.height.equalTo(32).constraint
         }
         
         explanationLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(19)
-            
-            showEstimateTimeLabel = $0.top.equalTo(estimatedTimeLabel.snp.bottom).constraint
-            hideEstimateTimeLabel = $0.top.equalTo(stateLabel.snp.bottom).constraint
+            $0.top.equalTo(estimatedTimeLabel.snp.bottom)
+
         }
         
         underView.snp.makeConstraints {
@@ -225,7 +224,6 @@ extension OrderPrepareCollectionViewCell {
             $0.bottom.equalToSuperview().inset(16)
         }
         
-        hideEstimateTimeLabel.deactivate()
     }
     
     // MARK: - Function
@@ -259,15 +257,8 @@ extension OrderPrepareCollectionViewCell {
     
     private func setEstimatedLabel(_ visible: Bool){
         estimatedTimeLabel.isHidden = !visible
-        
-        if visible {
-            hideEstimateTimeLabel.deactivate()
-            showEstimateTimeLabel.activate()
-        } else {
-            showEstimateTimeLabel.deactivate()
-            hideEstimateTimeLabel.activate()
-        }
-        
+        estimatedHeightConstraint.update(offset: visible ? 32 : 0)
+
         setNeedsLayout()
         layoutIfNeeded()
         

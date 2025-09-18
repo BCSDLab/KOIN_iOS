@@ -31,12 +31,7 @@ struct OrderHistory {
 enum OrderStatus: String {
     case delivered = "DELIVERED"
     case canceled = "CANCELED"
-    case confirming = "CONFIRMING"
-    case cooking = "COOKING"
-    case packaged = "PACKAGED"
     case pickedUp = "PICKED_UP"
-    case delivering = "DELIVERING"
-    case unknown = "UNKNOWN"
 }
 
 // MARK: - Query

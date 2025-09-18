@@ -140,9 +140,6 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
 }
 
 extension OrderPrepareCollectionView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.reloadItems(at: [indexPath])
-    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let item = items[indexPath.item]
         let width = UIScreen.main.bounds.width - 48
