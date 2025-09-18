@@ -19,7 +19,7 @@ protocol OrderService {
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
     func resetCart() -> AnyPublisher<Void, Error>
-    func fetchCart(parameter: String) -> AnyPublisher<CartDTO, Error>
+    func fetchCart() -> AnyPublisher<CartDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -90,8 +90,20 @@ final class DefaultOrderService: OrderService {
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
-    func fetchCart(parameter: String) -> AnyPublisher<CartDTO, Error> {
-        request(.fetchCart(parameter: parameter))
+    func fetchCart() -> AnyPublisher<CartDTO, Error> {
+        request(.fetchCart(parameter: "DELIVERY"))
+            .catch { [weak self] error -> AnyPublisher<CartDTO, Error> in
+                guard let self = self else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+                switch error.asAFError?.responseCode {
+                case 400:
+                    return self.request(.fetchCart(parameter: "TAKE_OUT"))
+                        .eraseToAnyPublisher()
+                default:
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
             .eraseToAnyPublisher()
     }
     
