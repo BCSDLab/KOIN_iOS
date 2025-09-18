@@ -139,7 +139,7 @@ extension ShopDetailViewController {
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.isHidden = !cartSummary.isAvailable
                 self?.bottomSheet.configure(cartSummary: cartSummary)
-                self?.updateBottomSheetConstraint(sholdShowBottomSheet: cartSummary.isAvailable)
+                self?.updateBottomSheetConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
                 self?.isAddingMenuAvailable = isAddingMenuAvailable
             case let .updateCartItemsCount(count):
@@ -271,9 +271,9 @@ extension ShopDetailViewController {
     }
     
     // MARK: - shouldShowBottomSheet
-    private func updateBottomSheetConstraint(sholdShowBottomSheet: Bool) {
+    private func updateBottomSheetConstraint(shouldShowBottomSheet: Bool) {
         scrollView.snp.updateConstraints {
-            $0.bottom.equalToSuperview().offset(sholdShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
+            $0.bottom.equalToSuperview().offset(shouldShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
         }
     }
     
