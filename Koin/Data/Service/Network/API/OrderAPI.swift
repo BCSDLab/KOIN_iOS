@@ -17,7 +17,6 @@ enum OrderAPI {
     case fetchOrderInProgress
     case fetchCartSummary(orderableShopId: Int)
     case fetchCartItemsCount
-    case resetCart
     case fetchCart(parameter: String)
 }
 
@@ -38,14 +37,12 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchOrderInProgress: return "/order/in-progress"
         case .fetchCartSummary(let orderableShopId): return "/cart/summary/\(orderableShopId)"
         case .fetchCartItemsCount: return "/cart/items/count"
-        case .resetCart: return "/cart/reset"
         case .fetchCart: return "/cart"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .resetCart: .delete
         default: .get
         }
     }
@@ -53,7 +50,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .resetCart, .fetchCart:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -90,8 +87,6 @@ extension OrderAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchOrderShopList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .resetCart:
-            return nil
         default:
             return URLEncoding.default
         }
