@@ -14,7 +14,7 @@ protocol BusService {
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
     func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error>
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error>
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error>
 }
 
 final class DefaultBusService: BusService {
@@ -40,7 +40,7 @@ final class DefaultBusService: BusService {
         return request(.fetchEmergencyNotice)
     }
     
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
         return request(.fetchShuttleBusTimetableList(id))
     }
 

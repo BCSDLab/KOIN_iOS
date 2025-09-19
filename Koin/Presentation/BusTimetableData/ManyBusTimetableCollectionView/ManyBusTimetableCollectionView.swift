@@ -8,8 +8,6 @@
 import Combine
 import UIKit
 
-// 임시 데이터 모델
-
 final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     //MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
