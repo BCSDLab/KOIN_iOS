@@ -254,6 +254,7 @@ final class OrderHistoryViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.layoutIfNeeded()
+        inputSubject.send(.refresh)
     }
 
     // MARK: - Bind
@@ -296,7 +297,6 @@ final class OrderHistoryViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
-        inputSubject.send(.viewDidLoad)
         searchBar.onReturn = { [weak self] text in
             guard let self = self else { return }
                 let trimmedQuery = text.trimmingCharacters(in: .whitespacesAndNewlines)
