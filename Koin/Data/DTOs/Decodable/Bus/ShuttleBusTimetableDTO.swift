@@ -34,10 +34,11 @@ struct NodeInfo: Decodable {
 // MARK: - RouteInfo
 struct RouteInfo: Decodable {
     let name: String
+    let detail: String?
     let arrivalTime: [String?]
 
     enum CodingKeys: String, CodingKey {
-        case name
+        case name, detail
         case arrivalTime = "arrival_time"
     }
 }
@@ -49,9 +50,9 @@ extension ShuttleBusTimetableDTO {
 
         let updatedRouteInfo = routeInfo.map { route in
             if route.name == "하교" && hasGoSchool && hasDropOffSchool {
-                return route.toDomain() // ✅ 등교 & 하교 둘 다 있으면 reverse
+                return route.toDomain()
             } else {
-                return route // ✅ 하교만 있는 경우 그대로 유지
+                return route
             }
         }
 
@@ -71,6 +72,7 @@ extension RouteInfo {
     func toDomain() -> RouteInfo {
         return RouteInfo(
             name: name,
+            detail: detail,
             arrivalTime: name == "하교" ? arrivalTime.reversed() : arrivalTime
         )
     }
