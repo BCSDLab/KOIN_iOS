@@ -7,11 +7,11 @@
 
 import Combine
 
-protocol FetchShopSummaryUseCase {
+protocol FetchOrderShopSummaryFromShopUseCase {
     func execute(id: Int) -> AnyPublisher<OrderShopSummary, Error>
 }
 
-final class DefaultFetchShopSummaryUseCase: FetchShopSummaryUseCase {
+final class DefaultFetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase {
     let repository: ShopRepository
         
     init(repository: ShopRepository) {

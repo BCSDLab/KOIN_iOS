@@ -243,13 +243,15 @@ final class ShopViewController: UIViewController {
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
             let service = DefaultShopService()
             let repository = DefaultShopRepository(service: service)
-            let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(repository: repository)
-            let fetchShopmenusCategoryListUseCase = DefaultFetchShopmenusCategoryListUseCase(repository: repository)
-            let fetchShopMenuListUseCase = DefaultFetchShopMenuListUseCase(shopRepository: repository)
+            
+            let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
+            let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: repository)
+            let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-            let viewModel = ShopDetailViewModel(fetchShopSummaryUseCase: fetchShopSummaryUseCase,
-                                                fetchShopmenusCategoryListUseCase: fetchShopmenusCategoryListUseCase,
-                                                fetchShopMenuListUseCase: fetchShopMenuListUseCase,
+            
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+                                                fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
+                                                fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
                                                 fetchShopDataUseCase: fetchShopDataUseCase,
                                                 shopId: shopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)

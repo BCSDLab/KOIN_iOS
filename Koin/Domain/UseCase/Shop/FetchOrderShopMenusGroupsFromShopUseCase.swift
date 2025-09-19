@@ -7,11 +7,11 @@
 
 import Combine
 
-protocol FetchShopMenusCategoryListUseCase {
+protocol FetchOrderShopMenusGroupsFromShopUseCase {
     func execute(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
 }
 
-final class DefaultFetchShopmenusCategoryListUseCase: FetchShopMenusCategoryListUseCase {
+final class DefaultFetchOrderShopMenusGroupsFromShopUseCase: FetchOrderShopMenusGroupsFromShopUseCase {
     
     let repository: ShopRepository
     

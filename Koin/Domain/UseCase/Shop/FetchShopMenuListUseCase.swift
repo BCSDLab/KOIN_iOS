@@ -9,7 +9,6 @@ import Combine
 
 protocol FetchShopMenuListUseCase {
     func execute(shopId: Int) -> AnyPublisher<[MenuCategory], Error>
-    func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error>
 }
 
 final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
@@ -24,14 +23,5 @@ final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
         return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDTO in
             menuDTO.menuCategories ?? []
         }.eraseToAnyPublisher()
-    }
-    func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
-        return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDTO in
-            let menuCategories = menuDTO.menuCategories ?? [] 
-            return menuCategories.map {
-                OrderShopMenus(from: $0)
-            }
-        }
-        .eraseToAnyPublisher()
     }
 }

@@ -32,13 +32,13 @@ final class ShopDetailViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     
     private let fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?
-    private let fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?
     private let fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?
+    private let fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?
     
-    private let fetchShopSummaryUseCase: FetchShopSummaryUseCase?
-    private let fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase?
-    private let fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase?
-    private let fetchShopDataUseCase: DefaultFetchShopDataUseCase?
+    private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase?
+    private let fetchOrderShopMenusGroupsFromShopUseCase: FetchOrderShopMenusGroupsFromShopUseCase?
+    private let fetchOrderShopMenusFromShopUseCase: FetchOrderShopMenusFromShopUseCase?
+    private let fetchShopDataUseCase: FetchShopDataUseCase?
     
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
     private let fetchCartUseCase: FetchCartUseCase?
@@ -50,7 +50,7 @@ final class ShopDetailViewModel {
     private let shopId: Int?
     private let isFromOrder: Bool
     
-    // MARK: - Initializer
+    // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
          fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase,
@@ -68,20 +68,22 @@ final class ShopDetailViewModel {
         self.resetCartUseCase = resetCartUseCase
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
-        self.fetchShopSummaryUseCase = nil
-        self.fetchShopmenusCategoryListUseCase = nil
-        self.fetchShopMenuListUseCase = nil
+        self.fetchOrderShopSummaryFromShopUseCase = nil
+        self.fetchOrderShopMenusGroupsFromShopUseCase = nil
+        self.fetchOrderShopMenusFromShopUseCase = nil
         self.fetchShopDataUseCase = nil
         self.shopId = nil
     }
-    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
-         fetchShopmenusCategoryListUseCase: DefaultFetchShopmenusCategoryListUseCase,
-         fetchShopMenuListUseCase: DefaultFetchShopMenuListUseCase,
+    // MARK: - Initializer from Shop
+    init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
+         fetchOrderShopMenusGroupsFromShopUseCase: DefaultFetchOrderShopMenusGroupsFromShopUseCase,
+         fetchOrderShopMenusFromShopUseCase: DefaultFetchOrderShopMenusFromShopUseCase,
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
          shopId: Int) {
-        self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
-        self.fetchShopmenusCategoryListUseCase = fetchShopmenusCategoryListUseCase
-        self.fetchShopMenuListUseCase = fetchShopMenuListUseCase
+        
+        self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
+        self.fetchOrderShopMenusGroupsFromShopUseCase = fetchOrderShopMenusGroupsFromShopUseCase
+        self.fetchOrderShopMenusFromShopUseCase = fetchOrderShopMenusFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.shopId = shopId
         self.isFromOrder = false
@@ -157,7 +159,7 @@ extension ShopDetailViewModel {
 
     // MARK: - Shop UseCase
     private func fetchShopSummary(shopId: Int) {
-        fetchShopSummaryUseCase?.execute(id: shopId)
+        fetchOrderShopSummaryFromShopUseCase?.execute(id: shopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 guard let isFromOrder = self?.isFromOrder else { return }
@@ -167,7 +169,7 @@ extension ShopDetailViewModel {
     }
     
     private func fetchShopmenusCategoryList(shopId: Int) {
-        fetchShopmenusCategoryListUseCase?.execute(shopId: shopId)
+        fetchOrderShopMenusGroupsFromShopUseCase?.execute(shopId: shopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopMenusCategory in
                 self?.outputSubject.send(.updateMenusGroups(shopMenusCategory))
@@ -176,7 +178,7 @@ extension ShopDetailViewModel {
     }
     
     private func fetchShopMenuList(shopId: Int) {
-        fetchShopMenuListUseCase?.execute(shopId: shopId)
+        fetchOrderShopMenusFromShopUseCase?.execute(shopId: shopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopMenus in
                 self?.outputSubject.send(.updateMenus(shopMenus))
