@@ -20,6 +20,7 @@ final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        clipsToBounds = true
         configureView()
     }
     required init?(coder: NSCoder) {
