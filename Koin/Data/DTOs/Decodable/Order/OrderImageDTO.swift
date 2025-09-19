@@ -1,5 +1,5 @@
 //
-//  OrderImageDTO.swift
+//  OrderImageDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/14/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderImageDTO: Codable {
+struct OrderImageDto: Codable {
     let imageUrl: String
     let isThumbnail: Bool
 

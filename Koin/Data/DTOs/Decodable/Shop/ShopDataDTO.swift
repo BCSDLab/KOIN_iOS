@@ -1,5 +1,5 @@
 //
-//  ShopDataDTO.swift
+//  ShopDataDto.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/15/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShopDataDTO: Decodable {
+struct ShopDataDto: Decodable {
     let address: String?
     let delivery: Bool?
     let deliveryPrice: Int

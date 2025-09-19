@@ -1,5 +1,5 @@
 //
-//  ShopEventDTO.swift
+//  ShopEventDto.swift
 //  koin
 //
 //  Created by 이은지 on 7/31/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderShopEventDTO: Decodable {
+struct OrderShopEventDto: Decodable {
     let orderableShopId: Int
     let shopId: Int
     let shopName: String
@@ -30,8 +30,8 @@ struct OrderShopEventDTO: Decodable {
     }
 }
 
-struct OrderShopEventListResponseDTO: Decodable {
-    let shopEvents: [OrderShopEventDTO]
+struct OrderShopEventListResponseDto: Decodable {
+    let shopEvents: [OrderShopEventDto]
 
     enum CodingKeys: String, CodingKey {
         case shopEvents = "shop_events"

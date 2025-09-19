@@ -20,7 +20,7 @@ struct OrderShopEvent {
 }
 
 extension OrderShopEvent {
-    init(dto: OrderShopEventDTO) {
+    init(dto: OrderShopEventDto) {
         self.orderableShopId = dto.orderableShopId
         self.shopId = dto.shopId
         self.shopName = dto.shopName

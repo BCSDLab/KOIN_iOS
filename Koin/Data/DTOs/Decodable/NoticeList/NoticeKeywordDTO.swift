@@ -1,5 +1,5 @@
 //
-//  NoticeKeysordDTO.swift
+//  NoticeKeysordDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct NoticeKeywordsDTO: Decodable {
-    let keywords: [NoticeKeywordDTO]
+struct NoticeKeywordsDto: Decodable {
+    let keywords: [NoticeKeywordDto]
     
     enum CodingKeys: String, CodingKey {
         case keywords = "keywords"
     }
 }
 
-struct NoticeKeywordDTO: Codable {
+struct NoticeKeywordDto: Codable {
     let id: Int?
     let keyword: String
     
@@ -25,6 +25,6 @@ struct NoticeKeywordDTO: Codable {
     }
 }
 
-struct NoticeRecommendedKeywordDTO: Decodable {
+struct NoticeRecommendedKeywordDto: Decodable {
     let keywords: [String]
 }

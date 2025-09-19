@@ -1,5 +1,5 @@
 //
-//  RelatedKeywordsDTO.swift
+//  RelatedKeywordsDto.swift
 //  koin
 //
 //  Created by 김나훈 on 11/14/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RelatedKeywordsDTO: Decodable {
+struct RelatedKeywordsDto: Decodable {
     let keywords: [Keyword]?
 }
 

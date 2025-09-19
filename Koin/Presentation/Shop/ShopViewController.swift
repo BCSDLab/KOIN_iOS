@@ -326,11 +326,11 @@ extension ShopViewController {
         categoryCollectionView.updateCategory(id)
     }
 
-    private func putImage(data: ShopCategoryDTO) {
+    private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
 
-    private func updateEventShops(_ eventShops: [EventDTO]) {
+    private func updateEventShops(_ eventShops: [EventDto]) {
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {

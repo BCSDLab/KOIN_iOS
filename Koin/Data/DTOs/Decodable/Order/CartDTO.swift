@@ -1,5 +1,5 @@
 //
-//  CartDTO.swift
+//  CartDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/16/25.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct CartDTO: Decodable {
+struct CartDto: Decodable {
     let shopName: String?
     let shopThumbnailImageUrl: String?
     let orderableShopId: Int?
     let isDeliveryAvailable, isTakeoutAvailable: Bool
     let shopMinimumOrderAmount: Int
-    let items: [CartItemDTO]
+    let items: [CartItemDto]
     let itemsAmount, deliveryFee, totalAmount, finalPaymentAmount: Int
 
     enum CodingKeys: String, CodingKey {
@@ -31,13 +31,13 @@ struct CartDTO: Decodable {
     }
 }
 
-struct CartItemDTO: Decodable {
+struct CartItemDto: Decodable {
     let cartMenuItemId, orderableShopMenuId: Int
     let name: String
     let menuThumbnailImageUrl: String
     let quantity, totalAmount: Int
-    let price: CartPriceDTO
-    let options: [OptionDTO]
+    let price: CartPriceDto
+    let options: [OptionDto]
     let isModified: Bool
 
     enum CodingKeys: String, CodingKey {
@@ -52,7 +52,7 @@ struct CartItemDTO: Decodable {
     }
 }
 
-struct OptionDTO: Decodable {
+struct OptionDto: Decodable {
     let optionGroupName, optionName: String
     let optionPrice: Int
 
@@ -63,7 +63,7 @@ struct OptionDTO: Decodable {
     }
 }
 
-struct CartPriceDTO: Decodable {
+struct CartPriceDto: Decodable {
     let name: String?
     let price: Int
 }

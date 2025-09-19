@@ -1,5 +1,5 @@
 //
-//  ShuttleBusTimetableDTO.swift
+//  ShuttleBusTimetableDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 12/8/24.
@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ShuttleBusTimetableInfo
-struct ShuttleBusTimetableDTO: Decodable {
+struct ShuttleBusTimetableDto: Decodable {
     let id, region, routeName: String
     let routeType: ShuttleRouteType
     let subName: String?
@@ -42,8 +42,8 @@ struct RouteInfo: Decodable {
     }
 }
 
-extension ShuttleBusTimetableDTO {
-    func toDomain() -> ShuttleBusTimetableDTO {
+extension ShuttleBusTimetableDto {
+    func toDomain() -> ShuttleBusTimetableDto {
         let hasGoSchool = routeInfo.contains { $0.name == "등교" }
         let hasDropOffSchool = routeInfo.contains { $0.name == "하교" }
 
@@ -55,7 +55,7 @@ extension ShuttleBusTimetableDTO {
             }
         }
 
-        return ShuttleBusTimetableDTO(
+        return ShuttleBusTimetableDto(
             id: id,
             region: region,
             routeName: routeName,

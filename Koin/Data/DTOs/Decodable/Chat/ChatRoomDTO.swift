@@ -1,5 +1,5 @@
 //
-//  ChatRoomDTO.swift
+//  ChatRoomDto.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatRoomDTO: Codable {
+struct ChatRoomDto: Codable {
     let articleTitle, recentMessageContent: String
     let lostItemImageUrl: String?
     let unreadMessageCount: Int
@@ -24,7 +24,7 @@ struct ChatRoomDTO: Codable {
         case chatRoomId = "chat_room_id"
     }
 }
-extension ChatRoomDTO {
+extension ChatRoomDto {
     func toDomain() -> ChatRoomItem {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

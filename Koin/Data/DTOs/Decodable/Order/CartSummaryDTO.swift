@@ -1,5 +1,5 @@
 //
-//  CartSummaryDTO.swift
+//  CartSummaryDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/15/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CartSummaryDTO: Decodable {
+struct CartSummaryDto: Decodable {
     let orderableShopId: Int
     let shopMinimumOrderAmount: Int
     let cartItemsAmount: Int

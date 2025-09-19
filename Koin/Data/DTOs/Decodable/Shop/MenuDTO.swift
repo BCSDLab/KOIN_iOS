@@ -1,5 +1,5 @@
 //
-//  MenuDTO.swift
+//  MenuDto.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/15/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MenuDTO: Codable {
+struct MenuDto: Codable {
     let count: Int
     let menuCategories: [MenuCategory]?
 

@@ -1,5 +1,5 @@
 //
-//  SemesterDTO.swift
+//  SemesterDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/31/24.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct SemesterDTO: Decodable {
+struct SemesterDto: Decodable {
     let id: Int
     let semester: String
 }
 
 
-struct MySemesterDTO: Codable {
+struct MySemesterDto: Codable {
     let userID: Int
     let semesters: [String]
 
@@ -23,12 +23,12 @@ struct MySemesterDTO: Codable {
     }
 }
 
-struct SemestersDTO: Codable {
+struct SemestersDto: Codable {
     let semesters: [String: [Semester]]
     func toDomain() -> [FrameData] {
             return semesters.map { semester, frames in
-                let frameDTOs = frames.map { FrameDTO(id: $0.id, timetableName: $0.timetableName, isMain: $0.isMain) }
-                return FrameData(semester: semester, frame: frameDTOs)
+                let frameDtos = frames.map { FrameDto(id: $0.id, timetableName: $0.timetableName, isMain: $0.isMain) }
+                return FrameData(semester: semester, frame: frameDtos)
             }
         }
 }

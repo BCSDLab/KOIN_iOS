@@ -23,7 +23,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
     
     // MARK: - Output
     enum Output {
-        case putImage(ShopCategoryDTO)
+        case putImage(ShopCategoryDto)
         case changeFilteredOrderShops([OrderShop], Int)
         case changeFilteredShops([OrderShop], Int)
         case updateEventShops([OrderShopEvent])

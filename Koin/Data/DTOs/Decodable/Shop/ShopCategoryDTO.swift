@@ -1,5 +1,5 @@
 //
-//  ShopCategoryDTO.swift
+//  ShopCategoryDto.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/12/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShopCategoryDTO: Codable {
+struct ShopCategoryDto: Codable {
     var totalCount: Int
     var shopCategories: [ShopCategory]
 

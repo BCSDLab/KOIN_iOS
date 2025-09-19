@@ -1,5 +1,5 @@
 //
-//  TokenDTO.swift
+//  TokenDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/17/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TokenDTO: Decodable {
+struct TokenDto: Decodable {
     let refreshToken: String
     let token: String
     

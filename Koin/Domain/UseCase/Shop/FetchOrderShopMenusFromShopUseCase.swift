@@ -20,8 +20,8 @@ final class DefaultFetchOrderShopMenusFromShopUseCase: FetchOrderShopMenusFromSh
     }
     
     func execute(shopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
-        return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDTO in
-            let menuCategories = menuDTO.menuCategories ?? [] 
+        return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDto in
+            let menuCategories = menuDto.menuCategories ?? [] 
             return menuCategories.map {
                 OrderShopMenus(from: $0)
             }

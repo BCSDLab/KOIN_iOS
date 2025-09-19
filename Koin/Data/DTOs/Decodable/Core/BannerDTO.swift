@@ -1,11 +1,11 @@
 //
-//  BannerDTO.swift
+//  BannerDto.swift
 //  koin
 //
 //  Created by 김나훈 on 4/1/25.
 //
 
-struct BannerDTO: Codable {
+struct BannerDto: Codable {
     let count: Int
     let banners: [Banner]
 }

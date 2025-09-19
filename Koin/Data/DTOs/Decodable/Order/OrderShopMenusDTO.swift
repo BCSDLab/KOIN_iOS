@@ -1,5 +1,5 @@
 //
-//  OrderShopMenusDTO.swift
+//  OrderShopMenusDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/13/25.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct OrderShopMenusDTO: Decodable {
+struct OrderShopMenusDto: Decodable {
     let menuGroupId: Int
     let menuGroupName: String
-    let menus: [OrderShopMenuDTO]
+    let menus: [OrderShopMenuDto]
     
     enum CodingKeys: String, CodingKey {
         case menuGroupId = "menu_group_id"
@@ -19,13 +19,13 @@ struct OrderShopMenusDTO: Decodable {
     }
 }
 
-struct OrderShopMenuDTO: Decodable {
+struct OrderShopMenuDto: Decodable {
     let id: Int
     let name: String
     let description: String?
     let thumbnailImage: String?
     let isSoldOut: Bool
-    let prices: [PriceDTO]
+    let prices: [PriceDto]
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -37,7 +37,7 @@ struct OrderShopMenuDTO: Decodable {
     }
 }
 
-struct PriceDTO: Decodable {
+struct PriceDto: Decodable {
     let id: Int
     let name: String?
     let price: Int

@@ -13,7 +13,7 @@ struct OrderImage {
 }
 
 extension OrderImage {    
-    init(from dto: OrderImageDTO) {
+    init(from dto: OrderImageDto) {
         self.imageUrl = dto.imageUrl
         self.isThumbnail = dto.isThumbnail
     }

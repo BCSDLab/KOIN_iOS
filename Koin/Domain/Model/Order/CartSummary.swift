@@ -15,7 +15,7 @@ struct CartSummary {
 
 extension CartSummary {
     
-    init(from dto: CartSummaryDTO){
+    init(from dto: CartSummaryDto){
         self.shopMinimumOrderAmount = dto.shopMinimumOrderAmount
         self.cartItemsAmount = dto.cartItemsAmount
         self.isAvailable = dto.isAvailable

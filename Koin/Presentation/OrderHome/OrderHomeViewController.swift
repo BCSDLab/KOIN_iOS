@@ -297,7 +297,7 @@ extension OrderHomeViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    private func putImage(data: ShopCategoryDTO) {
+    private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     

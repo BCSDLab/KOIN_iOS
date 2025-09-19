@@ -79,9 +79,9 @@ class NetworkService {
     
     func refreshToken() -> AnyPublisher<Void, ErrorResponse> {
         return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? "")))
-            .map { (tokenDTO: TokenDTO) -> Void in
-                KeychainWorker.shared.create(key: .access, token: tokenDTO.token)
-                KeychainWorker.shared.create(key: .refresh, token: tokenDTO.refreshToken)
+            .map { (tokenDto: TokenDto) -> Void in
+                KeychainWorker.shared.create(key: .access, token: tokenDto.token)
+                KeychainWorker.shared.create(key: .refresh, token: tokenDto.refreshToken)
                 return ()
             }
             .catch { error -> AnyPublisher<Void, ErrorResponse> in

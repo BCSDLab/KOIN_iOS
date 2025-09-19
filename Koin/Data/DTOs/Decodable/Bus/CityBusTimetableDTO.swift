@@ -1,5 +1,5 @@
 //
-//  CityBusTimetableDTO.swift
+//  CityBusTimetableDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 7/29/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CityBusTimetableDTO: Decodable {
+struct CityBusTimetableDto: Decodable {
     let updatedAt: String?
     let busInfo: CityBusInfo
     let busTimetables: [CityBusTimetable]?
@@ -40,7 +40,7 @@ struct CityBusTimetable: Decodable {
     }
 }
 
-extension CityBusTimetableDTO {
+extension CityBusTimetableDto {
     func toDomain() -> BusTimetableInfo {
         var arrivalInfos: [BusArrivalInfo] = []
         var updatedAtText: String = ""

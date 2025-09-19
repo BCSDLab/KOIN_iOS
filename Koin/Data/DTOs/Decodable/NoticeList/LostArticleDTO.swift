@@ -1,5 +1,5 @@
 //
-//  LostArticleDTO.swift
+//  LostArticleDto.swift
 //  koin
 //
 //  Created by 김나훈 on 1/15/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LostArticleDTO: Codable {
+struct LostArticleDto: Codable {
     let articles: [Article]?
     let totalCount, currentCount, totalPage, currentPage: Int
 

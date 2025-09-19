@@ -52,7 +52,7 @@ final class EventShopCollectionViewCell: UICollectionViewCell {
         eventTextLabel.text = ""
     }
 
-    func configure(_ shop: EventDTO) {
+    func configure(_ shop: EventDto) {
         updateEventText(shopName: shop.shopName)
         shopId = shop.shopId
 

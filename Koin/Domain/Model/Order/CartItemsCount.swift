@@ -11,7 +11,7 @@ struct CartItemsCount {
     let totalQuantity: Int
 }
 extension CartItemsCount {
-    init(from dto: CartItemsCountDTO) {
+    init(from dto: CartItemsCountDto) {
         self.totalQuantity = dto.totalQuantity
     }
 }

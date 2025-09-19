@@ -93,7 +93,7 @@ final class ShopDataPageViewController: UIPageViewController, UIPageViewControll
         reviewListViewController.setReviewList(review, shopId, shopName, fetchStandard, isMine, currentPage, totalPage, disappear)
     }
     
-    func setReviewStatistic(_ statistic: StatisticsDTO) {
+    func setReviewStatistic(_ statistic: StatisticsDto) {
         reviewListViewController.setReviewStatistics(statistics: statistic)
     }
     

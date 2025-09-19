@@ -21,7 +21,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
     enum Output {
         case updateHotKeyWord([String])
         case updateRecentSearchedWord([RecentSearchedWordInfo])
-        case updateSearchedrsult([NoticeArticleDTO], Bool, Bool)
+        case updateSearchedrsult([NoticeArticleDto], Bool, Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShuttleBusRoutesUseCase {
-    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error>
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, Error>
 }
 
 final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
@@ -18,13 +18,13 @@ final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDTO, Error> {
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, Error> {
         return busRepository.fetchShuttleRouteList().map { [weak self] routeList in
-            return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDTO(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
+            return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDto(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
         }.eraseToAnyPublisher()
     }
 
-    private func filterByShuttleRouteType(busTimetableInfo: ShuttleRouteDTO, shuttleRouteType: ShuttleRouteType) -> ShuttleRouteDTO {
+    private func filterByShuttleRouteType(busTimetableInfo: ShuttleRouteDto, shuttleRouteType: ShuttleRouteType) -> ShuttleRouteDto {
         if shuttleRouteType == .overall {
             return busTimetableInfo
         }
@@ -37,6 +37,6 @@ final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
             return RouteRegion(region: region.region, routes: filteredRoutes)
         }.filter { !$0.routes.isEmpty }
         
-        return ShuttleRouteDTO(routeRegions: filteredRegions, semesterInfo: busTimetableInfo.semesterInfo)
+        return ShuttleRouteDto(routeRegions: filteredRegions, semesterInfo: busTimetableInfo.semesterInfo)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  BusCourseDTO.swift
+//  BusCourseDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 2024/04/07.

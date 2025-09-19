@@ -130,7 +130,7 @@ final class ReviewListViewController: UIViewController {
         print("\(currentPage) \(totalPage)")
     }
     
-    func setReviewStatistics(statistics: StatisticsDTO) {
+    func setReviewStatistics(statistics: StatisticsDto) {
         totalScoreLabel.text = "\(statistics.averageRating)"
         totalScoreView.rating = statistics.averageRating
         scoreChartCollectionView.setStatistics(statistics)

@@ -1,12 +1,12 @@
 //
-//  LandDTO.swift
+//  LandDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/16/24.
 //  Nullable 2024.04.26
 
 import Foundation
-struct LandDTO: Decodable {
+struct LandDto: Decodable {
     let lands: [Land]?
 }
 

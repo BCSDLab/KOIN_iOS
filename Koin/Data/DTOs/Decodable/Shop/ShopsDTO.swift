@@ -1,5 +1,5 @@
 //
-//  StoreDTO.swift
+//  StoreDto.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/12/24.
@@ -7,18 +7,18 @@
 
 import Foundation
 
-struct ShopsDTO: Decodable {
+struct ShopsDto: Decodable {
     let count: Int
-    var shops: [ShopDTO]?
+    var shops: [ShopDto]?
 }
 
-extension ShopsDTO {
+extension ShopsDto {
     func toDomain() -> [Shop] {
         return shops?.map { $0.toDomain() } ?? []
     }
 }
 
-struct ShopDTO: Decodable {
+struct ShopDto: Decodable {
     let categoryIds: [Int]
     let delivery: Bool
     let id: Int
@@ -49,7 +49,7 @@ struct ShopDTO: Decodable {
     }
 }
 
-extension ShopDTO {
+extension ShopDto {
     func toDomain() -> Shop {
         return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, phone: phone, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [], images: images)
     }

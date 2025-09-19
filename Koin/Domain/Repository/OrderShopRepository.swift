@@ -11,7 +11,7 @@ import Combine
 protocol OrderShopRepository {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEvent], Error>
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
     func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error>
     func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error>

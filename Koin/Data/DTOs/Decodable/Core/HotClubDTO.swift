@@ -1,5 +1,5 @@
 //
-//  HotClubDTO.swift
+//  HotClubDto.swift
 //  koin
 //
 //  Created by 김나훈 on 6/13/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HotClubDTO: Codable {
+struct HotClubDto: Codable {
     let clubId: Int
     let name: String
     let imageUrl: String

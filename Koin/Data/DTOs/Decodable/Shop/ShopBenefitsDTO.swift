@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShopBenefitsDTO: Decodable {
+struct ShopBenefitsDto: Decodable {
     let benefits: [Benefit]?
 }
 

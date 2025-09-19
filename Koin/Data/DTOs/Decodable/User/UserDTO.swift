@@ -1,5 +1,5 @@
 //
-//  UserDTO.swift
+//  UserDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/20/24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserDTO: Decodable, Equatable {
+struct UserDto: Decodable, Equatable {
     let id: Int?
     let loginId: String?
     let anonymousNickname: String?

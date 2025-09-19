@@ -21,7 +21,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     enum Output {
         case showToastMessage(String, Bool)
         case showToast(String, Bool, Request)
-        case showProfile(UserDTO)
+        case showProfile(UserDto)
         case showDeptDropDownList([String])
     }
     
@@ -37,8 +37,8 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private lazy var revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
-    private(set) var userData: UserDTO? = nil
-    @Published var modifyUserData: UserDTO? = nil
+    private(set) var userData: UserDto? = nil
+    @Published var modifyUserData: UserDto? = nil
     @Published var phoneNumberSuccess: Bool = true
     @Published var nicknameSuccess: Bool = true
     @Published private(set) var isFormValid: Bool = false

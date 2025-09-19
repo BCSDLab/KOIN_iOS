@@ -1,5 +1,5 @@
 //
-//  CoopShopDTO.swift
+//  CoopShopDto.swift
 //  koin
 //
 //  Created by 김나훈 on 7/19/24.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct CoopShopDTO: Decodable {
+struct CoopShopDto: Decodable {
     let id: Int
     let name, semester: String
-    let opens: [CoopOpenDTO]?
+    let opens: [CoopOpenDto]?
     let phone, location: String
     let remarks: String?
     let updatedAt: String
@@ -34,7 +34,7 @@ struct CoopShopDTO: Decodable {
     }
 }
 
-struct CoopOpenDTO: Decodable {
+struct CoopOpenDto: Decodable {
     let dayOfWeek: DayOfWeek
     let type: MealType
     let openTime, closeTime: String

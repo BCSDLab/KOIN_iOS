@@ -1,5 +1,5 @@
 //
-//  ShopImageDTO.swift
+//  ShopImageDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/14/25.
@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Image
-struct ShopImageDTO: Decodable {
+struct ShopImageDto: Decodable {
     let imageUrl: String
     let isThumbnail: Bool
 

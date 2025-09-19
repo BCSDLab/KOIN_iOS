@@ -1,5 +1,5 @@
 //
-//  ShopMenusCategoryDTO.swift
+//  ShopMenusCategoryDto.swift
 //  koin
 //
 //  Created by 홍기정 on 9/15/25.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct ShopMenusCategoryDTO: Decodable {
+struct ShopMenusCategoryDto: Decodable {
     let count: Int
-    let menuCategories: [ShopMenuCategoryDTO]
+    let menuCategories: [ShopMenuCategoryDto]
 
     enum CodingKeys: String, CodingKey {
         case count
@@ -18,7 +18,7 @@ struct ShopMenusCategoryDTO: Decodable {
 }
 
 // MARK: - MenuCategory
-struct ShopMenuCategoryDTO: Decodable {
+struct ShopMenuCategoryDto: Decodable {
     let id: Int
     let name: String
 }

@@ -1,5 +1,5 @@
 //
-//  LandDetailDTO.swift
+//  LandDetailDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/17/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LandDetailDTO: Decodable {
+struct LandDetailDto: Decodable {
     let optElectronicDoorLocks, optTv: Bool
     let monthlyFee: String?
     let optElevator, optWaterPurifier, optWasher: Bool

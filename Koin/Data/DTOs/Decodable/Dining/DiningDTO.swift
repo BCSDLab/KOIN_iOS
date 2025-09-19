@@ -1,5 +1,5 @@
 //
-//  DiningDTO.swift
+//  DiningDto.swift
 //  Koin
 //
 //  Created by 김나훈 on 3/9/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DiningDTO: Decodable {
+struct DiningDto: Decodable {
     let id: Int
     let date: String
     let type: DiningType

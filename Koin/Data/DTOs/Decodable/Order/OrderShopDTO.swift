@@ -1,5 +1,5 @@
 //
-//  OrderShopDTO.swift
+//  OrderShopDto.swift
 //  koin
 //
 //  Created by 이은지 on 7/7/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderShopDTO: Codable {
+struct OrderShopDto: Codable {
     let shopId: Int
     let orderableShopId: Int
     let name: String
@@ -21,7 +21,7 @@ struct OrderShopDTO: Codable {
     let maximumDeliveryTip: Int
     let isOpen: Bool
     let categoryIds: [Int]
-    let images: [OrderImageDTO]?
+    let images: [OrderImageDto]?
     let openStatus: String
 
     enum CodingKeys: String, CodingKey {
@@ -43,7 +43,7 @@ struct OrderShopDTO: Codable {
     }
 }
 
-struct OpenInfoDTO: Codable {
+struct OpenInfoDto: Codable {
     let dayOfWeek: String
     let closed: Bool
     let openTime: String?

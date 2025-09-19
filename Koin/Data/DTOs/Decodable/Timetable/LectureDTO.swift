@@ -1,5 +1,5 @@
 //
-//  LectureDTO.swift
+//  LectureDto.swift
 //  koin
 //
 //  Created by 김나훈 on 3/31/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LectureDTO: Codable {
+struct LectureDto: Codable {
     let timetableFrameID: Int?
     let timetable: [Timetable]?
     let grades: Int?
@@ -20,7 +20,7 @@ struct LectureDTO: Codable {
     }
 }
 
-extension LectureDTO {
+extension LectureDto {
     func toDomain() -> [LectureData] {
            return timetable?.map { timetable in
                LectureData(id: timetable.id, name: timetable.classTitle, professor: timetable.professor ?? "", classTime: timetable.classInfos?.first?.classTime ?? [], grades: timetable.grades)

@@ -1,11 +1,11 @@
 //
-//  ClubCategoriesDTO.swift
+//  ClubCategoriesDto.swift
 //  koin
 //
 //  Created by 김나훈 on 6/13/25.
 //
 
-struct ClubCategoriesDTO: Decodable {
+struct ClubCategoriesDto: Decodable {
     let clubCategories: [ClubCategory]
 
     enum CodingKeys: String, CodingKey {

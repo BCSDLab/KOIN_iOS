@@ -1,5 +1,5 @@
 //
-//  BusSearchDTO.swift
+//  BusSearchDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 2024/04/03.
@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Welcome
-struct BusSearchDTO: Decodable {
+struct BusSearchDto: Decodable {
     let depart: BusPlace
     let arrival: BusPlace
     let departDate, departTime: String
@@ -34,7 +34,7 @@ struct BusSchedule: Decodable {
     }
 }
 
-extension BusSearchDTO {
+extension BusSearchDto {
     func toDomain() -> SearchBusInfoResult {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

@@ -1,5 +1,5 @@
 //
-//  ChatDetailDTO.swift
+//  ChatDetailDto.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatDetailDTO: Codable {
+struct ChatDetailDto: Codable {
     let userId: Int
     let userNickname, content, timestamp: String
     let isImage: Bool
@@ -20,7 +20,7 @@ struct ChatDetailDTO: Codable {
     }
 }
 
-extension ChatDetailDTO {
+extension ChatDetailDto {
     func toDomain(currentUserId: Int) -> ChatMessage {
         return ChatMessage(
             senderNickname: userNickname,

@@ -1,5 +1,5 @@
 //
-//  SendVerificationCodeDTO.swift
+//  SendVerificationCodeDto.swift
 //  koin
 //
 //  Created by 이은지 on 4/28/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SendVerificationCodeDTO: Decodable {
+struct SendVerificationCodeDto: Decodable {
     let target: String
     let totalCount, remainingCount, currentCount: Int
 

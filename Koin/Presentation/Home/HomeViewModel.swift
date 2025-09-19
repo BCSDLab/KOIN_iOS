@@ -29,14 +29,14 @@ final class HomeViewModel: ViewModelProtocol {
     
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
-        case updateNoticeBanners([NoticeArticleDTO], ((String, String), Int)?)
-        case putImage(ShopCategoryDTO)
+        case updateNoticeBanners([NoticeArticleDto], ((String, String), Int)?)
+        case putImage(ShopCategoryDto)
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case showForceModal
-        case updateBanner(BannerDTO, AssignAbTestResponse)
-        case setHotClub(HotClubDTO)
-        case setClubCategories(ClubCategoriesDTO)
+        case updateBanner(BannerDto, AssignAbTestResponse)
+        case setHotClub(HotClubDto)
+        case setClubCategories(ClubCategoriesDto)
     }
     
     // MARK: - Properties

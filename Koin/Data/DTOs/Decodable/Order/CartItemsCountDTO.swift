@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CartItemsCountDTO: Decodable {
+struct CartItemsCountDto: Decodable {
     let itemTypeCount: Int
     let totalQuantity: Int
 

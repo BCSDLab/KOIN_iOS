@@ -27,10 +27,10 @@ struct Price {
 }
 
 extension OrderShopMenus {
-    init(from dto: OrderShopMenusDTO) {
+    init(from dto: OrderShopMenusDto) {
         self.menuGroupName = dto.menuGroupName
-        self.menus = dto.menus.map { orderShopMenuDTO in
-            OrderShopMenu(from: orderShopMenuDTO)
+        self.menus = dto.menus.map { orderShopMenuDto in
+            OrderShopMenu(from: orderShopMenuDto)
         }
     }
     init(from dto: MenuCategory) {
@@ -46,14 +46,14 @@ extension OrderShopMenus {
     }
 }
 extension OrderShopMenu {
-    init(from dto: OrderShopMenuDTO) {
+    init(from dto: OrderShopMenuDto) {
         self.id = dto.id
         self.name = dto.name
         self.description = dto.description
         self.thumbnailImage = dto.thumbnailImage
         self.isSoldOut = dto.isSoldOut
-        self.prices = dto.prices.map { priceDTO in
-            Price(from: priceDTO)
+        self.prices = dto.prices.map { priceDto in
+            Price(from: priceDto)
         }
     }
     init(from dto: Menu) {
@@ -76,7 +76,7 @@ extension OrderShopMenu {
 }
 
 extension Price {
-    init(from dto: PriceDTO) {
+    init(from dto: PriceDto) {
         self.name = dto.name
         self.price = dto.price
     }

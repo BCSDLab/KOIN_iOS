@@ -1,5 +1,5 @@
 //
-//  NoticeListDTO.swift
+//  NoticeListDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.
@@ -8,8 +8,8 @@
 import Foundation
 import SwiftSoup
 
-struct NoticeListDTO: Decodable {
-    let articles: [NoticeArticleDTO]?
+struct NoticeListDto: Decodable {
+    let articles: [NoticeArticleDto]?
     let totalCount, currentCount, totalPage, currentPage: Int
     
     enum CodingKeys: String, CodingKey {
@@ -21,7 +21,7 @@ struct NoticeListDTO: Decodable {
     }
 }
 
-struct NoticeArticleDTO: Decodable {
+struct NoticeArticleDto: Decodable {
     let id, boardId: Int
     let title: String?
     let author: String?
@@ -33,7 +33,7 @@ struct NoticeArticleDTO: Decodable {
     let content: String?
     let updatedAt: String?
     let url: String?
-    let attachments: [NoticeAttachmentDTO]?
+    let attachments: [NoticeAttachmentDto]?
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String
@@ -54,7 +54,7 @@ struct NoticeArticleDTO: Decodable {
     }
 }
 
-struct NoticeAttachmentDTO: Decodable {
+struct NoticeAttachmentDto: Decodable {
     let id: Int
     let name, url, createdAt, updatedAt: String
     
@@ -65,31 +65,31 @@ struct NoticeAttachmentDTO: Decodable {
     }
 }
 
-extension NoticeListDTO {
-    func toDomain() -> NoticeListDTO {
-        var newArticles: [NoticeArticleDTO] = []
+extension NoticeListDto {
+    func toDomain() -> NoticeListDto {
+        var newArticles: [NoticeArticleDto] = []
         if let articles = articles {
             for article in articles {
                 newArticles.append(article.toDomainWithChangedDate())
             }
         }
-        return NoticeListDTO(articles: newArticles, totalCount: totalCount, currentCount: currentCount, totalPage: totalPage, currentPage: currentPage)
+        return NoticeListDto(articles: newArticles, totalCount: totalCount, currentCount: currentCount, totalPage: totalPage, currentPage: currentPage)
     }
 }
 
-extension NoticeArticleDTO {
+extension NoticeArticleDto {
     func toDomain() -> NoticeDataInfo {
         return NoticeDataInfo(title: title ?? "", boardId: boardId, content: content ?? "", author: author ?? "-", hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
     }
     
-    func toDomainWithChangedDate() -> NoticeArticleDTO {
+    func toDomainWithChangedDate() -> NoticeArticleDto {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let date = dateFormatter.date(from: registeredAt) ?? Date()
         let newDate = date.formatDateToMMDDE()
         let newTitle = title?.replacingOccurrences(of: "\n", with: "")
 
-        return NoticeArticleDTO(
+        return NoticeArticleDto(
             id: id,
             boardId: boardId,
             title: newTitle,

@@ -1,5 +1,5 @@
 //
-//  ShuttleRouteDTO.swift
+//  ShuttleRouteDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 12/8/24.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - ShuttleRouteDTO
-struct ShuttleRouteDTO: Decodable {
+// MARK: - ShuttleRouteDto
+struct ShuttleRouteDto: Decodable {
     let routeRegions: [RouteRegion]
     let semesterInfo: SemesterInfo
 

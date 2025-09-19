@@ -21,8 +21,8 @@ final class DefaultFetchOrderShopMenusGroupsFromShopUseCase: FetchOrderShopMenus
     
     func execute(shopId: Int) -> AnyPublisher<OrderShopMenusGroups, any Error> {
         repository.fetchShopMenusCategoryList(shopId: shopId)
-            .map { shopMenusCategoryDTO in
-                OrderShopMenusGroups(from: shopMenusCategoryDTO)
+            .map { shopMenusCategoryDto in
+                OrderShopMenusGroups(from: shopMenusCategoryDto)
             }
             .eraseToAnyPublisher()
     }

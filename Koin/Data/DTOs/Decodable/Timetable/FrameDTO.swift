@@ -1,5 +1,5 @@
 //
-//  FrameDTO.swift
+//  FrameDto.swift
 //  koin
 //
 //  Created by 김나훈 on 11/20/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FrameDTO: Decodable {
+struct FrameDto: Decodable {
     let id: Int
     var timetableName: String
     var isMain: Bool

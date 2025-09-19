@@ -1,14 +1,14 @@
 //
-//  ReviewsDTO.swift
+//  ReviewsDto.swift
 //  koin
 //
 //  Created by 김나훈 on 7/8/24.
 //
 
-struct ReviewsDTO: Decodable {
+struct ReviewsDto: Decodable {
     let totalCount, currentCount, totalPage, currentPage: Int
-    let statistics: StatisticsDTO
-    let reviews: [ReviewDTO]
+    let statistics: StatisticsDto
+    let reviews: [ReviewDto]
 
     enum CodingKeys: String, CodingKey {
         case totalCount = "total_count"
@@ -19,13 +19,13 @@ struct ReviewsDTO: Decodable {
     }
 }
 
-struct MyReviewDTO: Decodable {
+struct MyReviewDto: Decodable {
     let count: Int
-    let reviews: [ReviewDTO]
+    let reviews: [ReviewDto]
 }
 
 // MARK: - Review
-struct ReviewDTO: Decodable {
+struct ReviewDto: Decodable {
     let reviewId, rating: Int
     let nickName, content: String
     let imageUrls: [String]
@@ -48,13 +48,13 @@ struct ReviewDTO: Decodable {
     }
 }
 
-extension MyReviewDTO {
+extension MyReviewDto {
     func toDomain(shopId: Int) -> [Review] {
         return self.reviews.map { $0.toDomain(shopId: shopId) }
     }
 }
 
-struct OneReviewDTO: Decodable {
+struct OneReviewDto: Decodable {
     let reviewId, rating: Int
     let nickName, content: String
     let imageUrls: [String]
@@ -74,7 +74,7 @@ struct OneReviewDTO: Decodable {
     }
 }
 
-struct StatisticsDTO: Decodable {
+struct StatisticsDto: Decodable {
     let averageRating: Double
     let ratings: [String: Int]
 
@@ -84,7 +84,7 @@ struct StatisticsDTO: Decodable {
     }
 }
 
-extension ReviewDTO {
+extension ReviewDto {
     func toDomain(shopId: Int) -> Review {
         return Review(
             nickName: nickName,
@@ -102,7 +102,7 @@ extension ReviewDTO {
     }
 }
 
-extension ReviewsDTO {
+extension ReviewsDto {
     func toDomain(shopId: Int) -> ShopReview {
         return ShopReview(
             reviewStatistics: statistics,

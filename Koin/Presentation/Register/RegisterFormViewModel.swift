@@ -42,7 +42,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showIdHttpResult(String, SceneColorAsset)
         case showNicknameHttpResult(String, SceneColorAsset)
         case changeSendVerificationButtonStatus
-        case sendVerificationCodeSuccess(response: SendVerificationCodeDTO)
+        case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case correctVerificationCode
         case successCheckDuplicatedId
         case showDeptDropDownList([String])

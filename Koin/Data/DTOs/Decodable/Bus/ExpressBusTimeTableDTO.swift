@@ -1,5 +1,5 @@
 //
-//  BusTimeTableDTO.swift
+//  BusTimeTableDto.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 2024/04/03.
@@ -13,7 +13,7 @@ struct ExpressTimetable: Decodable {
     let charge: Int
 }
 
-struct ExpressTimetableDTO: Decodable {
+struct ExpressTimetableDto: Decodable {
     let expressTimeTable: [ExpressTimetable]?
     let updatedAt: String?
     
@@ -24,7 +24,7 @@ struct ExpressTimetableDTO: Decodable {
     
 }
 
-extension ExpressTimetableDTO {
+extension ExpressTimetableDto {
     func toDomain() -> BusTimetableInfo {
         var updatedAtText: String = ""
         var arrivalInfos: [BusArrivalInfo] = []

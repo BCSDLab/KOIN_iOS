@@ -11,7 +11,7 @@ struct Cart {
     let orderableShopId: Int?
 }
 extension Cart {
-    init(from dto: CartDTO) {
+    init(from dto: CartDto) {
         self.orderableShopId = dto.orderableShopId
     }
 }

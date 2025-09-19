@@ -1,5 +1,5 @@
 //
-//  LostArticleDetailDTO.swift
+//  LostArticleDetailDto.swift
 //  koin
 //
 //  Created by 김나훈 on 1/15/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LostArticleDetailDTO: Decodable {
+struct LostArticleDetailDto: Decodable {
     let id, boardId: Int
     let type: LostItemType?
     let category, foundPlace, foundDate: String

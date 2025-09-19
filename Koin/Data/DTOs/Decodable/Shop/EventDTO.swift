@@ -1,5 +1,5 @@
 //
-//  EventsDTO.swift
+//  EventsDto.swift
 //  koin
 //
 //  Created by 김나훈 on 4/9/24.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct EventsDTO: Decodable {
-    let events: [EventDTO]?
+struct EventsDto: Decodable {
+    let events: [EventDto]?
 }
 
-struct EventDTO: Decodable {
+struct EventDto: Decodable {
     let shopId: Int
     let shopName: String
     let eventId: Int

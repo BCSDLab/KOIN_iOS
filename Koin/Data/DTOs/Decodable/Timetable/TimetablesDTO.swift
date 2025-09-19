@@ -1,5 +1,5 @@
 //
-//  TimeTableDTO.swift
+//  TimeTableDto.swift
 //  koin
 //
 //  Created by 김나훈 on 4/1/24.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct TimetablesDTO: Decodable {
+struct TimetablesDto: Decodable {
     let totalGrades: Int?
     let semester: String
     let grades: Int?
-    let timetable: [TimetableDTO]
+    let timetable: [TimetableDto]
     
     enum CodingKeys: String, CodingKey {
         case totalGrades = "total_grades"
@@ -19,7 +19,7 @@ struct TimetablesDTO: Decodable {
     }
 }
 
-struct TimetableDTO: Codable {
+struct TimetableDto: Codable {
     let regularNumber, code, designScore: String
     let classTime: [Int]
     let grades, classTitle: String

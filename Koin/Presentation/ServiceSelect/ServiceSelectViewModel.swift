@@ -16,7 +16,7 @@ final class ServiceSelectViewModel: ViewModelProtocol {
     }
     enum Output {
         case disappearProfile
-        case updateProfile(UserDTO)
+        case updateProfile(UserDto)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

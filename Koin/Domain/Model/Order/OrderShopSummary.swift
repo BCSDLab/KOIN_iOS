@@ -19,7 +19,7 @@ struct OrderShopSummary {
 }
 
 extension OrderShopSummary {    
-    init(from dto: OrderShopSummaryDTO) {
+    init(from dto: OrderShopSummaryDto) {
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = dto.isDeliveryAvailable
@@ -35,7 +35,7 @@ extension OrderShopSummary {
             OrderImage(from: orderImages)
         }
     }
-    init(from dto: ShopSummaryDTO) {
+    init(from dto: ShopSummaryDto) {
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = false

@@ -15,7 +15,7 @@ final class DefaultTimetableRepository: TimetableRepository {
         self.service = service
     }
     
-    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse> {
+    func fetchAllFrames() -> AnyPublisher<SemestersDto, ErrorResponse> {
         service.fetchAllFrames()
     }
     
@@ -31,7 +31,7 @@ final class DefaultTimetableRepository: TimetableRepository {
         service.deleteLecture(frameId: frameId, lectureId: lectureId)
     }
     
-    func fetchMySemester() -> AnyPublisher<MySemesterDTO, ErrorResponse> {
+    func fetchMySemester() -> AnyPublisher<MySemesterDto, ErrorResponse> {
         service.fetchMySemester()
     }
     
@@ -39,15 +39,15 @@ final class DefaultTimetableRepository: TimetableRepository {
         service.fetchLectureList(semester: semester)
     }
     
-    func fetchSemester() -> AnyPublisher<[SemesterDTO], Error> {
+    func fetchSemester() -> AnyPublisher<[SemesterDto], Error> {
         service.fetchSemester()
     }
     
-    func fetchDeptList() -> AnyPublisher<[DeptDTO], Error> {
+    func fetchDeptList() -> AnyPublisher<[DeptDto], Error> {
         return service.fetchDeptList()
     }
     
-    func fetchFrame(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse> {
+    func fetchFrame(semester: String) -> AnyPublisher<[FrameDto], ErrorResponse> {
         service.fetchFrame(semester: semester)
     }
     
@@ -55,27 +55,27 @@ final class DefaultTimetableRepository: TimetableRepository {
         service.deleteFrame(id: id)
     }
     
-    func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse> {
+    func createFrame(semester: String) -> AnyPublisher<FrameDto, ErrorResponse> {
         service.createFrame(semester: semester)
     }
     
-    func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse> {
+    func modifyFrame(frame: FrameDto) -> AnyPublisher<FrameDto, ErrorResponse> {
         service.modifyFrame(frame: frame)
     }
     
-    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDto, ErrorResponse> {
         service.fetchLecture(frameId: frameId)
     }
     
-    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse> {
         service.modifyLecture(request: request)
     }
     
-    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse> {
         service.postLecture(request: request)
     }
     
-    func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse> {
+    func rollbackFrame(id: Int) -> AnyPublisher<LectureDto, ErrorResponse> {
         service.rollbackFrame(id: id)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  NotiAgreementDTO.swift
+//  NotiAgreementDto.swift
 //  koin
 //
 //  Created by 김나훈 on 4/18/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NotiAgreementDTO: Decodable {
+struct NotiAgreementDto: Decodable {
     var isPermit: Bool?
     var subscribes: [Subscribe]?
     

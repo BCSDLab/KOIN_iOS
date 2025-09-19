@@ -9,62 +9,62 @@ import Alamofire
 import Combine
 
 protocol OrderService {
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
-    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error>
-    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error>
-    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error>
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error>
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDto], Error>
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDto], Error>
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDto, Error>
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDto, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
-    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error>
-    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error>
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error>
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
     func resetCart() -> AnyPublisher<Void, Error>
-    func fetchCart() -> AnyPublisher<CartDTO, Error>
+    func fetchCart() -> AnyPublisher<CartDto, Error>
 }
 
 final class DefaultOrderService: OrderService {
     
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error> {
         return request(.fetchOrderShopList(requestModel))
             .eraseToAnyPublisher()
     }
     
-    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDto], Error> {
         return request(.fetchOrderEventShop)
-            .map { (response: OrderShopEventListResponseDTO) in
+            .map { (response: OrderShopEventListResponseDto) in
                 response.shopEvents
             }
             .eraseToAnyPublisher()
     }
     
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return request(.searchShop(text))
     }
     
-    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDTO], Error> {
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDto], Error> {
         return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
-    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDTO, Error> {
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDto, Error> {
         return request(.fetchOrderShopMenusGroups(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
-    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDTO, Error> {
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDto, Error> {
         return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         request(.fetchOrderInProgress)
-            .map { (dtos: [OrderInProgressDTO]) in
+            .map { (dtos: [OrderInProgressDto]) in
                 dtos.map { $0.toEntity() }
             }
             .eraseToAnyPublisher()
     }
-    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDTO, Error> {
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error> {
         request(.fetchCartSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
-    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDTO, Error> {
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error> {
         request(.fetchCartItemsCount)
             .eraseToAnyPublisher()
     }
@@ -90,9 +90,9 @@ final class DefaultOrderService: OrderService {
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
-    func fetchCart() -> AnyPublisher<CartDTO, Error> {
+    func fetchCart() -> AnyPublisher<CartDto, Error> {
         request(.fetchCart(parameter: "DELIVERY"))
-            .catch { [weak self] error -> AnyPublisher<CartDTO, Error> in
+            .catch { [weak self] error -> AnyPublisher<CartDto, Error> in
                 guard let self = self else {
                     return Fail(error: error).eraseToAnyPublisher()
                 }

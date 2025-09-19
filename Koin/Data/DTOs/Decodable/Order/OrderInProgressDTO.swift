@@ -1,5 +1,5 @@
 //
-//  OrderInProgressDTO.swift
+//  OrderInProgressDto.swift
 //  koin
 //
 //  Created by 이은지 on 9/8/25.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct OrderInProgressDTO: Decodable {
+struct OrderInProgressDto: Decodable {
     let id: Int
-    let orderType: OrderInProgressTypeDTO
+    let orderType: OrderInProgressTypeDto
     let orderableShopName: String
     let orderableShopThumbnail: String
     let estimatedAt: String?
-    let orderStatus: OrderInProgressStatusDTO
+    let orderStatus: OrderInProgressStatusDto
     let orderTitle: String
     let totalAmount: Int
     
@@ -30,7 +30,7 @@ struct OrderInProgressDTO: Decodable {
 }
 
 // 주문 타입
-enum OrderInProgressTypeDTO: Decodable {
+enum OrderInProgressTypeDto: Decodable {
     case delivery
     case takeout
 
@@ -46,7 +46,7 @@ enum OrderInProgressTypeDTO: Decodable {
 }
 
 // 주문 상태
-enum OrderInProgressStatusDTO: String, Decodable {
+enum OrderInProgressStatusDto: String, Decodable {
     case confirming = "CONFIRMING"
     case cooking = "COOKING"
     case packaged = "PACKAGED"
@@ -56,7 +56,7 @@ enum OrderInProgressStatusDTO: String, Decodable {
     case canceled = "CANCELED"
 }
 
-extension OrderInProgressDTO {
+extension OrderInProgressDto {
     func toEntity() -> OrderInProgress {
         let timeText = estimatedAt?.toKoreanTimeString() ?? "시간 미정"
 

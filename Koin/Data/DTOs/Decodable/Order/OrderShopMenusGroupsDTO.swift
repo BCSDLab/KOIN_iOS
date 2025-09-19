@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct OrderShopMenusGroupsDTO: Decodable {
+struct OrderShopMenusGroupsDto: Decodable {
     let count: Int
-    let menuGroups: [MenuGroupDTO]
+    let menuGroups: [MenuGroupDto]
     
     enum CodingKeys: String, CodingKey {
     case count
@@ -17,7 +17,7 @@ struct OrderShopMenusGroupsDTO: Decodable {
     }
 }
 
-struct MenuGroupDTO: Decodable {
+struct MenuGroupDto: Decodable {
     let id: Int
     let name: String
 }
