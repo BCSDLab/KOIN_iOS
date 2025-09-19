@@ -12,7 +12,6 @@ import SnapKit
 final class ShopDetailBottomSheet: UIView {
     
     // MARK: - Properties
-    var orderableShopId: Int = 0
     var shopMinimumOrderAmount: Int = 0
     var cartItemsAmount: Int = 0
     var isAvailable: Bool = false
@@ -54,7 +53,7 @@ final class ShopDetailBottomSheet: UIView {
         
         self.isDeliveryAvailableLabel.text = cartSummary.shopMinimumOrderAmount < cartSummary.cartItemsAmount ? "배달 가능" : "배달 불가"
         
-        self.orderableShopId = cartSummary.orderableShopId
+        self.isAvailable = cartSummary.isAvailable
     }
     func configure(count: Int) {
         switch count {

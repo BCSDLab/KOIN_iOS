@@ -11,7 +11,6 @@ import Combine
 final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
-    private var menuGroupId: [Int] = []
     private var menuGroupName: [String] = []
     private var ids: [[Int]] = []
     private var names: [[String]] = []
@@ -33,7 +32,6 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     
     func configure(_ orderShopMenus: [OrderShopMenus]) {
         orderShopMenus.forEach {
-            self.menuGroupId.append($0.menuGroupId)
             self.menuGroupName.append($0.menuGroupName)
             
             var ids: [Int] = []

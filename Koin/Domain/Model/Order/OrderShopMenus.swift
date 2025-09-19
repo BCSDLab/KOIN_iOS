@@ -8,7 +8,6 @@
 import Foundation
 
 struct OrderShopMenus {
-    let menuGroupId: Int
     let menuGroupName: String
     let menus: [OrderShopMenu]
 }
@@ -23,21 +22,18 @@ struct OrderShopMenu {
 }
 
 struct Price {
-    let id: Int?
     let name: String?
     let price: Int
 }
 
 extension OrderShopMenus {
     init(from dto: OrderShopMenusDTO) {
-        self.menuGroupId = dto.menuGroupId
         self.menuGroupName = dto.menuGroupName
         self.menus = dto.menus.map { orderShopMenuDTO in
             OrderShopMenu(from: orderShopMenuDTO)
         }
     }
     init(from dto: MenuCategory) {
-        self.menuGroupId = dto.id
         self.menuGroupName = dto.name
         
         guard let menus = dto.menus else {
@@ -49,7 +45,6 @@ extension OrderShopMenus {
         }
     }
 }
-
 extension OrderShopMenu {
     init(from dto: OrderShopMenuDTO) {
         self.id = dto.id
@@ -69,7 +64,7 @@ extension OrderShopMenu {
         self.isSoldOut = false
         
         if dto.isSingle, let singlePrice = dto.singlePrice {
-            self.prices = [Price(id: dto.id, name: dto.name, price: singlePrice)]
+            self.prices = [Price(name: dto.name, price: singlePrice)]
         } else if let optionPrices = dto.optionPrices {
             self.prices = optionPrices.map { optionPrice in
                 Price(from: optionPrice)
@@ -82,12 +77,10 @@ extension OrderShopMenu {
 
 extension Price {
     init(from dto: PriceDTO) {
-        self.id = dto.id
         self.name = dto.name
         self.price = dto.price
     }
     init(from dto: OptionPrice) {
-        self.id = nil
         self.name = dto.option
         self.price = dto.price
     }

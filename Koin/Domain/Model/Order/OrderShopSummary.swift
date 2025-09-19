@@ -8,21 +8,18 @@
 import Foundation
 
 struct OrderShopSummary {
-    let shopId: Int
-    let orderableShopId: Int?
+    let images: [OrderImage]
     let name: String
-    let introduction: String?
+    let ratingAverage: Double
+    let reviewCount: Int
     let isDeliveryAvailable, isTakeoutAvailable, payCard, payBank: Bool
     let minimumOrderAmount: Int
-    let ratingAverage: Double
-    let reviewCount, minimumDeliveryTip, maximumDeliveryTip: Int
-    let images: [OrderImage]
+    let minimumDeliveryTip, maximumDeliveryTip: Int
+    let introduction: String?
 }
 
 extension OrderShopSummary {    
     init(from dto: OrderShopSummaryDTO) {
-        self.shopId = dto.shopId
-        self.orderableShopId = dto.orderableShopId
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = dto.isDeliveryAvailable
@@ -39,8 +36,6 @@ extension OrderShopSummary {
         }
     }
     init(from dto: ShopSummaryDTO) {
-        self.shopId = dto.shopId
-        self.orderableShopId = nil
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = false
@@ -53,8 +48,7 @@ extension OrderShopSummary {
         self.minimumDeliveryTip = 0
         self.maximumDeliveryTip = 0
         self.images = dto.images.map {
-            OrderImage(imageUrl: $0.imageUrl,
-                       isThumbnail: $0.isThumbnail)
+            OrderImage(imageUrl: $0.imageUrl, isThumbnail: $0.isThumbnail)
         }
     }
 }
