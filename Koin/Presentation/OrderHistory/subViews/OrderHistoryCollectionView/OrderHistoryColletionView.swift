@@ -17,6 +17,7 @@ final class OrderHistoryCollectionView: UICollectionView {
     var onTapOrderInfoButton: ((Int) -> Void)?
     var onReachEnd: (() -> Void)?
     var onDidScroll: ((CGFloat) -> Void)?
+    
 
 
 

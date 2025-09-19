@@ -31,6 +31,11 @@ final class OrderHistoryViewController: UIViewController {
     private var shadowAlpha: CGFloat = 0
     private var isRefreshingNow = false
     
+    private let maxShadowAlpha: CGFloat = 0.6
+    private let activationOffset: CGFloat = 1.5
+    private let fadeDistance: CGFloat = 24.0
+    
+    
     init(viewModel: OrderHistoryViewModel, initialTab: Int = 0) {
         self.viewModel = viewModel
         self.initialTab = initialTab
@@ -202,7 +207,7 @@ final class OrderHistoryViewController: UIViewController {
         render()
         updateEmptyState()
         setupRefreshControl()
-        bindCollectionViewScroll()
+        
 
         orderHistorySegment.selectedSegmentIndex = initialTab
         changeSegmentLine(orderHistorySegment)
@@ -264,7 +269,7 @@ final class OrderHistoryViewController: UIViewController {
                     self.items = newItems
                     self.orderHistoryCollectionView.update(newItems)
                     self.updateEmptyState()
-                    self.refreshShadowForCurrentTab()
+                    self.updateTopShadow()
                     self.endRefreshIfNeeded()
                     
                 case .updatePreparing(let newItems):
@@ -500,6 +505,9 @@ extension OrderHistoryViewController {
         self.view.backgroundColor = UIColor.appColor(.newBackground)
         orderHistoryCollectionView.alwaysBounceVertical = true
         orderPrepareCollectionView.alwaysBounceVertical = true
+        orderHistoryCollectionView.onDidScroll = {[weak self] y in
+            self?.updateTopShadow(using: y)
+        }
     }
 }
 
@@ -520,7 +528,7 @@ extension OrderHistoryViewController{
             orderPrepareCollectionView.reloadData()
         }
         updateEmptyState()
-        refreshShadowForCurrentTab()
+        updateTopShadow()
     }
     
     private func updateResetVisibility() {
@@ -561,7 +569,7 @@ extension OrderHistoryViewController{
         topShadowView.isHidden = !isHistory || !emptyStateView.isHidden
         topShadowView.alpha = 0
         
-        refreshShadowForCurrentTab()
+        updateTopShadow()
     }
     
     private func updateEmptyState() {
@@ -618,7 +626,7 @@ extension OrderHistoryViewController{
             topShadowView.alpha = 0
             topShadowView.isHidden = true
         } else {
-            refreshShadowForCurrentTab()
+            updateTopShadow()
         }
     }
 
@@ -654,7 +662,7 @@ extension OrderHistoryViewController {
             self.updateSearchVisibility()
             self.updateEmptyState()
             self.view.layoutIfNeeded()
-            self.refreshShadowForCurrentTab()
+            self.updateTopShadow()
         })
     }
     
@@ -722,7 +730,7 @@ extension OrderHistoryViewController {
             self.searchDimView.isHidden = true
             self.barTrailingToCancel?.deactivate()
             self.barTrailingToSuperview.activate()
-            self.refreshShadowForCurrentTab()
+            self.updateTopShadow()
         }
     }
     
@@ -757,55 +765,39 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     //MARK: - ScrollSet
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard orderHistorySegment.selectedSegmentIndex == 0,
-              scrollView === orderHistoryCollectionView else { return }
-
-        guard emptyStateView.isHidden else {
-            topShadowView.alpha = 0
-            topShadowView.isHidden = true
-            return
-        }
-
-        let y = max(scrollView.contentOffset.y, 0)
-        let target = min(y / 12.0, 1.0)
-        setShadowAlphaSmooth(to: target)
+        guard scrollView === orderHistoryCollectionView else { return }
+        updateTopShadow(using: scrollView.contentOffset.y)
     }
     
-    private func refreshShadowForCurrentTab() {
-        let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
-        guard isHistory, emptyStateView.isHidden else {
+    private func updateTopShadow(using y: CGFloat? = nil, forceHide: Bool = false) {
+        let isHistoryTab = (orderHistorySegment.selectedSegmentIndex == 0)
+        let active = isHistoryTab && emptyStateView.isHidden && !forceHide
+
+        guard active else {
             shadowAlpha = 0
             topShadowView.alpha = 0
             topShadowView.isHidden = true
             return
         }
 
-        topShadowView.isHidden = false
-        let y = max(orderHistoryCollectionView.contentOffset.y, 0)
-        let target = min(y / 12.0, 1.0)
-        setShadowAlphaSmooth(to: target)
-    }
-    
-    private func setShadowAlphaSmooth(to target: CGFloat) {
-        let t = min(max(target, 0), 1)
-        shadowAlpha += (t - shadowAlpha) * 0.20
+        let yy = max(y ?? orderHistoryCollectionView.contentOffset.y, 0)
+        guard yy > activationOffset else {
+            shadowAlpha = 0
+            topShadowView.alpha = 0
+            topShadowView.isHidden = true
+            return
+        }
+        
+        let progress = min(yy / fadeDistance , 1.0)
+        let target = progress * maxShadowAlpha
+        
+        if topShadowView.isHidden {
+            topShadowView.isHidden = false
+        }
+        shadowAlpha += (target - shadowAlpha) * 0.20
         topShadowView.alpha = shadowAlpha
     }
-    
-    private func bindCollectionViewScroll() {
-        orderHistoryCollectionView.onDidScroll = { [weak self] y in
-            guard let self else { return }
-            guard self.orderHistorySegment.selectedSegmentIndex == 0,
-                  self.emptyStateView.isHidden else {
-                self.topShadowView.alpha = 0
-                self.topShadowView.isHidden = true
-                return
-            }
-            let yy = max(y, 0)
-            let target = min(yy / 12.0, 1.0)
-            self.setShadowAlphaSmooth(to: target)
-        }
-    }
+
 }
 
 private extension UICollectionView {
