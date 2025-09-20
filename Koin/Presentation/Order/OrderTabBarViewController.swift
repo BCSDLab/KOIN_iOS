@@ -223,6 +223,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     func goToHistory(initialSegment: Int) {
         let historyTabIndex = 2
         selectedIndex = historyTabIndex
+        updateNavigationTitle(for: historyTabIndex)
 
         guard let navigationViewController = viewControllers?[historyTabIndex] as? UINavigationController else { return }
 
@@ -231,6 +232,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         if let orderHistoryViewController = navigationViewController.viewControllers.first as? OrderHistoryViewController {
             orderHistoryViewController.loadViewIfNeeded()
             orderHistoryViewController.setInitialTab(initialSegment)
+            
         }
     }
 }

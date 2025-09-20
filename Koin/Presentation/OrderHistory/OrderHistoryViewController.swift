@@ -169,18 +169,8 @@ final class OrderHistoryViewController: UIViewController {
         setAddTarget()
         render()
         setupRefreshControl()
-        
-
         orderHistorySegment.selectedSegmentIndex = initialTab
         changeSegmentLine(orderHistorySegment)
-        
-        orderPrepareCollectionView.onLoadedIDs = { ids in
-            print("상점 id:", ids)
-        }
-        
-        orderHistoryCollectionView.onReachEnd = { [weak self] in
-            self?.inputSubject.send(.loadNextPage)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -222,7 +212,7 @@ final class OrderHistoryViewController: UIViewController {
     // MARK: - Bind
     private func bind() {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-
+        
         output
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
@@ -288,6 +278,11 @@ final class OrderHistoryViewController: UIViewController {
         emptyView.onTapAction = { [weak self] in
             self?.seeOrderHistoryButtonTapped()
         }
+        
+        orderHistoryCollectionView.onReachEnd = { [weak self] in
+            self?.inputSubject.send(.loadNextPage)
+        }
+        
         
         orderPrepareCollectionView.onTapOrderDetailButton = { [weak self] paymentId in
             self?.presentOrderResultModal(with: paymentId)
