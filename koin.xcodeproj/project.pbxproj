@@ -22,6 +22,7 @@
 		3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */; };
 		3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
+		3BACDF3E2E7D21B0004351E3 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BACDF3D2E7D21B0004351E3 /* EmptyStateView.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -747,6 +748,7 @@
 		3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
 		3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
+		3BACDF3D2E7D21B0004351E3 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -3685,6 +3687,7 @@
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
 				3B3CAE712E719CD500BBAEEE /* OrderHistoryViewModel.swift */,
 				D838F2A52E78100C0084C230 /* OrderResultWebViewController.swift */,
+				3BACDF3D2E7D21B0004351E3 /* EmptyStateView.swift */,
 			);
 			path = OrderHistory;
 			sourceTree = "<group>";
@@ -4245,6 +4248,7 @@
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				D224213E2C897DF600E8B480 /* ChangePasswordViewModel.swift in Sources */,
 				D27DD0972BA608310081FD36 /* MenuCollectionView.swift in Sources */,
+				3BACDF3E2E7D21B0004351E3 /* EmptyStateView.swift in Sources */,
 				D2B219312D665ACC00EAF5B1 /* ChatHistoryTableView.swift in Sources */,
 				83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */,
 				D283A4DD2CECA2A900C238BA /* AddClassCollectionViewCell.swift in Sources */,
