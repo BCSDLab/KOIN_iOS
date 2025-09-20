@@ -8,7 +8,7 @@
 import Combine
 
 protocol ResetCartUseCase {
-    func execute() -> AnyPublisher<Void, Error>
+    func execute() -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultResetCartUseCase: ResetCartUseCase {
@@ -19,7 +19,7 @@ final class DefaultResetCartUseCase: ResetCartUseCase {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<Void, Error> {
+    func execute() -> AnyPublisher<Void, ErrorResponse> {
         repository.resetCart()
             .eraseToAnyPublisher()
     }

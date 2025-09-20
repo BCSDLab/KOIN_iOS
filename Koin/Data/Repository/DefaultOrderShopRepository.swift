@@ -75,7 +75,7 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .eraseToAnyPublisher()
     }
     
-    func resetCart() -> AnyPublisher<Void, Error> {
+    func resetCart() -> AnyPublisher<Void, ErrorResponse> {
         service.resetCart()
             .eraseToAnyPublisher()
     }

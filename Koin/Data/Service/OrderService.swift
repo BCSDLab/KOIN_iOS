@@ -18,11 +18,13 @@ protocol OrderService {
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
-    func resetCart() -> AnyPublisher<Void, Error>
     func fetchCart() -> AnyPublisher<CartDto, Error>
+    func resetCart() -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultOrderService: OrderService {
+    
+    let networkService = NetworkService()
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error> {
         return request(.fetchOrderShopList(requestModel))
@@ -69,25 +71,8 @@ final class DefaultOrderService: OrderService {
             .eraseToAnyPublisher()
     }
     
-    func resetCart() -> AnyPublisher<Void, Error> {
-        let url = Bundle.main.baseUrl + "/cart/reset"
-        var headers = HTTPHeaders()
-        if let token = KeychainWorker.shared.read(key: .access) {
-            headers.add(name: "Authorization", value: "Bearer \(token)")
-        }
-        
-        return AF.request(url, method: .delete, headers: headers)
-            .validate(statusCode: 200..<300)
-            .publishData(emptyResponseCodes: [200])
-            .tryMap { response in
-                switch response.result {
-                case .success:
-                    return ()
-                case .failure(let afError):
-                    throw afError
-                }
-            }
-            .mapError { $0 as Error }
+    func resetCart() -> AnyPublisher<Void, ErrorResponse> {
+        return requestWithResponse(.resetCart)
             .eraseToAnyPublisher()
     }
     func fetchCart() -> AnyPublisher<CartDto, Error> {
@@ -126,5 +111,37 @@ final class DefaultOrderService: OrderService {
             }
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
+    }
+    private func requestWithResponse(_ api: OrderAPI) -> AnyPublisher<Void, ErrorResponse> {
+        return AF.request(api)
+            .validate(statusCode: 200..<300)
+            .publishData(emptyResponseCodes: [200])
+            .tryMap { response in
+                switch response.result {
+                case .success:
+                    return ()
+                case .failure(let afError):
+                    guard let response = response.response else {
+                        throw URLError(.badServerResponse)
+                    }
+                    switch response.statusCode {
+                    case 401:
+                        throw ErrorResponse(code: "401", message: "")
+                    default:
+                        let afError = AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: response.statusCode))
+                        throw afError
+                    }
+                }
+            }
+            .mapError { error -> ErrorResponse in
+                self.handleError(error)
+            }
+            .eraseToAnyPublisher()
+    }
+    private func handleError(_ error: Error) -> ErrorResponse {
+        if let errorResponse = error as? ErrorResponse {
+            return errorResponse
+        }
+        return ErrorResponse(code: "", message: "알 수 없는 에러")
     }
 }
