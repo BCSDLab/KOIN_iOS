@@ -239,7 +239,7 @@ extension OrderPrepareCollectionViewCell {
         explanationLabel.text = order.explanationText
         storeNameLabel.text = order.orderableShopName
         menuNameLabel.text = order.orderTitle
-        menuPriceLabel.text = "\(NumberFormatter.krCurrencyNoFraction.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)") 원"
+        menuPriceLabel.text = "\(NumberFormatter.krCurrencyNoFraction.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)")원"
         setEstimatedLabel(order.status.showEstimatedTime)
 
         if let url = URL(string: order.orderableShopThumbnail) {
