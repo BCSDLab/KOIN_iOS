@@ -124,6 +124,7 @@ extension ShopDetailViewController {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
+            // 기본정보
             case .updateInfoView(let orderShopSummary, let isFromOrder):
                 self?.imagesCollectionView.configure(orderImage: orderShopSummary.images)
                 self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
@@ -136,6 +137,7 @@ extension ShopDetailViewController {
                 self?.updateTableViewHeight(orderShopMenus)
             case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
                 self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
+            // 장바구니
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.isHidden = !cartSummary.isAvailable
                 self?.bottomSheet.configure(cartSummary: cartSummary)
