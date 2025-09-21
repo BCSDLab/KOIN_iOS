@@ -77,7 +77,12 @@ final class OrderHistoryViewModel {
                     self.fetchOrderHistory()
                     
                 case .applyQuery(let query):
+                    var query = query
+                    if query.keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty{
+                        query.keyword = self.currentQuery.keyword
+                    }
                     self.currentQuery = query
+                    
                     self.outputSubject.send(.scrollToTop)
                     self.fetchOrderHistory()
                     

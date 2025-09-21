@@ -25,7 +25,10 @@ final class OrderHistoryViewController: UIViewController {
     private var emptyTopToFilter: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
-    private var isSearching: Bool { !currentQuery.keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    private var appliedQuery: String = ""
+    private var isSearching: Bool {
+        !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     private var shadowAlpha: CGFloat = 0
     private var isRefreshingNow = false
     
@@ -227,6 +230,8 @@ final class OrderHistoryViewController: UIViewController {
                     self.syncUI()
                     
                 case .showEmpty:
+                    self.items = []
+                    self.orderHistoryCollectionView.update([])
                     self.syncUI()
                     self.endRefreshIfNeeded()
 
@@ -256,12 +261,8 @@ final class OrderHistoryViewController: UIViewController {
             searchBar.onReturn = { [weak self] text in
                 guard let self = self else { return }
                 let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                self.appliedQuery = trimmed
                 self.inputSubject.send(.search(trimmed))
-
-                self.orderHistoryCollectionView.setContentOffset(.zero, animated: false)
-                self.shadowAlpha = 0
-                self.topShadowView.alpha = 0
-                self.topShadowView.isHidden = true
                 self.deactivateDimOnly()
         }
     }
@@ -580,31 +581,34 @@ extension OrderHistoryViewController {
     }
     
     @objc private func searchTapped(_ sender: UITextField) {
-        barTrailingToSuperview.deactivate()
-        barTrailingToCancel?.activate()
-        
-        view.bringSubviewToFront(searchDimView)
-        view.bringSubviewToFront(searchBar)
-        view.bringSubviewToFront(searchCancelButton)
-
-        searchCancelButton.isHidden = false
-        searchDimView.isHidden = false
-        searchBar.focus()
-        
         searchBar.becomeFirstResponder()
 
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
-                self.searchCancelButton.alpha = 1
-                self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-                self.view.layoutIfNeeded()
-            }
+        view.bringSubviewToFront(searchDimView)
+        barTrailingToSuperview.deactivate()
+        barTrailingToCancel?.activate()
+        searchCancelButton.isHidden = false
+        searchDimView.isHidden = false
+        
+        UIView.performWithoutAnimation {
+            view.layoutIfNeeded()
         }
+
+
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       options: [.curveEaseInOut],
+                       animations: {
+            self.searchCancelButton.alpha = 1
+            self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+            self.view.layoutIfNeeded()
+        })
+
     }
 
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
         searchBar.textField.text = ""
+        inputSubject.send(.search(""))
         
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
             self.searchCancelButton.alpha = 0
