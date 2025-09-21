@@ -5,9 +5,8 @@
 //  Created by JOOMINKYUNG on 12/7/24.
 //
 
-import SnapKit
-import Then
 import UIKit
+import SnapKit
 
 final class ManyBusTimetableCollectionViewHeaderCell: UICollectionViewCell {
     static let reuseIdentifier = "manyBusTimetableCollectionViewHeaderCell"
@@ -17,6 +16,7 @@ final class ManyBusTimetableCollectionViewHeaderCell: UICollectionViewCell {
         $0.textAlignment = .center
         $0.font = .appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral600)
+        $0.numberOfLines = 0
     }
     
     // MARK: - Initialization
@@ -29,8 +29,12 @@ final class ManyBusTimetableCollectionViewHeaderCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(busTimeNumber: String) {
-        busTimeNumberLabel.text = busTimeNumber
+    func configure(name: String, detail: String?) {
+        if let detail, !detail.isEmpty {
+            busTimeNumberLabel.text = "\(name)\n\(detail)"
+        } else {
+            busTimeNumberLabel.text = name
+        }
     }
 }
 
@@ -44,7 +48,7 @@ extension ManyBusTimetableCollectionViewHeaderCell {
     private func setUpConstraints() {
         busTimeNumberLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(22)
+            $0.centerY.equalToSuperview()
         }
     }
     
