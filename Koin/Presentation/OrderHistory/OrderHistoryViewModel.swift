@@ -22,7 +22,7 @@ final class OrderHistoryViewModel {
     }
 
     // MARK: Output
-    enum Event {
+    enum Output {
         case updateOrders([OrderHistory])
         case appendOrders([OrderHistory])
         case updatePreparing([OrderInProgress])
@@ -56,8 +56,8 @@ final class OrderHistoryViewModel {
     }
 
     // MARK: - Transform
-    func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Event, Never> {
-        let subject = PassthroughSubject<Event, Never>()
+    func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        let subject = PassthroughSubject<Output, Never>()
 
         let historyTrigger = input
             .filter {
@@ -75,11 +75,11 @@ final class OrderHistoryViewModel {
                 }
             }
         historyTrigger
-            .flatMap { [weak self] event -> AnyPublisher<(OrdersPage, Bool), Error> in
+            .flatMap { [weak self] Input -> AnyPublisher<(OrdersPage, Bool), Error> in
                 guard let self else {
                     return Fail(error: NSError(domain: "OrderVM", code: -1)).eraseToAnyPublisher()
                 }
-                switch event {
+                switch Input {
                 case .applyQuery(let query):
                     self.currentQuery = query
                     self.currentQuery.page = 1
@@ -93,7 +93,7 @@ final class OrderHistoryViewModel {
                         .eraseToAnyPublisher()
         
                 case .viewDidLoad, .refresh, .search:
-                    if case .search(let text) = event {
+                    if case .search(let text) = Input {
                         self.currentQuery.keyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
                     self.currentQuery.page = 1
@@ -125,7 +125,7 @@ final class OrderHistoryViewModel {
                     return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
                 }
             }
-            .map { [weak self] (page, isAppend) -> Event in
+            .map { [weak self] (page, isAppend) -> Output in
                 guard let self else { return .showEmpty(true) }
                 self.currentPageIndex = page.currentPage
                 self.totalPages = page.totalPage
@@ -143,9 +143,9 @@ final class OrderHistoryViewModel {
             }
             .catch { [weak self] err in
                 self?.isLoadingPage = false
-                return Just(Event.errorOccurred(err))
+                return Just(Output.errorOccurred(err))
             }
-            .merge(with: Just(Event.endRefreshing))
+            .merge(with: Just(Output.endRefreshing))
             .sink { subject.send($0) }
             .store(in: &subscriptions)
         preparingTrigger
@@ -155,8 +155,8 @@ final class OrderHistoryViewModel {
                 }
                 return self.orderService.fetchOrderInProgress()
             }
-            .map { Event.updatePreparing($0) }
-            .catch { _ in Just(Event.updatePreparing([])) }
+            .map { Output.updatePreparing($0) }
+            .catch { _ in Just(Output.updatePreparing([])) }
             .sink { subject.send($0) }
             .store(in: &subscriptions)
         input

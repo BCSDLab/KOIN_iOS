@@ -22,9 +22,9 @@ final class FilterBottomSheetViewController: UIViewController {
     private let container = UIView()
     private let body = UIStackView()
     private let bottomBar = UIStackView()
-    private let m3Button = FilteringButton()
-    private let m6Button = FilteringButton()
-    private let y1Button = FilteringButton()
+    private let threeMonthsButton = FilteringButton()
+    private let sixMonthButton = FilteringButton()
+    private let oneYearButton = FilteringButton()
     private let deliveryButton = FilteringButton()
     private let takeoutButton = FilteringButton()
     private let doneButton = FilteringButton()
@@ -158,15 +158,15 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - UI Function
     
     private func configureButtons(){
-        m3Button.setTitle("최근 3개월")
-        m6Button.setTitle("최근 6개월")
-        y1Button.setTitle("최근 1년")
+        threeMonthsButton.setTitle("최근 3개월")
+        sixMonthButton.setTitle("최근 6개월")
+        oneYearButton.setTitle("최근 1년")
         deliveryButton.setTitle("배달")
         takeoutButton.setTitle("포장")
         doneButton.setTitle("완료")
         cancelButton.setTitle("취소")
 
-        [m3Button, m6Button, y1Button,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
+        [threeMonthsButton, sixMonthButton, oneYearButton,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
                 $0.applyFilter(false)
                 changeSheetInButton($0)
             }
@@ -186,7 +186,7 @@ final class FilterBottomSheetViewController: UIViewController {
         }
         
         
-        [m3Button, m6Button, y1Button].forEach{
+        [threeMonthsButton, sixMonthButton, oneYearButton].forEach{
             periodRow.addArrangedSubview($0)
         }
         
@@ -301,7 +301,7 @@ final class FilterBottomSheetViewController: UIViewController {
     //MARK: - Bind
     
     private func bind() {
-        [m3Button, m6Button, y1Button].forEach {
+        [threeMonthsButton, sixMonthButton, oneYearButton].forEach {
             $0.addTarget(self, action: #selector(periodTapped(_:)), for: .touchUpInside)
         }
         [deliveryButton, takeoutButton].forEach {
@@ -312,7 +312,7 @@ final class FilterBottomSheetViewController: UIViewController {
         }
 
         // 3개월, 6개월 , 1년
-        [m3Button, m6Button, y1Button,
+        [threeMonthsButton, sixMonthButton, oneYearButton,
          deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -329,9 +329,9 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - Function
 
     private func render() {
-        m3Button.applyFilter(work.period == .last3Months)
-        m6Button.applyFilter(work.period == .last6Months)
-        y1Button.applyFilter(work.period == .last1Year)
+        threeMonthsButton.applyFilter(work.period == .last3Months)
+        sixMonthButton.applyFilter(work.period == .last6Months)
+        oneYearButton.applyFilter(work.period == .last1Year)
 
         deliveryButton.applyFilter(work.type == .delivery)
         takeoutButton.applyFilter(work.type == .takeout)
@@ -360,9 +360,9 @@ final class FilterBottomSheetViewController: UIViewController {
     
     @objc private func periodTapped(_ sender: FilteringButton) {
         let current = work.period
-        if sender === m3Button { work.period = (current == .last3Months) ? .none : .last3Months }
-        if sender === m6Button { work.period = (current == .last6Months) ? .none : .last6Months }
-        if sender === y1Button { work.period = (current == .last1Year)  ? .none : .last1Year  }
+        if sender === threeMonthsButton { work.period = (current == .last3Months) ? .none : .last3Months }
+        if sender === sixMonthButton { work.period = (current == .last6Months) ? .none : .last6Months }
+        if sender === oneYearButton { work.period = (current == .last1Year)  ? .none : .last1Year  }
         render()
     }
     

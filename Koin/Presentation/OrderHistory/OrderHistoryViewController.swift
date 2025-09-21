@@ -538,7 +538,7 @@ extension OrderHistoryViewController {
         let segmentCount = CGFloat(segment.numberOfSegments)
         let leadingDistance: CGFloat = CGFloat(segment.selectedSegmentIndex) * (UIScreen.main.bounds.width / segmentCount) + 7.5
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.orderHistoryTabClick, .click, <#T##Any#>))
+//        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.orderHistoryTabClick, .click, <#T##Any#>))
         
         
         UIView.animate(withDuration:0.2, animations: {

@@ -74,7 +74,9 @@ struct OrderHistoryQuery {
 extension OrderHistoryQuery {
     
     mutating func resetFilter() {
-        period = .none; status = .none; type = .none
+        period = .none
+        status = .none
+        type = .none
         page = 1
     }
     
