@@ -94,6 +94,10 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        
+        
 
         let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
@@ -143,7 +147,10 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
 
         let orderHistoryViewModel = OrderHistoryViewModel(
             fetchHistory: fetchOrderHistoryUseCase,
-            orderService: orderService
+            orderService: orderService,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+
         )
 
         let orderHistoryVC = OrderHistoryViewController(viewModel: orderHistoryViewModel)

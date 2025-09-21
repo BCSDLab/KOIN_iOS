@@ -25,9 +25,7 @@ final class OrderHistoryViewController: UIViewController {
     private var emptyTopToFilter: Constraint!
     private var barTrailingToSuperview: Constraint!
     private var barTrailingToCancel: Constraint!
-    
-    private var appliedQuery: String = ""
-    private var isSearching: Bool { !appliedQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    private var isSearching: Bool { !currentQuery.keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     private var shadowAlpha: CGFloat = 0
     private var isRefreshingNow = false
     
@@ -215,9 +213,9 @@ final class OrderHistoryViewController: UIViewController {
         
         output
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] event in
+            .sink { [weak self] output in
                 guard let self = self else { return }
-                switch event {
+                switch output {
                 case .updateOrders(let newItems):
                     self.items = newItems
                     self.orderHistoryCollectionView.update(newItems)
@@ -246,14 +244,19 @@ final class OrderHistoryViewController: UIViewController {
                     self.items.append(contentsOf: pageItems)
                     self.orderHistoryCollectionView.append(pageItems)
                     self.syncUI()
+                    
+                case .scrollToTop:
+                    if self.orderHistorySegment.selectedSegmentIndex == 0 {
+                        self.orderHistoryCollectionView.setContentOffset(.zero, animated: false)
+                    }
                 }
             }
             .store(in: &cancellables)
-        searchBar.onReturn = { [weak self] text in
-            guard let self = self else { return }
-                let trimmedQuery = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                self.appliedQuery = trimmedQuery
-                self.inputSubject.send(.search(trimmedQuery))
+            
+            searchBar.onReturn = { [weak self] text in
+                guard let self = self else { return }
+                let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                self.inputSubject.send(.search(trimmed))
 
                 self.orderHistoryCollectionView.setContentOffset(.zero, animated: false)
                 self.shadowAlpha = 0
@@ -602,8 +605,6 @@ extension OrderHistoryViewController {
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
         searchBar.textField.text = ""
-        appliedQuery = ""
-        inputSubject.send(.search(""))
         
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
             self.searchCancelButton.alpha = 0

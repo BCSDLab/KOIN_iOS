@@ -16,9 +16,10 @@ final class OrderHistoryViewModel {
         case applyQuery(OrderHistoryQuery)
         case search(String)
         case loadNextPage
-        case selectOrder(Int)
-        case tapReorder(Int)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        
+//        case selectOrder(Int)
+//        case tapReorder(Int)
+//        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
 
     // MARK: Output
@@ -30,6 +31,7 @@ final class OrderHistoryViewModel {
         case errorOccurred(Error)
         case endRefreshing
         case navigateToOrderDetail(Int)
+        case scrollToTop
     }
 
     // MARK: - properties
@@ -39,6 +41,8 @@ final class OrderHistoryViewModel {
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
 
     private var subscriptions = Set<AnyCancellable>()
+    private let outputSubject = PassthroughSubject<Output, Never>()
+
     private var currentQuery = OrderHistoryQuery()
     private var currentKeyword: String = ""
     
@@ -48,7 +52,9 @@ final class OrderHistoryViewModel {
     private var isLoadingPage: Bool = false
     private let pageSize: Int = 10
 
-    init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase) {
+    init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService, logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    ) {
         self.fetchHistory = fetchHistory
         self.orderService = orderService
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
@@ -57,122 +63,45 @@ final class OrderHistoryViewModel {
 
     // MARK: - Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        let subject = PassthroughSubject<Output, Never>()
-
-        let historyTrigger = input
-            .filter {
-                switch $0 {
-                case .viewDidLoad, .refresh, .applyQuery, .search, .loadNextPage: return true
-                default: return false
-                }
-            }
-
-        let preparingTrigger = input
-            .filter {
-                switch $0 {
-                case .viewDidLoad, .refresh: return true
-                default: return false
-                }
-            }
-        historyTrigger
-            .flatMap { [weak self] Input -> AnyPublisher<(OrdersPage, Bool), Error> in
-                guard let self else {
-                    return Fail(error: NSError(domain: "OrderVM", code: -1)).eraseToAnyPublisher()
-                }
-                switch Input {
+        input
+            .sink{ [weak self] input in
+                guard let self else { return }
+                
+                switch input {
+                case .viewDidLoad:
+                    self.fetchOrderPrepare()
+                    self.fetchOrderHistory()
+                    
+                case .refresh:
+                    self.fetchOrderPrepare()
+                    self.fetchOrderHistory()
+                    
                 case .applyQuery(let query):
                     self.currentQuery = query
-                    self.currentQuery.page = 1
-                    self.currentQuery.size = self.pageSize
-                    self.currentPageIndex = 1
-                    self.historyAccum = []
-                    self.isLoadingPage = true
+                    self.outputSubject.send(.scrollToTop)
+                    self.fetchOrderHistory()
                     
-                    return self.fetchHistory.execute(query: self.currentQuery)
-                        .map{($0,false)}
-                        .eraseToAnyPublisher()
-        
-                case .viewDidLoad, .refresh, .search:
-                    if case .search(let text) = Input {
-                        self.currentQuery.keyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                    }
-                    self.currentQuery.page = 1
-                    self.currentQuery.size = self.pageSize
-                    self.currentPageIndex = 1
-                    self.totalPages = 1
-                    self.historyAccum = []
-                    self.isLoadingPage = true
-
-                    return self.fetchHistory.execute(query: self.currentQuery)
-                        .map { ($0, false) }
-                        .eraseToAnyPublisher()
-
+                case .search(let text):
+                    self.search(text)
+                    self.outputSubject.send(.scrollToTop)
+                    
                 case .loadNextPage:
-                    guard !self.isLoadingPage, self.currentPageIndex < self.totalPages else {
-                        return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
-                    }
-                    self.isLoadingPage = true
+                    self.fetchNextPage()
                     
-                    self.currentQuery.page = self.currentPageIndex + 1
-                    self.currentQuery.size = self.pageSize
-
-
-                    return self.fetchHistory.execute(query: self.currentQuery)
-                        .map { ($0, true) }
-                        .eraseToAnyPublisher()
-
-                default:
-                    return Empty<(OrdersPage, Bool), Error>(completeImmediately: true).eraseToAnyPublisher()
+//                case .selectOrder(let id):
+//                    self.outputSubject.send(.navigateToOrderDetail(id))
+                    
+//                case .tapReorder(_):
+//                    <#code#>
+//                case .logEvent(_, _, _, _, _):
+//                    <#code#>
                 }
-            }
-            .map { [weak self] (page, isAppend) -> Output in
-                guard let self else { return .showEmpty(true) }
-                self.currentPageIndex = page.currentPage
-                self.totalPages = page.totalPage
-                self.isLoadingPage = false
+// 나중에 연결
 
-                let list = page.orders
-
-                if isAppend {
-                    self.historyAccum.append(contentsOf: list)
-                    return .appendOrders(list)
-                } else {
-                    self.historyAccum = list
-                    return list.isEmpty ? .showEmpty(true) : .updateOrders(list)
-                }
-            }
-            .catch { [weak self] err in
-                self?.isLoadingPage = false
-                return Just(Output.errorOccurred(err))
-            }
-            .merge(with: Just(Output.endRefreshing))
-            .sink { subject.send($0) }
-            .store(in: &subscriptions)
-        preparingTrigger
-            .flatMap { [weak self] _ -> AnyPublisher<[OrderInProgress], Error> in
-                guard let self else {
-                    return Fail(error: NSError(domain: "OrderVM", code: -2)).eraseToAnyPublisher()
-                }
-                return self.orderService.fetchOrderInProgress()
-            }
-            .map { Output.updatePreparing($0) }
-            .catch { _ in Just(Output.updatePreparing([])) }
-            .sink { subject.send($0) }
-            .store(in: &subscriptions)
-        input
-            .sink { event in
-                switch event {
-                case .selectOrder(let id):
-                    subject.send(.navigateToOrderDetail(id))
-                case .tapReorder:
-                    break
-                default:
-                    break
-                }
-            }
-            .store(in: &subscriptions)
-
-        return subject.eraseToAnyPublisher()
+                
+            }.store(in: &subscriptions)
+            
+        return outputSubject.eraseToAnyPublisher()
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
@@ -184,6 +113,104 @@ final class OrderHistoryViewModel {
             logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
         }
     }
+    
+}
+
+extension OrderHistoryViewModel{
+    
+    private func fetchOrderHistory() {
+        currentQuery.page = 1
+        currentQuery.size = pageSize
+        currentPageIndex = 1
+        totalPages = 1
+        historyAccum = []
+        isLoadingPage = true
+
+        fetchHistory.execute(query: currentQuery)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.isLoadingPage = false
+                if case let .failure(error) = completion {
+                    self.outputSubject.send(.errorOccurred(error))
+                }
+                self.outputSubject.send(.endRefreshing)
+            } receiveValue: { [weak self] page in
+                guard let self else { return }
+                self.currentPageIndex = page.currentPage
+                self.totalPages = page.totalPage
+
+                let list = page.orders
+                self.historyAccum = list
+                self.outputSubject.send(list.isEmpty ? .showEmpty(true) : .updateOrders(list))
+            }
+            .store(in: &subscriptions)
+    }
+
+    private func fetchNextPage() {
+        guard !isLoadingPage, currentPageIndex < totalPages else { return }
+        isLoadingPage = true
+        currentQuery.page = currentPageIndex + 1
+        currentQuery.size = pageSize
+
+        fetchHistory.execute(query: currentQuery)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.isLoadingPage = false
+                if case let .failure(error) = completion {
+                    self.outputSubject.send(.errorOccurred(error))
+                }
+            } receiveValue: { [weak self] page in
+                guard let self else { return }
+                self.currentPageIndex = page.currentPage
+                self.totalPages = page.totalPage
+                let list = page.orders
+                self.historyAccum.append(contentsOf: list)
+                self.outputSubject.send(.appendOrders(list))
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchOrderPrepare() {
+         orderService.fetchOrderInProgress()
+             .receive(on: DispatchQueue.main)
+             .sink { [weak self] completion in
+                 guard let self else { return }
+                 if case .failure = completion {
+                     self.outputSubject.send(.updatePreparing([]))
+                 }
+             } receiveValue: { [weak self] inProgress in
+                 self?.outputSubject.send(.updatePreparing(inProgress))
+             }
+             .store(in: &subscriptions)
+     }
+    
+    private func fetchFilter(period: OrderHistoryPeriod? = nil,
+                             status: OrderHistoryStatus? = nil,
+                             type: OrderHistoryType? = nil,
+                             keyword: String = ""){
+        currentQuery.apply(period: period , status: status , type: type, keyword: keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        )
+        
+        fetchOrderHistory()
+        fetchNextPage()
+    }
+    
+    private func search(_ text: String){
+        let keyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        currentQuery.apply(keyword: keyword)
+        fetchOrderHistory()
+        fetchNextPage()
+    }
+    
+    private func resetFilter(){
+        currentQuery.resetFilter()
+        currentQuery.keyword = ""
+        fetchOrderHistory()
+        fetchNextPage()
+    }
+    
     
 }
 
