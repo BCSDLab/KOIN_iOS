@@ -18,6 +18,7 @@ final class OrderHistoryViewModel {
         case loadNextPage
         case selectOrder(Int)
         case tapReorder(Int)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
 
     // MARK: Output
@@ -31,25 +32,27 @@ final class OrderHistoryViewModel {
         case navigateToOrderDetail(Int)
     }
 
-    // MARK: - Deps
+    // MARK: - properties
     private let fetchHistory: FetchOrderHistoryUseCase
     private let orderService: OrderService
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
 
-    // MARK: - State
     private var subscriptions = Set<AnyCancellable>()
     private var currentQuery = OrderHistoryQuery()
     private var currentKeyword: String = ""
     
-    // MARK: - Pagination
     private var historyAccum: [OrderHistory] = []
     private var currentPageIndex: Int = 1
     private var totalPages: Int = 1
     private var isLoadingPage: Bool = false
     private let pageSize: Int = 10
 
-    init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService) {
+    init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase) {
         self.fetchHistory = fetchHistory
         self.orderService = orderService
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
 
     // MARK: - Transform
@@ -171,6 +174,17 @@ final class OrderHistoryViewModel {
 
         return subject.eraseToAnyPublisher()
     }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if durationType != nil {
+            let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: nil, currentPage: nil, durationTime: "\(durationTime)")
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
+    }
+    
 }
 
 extension DateFormatter {
