@@ -305,11 +305,11 @@ extension OrderHistoryColletionViewCell {
     
     func configure(with order: OrderHistory) {
         stateLabel.text = stateText(order.status)
-        dayLabel.text = DateFormatter.orderKR.string(from: order.orderDate)
+        dayLabel.text = order.orderDate.formatDateToMDEEE()
         
         storeNameLabel.text = order.shopName
         menuNameLabel.text  = order.orderTitle
-        menuPriceLabel.text = "\(NumberFormatter.krCurrencyNoFraction.string(from: NSNumber(value: order.totalAmount)) ?? "\(order.totalAmount)")원"
+        menuPriceLabel.text = "\(order.totalAmount.formattedWithComma)원"
 
         menuImageView.kf.setImage(
             with: order.shopThumbnail,

@@ -215,27 +215,5 @@ extension OrderHistoryViewModel{
         fetchOrderHistory()
         fetchNextPage()
     }
-    
-    
 }
 
-extension DateFormatter {
-    static let orderKR: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "ko_KR")
-        f.timeZone = TimeZone(identifier: "Asia/Seoul")
-        f.dateFormat = "M월 d일 (E)"
-        return f
-    }()
-}
-
-extension NumberFormatter {
-    static let krCurrencyNoFraction: NumberFormatter = {
-        let nf = NumberFormatter()
-        nf.locale = Locale(identifier: "ko_KR")
-        nf.numberStyle = .decimal
-        nf.maximumFractionDigits = 0
-        nf.usesGroupingSeparator = true
-        return nf
-    }()
-}
