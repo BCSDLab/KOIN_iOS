@@ -1,5 +1,5 @@
 //
-//  ShopDetailMenuGroupTableViewHeaderView.swift
+//  ShopDetailTableViewHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/9/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailMenuGroupTableViewHeaderView: UITableViewHeaderFooterView {
+final class ShopDetailTableViewHeaderView: UITableViewHeaderFooterView {
     
     private let label = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 20)

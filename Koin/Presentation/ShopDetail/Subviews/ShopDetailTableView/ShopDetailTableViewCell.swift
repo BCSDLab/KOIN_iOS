@@ -1,5 +1,5 @@
 //
-//  ShopDetailMenuGroupTableViewCell.swift
+//  ShopDetailTableViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 9/9/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
+final class ShopDetailTableViewCell: UITableViewCell {
     
     // MARK: - Components
     private let labelsStackView = UIStackView().then {
@@ -235,7 +235,7 @@ final class ShopDetailMenuGroupTableViewCell: UITableViewCell {
     }
 }
 
-extension ShopDetailMenuGroupTableViewCell {
+extension ShopDetailTableViewCell {
     
     private func setUpShadow() {
         layer.masksToBounds = false

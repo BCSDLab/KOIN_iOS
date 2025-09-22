@@ -62,7 +62,7 @@ final class ShopDetailViewController: UIViewController {
         $0.isHidden = true
         $0.allowsMultipleSelection = false
     }
-    private let menuGroupTableView = ShopDetailMenuGroupTableView(frame: .zero, style: .grouped).then {
+    private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .grouped).then {
         $0.isScrollEnabled = false
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = .zero

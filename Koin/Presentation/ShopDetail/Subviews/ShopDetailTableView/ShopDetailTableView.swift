@@ -1,5 +1,5 @@
 //
-//  ShopDetailMenuGroupTableView.swift
+//  ShopDetailTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/8/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
     private var menuGroupName: [String] = []
@@ -60,7 +60,7 @@ final class ShopDetailMenuGroupTableView: UITableView, UITableViewDelegate, UITa
     }
 }
 
-extension ShopDetailMenuGroupTableView {
+extension ShopDetailTableView {
     // numberOf
     func numberOfSections(in tableView: UITableView) -> Int {
         return names.count
@@ -70,7 +70,7 @@ extension ShopDetailMenuGroupTableView {
     }
     // viewFor, cellFor
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: ShopDetailMenuGroupTableViewHeaderView.identifier) as? ShopDetailMenuGroupTableViewHeaderView else {
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: ShopDetailTableViewHeaderView.identifier) as? ShopDetailTableViewHeaderView else {
             return UITableViewHeaderFooterView()
         }
         view.configure(groupName: menuGroupName[section])
@@ -78,7 +78,7 @@ extension ShopDetailMenuGroupTableView {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopDetailMenuGroupTableViewCell.identifier, for: indexPath) as? ShopDetailMenuGroupTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopDetailTableViewCell.identifier, for: indexPath) as? ShopDetailTableViewCell else {
             return UITableViewCell()
         }
         cell.configure(name: names[indexPath.section][indexPath.row],
@@ -102,13 +102,13 @@ extension ShopDetailMenuGroupTableView {
     }
 }
 
-extension ShopDetailMenuGroupTableView {
+extension ShopDetailTableView {
     
     private func commonInit() {
         dataSource = self
         delegate = self
-        register(ShopDetailMenuGroupTableViewCell.self, forCellReuseIdentifier: ShopDetailMenuGroupTableViewCell.identifier)
-        register(ShopDetailMenuGroupTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: ShopDetailMenuGroupTableViewHeaderView.identifier)
+        register(ShopDetailTableViewCell.self, forCellReuseIdentifier: ShopDetailTableViewCell.identifier)
+        register(ShopDetailTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: ShopDetailTableViewHeaderView.identifier)
     }
     
 }
