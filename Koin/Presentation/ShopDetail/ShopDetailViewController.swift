@@ -329,7 +329,7 @@ extension ShopDetailViewController {
         }
     }
     private func setUpLayout() {
-        [bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView, menuGroupTableView].forEach {
+        [menuGroupTableView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
     }
