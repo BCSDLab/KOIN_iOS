@@ -139,6 +139,9 @@ extension ShopDetailViewController {
             }
             self?.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
             self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            
+            let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
+            self?.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
         }
         .store(in: &subscriptions)
         
