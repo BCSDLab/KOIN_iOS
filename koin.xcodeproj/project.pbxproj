@@ -2021,6 +2021,16 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		B46C43C62E814BC1000E5ACD /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		B48BFD672E6A9E82002D3A3D /* ShopDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -2034,6 +2044,7 @@
 		B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */ = {
 			isa = PBXGroup;
 			children = (
+				B46C43C62E814BC1000E5ACD /* Subviews */,
 				B49C1CD62E6F1F1600150BE2 /* ShopDetailTableView.swift */,
 				B49C1CD82E6F320200150BE2 /* ShopDetailTableViewCell.swift */,
 				B49C1CDA2E6F320E00150BE2 /* ShopDetailTableViewHeaderView.swift */,
@@ -2062,11 +2073,8 @@
 			isa = PBXGroup;
 			children = (
 				B438AEEF2E75E18600E889C4 /* ShopDetailPopUpView */,
-				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
-				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
-				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
-				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
+				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
