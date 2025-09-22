@@ -46,6 +46,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureView()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -86,16 +87,58 @@ final class ShopDetailTableViewTableHeaderView: UIView {
         }
         .store(in: &subscriptions)
     }
+}
+
+extension ShopDetailTableViewTableHeaderView {
     
-    // MARK: - Configure?? 뭐라하지
-    func configure(menuGroupCollectionViewContentOffset contentOffset: CGPoint) {
+    // MARK: - update status of MenuGroupName CollectionView
+    func update(contentOffset: CGPoint) {
         menuGroupNameCollectionView.contentOffset = contentOffset
     }
-    func configure(indexPath: IndexPath) {
+    func update(selectedIndexPath indexPath: IndexPath) {
         menuGroupNameCollectionView.indexPathsForSelectedItems?.forEach {
             menuGroupNameCollectionView.configureDeselectedCell($0)
         }
         menuGroupNameCollectionView.configureSelectedCell(indexPath)
         menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+    }
+}
+
+extension ShopDetailTableViewTableHeaderView {
+    
+    private func setUpLayouts() {
+        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView].forEach {
+            addSubview($0)
+        }
+    }
+    
+    private func setUpConstraints(){
+        imagesCollectionView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.height.equalTo(UIScreen.main.bounds.width / 1.21)
+        }
+        imagesPageControl.snp.makeConstraints {
+            $0.centerX.equalTo(imagesCollectionView)
+            $0.bottom.equalTo(imagesCollectionView).offset(-15)
+        }
+        infoView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(imagesCollectionView.snp.bottom)
+        }
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(infoView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(8)
+        }
+        menuGroupNameCollectionView.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(66)
+        }
+    }
+    
+    private func configureView() {
+        setUpLayouts()
+        setUpConstraints()
     }
 }

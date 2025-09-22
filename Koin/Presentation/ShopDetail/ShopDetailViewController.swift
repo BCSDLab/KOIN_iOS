@@ -20,7 +20,7 @@ final class ShopDetailViewController: UIViewController {
     private var isNavigationBarOpaque: Bool = false
     private var isAddingMenuAvailable: Bool = false
     
-    private let tableHeaderView = ShopDetailTableViewTableHeaderView() // TODO: 크기 명시해야함
+    private let tableHeaderView = ShopDetailTableViewTableHeaderView()
     
     // MARK: - Components
     private let navigationBarLikeView = UIView().then {
@@ -144,13 +144,13 @@ extension ShopDetailViewController {
         
         // MARK: - stickyHeader
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.tableHeaderView.configure(menuGroupCollectionViewContentOffset: contentOffset)
+            self?.tableHeaderView.update(contentOffset: contentOffset)
             self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
         }
         .store(in: &subscriptions)
         menuGroupNameCollectionViewSticky.didSelectCellPublisher.sink { [weak self] indexPath in
             self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-            self?.tableHeaderView.configure(indexPath: indexPath)
+            self?.tableHeaderView.update(selectedIndexPath: indexPath)
         }
         .store(in: &subscriptions)
         
@@ -340,8 +340,15 @@ extension ShopDetailViewController {
                             rightButtonText: "예")
     }
     
+    private func setUpTableHeaderView() {
+        let size = tableHeaderView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        tableHeaderView.frame.size = size
+        menuGroupTableView.tableHeaderView = tableHeaderView
+    }
+    
     private func configureView(){
         configurePopUpView()
+        setUpTableHeaderView()
         setUpLayout()
         setUpConstraints()
     }
