@@ -22,7 +22,7 @@ final class ShopDetailTableViewHeaderView: UITableViewHeaderFooterView {
         
         addSubview(label)
         label.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(28)
             $0.height.equalTo(32)
             $0.top.bottom.equalToSuperview().inset(12)
             
