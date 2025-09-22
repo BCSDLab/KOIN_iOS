@@ -20,36 +20,12 @@ final class ShopDetailViewController: UIViewController {
     private var isNavigationBarOpaque: Bool = false
     private var isAddingMenuAvailable: Bool = false
     
+    private let tableHeaderView = ShopDetailTableViewTableHeaderView() // TODO: 크기 명시해야함
+    
     // MARK: - Components
-    private let scrollView = UIScrollView().then {
-        $0.contentInsetAdjustmentBehavior = .never
-    }
-    private let contentView = UIView()
-    private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
-        $0.scrollDirection = .horizontal
-        $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
-        $0.minimumLineSpacing = 0
-    }).then {
-        $0.showsHorizontalScrollIndicator = false
-    }
-    private let imagesPageControl = UIPageControl().then {
-        $0.currentPage = 0
-        $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
-        $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
-    }
-    private let infoView = ShopDetailInfoView()
-    private let separatorView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral100)
-    }
-    private let menuGroupNameCollectionView = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
-        $0.minimumInteritemSpacing = 4
-        $0.scrollDirection = .horizontal
-    }).then {
-        $0.backgroundColor = .clear
-        $0.contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
-        $0.showsHorizontalScrollIndicator = false
-        $0.layer.masksToBounds = false
-        $0.allowsMultipleSelection = false
+    private let navigationBarLikeView = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+        $0.layer.opacity = 0
     }
     private let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
@@ -63,7 +39,6 @@ final class ShopDetailViewController: UIViewController {
         $0.allowsMultipleSelection = false
     }
     private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .grouped).then {
-        $0.isScrollEnabled = false
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = .zero
         $0.sectionFooterHeight = .zero
@@ -72,11 +47,10 @@ final class ShopDetailViewController: UIViewController {
     private let bottomSheet = ShopDetailBottomSheet().then {
         $0.isHidden = true
     }
-    private let navigationBarLikeView = UIView().then {
-        $0.backgroundColor = .appColor(.newBackground)
-        $0.layer.opacity = 0
+    private let popUpView = ShopDetailPopUpView().then {
+        $0.isHidden = true
     }
-    private let cartItemsCountLabel = UILabel().then {
+    private let cartItemsCountLabel = UILabel().then { // naviBar rightButton에 뱃지처럼 붙일 label. 작동하지 않는 상태
         $0.backgroundColor = .appColor(.new500)
         $0.textColor = .appColor(.neutral0)
         $0.font = .appFont(.pretendardMedium, size: 12)
@@ -85,9 +59,6 @@ final class ShopDetailViewController: UIViewController {
         $0.isHidden = true
         $0.contentMode = .center
         $0.textAlignment = .center
-    }
-    private let popUpView = ShopDetailPopUpView().then {
-        $0.isHidden = true
     }
     
     // MARK: - Initializer
@@ -107,7 +78,6 @@ final class ShopDetailViewController: UIViewController {
         bind()
         inputSubject.send(.viewDidLoad)
         configureView()
-        setDelegate()
     }
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: .orderTransparent)
@@ -124,24 +94,26 @@ extension ShopDetailViewController {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
             switch output {
-            // 기본정보
+            // 기본정보 - tableHeaderView
             case .updateInfoView(let orderShopSummary, let isFromOrder):
-                self?.imagesCollectionView.configure(orderImage: orderShopSummary.images)
-                self?.imagesPageControl.numberOfPages = orderShopSummary.images.count
-                self?.infoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
+                self?.tableHeaderView.configureInfoView(orderImage: orderShopSummary.images,
+                                                        numberOfPages: orderShopSummary.images.count,
+                                                        orderShopSummary: orderShopSummary,
+                                                        isFromOrder: isFromOrder)
             case .updateMenusGroups(let orderShopMenusGroups):
-                self?.menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
+                self?.tableHeaderView.configureMenusGroups(menuGroup: orderShopMenusGroups.menuGroups)
                 self?.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
+            case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
+                self?.tableHeaderView.configureIsAvailable(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut,
+                                                           payCard: payCard, payBank: payBank)
+            // 기본정보 - tableView
             case .updateMenus(let orderShopMenus):
                 self?.menuGroupTableView.configure(orderShopMenus)
-                self?.updateTableViewHeight(orderShopMenus)
-            case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
-                self?.infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut, payCard: payCard, payBank: payBank)
             // 장바구니
             case let .updateBottomSheet(cartSummary):
                 self?.bottomSheet.isHidden = !cartSummary.isAvailable
                 self?.bottomSheet.configure(cartSummary: cartSummary)
-                self?.updateBottomSheetConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
+                self?.updateTableViewConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
                 self?.isAddingMenuAvailable = isAddingMenuAvailable
             case let .updateCartItemsCount(count):
@@ -154,7 +126,34 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
         
-        // tableView
+        // MARK: - tableHeaderView        
+        tableHeaderView.menuGroupDidScrollSubject.sink { [weak self] contentOffset in
+            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
+        }
+        .store(in: &subscriptions)
+        
+        tableHeaderView.menuGroupDidSelectSubject.sink { [weak self] indexPath in
+            self?.menuGroupNameCollectionViewSticky.indexPathsForSelectedItems?.forEach {
+                self?.menuGroupNameCollectionViewSticky.configureDeselectedCell($0)
+            }
+            self?.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
+            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - stickyHeader
+        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
+            self?.tableHeaderView.configure(menuGroupCollectionViewContentOffset: contentOffset)
+            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
+        }
+        .store(in: &subscriptions)
+        menuGroupNameCollectionViewSticky.didSelectCellPublisher.sink { [weak self] indexPath in
+            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            self?.tableHeaderView.configure(indexPath: indexPath)
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - tableView
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
@@ -168,7 +167,7 @@ extension ShopDetailViewController {
             }
             .store(in: &subscriptions)
         
-        // popUpView
+        // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in
                 self?.hidePopUpView()
@@ -182,55 +181,11 @@ extension ShopDetailViewController {
                 self?.navigateToMenuDetail(menuId: menuId)// 메뉴 상세페이지로 넘어가기
             }
             .store(in: &subscriptions)
-        
-        // imagesCollectionView
-        imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
-            self?.imagesPageControl.currentPage = currentPage
-        }
-        .store(in: &subscriptions)
-        
-        // menuGroupCollectionView
-        menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.menuGroupNameCollectionView.contentOffset = contentOffset
-            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
-        }
-        .store(in: &subscriptions)
-        
-        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.menuGroupNameCollectionView.contentOffset = contentOffset
-            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
-        }
-        .store(in: &subscriptions)
-        
-        menuGroupNameCollectionView.didSelectCellPublisher.sink { [weak self] indexPath in
-            self?.menuGroupNameCollectionViewSticky.indexPathsForSelectedItems?.forEach {
-                self?.menuGroupNameCollectionViewSticky.configureDeselectedCell($0)
-            }
-            self?.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
-            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-            self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        }
-        .store(in: &subscriptions)
-        
-        menuGroupNameCollectionViewSticky.didSelectCellPublisher.sink { [weak self] indexPath in
-            self?.menuGroupNameCollectionView.indexPathsForSelectedItems?.forEach {
-                self?.menuGroupNameCollectionView.configureDeselectedCell($0)
-            }
-            self?.menuGroupNameCollectionView.configureSelectedCell(indexPath)
-            self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-            self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        }
-        .store(in: &subscriptions)
-    }
-    
-    // MARK: - continue adding menu
-    private func continueAddingMenu(menuId: Int) {
-        self.navigationController?.pushViewController(UIViewController(), animated: true)
     }
     
     // MARK: - shouldShowBottomSheet
-    private func updateBottomSheetConstraint(shouldShowBottomSheet: Bool) {
-        scrollView.snp.updateConstraints {
+    private func updateTableViewConstraint(shouldShowBottomSheet: Bool) {
+        menuGroupTableView.snp.updateConstraints {
             $0.bottom.equalToSuperview().offset(shouldShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
         }
     }
@@ -257,12 +212,6 @@ extension ShopDetailViewController {
         // TODO: CartItemsCount를 rightButton에 어떻게 붙일까 ㅠ
     }
     
-    // MARK: - updateTableViewHeight
-    private func updateTableViewHeight(_ orderShopMenus: [OrderShopMenus]) {
-        menuGroupTableView.snp.makeConstraints {
-            $0.height.equalTo(tableViewHeight(orderShopMenus))
-        }
-    }
     // MARK: - @objc
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
@@ -319,7 +268,7 @@ extension ShopDetailViewController {
 }
 
 extension ShopDetailViewController: UIScrollViewDelegate {
-    
+    /*
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
@@ -348,77 +297,15 @@ extension ShopDetailViewController: UIScrollViewDelegate {
             }
         }
         navigationBarLikeView.layer.opacity = Float(opacity)
-    }
-}
-
-extension ShopDetailViewController {
-    
-    // MARK: - helper
-    private func tableViewHeight(_ orderShopMenus: [OrderShopMenus]) -> Int {
-        let groupNameHeight = 56
-        let minimumRowHeight = 112
-        let nameHeight = 29
-        let descriptionHeight = 19
-        let priceHeight = 22
-        let priceTopPadding = 4
-        let insetHeight = 24
-        
-        var tableViewHeight = 0
-        orderShopMenus.forEach {
-            var sectionHeight = 0
-            sectionHeight += groupNameHeight
-            $0.menus.forEach {
-                var rowHeight = 0
-                rowHeight += nameHeight
-                rowHeight += $0.description != nil ? descriptionHeight : 0
-                rowHeight += 1 < $0.prices.count ? priceTopPadding : 0
-                rowHeight += $0.prices.count * priceHeight
-                rowHeight += insetHeight
-                sectionHeight += rowHeight > minimumRowHeight ? rowHeight : minimumRowHeight
-            }
-            tableViewHeight += sectionHeight
-        }
-        return tableViewHeight
-    }
+    }*/
 }
 
 extension ShopDetailViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
-        scrollView.snp.makeConstraints {
+        menuGroupTableView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
-        }
-        imagesCollectionView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
-            $0.height.equalTo(UIScreen.main.bounds.width / 1.21)
-        }
-        imagesPageControl.snp.makeConstraints {
-            $0.centerX.equalTo(imagesCollectionView)
-            $0.bottom.equalTo(imagesCollectionView).offset(-15)
-        }
-        infoView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(imagesCollectionView.snp.bottom)
-        }
-        separatorView.snp.makeConstraints {
-            $0.top.equalTo(infoView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(8)
-        }
-        menuGroupNameCollectionView.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(66)
-        }
-        menuGroupTableView.snp.makeConstraints {
-            $0.top.equalTo(menuGroupNameCollectionView.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().offset(-20)
         }
         bottomSheet.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
@@ -433,7 +320,7 @@ extension ShopDetailViewController {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(
                 UIApplication.topSafeAreaHeight()
-                + (navigationController?.navigationBar.bounds.height ?? 0)
+                + (navigationController?.navigationBar.bounds.height ?? 0) // TODO: safeArea에 직접 붙혀도 될 것 같다
             )
         }
         popUpView.snp.makeConstraints {
@@ -441,12 +328,8 @@ extension ShopDetailViewController {
         }
     }
     private func setUpLayout() {
-        [scrollView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
+        [bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView, menuGroupTableView].forEach {
             view.addSubview($0)
-        }
-        scrollView.addSubview(contentView)
-        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView].forEach {
-            contentView.addSubview( $0 )
         }
     }
     
@@ -460,10 +343,5 @@ extension ShopDetailViewController {
         configurePopUpView()
         setUpLayout()
         setUpConstraints()
-    }
-    
-    // MARK: - SetDelegate
-    private func setDelegate() {
-        scrollView.delegate = self
     }
 }
