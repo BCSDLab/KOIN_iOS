@@ -96,17 +96,9 @@ final class ShopDetailTableViewCell: UITableViewCell {
         
         setCornerRadius(isFirstRow: isFirstRow, isLastRow: isLastRow)
         setShadow(isLastRow: isLastRow)
-        
-        if isLastRow {
-            separatorView.isHidden = true
-        } else {
-            separatorView.isHidden = false
-        }
-        
-        if !isSoldOut {
-            [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = true }
-        } else {
-            [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = false }
+        separatorView.isHidden = isLastRow
+        [soldOutDimView, soldOutImageView, soldOutLabel].forEach {
+            $0.isHidden = !isSoldOut
         }
     }
     
