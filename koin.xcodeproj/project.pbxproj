@@ -192,6 +192,8 @@
 		B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8D392E771A1300A8E797 /* ShopMenusCategoryDTO.swift */; };
 		B46B8D3C2E771CAA00A8E797 /* FetchOrderShopMenusGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8D3B2E771CAA00A8E797 /* FetchOrderShopMenusGroupsFromShopUseCase.swift */; };
 		B46C43C82E814C9A000E5ACD /* ShopDetailTableViewTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C43C72E814C9A000E5ACD /* ShopDetailTableViewTableHeaderView.swift */; };
+		B46C43D12E822298000E5ACD /* ShopDetailPriceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C43D02E822298000E5ACD /* ShopDetailPriceTableView.swift */; };
+		B46C43D32E8222A0000E5ACD /* ShopDetailPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C43D22E8222A0000E5ACD /* ShopDetailPriceTableViewCell.swift */; };
 		B47839052E70FAFE00D002E3 /* OrderShopSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */; };
 		B47839072E70FF2B00D002E3 /* OrderShopMenusGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */; };
 		B48BFD692E6AA000002D3A3D /* ShopDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */; };
@@ -947,6 +949,8 @@
 		B46B8D392E771A1300A8E797 /* ShopMenusCategoryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopMenusCategoryDTO.swift; sourceTree = "<group>"; };
 		B46B8D3B2E771CAA00A8E797 /* FetchOrderShopMenusGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		B46C43C72E814C9A000E5ACD /* ShopDetailTableViewTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailTableViewTableHeaderView.swift; sourceTree = "<group>"; };
+		B46C43D02E822298000E5ACD /* ShopDetailPriceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailPriceTableView.swift; sourceTree = "<group>"; };
+		B46C43D22E8222A0000E5ACD /* ShopDetailPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailPriceTableViewCell.swift; sourceTree = "<group>"; };
 		B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopSummary.swift; sourceTree = "<group>"; };
 		B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenusGroups.swift; sourceTree = "<group>"; };
 		B48BFD682E6AA000002D3A3D /* ShopDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
@@ -2023,14 +2027,31 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
-		B46C43C62E814BC1000E5ACD /* Subviews */ = {
+		B46C43C62E814BC1000E5ACD /* SubviewsOfTableHeaderView */ = {
 			isa = PBXGroup;
 			children = (
 				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
 				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
 				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
 			);
-			path = Subviews;
+			path = SubviewsOfTableHeaderView;
+			sourceTree = "<group>";
+		};
+		B46C43C92E817099000E5ACD /* SubviewsOfCell */ = {
+			isa = PBXGroup;
+			children = (
+				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
+			);
+			path = SubviewsOfCell;
+			sourceTree = "<group>";
+		};
+		B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */ = {
+			isa = PBXGroup;
+			children = (
+				B46C43D02E822298000E5ACD /* ShopDetailPriceTableView.swift */,
+				B46C43D22E8222A0000E5ACD /* ShopDetailPriceTableViewCell.swift */,
+			);
+			path = ShopDetailPriceTableView;
 			sourceTree = "<group>";
 		};
 		B48BFD672E6A9E82002D3A3D /* ShopDetail */ = {
@@ -2046,7 +2067,8 @@
 		B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */ = {
 			isa = PBXGroup;
 			children = (
-				B46C43C62E814BC1000E5ACD /* Subviews */,
+				B46C43C92E817099000E5ACD /* SubviewsOfCell */,
+				B46C43C62E814BC1000E5ACD /* SubviewsOfTableHeaderView */,
 				B49C1CD62E6F1F1600150BE2 /* ShopDetailTableView.swift */,
 				B49C1CD82E6F320200150BE2 /* ShopDetailTableViewCell.swift */,
 				B49C1CDA2E6F320E00150BE2 /* ShopDetailTableViewHeaderView.swift */,
@@ -4560,6 +4582,7 @@
 				833D9C2B2C6C679700982145 /* NoticeListViewController.swift in Sources */,
 				833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */,
 				833D9C1B2C6B3F8600982145 /* NoticeListTableView.swift in Sources */,
+				B46C43D12E822298000E5ACD /* ShopDetailPriceTableView.swift in Sources */,
 				D2C163D42E24DD7800DC68A8 /* ModifyUserModalViewController.swift in Sources */,
 				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
@@ -4712,6 +4735,7 @@
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D89E8A9E2E03B4D600624C30 /* OrderHomeViewModel.swift in Sources */,
 				D2D380E72BA6EB33009AD5A9 /* ServiceSelectViewController.swift in Sources */,
+				B46C43D32E8222A0000E5ACD /* ShopDetailPriceTableViewCell.swift in Sources */,
 				D22C54612C68C904000826DA /* ScoreChartCollectionViewCell.swift in Sources */,
 				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,

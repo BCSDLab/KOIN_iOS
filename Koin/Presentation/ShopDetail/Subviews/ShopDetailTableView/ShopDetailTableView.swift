@@ -96,10 +96,6 @@ extension ShopDetailTableView {
         didTapCellPublisher.send(ids[indexPath.section][indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    // height
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 104
-    }
 }
 
 extension ShopDetailTableView {
@@ -110,6 +106,5 @@ extension ShopDetailTableView {
         register(ShopDetailTableViewCell.self, forCellReuseIdentifier: ShopDetailTableViewCell.identifier)
         register(ShopDetailTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: ShopDetailTableViewHeaderView.identifier)
     }
-    
 }
 

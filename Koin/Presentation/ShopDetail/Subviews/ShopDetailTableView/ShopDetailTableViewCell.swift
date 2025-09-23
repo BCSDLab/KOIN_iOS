@@ -11,12 +11,8 @@ import SnapKit
 final class ShopDetailTableViewCell: UITableViewCell {
     
     // MARK: - Components
-    private let labelsStackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.alignment = .leading
-        $0.spacing = 4
-    }
-    private let nameStackView = UIStackView().then {
+    
+    private let stackView = UIStackView().then {
         $0.axis = .vertical
         $0.alignment = .leading
         $0.spacing = 0
@@ -36,16 +32,14 @@ final class ShopDetailTableViewCell: UITableViewCell {
         $0.contentMode = .center
         $0.textAlignment = .left
     }
-    
-    private let priceStackViews = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 0
-        $0.alignment = .leading
-        $0.distribution = .fill
+    private let paddingView = UIView().then { $0.backgroundColor = .red }
+    private let priceTableView = ShopDetailPriceTableView(frame: .zero, style: .plain).then {
+        $0.isScrollEnabled = false
+        $0.sectionHeaderTopPadding = 0
+        $0.separatorStyle = .none
+        $0.rowHeight = 22
     }
-    private var priceNameLabels: [UILabel] = []
-    private var priceValueLabels: [UILabel] = []
-    
+
     private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
@@ -87,27 +81,10 @@ final class ShopDetailTableViewCell: UITableViewCell {
             descriptionLabel.isHidden = true
         }
         
-        priceNameLabels = []
-        priceValueLabels = []
-        for index in 0..<prices.count {
-            priceNameLabels.append(UILabel())
-            if let name = prices[index].name {
-                priceNameLabels[index].text = "\(name) : "
-                priceNameLabels[index].isHidden = false
-            }
-            else {
-                priceNameLabels[index].isHidden = true
-            }
-            
-            priceValueLabels.append(UILabel())
-            let formatter = NumberFormatter().then {
-                $0.numberStyle = .decimal
-            }
-            let price = formatter.string(from: NSNumber(value: prices[index].price)) ?? ""
-            priceValueLabels[index].text = "\(price)원"
+        priceTableView.configure(prices: prices)
+        priceTableView.snp.updateConstraints {
+            $0.height.equalTo(prices.count * 22)
         }
-        setUpLabels()
-        setUpStackViews()
         
         if let url = thumbnailImage {
             thumbnailImageView.loadImageWithSpinner(from: url)
@@ -179,60 +156,6 @@ final class ShopDetailTableViewCell: UITableViewCell {
         }
         setUpShadow()
     }
-    private func setUpLabels() {
-        priceNameLabels.forEach {
-            $0.numberOfLines = 0
-            $0.font = .appFont(.pretendardRegular, size: 14)
-            $0.textColor = .appColor(.neutral800)
-            $0.contentMode = .center
-            $0.textAlignment = .left
-            
-            let label = $0
-            $0.snp.makeConstraints {
-                $0.height.equalTo(22)
-                $0.width.equalTo(label.intrinsicContentSize.width)
-            }
-        }
-        priceValueLabels.forEach {
-            $0.numberOfLines = 0
-            $0.font = .appFont(.pretendardBold, size: 14)
-            $0.textColor = .appColor(.neutral800)
-            $0.contentMode = .center
-            $0.textAlignment = .left
-            
-            let label = $0
-            $0.snp.makeConstraints {
-                $0.height.equalTo(22)
-                $0.width.equalTo(label.intrinsicContentSize.width)
-            }
-        }
-    }
-    private func setUpStackViews() {
-        [nameLabel, descriptionLabel].forEach {
-            nameStackView.addArrangedSubview($0)
-        }
-        for i in 0..<priceValueLabels.count {
-            priceStackViews.addArrangedSubview(UIStackView().then {
-                $0.alignment = .fill
-                $0.addArrangedSubview(priceNameLabels[i])
-                $0.addArrangedSubview(priceValueLabels[i])
-            })
-        }
-        
-        [nameStackView, priceStackViews].forEach {
-            labelsStackView.addArrangedSubview($0)
-        }
-        
-        priceStackViews.arrangedSubviews.forEach {
-            guard let stackView = $0 as? UIStackView else {
-                fatalError()
-            }
-            stackView.axis = .horizontal
-            stackView.spacing = 0
-            stackView.alignment = .fill
-            stackView.distribution = .fill
-        }
-    }
 }
 
 extension ShopDetailTableViewCell {
@@ -243,8 +166,11 @@ extension ShopDetailTableViewCell {
     }
     
     private func setUpLayout() {
-        [labelsStackView, thumbnailImageView, separatorView].forEach {
-            addSubview($0)
+        [stackView, thumbnailImageView, separatorView].forEach {
+            contentView.addSubview($0)
+        }
+        [nameLabel, descriptionLabel, paddingView, priceTableView].forEach {
+            stackView.addArrangedSubview($0)
         }
         [soldOutDimView, soldOutImageView, soldOutLabel].forEach {
             thumbnailImageView.addSubview($0)
@@ -252,14 +178,22 @@ extension ShopDetailTableViewCell {
     }
     
     private func setUpConstaints() {
+        
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(29)
         }
-        //descriptionLabel.snp.makeConstraints {
-            //$0.height.equalTo(19)
-        //}
+        descriptionLabel.snp.makeConstraints {
+            $0.height.equalTo(19)
+        }
+        paddingView.snp.makeConstraints {
+            $0.height.equalTo(4)
+        }
+        priceTableView.snp.makeConstraints {
+            $0.height.equalTo(22)
+            $0.width.equalToSuperview()
+        }
         
-        labelsStackView.snp.makeConstraints {
+        stackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(thumbnailImageView.snp.leading).offset(-12)
@@ -294,7 +228,6 @@ extension ShopDetailTableViewCell {
     private func configureView() {
         backgroundColor = .clear
         selectedBackgroundView = UIView()
-        setUpStackViews()
         setUpLayout()
         setUpConstaints()
     }

@@ -41,10 +41,11 @@ final class ShopDetailViewController: UIViewController {
     private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .insetGrouped).then {
         $0.contentInsetAdjustmentBehavior = .never
         $0.backgroundColor = .clear
-        $0.sectionHeaderTopPadding = .zero
         $0.sectionFooterHeight = .zero
         $0.separatorStyle = .none
         $0.sectionHeaderHeight = 56
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 112
     }
     private let bottomSheet = ShopDetailBottomSheet().then {
         $0.isHidden = true
