@@ -38,7 +38,7 @@ final class ShopDetailViewController: UIViewController {
         $0.isHidden = true
         $0.allowsMultipleSelection = false
     }
-    private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .insetGrouped).then {
+    private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .grouped).then {
         $0.contentInsetAdjustmentBehavior = .never
         $0.backgroundColor = .clear
         $0.sectionFooterHeight = .zero

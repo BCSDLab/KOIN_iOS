@@ -11,6 +11,7 @@ import SnapKit
 final class ShopDetailTableViewCell: UITableViewCell {
     
     // MARK: - Components
+    private var insetBackgroundView = UIView().then { $0.backgroundColor = .yellow }
     
     private let stackView = UIStackView().then {
         $0.axis = .vertical
@@ -68,6 +69,7 @@ final class ShopDetailTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configure
     func configure(name: String, description: String?, prices: [Price],
                    thumbnailImage: String?, isFirstRow: Bool, isLastRow: Bool, isSoldOut: Bool) {
         
@@ -88,20 +90,12 @@ final class ShopDetailTableViewCell: UITableViewCell {
         
         if let url = thumbnailImage {
             thumbnailImageView.loadImageWithSpinner(from: url)
-        }
-        else {
+        } else {
             thumbnailImageView.image = nil
         }
         
-        if isFirstRow && !isLastRow {
-            setTopCornerRadius()
-        } else if isLastRow && !isFirstRow {
-            setBottomCornerRadius()
-        } else if isFirstRow && isLastRow {
-            setAllCornerRadius()
-        } else {
-            setDefaultBackgroundView()
-        }
+        setCornerRadius(isFirstRow: isFirstRow, isLastRow: isLastRow)
+        setShadow(isLastRow: isLastRow)
         
         if isLastRow {
             separatorView.isHidden = true
@@ -111,63 +105,53 @@ final class ShopDetailTableViewCell: UITableViewCell {
         
         if !isSoldOut {
             [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = true }
-        }
-        else {
+        } else {
             [soldOutDimView, soldOutImageView, soldOutLabel].forEach { $0.isHidden = false }
         }
     }
     
     // MARK: - cornerRadius
-    private func setTopCornerRadius() {
-        backgroundView = UIView().then {
-            $0.backgroundColor = .appColor(.neutral0)
-            $0.layer.cornerRadius = 24
-            $0.clipsToBounds = true
-            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            $0.frame = bounds
-            $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        }
-    }
-    private func setBottomCornerRadius() {
-        backgroundView = UIView().then {
-            $0.backgroundColor = .appColor(.neutral0)
-            $0.layer.cornerRadius = 24
-            $0.clipsToBounds = true
-            $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            $0.frame = bounds
-            $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        }
-        setUpShadow()
-    }
-    private func setDefaultBackgroundView() {
-        backgroundView = UIView().then {
-            $0.backgroundColor = .appColor(.neutral0)
-            $0.frame = bounds
-            $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        }
-    }
-    private func setAllCornerRadius() {
-        backgroundView = UIView().then {
+    private func setCornerRadius(isFirstRow: Bool, isLastRow: Bool){
+        [insetBackgroundView].forEach {
             $0.backgroundColor = .appColor(.neutral0)
             $0.layer.cornerRadius = 24
             $0.clipsToBounds = true
             $0.frame = bounds
             $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         }
-        setUpShadow()
+        switch (isFirstRow, isLastRow) {
+        case (true, true): // 첫번쨰&&마지막 row (단일 row)
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
+                                                       .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        case (true, false): // 첫번째 row
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case (false, true): // 마지막 row
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        case (false, false): // 중간 row
+            insetBackgroundView.layer.cornerRadius = 0
+        }
+    }
+    
+    private func setShadow(isLastRow: Bool) {
+        switch isLastRow {
+        case true:
+            insetBackgroundView.layer.masksToBounds = false
+            insetBackgroundView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+        case false:
+            insetBackgroundView.layer.masksToBounds = true
+            insetBackgroundView.layer.applySketchShadow(color: .clear, alpha: 0.0, x: 0, y: 0, blur: 0, spread: 0)
+        }
     }
 }
 
 extension ShopDetailTableViewCell {
-    
-    private func setUpShadow() {
-        layer.masksToBounds = false
-        layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
-    }
-    
+
     private func setUpLayout() {
-        [stackView, thumbnailImageView, separatorView].forEach {
+        [insetBackgroundView].forEach {
             contentView.addSubview($0)
+        }
+        [stackView, thumbnailImageView, separatorView].forEach {
+            insetBackgroundView.addSubview($0)
         }
         [nameLabel, descriptionLabel, paddingView, priceTableView].forEach {
             stackView.addArrangedSubview($0)
@@ -178,6 +162,10 @@ extension ShopDetailTableViewCell {
     }
     
     private func setUpConstaints() {
+        insetBackgroundView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(16)
+        }
         
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(29)
@@ -230,5 +218,6 @@ extension ShopDetailTableViewCell {
         selectedBackgroundView = UIView()
         setUpLayout()
         setUpConstaints()
+        backgroundView = nil
     }
 }
