@@ -178,9 +178,14 @@ extension ShopDetailInfoView {
             $0.centerY.equalTo(rateReviewStackView.snp.centerY)
             $0.height.equalTo(24)
         }
+        isAvailableStackView.snp.makeConstraints {
+            $0.height.equalTo(23)
+            $0.leading.equalToSuperview().offset(24)
+            $0.top.equalTo(rateReviewStackView.snp.bottom).offset(16)
+        }        
         orderAmountDelieveryTipView.snp.makeConstraints {
             $0.leading.equalTo(shopTitleLabel)
-            $0.top.equalTo(rateReviewStackView.snp.bottom).offset(55)
+            $0.top.equalTo(isAvailableStackView.snp.bottom).offset(16)
             $0.height.equalTo(56)
             $0.width.equalTo((UIScreen.main.bounds.width - 60)/2)
         }
@@ -191,11 +196,7 @@ extension ShopDetailInfoView {
             $0.width.equalTo(orderAmountDelieveryTipView)
             $0.bottom.equalToSuperview().offset(-18)
         }
-        isAvailableStackView.snp.makeConstraints {
-            $0.height.equalTo(23)
-            $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(rateReviewStackView.snp.bottom).offset(16)
-        }
+        
         [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(23)

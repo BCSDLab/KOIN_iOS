@@ -125,6 +125,7 @@ extension ShopDetailTableViewTableHeaderView {
         infoView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(imagesCollectionView.snp.bottom)
+            $0.height.equalTo(212)
         }
         separatorView.snp.makeConstraints {
             $0.top.equalTo(infoView.snp.bottom)

@@ -24,8 +24,7 @@ final class ShopDetailTableViewHeaderView: UITableViewHeaderFooterView {
         label.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(28)
             $0.height.equalTo(32)
-            $0.top.bottom.equalToSuperview().inset(12)
-            
+            $0.centerY.equalToSuperview()
         }
     }
     required init?(coder: NSCoder) {

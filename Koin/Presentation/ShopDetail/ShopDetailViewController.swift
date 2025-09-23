@@ -44,6 +44,7 @@ final class ShopDetailViewController: UIViewController {
         $0.sectionHeaderTopPadding = .zero
         $0.sectionFooterHeight = .zero
         $0.separatorStyle = .none
+        $0.sectionHeaderHeight = 56
     }
     private let bottomSheet = ShopDetailBottomSheet().then {
         $0.isHidden = true
@@ -344,8 +345,7 @@ extension ShopDetailViewController {
     }
     
     private func setUpTableHeaderView() {
-        let size = tableHeaderView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        tableHeaderView.frame.size = size
+        tableHeaderView.frame.size.height = UIScreen.main.bounds.width / 1.21 + 212 + 8 + 66
         menuGroupTableView.tableHeaderView = tableHeaderView
     }
     
