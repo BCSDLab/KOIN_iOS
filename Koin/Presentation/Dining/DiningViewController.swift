@@ -117,6 +117,10 @@ final class DiningViewController: UIViewController {
         segmentDidChange(diningTypeSegmentControl)
     }
     
+    private let diningToStoreABTestButton = DiningToStoreABTestButton().then {
+        $0.isHidden = true
+    }
+    
     // MARK: - Initialization
     
     init(viewModel: DiningViewModel) {
@@ -181,7 +185,7 @@ final class DiningViewController: UIViewController {
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
             case let .setABTestResult(abTestResult):
-                self?.diningListCollectionView.setAbTestResult(result: abTestResult)
+                self?.handleAbTestResult(abTestResult)
             }
         }.store(in: &subscriptions)
         
@@ -236,6 +240,23 @@ final class DiningViewController: UIViewController {
 }
 
 extension DiningViewController {
+
+    private func handleAbTestResult(_ abTestResult: AssignAbTestResponse) {
+        switch abTestResult.variableName {
+        case .variant:
+            diningToStoreABTestButton.isHidden = false
+            logAbTestResult(abTestResult.variableName.rawValue)
+        case .control:
+            diningToStoreABTestButton.isHidden = true
+            logAbTestResult(abTestResult.variableName.rawValue)
+        default:
+            logAbTestResult(abTestResult.variableName.rawValue)
+        }
+    }
+
+    private func logAbTestResult(_ variantName: String) {
+
+    }
     
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
@@ -342,17 +363,17 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
-            self.view.addSubview($0)
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToStoreABTestButton].forEach {
+            view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         [diningTypeSegmentControl, underlineView].forEach {
             tabBarView.addSubview($0)
         }
         
-        separateViewArray.forEach { view in
-            stackView.addArrangedSubview(view)
+        separateViewArray.forEach {
+            stackView.addArrangedSubview($0)
         }
     }
     
@@ -398,13 +419,16 @@ extension DiningViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+        diningToStoreABTestButton.snp.makeConstraints() {
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-8)
+            $0.height.equalTo(46)
+        }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBackground
     }
 }
-
-
