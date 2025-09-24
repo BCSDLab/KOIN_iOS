@@ -254,7 +254,7 @@ extension LoginViewController {
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작", customSessionId))
     }
 }
@@ -354,5 +354,4 @@ extension LoginViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
 
