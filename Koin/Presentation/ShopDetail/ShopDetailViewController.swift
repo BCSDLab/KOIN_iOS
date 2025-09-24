@@ -25,6 +25,7 @@ final class ShopDetailViewController: UIViewController {
         $0.minimumLineSpacing = 0
     }).then {
         $0.showsHorizontalScrollIndicator = false
+        $0.contentInsetAdjustmentBehavior = .never
     }
     private let imagesPageControl = UIPageControl().then {
         $0.currentPage = 0
@@ -360,7 +361,7 @@ extension ShopDetailViewController {
         }
     }
     private func setUpLayout() {
-        [menuGroupTableView, imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView,
+        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView,
          bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
