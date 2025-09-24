@@ -182,18 +182,6 @@ extension ShopDetailViewController {
             .store(in: &subscriptions)
         
         // MARK: - tableView
-        menuGroupTableView.menuGroupCollectionViewShouldUpdate
-            .sink { [weak self] indexPath in
-                if let row = indexPath?.section, let self = self {
-                    let indexPath = IndexPath(row: row, section: 0)
-                    self.menuGroupNameCollectionView.configure(selectedIndexPath: indexPath)
-                    self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
-                    self.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                    self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                }
-            }
-            .store(in: &subscriptions)
-        
         menuGroupTableView.tableViewDidScroll
             .sink { [weak self] contentOffset in
                 self?.imagesCollectionView.snp.updateConstraints {
