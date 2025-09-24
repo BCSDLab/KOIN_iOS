@@ -187,7 +187,11 @@ extension ShopDetailViewController {
                 self?.navigationBarLikeView.layer.opacity = opacity
             }
             .store(in: &subscriptions)
-        
+        menuGroupTableView.shouldShowSticky
+            .sink { [weak self] shouldShowSticky in
+                self?.menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
+            }
+            .store(in: &subscriptions)
         
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
@@ -289,43 +293,6 @@ extension ShopDetailViewController {
     }
 }
 
-
-extension ShopDetailViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        //let imagesCollectionView: ShopDetailImagesCollectionView = tableHeaderView.getImagesCollectionView()
-        //let imagesCollectionViewBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: <#T##any UICoordinateSpace#>)
-        /*
-        let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
-        let imagesBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: view).maxY
-        let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
-        
-        let shouldShowSticky = collectionViewTop < naviBottom
-        let isNavigationBarOpaque = imagesBottom < naviBottom
-        let opacity = 1 - (imagesBottom - naviBottom)/100
-        
-        if shouldShowSticky != self.shouldShowSticky {
-            self.shouldShowSticky = shouldShowSticky
-            menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
-        }
-        if isNavigationBarOpaque != self.isNavigationBarOpaque {
-            self.isNavigationBarOpaque = isNavigationBarOpaque
-            if (isNavigationBarOpaque) {
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    self?.configureNavigationBar(style: .order)
-                })
-            }
-            else {
-                UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                    self?.configureNavigationBar(style: .orderTransparent)
-                })
-            }
-        }
-        navigationBarLikeView.layer.opacity = Float(opacity)*/
-    }
-}
-
 extension ShopDetailViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
@@ -339,14 +306,14 @@ extension ShopDetailViewController {
         }
         menuGroupNameCollectionViewSticky.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(navigationBarLikeView.snp.bottom)
             $0.height.equalTo(66)
         }
         navigationBarLikeView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(
                 UIApplication.topSafeAreaHeight()
-                + (navigationController?.navigationBar.bounds.height ?? 0) // TODO: safeArea에 직접 붙혀도 될 것 같다
+                + (navigationController?.navigationBar.bounds.height ?? 0)
             )
         }
         popUpView.snp.makeConstraints {
