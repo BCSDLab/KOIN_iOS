@@ -19,7 +19,11 @@ final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDa
     private var isSoldOuts: [[Bool]] = []
     private var prices: [[[Price]]] = []
     
+    private var navigationBarHeight: CGFloat = 0
+    
     let didTapCellPublisher = PassthroughSubject<Int, Never>()
+    let shouldSetNavigationBarTransparentPublisher = PassthroughSubject<Bool, Never>()
+    let navigationBarOpacityPublisher = PassthroughSubject<Float, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -58,6 +62,9 @@ final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDa
         }
         reloadData()
     }
+    func configure(navigationBarHeight: CGFloat) {
+        self.navigationBarHeight = navigationBarHeight
+    }
 }
 
 extension ShopDetailTableView {
@@ -95,6 +102,23 @@ extension ShopDetailTableView {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didTapCellPublisher.send(ids[indexPath.section][indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+extension ShopDetailTableView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        guard let imagesCollectionView = (tableHeaderView as? ShopDetailTableViewTableHeaderView)?.getImagesCollectionView() else {
+            return
+        }
+        let navigationBarOffset = imagesCollectionView.frame.height - (self.navigationBarHeight + UIApplication.topSafeAreaHeight())
+        let contentOffset = self.contentOffset.y
+        
+        let opacity = 1 - (navigationBarOffset - contentOffset)/100
+        let shouldSetNavigationBarTransparent = navigationBarOffset < contentOffset
+        
+        self.shouldSetNavigationBarTransparentPublisher.send(shouldSetNavigationBarTransparent)
+        self.navigationBarOpacityPublisher.send(Float(opacity))
     }
 }
 

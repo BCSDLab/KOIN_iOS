@@ -86,6 +86,7 @@ final class ShopDetailViewController: UIViewController {
         configureNavigationBar(style: .orderTransparent)
         configureRightBarButton()
         inputSubject.send(.viewWillAppear)
+        menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
     }
 }
 
@@ -172,6 +173,21 @@ extension ShopDetailViewController {
                 }
             }
             .store(in: &subscriptions)
+        
+        menuGroupTableView.shouldSetNavigationBarTransparentPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isTransparent in
+                UIView.animate(withDuration: 0.25) {
+                    self?.configureNavigationBar(style: isTransparent ? .order : .orderTransparent)
+                }
+            }
+            .store(in: &subscriptions)
+        menuGroupTableView.navigationBarOpacityPublisher
+            .sink { [weak self] opacity in
+                self?.navigationBarLikeView.layer.opacity = opacity
+            }
+            .store(in: &subscriptions)
+        
         
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
@@ -273,10 +289,14 @@ extension ShopDetailViewController {
     }
 }
 
+
 extension ShopDetailViewController: UIScrollViewDelegate {
-    /*
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        //let imagesCollectionView: ShopDetailImagesCollectionView = tableHeaderView.getImagesCollectionView()
+        //let imagesCollectionViewBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: <#T##any UICoordinateSpace#>)
+        /*
         let naviBottom = navigationController?.navigationBar.frame.maxY ?? 0
         let imagesBottom = imagesCollectionView.convert(imagesCollectionView.bounds, to: view).maxY
         let collectionViewTop = menuGroupNameCollectionView.convert(menuGroupNameCollectionView.bounds, to: view).minY
@@ -302,8 +322,8 @@ extension ShopDetailViewController: UIScrollViewDelegate {
                 })
             }
         }
-        navigationBarLikeView.layer.opacity = Float(opacity)
-    }*/
+        navigationBarLikeView.layer.opacity = Float(opacity)*/
+    }
 }
 
 extension ShopDetailViewController {

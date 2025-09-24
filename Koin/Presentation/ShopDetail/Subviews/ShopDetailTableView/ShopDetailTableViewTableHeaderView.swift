@@ -107,6 +107,13 @@ extension ShopDetailTableViewTableHeaderView {
 
 extension ShopDetailTableViewTableHeaderView {
     
+    func getImagesCollectionView() -> ShopDetailImagesCollectionView {
+        return imagesCollectionView
+    }
+}
+
+extension ShopDetailTableViewTableHeaderView {
+    
     private func setUpLayouts() {
         [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView].forEach {
             addSubview($0)
