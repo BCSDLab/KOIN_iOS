@@ -53,16 +53,6 @@ final class ShopDetailViewController: UIViewController {
     private let popUpView = ShopDetailPopUpView().then {
         $0.isHidden = true
     }
-    private let cartItemsCountLabel = UILabel().then { // naviBar rightButton에 뱃지처럼 붙일 label. 작동하지 않는 상태
-        $0.backgroundColor = .appColor(.new500)
-        $0.textColor = .appColor(.neutral0)
-        $0.font = .appFont(.pretendardMedium, size: 12)
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
-        $0.isHidden = true
-        $0.contentMode = .center
-        $0.textAlignment = .center
-    }
     
     // MARK: - Initializer
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
@@ -215,16 +205,6 @@ extension ShopDetailViewController {
             $0.bottom.equalToSuperview().offset(shouldShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
         }
     }
-    
-    // MARK: - CartItemsCount
-    private func updateCartItemsCountLabel(count: Int) {
-        if count == 0 {
-            cartItemsCountLabel.isHidden = true
-            return
-        }
-        cartItemsCountLabel.isHidden = false
-        cartItemsCountLabel.text = "\(count)"
-    }
 
     // MARK: - Navigation Right Bar Button
     private func configureRightBarButton() {
@@ -234,8 +214,6 @@ extension ShopDetailViewController {
             target: self,
             action: #selector(didTapCart)
         )
-        
-        // TODO: CartItemsCount를 rightButton에 어떻게 붙일까 ㅠ
     }
     
     // MARK: - @objc
