@@ -146,6 +146,9 @@ extension ShopDetailViewController {
         menuGroupNameCollectionViewSticky.didSelectCellPublisher.sink { [weak self] indexPath in
             self?.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             self?.tableHeaderView.update(selectedIndexPath: indexPath)
+            
+            let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
+            self?.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
         }
         .store(in: &subscriptions)
         
