@@ -35,6 +35,12 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
         self.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         self.configureSelectedCell(IndexPath(row: 0, section: 0))
     }
+    func configure(selectedIndexPath indexPath: IndexPath) {
+        indexPathsForSelectedItems?.forEach {
+            configureDeselectedCell($0)
+        }
+        configureSelectedCell(indexPath)
+    }
 }
 
 extension ShopDetailMenuGroupCollectionView {
@@ -75,12 +81,12 @@ extension ShopDetailMenuGroupCollectionView {
 
 extension ShopDetailMenuGroupCollectionView {
     
-    func configureSelectedCell(_ indexPath: IndexPath) {
+    private func configureSelectedCell(_ indexPath: IndexPath) {
         if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
             cell.setSelected(isSelected: true)
         }
     }
-    func configureDeselectedCell(_ indexPath: IndexPath) {
+    private func configureDeselectedCell(_ indexPath: IndexPath) {
         if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
             cell.setSelected(isSelected: false)
         }

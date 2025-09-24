@@ -163,12 +163,9 @@ extension ShopDetailViewController {
                 guard let self = self else { return }
                 let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
                 self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
+                self.menuGroupNameCollectionView.configure(selectedIndexPath: indexPath)
+                self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
                 self.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                self.menuGroupNameCollectionViewSticky.indexPathsForSelectedItems?.forEach {
-                    self.menuGroupNameCollectionViewSticky.configureDeselectedCell($0)
-                }
-                self.menuGroupNameCollectionViewSticky.configureSelectedCell(indexPath)
                 self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             }
             .store(in: &subscriptions)
@@ -177,13 +174,10 @@ extension ShopDetailViewController {
                 guard let self = self else { return }
                 let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
                 self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
+                self.menuGroupNameCollectionView.configure(selectedIndexPath: indexPath)
+                self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
+                self.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
                 self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                self.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-                self.menuGroupNameCollectionView.indexPathsForSelectedItems?.forEach {
-                    self.menuGroupNameCollectionView.configureDeselectedCell($0)
-                }
-                self.menuGroupNameCollectionView.configureSelectedCell(indexPath)
-                self.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             }
             .store(in: &subscriptions)
         
