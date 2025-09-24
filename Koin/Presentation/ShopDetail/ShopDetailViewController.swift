@@ -16,8 +16,6 @@ final class ShopDetailViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private var shouldShowSticky: Bool = false
-    private var isNavigationBarOpaque: Bool = false
     private var isAddingMenuAvailable: Bool = false
     
     // MARK: - Components
@@ -146,6 +144,7 @@ extension ShopDetailViewController {
         // MARK: - ImagesCollectionView
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
             self?.imagesPageControl.currentPage = currentPage
+            self?.imagesPageControl.isHidden = currentPage == 0 ? true : false
         }
         .store(in: &subscriptions)
         
