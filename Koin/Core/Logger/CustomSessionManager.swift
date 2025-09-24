@@ -7,59 +7,83 @@
 
 import Foundation
 
-// 커스텀 세션 로깅
-/// 15분 또는 30분 동안 세션 ID를 유지
-/// 유지 시간이 지나면 새로운 세션 ID를 생성
+/// 커스텀 세션 로깅 매니저
+/// [세션이름]_[로그인0/1]_[플랫폼]_[세션시작(UnixTs)]_[랜덤5]
+/// 예) sign_up_0_WEB_1758713295_SDAFS
 struct CustomSessionManager {
-    private static let sessionKey = "custom_session_id"
-    private static let sessionStartKey = "custom_session_start_time"
-    private static let sessionDurationKey = "custom_session_duration"
-    private static let sessionEventNameKey = "custom_session_event_name"
+
+    private struct Keys {
+        let id: String
+        let startedAt: String
+        let duration: String
+        let event: String
+        let loginFlag: String
+        let platform: String
+
+        init(eventName: String) {
+            let base = "custom_session.\(eventName)"
+            id = "\(base).id"
+            startedAt = "\(base).startedAt"
+            duration = "\(base).duration"
+            event = "\(base).event"
+            loginFlag = "\(base).loginFlag"
+            platform = "\(base).platform"
+        }
+    }
 
     enum Duration: TimeInterval {
-        case fifteenMinutes = 900   // 15분
-        case thirtyMinutes = 1800   // 30분
+        case fifteenMinutes = 900
+        case thirtyMinutes  = 1800
     }
 
-    static func getOrCreateSessionId(
-        duration: Duration = .fifteenMinutes,
-        eventName: String = "sign_up",
-        loginStatus: Int? = nil,
-        platform: String = "iOS"
-    ) -> String {
+    /// 생성 및 이전 세션 재사용
+    static func getOrCreateSessionId(duration: Duration = .fifteenMinutes, eventName: String, loginStatus: Int? = nil, platform: String = "iOS") -> String {
+        let keys = Keys(eventName: eventName)
         let defaults = UserDefaults.standard
+
         let now = Date().timeIntervalSince1970
+        let savedEvent = defaults.string(forKey: keys.event)
+        let savedId = defaults.string(forKey: keys.id)
+        let savedStart = defaults.double(forKey: keys.startedAt)
+        let savedDuration = defaults.double(forKey: keys.duration)
 
-        let savedDuration = defaults.double(forKey: sessionDurationKey)
-        let savedEventName = defaults.string(forKey: sessionEventNameKey)
-
-        if let existingSessionId = defaults.string(forKey: sessionKey),
-           let startTime = defaults.object(forKey: sessionStartKey) as? TimeInterval,
-           now - startTime < savedDuration,
-           savedDuration == duration.rawValue,
-           savedEventName == eventName {
-            return existingSessionId
+        if let existing = savedId,
+           savedEvent == eventName,
+           savedStart > 0,
+           now - savedStart < savedDuration {
+            return existing
         }
 
-        let timestamp = Int(now)
-        let random = String(UUID().uuidString.filter { $0.isLetter }.prefix(5)).uppercased()
-        let loginFlag = loginStatus ?? loginStatusFlag()
-        let sessionId = "\(eventName)_\(loginFlag)_\(platform)_\(timestamp)_\(random)"
+        let timeStamp = Int(now)
+        let randomString = String(UUID().uuidString.filter { $0.isLetter }.prefix(5)).uppercased()
+        let flag = loginStatus ?? defaults.integer(forKey: "loginFlag")
 
-        defaults.set(sessionId, forKey: sessionKey)
-        defaults.set(now, forKey: sessionStartKey)
-        defaults.set(duration.rawValue, forKey: sessionDurationKey)
-        defaults.set(eventName, forKey: sessionEventNameKey)
+        let newId = "\(eventName)_\(flag)_\(platform)_\(timeStamp)_\(randomString)"
 
-        return sessionId
+        defaults.set(newId, forKey: keys.id)
+        defaults.set(now, forKey: keys.startedAt)
+        defaults.set(duration.rawValue, forKey: keys.duration)
+        defaults.set(eventName, forKey: keys.event)
+        defaults.set(flag, forKey: keys.loginFlag)
+        defaults.set(platform, forKey: keys.platform)
+
+        return newId
     }
 
-    private static func loginStatusFlag() -> Int {
-        if let token = KeychainWorker.shared.read(key: .access),
-               token.isEmpty == false {
-            return 1
-        } else {
-            return 0
-        }
+    /// 현재 세션 조회
+    static func current(eventName: String) -> String? {
+        UserDefaults.standard.string(forKey: Keys(eventName: eventName).id)
+    }
+
+    /// 세션 이탈
+    static func end(eventName: String) {
+        let keys = Keys(eventName: eventName)
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: keys.id)
+        defaults.removeObject(forKey: keys.startedAt)
+        defaults.removeObject(forKey: keys.duration)
+        defaults.removeObject(forKey: keys.event)
+        defaults.removeObject(forKey: keys.loginFlag)
+        defaults.removeObject(forKey: keys.platform)
     }
 }
