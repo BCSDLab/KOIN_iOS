@@ -23,6 +23,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getAbTestResult(String)
         case getBannerAbTest(String)
         case getClubAbTest(String)
+        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
     // MARK: - Output
@@ -101,6 +102,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case .getClubAbTest(let request):
                 self?.getClubAbTest(request: request)
+            case let .logSessionEvent(label, category, value, sessionId):
+                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -277,6 +280,8 @@ extension HomeViewModel {
                 }
             }).store(in: &subscriptions)
     }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    }
 }
-
-

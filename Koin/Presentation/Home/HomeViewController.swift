@@ -19,6 +19,9 @@ final class HomeViewController: UIViewController {
     private var isSegmentedControlSetupDone = false
     private var scrollDirection: ScrollLog = .scrollToDown
     
+    /// AB 테스트 세션 로깅을 위한 로그인 유무 체크
+    private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    
     // MARK: - UI Components
     
     private let wrapperView = UIView().then { _ in
@@ -160,6 +163,8 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
+        
+        checkLogin()
     }
     
     @objc private func appWillEnterForeground() {
@@ -621,6 +626,10 @@ extension HomeViewController {
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "\(menuLabel.text ?? "")", nil, nil, nil, nil))
+        
+        let customSessionId = makeSessionId(eventName: "dining2shop")
+        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView,
+            .click, "오늘 식단, 내일 식단", customSessionId))
     }
     
     private func navigateToServiceSelectViewController() {
@@ -638,6 +647,22 @@ extension HomeViewController {
 }
 
 extension HomeViewController {
+    /// AB 테스트
+    private func checkLogin() {
+        checkLoginUseCase.execute()
+            .sink { [weak self] isLoggedIn in
+                guard self != nil else { return }
+                let loginFlag = isLoggedIn ? 1 : 0
+                UserDefaults.standard.set(loginFlag, forKey: "loginFlag")
+                Log.make().debug("checkLogin: \(loginFlag == 1 ? "로그인" : "비로그인")")
+            }
+            .store(in: &subscriptions)
+    }
+
+    private func makeSessionId(eventName: String) -> String {
+        let loginFlag = UserDefaults.standard.integer(forKey: "loginFlag")
+        return CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: eventName, loginStatus: loginFlag, platform: "iOS")
+    }
     
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
