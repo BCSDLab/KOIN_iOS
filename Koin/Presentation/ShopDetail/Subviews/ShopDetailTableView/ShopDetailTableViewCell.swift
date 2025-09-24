@@ -140,7 +140,10 @@ final class ShopDetailTableViewCell: UITableViewCell {
     // MARK: - prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
-        thumbnailImageView.image = nil // 기존이미지 지우기 
+        nameLabel.text = nil
+        descriptionLabel.text = nil
+        priceTableView.configure(prices: [])
+        thumbnailImageView.image = nil // 기존이미지 지우기
         thumbnailImageView.kf.cancelDownloadTask() // 로딩중이던 이미지 취소
     }
 }
