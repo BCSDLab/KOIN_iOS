@@ -35,6 +35,7 @@ final class DiningToStoreABTestButton: UIControl {
         $0.layer.shadowOpacity = 0.2
         $0.layer.shadowRadius = 8
         $0.layer.shadowOffset = .init(width: 0, height: 2)
+        $0.isUserInteractionEnabled = false
     }
     
     // MARK: - Initialize

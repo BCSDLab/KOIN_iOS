@@ -147,6 +147,8 @@ final class DiningViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
+        
+        diningToStoreABTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -239,25 +241,59 @@ final class DiningViewController: UIViewController {
     }
 }
 
+// MARK: - Dining To Shop AB Test
 extension DiningViewController {
-
     private func handleAbTestResult(_ abTestResult: AssignAbTestResponse) {
         switch abTestResult.variableName {
         case .variant:
             diningToStoreABTestButton.isHidden = false
-            logAbTestResult(abTestResult.variableName.rawValue)
+            logAbTestResult(value: "design_B")
         case .control:
             diningToStoreABTestButton.isHidden = true
-            logAbTestResult(abTestResult.variableName.rawValue)
+            logAbTestResult(value: "design_A")
         default:
-            logAbTestResult(abTestResult.variableName.rawValue)
+            break
         }
     }
 
-    private func logAbTestResult(_ variantName: String) {
-
+    private func logAbTestResult(value: String) {
+        inputSubject.send(.logEventDirect(label: EventParameter.EventLabel.ABTest.dining2shop1, category: .abTestDiningEntry, value: value))
     }
     
+    @objc private func didTapDiningToStore() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.diningToShop, .click, getCurrentDiningType()))
+
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+
+        let fetchShopListUseCase         = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase        = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase      = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase   = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let searchShopUseCase            = DefaultSearchShopUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase     = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase     = DefaultGetUserScreenTimeUseCase()
+
+        let viewModel = ShopViewModel(
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            searchShopUseCase: searchShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            selectedId: 1
+        )
+
+        let shopVC = ShopViewControllerA(viewModel: viewModel)
+        shopVC.title = "주변상점"
+        navigationController?.pushViewController(shopVC, animated: true)
+    }
+}
+
+extension DiningViewController {
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
         case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
@@ -365,7 +401,6 @@ extension DiningViewController {
     private func setUpLayOuts() {
         [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToStoreABTestButton].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
         [diningTypeSegmentControl, underlineView].forEach {

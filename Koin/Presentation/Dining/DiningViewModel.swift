@@ -18,6 +18,7 @@ final class DiningViewModel: ViewModelProtocol {
         case changeNoti(Bool, SubscribeType)
         case fetchNotiList
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEventDirect(label: EventLabelType, category: EventParameter.EventCategory, value: String)
     }
     enum Output {
         case updateDiningList([DiningItem], DiningType)
@@ -81,6 +82,8 @@ final class DiningViewModel: ViewModelProtocol {
                 self.fetchNotiList()
             case .getABTestResult:
                 self.getAbTestResult()
+            case let .logEventDirect(label, category, value):
+                self.logAnalyticsEventUseCase.logEvent(name: label.team, label: label.rawValue, value: value, category: category.rawValue)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -185,10 +188,22 @@ extension DiningViewModel {
             print(abTestResult)
             self?.outputSubject.send(.setABTestResult(abTestResult))
         }).store(in: &subscriptions)
+
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "dining_store")).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            self?.outputSubject.send(.setABTestResult(abTestResult))
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    }
 }
-
