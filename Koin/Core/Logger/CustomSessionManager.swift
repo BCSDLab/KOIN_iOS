@@ -7,35 +7,59 @@
 
 import Foundation
 
-// 회원가입 커스텀 세션
-/// 세션id가 생성되고 15분 동안 세션id를 유지
-/// 이후에 다시 생성 이벤트가 발생한다면 새로운 세션id를 생성
+// 커스텀 세션 로깅
+/// 15분 또는 30분 동안 세션 ID를 유지
+/// 유지 시간이 지나면 새로운 세션 ID를 생성
 struct CustomSessionManager {
     private static let sessionKey = "custom_session_id"
     private static let sessionStartKey = "custom_session_start_time"
-    private static let sessionDuration: TimeInterval = 900
+    private static let sessionDurationKey = "custom_session_duration"
+    private static let sessionEventNameKey = "custom_session_event_name"
+
+    enum Duration: TimeInterval {
+        case fifteenMinutes = 900   // 15분
+        case thirtyMinutes = 1800   // 30분
+    }
 
     static func getOrCreateSessionId(
+        duration: Duration = .fifteenMinutes,
         eventName: String = "sign_up",
-        userId: Int = 0,
+        loginStatus: Int? = nil,
         platform: String = "iOS"
     ) -> String {
         let defaults = UserDefaults.standard
         let now = Date().timeIntervalSince1970
 
+        let savedDuration = defaults.double(forKey: sessionDurationKey)
+        let savedEventName = defaults.string(forKey: sessionEventNameKey)
+
         if let existingSessionId = defaults.string(forKey: sessionKey),
            let startTime = defaults.object(forKey: sessionStartKey) as? TimeInterval,
-           now - startTime < sessionDuration {
+           now - startTime < savedDuration,
+           savedDuration == duration.rawValue,
+           savedEventName == eventName {
             return existingSessionId
         }
 
         let timestamp = Int(now)
         let random = String(UUID().uuidString.filter { $0.isLetter }.prefix(5)).uppercased()
-        let sessionId = "\(eventName)_\(userId)_\(platform)_\(timestamp)_\(random)"
+        let loginFlag = loginStatus ?? loginStatusFlag()
+        let sessionId = "\(eventName)_\(loginFlag)_\(platform)_\(timestamp)_\(random)"
 
         defaults.set(sessionId, forKey: sessionKey)
         defaults.set(now, forKey: sessionStartKey)
+        defaults.set(duration.rawValue, forKey: sessionDurationKey)
+        defaults.set(eventName, forKey: sessionEventNameKey)
 
         return sessionId
+    }
+
+    private static func loginStatusFlag() -> Int {
+        if let token = KeychainWorker.shared.read(key: .access),
+               token.isEmpty == false {
+            return 1
+        } else {
+            return 0
+        }
     }
 }
