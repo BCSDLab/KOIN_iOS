@@ -42,6 +42,7 @@ final class ShopDetailTableViewCell: UITableViewCell {
     }
 
     private let thumbnailImageView = UIImageView().then {
+        $0.image = nil
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
@@ -124,6 +125,7 @@ final class ShopDetailTableViewCell: UITableViewCell {
         }
     }
     
+    // MARK: - shadow
     private func setShadow(isLastRow: Bool) {
         switch isLastRow {
         case true:
@@ -133,6 +135,13 @@ final class ShopDetailTableViewCell: UITableViewCell {
             insetBackgroundView.layer.masksToBounds = true
             insetBackgroundView.layer.applySketchShadow(color: .clear, alpha: 0.0, x: 0, y: 0, blur: 0, spread: 0)
         }
+    }
+    
+    // MARK: - prepareForReuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        thumbnailImageView.image = nil // 기존이미지 지우기 
+        thumbnailImageView.kf.cancelDownloadTask() // 로딩중이던 이미지 취소
     }
 }
 
