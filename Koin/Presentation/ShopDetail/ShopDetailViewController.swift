@@ -111,7 +111,6 @@ extension ShopDetailViewController {
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
                 self?.isAddingMenuAvailable = isAddingMenuAvailable
             case let .updateCartItemsCount(count):
-                self?.updateCartItemsCountLabel(count: count)
                 self?.bottomSheet.configure(count: count)
                 if count == 0 {
                     self?.isAddingMenuAvailable = true
