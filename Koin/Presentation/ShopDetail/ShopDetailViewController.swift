@@ -360,7 +360,7 @@ extension ShopDetailViewController {
         }
     }
     private func setUpLayout() {
-        [infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView, imagesCollectionView, imagesPageControl,
+        [separatorView, menuGroupTableView, imagesCollectionView, imagesPageControl, infoView, menuGroupNameCollectionView, 
          bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
