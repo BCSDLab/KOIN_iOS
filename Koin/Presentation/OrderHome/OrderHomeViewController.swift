@@ -501,7 +501,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            
+            let title = viewModel.getShopName(at: indexPath.item)
             let service = DefaultOrderService()
             let repository = DefaultOrderShopRepository(service: service)
             let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
@@ -520,6 +520,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 resetCartUseCase: resetCartUseCase,
                                                 orderableShopId: orderableShopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            viewController.title = title
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
     }

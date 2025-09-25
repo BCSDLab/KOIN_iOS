@@ -240,7 +240,7 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.changeCategory(categoryId))
         }.store(in: &subscriptions)
         
-        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
+        shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let service = DefaultShopService()
             let repository = DefaultShopRepository(service: service)
             
@@ -255,6 +255,7 @@ final class ShopViewController: UIViewController {
                                                 fetchShopDataUseCase: fetchShopDataUseCase,
                                                 shopId: shopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)
+            viewController.title = shopName
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)

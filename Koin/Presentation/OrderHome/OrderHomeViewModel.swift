@@ -163,6 +163,9 @@ extension OrderHomeViewModel {
     func getOrderableShopId(at index: Int) -> Int {
         return orderShopList[index].orderableShopId
     }
+    func getShopName(at index: Int) -> String {
+        return orderShopList[index].name
+    }
     
     private func getFloatingButtonStatus() {
         fetchOrderTrackingUseCase.execute()
