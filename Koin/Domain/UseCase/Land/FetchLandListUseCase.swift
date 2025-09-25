@@ -20,8 +20,8 @@ final class DefaultFetchLandListUseCase: FetchLandListUseCase {
     }
     
     func execute() -> AnyPublisher<[LandItem], Error> {
-        return landRepository.fetchLandList().map { landDTO in
-            landDTO.lands?.map { $0.toDomain() } ?? []
+        return landRepository.fetchLandList().map { landDto in
+            landDto.lands?.map { $0.toDomain() } ?? []
         }.eraseToAnyPublisher()
     }
 }

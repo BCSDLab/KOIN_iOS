@@ -30,7 +30,7 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .eraseToAnyPublisher()
     }
     
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return service.searchRelatedShops(text: text)
     }
     
@@ -57,8 +57,32 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             }
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         service.fetchOrderInProgress()
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error> {
+        service.fetchCartSummary(orderableShopId: orderableShopId)
+            .map { CartSummary(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error> {
+        service.fetchCartItemsCount()
+            .map { CartItemsCount(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func resetCart() -> AnyPublisher<Void, ErrorResponse> {
+        service.resetCart()
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCart() -> AnyPublisher<Cart, Error> {
+        service.fetchCart()
+            .map { Cart(from: $0) }
             .eraseToAnyPublisher()
     }
 }

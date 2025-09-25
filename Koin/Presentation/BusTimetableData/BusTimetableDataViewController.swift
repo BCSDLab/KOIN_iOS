@@ -233,7 +233,7 @@ extension BusTimetableDataViewController {
         )
     }
     
-    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO, shuttleTimetableType: ShuttleTimetableType) {
+    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDto, shuttleTimetableType: ShuttleTimetableType) {
         shuttleRouteTypeLabel.text = timetable.routeType.rawValue
         shuttleRouteTypeLabel.backgroundColor = UIColor.setColor(timetable.routeType.returnRouteColor())
         busTimetablePlaceLabel.text = timetable.routeName

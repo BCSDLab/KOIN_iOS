@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchBannerUseCase {
-    func execute() -> AnyPublisher<BannerDTO, Error>
+    func execute() -> AnyPublisher<BannerDto, Error>
 }
 
 final class DefaultFetchBannerUseCase: FetchBannerUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchBannerUseCase: FetchBannerUseCase {
         self.coreRepository = coreRepository
     }
     
-    func execute() -> AnyPublisher<BannerDTO, Error> {
+    func execute() -> AnyPublisher<BannerDto, Error> {
         return coreRepository.fetBanner()
     }
 }

@@ -250,7 +250,7 @@ extension ShopReviewViewController {
         return updatedText.count <= 500
     }
     
-    private func fillComponent(_ response: OneReviewDTO) {
+    private func fillComponent(_ response: OneReviewDto) {
         totalScoreView.rating = Double(response.rating)
         imageUploadCollectionView.updateImageUrls(response.imageUrls)
         reviewTextView.text = response.content

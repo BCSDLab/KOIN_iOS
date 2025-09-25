@@ -9,7 +9,7 @@ import UIKit
 
 final class DiningOperatingTimeCollectionView: UICollectionView, UICollectionViewDataSource {
     
-    private var timeText: [CoopOpenDTO] = []
+    private var timeText: [CoopOpenDto] = []
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -30,7 +30,7 @@ final class DiningOperatingTimeCollectionView: UICollectionView, UICollectionVie
         register(DiningOperatingTimeFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: DiningOperatingTimeFooterView.identifier)
     }
     
-    func setUpTimeText(_ timeText: [CoopOpenDTO]) {
+    func setUpTimeText(_ timeText: [CoopOpenDto]) {
         self.timeText = timeText
         reloadData()
     }

@@ -55,7 +55,10 @@ extension ShopDetailImagesCollectionView {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = self.frame.width
-        let currentPage = (contentOffset.x + width/2) / width
+        let currentPage = contentOffset.x
+        guard 0 <= currentPage else {
+            return
+        }
         didScrollOutputSubject.send(Int(currentPage))
     }
 }

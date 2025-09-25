@@ -22,7 +22,7 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     }
 
     enum Output {
-        case updateBusRoute(ShuttleBusTimetableDTO, ShuttleTimetableType)
+        case updateBusRoute(ShuttleBusTimetableDto, ShuttleTimetableType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

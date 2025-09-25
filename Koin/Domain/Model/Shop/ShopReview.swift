@@ -8,7 +8,7 @@
 import Foundation
 
 struct ShopReview {
-    let reviewStatistics: StatisticsDTO
+    let reviewStatistics: StatisticsDto
     let totalPage: Int
     let currentPage: Int
     let totalCount: Int

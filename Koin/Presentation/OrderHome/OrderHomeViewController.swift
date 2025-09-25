@@ -297,7 +297,7 @@ extension OrderHomeViewController {
         present(navController, animated: true, completion: nil)
     }
 
-    private func putImage(data: ShopCategoryDTO) {
+    private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
@@ -487,18 +487,23 @@ extension OrderHomeViewController: UICollectionViewDelegate {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
             
-            let service = DefaultOrderService() // TODO: Service 구현체 나누기
-            let repository = DefaultOrderShopRepository(service: service) // TODO: Repository 구현체 나누기
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
             let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
             let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
             let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
+            let fetchCartSummaryUseCase = DefaultFetchCartSummaryUseCase(repository: repository)
+            let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
+            let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
+            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
-                                                fetchShopSummaryUseCase: nil,
-                                                orderableShopId: orderableShopId,
-                                                shopId: nil,
-                                                isFromOrder: true)
+                                                fetchCartSummaryUseCase: fetchCartSummaryUseCase,
+                                                fetchCartUseCase: fetchCartUseCase,
+                                                fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
+                                                resetCartUseCase: resetCartUseCase,
+                                                orderableShopId: orderableShopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }

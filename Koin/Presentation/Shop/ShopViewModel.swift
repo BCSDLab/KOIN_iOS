@@ -23,10 +23,10 @@ final class ShopViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case putImage(ShopCategoryDTO)
+        case putImage(ShopCategoryDto)
         case changeFilteredShops([Shop], Int)
-        case updateEventShops([EventDTO])
-        case updateShopBenefits(ShopBenefitsDTO)
+        case updateEventShops([EventDto])
+        case updateShopBenefits(ShopBenefitsDto)
         case updateBeneficialShops([Shop])
         case showSearchedResult([Keyword])
         case navigateToShopData(Int, String, Int)

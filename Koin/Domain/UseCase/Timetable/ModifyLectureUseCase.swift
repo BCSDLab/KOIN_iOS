@@ -8,7 +8,7 @@
 import Combine
 
 protocol ModifyLectureUseCase {
-    func execute(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
+    func execute(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse>
 }
 
 final class DefaultModifyLectureUseCase: ModifyLectureUseCase {
@@ -19,7 +19,7 @@ final class DefaultModifyLectureUseCase: ModifyLectureUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse> {
+    func execute(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse> {
         return timetableRepository.modifyLecture(request: request)
     }
     

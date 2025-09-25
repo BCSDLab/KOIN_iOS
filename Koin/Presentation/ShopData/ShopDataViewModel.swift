@@ -50,7 +50,7 @@ final class ShopDataViewModel: ViewModelProtocol {
         case showShopMenuList([MenuCategory])
         case showShopEventList([ShopEvent])
         case showShopReviewList([Review], Int, String, ReviewSortType, Bool, Int, Int, Bool)
-        case showShopReviewStatistics(StatisticsDTO)
+        case showShopReviewStatistics(StatisticsDto)
         case showToast(String, Bool)
         case updateReviewCount(Int)
         case disappearReview(Int, Int)

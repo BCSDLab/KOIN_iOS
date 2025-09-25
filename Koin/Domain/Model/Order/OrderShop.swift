@@ -44,7 +44,7 @@ enum OrderDayOfWeek: String {
 }
 
 extension OrderShop {
-    init(dto: OrderShopDTO) {
+    init(dto: OrderShopDto) {
         shopId = dto.shopId
         orderableShopId = dto.orderableShopId
         name = dto.name
@@ -64,14 +64,14 @@ extension OrderShop {
 }
 
 extension OrderImage {
-    init(dto: OrderImageDTO) {
+    init(dto: OrderImageDto) {
         imageUrl = dto.imageUrl
         isThumbnail = dto.isThumbnail
     }
 }
 
 extension OrderOpen {
-    init(dto: OpenInfoDTO) {
+    init(dto: OpenInfoDto) {
         dayOfWeek = OrderDayOfWeek(rawValue: dto.dayOfWeek) ?? .monday
         closed = dto.closed
         openTime = dto.openTime ?? ""

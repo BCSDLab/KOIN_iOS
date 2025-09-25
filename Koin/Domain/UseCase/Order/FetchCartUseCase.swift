@@ -1,0 +1,27 @@
+//
+//  FetchCartUseCase.swift
+//  koin
+//
+//  Created by 홍기정 on 9/16/25.
+//
+
+import Combine
+
+protocol FetchCartUseCase {
+    func execute() -> AnyPublisher<Cart, Error>
+}
+
+final class DefaultFetchCartUseCase: FetchCartUseCase {
+    
+    let repository: OrderShopRepository
+    
+    init(repository: OrderShopRepository) {
+        self.repository = repository
+    }
+    
+    func execute() -> AnyPublisher<Cart, Error> {
+        repository.fetchCart()
+            .eraseToAnyPublisher()
+    }
+}
+

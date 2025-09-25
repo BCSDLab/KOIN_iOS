@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchShuttleBusTimetableUseCase {
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error>
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error>
 }
 
 final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseC
         self.repository = repository
     }
     
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDTO, Error> {
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
         return repository.fetchShuttleBusTimetable(id: id).map { $0.toDomain() }.eraseToAnyPublisher()
     }
 }

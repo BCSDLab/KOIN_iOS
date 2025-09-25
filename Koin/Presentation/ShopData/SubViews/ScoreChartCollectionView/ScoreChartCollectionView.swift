@@ -28,7 +28,7 @@ final class ScoreChartCollectionView: UICollectionView, UICollectionViewDataSour
         delegate = self
     }
     
-    func setStatistics(_ statistics: StatisticsDTO) {
+    func setStatistics(_ statistics: StatisticsDto) {
         self.sortedStatistics = statistics.ratings.sorted { $0.key > $1.key }
         reloadData()
     }

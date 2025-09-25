@@ -10,7 +10,7 @@ import UIKit
 
 final class EventShopCollectionView: UICollectionView, UICollectionViewDataSource, UIScrollViewDelegate, UICollectionViewDelegate  {
     
-    private var eventShops: [EventDTO] = []
+    private var eventShops: [EventDto] = []
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     let scrollPublisher = PassthroughSubject<String, Never>()
     private var timer: Timer?
@@ -40,7 +40,7 @@ final class EventShopCollectionView: UICollectionView, UICollectionViewDataSourc
         backgroundColor = UIColor.appColor(.newBackground)
     }
     
-    func setEventShops(_ eventList: [EventDTO]) {
+    func setEventShops(_ eventList: [EventDto]) {
         self.eventShops = eventList
         self.reloadData()
     }

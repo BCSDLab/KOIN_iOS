@@ -8,7 +8,7 @@
 import Combine
 
 protocol SearchOrderShopUseCase {
-    func execute(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    func execute(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
 }
 
 final class DefaultSearchOrderShopUseCase: SearchOrderShopUseCase {
@@ -18,7 +18,7 @@ final class DefaultSearchOrderShopUseCase: SearchOrderShopUseCase {
         self.orderShopRepository = orderShopRepository
     }
     
-    func execute(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func execute(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return orderShopRepository.searchRelatedQuery(text: text)
     }
     

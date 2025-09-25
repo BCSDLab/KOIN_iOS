@@ -11,14 +11,14 @@ import Foundation
 final class ManageNoticeKeywordViewModel: ViewModelProtocol {
     enum Input {
         case addKeyword(keyword: String, isRecommended: Bool)
-        case deleteKeyword(keyword: NoticeKeywordDTO)
+        case deleteKeyword(keyword: NoticeKeywordDto)
         case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
-        case updateKeyword([NoticeKeywordDTO])
+        case updateKeyword([NoticeKeywordDto])
         case updateRecommendedKeyword([String])
         case showLoginModal
         case updateSwitch(isOn: Bool)
@@ -69,7 +69,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
 
 extension ManageNoticeKeywordViewModel {
     private func addKeyword(keyword: String, isRecommended: Bool) {
-        let requestModel = NoticeKeywordDTO(id: nil, keyword: keyword)
+        let requestModel = NoticeKeywordDto(id: nil, keyword: keyword)
         getMyKeyword { [weak self] myKeywords in
             guard let self = self else { return }
             self.addNotificationKeywordUseCase
@@ -105,7 +105,7 @@ extension ManageNoticeKeywordViewModel {
         }
     }
     
-    private func getMyKeyword(completion: @escaping ([NoticeKeywordDTO]) -> Void) {
+    private func getMyKeyword(completion: @escaping ([NoticeKeywordDto]) -> Void) {
         fetchNotificationKeywordUseCase.execute().sink(receiveCompletion: { completionResult in
             if case let .failure(error) = completionResult {
                 Log.make().error("\(error)")
@@ -115,7 +115,7 @@ extension ManageNoticeKeywordViewModel {
         }).store(in: &subscriptions)
     }
     
-    private func deleteMyKeyword(keyWord: NoticeKeywordDTO) {
+    private func deleteMyKeyword(keyWord: NoticeKeywordDto) {
         deleteNotificationKeywordUseCase.execute(keyword: keyWord)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
@@ -142,7 +142,7 @@ extension ManageNoticeKeywordViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func getRecommendedKeyword(keywords: [NoticeKeywordDTO]) {
+    private func getRecommendedKeyword(keywords: [NoticeKeywordDto]) {
         fetchRecommendedKeywordUseCase.execute(filters: keywords).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")

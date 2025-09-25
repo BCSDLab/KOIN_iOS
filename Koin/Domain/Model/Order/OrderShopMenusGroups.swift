@@ -8,27 +8,30 @@
 import Foundation
 
 struct OrderShopMenusGroups {
-    let count: Int
     let menuGroups: [MenuGroup]
 }
-
 struct MenuGroup {
-    let id: Int
     let name: String
 }
 
 extension OrderShopMenusGroups {
-    init(from dto: OrderShopMenusGroupsDTO) {
-        self.count = dto.count
-        self.menuGroups = dto.menuGroups.map { menuGroupDTO in
-            MenuGroup(from: menuGroupDTO)
+    init(from dto: OrderShopMenusGroupsDto) {
+        self.menuGroups = dto.menuGroups.map { menuGroupDto in
+            MenuGroup(from: menuGroupDto)
+        }
+    }
+    init(from dto: ShopMenusCategoryDto) {
+        self.menuGroups = dto.menuCategories.map { menuCategoryDto in
+            return MenuGroup(from: menuCategoryDto)
         }
     }
 }
 
 extension MenuGroup {
-    init(from dto: MenuGroupDTO) {
-        self.id = dto.id
+    init(from dto: MenuGroupDto) {
+        self.name = dto.name
+    }
+    init(from dto: ShopMenuCategoryDto) {
         self.name = dto.name
     }
 }

@@ -241,16 +241,19 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, _ in
-            let service = DefaultShopService() // TODO: Service 구현체 나누기
-            let repository = DefaultShopRepository(service: service) // TODO:  Repository 구현체 나누기
-            let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(repository: repository)
-            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: nil,
-                                                fetchOrderShopMenusUseCase: nil,
-                                                fetchOrderShopMenusGroupsUseCase: nil,
-                                                fetchShopSummaryUseCase: fetchShopSummaryUseCase,
-                                                orderableShopId: nil,
-                                                shopId: shopId,
-                                                isFromOrder: false)
+            let service = DefaultShopService()
+            let repository = DefaultShopRepository(service: service)
+            
+            let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
+            let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: repository)
+            let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
+            let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
+            
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+                                                fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
+                                                fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
+                                                fetchShopDataUseCase: fetchShopDataUseCase,
+                                                shopId: shopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
@@ -323,11 +326,11 @@ extension ShopViewController {
         categoryCollectionView.updateCategory(id)
     }
 
-    private func putImage(data: ShopCategoryDTO) {
+    private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
 
-    private func updateEventShops(_ eventShops: [EventDTO]) {
+    private func updateEventShops(_ eventShops: [EventDto]) {
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {

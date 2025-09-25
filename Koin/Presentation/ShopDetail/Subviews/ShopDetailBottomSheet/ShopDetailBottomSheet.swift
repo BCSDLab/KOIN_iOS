@@ -6,9 +6,17 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 
 final class ShopDetailBottomSheet: UIView {
+    
+    // MARK: - Properties
+    var shopMinimumOrderAmount: Int = 0
+    var cartItemsAmount: Int = 0
+    var isAvailable: Bool = false
+    
+    let isMenuAddablePublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - Component
     private let separatorView = UIView().then {
@@ -37,14 +45,18 @@ final class ShopDetailBottomSheet: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(price: Int, isDeliveryAvailable: Bool, numberOfShoppingList: Int) {
+    func configure(cartSummary: CartSummary) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        priceLabel.text = formatter.string(from: NSNumber(value: price)) ?? "-" + "원"
-
-        isDeliveryAvailableLabel.text = isDeliveryAvailable ? "배달 가능" : "배달 불가"
+        let formattedAmount = formatter.string(from: NSNumber(value: cartSummary.cartItemsAmount)) ?? "0"
+        priceLabel.text = "\(formattedAmount)원"
         
-        switch numberOfShoppingList {
+        self.isDeliveryAvailableLabel.text = cartSummary.shopMinimumOrderAmount < cartSummary.cartItemsAmount ? "배달 가능" : "배달 불가"
+        
+        self.isAvailable = cartSummary.isAvailable
+    }
+    func configure(count: Int) {
+        switch count {
         case 0: shoppingListButton.setImage(.appImage(asset: .countIcon0), for: .normal)
         case 1: shoppingListButton.setImage(.appImage(asset: .countIcon1), for: .normal)
         case 2: shoppingListButton.setImage(.appImage(asset: .countIcon2), for: .normal)
@@ -57,11 +69,12 @@ final class ShopDetailBottomSheet: UIView {
         case 9: shoppingListButton.setImage(.appImage(asset: .countIcon9), for: .normal)
         default: shoppingListButton.setImage(.appImage(asset: .countIcon9Plus), for: .normal)
         }
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
 
 extension ShopDetailBottomSheet {
-    
     private func setUpButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePlacement = .leading

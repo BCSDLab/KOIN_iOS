@@ -13,6 +13,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     private var selectedShopId: Int?
     private var selectedTabIndex: Int
     private var subscriptions: Set<AnyCancellable> = []
+    private var isViewLoadedFirst: Bool = true
     
     init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopID
@@ -36,9 +37,12 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureController()
         configureNavigationBar(style: .order)
-        selectedIndex = selectedTabIndex
+        if isViewLoadedFirst {
+            configureController()
+            selectedIndex = selectedTabIndex
+            isViewLoadedFirst = false
+        }
     }
 
     

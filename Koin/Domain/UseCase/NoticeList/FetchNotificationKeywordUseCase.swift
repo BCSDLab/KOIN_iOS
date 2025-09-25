@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchNotificationKeywordUseCase {
-    func execute() -> AnyPublisher<([NoticeKeywordDTO], Bool), ErrorResponse>
+    func execute() -> AnyPublisher<([NoticeKeywordDto], Bool), ErrorResponse>
 }
 
 final class DefaultFetchNotificationKeywordUseCase: FetchNotificationKeywordUseCase {
@@ -18,7 +18,7 @@ final class DefaultFetchNotificationKeywordUseCase: FetchNotificationKeywordUseC
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute() -> AnyPublisher<([NoticeKeywordDTO], Bool), ErrorResponse> {
+    func execute() -> AnyPublisher<([NoticeKeywordDto], Bool), ErrorResponse> {
         noticeListRepository.fetchNotificationKeyword().map { fetchResult in
             switch fetchResult {
             case let .success(keywords):

@@ -220,7 +220,7 @@ extension NoticeSearchViewController {
         recentSearchTableView.updateRecentSearchedWords(words: words)
     }
     
-    private func updateSearchedResult(searchedResult: [NoticeArticleDTO], isLastPage: Bool, isNewPage: Bool) {
+    private func updateSearchedResult(searchedResult: [NoticeArticleDto], isLastPage: Bool, isNewPage: Bool) {
         [popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView].forEach {
             $0.isHidden = true
         }

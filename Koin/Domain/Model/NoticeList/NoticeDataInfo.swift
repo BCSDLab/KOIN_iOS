@@ -15,7 +15,7 @@ struct NoticeDataInfo {
     let hit: Int?
     let prevId: Int?
     let nextId: Int?
-    let attachments: [NoticeAttachmentDTO]
+    let attachments: [NoticeAttachmentDto]
     let url: String?
     let registeredAt: String
 }
