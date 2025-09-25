@@ -438,12 +438,27 @@ extension OrderHomeViewController {
         }
 
         eventOrderShopCollectionView.cellTapPublisher
-            .sink { [weak self] (shopId, _) in
+            .sink { [weak self] (orderableShopId, _) in
                 guard let self = self else { return }
-                let detailVC = OrderHomeDetailWebViewController(shopId: shopId, isFromOrder: true)
-                self.navigationController?.setNavigationBarHidden(true, animated: true)
-                self.navigationController?.pushViewController(detailVC, animated: true)
-                self.tabBarController?.tabBar.isHidden = true
+                let service = DefaultOrderService()
+                let repository = DefaultOrderShopRepository(service: service)
+                let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
+                let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
+                let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
+                let fetchCartSummaryUseCase = DefaultFetchCartSummaryUseCase(repository: repository)
+                let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
+                let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
+                let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+                let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
+                                                    fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
+                                                    fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
+                                                    fetchCartSummaryUseCase: fetchCartSummaryUseCase,
+                                                    fetchCartUseCase: fetchCartUseCase,
+                                                    fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
+                                                    resetCartUseCase: resetCartUseCase,
+                                                    orderableShopId: orderableShopId)
+                let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+                navigationControllerDelegate?.pushViewController(viewController, animated: true)
             }
             .store(in: &subscriptions)
     }
