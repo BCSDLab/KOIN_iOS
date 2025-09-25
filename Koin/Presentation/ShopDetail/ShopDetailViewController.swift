@@ -16,7 +16,7 @@ final class ShopDetailViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private var isAddingMenuAvailable: Bool = false
+    private var isAddingMenuAvailable: Bool = true
     
     // MARK: - Components
     private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
@@ -145,7 +145,6 @@ extension ShopDetailViewController {
         // MARK: - ImagesCollectionView
         imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
             self?.imagesPageControl.currentPage = currentPage
-            self?.imagesPageControl.isHidden = currentPage == 0 ? true : false
         }
         .store(in: &subscriptions)
         
@@ -361,7 +360,7 @@ extension ShopDetailViewController {
         }
     }
     private func setUpLayout() {
-        [imagesCollectionView, imagesPageControl, infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView,
+        [infoView, separatorView, menuGroupNameCollectionView, menuGroupTableView, imagesCollectionView, imagesPageControl,
          bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
