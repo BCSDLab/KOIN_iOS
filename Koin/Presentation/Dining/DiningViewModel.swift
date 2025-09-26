@@ -18,8 +18,9 @@ final class DiningViewModel: ViewModelProtocol {
         case changeNoti(Bool, SubscribeType)
         case fetchNotiList
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case logEventDirect(label: EventLabelType, category: EventParameter.EventCategory, value: String)
+        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
     }
+    
     enum Output {
         case updateDiningList([DiningItem], DiningType)
         case initCalendar(Date)
@@ -82,8 +83,8 @@ final class DiningViewModel: ViewModelProtocol {
                 self.fetchNotiList()
             case .getAbTestResult:
                 self.getAbTestResult()
-            case let .logEventDirect(label, category, value):
-                self.logAnalyticsEventUseCase.logEvent(name: label.team, label: label.rawValue, value: value, category: category.rawValue)
+            case let .logEventWithSessionId(label, category, value, sessionId):
+                self.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()

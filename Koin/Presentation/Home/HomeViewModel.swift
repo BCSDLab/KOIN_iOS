@@ -65,7 +65,10 @@ final class HomeViewModel: ViewModelProtocol {
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
-         dateProvider: DateProvider, checkVersionUseCase: CheckVersionUseCase, assignAbTestUseCase: AssignAbTestUseCase, fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase) {
+         dateProvider: DateProvider,
+         checkVersionUseCase: CheckVersionUseCase,
+         assignAbTestUseCase: AssignAbTestUseCase,
+         fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase

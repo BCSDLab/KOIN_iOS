@@ -18,6 +18,10 @@ final class DiningViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var viewDidAppeared = false
     
+    // FIXME: - AB 테스트 식단 세션 아이디 프로퍼티
+    
+    private var customSessionId: String?
+    
     // MARK: - UI Components
     
     private let dateCalendarCollectionView: CalendarCollectionView = {
@@ -148,7 +152,7 @@ final class DiningViewController: UIViewController {
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
         
-        diningToShopAbTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
+        diningToShopAbTestButton.addTarget(self, action: #selector(didTapDiningToShop), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -257,23 +261,32 @@ extension DiningViewController {
     }
 
     private func logAbTestResult(value: String) {
-        inputSubject.send(.logEventDirect(label: EventParameter.EventLabel.AbTest.dining2shop1, category: .abTestDiningEntry, value: value))
+        let loginFlag = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
+
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginFlag, platform: "iOS")
+        
+        self.customSessionId = customSessionId
+        
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.dining2shop1, .abTestDiningEntry, value, customSessionId))
     }
     
-    @objc private func didTapDiningToStore() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.diningToShop, .click, getCurrentDiningType()))
-
+    @objc private func didTapDiningToShop() {
+        let loginFlag = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
+        let customSessionId = customSessionId ?? CustomSessionManager.current(eventName: "dining2shop")
+                                              ?? CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginFlag, platform: "iOS")
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.diningToShop, .click, getCurrentDiningType(), customSessionId))
+        
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
 
-        let fetchShopListUseCase         = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase        = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase      = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase   = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase            = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase     = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase     = DefaultGetUserScreenTimeUseCase()
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
 
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
@@ -287,9 +300,9 @@ extension DiningViewController {
             selectedId: 1
         )
 
-        let shopVC = ShopViewControllerA(viewModel: viewModel)
-        shopVC.title = "주변상점"
-        navigationController?.pushViewController(shopVC, animated: true)
+        let shopViewController = ShopViewControllerA(viewModel: viewModel)
+        shopViewController.title = "주변상점"
+        navigationController?.pushViewController(shopViewController, animated: true)
     }
 }
 
