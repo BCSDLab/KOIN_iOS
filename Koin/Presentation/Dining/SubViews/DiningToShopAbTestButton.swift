@@ -1,5 +1,5 @@
 //
-//  DiningToStoreABTestButton.swift
+//  DiningToShopAbTestButton.swift
 //  koin
 //
 //  Created by 이은지 on 9/24/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class DiningToShopABTestButton: UIControl {
+final class DiningToShopAbTestButton: UIControl {
     
     // MARK: - UI Components
     
@@ -52,7 +52,7 @@ final class DiningToShopABTestButton: UIControl {
 
 // MARK: - UI Functions
 
-extension DiningToShopABTestButton {
+extension DiningToShopAbTestButton {
     private func setUpLayOuts() {
         addSubview(containerView)
         

@@ -117,7 +117,7 @@ final class DiningViewController: UIViewController {
         segmentDidChange(diningTypeSegmentControl)
     }
     
-    private let diningToShopABTestButton = DiningToShopABTestButton().then {
+    private let diningToShopAbTestButton = DiningToShopAbTestButton().then {
         $0.isHidden = true
     }
     
@@ -141,14 +141,14 @@ final class DiningViewController: UIViewController {
         configureSwipeGestures()
         configureView()
         navigationItem.title = "식단"
-        inputSubject.send(.getABTestResult)
+        inputSubject.send(.getAbTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
         
-        diningToShopABTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
+        diningToShopAbTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -186,7 +186,7 @@ final class DiningViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
-            case let .setABTestResult(abTestResult):
+            case let .setAbTestResult(abTestResult):
                 self?.handleAbTestResult(abTestResult)
             }
         }.store(in: &subscriptions)
@@ -246,10 +246,10 @@ extension DiningViewController {
     private func handleAbTestResult(_ abTestResult: AssignAbTestResponse) {
         switch abTestResult.variableName {
         case .variant:
-            diningToShopABTestButton.isHidden = false
+            diningToShopAbTestButton.isHidden = false
             logAbTestResult(value: "design_B")
         case .control:
-            diningToShopABTestButton.isHidden = true
+            diningToShopAbTestButton.isHidden = true
             logAbTestResult(value: "design_A")
         default:
             break
@@ -257,11 +257,11 @@ extension DiningViewController {
     }
 
     private func logAbTestResult(value: String) {
-        inputSubject.send(.logEventDirect(label: EventParameter.EventLabel.ABTest.dining2shop1, category: .abTestDiningEntry, value: value))
+        inputSubject.send(.logEventDirect(label: EventParameter.EventLabel.AbTest.dining2shop1, category: .abTestDiningEntry, value: value))
     }
     
     @objc private func didTapDiningToStore() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.diningToShop, .click, getCurrentDiningType()))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.diningToShop, .click, getCurrentDiningType()))
 
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -399,7 +399,7 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToShopABTestButton].forEach {
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToShopAbTestButton].forEach {
             view.addSubview($0)
         }
 
@@ -454,7 +454,7 @@ extension DiningViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-        diningToShopABTestButton.snp.makeConstraints() {
+        diningToShopAbTestButton.snp.makeConstraints() {
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-8)
             $0.height.equalTo(46)

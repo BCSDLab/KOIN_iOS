@@ -630,7 +630,7 @@
 		D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F8FDA2DF12847000265DC /* StatefulButton.swift */; };
 		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
 		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
-		D8F1D7042E83F82B000DBCF2 /* DiningToStoreABTestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F1D7032E83F82B000DBCF2 /* DiningToStoreABTestButton.swift */; };
+		D8F1D7042E83F82B000DBCF2 /* DiningToShopAbTestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F1D7032E83F82B000DBCF2 /* DiningToShopAbTestButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1308,7 +1308,7 @@
 		D89F8FDA2DF12847000265DC /* StatefulButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulButton.swift; sourceTree = "<group>"; };
 		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
-		D8F1D7032E83F82B000DBCF2 /* DiningToStoreABTestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningToStoreABTestButton.swift; sourceTree = "<group>"; };
+		D8F1D7032E83F82B000DBCF2 /* DiningToShopAbTestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningToShopAbTestButton.swift; sourceTree = "<group>"; };
 		DC8E222A5A003F4FD659C01B /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2241,7 +2241,7 @@
 				D20AB96C2C573356006BC684 /* DiningNotiContentViewController.swift */,
 				D23582952BC0F19200D615DD /* CalendarCollectionView */,
 				D27DD03F2BA608310081FD36 /* DiningCollectionView */,
-				D8F1D7032E83F82B000DBCF2 /* DiningToStoreABTestButton.swift */,
+				D8F1D7032E83F82B000DBCF2 /* DiningToShopAbTestButton.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -3867,7 +3867,7 @@
 				D23944792C3BD97500048F45 /* ReviewListViewController.swift in Sources */,
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
-				D8F1D7042E83F82B000DBCF2 /* DiningToStoreABTestButton.swift in Sources */,
+				D8F1D7042E83F82B000DBCF2 /* DiningToShopAbTestButton.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D223D6162D9BF20B00C29BE6 /* BannerViewControllerB.swift in Sources */,
@@ -4558,7 +4558,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 393;
+				CURRENT_PROJECT_VERSION = 412;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4577,7 +4577,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.4.1;
+				MARKETING_VERSION = 4.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -4595,7 +4595,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 393;
+				CURRENT_PROJECT_VERSION = 412;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4614,7 +4614,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.4.1;
+				MARKETING_VERSION = 4.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

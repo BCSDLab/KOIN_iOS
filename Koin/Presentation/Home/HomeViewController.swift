@@ -159,7 +159,7 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         checkAndShowBanner()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self

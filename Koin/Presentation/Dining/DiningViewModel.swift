@@ -11,7 +11,7 @@ import Foundation
 final class DiningViewModel: ViewModelProtocol {
     
     enum Input {
-        case getABTestResult
+        case getAbTestResult
         case updateDisplayDateTime(Date?, DiningType?)
         case shareMenuList(ShareDiningMenu)
         case determineInitDate
@@ -25,7 +25,7 @@ final class DiningViewModel: ViewModelProtocol {
         case initCalendar(Date)
         case showBottomSheet((Bool, Bool))
         case showLoginModal
-        case setABTestResult(AssignAbTestResponse)
+        case setAbTestResult(AssignAbTestResponse)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -80,7 +80,7 @@ final class DiningViewModel: ViewModelProtocol {
                 self.changeNoti(isOn: isOn, type: subscribeType)
             case .fetchNotiList:
                 self.fetchNotiList()
-            case .getABTestResult:
+            case .getAbTestResult:
                 self.getAbTestResult()
             case let .logEventDirect(label, category, value):
                 self.logAnalyticsEventUseCase.logEvent(name: label.team, label: label.rawValue, value: value, category: category.rawValue)
@@ -186,7 +186,7 @@ extension DiningViewModel {
             }
         }, receiveValue: { [weak self] abTestResult in
             print(abTestResult)
-            self?.outputSubject.send(.setABTestResult(abTestResult))
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
         }).store(in: &subscriptions)
 
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "dining_store")).sink(receiveCompletion: { completion in
@@ -195,7 +195,7 @@ extension DiningViewModel {
             }
         }, receiveValue: { [weak self] abTestResult in
             print(abTestResult)
-            self?.outputSubject.send(.setABTestResult(abTestResult))
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
         }).store(in: &subscriptions)
     }
     
