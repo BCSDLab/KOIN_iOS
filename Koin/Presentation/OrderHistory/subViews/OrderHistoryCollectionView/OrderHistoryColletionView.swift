@@ -11,16 +11,16 @@ import SnapKit
 final class OrderHistoryCollectionView: UICollectionView {
     
     private var items: [OrderHistory] = []
-
+    
     var onSelect: ((Int) -> Void)?
     var onTapReorder: ((Int) -> Void)?
     var onTapOrderInfoButton: ((Int) -> Void)?
     var onReachEnd: (() -> Void)?
     var onDidScroll: ((CGFloat) -> Void)?
     
-
-
-
+    
+    
+    
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
@@ -30,7 +30,7 @@ final class OrderHistoryCollectionView: UICollectionView {
         super.init(coder: coder)
         commonInit()
     }
-
+    
     private func commonInit() {
         backgroundColor = .clear
         showsVerticalScrollIndicator = false
@@ -40,7 +40,7 @@ final class OrderHistoryCollectionView: UICollectionView {
         register(OrderHistoryColletionViewCell.self,
                  forCellWithReuseIdentifier: OrderHistoryColletionViewCell.orderHistoryIdentifier)
     }
-
+    
     func update(_ items: [OrderHistory]) {
         self.items = items
         reloadData()
@@ -54,7 +54,7 @@ final class OrderHistoryCollectionView: UICollectionView {
         performBatchUpdates({ insertItems(at: indexPaths) }, completion: nil)
     }
     
-   
+    
     private func calculateHeight() -> CGFloat{
         let topInset: CGFloat = 16
         let stateLabelH = UIFont.appFont(.pretendardBold, size: 16).lineHeight

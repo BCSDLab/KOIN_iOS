@@ -10,7 +10,7 @@ import SnapKit
 import Combine
 
 final class OrderHistoryViewController: UIViewController {
-
+    
     // MARK: - Properties
     private let viewModel: OrderHistoryViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -71,22 +71,22 @@ final class OrderHistoryViewController: UIViewController {
                            rightSegmentState: .normal,
                            barMetrics: .default)
     }
-
+    
     private let orderHistorySeperateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral400)
     }
-
+    
     private let refreshControl = UIRefreshControl()
-
+    
     private let orderHistoryUnderLineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.new500)
     }
-
+    
     private let orderHistoryCollectionView = OrderHistoryCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
-
+    
     private let orderPrepareCollectionView = OrderPrepareCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
@@ -98,32 +98,32 @@ final class OrderHistoryViewController: UIViewController {
             layout.sectionInset = .zero
         }
     }
-
+    
     //MARK: - emptyState UI
-
+    
     private let emptyView = EmptyStateView()
     
     private let topShadowView = UIView().then {
         $0.isUserInteractionEnabled = false
         $0.alpha = 0
     }
-
+    
     private let searchBar = OrderHistoryCustomSearchBar()
-
+    
     private lazy var searchDimView = UIControl().then {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0)
         $0.isHidden = false
     }
-
+    
     private let searchCancelButton = UIButton(
         configuration: {
             var config = UIButton.Configuration.plain()
-
+            
             var title = AttributedString("취소")
             title.font = UIFont.appFont(.pretendardBold, size: 14)
             title.foregroundColor = UIColor.appColor(.neutral500)
             config.attributedTitle = title
-
+            
             config.baseForegroundColor = UIColor.appColor(.neutral500)
             config.contentInsets = .zero
             return config
@@ -132,26 +132,26 @@ final class OrderHistoryViewController: UIViewController {
         $0.setContentHuggingPriority(.required, for: .horizontal)
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
-
+    
     private let filterButtonRow = UIStackView().then {
         $0.axis = .horizontal
         $0.alignment = .leading
         $0.distribution = .fill
         $0.spacing = 8
     }
-
+    
     private let periodButton = FilteringButton().then {
         $0.set(title: "조회 기간", showsChevron: true)
         $0.setSelectable(false)
         $0.applyFilter(false)
     }
-
+    
     private let stateInfoButton = FilteringButton().then {
         $0.set(title: "주문 상태 · 정보", showsChevron: true)
         $0.setSelectable(false)
         $0.applyFilter(false)
     }
-
+    
     private let resetButton = FilteringButton().then {
         let icon = UIImage.appImage(asset: .refresh)
         $0.set(title: "초기화", iconRight: icon, showsChevron: false)
@@ -184,9 +184,9 @@ final class OrderHistoryViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         view.bringSubviewToFront(topShadowView)
-
+        
         topShadowView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-
+        
         let topBorder = CALayer()
         topBorder.frame = CGRect(x: 0,
                                  y: 0,
@@ -194,7 +194,7 @@ final class OrderHistoryViewController: UIViewController {
                                  height: 1)
         topBorder.backgroundColor = UIColor.black.withAlphaComponent(0.08).cgColor
         topShadowView.layer.addSublayer(topBorder)
-
+        
         let bottomBorder = CALayer()
         bottomBorder.frame = CGRect(x: 0,
                                     y: topShadowView.bounds.height - 1,
@@ -209,7 +209,7 @@ final class OrderHistoryViewController: UIViewController {
         navigationController?.navigationBar.layoutIfNeeded()
         inputSubject.send(.refresh)
     }
-
+    
     // MARK: - Bind
     private func bind() {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
@@ -234,10 +234,10 @@ final class OrderHistoryViewController: UIViewController {
                     self.orderHistoryCollectionView.update([])
                     self.syncUI()
                     self.endRefreshIfNeeded()
-
+                    
                 case .errorOccurred(let error):
                     print(error)
-
+                    
                 case .endRefreshing:
                     self.endRefreshIfNeeded()
                     
@@ -257,13 +257,13 @@ final class OrderHistoryViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
-            
-            searchBar.onReturn = { [weak self] text in
-                guard let self = self else { return }
-                let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                self.appliedQuery = trimmed
-                self.inputSubject.send(.search(trimmed))
-                self.deactivateDimOnly()
+        
+        searchBar.onReturn = { [weak self] text in
+            guard let self = self else { return }
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.appliedQuery = trimmed
+            self.inputSubject.send(.search(trimmed))
+            self.deactivateDimOnly()
         }
     }
     
@@ -291,7 +291,7 @@ final class OrderHistoryViewController: UIViewController {
         orderPrepareCollectionView.onTapOrderDetailButton = { [weak self] paymentId in
             self?.presentOrderResultModal(with: paymentId)
         }
-
+        
         orderHistoryCollectionView.onTapOrderInfoButton = { [weak self] paymentId in
             self?.presentOrderResultModal(with: paymentId)
         }
@@ -310,7 +310,7 @@ final class OrderHistoryViewController: UIViewController {
         barTrailingToCancel?.activate()
         searchCancelButton.isHidden = false
         searchCancelButton.alpha = 1
-
+        
         searchBar.unfocus()
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
             self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0)
@@ -319,7 +319,7 @@ final class OrderHistoryViewController: UIViewController {
             self.searchDimView.isHidden = true
         }
     }
-
+    
     private func presentOrderResultModal(with paymentId: Int) {
         guard let url = URL(string: "https://order.stage.koreatech.in/result/\(paymentId)") else { return }
         let viewController = OrderResultWebViewController(resultURL: url)
@@ -342,7 +342,7 @@ extension OrderHistoryViewController {
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
             $0.snp.makeConstraints { $0.height.equalTo(34) }
         }
-
+        
     }
     
     private func setUpConstraints() {
@@ -421,7 +421,7 @@ extension OrderHistoryViewController {
             emptyTopToSeparator = emptyView.snp.prepareConstraints {
                 $0.top.equalTo(orderHistorySeperateView.snp.bottom)
             }.first
-
+            
             emptyTopToFilter = emptyView.snp.prepareConstraints {
                 $0.top.equalTo(orderHistoryCollectionView.snp.top)
             }.first
@@ -429,7 +429,7 @@ extension OrderHistoryViewController {
         
         emptyTopToFilter.activate()
         emptyTopToSeparator.deactivate()
-
+        
         
         topShadowView.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview()
@@ -454,12 +454,12 @@ extension OrderHistoryViewController{
     private func render() {
         periodButton.setTitle(currentQuery.periodTitle)
         periodButton.applyFilter(currentQuery.period != .none)
-
+        
         stateInfoButton.setTitle(currentQuery.infoTitle)
         let hasInfo = (currentQuery.type != .none) || (currentQuery.status != .none)
         stateInfoButton.applyFilter(hasInfo)
-
-
+        
+        
         updateResetVisibility()
         if orderHistorySegment.selectedSegmentIndex == 0 {
             inputSubject.send(.applyQuery(currentQuery))
@@ -520,7 +520,7 @@ extension OrderHistoryViewController{
     
     private func setupRefreshControl() {
         orderHistoryCollectionView.refreshControl = refreshControl
-
+        
         refreshControl.removeTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
     }
@@ -542,7 +542,7 @@ extension OrderHistoryViewController {
         let segmentCount = CGFloat(segment.numberOfSegments)
         let leadingDistance: CGFloat = CGFloat(segment.selectedSegmentIndex) * (UIScreen.main.bounds.width / segmentCount) + 7.5
         
-//        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.orderHistoryTabClick, .click, <#T##Any#>))
+        //        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.orderHistoryTabClick, .click, <#T##Any#>))
         
         
         UIView.animate(withDuration:0.2, animations: {
@@ -573,7 +573,7 @@ extension OrderHistoryViewController {
         isRefreshingNow = true
         inputSubject.send(.refresh)
     }
-        
+    
     @objc private func resetFilterTapped() {
         currentQuery.resetFilter()
         inputSubject.send(.applyQuery(currentQuery))
@@ -582,7 +582,7 @@ extension OrderHistoryViewController {
     
     @objc private func searchTapped(_ sender: UITextField) {
         searchBar.becomeFirstResponder()
-
+        
         view.bringSubviewToFront(searchDimView)
         barTrailingToSuperview.deactivate()
         barTrailingToCancel?.activate()
@@ -592,8 +592,8 @@ extension OrderHistoryViewController {
         UIView.performWithoutAnimation {
             view.layoutIfNeeded()
         }
-
-
+        
+        
         UIView.animate(withDuration: 0.25,
                        delay: 0,
                        options: [.curveEaseInOut],
@@ -602,9 +602,9 @@ extension OrderHistoryViewController {
             self.searchDimView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
             self.view.layoutIfNeeded()
         })
-
+        
     }
-
+    
     @objc private func cancelButtonTapped() {
         searchBar.unfocus()
         searchBar.textField.text = ""
@@ -661,14 +661,14 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
     private func updateTopShadow(using y: CGFloat? = nil, forceHide: Bool = false) {
         let isHistoryTab = (orderHistorySegment.selectedSegmentIndex == 0)
         let active = isHistoryTab && emptyView.isHidden && !forceHide
-
+        
         guard active else {
             shadowAlpha = 0
             topShadowView.alpha = 0
             topShadowView.isHidden = true
             return
         }
-
+        
         let yy = max(y ?? orderHistoryCollectionView.contentOffset.y, 0)
         guard yy > activationOffset else {
             shadowAlpha = 0
@@ -686,7 +686,7 @@ extension OrderHistoryViewController: UICollectionViewDelegate, UIScrollViewDele
         shadowAlpha += (target - shadowAlpha) * 0.20
         topShadowView.alpha = shadowAlpha
     }
-
+    
 }
 
 private extension UICollectionView {

@@ -17,11 +17,11 @@ final class OrderHistoryViewModel {
         case search(String)
         case loadNextPage
         
-//        case selectOrder(Int)
-//        case tapReorder(Int)
-//        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        //        case selectOrder(Int)
+        //        case tapReorder(Int)
+        //        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, EventParameter.EventLabelNeededDuration? = nil)
     }
-
+    
     // MARK: Output
     enum Output {
         case updateOrders([OrderHistory])
@@ -33,16 +33,16 @@ final class OrderHistoryViewModel {
         case navigateToOrderDetail(Int)
         case scrollToTop
     }
-
+    
     // MARK: - properties
     private let fetchHistory: FetchOrderHistoryUseCase
     private let orderService: OrderService
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
-
+    
     private var subscriptions = Set<AnyCancellable>()
     private let outputSubject = PassthroughSubject<Output, Never>()
-
+    
     private var currentQuery = OrderHistoryQuery()
     private var currentKeyword: String = ""
     
@@ -51,16 +51,16 @@ final class OrderHistoryViewModel {
     private var totalPages: Int = 1
     private var isLoadingPage: Bool = false
     private let pageSize: Int = 10
-
+    
     init(fetchHistory: FetchOrderHistoryUseCase, orderService: OrderService, logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-        getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+         getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     ) {
         self.fetchHistory = fetchHistory
         self.orderService = orderService
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
-
+    
     // MARK: - Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input
@@ -93,19 +93,19 @@ final class OrderHistoryViewModel {
                 case .loadNextPage:
                     self.fetchNextPage()
                     
-//                case .selectOrder(let id):
-//                    self.outputSubject.send(.navigateToOrderDetail(id))
+                    //                case .selectOrder(let id):
+                    //                    self.outputSubject.send(.navigateToOrderDetail(id))
                     
-//                case .tapReorder(_):
-//                    <#code#>
-//                case .logEvent(_, _, _, _, _):
-//                    <#code#>
+                    //                case .tapReorder(_):
+                    //                    <#code#>
+                    //                case .logEvent(_, _, _, _, _):
+                    //                    <#code#>
                 }
-// 나중에 연결
-
+                // 나중에 연결
+                
                 
             }.store(in: &subscriptions)
-            
+        
         return outputSubject.eraseToAnyPublisher()
     }
     
@@ -130,7 +130,7 @@ extension OrderHistoryViewModel{
         totalPages = 1
         historyAccum = []
         isLoadingPage = true
-
+        
         fetchHistory.execute(query: currentQuery)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
@@ -144,20 +144,20 @@ extension OrderHistoryViewModel{
                 guard let self else { return }
                 self.currentPageIndex = page.currentPage
                 self.totalPages = page.totalPage
-
+                
                 let list = page.orders
                 self.historyAccum = list
                 self.outputSubject.send(list.isEmpty ? .showEmpty(true) : .updateOrders(list))
             }
             .store(in: &subscriptions)
     }
-
+    
     private func fetchNextPage() {
         guard !isLoadingPage, currentPageIndex < totalPages else { return }
         isLoadingPage = true
         currentQuery.page = currentPageIndex + 1
         currentQuery.size = pageSize
-
+        
         fetchHistory.execute(query: currentQuery)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
@@ -178,18 +178,18 @@ extension OrderHistoryViewModel{
     }
     
     private func fetchOrderPrepare() {
-         orderService.fetchOrderInProgress()
-             .receive(on: DispatchQueue.main)
-             .sink { [weak self] completion in
-                 guard let self else { return }
-                 if case .failure = completion {
-                     self.outputSubject.send(.updatePreparing([]))
-                 }
-             } receiveValue: { [weak self] inProgress in
-                 self?.outputSubject.send(.updatePreparing(inProgress))
-             }
-             .store(in: &subscriptions)
-     }
+        orderService.fetchOrderInProgress()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                if case .failure = completion {
+                    self.outputSubject.send(.updatePreparing([]))
+                }
+            } receiveValue: { [weak self] inProgress in
+                self?.outputSubject.send(.updatePreparing(inProgress))
+            }
+            .store(in: &subscriptions)
+    }
     
     private func fetchFilter(period: OrderHistoryPeriod? = nil,
                              status: OrderHistoryStatus? = nil,

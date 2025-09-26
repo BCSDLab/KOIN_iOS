@@ -68,7 +68,7 @@ final class OrderPrepareCollectionView: UICollectionView {
         return total
     }
 }
-    
+
 
 extension OrderPrepareCollectionView: UICollectionViewDataSource {
     
@@ -85,13 +85,13 @@ extension OrderPrepareCollectionView: UICollectionViewDataSource {
         }
         let order = items[indexPath.item]
         cell.configure(with: order)
-
+        
         cell.onTapOrderDetailButton = { [weak self] in
             self?.onTapOrderDetailButton?(order.paymentId)
         }
         return cell
     }
-
+    
 }
 
 extension OrderPrepareCollectionView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
