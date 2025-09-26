@@ -22,6 +22,7 @@
 		3B3CAE8E2E72E2FE00BBAEEE /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */; };
 		3B3CAE902E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
+		3B8E09732E8650B0007FD6A4 /* FilterBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8E09722E8650B0007FD6A4 /* FilterBottomSheetViewModel.swift */; };
 		3BACDF3E2E7D21B0004351E3 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BACDF3D2E7D21B0004351E3 /* EmptyStateView.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
@@ -748,6 +749,7 @@
 		3B3CAE852E72E2FE00BBAEEE /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
 		3B3CAE872E72E2FE00BBAEEE /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
+		3B8E09722E8650B0007FD6A4 /* FilterBottomSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewModel.swift; sourceTree = "<group>"; };
 		3BACDF3D2E7D21B0004351E3 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -3688,6 +3690,7 @@
 				3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */,
 				3B3CAE712E719CD500BBAEEE /* OrderHistoryViewModel.swift */,
 				D838F2A52E78100C0084C230 /* OrderResultWebViewController.swift */,
+				3B8E09722E8650B0007FD6A4 /* FilterBottomSheetViewModel.swift */,
 			);
 			path = OrderHistory;
 			sourceTree = "<group>";
@@ -4316,6 +4319,7 @@
 				83E770F82D05864800EB3F84 /* MockNetworkService.swift in Sources */,
 				D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
+				3B8E09732E8650B0007FD6A4 /* FilterBottomSheetViewModel.swift in Sources */,
 				8354BE1C2C78AAC9009D4D7A /* RecommendedSearchCollectionView.swift in Sources */,
 				D283A4EA2CECF48C00C238BA /* PointLabel.swift in Sources */,
 				D239447E2C3BF4B100048F45 /* ShopReviewViewModel.swift in Sources */,

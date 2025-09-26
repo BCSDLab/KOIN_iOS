@@ -13,7 +13,7 @@ final class OrderHistoryViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: OrderHistoryViewModel
-    private var cancellables = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     private let inputSubject = PassthroughSubject<OrderHistoryViewModel.Input, Never>()
     private var items: [OrderHistory] = []
     private let initialTab: Int
@@ -256,7 +256,7 @@ final class OrderHistoryViewController: UIViewController {
                     }
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &subscriptions)
         
         searchBar.onReturn = { [weak self] text in
             guard let self = self else { return }
@@ -459,13 +459,7 @@ extension OrderHistoryViewController{
         let hasInfo = (currentQuery.type != .none) || (currentQuery.status != .none)
         stateInfoButton.applyFilter(hasInfo)
         
-        
         updateResetVisibility()
-        if orderHistorySegment.selectedSegmentIndex == 0 {
-            inputSubject.send(.applyQuery(currentQuery))
-        } else {
-            orderPrepareCollectionView.reloadData()
-        }
         syncUI()
     }
     
@@ -551,6 +545,12 @@ extension OrderHistoryViewController {
             }
             self.view.layoutIfNeeded()
             self.syncUI()
+        }, completion: {_ in
+            if segment.selectedSegmentIndex == 0 {
+                self.inputSubject.send(.applyQuery(self.currentQuery))
+            } else {
+                self.orderPrepareCollectionView.reloadData()
+            }
         })
     }
     
@@ -576,6 +576,7 @@ extension OrderHistoryViewController {
     
     @objc private func resetFilterTapped() {
         currentQuery.resetFilter()
+        render()
         inputSubject.send(.applyQuery(currentQuery))
         
     }

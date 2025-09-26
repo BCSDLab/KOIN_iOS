@@ -7,14 +7,17 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class FilterBottomSheetViewController: UIViewController {
     
     //MARK: - properties
     
-    var onApply: ((OrderHistoryQuery) -> Void)?
-    private var work: OrderHistoryQuery
     private var bottomConstraint: Constraint!
+    var onApply: ((OrderHistoryQuery) -> Void)?
+    private let viewModel: FilterBottomSheetViewModel
+    private let inputSubject = PassthroughSubject<FilterBottomSheetViewModel.Input, Never>()
+    private var subscription = Set<AnyCancellable>()
     
     // MARK: - UI Components
     
@@ -132,7 +135,7 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - Initialize
     
     init(initialQuery: OrderHistoryQuery) {
-        self.work = initialQuery
+        self.viewModel = FilterBottomSheetViewModel(initial: initialQuery)
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
     }
@@ -293,12 +296,34 @@ final class FilterBottomSheetViewController: UIViewController {
         configureButtons()
         view.backgroundColor = .clear
         filterButtonContainer.backgroundColor = UIColor.appColor(.neutral0)
+        setAddTarget()
         bind()
+        
     }
     
     //MARK: - Bind
     
     private func bind() {
+        let output = viewModel.transform(inputSubject.eraseToAnyPublisher())
+        
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [ weak self ] output in
+                guard let self else {return}
+                switch output {
+                case .render(let state):
+                    self.render(state: state)
+                case .applied(let query):
+                    self.onApply?(query)
+                case .dismiss:
+                    self.animateDismiss()
+                }
+            }
+            .store(in: &subscription)        
+    }
+    
+    
+    private func setAddTarget() {
         [threeMonthButton, sixMonthButton, oneYearButton].forEach {
             $0.addTarget(self, action: #selector(periodTapped(_:)), for: .touchUpInside)
         }
@@ -320,62 +345,52 @@ final class FilterBottomSheetViewController: UIViewController {
         applyButton.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         backdrop.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        
-        render()
     }
     
     // MARK: - Function
     
-    private func render() {
-        threeMonthButton.applyFilter(work.period == .last3Months)
-        sixMonthButton.applyFilter(work.period == .last6Months)
-        oneYearButton.applyFilter(work.period == .last1Year)
+    private func render(state: FilterBottomSheetViewModel.State) {
+        threeMonthButton.applyFilter(state.period == .last3Months)
+        sixMonthButton.applyFilter(state.period == .last6Months)
+        oneYearButton.applyFilter(state.period == .last1Year)
+    
+        deliveryButton.applyFilter(state.type == .delivery)
+        takeoutButton.applyFilter(state.type == .takeout)
         
-        deliveryButton.applyFilter(work.type == .delivery)
-        takeoutButton.applyFilter(work.type == .takeout)
-        
-        doneButton.applyFilter(work.status == .completed)
-        cancelButton.applyFilter(work.status == .canceled)
+        doneButton.applyFilter(state.status == .completed)
+        cancelButton.applyFilter(state.status == .canceled)
+
     }
     
     //MARK: - @objc
     
     @objc private func closeTapped() {
-        animateDismiss()
+        inputSubject.send(.close)
     }
     
     @objc private func resetTapped() {
-        work.resetFilter()
-        render()
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        inputSubject.send(.reset)
+
     }
     
     @objc private func applyTapped() {
-        onApply?(work)
-        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-        animateDismiss()
+        inputSubject.send(.apply)
     }
     
     @objc private func periodTapped(_ sender: FilteringButton) {
-        let current = work.period
-        if sender === threeMonthButton { work.period = (current == .last3Months) ? .none : .last3Months }
-        if sender === sixMonthButton { work.period = (current == .last6Months) ? .none : .last6Months }
-        if sender === oneYearButton { work.period = (current == .last1Year)  ? .none : .last1Year  }
-        render()
+        if sender === threeMonthButton { inputSubject.send(.togglePeriod(.last3Months)) }
+        if sender === sixMonthButton   { inputSubject.send(.togglePeriod(.last6Months)) }
+        if sender === oneYearButton    { inputSubject.send(.togglePeriod(.last1Year)) }
     }
     
     @objc private func methodTapped(_ sender: FilteringButton) {
-        let current = work.type
-        if sender === deliveryButton { work.type = (current == .delivery) ? .none : .delivery }
-        if sender === takeoutButton  { work.type = (current == .takeout)  ? .none : .takeout  }
-        render()
+        if sender === deliveryButton { inputSubject.send(.toggleType(.delivery)) }
+        if sender === takeoutButton  { inputSubject.send(.toggleType(.takeout)) }
     }
     
     @objc private func infoTapped(_ sender: FilteringButton) {
-        let current = work.status
-        if sender === doneButton   { work.status = (current == .completed) ? .none : .completed }
-        if sender === cancelButton { work.status = (current == .canceled)  ? .none : .canceled  }
-        render()
+        if sender === doneButton   { inputSubject.send(.toggleStatus(.completed)) }
+        if sender === cancelButton { inputSubject.send(.toggleStatus(.canceled)) }
     }
 }
 
