@@ -112,14 +112,14 @@ extension SelectTypeFormViewController {
     @objc private func studentButtonTapped() {
         viewModel.selectUserType(.student)
         userTypeButtonTapped()
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "학생", customSessionId))
     }
 
     @objc private func generalButtonTapped() {
         viewModel.selectUserType(.general)
         userTypeButtonTapped()
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "외부인", customSessionId))
     }
     

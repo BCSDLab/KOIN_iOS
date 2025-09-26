@@ -163,7 +163,7 @@ final class ShopDataViewControllerB: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         menuTitleImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessCall, .abTestCall, "floating"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessCall, .abTestCall, "floating"))
     }
     
     @objc private func appWillResignActive() {

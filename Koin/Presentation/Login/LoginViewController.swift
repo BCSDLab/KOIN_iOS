@@ -157,13 +157,20 @@ final class LoginViewController: UIViewController {
             let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
             let dateProvider = DefaultDateProvider()
+            let checkLoginUseCase = DefaultCheckLoginUseCase(
+                userRepository: DefaultUserRepository(service: DefaultUserService())
+            )
             let homeViewModel = HomeViewModel(
                 fetchDiningListUseCase: fetchDiningListUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                 fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
                 fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-                dateProvider: dateProvider, checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())), assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())), fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase()
+                dateProvider: dateProvider,
+                checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
+                assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())),
+                fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
+                checkLoginUseCase: checkLoginUseCase
             )
             let homeViewController = HomeViewController(viewModel: homeViewModel)
             
@@ -254,7 +261,7 @@ extension LoginViewController {
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작", customSessionId))
     }
 }
@@ -354,5 +361,4 @@ extension LoginViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
 
