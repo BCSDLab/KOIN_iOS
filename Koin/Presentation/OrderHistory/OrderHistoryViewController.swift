@@ -483,7 +483,7 @@ extension OrderHistoryViewController{
         }
     }
     
-    private func syncUI(){
+    private func syncUI() {
         let isHistory = (orderHistorySegment.selectedSegmentIndex == 0)
         let isEmptyHistory = orderHistoryCollectionView.totalItemCount == 0
         let isEmptyPreparing = orderPrepareCollectionView.totalItemCount == 0

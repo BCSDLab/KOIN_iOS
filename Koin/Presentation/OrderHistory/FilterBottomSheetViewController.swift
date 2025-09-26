@@ -19,10 +19,8 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - UI Components
 
     private let backdrop = UIControl()
-    private let container = UIView()
-    private let body = UIStackView()
-    private let bottomBar = UIStackView()
-    private let threeMonthsButton = FilteringButton()
+    private let filterButtonContainer = UIView()
+    private let threeMonthButton = FilteringButton()
     private let sixMonthButton = FilteringButton()
     private let oneYearButton = FilteringButton()
     private let deliveryButton = FilteringButton()
@@ -158,7 +156,7 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - UI Function
     
     private func configureButtons(){
-        threeMonthsButton.setTitle("최근 3개월")
+        threeMonthButton.setTitle("최근 3개월")
         sixMonthButton.setTitle("최근 6개월")
         oneYearButton.setTitle("최근 1년")
         deliveryButton.setTitle("배달")
@@ -166,27 +164,27 @@ final class FilterBottomSheetViewController: UIViewController {
         doneButton.setTitle("완료")
         cancelButton.setTitle("취소")
 
-        [threeMonthsButton, sixMonthButton, oneYearButton,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
+        [threeMonthButton, sixMonthButton, oneYearButton,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
                 $0.applyFilter(false)
                 changeSheetInButton($0)
             }
     }
     
     private func setUpLayOuts(){
-        [backdrop, container].forEach {
+        [backdrop, filterButtonContainer].forEach {
             view.addSubview($0)
         }
         backdrop.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        container.backgroundColor = UIColor.appColor(.newBackground)
-        container.layer.cornerRadius = 32
-        container.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        filterButtonContainer.backgroundColor = UIColor.appColor(.newBackground)
+        filterButtonContainer.layer.cornerRadius = 32
+        filterButtonContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         [titleLabel,periodLabel,infoLabel,stateLabel,filterUnderLineView,periodUnderLineView,periodRow,stateRow,infoRow, resetButton, applyButton ,containerUnderLineView, closeButton].forEach {
-            container.addSubview($0)
+            filterButtonContainer.addSubview($0)
         }
         
         
-        [threeMonthsButton, sixMonthButton, oneYearButton].forEach{
+        [threeMonthButton, sixMonthButton, oneYearButton].forEach{
             periodRow.addArrangedSubview($0)
         }
         
@@ -204,7 +202,7 @@ final class FilterBottomSheetViewController: UIViewController {
         backdrop.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        container.snp.makeConstraints {
+        filterButtonContainer.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             bottomConstraint = $0.bottom.equalTo(view.snp.bottom).offset(320).constraint
             $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.7)
@@ -282,7 +280,7 @@ final class FilterBottomSheetViewController: UIViewController {
         
         containerUnderLineView.snp.makeConstraints {
             $0.top.equalTo(resetButton.snp.bottom).offset(12)
-            $0.bottom.equalTo(container.safeAreaLayoutGuide)
+            $0.bottom.equalTo(filterButtonContainer.safeAreaLayoutGuide)
             $0.height.equalTo(1)
             $0.leading.trailing.equalToSuperview()
         }
@@ -294,14 +292,14 @@ final class FilterBottomSheetViewController: UIViewController {
         setUpConstraints()
         configureButtons()
         view.backgroundColor = .clear
-        container.backgroundColor = UIColor.appColor(.neutral0)
+        filterButtonContainer.backgroundColor = UIColor.appColor(.neutral0)
         bind()
     }
     
     //MARK: - Bind
     
     private func bind() {
-        [threeMonthsButton, sixMonthButton, oneYearButton].forEach {
+        [threeMonthButton, sixMonthButton, oneYearButton].forEach {
             $0.addTarget(self, action: #selector(periodTapped(_:)), for: .touchUpInside)
         }
         [deliveryButton, takeoutButton].forEach {
@@ -312,7 +310,7 @@ final class FilterBottomSheetViewController: UIViewController {
         }
 
         // 3개월, 6개월 , 1년
-        [threeMonthsButton, sixMonthButton, oneYearButton,
+        [threeMonthButton, sixMonthButton, oneYearButton,
          deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -329,7 +327,7 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - Function
 
     private func render() {
-        threeMonthsButton.applyFilter(work.period == .last3Months)
+        threeMonthButton.applyFilter(work.period == .last3Months)
         sixMonthButton.applyFilter(work.period == .last6Months)
         oneYearButton.applyFilter(work.period == .last1Year)
 
@@ -360,7 +358,7 @@ final class FilterBottomSheetViewController: UIViewController {
     
     @objc private func periodTapped(_ sender: FilteringButton) {
         let current = work.period
-        if sender === threeMonthsButton { work.period = (current == .last3Months) ? .none : .last3Months }
+        if sender === threeMonthButton { work.period = (current == .last3Months) ? .none : .last3Months }
         if sender === sixMonthButton { work.period = (current == .last6Months) ? .none : .last6Months }
         if sender === oneYearButton { work.period = (current == .last1Year)  ? .none : .last1Year  }
         render()

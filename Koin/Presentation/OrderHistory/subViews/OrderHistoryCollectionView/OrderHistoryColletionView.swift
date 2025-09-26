@@ -46,11 +46,11 @@ final class OrderHistoryCollectionView: UICollectionView {
         reloadData()
     }
     
-    func append(_ more: [OrderHistory]) {
-        guard !more.isEmpty else { return }
+    func append(_ nextItem: [OrderHistory]) {
+        guard !nextItem.isEmpty else { return }
         let start = items.count
-        items.append(contentsOf: more)
-        let indexPaths = (start..<(start + more.count)).map { IndexPath(item: $0, section: 0) }
+        items.append(contentsOf: nextItem)
+        let indexPaths = (start..<(start + nextItem.count)).map { IndexPath(item: $0, section: 0) }
         performBatchUpdates({ insertItems(at: indexPaths) }, completion: nil)
     }
     

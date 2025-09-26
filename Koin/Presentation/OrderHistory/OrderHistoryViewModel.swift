@@ -202,14 +202,14 @@ extension OrderHistoryViewModel{
         fetchNextPage()
     }
     
-    private func search(_ text: String){
+    private func search(_ text: String) {
         let keyword = text.trimmingCharacters(in: .whitespacesAndNewlines)
         currentQuery.apply(keyword: keyword)
         fetchOrderHistory()
         fetchNextPage()
     }
     
-    private func resetFilter(){
+    private func resetFilter() {
         currentQuery.resetFilter()
         currentQuery.keyword = ""
         fetchOrderHistory()

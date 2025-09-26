@@ -74,7 +74,7 @@ final class EmptyStateView: UIView {
 
 extension EmptyStateView {
     
-    private func configureView(){
+    private func configureView() {
         backgroundColor = UIColor.appColor(.newBackground)
         setLayout()
     }
@@ -113,7 +113,7 @@ extension EmptyStateView {
 
     
     private func setAddTarget(){
-        seeOrderHistoryButton.addTarget(self, action: #selector(didTap), for: .touchUpInside)
+        seeOrderHistoryButton.addTarget(self, action: #selector(seeOrderHistoryButtonTapped), for: .touchUpInside)
     }
     
     func apply(_ config: Config){
@@ -124,7 +124,7 @@ extension EmptyStateView {
     
     
     //MARK: - @Objc
-    @objc private func didTap(){
+    @objc private func seeOrderHistoryButtonTapped() {
         onTapAction?()
     }
     
