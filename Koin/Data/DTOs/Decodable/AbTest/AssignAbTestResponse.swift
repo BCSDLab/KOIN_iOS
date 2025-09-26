@@ -32,8 +32,8 @@ enum UserAssignType: String, Decodable {
     case category
     case hot
     case diningStore = "dining_store"
-    case control = "control"
-    case variant = "variant"
+    case control
+    case variant
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

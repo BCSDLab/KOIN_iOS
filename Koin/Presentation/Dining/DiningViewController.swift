@@ -117,7 +117,7 @@ final class DiningViewController: UIViewController {
         segmentDidChange(diningTypeSegmentControl)
     }
     
-    private let diningToStoreABTestButton = DiningToStoreABTestButton().then {
+    private let diningToShopABTestButton = DiningToShopABTestButton().then {
         $0.isHidden = true
     }
     
@@ -148,7 +148,7 @@ final class DiningViewController: UIViewController {
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
         
-        diningToStoreABTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
+        diningToShopABTestButton.addTarget(self, action: #selector(didTapDiningToStore), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -246,10 +246,10 @@ extension DiningViewController {
     private func handleAbTestResult(_ abTestResult: AssignAbTestResponse) {
         switch abTestResult.variableName {
         case .variant:
-            diningToStoreABTestButton.isHidden = false
+            diningToShopABTestButton.isHidden = false
             logAbTestResult(value: "design_B")
         case .control:
-            diningToStoreABTestButton.isHidden = true
+            diningToShopABTestButton.isHidden = true
             logAbTestResult(value: "design_A")
         default:
             break
@@ -399,7 +399,7 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToStoreABTestButton].forEach {
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToShopABTestButton].forEach {
             view.addSubview($0)
         }
 
@@ -454,7 +454,7 @@ extension DiningViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-        diningToStoreABTestButton.snp.makeConstraints() {
+        diningToShopABTestButton.snp.makeConstraints() {
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-8)
             $0.height.equalTo(46)

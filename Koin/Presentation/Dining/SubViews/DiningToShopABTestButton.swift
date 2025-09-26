@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class DiningToStoreABTestButton: UIControl {
+final class DiningToShopABTestButton: UIControl {
     
     // MARK: - UI Components
     
@@ -52,7 +52,7 @@ final class DiningToStoreABTestButton: UIControl {
 
 // MARK: - UI Functions
 
-extension DiningToStoreABTestButton {
+extension DiningToShopABTestButton {
     private func setUpLayOuts() {
         addSubview(containerView)
         
