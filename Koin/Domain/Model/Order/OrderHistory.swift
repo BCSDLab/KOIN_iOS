@@ -32,6 +32,14 @@ enum OrderStatus: String {
     case delivered = "DELIVERED"
     case canceled = "CANCELED"
     case pickedUp = "PICKED_UP"
+    
+    var text: String{
+        switch self {
+        case .delivered: return "배달완료"
+        case .pickedUp: return "포장완료"
+        case .canceled: return "취소완료"
+        }
+    }
 }
 
 extension OrderHistory {

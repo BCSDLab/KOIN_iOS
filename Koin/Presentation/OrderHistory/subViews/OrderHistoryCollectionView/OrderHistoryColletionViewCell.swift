@@ -294,17 +294,9 @@ extension OrderHistoryColletionViewCell {
          }
          reorderButton.setNeedsUpdateConfiguration()
      }
-    
-    private func stateText(_ s: OrderStatus) -> String {
-        switch s {
-        case .delivered: return "배달완료"
-        case .pickedUp:  return "포장완료"
-        case .canceled:  return "취소완료"
-        }
-    }
-    
+        
     func configure(with order: OrderHistory) {
-        stateLabel.text = stateText(order.status)
+        stateLabel.text = order.status.text
         dayLabel.text = order.orderDate.formatDateToMDEEE()
         
         storeNameLabel.text = order.shopName
