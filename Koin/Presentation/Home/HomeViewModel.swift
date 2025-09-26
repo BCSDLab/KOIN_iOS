@@ -56,6 +56,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
     
@@ -68,7 +69,8 @@ final class HomeViewModel: ViewModelProtocol {
          dateProvider: DateProvider,
          checkVersionUseCase: CheckVersionUseCase,
          assignAbTestUseCase: AssignAbTestUseCase,
-         fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase) {
+         fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
+         checkLoginUseCase: CheckLoginUseCase) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -78,12 +80,14 @@ final class HomeViewModel: ViewModelProtocol {
         self.checkVersionUseCase = checkVersionUseCase
         self.assignAbTestUseCase = assignAbTestUseCase
         self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
+        self.checkLoginUseCase = checkLoginUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad:
+                self?.checkLogin()
                 self?.getShopCategory()
                 self?.checkVersion()
                 self?.fetchUserData()
@@ -226,6 +230,14 @@ extension HomeViewModel {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.putImage(response))
         }.store(in: &subscriptions)
+    }
+    
+    private func checkLogin() {
+        checkLoginUseCase.execute()
+            .sink { isLoggedIn in
+                UserDefaults.standard.set(isLoggedIn ? 1 : 0, forKey: "loginFlag")
+            }
+            .store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {

@@ -47,7 +47,16 @@ final class DiningViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, assignAbTestUseCase: AssignAbTestUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         dateProvder: DateProvider,
+         shareMenuListUseCase: ShareMenuListUseCase,
+         diningLikeUseCase: DiningLikeUseCase,
+         changeNotiUseCase: ChangeNotiUseCase,
+         fetchNotiListUsecase: FetchNotiListUseCase,
+         changeNotiDetailUseCase: ChangeNotiDetailUseCase,
+         assignAbTestUseCase: AssignAbTestUseCase,
+         sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder

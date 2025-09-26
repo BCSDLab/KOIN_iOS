@@ -19,7 +19,6 @@ final class DiningViewController: UIViewController {
     private var viewDidAppeared = false
     
     // FIXME: - AB 테스트 식단 세션 아이디 프로퍼티
-    
     private var customSessionId: String?
     
     // MARK: - UI Components
@@ -261,9 +260,8 @@ extension DiningViewController {
     }
 
     private func logAbTestResult(value: String) {
-        let loginFlag = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
-
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginFlag, platform: "iOS")
+        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
         
         self.customSessionId = customSessionId
         
@@ -271,9 +269,9 @@ extension DiningViewController {
     }
     
     @objc private func didTapDiningToShop() {
-        let loginFlag = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
+        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
         let customSessionId = customSessionId ?? CustomSessionManager.current(eventName: "dining2shop")
-                                              ?? CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginFlag, platform: "iOS")
+                                              ?? CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.diningToShop, .click, getCurrentDiningType(), customSessionId))
         
         let shopService = DefaultShopService()
