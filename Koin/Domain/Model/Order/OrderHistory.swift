@@ -98,8 +98,6 @@ extension OrderHistoryQuery {
         if let keyword = keyword {self.keyword = keyword}
         page = 1
     }
-    
-    mutating func nextPage() { page += 1 }
 }
 
 extension OrderHistoryQuery {

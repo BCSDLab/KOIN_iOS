@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
 
 final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     
@@ -16,11 +15,6 @@ final class OrderPrepareCollectionViewCell: UICollectionViewCell {
     static let OrderPrepareIdentifier = "OrderPrepareCollectionViewCell"
     
     private var estimatedHeightConstraint: Constraint!
-    
-    private enum stateCase {
-        case delivery
-        case packaging
-    }
     
     // MARK: - UI Components
     

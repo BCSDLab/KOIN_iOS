@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
 
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
