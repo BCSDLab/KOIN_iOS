@@ -32,8 +32,6 @@ enum OrderInProgressStatus: String {
     case delivering = "DELIVERING"
     case delivered = "DELIVERED"
     case canceled = "CANCELED"
-    
-    
 }
 
 extension OrderInProgress {
@@ -126,7 +124,7 @@ extension OrderInProgress {
         }
     }
     var estimatedTimeText: String {
-        if estimatedTime == "시간 미정" { return "시간 미정" }
+        if estimatedTime.isEmpty { return "시간 미정" }
         switch type {
         case .delivery: return "\(estimatedTime) 도착 예정"
         case .takeout:  return "\(estimatedTime) 수령 가능"
