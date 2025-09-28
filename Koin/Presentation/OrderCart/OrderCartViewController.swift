@@ -13,6 +13,7 @@ final class OrderCartViewController: UIViewController {
     private let viewModel: OrderCartViewModel
     
     // MARK: - Components
+    private let emptyView = EmptyView()
     
     
     // MARK: - Initializer
@@ -63,11 +64,15 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        
+        [emptyView].forEach {
+            view.addSubview($0)
+        }
     }
     
     private func setUpConstraints() {
-        
+        emptyView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
     
     private func configureView() {
