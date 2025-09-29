@@ -50,10 +50,7 @@ extension OrderCartTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 1:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: OrderCartShopTitleHeaderView.identifier) as? OrderCartShopTitleHeaderView else {
-                print("OrderCartShopTitleHeaderView : nil")
-                return nil
-            }
+            let headerView = OrderCartShopTitleHeaderView()
             guard let shopName = cart.shopName else {
                 return nil
             }
@@ -102,8 +99,6 @@ extension OrderCartTableView: UITableViewDataSource {
 extension OrderCartTableView {
     
     private func commonInit() {
-        register(OrderCartSegmentedControlCell.self, forCellReuseIdentifier: OrderCartSegmentedControlCell.identifier)
-        register(OrderCartShopTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: OrderCartShopTitleHeaderView.identifier)
         register(OrderCartListCell.self, forCellReuseIdentifier: OrderCartListCell.identifier)
         delegate = self
         dataSource = self
