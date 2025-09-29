@@ -13,13 +13,20 @@ final class OrderCartListCellPriceTableView: UITableView {
     private var options: [Option] = []
     
     // MARK: - Initializer
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        commonInit()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func configure(price: CartPrice, options: [Option]) {
         var newOptions: [Option] = []
         let formatter = NumberFormatter().then { $0.numberStyle = .decimal }
-        newOptions.append(Option(optionGroupName: price.name ?? "",
+        newOptions.append(Option(optionGroupName: "가격",
                               optionName: "\(formatter.string(from: NSNumber(value: price.price)) ?? "-")원",
-                              optionPrice: nil))
+                              optionPrice: 0))
         options.forEach {
             newOptions.append($0)
         }
@@ -33,30 +40,29 @@ extension OrderCartListCellPriceTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 21
     }
-    //tableView
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
 }
 
-/*
- Cart(shopName: "굿모닝살로만치킨",
-      shopThumbnailImageUrl: "https://static.koreatech.in/upload/owners/2024/03/28/ebef80af-9d18-44c8-b4dd-44c64f21a520-1711617869236/1693645787165.jpg",
-      orderableShopId: 2,
-      isDeliveryAvailable: true,
-      isTakeoutAvailable: false,
-      shopMinimumOrderAmount: 14000,
-      items: [CartItem(
-         cartMenuItemId: 906,
-         orderableShopMenuId: 11,
-         name: "후라이드 치킨",
-         menuThumbnailImageUrl: "https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg",
-         quantity: 2,
-         totalAmount: 38000,
-         price: CartPrice(
-             name: nil,
-             price: 19000),
-         options: [],
-         isModified: false)],
-      itemsAmount: 62500,
-      deliveryFee: 1500,
-      totalAmount: 64000,
-      finalPaymentAmount: 64000)
- */
+extension OrderCartListCellPriceTableView: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCellPriceTableViewCell.identifier, for: indexPath) as? OrderCartListCellPriceTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(option: options[indexPath.row])
+        return cell
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return options.count
+    }
+}
+
+extension OrderCartListCellPriceTableView {
+    
+    private func commonInit() {
+        register(OrderCartListCellPriceTableViewCell.self, forCellReuseIdentifier: OrderCartListCellPriceTableViewCell.identifier)
+        delegate = self
+        dataSource = self
+    }
+}
