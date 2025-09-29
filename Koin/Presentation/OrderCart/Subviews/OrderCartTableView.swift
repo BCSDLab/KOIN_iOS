@@ -94,6 +94,10 @@ extension OrderCartTableView: UITableViewDataSource {
         case 2:
             let cell = OrderCartAddMoreCell()
             return cell
+        case 3:
+            let cell = OrderCartAmountCell()
+            cell.configure(itemsAmount: cart.itemsAmount, deliveryFee: cart.deliveryFee, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount)
+            return cell
         default:
             return UITableViewCell()
         }
