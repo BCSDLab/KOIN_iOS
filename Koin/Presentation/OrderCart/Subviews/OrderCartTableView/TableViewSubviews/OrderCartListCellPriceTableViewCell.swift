@@ -5,4 +5,8 @@
 //  Created by 홍기정 on 9/29/25.
 //
 
-import Foundation
+import UIKit
+
+final class OrderCartListCellPriceTableViewCell: UITableViewCell {
+    
+}

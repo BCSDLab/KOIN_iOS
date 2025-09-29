@@ -26,6 +26,9 @@ final class OrderCartViewController: UIViewController {
         $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.new500)
     }
+    private let tableView = OrderCartTableView().then {
+        $0.sectionHeaderTopPadding = 0
+    }
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -81,7 +84,7 @@ extension OrderCartViewController {
             descriptionStackView.addArrangedSubview($0)
         }
         
-        [emptyView, segmentedControl, descriptionStackView].forEach {
+        [emptyView, segmentedControl, descriptionStackView, tableView].forEach {
             view.addSubview($0)
         }
     }
@@ -102,6 +105,11 @@ extension OrderCartViewController {
             $0.leading.equalTo(segmentedControl).offset(2)
             $0.top.equalTo(segmentedControl.snp.bottom).offset(6)
             $0.height.equalTo(19)
+        }
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(segmentedControl.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     

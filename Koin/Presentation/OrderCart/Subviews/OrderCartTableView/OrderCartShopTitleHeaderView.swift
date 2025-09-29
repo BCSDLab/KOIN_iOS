@@ -1,8 +1,72 @@
 //
-//  TableHeaderView.swift
+//  OrderCartShopTitleHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/29/25.
 //
 
-import Foundation
+import UIKit
+
+final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
+    
+    // MARK: - Properties
+    
+    // MARK: - Components
+    private let thumbnailImageView = UIImageView().then {
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+    }
+    private let titleButton = UIButton()
+    
+    // MARK: - Initializer
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        configureView()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(shopThumbnailImageUrl: String, shopName: String) {
+        thumbnailImageView.loadImage(from: shopThumbnailImageUrl)
+        configureButton(shopName: shopName)
+    }
+}
+
+extension OrderCartShopTitleHeaderView {
+    
+    private func configureButton(shopName: String) {
+        var configuration = UIButton.Configuration.plain()
+        configuration.attributedTitle = AttributedString(shopName, attributes: AttributeContainer([
+            .font : UIFont.appFont(.pretendardBold, size: 18),
+            .foregroundColor : UIColor.appColor(.neutral800)
+        ]))
+        configuration.image = .appImage(asset: .chevronRight)?.withTintColor(.appColor(.neutral800)).resize(to: CGSize(width: 16, height: 16))
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 14
+        configuration.contentInsets = .zero
+        titleButton.configuration = configuration
+        titleButton.contentMode = .center
+    }
+    
+    private func setUpLayout() {
+        [thumbnailImageView, titleButton].forEach {
+            contentView.addSubview($0)
+        }
+    }
+    private func setUpConstaints() {
+        thumbnailImageView.snp.makeConstraints {
+            $0.width.height.equalTo(30)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(4)
+        }
+        titleButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(thumbnailImageView.snp.trailing).offset(10)
+        }
+    }
+    private func configureView() {
+        setUpLayout()
+        setUpConstaints()
+    }
+}
