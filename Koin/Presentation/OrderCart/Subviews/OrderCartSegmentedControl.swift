@@ -11,8 +11,8 @@ import Combine
 final class OrderCartSegmentedControl: UIView {
  
     // MARK: - Properties
-    let isDeliveryAvailable: Bool
-    let isPickupAvailable: Bool
+    var isDeliveryAvailable: Bool = false
+    var isPickupAvailable: Bool = false
     
     let selectedAttributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
@@ -37,10 +37,7 @@ final class OrderCartSegmentedControl: UIView {
     }
     
     // MARK: - Initializer
-    init(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        self.isDeliveryAvailable = isDeliveryAvailable
-        self.isPickupAvailable = isPickupAvailable
-        
+    init() {
         super.init(frame: .zero)
         addTargets()
         configureView()
@@ -48,23 +45,25 @@ final class OrderCartSegmentedControl: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
+        self.isDeliveryAvailable = isDeliveryAvailable
+        self.isPickupAvailable = isPickupAvailable
+        configureButtons()
+    }
 }
 
 extension OrderCartSegmentedControl {
     
     // MARK: - addTargets
     private func addTargets() {
-        if isDeliveryAvailable {
-            buttonDelivery.addTarget(self, action: #selector(buttonDeliveryTapped), for: .touchUpInside)
-        }
-        if isPickupAvailable {
-            buttonPickup.addTarget(self, action: #selector(buttonPickupTapped), for: .touchUpInside)
-        }
+        buttonDelivery.addTarget(self, action: #selector(buttonDeliveryTapped), for: .touchUpInside)
+        buttonPickup.addTarget(self, action: #selector(buttonPickupTapped), for: .touchUpInside)
     }
     
     // MARK: - @objc
     @objc private func buttonDeliveryTapped() {
-        print("delivery")
+        guard isDeliveryAvailable else { return }
         UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self = self else { return }
             self.selectedBackgroundView.snp.updateConstraints {
@@ -80,7 +79,7 @@ extension OrderCartSegmentedControl {
         }
     }
     @objc private func buttonPickupTapped() {
-        print("pickup")
+        guard isPickupAvailable else { return }
         UIView.animate(withDuration: 0.2) {[weak self] in
             guard let self = self else { return }
             self.selectedBackgroundView.snp.updateConstraints {
@@ -102,8 +101,6 @@ extension OrderCartSegmentedControl {
     
     
     private func configureButtons() {
-        
-        
         switch (isDeliveryAvailable, isPickupAvailable) {
         case (true, true):
             buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: selectedAttributes), for: .normal)
@@ -146,7 +143,6 @@ extension OrderCartSegmentedControl {
         backgroundColor = .appColor(.neutral0)
         layer.cornerRadius = 10
         clipsToBounds = true
-        configureButtons()
         setUpLayouts()
         setUpConstraints()
     }

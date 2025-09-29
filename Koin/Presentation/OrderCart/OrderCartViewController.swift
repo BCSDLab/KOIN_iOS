@@ -14,6 +14,7 @@ final class OrderCartViewController: UIViewController {
     
     // MARK: - Components
     private let emptyView = EmptyView()
+    private let segmentedControl = OrderCartSegmentedControl()
     
     
     // MARK: - Initializer
@@ -35,6 +36,8 @@ final class OrderCartViewController: UIViewController {
         super.viewWillAppear(animated)
         configureRightBarButton()
         configureNavigationBar(style: .order)
+        
+        segmentedControl.configure(isDeliveryAvailable: true, isPickupAvailable: true)
     }
 }
 
@@ -64,7 +67,7 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        [emptyView].forEach {
+        [emptyView, segmentedControl].forEach {
             view.addSubview($0)
         }
     }
@@ -72,6 +75,11 @@ extension OrderCartViewController {
     private func setUpConstraints() {
         emptyView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        segmentedControl.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            $0.height.equalTo(46)
         }
     }
     
