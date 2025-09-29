@@ -38,44 +38,64 @@ extension OrderCartTableView: UITableViewDelegate {
         }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 78
+        switch section {
+        case 1: return 78
+        default: return 0
+        }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: OrderCartShopTitleHeaderView.identifier) as? OrderCartShopTitleHeaderView else {
-            print("OrderCartShopTitleHeaderView : nil")
+        switch section {
+        case 1:
+            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: OrderCartShopTitleHeaderView.identifier) as? OrderCartShopTitleHeaderView else {
+                print("OrderCartShopTitleHeaderView : nil")
+                return nil
+            }
+            guard let shopThumbnailImageUrl = cart.shopThumbnailImageUrl, let shopName = cart.shopName else {
+                return nil
+            }
+            headerView.configure(shopThumbnailImageUrl: shopThumbnailImageUrl, shopName: shopName)
+            return headerView
+        default:
             return nil
         }
-        guard let shopThumbnailImageUrl = cart.shopThumbnailImageUrl, let shopName = cart.shopName else {
-            return nil
-        }
-        headerView.configure(shopThumbnailImageUrl: shopThumbnailImageUrl, shopName: shopName)
-        return headerView
     }
 }
  
 extension OrderCartTableView: UITableViewDataSource {
  
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-        //return 3
+        return 4
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cart.items.count
+        switch section {
+        case 1: return cart.items.count
+        default: return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
+        switch indexPath.section {
+        case 0:
+            let cell = OrderCartSegmentedControlCell()
+            cell.configure(isDeliveryAvailable: cart.isDeliveryAvailable, isPickupAvailable: cart.isTakeoutAvailable)
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
+                return UITableViewCell()
+            }
+            let isFirstRow: Bool = indexPath.row == 0
+            let isLastRow: Bool = cart.items.count - 1 == indexPath.row
+            cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow)
+            return cell
+        default:
             return UITableViewCell()
         }
-        let isFirstRow: Bool = indexPath.row == 0
-        let isLastRow: Bool = cart.items.count - 1 == indexPath.row
-        cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow)
-        return cell
     }
 }
 extension OrderCartTableView {
     
     private func commonInit() {
+        register(OrderCartSegmentedControlCell.self, forCellReuseIdentifier: OrderCartSegmentedControlCell.identifier)
         register(OrderCartShopTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: OrderCartShopTitleHeaderView.identifier)
         register(OrderCartListCell.self, forCellReuseIdentifier: OrderCartListCell.identifier)
         delegate = self

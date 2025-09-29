@@ -14,23 +14,12 @@ final class OrderCartViewController: UIViewController {
     
     // MARK: - Components
     private let emptyView = EmptyView()
-    private let segmentedControl = OrderCartSegmentedControl()
-    private let descriptionStackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.spacing = 4
-        $0.alignment = .center
-    }
-    private let descriptionImageView = UIImageView(image: .appImage(asset: .incorrectInfo)?.withRenderingMode(.alwaysTemplate).withTintColor(.appColor(.new500)))
-    private let descriptionLabel = UILabel().then {
-        $0.text = "이 가게는 포장주문만 가능해요"
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textColor = .appColor(.new500)
-    }
     private let tableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
+        $0.sectionFooterHeight = .zero
     }
     
     // MARK: - Initializer
@@ -52,8 +41,6 @@ final class OrderCartViewController: UIViewController {
         super.viewWillAppear(animated)
         configureRightBarButton()
         configureNavigationBar(style: .order)
-        
-        segmentedControl.configure(isDeliveryAvailable: true, isPickupAvailable: true)
     }
 }
 
@@ -83,11 +70,7 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        [descriptionImageView, descriptionLabel].forEach {
-            descriptionStackView.addArrangedSubview($0)
-        }
-        
-        [emptyView, segmentedControl, descriptionStackView, tableView].forEach {
+        [emptyView, tableView].forEach {
             view.addSubview($0)
         }
     }
@@ -96,22 +79,9 @@ extension OrderCartViewController {
         emptyView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        segmentedControl.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            $0.height.equalTo(46)
-        }
-        descriptionImageView.snp.makeConstraints {
-            $0.width.height.equalTo(16)
-        }
-        descriptionStackView.snp.makeConstraints {
-            $0.leading.equalTo(segmentedControl).offset(2)
-            $0.top.equalTo(segmentedControl.snp.bottom).offset(6)
-            $0.height.equalTo(19)
-        }
+        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(descriptionLabel.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }
