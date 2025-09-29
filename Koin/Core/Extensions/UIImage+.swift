@@ -72,6 +72,7 @@ enum ImageAsset: String {
     case filledCircle
     case cancelYellow
     case trashcan
+    case trashcanNew
     case nonReview
     case reportedImageView
     case nonMenuWeekendImage
@@ -110,6 +111,8 @@ enum ImageAsset: String {
     case classFilter
     case add
     case addGray
+    case addThin
+    case minus
     case minusCircle
     case bookmark
     case plusBold
