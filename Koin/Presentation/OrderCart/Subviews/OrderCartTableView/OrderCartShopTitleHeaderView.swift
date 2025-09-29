@@ -58,7 +58,7 @@ extension OrderCartShopTitleHeaderView {
         thumbnailImageView.snp.makeConstraints {
             $0.width.height.equalTo(30)
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(4)
+            $0.leading.equalToSuperview().offset(28)
         }
         titleButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()

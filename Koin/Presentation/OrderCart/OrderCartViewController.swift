@@ -28,6 +28,8 @@ final class OrderCartViewController: UIViewController {
     }
     private let tableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
+        $0.rowHeight = UITableView.automaticDimension
+        $0.backgroundColor = .clear
     }
     
     // MARK: - Initializer
@@ -107,7 +109,7 @@ extension OrderCartViewController {
             $0.height.equalTo(19)
         }
         tableView.snp.makeConstraints {
-            $0.top.equalTo(segmentedControl.snp.bottom)
+            $0.top.equalTo(descriptionLabel.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
