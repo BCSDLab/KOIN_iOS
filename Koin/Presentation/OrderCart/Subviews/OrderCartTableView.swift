@@ -56,6 +56,9 @@ extension OrderCartTableView: UITableViewDelegate {
             }
             headerView.configure(shopThumbnailImageUrl: cart.shopThumbnailImageUrl, shopName: shopName)
             return headerView
+        case 3:
+            let headerView = OrderCartAmountHeaderView()
+            return headerView
         default:
             return nil
         }
