@@ -15,7 +15,17 @@ final class OrderCartViewController: UIViewController {
     // MARK: - Components
     private let emptyView = EmptyView()
     private let segmentedControl = OrderCartSegmentedControl()
-    
+    private let descriptionStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 4
+        $0.alignment = .center
+    }
+    private let descriptionImageView = UIImageView(image: .appImage(asset: .incorrectInfo)?.withRenderingMode(.alwaysTemplate).withTintColor(.appColor(.new500)))
+    private let descriptionLabel = UILabel().then {
+        $0.text = "이 가게는 포장주문만 가능해요"
+        $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.textColor = .appColor(.new500)
+    }
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -67,7 +77,11 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        [emptyView, segmentedControl].forEach {
+        [descriptionImageView, descriptionLabel].forEach {
+            descriptionStackView.addArrangedSubview($0)
+        }
+        
+        [emptyView, segmentedControl, descriptionStackView].forEach {
             view.addSubview($0)
         }
     }
@@ -80,6 +94,14 @@ extension OrderCartViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             $0.height.equalTo(46)
+        }
+        descriptionImageView.snp.makeConstraints {
+            $0.width.height.equalTo(16)
+        }
+        descriptionStackView.snp.makeConstraints {
+            $0.leading.equalTo(segmentedControl).offset(2)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(6)
+            $0.height.equalTo(19)
         }
     }
     
