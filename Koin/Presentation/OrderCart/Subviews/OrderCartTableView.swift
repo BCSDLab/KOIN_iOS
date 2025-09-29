@@ -33,13 +33,17 @@ extension OrderCartTableView: UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 1: return 46
-        default: return 160
+        case 0: return 68
+        case 1: return 160
+        case 2: return 58
+        case 3: return 139
+        default: return 0
         }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 1: return 78
+        case 3: return 62
         default: return 0
         }
     }
@@ -50,10 +54,10 @@ extension OrderCartTableView: UITableViewDelegate {
                 print("OrderCartShopTitleHeaderView : nil")
                 return nil
             }
-            guard let shopThumbnailImageUrl = cart.shopThumbnailImageUrl, let shopName = cart.shopName else {
+            guard let shopName = cart.shopName else {
                 return nil
             }
-            headerView.configure(shopThumbnailImageUrl: shopThumbnailImageUrl, shopName: shopName)
+            headerView.configure(shopThumbnailImageUrl: cart.shopThumbnailImageUrl, shopName: shopName)
             return headerView
         default:
             return nil
@@ -86,6 +90,9 @@ extension OrderCartTableView: UITableViewDataSource {
             let isFirstRow: Bool = indexPath.row == 0
             let isLastRow: Bool = cart.items.count - 1 == indexPath.row
             cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow)
+            return cell
+        case 2:
+            let cell = OrderCartAddMoreCell()
             return cell
         default:
             return UITableViewCell()
