@@ -27,8 +27,17 @@ final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopThumbnailImageUrl: String, shopName: String) {
-        thumbnailImageView.loadImage(from: shopThumbnailImageUrl)
+    func configure(shopThumbnailImageUrl: String?, shopName: String) {
+        if let shopThumbnailImageUrl = shopThumbnailImageUrl {
+            thumbnailImageView.loadImage(from: shopThumbnailImageUrl)
+        }
+        else {
+            thumbnailImageView.image = nil
+            titleButton.snp.remakeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalToSuperview().offset(28)
+            }
+        }
         configureButton(shopName: shopName)
     }
 }
