@@ -71,7 +71,7 @@ extension OrderCartViewController {
     
     private func setUpConstraints() {
         emptyView.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     

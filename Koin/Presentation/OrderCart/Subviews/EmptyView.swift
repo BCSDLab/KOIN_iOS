@@ -81,12 +81,12 @@ extension EmptyView {
             $0.bottom.equalTo(label.snp.top).offset(-13)
         }
         shadowSquareImageView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(label.snp.top).offset(-23)
+            $0.leading.equalTo(shadowOvaleImageView).offset(29.07)
+            $0.bottom.equalTo(shadowOvaleImageView).offset(-10.4)
         }
         cartImageView.snp.makeConstraints {
-            $0.centerX.equalToSuperview().offset(-10)
-            $0.bottom.equalTo(label.snp.top).offset(-32.5)
+            $0.leading.equalTo(shadowOvaleImageView).offset(26.8)
+            $0.bottom.equalTo(shadowOvaleImageView).offset(-20.02)
         }
     }
     
