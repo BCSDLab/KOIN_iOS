@@ -30,6 +30,7 @@ final class OrderCartViewController: UIViewController {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .clear
+        $0.separatorStyle = .none
     }
     
     // MARK: - Initializer

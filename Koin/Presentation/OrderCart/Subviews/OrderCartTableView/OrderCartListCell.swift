@@ -4,7 +4,7 @@
 //
 //  Created by 홍기정 on 9/29/25.
 //
-/*
+
 import UIKit
 
 final class OrderCartListCell: UITableViewCell {
@@ -12,15 +12,27 @@ final class OrderCartListCell: UITableViewCell {
     // MARK: - Properties
     
     // MARK: - Components
+    let insetBackgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral0)
+        $0.clipsToBounds = true
+        $0.layer.masksToBounds = false
+        $0.layer.cornerRadius = 24
+    }
     let nameLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
-        $0.font = .appFont(.pretendardSemiBold, size: 16)
+        $0.font = .appFont(.pretendardBold, size: 16)
     }
-    let thumbnailImageView = UIImageView()
-    let priceTableView = OrderCartListCellPriceTableView()
+    let thumbnailImageView = UIImageView().then {
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+    }
+    let priceTableView = OrderCartListCellPriceTableView().then {
+        $0.separatorStyle = .none
+        $0.isScrollEnabled = false
+    }
     let totalAmountLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
-        $0.font = .appFont(.pretendardSemiBold, size: 15)
+        $0.font = .appFont(.pretendardBold, size: 15)
     }
     let changeOptionButton = UIButton().then {
         $0.setAttributedTitle(NSAttributedString(string: "옵션 변경", attributes: [
@@ -56,6 +68,9 @@ final class OrderCartListCell: UITableViewCell {
     let trashcanButton = UIButton().then {
         $0.setImage(.appImage(asset: .trashcanNew), for: .normal)
     }
+    let separaterView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -66,10 +81,10 @@ final class OrderCartListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(item: CartItem) {
+    func configure(item: CartItem, isFirstRow: Bool, isLastRow: Bool) {
         nameLabel.text = item.name
         thumbnailImageView.loadImage(from: item.menuThumbnailImageUrl)
-        configureQuantity(quantity: item.quantity)
+        setUpQuantity(quantity: item.quantity)
         let formatter = NumberFormatter().then {
             $0.numberStyle = .decimal
         }
@@ -79,12 +94,37 @@ final class OrderCartListCell: UITableViewCell {
         priceTableView.snp.makeConstraints {
             $0.height.equalTo(21 * (item.options.count+1))
         }
+        
+        setUpInsetBackgroundView(isFirstRow: isFirstRow, isLastRow: isLastRow)
     }
 }
 
 extension OrderCartListCell {
     
-    private func configureQuantity(quantity: Int) {
+    private func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {
+        switch (isFirstRow, isLastRow) {
+        case (true, true):
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
+                                                       .layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case (true, false):
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case (false, true):
+            insetBackgroundView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        case (false, false):
+            insetBackgroundView.layer.maskedCorners = []
+        }
+        
+        switch isLastRow {
+        case true:
+            separaterView.isHidden = true
+            insetBackgroundView.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+        case false:
+            separaterView.isHidden = false
+            insetBackgroundView.layer.shadowColor = UIColor.clear.cgColor
+        }
+    }
+    
+    private func setUpQuantity(quantity: Int) {
         quantityLabel.text = "\(quantity)"
         
         trashcanButton.isHidden = quantity == 1 ? false : true
@@ -93,7 +133,11 @@ extension OrderCartListCell {
     
     private func setUpLayout() {
         [nameLabel, thumbnailImageView, priceTableView, totalAmountLabel,
-         changeOptionButton, quantityBackgroundView, quantityLabel, addButton, minusButton, trashcanButton].forEach {
+         changeOptionButton, quantityBackgroundView, quantityLabel, addButton, minusButton, trashcanButton,
+         separaterView].forEach {
+            insetBackgroundView.addSubview($0)
+        }
+        [insetBackgroundView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -118,30 +162,47 @@ extension OrderCartListCell {
             $0.top.equalTo(priceTableView.snp.bottom).offset(8)
         }
         
-        minusButton.snp.makeConstraints {
+        addButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.trailing.equalTo(thumbnailImageView)
+            $0.top.equalTo(totalAmountLabel.snp.bottom).offset(16)
             $0.bottom.equalToSuperview().offset(-12)
         }
         quantityLabel.snp.makeConstraints {
-            $0.centerY.equalTo(minusButton)
-            $0.trailing.equalTo(minusButton.snp.leading).offset(-4)
+            $0.centerY.equalTo(addButton)
+            $0.trailing.equalTo(addButton.snp.leading).offset(-4)
         }
-        [addButton, trashcanButton].forEach {
+        [minusButton, trashcanButton].forEach {
             $0.snp.makeConstraints {
                 $0.width.height.equalTo(32)
                 $0.trailing.equalTo(quantityLabel.snp.leading).offset(-4)
-                $0.centerY.equalTo(minusButton)
+                $0.centerY.equalTo(addButton)
             }
         }
         quantityBackgroundView.snp.makeConstraints {
-            $0.leading.equalTo(addButton)
-            $0.top.bottom.trailing.equalTo(minusButton)
+            $0.leading.equalTo(minusButton)
+            $0.top.bottom.trailing.equalTo(addButton)
+        }
+        changeOptionButton.snp.makeConstraints {
+            $0.top.bottom.equalTo(quantityBackgroundView)
+            $0.trailing.equalTo(quantityBackgroundView.snp.leading).offset(-8)
+            $0.width.equalTo(68)
+        }
+        separaterView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        insetBackgroundView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
     }
     private func configureView() {
+        backgroundColor = .clear
+        backgroundView = .none
         setUpLayout()
         setUpConstraints()
     }
 }
-*/
+

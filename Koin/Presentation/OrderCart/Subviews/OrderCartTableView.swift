@@ -14,7 +14,7 @@ final class OrderCartTableView: UITableView {
     
     // MARK: - Initializer
     init() {
-        super.init(frame: .zero, style: .insetGrouped)
+        super.init(frame: .zero, style: .grouped)
         commonInit()
     }
     required init?(coder: NSCoder) {
@@ -27,14 +27,7 @@ final class OrderCartTableView: UITableView {
 }
 
 extension OrderCartTableView: UITableViewDelegate {
-    /*
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
-    }*/
-    /*
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        <#code#>
-    }*/
+    
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
     }
@@ -56,30 +49,7 @@ extension OrderCartTableView: UITableViewDelegate {
             return nil
         }
         headerView.configure(shopThumbnailImageUrl: shopThumbnailImageUrl, shopName: shopName)
-        headerView.backgroundColor = .red
         return headerView
-        /*
-        switch section {
-        case 0:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: OrderCartShopTitleHeaderView.identifier) as? OrderCartShopTitleHeaderView else {
-                print("OrderCartShopTitleHeaderView : nil")
-                return nil
-            }
-            guard let shopThumbnailImageUrl = cart.shopThumbnailImageUrl, let shopName = cart.shopName else {
-                return nil
-            }
-            headerView.configure(shopThumbnailImageUrl: shopThumbnailImageUrl, shopName: shopName)
-            headerView.backgroundColor = .red
-            return headerView
-        case 2:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: OrderCartAmountHeaderView.identifier) as? OrderCartAmountHeaderView else {
-                print("OrderCartAmountHeaderView nil")
-                return nil
-            }
-            headerView.backgroundColor = .blue
-            return headerView
-        default: return nil
-        }*/
     }
 }
  
@@ -90,51 +60,24 @@ extension OrderCartTableView: UITableViewDataSource {
         //return 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-        /*
-        switch section {
-        case 0: return cart.items.count
-        case 1, 2: return 1
-        default: return 0
-        }*/
+        return cart.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-    }
-        /*
-        switch indexPath.section {
-        case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
-                return UITableViewCell()
-            }
-            cell.configure(item: cart.items[indexPath.row])
-            cell.backgroundColor = .gray
-            return cell
-        case 1:
-            let cell = OrderCartAddMoreCell()
-            cell.backgroundColor = .brown
-            return cell
-        case 2:
-            let cell = OrderCartAmountCell()
-            //cell.configure()
-            cell.backgroundColor = .green
-            return cell
-        default: return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
+            return UITableViewCell()
         }
-    }*/
+        let isFirstRow: Bool = indexPath.row == 0
+        let isLastRow: Bool = cart.items.count - 1 == indexPath.row
+        cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow)
+        return cell
+    }
 }
 extension OrderCartTableView {
     
     private func commonInit() {
         register(OrderCartShopTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: OrderCartShopTitleHeaderView.identifier)
-        /*
-        register(OrderCartAmountHeaderView.self, forHeaderFooterViewReuseIdentifier: OrderCartAmountHeaderView.identifier)
-        
         register(OrderCartListCell.self, forCellReuseIdentifier: OrderCartListCell.identifier)
-        register(OrderCartAddMoreCell.self, forCellReuseIdentifier: OrderCartAddMoreCell.identifier)
-        register(OrderCartAmountCell.self, forCellReuseIdentifier: OrderCartAmountCell.identifier)
-        */
         delegate = self
         dataSource = self
     }
