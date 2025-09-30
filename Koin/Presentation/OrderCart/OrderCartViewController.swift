@@ -21,6 +21,7 @@ final class OrderCartViewController: UIViewController {
         $0.separatorStyle = .none
         $0.sectionFooterHeight = .zero
     }
+    private let bottomSheet = OrderCartBottomSheet()
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -41,6 +42,11 @@ final class OrderCartViewController: UIViewController {
         super.viewWillAppear(animated)
         configureRightBarButton()
         configureNavigationBar(style: .order)
+        
+        let cart = Cart.dummy()
+        tableView.configure(cart: cart)
+        bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
+                              totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count)
     }
 }
 
@@ -70,7 +76,7 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        [emptyView, tableView].forEach {
+        [emptyView, tableView, bottomSheet].forEach {
             view.addSubview($0)
         }
     }
@@ -79,10 +85,13 @@ extension OrderCartViewController {
         emptyView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
+        bottomSheet.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
+        }
         tableView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(bottomSheet.snp.top)
         }
     }
     

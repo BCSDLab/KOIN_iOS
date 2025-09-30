@@ -10,7 +10,7 @@ import UIKit
 final class OrderCartTableView: UITableView {
     
     // MARK: - Properties
-    private var cart = Cart.dummy()
+    private var cart = Cart.empty()
     
     // MARK: - Initializer
     init() {
