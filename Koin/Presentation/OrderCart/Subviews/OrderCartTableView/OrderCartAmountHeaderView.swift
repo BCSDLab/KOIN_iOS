@@ -40,7 +40,6 @@ extension OrderCartAmountHeaderView {
         label.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalToSuperview().offset(21)
             $0.bottom.equalToSuperview().offset(-12)
         }
     }
