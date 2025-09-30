@@ -34,7 +34,7 @@ struct CartDto: Decodable {
 struct CartItemDto: Decodable {
     let cartMenuItemId, orderableShopMenuId: Int
     let name: String
-    let menuThumbnailImageUrl: String
+    let menuThumbnailImageUrl: String?
     let quantity, totalAmount: Int
     let price: CartPriceDto
     let options: [OptionDto]

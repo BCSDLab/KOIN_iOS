@@ -92,7 +92,9 @@ final class OrderCartListCell: UITableViewCell {
     func configure(item: CartItem, isFirstRow: Bool, isLastRow: Bool, indexPath: IndexPath) {
         cartMenuItemId = item.cartMenuItemId
         nameLabel.text = item.name
-        thumbnailImageView.loadImage(from: item.menuThumbnailImageUrl)
+        if let menuThumbnailImageUrl = item.menuThumbnailImageUrl {
+            thumbnailImageView.loadImage(from: menuThumbnailImageUrl)
+        }
         setUpQuantity(quantity: item.quantity)
         let formatter = NumberFormatter().then { $0.numberStyle = .decimal }
         totalAmountLabel.text = "\(formatter.string(from: NSNumber(value: item.totalAmount)) ?? "-")원"

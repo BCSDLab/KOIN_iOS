@@ -20,7 +20,7 @@ struct Cart {
 struct CartItem {
     let cartMenuItemId, orderableShopMenuId: Int
     let name: String
-    let menuThumbnailImageUrl: String
+    let menuThumbnailImageUrl: String?
     let quantity, totalAmount: Int
     let price: CartPrice
     let options: [Option]
