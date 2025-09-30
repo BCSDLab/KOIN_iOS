@@ -13,6 +13,10 @@ final class OrderCartTableView: UITableView {
     // MARK: - Properties
     private var cart = Cart.empty()
     let moveToShopPublisher = PassthroughSubject<Void, Never>()
+    let addQuantityPublisher = PassthroughSubject<Int, Never>()
+    let minusQuantityPublisher = PassthroughSubject<Int, Never>()
+    let deleteItemPublisher = PassthroughSubject<Int, Never>()
+    let changeOptionPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
@@ -98,7 +102,28 @@ extension OrderCartTableView: UITableViewDataSource {
             }
             let isFirstRow: Bool = indexPath.row == 0
             let isLastRow: Bool = cart.items.count - 1 == indexPath.row
-            cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow)
+            cell.configure(item: cart.items[indexPath.row], isFirstRow: isFirstRow, isLastRow: isLastRow, indexPath: indexPath)
+            
+            cell.addQuantityPublisher
+                .sink { [weak self] cartMenuItemId in
+                    self?.addQuantityPublisher.send(cartMenuItemId)
+                }
+                .store(in: &subscriptions)
+            cell.minusQuantityPublisher
+                .sink { [weak self] cartMenuItemId in
+                    self?.minusQuantityPublisher.send(cartMenuItemId)
+                }
+                .store(in: &subscriptions)
+            cell.deleteItemPublisher
+                .sink { [weak self] cartMenuItemId, indexPath in
+                    self?.deleteItemPublisher.send(cartMenuItemId)
+                }
+                .store(in: &subscriptions)
+            cell.changeOptionPublisher
+                .sink { [weak self] cartMenuItemId in
+                    self?.changeOptionPublisher.send(cartMenuItemId)
+                }
+                .store(in: &subscriptions)
             return cell
         case 2:
             let cell = OrderCartAddMoreCell()
@@ -117,8 +142,9 @@ extension OrderCartTableView: UITableViewDataSource {
         }
     }
 }
+
 extension OrderCartTableView {
-    
+
     private func commonInit() {
         register(OrderCartListCell.self, forCellReuseIdentifier: OrderCartListCell.identifier)
         delegate = self

@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartListCell: UITableViewCell {
     
     // MARK: - Properties
+    let addQuantityPublisher = PassthroughSubject<Int, Never>()
+    let minusQuantityPublisher = PassthroughSubject<Int, Never>()
+    let deleteItemPublisher = PassthroughSubject<(id: Int, indexPath: IndexPath), Never>()
+    let changeOptionPublisher = PassthroughSubject<Int, Never>()
+    private var cartMenuItemId: Int? = nil
+    private var indexPath: IndexPath? = nil
     
     // MARK: - Components
     let insetBackgroundView = UIView().then {
@@ -76,29 +83,67 @@ final class OrderCartListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        setAddTarget()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(item: CartItem, isFirstRow: Bool, isLastRow: Bool) {
+    func configure(item: CartItem, isFirstRow: Bool, isLastRow: Bool, indexPath: IndexPath) {
+        cartMenuItemId = item.cartMenuItemId
         nameLabel.text = item.name
         thumbnailImageView.loadImage(from: item.menuThumbnailImageUrl)
         setUpQuantity(quantity: item.quantity)
-        let formatter = NumberFormatter().then {
-            $0.numberStyle = .decimal
-        }
+        let formatter = NumberFormatter().then { $0.numberStyle = .decimal }
         totalAmountLabel.text = "\(formatter.string(from: NSNumber(value: item.totalAmount)) ?? "-")원"
         priceTableView.configure(price: item.price, options: item.options)
-        
         priceTableView.snp.makeConstraints {
             $0.height.equalTo(21 * (item.options.count+1))
         }
         
         setUpInsetBackgroundView(isFirstRow: isFirstRow, isLastRow: isLastRow)
+        
+        self.indexPath = indexPath
     }
 }
 
+extension OrderCartListCell {
+    
+    private func setAddTarget() {
+        changeOptionButton.addTarget(self, action: #selector(changeOptionButtonTapped), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
+        trashcanButton.addTarget(self, action: #selector(trashcanButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: - @objc
+    @objc private func addButtonTapped() {
+        guard let cartMenuItemId = cartMenuItemId else {
+            return
+        }
+        addQuantityPublisher.send(cartMenuItemId)
+    }
+    @objc private func minusButtonTapped() {
+        guard let cartMenuItemId = cartMenuItemId else {
+            return
+        }
+        minusQuantityPublisher.send(cartMenuItemId)
+    }
+    @objc private func trashcanButtonTapped() {
+        guard let cartMenuItemId = cartMenuItemId, let indexPath = indexPath else {
+            return
+        }
+        deleteItemPublisher.send((id: cartMenuItemId, indexPath: indexPath))
+    }
+    @objc private func changeOptionButtonTapped() {
+        guard let cartMenuItemId = cartMenuItemId else {
+            return
+        }
+        changeOptionPublisher.send(cartMenuItemId)
+    }
+    
+}
+    
 extension OrderCartListCell {
     
     private func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {

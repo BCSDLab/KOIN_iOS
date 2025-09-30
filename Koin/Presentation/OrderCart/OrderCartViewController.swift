@@ -61,6 +61,8 @@ final class OrderCartViewController: UIViewController {
         }
         .store(in: &subscriptions)
         
+        
+        // MARK: - TableView
         tableView.moveToShopPublisher.sink { [weak self] in
             guard let self = self, let orderableShopId = self.orderableShopId else {
                 return
@@ -86,6 +88,26 @@ final class OrderCartViewController: UIViewController {
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
+        
+        tableView.addQuantityPublisher.sink { [weak self] cartMenuItemId in
+            print("add quantity")
+        }
+        .store(in: &subscriptions)
+        
+        tableView.minusQuantityPublisher.sink { [weak self] cartMenuItemId in
+            print("minus quantity")
+        }
+        .store(in: &subscriptions)
+        tableView.deleteItemPublisher.sink { [weak self] cartMenuItemId in
+            print("delete item")
+        }
+        .store(in: &subscriptions)
+        tableView.changeOptionPublisher.sink { [weak self] cartMenuItemId in
+            print("change opotion")
+        }
+        .store(in: &subscriptions)
+        
+        
     }
 }
 
