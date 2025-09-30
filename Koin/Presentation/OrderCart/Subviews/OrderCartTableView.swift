@@ -117,6 +117,7 @@ extension OrderCartTableView: UITableViewDataSource {
             cell.deleteItemPublisher
                 .sink { [weak self] cartMenuItemId, indexPath in
                     self?.deleteItemPublisher.send(cartMenuItemId)
+                    self?.removeItem(cartMenuItemId: cartMenuItemId)
                 }
                 .store(in: &subscriptions)
             cell.changeOptionPublisher
@@ -140,6 +141,46 @@ extension OrderCartTableView: UITableViewDataSource {
         default:
             return UITableViewCell()
         }
+    }
+}
+
+extension OrderCartTableView {
+    
+    private func removeItem(cartMenuItemId: Int) {
+        /// menuId에 해당하는 indexPath를 찾습니다.
+        var indexPath: IndexPath? = nil
+        for row in 0..<numberOfRows(inSection: 1) {
+            if (cellForRow(at: IndexPath(row: row, section: 1)) as? OrderCartListCell)?.cartMenuItemId == cartMenuItemId {
+                indexPath = IndexPath(row: row, section: 1)
+                break
+            }
+        }
+        guard let indexPath = indexPath else {
+            return
+        }
+        /// 해당 row의 위치, 인접 row의 위치를 파악합니다.
+        let isFirstRow: Bool = indexPath.row == 0
+        let isNextLastRow: Bool = cart.items.count - 1 == indexPath.row + 1
+        let isLastRow: Bool = cart.items.count - 1 == indexPath.row
+        let isPreviousFirstRow: Bool = indexPath.row - 1 == 0
+        /// 해당 row가 삭제되었을 때, 인접 row가 첫번째 또는 마지막, 또는 첫번째이자 마지막 cell이 된다면, radius와 separaterView를 적절하게 설정합니다.
+        switch (isFirstRow, isLastRow) {
+        case (true, true): break
+        case (true, false):
+            guard let nextCell = cellForRow(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? OrderCartListCell else {
+                return
+            }
+            nextCell.setUpInsetBackgroundView(isFirstRow: true, isLastRow: isNextLastRow)
+        case (false, true):
+            guard let previousCell = cellForRow(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? OrderCartListCell else {
+                return
+            }
+            previousCell.setUpInsetBackgroundView(isFirstRow: true, isLastRow: isPreviousFirstRow)
+        default: break
+        }
+        /// tabelView에서 해당 row를 삭제합니다.
+        cart.items.remove(at: indexPath.row)
+        deleteRows(at: [indexPath], with: .fade)
     }
 }
 
