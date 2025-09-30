@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: OrderCartViewModel
+    private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Components
     private let emptyView = EmptyView()
@@ -27,7 +30,6 @@ final class OrderCartViewController: UIViewController {
     init(viewModel: OrderCartViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        
         configureView()
     }
     required init?(coder: NSCoder) {
@@ -37,16 +39,26 @@ final class OrderCartViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
+        inputSubject.send(.viewDidLoad)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRightBarButton()
         configureNavigationBar(style: .order)
-        
-        let cart = Cart.dummy()
-        tableView.configure(cart: cart)
-        bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
-                              totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count)
+    }
+    
+    // MARK: - Bind
+    private func bind() {
+        viewModel.transform(with: inputSubject).sink { [weak self] output in
+            switch output {
+            case .updateCart(let cart):
+                print(cart.items)
+                self?.tableView.configure(cart: cart)
+                self?.bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count)
+            }
+        }
+        .store(in: &subscriptions)
     }
 }
 

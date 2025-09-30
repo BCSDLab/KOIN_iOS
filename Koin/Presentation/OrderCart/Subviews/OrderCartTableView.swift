@@ -23,6 +23,7 @@ final class OrderCartTableView: UITableView {
     
     func configure(cart: Cart) {
         self.cart = cart
+        reloadData()
     }
 }
 

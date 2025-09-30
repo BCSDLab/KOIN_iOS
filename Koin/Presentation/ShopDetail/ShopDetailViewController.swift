@@ -289,7 +289,10 @@ extension ShopDetailViewController {
             }
 
         } else {
-            let viewModel = OrderCartViewModel()
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
+            let useCase = DefaultFetchCartUseCase(repository: repository)
+            let viewModel = OrderCartViewModel(fetchCartUseCase: useCase)
             let viewController = OrderCartViewController(viewModel: viewModel)
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
