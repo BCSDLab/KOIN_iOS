@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartAddMoreCell: UITableViewCell {
  
     // MARK: - Properties
+    let moveToShopPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
     let insetBackgroundView = UIView().then {
@@ -37,9 +39,21 @@ final class OrderCartAddMoreCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        addTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension OrderCartAddMoreCell {
+    
+    private func addTargets() {
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func buttonTapped() {
+        moveToShopPublisher.send()
     }
 }
 

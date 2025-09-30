@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Properties
+    let moveToShopPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
     private let thumbnailImageView = UIImageView().then {
@@ -22,6 +24,7 @@ final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureView()
+        addTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -39,6 +42,19 @@ final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
             }
         }
         configureButton(shopName: shopName)
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+}
+
+extension OrderCartShopTitleHeaderView {
+
+    private func addTargets() {
+        titleButton.addTarget(self, action: #selector(titleButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func titleButtonTapped() {
+        moveToShopPublisher.send()
     }
 }
 

@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartTableView: UITableView {
     
     // MARK: - Properties
     private var cart = Cart.empty()
+    let moveToShopPublisher = PassthroughSubject<Void, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
     init() {
@@ -56,6 +59,11 @@ extension OrderCartTableView: UITableViewDelegate {
                 return nil
             }
             headerView.configure(shopThumbnailImageUrl: cart.shopThumbnailImageUrl, shopName: shopName)
+            headerView.moveToShopPublisher
+                .sink { [weak self] in
+                    self?.moveToShopPublisher.send()
+                }
+                .store(in: &subscriptions)
             return headerView
         case 3:
             let headerView = OrderCartAmountHeaderView()
@@ -94,6 +102,11 @@ extension OrderCartTableView: UITableViewDataSource {
             return cell
         case 2:
             let cell = OrderCartAddMoreCell()
+            cell.moveToShopPublisher
+                .sink { [weak self] in
+                    self?.moveToShopPublisher.send()
+                }
+                .store(in: &subscriptions)
             return cell
         case 3:
             let cell = OrderCartAmountCell()

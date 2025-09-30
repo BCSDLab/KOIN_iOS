@@ -14,6 +14,7 @@ final class OrderCartViewController: UIViewController {
     private let viewModel: OrderCartViewModel
     private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var orderableShopId: Int? = nil
     
     // MARK: - Components
     private let emptyView = EmptyView()
@@ -53,10 +54,36 @@ final class OrderCartViewController: UIViewController {
         viewModel.transform(with: inputSubject).sink { [weak self] output in
             switch output {
             case .updateCart(let cart):
-                print(cart.items)
+                self?.orderableShopId = cart.orderableShopId
                 self?.tableView.configure(cart: cart)
                 self?.bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count)
             }
+        }
+        .store(in: &subscriptions)
+        
+        tableView.moveToShopPublisher.sink { [weak self] in
+            guard let self = self, let orderableShopId = self.orderableShopId else {
+                return
+            }
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
+            let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
+            let fetchOrderShopMenusUseCase = DefaultFetchOrderShopMenusUseCase(repository: repository)
+            let fetchOrderShopMenusGroupsUseCase = DefaultFetchOrderShopMenusGroupsUseCase(repository: repository)
+            let fetchCartSummaryUseCase = DefaultFetchCartSummaryUseCase(repository: repository)
+            let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
+            let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
+            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
+                                                fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
+                                                fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
+                                                fetchCartSummaryUseCase: fetchCartSummaryUseCase,
+                                                fetchCartUseCase: fetchCartUseCase,
+                                                fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
+                                                resetCartUseCase: resetCartUseCase,
+                                                orderableShopId: orderableShopId)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
     }
