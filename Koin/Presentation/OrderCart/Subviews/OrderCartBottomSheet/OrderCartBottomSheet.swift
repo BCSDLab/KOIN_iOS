@@ -30,19 +30,15 @@ final class OrderCartBottomSheet: UIView {
         configuration.imagePlacement = .leading
         configuration.imagePadding = 10
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
-    
         $0.configuration = configuration
-        $0.backgroundColor = .appColor(.new500)
         $0.setAttributedTitle(NSAttributedString(
             string: "장바구니 보기",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral0)
             ]), for: .normal)
-        $0.setImage(UIImage.appImage(asset: .countIcon0)?.withRenderingMode(.alwaysOriginal), for: .normal)
         $0.layer.cornerRadius = 12
         $0.layer.masksToBounds = true
-    
     }
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
@@ -91,8 +87,7 @@ final class OrderCartBottomSheet: UIView {
         default: shoppingListButton.setImage(.appImage(asset: .countIcon9Plus), for: .normal)
         }
         setNeedsLayout()
-        layoutIfNeeded() // TODO: 진짜 실행해야해?
-        
+        layoutIfNeeded()
         shoppingListButton.backgroundColor = isEnabled ? .appColor(.new500) : .appColor(.neutral300)
     }
 }
