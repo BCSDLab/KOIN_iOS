@@ -15,7 +15,7 @@ final class OrderCartListCell: UITableViewCell {
     let minusQuantityPublisher = PassthroughSubject<Int, Never>()
     let deleteItemPublisher = PassthroughSubject<(id: Int, indexPath: IndexPath), Never>()
     let changeOptionPublisher = PassthroughSubject<Int, Never>()
-    private var cartMenuItemId: Int? = nil
+    private(set) var cartMenuItemId: Int? = nil
     private var indexPath: IndexPath? = nil
     
     // MARK: - Components
@@ -146,7 +146,7 @@ extension OrderCartListCell {
     
 extension OrderCartListCell {
     
-    private func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {
+    func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {
         switch (isFirstRow, isLastRow) {
         case (true, true):
             insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
