@@ -105,7 +105,7 @@ extension OrderCartListCell {
         switch (isFirstRow, isLastRow) {
         case (true, true):
             insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
-                                                       .layerMinXMinYCorner, .layerMaxXMinYCorner]
+                                                       .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         case (true, false):
             insetBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         case (false, true):
