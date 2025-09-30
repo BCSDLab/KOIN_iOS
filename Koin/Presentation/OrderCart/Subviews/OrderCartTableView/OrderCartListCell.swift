@@ -121,13 +121,14 @@ extension OrderCartListCell {
         guard let cartMenuItemId = cartMenuItemId else {
             return
         }
-        addQuantityPublisher.send(cartMenuItemId)
+        updateQuantity(diff: 1)
     }
     @objc private func minusButtonTapped() {
         guard let cartMenuItemId = cartMenuItemId else {
             return
         }
         minusQuantityPublisher.send(cartMenuItemId)
+        updateQuantity(diff: -1)
     }
     @objc private func trashcanButtonTapped() {
         guard let cartMenuItemId = cartMenuItemId, let indexPath = indexPath else {
@@ -143,7 +144,7 @@ extension OrderCartListCell {
     }
     
 }
-    
+
 extension OrderCartListCell {
     
     func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {
@@ -176,6 +177,18 @@ extension OrderCartListCell {
         minusButton.isHidden = 1 < quantity ? false : true
     }
     
+    private func updateQuantity(diff: Int) {
+        guard let text: String = quantityLabel.text,
+              var quantity: Int = Int(text) else {
+            return
+        }
+        quantity += diff
+        quantityLabel.text = "\(quantity)"
+        
+        trashcanButton.isHidden = quantity == 1 ? false : true
+        minusButton.isHidden = 1 < quantity ? false : true
+    }
+    
     private func setUpLayout() {
         [nameLabel, thumbnailImageView, priceTableView, totalAmountLabel,
          changeOptionButton, quantityBackgroundView, quantityLabel, addButton, minusButton, trashcanButton,
@@ -186,6 +199,7 @@ extension OrderCartListCell {
             contentView.addSubview($0)
         }
     }
+    
     private func setUpConstraints() {
         nameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
