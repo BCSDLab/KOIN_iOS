@@ -17,7 +17,7 @@ struct Cart {
     let itemsAmount, deliveryFee, totalAmount, finalPaymentAmount: Int
 }
 
-struct CartItem {
+struct CartItem: Equatable {
     let cartMenuItemId, orderableShopMenuId: Int
     let name: String
     let menuThumbnailImageUrl: String?
@@ -27,12 +27,12 @@ struct CartItem {
     let isModified: Bool
 }
 
-struct Option {
+struct Option: Equatable {
     let optionGroupName, optionName: String
     let optionPrice: Int
 }
 
-struct CartPrice {
+struct CartPrice: Equatable {
     let name: String?
     let price: Int
 }
