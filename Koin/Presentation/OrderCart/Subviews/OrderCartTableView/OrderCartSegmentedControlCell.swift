@@ -35,7 +35,21 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
     }
     
     func configure(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        segmentedControl.configure(isDeliveryAvailable: true, isPickupAvailable: true)
+        segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
+        
+        if isDeliveryAvailable && isPickupAvailable {
+            descriptionStackView.snp.updateConstraints {
+                $0.top.equalTo(segmentedControl.snp.bottom).offset(0)
+                $0.height.equalTo(0)
+            }
+        }
+        else {
+            if !isDeliveryAvailable {
+                descriptionLabel.text = "이 가게는 포장주문만 가능해요"
+            } else if !isPickupAvailable {
+                descriptionLabel.text = "이 가게는 배달주문만 가능해요"
+            }
+        }
     }
 }
 
@@ -50,6 +64,7 @@ extension OrderCartSegmentedControlCell {
             contentView.addSubview($0)
         }
     }
+    
     private func setUpConstraints() {
         segmentedControl.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(24)
@@ -66,7 +81,6 @@ extension OrderCartSegmentedControlCell {
             $0.bottom.equalToSuperview()
         }
     }
-    
     private func configureView() {
         backgroundColor = .clear
         backgroundView = .none
