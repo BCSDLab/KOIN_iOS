@@ -13,7 +13,7 @@ struct Cart {
     let orderableShopId: Int?
     let isDeliveryAvailable, isTakeoutAvailable: Bool
     let shopMinimumOrderAmount: Int
-    let items: [CartItem]
+    var items: [CartItem]
     let itemsAmount, deliveryFee, totalAmount, finalPaymentAmount: Int
 }
 
