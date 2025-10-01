@@ -186,15 +186,9 @@ extension OrderCartListCell {
             return
         }
         quantity += diff
-        UIView.transition(with: quantityLabel, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
-            self?.quantityLabel.text = "\(quantity)"
-        }
-        UIView.transition(with: trashcanButton, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
-            self?.trashcanButton.isHidden = quantity == 1 ? false : true
-        }
-        UIView.transition(with: minusButton, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
-            self?.minusButton.isHidden = 1 < quantity ? false : true
-        }
+        quantityLabel.text = "\(quantity)"
+        trashcanButton.isHidden = quantity == 1 ? false : true
+        minusButton.isHidden = 1 < quantity ? false : true
     }
     
     private func setUpLayout() {
