@@ -17,6 +17,7 @@ final class OrderCartTableView: UITableView {
     let minusQuantityPublisher = PassthroughSubject<Int, Never>()
     let deleteItemPublisher = PassthroughSubject<Int, Never>()
     let changeOptionPublisher = PassthroughSubject<Int, Never>()
+    let emptyCartPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
@@ -181,6 +182,11 @@ extension OrderCartTableView {
         /// tabelView에서 해당 row를 삭제합니다.
         cart.items.remove(at: indexPath.row)
         deleteRows(at: [indexPath], with: .fade)
+        
+        /// cart가 비었다면, viewController에 publisher를 발행하여 tableView를 숨길 수 있도록합니다.
+        if cart.items.isEmpty {
+            emptyCartPublisher.send()
+        }
     }
 }
 

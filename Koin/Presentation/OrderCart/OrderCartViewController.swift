@@ -17,7 +17,9 @@ final class OrderCartViewController: UIViewController {
     private var orderableShopId: Int? = nil
     
     // MARK: - Components
-    private let emptyView = EmptyView()
+    private let emptyView = EmptyView().then {
+        $0.isHidden = true
+    }
     private let tableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
@@ -107,7 +109,10 @@ final class OrderCartViewController: UIViewController {
         }
         .store(in: &subscriptions)
         
-        
+        tableView.emptyCartPublisher.sink { [weak self] in
+            self?.emptyCart()
+        }
+        .store(in: &subscriptions)
     }
 }
 
@@ -129,8 +134,16 @@ extension OrderCartViewController {
     
     // MARK: - @objc
     @objc private func rightBarButtonTapped() {
-        // 전체삭제 로직
-        print("rightBarButtonTapped")
+        emptyCart()
+    }
+}
+
+extension OrderCartViewController {
+    
+    private func emptyCart() {
+        tableView.isHidden = true
+        emptyView.isHidden = false
+        bottomSheet.isHidden = true
     }
 }
 
