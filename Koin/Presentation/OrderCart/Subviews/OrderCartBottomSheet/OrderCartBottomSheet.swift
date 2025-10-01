@@ -29,10 +29,10 @@ final class OrderCartBottomSheet: UIView {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePlacement = .leading
         configuration.imagePadding = 10
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50)
         $0.configuration = configuration
         $0.setAttributedTitle(NSAttributedString(
-            string: "장바구니 보기",
+            string: "주문하기",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral0)
