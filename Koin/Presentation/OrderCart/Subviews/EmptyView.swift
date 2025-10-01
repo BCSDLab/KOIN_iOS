@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class EmptyView: UIView {
     
     // MARK: - Properties
+    let addMenuButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
     let cartImageView = UIImageView(image: .appImage(asset: .shoppingCartLarge))
@@ -55,7 +57,7 @@ extension EmptyView {
     }
     
     @objc private func addMenuButtonTapped() {
-        print("addMenuButton Tapped")
+        addMenuButtonTappedPublisher.send()
     }
 }
 

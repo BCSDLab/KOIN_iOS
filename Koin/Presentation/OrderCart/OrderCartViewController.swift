@@ -119,6 +119,12 @@ final class OrderCartViewController: UIViewController {
             print("주문하기")
         }
         .store(in: &subscriptions)
+        
+        // MARK: - Empty View
+        emptyView.addMenuButtonTappedPublisher.sink { [weak self] in
+            self?.popToOrderTabbarViewController()
+        }
+        .store(in: &subscriptions)
     }
 }
 
@@ -150,6 +156,15 @@ extension OrderCartViewController {
         tableView.isHidden = true
         emptyView.isHidden = false
         bottomSheet.isHidden = true
+    }
+    
+    private func popToOrderTabbarViewController() {
+        navigationController?.viewControllers.forEach {
+            if $0 is OrderTabBarViewController {
+                navigationController?.popToViewController($0, animated: true)
+                return
+            }
+        }
     }
 }
 
