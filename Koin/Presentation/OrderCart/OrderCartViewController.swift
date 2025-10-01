@@ -146,7 +146,16 @@ extension OrderCartViewController {
     
     // MARK: - @objc
     @objc private func rightBarButtonTapped() {
-        emptyCart()
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+            return
+        }
+        let resetCartPopUpView = OrderCartPopUpView()
+        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", emptyCart: emptyCart)
+        resetCartPopUpView.frame = window.bounds
+        window.addSubview(resetCartPopUpView)
     }
 }
 
