@@ -65,6 +65,7 @@ final class OrderCartListCell: UITableViewCell {
     let quantityLabel = UILabel().then {
         $0.textColor = .appColor(.neutral600)
         $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.textAlignment = .center
     }
     let addButton = UIButton().then {
         $0.setImage(.appImage(asset: .addThin), for: .normal)
@@ -123,6 +124,7 @@ extension OrderCartListCell {
         guard let cartMenuItemId = cartMenuItemId else {
             return
         }
+        addQuantityPublisher.send(cartMenuItemId)
         updateQuantity(diff: 1)
     }
     @objc private func minusButtonTapped() {
@@ -174,7 +176,6 @@ extension OrderCartListCell {
     
     private func setUpQuantity(quantity: Int) {
         quantityLabel.text = "\(quantity)"
-        
         trashcanButton.isHidden = quantity == 1 ? false : true
         minusButton.isHidden = 1 < quantity ? false : true
     }
@@ -185,10 +186,15 @@ extension OrderCartListCell {
             return
         }
         quantity += diff
-        quantityLabel.text = "\(quantity)"
-        
-        trashcanButton.isHidden = quantity == 1 ? false : true
-        minusButton.isHidden = 1 < quantity ? false : true
+        UIView.transition(with: quantityLabel, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
+            self?.quantityLabel.text = "\(quantity)"
+        }
+        UIView.transition(with: trashcanButton, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
+            self?.trashcanButton.isHidden = quantity == 1 ? false : true
+        }
+        UIView.transition(with: minusButton, duration: 0.1, options: .transitionCrossDissolve) { [weak self] in
+            self?.minusButton.isHidden = 1 < quantity ? false : true
+        }
     }
     
     private func setUpLayout() {
@@ -222,38 +228,36 @@ extension OrderCartListCell {
             $0.leading.equalTo(nameLabel)
             $0.top.equalTo(priceTableView.snp.bottom).offset(8)
         }
-        
-        addButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.trailing.equalTo(thumbnailImageView)
+        quantityBackgroundView.snp.makeConstraints {
+            $0.height.equalTo(32)
+            $0.width.equalTo(78)
             $0.top.equalTo(totalAmountLabel.snp.bottom).offset(16)
             $0.bottom.equalToSuperview().offset(-12)
+            $0.trailing.equalTo(thumbnailImageView)
+        }
+        addButton.snp.makeConstraints {
+            $0.width.height.equalTo(32)
+            $0.centerY.trailing.equalTo(quantityBackgroundView)
         }
         quantityLabel.snp.makeConstraints {
-            $0.centerY.equalTo(addButton)
-            $0.trailing.equalTo(addButton.snp.leading).offset(-4)
+            $0.center.equalTo(quantityBackgroundView)
         }
         [minusButton, trashcanButton].forEach {
             $0.snp.makeConstraints {
                 $0.width.height.equalTo(32)
-                $0.trailing.equalTo(quantityLabel.snp.leading).offset(-4)
-                $0.centerY.equalTo(addButton)
+                $0.centerY.leading.equalTo(quantityBackgroundView)
             }
         }
-        quantityBackgroundView.snp.makeConstraints {
-            $0.leading.equalTo(minusButton)
-            $0.top.bottom.trailing.equalTo(addButton)
-        }
         changeOptionButton.snp.makeConstraints {
+            $0.height.equalTo(32)
+            $0.width.equalTo(68)
             $0.top.bottom.equalTo(quantityBackgroundView)
             $0.trailing.equalTo(quantityBackgroundView.snp.leading).offset(-8)
-            $0.width.equalTo(68)
         }
         separaterView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(1)
         }
-        
         insetBackgroundView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(24)
