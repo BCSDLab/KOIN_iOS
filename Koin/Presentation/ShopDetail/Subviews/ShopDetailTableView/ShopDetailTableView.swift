@@ -25,7 +25,6 @@ final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDa
     let shouldSetNavigationBarTransparentPublisher = PassthroughSubject<Bool, Never>()
     let navigationBarOpacityPublisher = PassthroughSubject<Float, Never>()
     let shouldShowSticky = PassthroughSubject<Bool, Never>()
-    let tableViewDidScroll = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -111,7 +110,7 @@ extension ShopDetailTableView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let navigationBarOffset = UIScreen.main.bounds.width/1.21 - (self.navigationBarHeight + UIApplication.topSafeAreaHeight())
-        let stickyOffset: CGFloat = (tableHeaderView?.frame.height ?? 0)
+        let stickyOffset: CGFloat = (tableHeaderView?.frame.height ?? 0) - (self.navigationBarHeight + UIApplication.topSafeAreaHeight() + 66)
         let contentOffset = self.contentOffset.y
         
         let opacity = 1 - (navigationBarOffset - contentOffset)/100
@@ -121,7 +120,6 @@ extension ShopDetailTableView: UIScrollViewDelegate {
         self.shouldSetNavigationBarTransparentPublisher.send(shouldSetNavigationBarTransparent)
         self.navigationBarOpacityPublisher.send(Float(opacity))
         self.shouldShowSticky.send(shouldShowSticky)
-        self.tableViewDidScroll.send(contentOffset)
     }
 }
 
