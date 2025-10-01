@@ -113,6 +113,12 @@ final class OrderCartViewController: UIViewController {
             self?.emptyCart()
         }
         .store(in: &subscriptions)
+        
+        // MARK: - bottomSheet
+        bottomSheet.bottomSheetButtonTappedPublisher.sink { [weak self] in
+            print("주문하기")
+        }
+        .store(in: &subscriptions)
     }
 }
 

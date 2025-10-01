@@ -12,7 +12,7 @@ import SnapKit
 final class OrderCartBottomSheet: UIView {
     
     // MARK: - Properties
-    //let isMenuAddablePublisher = PassthroughSubject<Bool, Never>()
+    let bottomSheetButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Component
     private let priceLabel = UILabel().then {
@@ -49,6 +49,7 @@ final class OrderCartBottomSheet: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        addTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -92,6 +93,16 @@ final class OrderCartBottomSheet: UIView {
     }
 }
 
+extension OrderCartBottomSheet {
+    
+    private func addTargets() {
+        shoppingListButton.addTarget(self, action: #selector(bottomSheetButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func bottomSheetButtonTapped() {
+        bottomSheetButtonTappedPublisher.send()
+    }
+}
 extension OrderCartBottomSheet {
     
     private func setUpConstraints() {
