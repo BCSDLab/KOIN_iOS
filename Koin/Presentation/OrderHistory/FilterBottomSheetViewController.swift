@@ -304,7 +304,7 @@ final class FilterBottomSheetViewController: UIViewController {
     //MARK: - Bind
     
     private func bind() {
-        let output = viewModel.transform(inputSubject.eraseToAnyPublisher())
+        let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         output
             .receive(on: DispatchQueue.main)
