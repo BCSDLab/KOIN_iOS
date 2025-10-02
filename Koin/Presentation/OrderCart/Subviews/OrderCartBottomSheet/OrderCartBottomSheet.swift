@@ -55,21 +55,27 @@ final class OrderCartBottomSheet: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopMinimumOrderAmount: Int, totalAmount: Int, finalPaymentAmount: Int, itemsCount: Int) {
+    func configure(shopMinimumOrderAmount: Int, totalAmount: Int, finalPaymentAmount: Int, itemsCount: Int, isPickUp: Bool) {
         
         let formatter = NumberFormatter().then {
             $0.numberStyle = .decimal
         }
         priceLabel.text = (formatter.string(from: NSNumber(value: finalPaymentAmount)) ?? "-") + "원"
         
-        switch shopMinimumOrderAmount <= totalAmount {
-        case true:
-            isDeliveryAvailableLabel.text = "배달 가능"
+        if isPickUp {
+            isDeliveryAvailableLabel.text = "주문 가능"
             configureButton(count: itemsCount, isEnabled: true)
-        case false:
-            let difference = formatter.string(from: NSNumber(value: shopMinimumOrderAmount - totalAmount)) ?? "-"
-            isDeliveryAvailableLabel.text = "\(difference)원 더 담으면 배달 가능"
-            configureButton(count: itemsCount, isEnabled: false)
+            return
+        } else {
+            switch shopMinimumOrderAmount <= totalAmount {
+            case true:
+                isDeliveryAvailableLabel.text = "배달 가능"
+                configureButton(count: itemsCount, isEnabled: true)
+            case false:
+                let difference = formatter.string(from: NSNumber(value: shopMinimumOrderAmount - totalAmount)) ?? "-"
+                isDeliveryAvailableLabel.text = "\(difference)원 더 담으면 배달 가능"
+                configureButton(count: itemsCount, isEnabled: false)
+            }
         }
     }
     

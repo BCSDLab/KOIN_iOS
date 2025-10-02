@@ -58,7 +58,7 @@ final class OrderCartViewController: UIViewController {
             case .updateCart(let cart):
                 self?.orderableShopId = cart.orderableShopId
                 self?.tableView.configure(cart: cart)
-                self?.bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count)
+                self?.bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count, isPickUp: !cart.isDeliveryAvailable)
             }
         }
         .store(in: &subscriptions)
