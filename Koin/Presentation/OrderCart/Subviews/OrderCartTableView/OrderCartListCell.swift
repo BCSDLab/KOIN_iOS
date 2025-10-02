@@ -150,6 +150,14 @@ extension OrderCartListCell {
 }
 
 extension OrderCartListCell {
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        thumbnailImageView.image = nil
+    }
+}
+
+extension OrderCartListCell {
     
     func setUpInsetBackgroundView(isFirstRow: Bool, isLastRow: Bool) {
         switch (isFirstRow, isLastRow) {
@@ -190,6 +198,10 @@ extension OrderCartListCell {
         trashcanButton.isHidden = quantity == 1 ? false : true
         minusButton.isHidden = 1 < quantity ? false : true
     }
+    
+}
+
+extension OrderCartListCell {
     
     private func setUpLayout() {
         [nameLabel, thumbnailImageView, priceTableView, totalAmountLabel,
