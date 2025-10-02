@@ -7,25 +7,25 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class FilterBottomSheetViewController: UIViewController {
-
-    //MARK: - properties
-    var initial: OrderHistoryFilter
-    var onApply: ((OrderHistoryFilter) -> Void)?
     
-    private var work: OrderHistoryFilter
+    //MARK: - properties
+    
     private var bottomConstraint: Constraint!
+    var onApply: ((OrderHistoryQuery) -> Void)?
+    private let viewModel: FilterBottomSheetViewModel
+    private let inputSubject = PassthroughSubject<FilterBottomSheetViewModel.Input, Never>()
+    private var subscription = Set<AnyCancellable>()
     
     // MARK: - UI Components
-
+    
     private let backdrop = UIControl()
-    private let container = UIView()
-    private let body = UIStackView()
-    private let bottomBar = UIStackView()
-    private let m3Button = FilteringButton()
-    private let m6Button = FilteringButton()
-    private let y1Button = FilteringButton()
+    private let filterButtonContainer = UIView()
+    private let threeMonthButton = FilteringButton()
+    private let sixMonthButton = FilteringButton()
+    private let oneYearButton = FilteringButton()
     private let deliveryButton = FilteringButton()
     private let takeoutButton = FilteringButton()
     private let doneButton = FilteringButton()
@@ -37,33 +37,33 @@ final class FilterBottomSheetViewController: UIViewController {
         $0.distribution = .fill
         $0.spacing = 12
     }
-
+    
     private let stateRow = UIStackView().then {
         $0.axis = .horizontal
         $0.alignment = .leading
         $0.distribution = .fill
         $0.spacing = 12
     }
-
+    
     private let infoRow = UIStackView().then {
         $0.axis = .horizontal
         $0.alignment = .leading
         $0.distribution = .fill
         $0.spacing = 12
     }
-
+    
     private let filterUnderLineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
-
+    
     private let periodUnderLineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
-
+    
     private let containerUnderLineView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral300)
     }
-
+    
     private let resetButton = UIButton(configuration: {
         var config = UIButton.Configuration.plain()
         config.title = "초기화"
@@ -81,7 +81,7 @@ final class FilterBottomSheetViewController: UIViewController {
         config.background.cornerRadius = 12
         return config
     }())
-
+    
     private let applyButton = UIButton(configuration: {
         var config = UIButton.Configuration.filled()
         config.title = "적용하기"
@@ -96,7 +96,7 @@ final class FilterBottomSheetViewController: UIViewController {
     }()).then {
         $0.titleLabel?.numberOfLines = 1
     }
-
+    
     private let closeButton = UIButton(type: .system).then {
         let icon = UIImage.appImage(asset: .delete)
         $0.setImage(icon, for: .normal)
@@ -107,36 +107,35 @@ final class FilterBottomSheetViewController: UIViewController {
         $0.tintColor = UIColor.appColor(.neutral800)
         $0.backgroundColor = .clear
     }
-
+    
     private let periodLabel = UILabel().then {
         $0.text = "조회 기간"
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = UIColor.appColor(.neutral600)
     }
-
+    
     private let stateLabel = UILabel().then {
         $0.text = "주문 상태"
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = UIColor.appColor(.neutral600)
     }
-
+    
     private let infoLabel = UILabel().then {
         $0.text = "주문 정보"
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = UIColor.appColor(.neutral600)
     }
-
+    
     private let titleLabel = UILabel().then {
         $0.text = "필터"
         $0.font = UIFont.appFont(.pretendardBold, size: 18)
         $0.textColor = UIColor.appColor(.new500)
     }
-
+    
     // MARK: - Initialize
     
-    init(initial: OrderHistoryFilter) {
-        self.initial = initial
-        self.work = initial
+    init(initialQuery: OrderHistoryQuery) {
+        self.viewModel = FilterBottomSheetViewModel(initial: initialQuery)
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
     }
@@ -144,9 +143,9 @@ final class FilterBottomSheetViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -160,35 +159,35 @@ final class FilterBottomSheetViewController: UIViewController {
     // MARK: - UI Function
     
     private func configureButtons(){
-        m3Button.setTitle("최근 3개월")
-        m6Button.setTitle("최근 6개월")
-        y1Button.setTitle("최근 1년")
+        threeMonthButton.setTitle("최근 3개월")
+        sixMonthButton.setTitle("최근 6개월")
+        oneYearButton.setTitle("최근 1년")
         deliveryButton.setTitle("배달")
         takeoutButton.setTitle("포장")
         doneButton.setTitle("완료")
         cancelButton.setTitle("취소")
-
-        [m3Button, m6Button, y1Button,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
-                $0.applyFilter(false)
-                changeSheetInButton($0)
-            }
+        
+        [threeMonthButton, sixMonthButton, oneYearButton,deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
+            $0.applyFilter(false)
+            changeSheetInButton($0)
+        }
     }
     
     private func setUpLayOuts(){
-        [backdrop, container].forEach {
+        [backdrop, filterButtonContainer].forEach {
             view.addSubview($0)
         }
         backdrop.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        container.backgroundColor = UIColor.appColor(.newBackground)
-        container.layer.cornerRadius = 32
-        container.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        filterButtonContainer.backgroundColor = UIColor.appColor(.newBackground)
+        filterButtonContainer.layer.cornerRadius = 32
+        filterButtonContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         [titleLabel,periodLabel,infoLabel,stateLabel,filterUnderLineView,periodUnderLineView,periodRow,stateRow,infoRow, resetButton, applyButton ,containerUnderLineView, closeButton].forEach {
-            container.addSubview($0)
+            filterButtonContainer.addSubview($0)
         }
         
         
-        [m3Button, m6Button, y1Button].forEach{
+        [threeMonthButton, sixMonthButton, oneYearButton].forEach{
             periodRow.addArrangedSubview($0)
         }
         
@@ -206,7 +205,7 @@ final class FilterBottomSheetViewController: UIViewController {
         backdrop.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        container.snp.makeConstraints {
+        filterButtonContainer.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             bottomConstraint = $0.bottom.equalTo(view.snp.bottom).offset(320).constraint
             $0.height.lessThanOrEqualTo(view.snp.height).multipliedBy(0.7)
@@ -284,7 +283,7 @@ final class FilterBottomSheetViewController: UIViewController {
         
         containerUnderLineView.snp.makeConstraints {
             $0.top.equalTo(resetButton.snp.bottom).offset(12)
-            $0.bottom.equalTo(container.safeAreaLayoutGuide)
+            $0.bottom.equalTo(filterButtonContainer.safeAreaLayoutGuide)
             $0.height.equalTo(1)
             $0.leading.trailing.equalToSuperview()
         }
@@ -296,14 +295,35 @@ final class FilterBottomSheetViewController: UIViewController {
         setUpConstraints()
         configureButtons()
         view.backgroundColor = .clear
-        container.backgroundColor = UIColor.appColor(.neutral0)
+        filterButtonContainer.backgroundColor = UIColor.appColor(.neutral0)
+        setAddTarget()
         bind()
+        
     }
     
     //MARK: - Bind
     
     private func bind() {
-        [m3Button, m6Button, y1Button].forEach {
+        let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [ weak self ] output in
+                switch output {
+                case .render(let state):
+                    self?.render(state: state)
+                case .applied(let query):
+                    self?.onApply?(query)
+                case .dismiss:
+                    self?.animateDismiss()
+                }
+            }
+            .store(in: &subscription)        
+    }
+    
+    
+    private func setAddTarget() {
+        [threeMonthButton, sixMonthButton, oneYearButton].forEach {
             $0.addTarget(self, action: #selector(periodTapped(_:)), for: .touchUpInside)
         }
         [deliveryButton, takeoutButton].forEach {
@@ -312,9 +332,9 @@ final class FilterBottomSheetViewController: UIViewController {
         [doneButton, cancelButton].forEach {
             $0.addTarget(self, action: #selector(infoTapped(_:)), for: .touchUpInside)
         }
-
+        
         // 3개월, 6개월 , 1년
-        [m3Button, m6Button, y1Button,
+        [threeMonthButton, sixMonthButton, oneYearButton,
          deliveryButton, takeoutButton, doneButton, cancelButton].forEach {
             $0.setContentHuggingPriority(.required, for: .horizontal)
             $0.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -324,62 +344,52 @@ final class FilterBottomSheetViewController: UIViewController {
         applyButton.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         backdrop.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-
-        render()
     }
-
+    
     // MARK: - Function
+    
+    private func render(state: FilterBottomSheetViewModel.State) {
+        threeMonthButton.applyFilter(state.period == .last3Months)
+        sixMonthButton.applyFilter(state.period == .last6Months)
+        oneYearButton.applyFilter(state.period == .last1Year)
+    
+        deliveryButton.applyFilter(state.type == .delivery)
+        takeoutButton.applyFilter(state.type == .takeout)
+        
+        doneButton.applyFilter(state.status == .completed)
+        cancelButton.applyFilter(state.status == .canceled)
 
-    private func render() {
-        m3Button.applyFilter(work.period == .threeMonths)
-        m6Button.applyFilter(work.period == .sixMonths)
-        y1Button.applyFilter(work.period == .oneYear)
-
-        deliveryButton.applyFilter(work.method == .delivery)
-        takeoutButton.applyFilter(work.method == .takeout)
-
-        doneButton.applyFilter(work.info == .completed)
-        cancelButton.applyFilter(work.info == .canceled)
     }
     
     //MARK: - @objc
     
     @objc private func closeTapped() {
-        animateDismiss()
+        inputSubject.send(.close)
     }
     
     @objc private func resetTapped() {
-        work = .empty
-        render()
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        inputSubject.send(.reset)
+
     }
     
     @objc private func applyTapped() {
-        onApply?(work)
-        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-        animateDismiss()
+        inputSubject.send(.apply)
     }
     
     @objc private func periodTapped(_ sender: FilteringButton) {
-        let cur = work.period
-        if sender === m3Button { work.period = (cur == .threeMonths) ? nil : .threeMonths }
-        if sender === m6Button { work.period = (cur == .sixMonths) ? nil : .sixMonths }
-        if sender === y1Button { work.period = (cur == .oneYear) ? nil : .oneYear }
-        render()
+        if sender === threeMonthButton { inputSubject.send(.togglePeriod(.last3Months)) }
+        if sender === sixMonthButton   { inputSubject.send(.togglePeriod(.last6Months)) }
+        if sender === oneYearButton    { inputSubject.send(.togglePeriod(.last1Year)) }
     }
     
     @objc private func methodTapped(_ sender: FilteringButton) {
-        let cur = work.method
-        if sender === deliveryButton { work.method = (cur == .delivery) ? nil : .delivery }
-        if sender === takeoutButton  { work.method = (cur == .takeout)  ? nil : .takeout  }
-        render()
+        if sender === deliveryButton { inputSubject.send(.toggleType(.delivery)) }
+        if sender === takeoutButton  { inputSubject.send(.toggleType(.takeout)) }
     }
     
     @objc private func infoTapped(_ sender: FilteringButton) {
-        let cur = work.info
-        if sender === doneButton    { work.info = (cur == .completed) ? nil : .completed }
-        if sender === cancelButton  { work.info = (cur == .canceled)  ? nil : .canceled }
-        render()
+        if sender === doneButton   { inputSubject.send(.toggleStatus(.completed)) }
+        if sender === cancelButton { inputSubject.send(.toggleStatus(.canceled)) }
     }
 }
 
@@ -414,7 +424,7 @@ extension FilterBottomSheetViewController {
             top: 8, leading: 12, bottom: 8, trailing: 12
         )
         button.configuration = config
-
+        
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
