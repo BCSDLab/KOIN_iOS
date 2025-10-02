@@ -63,9 +63,9 @@ final class OrderPrepareCollectionView: UICollectionView {
         let buttonH: CGFloat = 44
         let bottomInset: CGFloat = 16
         
-        var total = topInset + chipH + topState + stateH + explainH + underlineTop + underlineH + imageTop + imageH + buttonTop + buttonH + bottomInset
-        if showEstimateTimeLabel { total += estimateTimeH }
-        return total
+        var totalHeight = topInset + chipH + topState + stateH + explainH + underlineTop + underlineH + imageTop + imageH + buttonTop + buttonH + bottomInset
+        if showEstimateTimeLabel { totalHeight += estimateTimeH }
+        return totalHeight
     }
 }
 

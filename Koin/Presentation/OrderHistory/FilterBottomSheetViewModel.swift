@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class FilterBottomSheetViewModel {
+final class FilterBottomSheetViewModel: ViewModelProtocol {
     enum Input {
         case togglePeriod(OrderHistoryPeriod)
         case toggleType(OrderHistoryType)
@@ -36,7 +36,7 @@ final class FilterBottomSheetViewModel {
     
     init(initial: OrderHistoryQuery) { self.query = initial }
     
-    func transform(_ input: AnyPublisher<Input,Never>) -> AnyPublisher<Output,Never> {
+    func transform(with input: AnyPublisher<Input,Never>) -> AnyPublisher<Output,Never> {
         input
             .sink { [weak self] input in
                 guard let self else { return }
