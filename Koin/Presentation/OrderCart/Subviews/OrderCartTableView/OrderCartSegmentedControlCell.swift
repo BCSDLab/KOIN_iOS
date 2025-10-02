@@ -38,6 +38,7 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
         segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
         
         if isDeliveryAvailable && isPickupAvailable {
+            descriptionImageView.snp.removeConstraints()
             descriptionStackView.snp.updateConstraints {
                 $0.top.equalTo(segmentedControl.snp.bottom).offset(0)
                 $0.height.equalTo(0)
