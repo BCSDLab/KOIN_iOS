@@ -309,14 +309,13 @@ final class FilterBottomSheetViewController: UIViewController {
         output
             .receive(on: DispatchQueue.main)
             .sink { [ weak self ] output in
-                guard let self else {return}
                 switch output {
                 case .render(let state):
-                    self.render(state: state)
+                    self?.render(state: state)
                 case .applied(let query):
-                    self.onApply?(query)
+                    self?.onApply?(query)
                 case .dismiss:
-                    self.animateDismiss()
+                    self?.animateDismiss()
                 }
             }
             .store(in: &subscription)        
