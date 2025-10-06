@@ -20,6 +20,7 @@ final class DiningViewController: UIViewController {
     
     // FIXME: - AB 테스트 식단 세션 아이디 프로퍼티
     private var customSessionId: String?
+    private var isHidingBySwipe = false
     
     // MARK: - UI Components
     
@@ -152,6 +153,7 @@ final class DiningViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
         
         diningToShopAbTestButton.addTarget(self, action: #selector(didTapDiningToShop), for: .touchUpInside)
+        addDownSwipeToDiningToShopButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -269,6 +271,10 @@ extension DiningViewController {
     }
     
     @objc private func didTapDiningToShop() {
+        guard !isHidingBySwipe, !diningToShopAbTestButton.isHidden else {
+            return
+        }
+
         let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
         let customSessionId = customSessionId ?? CustomSessionManager.current(eventName: "dining2shop")
                                               ?? CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
@@ -301,6 +307,35 @@ extension DiningViewController {
         let shopViewController = ShopViewControllerA(viewModel: viewModel)
         shopViewController.title = "주변상점"
         navigationController?.pushViewController(shopViewController, animated: true)
+    }
+    
+    private func addDownSwipeToDiningToShopButton() {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleDiningToShopButtonSwipeDown(_:)))
+        swipeDown.direction = .down
+        swipeDown.cancelsTouchesInView = true
+        diningToShopAbTestButton.addGestureRecognizer(swipeDown)
+    }
+    
+    @objc private func handleDiningToShopButtonSwipeDown(_ gesture: UISwipeGestureRecognizer) {
+        guard gesture.state == .ended else {
+            return
+        }
+        isHidingBySwipe = true
+
+        let value = getCurrentDiningType()
+        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
+        self.customSessionId = customSessionId
+
+        diningToShopAbTestButton.isHidden = true
+        
+        UIView.animate(withDuration: 0.2) { self.diningToShopAbTestButton.alpha = 0
+        }
+
+        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.diningToShopClose, .swipe, value, customSessionId))
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { self.isHidingBySwipe = false
+        }
     }
 }
 
@@ -336,7 +371,6 @@ extension DiningViewController {
     }
     
     private func showBottomSheet(_ isOn: (Bool, Bool)) {
-      
         let bottomSheetViewController = BottomSheetViewController(contentViewController: diningNotiContentViewController, defaultHeight: 332, cornerRadius: 16, dimmedAlpha: 0.4, isPannedable: false)
         diningNotiContentViewController.updateButtonIsOn(isOn)
         self.present(bottomSheetViewController, animated: true)
