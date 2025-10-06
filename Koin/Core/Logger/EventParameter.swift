@@ -31,6 +31,7 @@ enum EventParameter {
             case campusClub1 = "CAMPUS_club_1"
             case dining2shop1 = "dining2shop_1"
             case diningToShop = "dining_to_shop"
+            case diningToShopClose = "dining_to_shop_close"
             var team: String {
                 return "AB_TEST"
             }
