@@ -25,7 +25,7 @@ final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDa
     let shouldSetNavigationBarTransparentPublisher = PassthroughSubject<Bool, Never>()
     let navigationBarOpacityPublisher = PassthroughSubject<Float, Never>()
     let shouldShowStickyPublisher = PassthroughSubject<Bool, Never>()
-    let shouldSetContentInset = PassthroughSubject<Bool, Never>()
+    let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -121,7 +121,7 @@ extension ShopDetailTableView: UIScrollViewDelegate {
         self.shouldSetNavigationBarTransparentPublisher.send(shouldSetNavigationBarTransparent)
         self.navigationBarOpacityPublisher.send(Float(opacity))
         self.shouldShowStickyPublisher.send(shouldShowSticky)
-        self.shouldSetContentInset.send(shouldShowSticky)
+        self.shouldSetContentInsetPublisher.send(shouldShowSticky)
     }
 }
 

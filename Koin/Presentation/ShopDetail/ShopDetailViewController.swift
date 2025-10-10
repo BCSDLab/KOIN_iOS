@@ -182,7 +182,7 @@ extension ShopDetailViewController {
                 self?.menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
             }
             .store(in: &subscriptions)
-        menuGroupTableView.shouldSetContentInset
+        menuGroupTableView.shouldSetContentInsetPublisher
             .sink { [weak self] shouldSetContentInset in
                 let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
                 self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
