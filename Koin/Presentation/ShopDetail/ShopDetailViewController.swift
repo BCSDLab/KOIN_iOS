@@ -170,7 +170,7 @@ extension ShopDetailViewController {
                 self?.navigationBarLikeView.layer.opacity = opacity
             }
             .store(in: &subscriptions)
-        menuGroupTableView.shouldShowSticky
+        menuGroupTableView.shouldShowStickyPublisher
             .sink { [weak self] shouldShowSticky in
                 self?.menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
             }
