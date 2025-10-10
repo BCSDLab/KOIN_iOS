@@ -34,6 +34,8 @@ final class ShopDetailViewController: UIViewController {
         $0.layer.masksToBounds = false
         $0.isHidden = true
         $0.allowsMultipleSelection = false
+        $0.layer.masksToBounds = false
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
     }
     private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .grouped).then {
         $0.contentInsetAdjustmentBehavior = .never
