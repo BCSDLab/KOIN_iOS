@@ -13,6 +13,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
     // MARK: - Properties
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
+    let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Components
@@ -63,6 +64,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
         }
         .store(in: &subscriptions)
         
+        // MARK: - MenuGroupName CollectionView
         menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
             self?.didScrollPublisher.send(contentOffset)
         }
@@ -72,6 +74,11 @@ final class ShopDetailTableViewTableHeaderView: UIView {
             self?.menuGroupNameCollectionView.configure(selectedIndexPath: indexPath)
             self?.menuGroupNameCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             self?.didSelectCellPublisher.send(indexPath)
+        }
+        .store(in: &subscriptions)
+        
+        menuGroupNameCollectionView.shouldSetContentInset.sink { [weak self] shouldSetContentInset in
+            self?.shouldSetContentInsetPublisher.send(shouldSetContentInset)
         }
         .store(in: &subscriptions)
     }

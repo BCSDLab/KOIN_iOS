@@ -113,13 +113,9 @@ extension ShopDetailViewController {
         }
         .store(in: &subscriptions)
         
-        // MARK: - GroupNameCollectionView
+        // MARK: - TableHeaderView
         tableHeaderView.didScrollPublisher.sink { [weak self] contentOffset in
             self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
-            }
-            .store(in: &subscriptions)
-        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.tableHeaderView.update(contentOffset: contentOffset)
             }
             .store(in: &subscriptions)
         
@@ -129,6 +125,17 @@ extension ShopDetailViewController {
             self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
             self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
             self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            }
+            .store(in: &subscriptions)
+        tableHeaderView.shouldSetContentInsetPublisher.sink { [weak self] shouldSetContentInset in
+            let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
+            self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
+            }
+            .store(in: &subscriptions)
+        
+        // MARK: - GroupNameCollectionView
+        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
+            self?.tableHeaderView.update(contentOffset: contentOffset)
             }
             .store(in: &subscriptions)
         menuGroupNameCollectionViewSticky.didSelectCellPublisher
@@ -175,6 +182,15 @@ extension ShopDetailViewController {
                 self?.menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
             }
             .store(in: &subscriptions)
+        menuGroupTableView.shouldSetContentInset
+            .sink { [weak self] shouldSetContentInset in
+                let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
+                self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
+            }
+            .store(in: &subscriptions)
+        
+        // MARK: - tableHeaderView
+        
         
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
