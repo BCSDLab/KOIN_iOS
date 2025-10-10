@@ -12,30 +12,30 @@ final class OrderCartAmountCell: UITableViewCell {
     // MARK: - Properties
     
     // MARK: - Components
-    let insetBackgroundView = UIView().then {
+    private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
         $0.layer.masksToBounds = false
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
-    let totalAmountLabel = UILabel().then {
+    private let totalAmountLabel = UILabel().then {
         $0.text = "총 금액"
     }
-    let totalAmountValueLabel = UILabel()
-    let itemsAmountLabel = UILabel().then {
+    private let totalAmountValueLabel = UILabel()
+    private let itemsAmountLabel = UILabel().then {
         $0.text = "메뉴 금액"
     }
-    let itemsAmountValueLabel = UILabel()
-    let deliveryFeeLabel = UILabel().then {
+    private let itemsAmountValueLabel = UILabel()
+    private let deliveryFeeLabel = UILabel().then {
         $0.text = "배달 금액"
     }
-    let deliveryFeeValueLabel = UILabel()
-    let finalPaymentAmountLabel = UILabel().then {
+    private let deliveryFeeValueLabel = UILabel()
+    private let finalPaymentAmountLabel = UILabel().then {
         $0.text = "결제예정금액"
     }
-    let finalPaymentAmountValueLabel = UILabel()
-    let separatorView = UIView().then {
+    private let finalPaymentAmountValueLabel = UILabel()
+    private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
     

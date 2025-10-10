@@ -11,23 +11,23 @@ import Combine
 final class OrderCartSegmentedControl: UIView {
  
     // MARK: - Properties
-    let selectedAttributes: [NSAttributedString.Key : Any] = [
+    private let selectedAttributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
         .foregroundColor : UIColor.appColor(.neutral0)
     ]
-    let deselectedAttributes: [NSAttributedString.Key : Any] = [
+    private let deselectedAttributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
         .foregroundColor : UIColor.appColor(.neutral500)
     ]
-    let disabledAtrributes: [NSAttributedString.Key : Any] = [
+    private let disabledAtrributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
         .foregroundColor : UIColor.appColor(.neutral300)
     ]
     
     // MARK: - Components
-    let buttonDelivery = UIButton()
-    let buttonPickup = UIButton()
-    let selectedBackgroundView = UIView().then {
+    private let buttonDelivery = UIButton()
+    private let buttonPickup = UIButton()
+    private let selectedBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.new500)
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true

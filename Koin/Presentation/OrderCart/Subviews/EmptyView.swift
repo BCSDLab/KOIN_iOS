@@ -14,16 +14,16 @@ final class EmptyView: UIView {
     let addMenuButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
-    let cartImageView = UIImageView(image: .appImage(asset: .shoppingCartLarge))
-    let shadowSquareImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowSquare))
-    let shadowOvaleImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowOval))
+    private let cartImageView = UIImageView(image: .appImage(asset: .shoppingCartLarge))
+    private let shadowSquareImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowSquare))
+    private let shadowOvaleImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowOval))
     
-    let label = UILabel().then {
+    private let label = UILabel().then {
         $0.text = "장바구니가 비었어요."
         $0.textColor = .appColor(.neutral700)
         $0.font = .appFont(.pretendardSemiBold, size: 14)
     }
-    let addMenuButton = UIButton().then {
+    private let addMenuButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("메뉴 추가", attributes: AttributeContainer([
             .font : UIFont.appFont(.pretendardSemiBold, size: 13),

@@ -14,14 +14,14 @@ final class OrderCartAddMoreCell: UITableViewCell {
     let moveToShopPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
-    let insetBackgroundView = UIView().then {
+    private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
         $0.layer.masksToBounds = false
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
-    let button = UIButton().then {
+    private let button = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("더 담으러 가기", attributes: AttributeContainer([
             .font: UIFont.appFont(.pretendardBold, size: 15),

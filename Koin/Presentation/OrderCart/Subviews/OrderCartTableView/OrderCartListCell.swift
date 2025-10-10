@@ -19,29 +19,29 @@ final class OrderCartListCell: UITableViewCell {
     private var indexPath: IndexPath? = nil
     
     // MARK: - Components
-    let insetBackgroundView = UIView().then {
+    private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.clipsToBounds = true
         $0.layer.masksToBounds = false
         $0.layer.cornerRadius = 24
     }
-    let nameLabel = UILabel().then {
+    private let nameLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
         $0.font = .appFont(.pretendardBold, size: 16)
     }
-    let thumbnailImageView = UIImageView().then {
+    private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
     }
-    let priceTableView = OrderCartListCellPriceTableView().then {
+    private let priceTableView = OrderCartListCellPriceTableView().then {
         $0.separatorStyle = .none
         $0.isScrollEnabled = false
     }
-    let totalAmountLabel = UILabel().then {
+    private let totalAmountLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
         $0.font = .appFont(.pretendardBold, size: 15)
     }
-    let changeOptionButton = UIButton().then {
+    private let changeOptionButton = UIButton().then {
         $0.setAttributedTitle(NSAttributedString(string: "옵션 변경", attributes: [
             .font : UIFont.appFont(.pretendardRegular, size: 12),
             .foregroundColor : UIColor.appColor(.neutral600)
@@ -56,27 +56,27 @@ final class OrderCartListCell: UITableViewCell {
         $0.clipsToBounds = true
     }
     
-    let quantityBackgroundView = UIView().then {
+    private let quantityBackgroundView = UIView().then {
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         $0.layer.borderWidth = 0.5
         $0.layer.cornerRadius = 16
         $0.clipsToBounds = true
     }
-    let quantityLabel = UILabel().then {
+    private let quantityLabel = UILabel().then {
         $0.textColor = .appColor(.neutral600)
         $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textAlignment = .center
     }
-    let addButton = UIButton().then {
+    private let addButton = UIButton().then {
         $0.setImage(.appImage(asset: .addThin), for: .normal)
     }
-    let minusButton = UIButton().then {
+    private let minusButton = UIButton().then {
         $0.setImage(.appImage(asset: .minus), for: .normal)
     }
-    let trashcanButton = UIButton().then {
+    private let trashcanButton = UIButton().then {
         $0.setImage(.appImage(asset: .trashcanNew), for: .normal)
     }
-    let separaterView = UIView().then {
+    private let separaterView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }
     
