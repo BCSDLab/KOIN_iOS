@@ -17,17 +17,17 @@ final class OrderCartViewController: UIViewController {
     private var orderableShopId: Int? = nil
     
     // MARK: - Components
-    private let emptyView = EmptyView().then {
+    private let orderCartEmptyView = OrderCartEmptyView().then {
         $0.isHidden = true
     }
-    private let tableView = OrderCartTableView().then {
+    private let orderCartTableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.sectionFooterHeight = .zero
     }
-    private let bottomSheet = OrderCartBottomSheet()
+    private let orderCartBottomSheet = OrderCartBottomSheet()
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -57,15 +57,15 @@ final class OrderCartViewController: UIViewController {
             switch output {
             case .updateCart(let cart):
                 self?.orderableShopId = cart.orderableShopId
-                self?.tableView.configure(cart: cart)
-                self?.bottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count, isPickUp: !cart.isDeliveryAvailable)
+                self?.orderCartTableView.configure(cart: cart)
+                self?.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count, isPickUp: !cart.isDeliveryAvailable)
             }
         }
         .store(in: &subscriptions)
         
         
         // MARK: - TableView
-        tableView.moveToShopPublisher.sink { [weak self] in
+        orderCartTableView.moveToShopPublisher.sink { [weak self] in
             guard let self = self, let orderableShopId = self.orderableShopId else {
                 return
             }
@@ -91,37 +91,37 @@ final class OrderCartViewController: UIViewController {
         }
         .store(in: &subscriptions)
         
-        tableView.addQuantityPublisher.sink { [weak self] cartMenuItemId in
+        orderCartTableView.addQuantityPublisher.sink { [weak self] cartMenuItemId in
             print("add quantity")
         }
         .store(in: &subscriptions)
         
-        tableView.minusQuantityPublisher.sink { [weak self] cartMenuItemId in
+        orderCartTableView.minusQuantityPublisher.sink { [weak self] cartMenuItemId in
             print("minus quantity")
         }
         .store(in: &subscriptions)
-        tableView.deleteItemPublisher.sink { [weak self] cartMenuItemId in
+        orderCartTableView.deleteItemPublisher.sink { [weak self] cartMenuItemId in
             print("delete item")
         }
         .store(in: &subscriptions)
-        tableView.changeOptionPublisher.sink { [weak self] cartMenuItemId in
+        orderCartTableView.changeOptionPublisher.sink { [weak self] cartMenuItemId in
             print("change opotion")
         }
         .store(in: &subscriptions)
         
-        tableView.emptyCartPublisher.sink { [weak self] in
+        orderCartTableView.emptyCartPublisher.sink { [weak self] in
             self?.emptyCart()
         }
         .store(in: &subscriptions)
         
         // MARK: - bottomSheet
-        bottomSheet.bottomSheetButtonTappedPublisher.sink { [weak self] in
+        orderCartBottomSheet.bottomSheetButtonTappedPublisher.sink { [weak self] in
             self?.orderButtonTapped()
         }
         .store(in: &subscriptions)
         
         // MARK: - Empty View
-        emptyView.addMenuButtonTappedPublisher.sink { [weak self] in
+        orderCartEmptyView.addMenuButtonTappedPublisher.sink { [weak self] in
             self?.popToOrderTabbarViewController()
         }
         .store(in: &subscriptions)
@@ -175,9 +175,9 @@ extension OrderCartViewController {
     }
     
     private func emptyCart() {
-        tableView.isHidden = true
-        emptyView.isHidden = false
-        bottomSheet.isHidden = true
+        orderCartTableView.isHidden = true
+        orderCartEmptyView.isHidden = false
+        orderCartBottomSheet.isHidden = true
     }
     
     private func popToOrderTabbarViewController() {
@@ -193,22 +193,22 @@ extension OrderCartViewController {
 extension OrderCartViewController {
     
     private func setUpLayouts() {
-        [emptyView, tableView, bottomSheet].forEach {
+        [orderCartEmptyView, orderCartTableView, orderCartBottomSheet].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        emptyView.snp.makeConstraints {
+        orderCartEmptyView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        bottomSheet.snp.makeConstraints {
+        orderCartBottomSheet.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
         }
-        tableView.snp.makeConstraints {
+        orderCartTableView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(bottomSheet.snp.top)
+            $0.bottom.equalTo(orderCartBottomSheet.snp.top)
         }
     }
     

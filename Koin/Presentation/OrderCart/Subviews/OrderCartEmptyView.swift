@@ -1,5 +1,5 @@
 //
-//  EmptyView.swift
+//  OrderCartEmptyView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/28/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class EmptyView: UIView {
+final class OrderCartEmptyView: UIView {
     
     // MARK: - Properties
     let addMenuButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -50,7 +50,7 @@ final class EmptyView: UIView {
     }
 }
 
-extension EmptyView {
+extension OrderCartEmptyView {
     
     private func setAddTarget() {
         addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
@@ -61,7 +61,7 @@ extension EmptyView {
     }
 }
 
-extension EmptyView {
+extension OrderCartEmptyView {
     
     private func setUpLayout() {
         [shadowOvaleImageView, shadowSquareImageView, cartImageView, descriptionLabel, addMenuButton].forEach {
