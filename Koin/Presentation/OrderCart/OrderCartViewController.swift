@@ -33,7 +33,6 @@ final class OrderCartViewController: UIViewController {
     init(viewModel: OrderCartViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        configureView()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,6 +41,7 @@ final class OrderCartViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureView()
         bind()
         inputSubject.send(.viewDidLoad)
     }
