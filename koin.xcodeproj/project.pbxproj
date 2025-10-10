@@ -1527,6 +1527,15 @@
 			path = Register;
 			sourceTree = "<group>";
 		};
+		7C93BA132E995B31006F9D76 /* TableHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+			);
+			path = TableHeaderView;
+			sourceTree = "<group>";
+		};
 		8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2049,6 +2058,7 @@
 		B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */ = {
 			isa = PBXGroup;
 			children = (
+				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B49C1CD62E6F1F1600150BE2 /* ShopDetailTableView.swift */,
 				B49C1CD82E6F320200150BE2 /* ShopDetailTableViewCell.swift */,
 				B49C1CDA2E6F320E00150BE2 /* ShopDetailTableViewHeaderView.swift */,
@@ -2077,13 +2087,11 @@
 		B4B5825B2E6D67810035A861 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
-				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+				7C93BA132E995B31006F9D76 /* TableHeaderView */,
+				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
-				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B438AEEF2E75E18600E889C4 /* ShopDetailPopUpView */,
 				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
-				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";

@@ -189,9 +189,6 @@ extension ShopDetailViewController {
             }
             .store(in: &subscriptions)
         
-        // MARK: - tableHeaderView
-        
-        
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in
