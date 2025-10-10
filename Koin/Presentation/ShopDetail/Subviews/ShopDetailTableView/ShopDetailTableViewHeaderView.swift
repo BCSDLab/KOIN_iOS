@@ -11,7 +11,7 @@ import SnapKit
 final class ShopDetailTableViewHeaderView: UITableViewHeaderFooterView {
     
     private let label = UILabel().then {
-        $0.font = .appFont(.pretendardBold, size: 20)
+        $0.font = .appFont(.pretendardSemiBold, size: 20)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
         $0.textAlignment = .left
