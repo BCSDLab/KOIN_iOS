@@ -72,7 +72,7 @@ extension OrderCartAmountCell {
     private func setUpLabels() {
         [totalAmountLabel, totalAmountValueLabel].forEach {
             $0.textColor = .appColor(.neutral800)
-            $0.font = .appFont(.pretendardBold, size: 15)
+            $0.font = .appFont(.pretendardSemiBold, size: 15)
             $0.contentMode = .center
             
         }
@@ -83,7 +83,7 @@ extension OrderCartAmountCell {
         }
         [finalPaymentAmountLabel, finalPaymentAmountValueLabel].forEach {
             $0.textColor = .appColor(.neutral800)
-            $0.font = .appFont(.pretendardBold, size: 16)
+            $0.font = .appFont(.pretendardSemiBold, size: 16)
             $0.contentMode = .center
         }
     }

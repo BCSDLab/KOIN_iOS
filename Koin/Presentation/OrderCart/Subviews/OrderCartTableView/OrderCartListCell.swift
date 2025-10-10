@@ -27,7 +27,7 @@ final class OrderCartListCell: UITableViewCell {
     }
     private let nameLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
-        $0.font = .appFont(.pretendardBold, size: 16)
+        $0.font = .appFont(.pretendardSemiBold, size: 16)
     }
     private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 5
@@ -39,7 +39,7 @@ final class OrderCartListCell: UITableViewCell {
     }
     private let totalAmountLabel = UILabel().then {
         $0.textColor = .appColor(.neutral800)
-        $0.font = .appFont(.pretendardBold, size: 15)
+        $0.font = .appFont(.pretendardSemiBold, size: 15)
     }
     private let changeOptionButton = UIButton().then {
         $0.setAttributedTitle(NSAttributedString(string: "옵션 변경", attributes: [

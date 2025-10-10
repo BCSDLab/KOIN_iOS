@@ -16,12 +16,12 @@ final class OrderCartBottomSheet: UIView {
     
     // MARK: - Component
     private let priceLabel = UILabel().then {
-        $0.font = .appFont(.pretendardBold, size: 18)
+        $0.font = .appFont(.pretendardSemiBold, size: 18)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
     }
     private let isDeliveryAvailableLabel = UILabel().then {
-        $0.font = .appFont(.pretendardMedium, size: 12)
+        $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.neutral500)
         $0.contentMode = .center
     }
@@ -34,7 +34,7 @@ final class OrderCartBottomSheet: UIView {
         $0.setAttributedTitle(NSAttributedString(
             string: "주문하기",
             attributes: [
-                .font : UIFont.appFont(.pretendardMedium, size: 14),
+                .font : UIFont.appFont(.pretendardSemiBold, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral0)
             ]), for: .normal)
         $0.layer.cornerRadius = 12

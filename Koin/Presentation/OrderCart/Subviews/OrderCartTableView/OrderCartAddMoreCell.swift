@@ -24,7 +24,7 @@ final class OrderCartAddMoreCell: UITableViewCell {
     private let button = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("더 담으러 가기", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardBold, size: 15),
+            .font: UIFont.appFont(.pretendardSemiBold, size: 15),
             .foregroundColor: UIColor.appColor(.new500)
         ]))
         configuration.image = .appImage(asset: .addGray)?.withTintColor(.appColor(.new500), renderingMode: .alwaysTemplate)

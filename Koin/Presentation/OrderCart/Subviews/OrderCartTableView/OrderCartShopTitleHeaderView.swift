@@ -63,7 +63,7 @@ extension OrderCartShopTitleHeaderView {
     private func configureButton(shopName: String) {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString(shopName, attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardBold, size: 18),
+            .font : UIFont.appFont(.pretendardSemiBold, size: 18),
             .foregroundColor : UIColor.appColor(.neutral800)
         ]))
         configuration.image = .appImage(asset: .chevronRight)?.withTintColor(.appColor(.neutral800)).resize(to: CGSize(width: 16, height: 16))
