@@ -18,7 +18,7 @@ final class EmptyView: UIView {
     private let shadowSquareImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowSquare))
     private let shadowOvaleImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowOval))
     
-    private let label = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.text = "장바구니가 비었어요."
         $0.textColor = .appColor(.neutral700)
         $0.font = .appFont(.pretendardSemiBold, size: 14)
@@ -64,23 +64,23 @@ extension EmptyView {
 extension EmptyView {
     
     private func setUpLayout() {
-        [shadowOvaleImageView, shadowSquareImageView, cartImageView, label, addMenuButton].forEach {
+        [shadowOvaleImageView, shadowSquareImageView, cartImageView, descriptionLabel, addMenuButton].forEach {
             addSubview($0)
         }
     }
     private func setUpConstraints() {
-        label.snp.makeConstraints {
+        descriptionLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.height.equalTo(22)
         }
         addMenuButton.snp.makeConstraints {
             $0.height.equalTo(35)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(label.snp.bottom).offset(16)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(16)
         }
         shadowOvaleImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(label.snp.top).offset(-13)
+            $0.bottom.equalTo(descriptionLabel.snp.top).offset(-13)
         }
         shadowSquareImageView.snp.makeConstraints {
             $0.leading.equalTo(shadowOvaleImageView).offset(29.07)
