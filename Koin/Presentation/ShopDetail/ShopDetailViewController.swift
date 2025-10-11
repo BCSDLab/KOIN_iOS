@@ -17,6 +17,7 @@ final class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
+    private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
     // MARK: - Components
     private let tableHeaderView = ShopDetailTableViewTableHeaderView()
@@ -72,7 +73,7 @@ final class ShopDetailViewController: UIViewController {
         configureView()
     }
     override func viewWillAppear(_ animated: Bool) {
-        configureNavigationBar(style: .orderTransparent)
+        configureNavigationBar(style: navigationBarStyle)
         configureRightBarButton()
         inputSubject.send(.viewWillAppear)
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
@@ -169,6 +170,7 @@ extension ShopDetailViewController {
         menuGroupTableView.shouldSetNavigationBarTransparentPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isTransparent in
+                self?.navigationBarStyle = isTransparent ? .order : .orderTransparent
                 UIView.animate(withDuration: 0.25) {
                     self?.configureNavigationBar(style: isTransparent ? .order : .orderTransparent)
                 }
