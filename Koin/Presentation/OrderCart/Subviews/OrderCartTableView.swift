@@ -42,23 +42,22 @@ extension OrderCartTableView: UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0: return 68
-        case 1: return 160
-        case 2: return 58
-        case 3: return 139
+        case 0: return 160
+        case 1: return 58
+        case 2: return 139
         default: return 0
         }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
-        case 1: return 78
-        case 3: return 62
+        case 0: return 78
+        case 2: return 62
         default: return 0
         }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
-        case 1:
+        case 0:
             let headerView = OrderCartShopTitleHeaderView()
             guard let shopName = cart.shopName else {
                 return nil
@@ -70,7 +69,7 @@ extension OrderCartTableView: UITableViewDelegate {
                 }
                 .store(in: &subscriptions)
             return headerView
-        case 3:
+        case 2:
             let headerView = OrderCartAmountHeaderView()
             return headerView
         default:
@@ -82,11 +81,11 @@ extension OrderCartTableView: UITableViewDelegate {
 extension OrderCartTableView: UITableViewDataSource {
  
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 1: return cart.items.count
+        case 0: return cart.items.count
         default: return 1
         }
     }
@@ -94,10 +93,6 @@ extension OrderCartTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = OrderCartSegmentedControlCell()
-            cell.configure(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable)
-            return cell
-        case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
                 return UITableViewCell()
             }
@@ -127,7 +122,7 @@ extension OrderCartTableView: UITableViewDataSource {
                 }
                 .store(in: &subscriptions)
             return cell
-        case 2:
+        case 1:
             let cell = OrderCartAddMoreCell()
             cell.moveToShopPublisher
                 .sink { [weak self] in
@@ -135,7 +130,7 @@ extension OrderCartTableView: UITableViewDataSource {
                 }
                 .store(in: &subscriptions)
             return cell
-        case 3:
+        case 2:
             let cell = OrderCartAmountCell()
             cell.configure(itemsAmount: cart.itemsAmount, deliveryFee: cart.deliveryFee, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount)
             return cell
@@ -150,9 +145,9 @@ extension OrderCartTableView {
     private func removeItem(cartMenuItemId: Int) {
         /// menuId에 해당하는 indexPath를 찾습니다.
         var indexPath: IndexPath? = nil
-        for row in 0..<numberOfRows(inSection: 1) {
-            if (cellForRow(at: IndexPath(row: row, section: 1)) as? OrderCartListCell)?.cartMenuItemId == cartMenuItemId {
-                indexPath = IndexPath(row: row, section: 1)
+        for row in 0..<numberOfRows(inSection: 0) {
+            if (cellForRow(at: IndexPath(row: row, section: 0)) as? OrderCartListCell)?.cartMenuItemId == cartMenuItemId {
+                indexPath = IndexPath(row: row, section: 0)
                 break
             }
         }

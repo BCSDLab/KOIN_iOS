@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class OrderCartSegmentedControlCell: UITableViewCell {
+final class OrderCartTableHeaderView: UIView {
     
     // MARK: - Properties
     
@@ -26,8 +26,8 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
     }
     
     // MARK: - Initializer
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configureView()
     }
     required init?(coder: NSCoder) {
@@ -54,7 +54,7 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
     }
 }
 
-extension OrderCartSegmentedControlCell {
+extension OrderCartTableHeaderView {
     
     private func setUpLayout() {
         [descriptionImageView, descriptionLabel].forEach {
@@ -62,7 +62,7 @@ extension OrderCartSegmentedControlCell {
         }
         
         [segmentedControl, descriptionStackView].forEach {
-            contentView.addSubview($0)
+            addSubview($0)
         }
     }
     
@@ -83,8 +83,7 @@ extension OrderCartSegmentedControlCell {
         }
     }
     private func configureView() {
-        backgroundColor = .clear
-        backgroundView = .none
+        backgroundColor = .appColor(.newBackground)
         setUpLayout()
         setUpConstraints()
     }

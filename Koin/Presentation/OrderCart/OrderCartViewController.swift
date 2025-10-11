@@ -18,6 +18,7 @@ final class OrderCartViewController: UIViewController {
     
     // MARK: - Components
     private let orderCartEmptyView = OrderCartEmptyView()
+    private let orderCartTableHeaderView = OrderCartTableHeaderView()
     private let orderCartTableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
@@ -76,6 +77,10 @@ final class OrderCartViewController: UIViewController {
                                                         finalPaymentAmount: cart.finalPaymentAmount,
                                                         itemsCount: cart.items.count,
                                                         isTakeOut: !cart.isDeliveryAvailable)
+                    self.orderCartTableHeaderView.configure(isDeliveryAvailable: cart.isDeliveryAvailable,
+                                                            isTakeOutAvailable: cart.isTakeoutAvailable)
+                    self.orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
+                                                                 height: cart.isDeliveryAvailable && cart.isTakeoutAvailable ? 62 : 62+25)
                 }
             }
         }
@@ -230,8 +235,13 @@ extension OrderCartViewController {
         }
     }
     
+    private func setUpTableHeaderView() {
+        orderCartTableView.tableHeaderView = orderCartTableHeaderView
+    }
+    
     private func configureView() {
         view.backgroundColor = .appColor(.newBackground)
+        setUpTableHeaderView()
         setUpLayouts()
         setUpConstraints()
     }
