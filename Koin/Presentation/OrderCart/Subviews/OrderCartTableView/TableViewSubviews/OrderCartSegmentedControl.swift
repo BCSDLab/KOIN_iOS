@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 final class OrderCartSegmentedControl: UIView {
- 
+    
     // MARK: - Properties
     private let selectedAttributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
@@ -26,7 +26,7 @@ final class OrderCartSegmentedControl: UIView {
     
     // MARK: - Components
     private let buttonDelivery = UIButton()
-    private let buttonPickup = UIButton()
+    private let buttonTakeOut = UIButton()
     private let selectedBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.new500)
         $0.layer.cornerRadius = 8
@@ -42,13 +42,13 @@ final class OrderCartSegmentedControl: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        configureButtons(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
-        addTargets(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
+    func configure(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        configureButtons(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
+        addTargets(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
         
         if !isDeliveryAvailable {
             selectedBackgroundView.snp.remakeConstraints {
-                $0.width.height.equalTo(buttonPickup)
+                $0.width.height.equalTo(buttonTakeOut)
                 $0.centerY.equalToSuperview()
                 $0.trailing.equalToSuperview().offset(-4)
             }
@@ -59,10 +59,10 @@ final class OrderCartSegmentedControl: UIView {
 extension OrderCartSegmentedControl {
     
     // MARK: - addTargets
-    private func addTargets(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        if isDeliveryAvailable && isPickupAvailable {
+    private func addTargets(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        if isDeliveryAvailable && isTakeOutAvailable {
             buttonDelivery.addTarget(self, action: #selector(buttonDeliveryTapped), for: .touchUpInside)
-            buttonPickup.addTarget(self, action: #selector(buttonPickupTapped), for: .touchUpInside)
+            buttonTakeOut.addTarget(self, action: #selector(buttonTakeOutTapped), for: .touchUpInside)
         }
     }
     
@@ -78,11 +78,11 @@ extension OrderCartSegmentedControl {
         UIView.transition(with: buttonDelivery, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
             self?.buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: self?.selectedAttributes), for: .normal)
         }
-        UIView.transition(with: buttonPickup, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
-            self?.buttonPickup.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.deselectedAttributes), for: .normal)
+        UIView.transition(with: buttonTakeOut, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
+            self?.buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.deselectedAttributes), for: .normal)
         }
     }
-    @objc private func buttonPickupTapped() {
+    @objc private func buttonTakeOutTapped() {
         UIView.animate(withDuration: 0.2) {[weak self] in
             guard let self = self else { return }
             self.selectedBackgroundView.snp.updateConstraints {
@@ -94,8 +94,8 @@ extension OrderCartSegmentedControl {
         UIView.transition(with: buttonDelivery, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
             self?.buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: self?.deselectedAttributes), for: .normal)
         }
-        UIView.transition(with: buttonPickup, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
-            self?.buttonPickup.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.selectedAttributes), for: .normal)
+        UIView.transition(with: buttonTakeOut, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
+            self?.buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.selectedAttributes), for: .normal)
         }
     }
 }
@@ -103,24 +103,24 @@ extension OrderCartSegmentedControl {
 extension OrderCartSegmentedControl {
     
     
-    private func configureButtons(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        switch (isDeliveryAvailable, isPickupAvailable) {
+    private func configureButtons(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        switch (isDeliveryAvailable, isTakeOutAvailable) {
         case (true, true):
             buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: selectedAttributes), for: .normal)
-            buttonPickup.setAttributedTitle(NSAttributedString(string: "포장", attributes: deselectedAttributes), for: .normal)
+            buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: deselectedAttributes), for: .normal)
         case (true, false):
             buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: selectedAttributes), for: .normal)
-            buttonPickup.setAttributedTitle(NSAttributedString(string: "포장", attributes: disabledAtrributes), for: .normal)
+            buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: disabledAtrributes), for: .normal)
         case (false, true):
             buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: disabledAtrributes), for: .normal)
-            buttonPickup.setAttributedTitle(NSAttributedString(string: "포장", attributes: selectedAttributes), for: .normal)
+            buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: selectedAttributes), for: .normal)
         default:
             print("invalid state")
         }
     }
     
     private func setUpLayouts() {
-        [selectedBackgroundView, buttonDelivery, buttonPickup].forEach {
+        [selectedBackgroundView, buttonDelivery, buttonTakeOut].forEach {
             addSubview($0)
         }
     }
@@ -130,7 +130,7 @@ extension OrderCartSegmentedControl {
             $0.trailing.equalTo(self.snp.centerX).offset(-2)
             $0.top.bottom.equalToSuperview().inset(4)
         }
-        buttonPickup.snp.makeConstraints {
+        buttonTakeOut.snp.makeConstraints {
             $0.leading.equalTo(self.snp.centerX).offset(2)
             $0.trailing.equalToSuperview().offset(-4)
             $0.top.bottom.equalToSuperview().inset(4)

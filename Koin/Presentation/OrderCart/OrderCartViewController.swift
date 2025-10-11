@@ -75,7 +75,7 @@ final class OrderCartViewController: UIViewController {
                                                         totalAmount: cart.totalAmount,
                                                         finalPaymentAmount: cart.finalPaymentAmount,
                                                         itemsCount: cart.items.count,
-                                                        isPickUp: !cart.isDeliveryAvailable)
+                                                        isTakeOut: !cart.isDeliveryAvailable)
                 }
             }
         }

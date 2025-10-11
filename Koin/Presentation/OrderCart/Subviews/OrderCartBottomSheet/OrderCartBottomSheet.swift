@@ -55,14 +55,14 @@ final class OrderCartBottomSheet: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopMinimumOrderAmount: Int, totalAmount: Int, finalPaymentAmount: Int, itemsCount: Int, isPickUp: Bool) {
+    func configure(shopMinimumOrderAmount: Int, totalAmount: Int, finalPaymentAmount: Int, itemsCount: Int, isTakeOut: Bool) {
         
         let formatter = NumberFormatter().then {
             $0.numberStyle = .decimal
         }
         priceLabel.text = (formatter.string(from: NSNumber(value: finalPaymentAmount)) ?? "-") + "원"
         
-        if isPickUp {
+        if isTakeOut {
             isDeliveryAvailableLabel.text = "주문 가능"
             configureButton(count: itemsCount, isEnabled: true)
             return

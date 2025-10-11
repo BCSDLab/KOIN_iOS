@@ -34,10 +34,10 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
+    func configure(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
         
-        if isDeliveryAvailable && isPickupAvailable {
+        if isDeliveryAvailable && isTakeOutAvailable {
             descriptionImageView.snp.removeConstraints()
             descriptionStackView.snp.updateConstraints {
                 $0.top.equalTo(segmentedControl.snp.bottom).offset(0)
@@ -47,7 +47,7 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
         else {
             if !isDeliveryAvailable {
                 descriptionLabel.text = "이 가게는 포장주문만 가능해요"
-            } else if !isPickupAvailable {
+            } else if !isTakeOutAvailable {
                 descriptionLabel.text = "이 가게는 배달주문만 가능해요"
             }
         }

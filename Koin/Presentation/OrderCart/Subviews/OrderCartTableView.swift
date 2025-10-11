@@ -95,7 +95,7 @@ extension OrderCartTableView: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = OrderCartSegmentedControlCell()
-            cell.configure(isDeliveryAvailable: cart.isDeliveryAvailable, isPickupAvailable: cart.isTakeoutAvailable)
+            cell.configure(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable)
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderCartListCell.identifier, for: indexPath) as? OrderCartListCell else {
