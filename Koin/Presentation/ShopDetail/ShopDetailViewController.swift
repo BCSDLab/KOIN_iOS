@@ -17,6 +17,9 @@ final class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
+    private let orderableShopId: Int?
+    
+    var currentOrderableShopId: Int? { orderableShopId }
     
     // MARK: - Components
     private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
@@ -79,9 +82,10 @@ final class ShopDetailViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopDetailViewModel, isFromOrder: Bool) {
+    init(viewModel: ShopDetailViewModel, isFromOrder: Bool, orderableShopId: Int?) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
+        self.orderableShopId = orderableShopId
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -138,6 +142,9 @@ extension ShopDetailViewController {
                 if count == 0 {
                     self?.isAddingMenuAvailable = true
                 }
+            case .updateMenuDetail(let orderMenu):
+                print("상세 메뉴 : \(orderMenu)")
+
             }
         }
         .store(in: &subscriptions)
@@ -194,7 +201,8 @@ extension ShopDetailViewController {
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
                 if isAddingMenuAvailable {
-                    // 다음 화면 (메뉴 상세페이지) 로 넘어가는 로직 // 담을 수 있으면 게속
+                    self.inputSubject.send(.fetchMenuDetail(orderableShopId: orderableShopId ?? -1, orderableShopMenuId: menuId))
+                          
                     navigateToMenuDetail(menuId: menuId)
                 }
                 else {

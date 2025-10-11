@@ -449,6 +449,9 @@ extension OrderHomeViewController {
                 let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
                 let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
                 let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+                let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(
+                    repository: DefaultOrderShopRepository(service: DefaultOrderService())
+                )
                 let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                     fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                     fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -456,8 +459,10 @@ extension OrderHomeViewController {
                                                     fetchCartUseCase: fetchCartUseCase,
                                                     fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                     resetCartUseCase: resetCartUseCase,
+                                                    fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                     orderableShopId: orderableShopId)
-                let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+    
+                let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: nil)
                 navigationControllerDelegate?.pushViewController(viewController, animated: true)
             }
             .store(in: &subscriptions)
@@ -511,6 +516,9 @@ extension OrderHomeViewController: UICollectionViewDelegate {
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+            let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(
+                repository: DefaultOrderShopRepository(service: DefaultOrderService())
+            )
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -518,8 +526,9 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 fetchCartUseCase: fetchCartUseCase,
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
+                                                fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                 orderableShopId: orderableShopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
             viewController.title = title
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }

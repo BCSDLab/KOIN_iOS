@@ -15,7 +15,8 @@ struct OrderMenuDTO: Decodable {
     let optionGroups: [OptionGroup]
 
     enum CodingKeys: String, CodingKey {
-        case id, name, description, images, menuPrices
+        case id, name, description, images
+        case menuPrices = "prices"
         case optionGroups = "option_groups"
     }
 }
