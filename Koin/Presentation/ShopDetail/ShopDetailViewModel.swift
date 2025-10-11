@@ -237,7 +237,7 @@ extension ShopDetailViewModel {
     
     private func fetchCart() {
          fetchCartUseCase?.execute()
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] cart in
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] (cart, isFromDelivery) in
                 let isAddingMenuAvailable = ( self?.orderableShopId == cart.orderableShopId || cart.orderableShopId == nil )
                 self?.outputSubject.send(.updateIsAddingMenuAvailable(isAddingMenuAvailable))
             })

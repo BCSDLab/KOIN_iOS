@@ -17,7 +17,7 @@ final class OrderCartViewModel {
     }
     enum Output {
         case updateSegment(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool)
-        case updateCart(cart: Cart)
+        case updateCart(cart: Cart, isFromDelivery: Bool)
     }
     
     // MARK: - Properties
@@ -60,7 +60,7 @@ extension OrderCartViewModel {
                 }
             },
                   receiveValue: { [weak self] (cart, isFromDelivery) in
-                self?.outputSubject.send(.updateCart(cart: cart))
+                self?.outputSubject.send(.updateCart(cart: cart, isFromDelivery: isFromDelivery))
                 self?.outputSubject.send(.updateSegment(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable))
             })
             .store(in: &subscriptions)
@@ -70,7 +70,7 @@ extension OrderCartViewModel {
         fetchCartDeliveryUseCase.execute()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] (cart, isFromDelivery) in
-                self?.outputSubject.send(.updateCart(cart: cart))
+                self?.outputSubject.send(.updateCart(cart: cart, isFromDelivery: isFromDelivery))
             })
             .store(in: &subscriptions)
     }
@@ -79,7 +79,7 @@ extension OrderCartViewModel {
         fetchCartTakeOutUseCase.execute()
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] (cart, isFromDelivery) in
-                self?.outputSubject.send(.updateCart(cart: cart))
+                self?.outputSubject.send(.updateCart(cart: cart, isFromDelivery: isFromDelivery))
             })
             .store(in: &subscriptions)
     }

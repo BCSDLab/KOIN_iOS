@@ -60,7 +60,7 @@ final class OrderCartViewController: UIViewController {
                 return
             }
             switch output {
-            case .updateCart(let cart):
+            case .updateCart(let cart, let isFromDelivery):
                 if cart.items.isEmpty {
                     self.orderCartEmptyView.isHidden = false
                     self.orderCartTableView.isHidden = true
@@ -73,10 +73,10 @@ final class OrderCartViewController: UIViewController {
                     self.orderableShopId = cart.orderableShopId
                     self.orderCartTableView.configure(cart: cart)
                     self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
-                                                        totalAmount: cart.totalAmount,
+                                                        itemsAmount: cart.itemsAmount,
                                                         finalPaymentAmount: cart.finalPaymentAmount,
                                                         itemsCount: cart.items.count,
-                                                        isTakeOut: !cart.isDeliveryAvailable)
+                                                        isFromDelivery: isFromDelivery)
                 }
             case .updateSegment(let isDeliveryAvailable, let isTakeOutAvailable):
                 self.orderCartTableHeaderView.configure(isDeliveryAvailable: isDeliveryAvailable,
