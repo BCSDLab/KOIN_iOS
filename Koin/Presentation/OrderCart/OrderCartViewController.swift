@@ -133,7 +133,7 @@ extension OrderCartViewController {
     private func configureRightBarButton() {
         let rightBarButton = UIBarButtonItem(title: "전체삭제", style: .plain, target: self, action: #selector(rightBarButtonTapped))
         rightBarButton.setTitleTextAttributes([
-            .foregroundColor: UIColor.appColor(.new300),
+            .foregroundColor: UIColor.appColor(.new500),
             .font: UIFont.appFont(.pretendardSemiBold, size: 14)
         ],for: .normal)
         rightBarButton.setTitleTextAttributes([
