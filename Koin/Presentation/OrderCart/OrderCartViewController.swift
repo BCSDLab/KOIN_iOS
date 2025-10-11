@@ -77,11 +77,13 @@ final class OrderCartViewController: UIViewController {
                                                         finalPaymentAmount: cart.finalPaymentAmount,
                                                         itemsCount: cart.items.count,
                                                         isTakeOut: !cart.isDeliveryAvailable)
-                    self.orderCartTableHeaderView.configure(isDeliveryAvailable: cart.isDeliveryAvailable,
-                                                            isTakeOutAvailable: cart.isTakeoutAvailable)
-                    self.orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
-                                                                 height: cart.isDeliveryAvailable && cart.isTakeoutAvailable ? 62 : 62+25)
                 }
+            case .updateSegment(let isDeliveryAvailable, let isTakeOutAvailable):
+                self.orderCartTableHeaderView.configure(isDeliveryAvailable: isDeliveryAvailable,
+                                                        isTakeOutAvailable: isTakeOutAvailable)
+                self.orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
+                                                             height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
+                
             }
         }
         .store(in: &subscriptions)

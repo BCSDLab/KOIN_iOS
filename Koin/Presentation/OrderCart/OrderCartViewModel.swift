@@ -16,6 +16,7 @@ final class OrderCartViewModel {
         case fetchCartTakeOut
     }
     enum Output {
+        case updateSegment(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool)
         case updateCart(cart: Cart)
     }
     
@@ -60,6 +61,7 @@ extension OrderCartViewModel {
             },
                   receiveValue: { [weak self] cart in
                 self?.outputSubject.send(.updateCart(cart: cart))
+                self?.outputSubject.send(.updateSegment(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable))
             })
             .store(in: &subscriptions)
     }
