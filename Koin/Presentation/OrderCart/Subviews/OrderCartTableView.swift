@@ -11,7 +11,7 @@ import Combine
 final class OrderCartTableView: UITableView {
     
     // MARK: - Properties
-    private var cart = Cart.empty()
+    private var cart: Cart = Cart.empty()
     let moveToShopPublisher = PassthroughSubject<Void, Never>()
     let addQuantityPublisher = PassthroughSubject<Int, Never>()
     let minusQuantityPublisher = PassthroughSubject<Int, Never>()

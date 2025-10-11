@@ -20,7 +20,18 @@ final class DefaultFetchCartUseCase: FetchCartUseCase {
     }
     
     func execute() -> AnyPublisher<Cart, Error> {
-        repository.fetchCart()
+        repository.fetchCart(parameter: .delivery)
+            .catch { [weak self] error -> AnyPublisher<Cart, Error> in
+                guard let self = self else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+                switch error.asAFError?.responseCode {
+                case 400:
+                    return repository.fetchCart(parameter: .takeOut).eraseToAnyPublisher()
+                default:
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
             .eraseToAnyPublisher()
     }
 }

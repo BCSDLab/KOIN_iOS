@@ -17,17 +17,18 @@ final class OrderCartViewController: UIViewController {
     private var orderableShopId: Int? = nil
     
     // MARK: - Components
-    private let orderCartEmptyView = OrderCartEmptyView().then {
-        $0.isHidden = true
-    }
+    private let orderCartEmptyView = OrderCartEmptyView()
     private let orderCartTableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.sectionFooterHeight = .zero
+        $0.isHidden = true
     }
-    private let orderCartBottomSheet = OrderCartBottomSheet()
+    private let orderCartBottomSheet = OrderCartBottomSheet().then {
+        $0.isHidden = true
+    }
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -54,11 +55,28 @@ final class OrderCartViewController: UIViewController {
     // MARK: - Bind
     private func bind() {
         viewModel.transform(with: inputSubject).sink { [weak self] output in
+            guard let self = self else {
+                return
+            }
             switch output {
             case .updateCart(let cart):
-                self?.orderableShopId = cart.orderableShopId
-                self?.orderCartTableView.configure(cart: cart)
-                self?.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count, isPickUp: !cart.isDeliveryAvailable)
+                if cart.items.isEmpty {
+                    self.orderCartEmptyView.isHidden = false
+                    self.orderCartTableView.isHidden = true
+                    self.orderCartBottomSheet.isHidden = true
+                }
+                else {
+                    self.orderCartEmptyView.isHidden = true
+                    self.orderCartTableView.isHidden = false
+                    self.orderCartBottomSheet.isHidden = false
+                    self.orderableShopId = cart.orderableShopId
+                    self.orderCartTableView.configure(cart: cart)
+                    self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
+                                                        totalAmount: cart.totalAmount,
+                                                        finalPaymentAmount: cart.finalPaymentAmount,
+                                                        itemsCount: cart.items.count,
+                                                        isPickUp: !cart.isDeliveryAvailable)
+                }
             }
         }
         .store(in: &subscriptions)
