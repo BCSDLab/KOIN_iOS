@@ -11,6 +11,9 @@ import Combine
 final class OrderCartSegmentedControl: UIView {
     
     // MARK: - Properties
+    let buttonDeliveryTappedPublisher = PassthroughSubject<Void, Never>()
+    let buttonTakeOutTappedPublisher = PassthroughSubject<Void, Never>()
+    
     private let selectedAttributes: [NSAttributedString.Key : Any] = [
         .font : UIFont.appFont(.pretendardMedium, size: 14),
         .foregroundColor : UIColor.appColor(.neutral0)
@@ -81,6 +84,7 @@ extension OrderCartSegmentedControl {
         UIView.transition(with: buttonTakeOut, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
             self?.buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.deselectedAttributes), for: .normal)
         }
+        buttonDeliveryTappedPublisher.send()
     }
     @objc private func buttonTakeOutTapped() {
         UIView.animate(withDuration: 0.2) {[weak self] in
@@ -97,6 +101,7 @@ extension OrderCartSegmentedControl {
         UIView.transition(with: buttonTakeOut, duration: 0.2, options: .transitionCrossDissolve) { [weak self] in
             self?.buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: self?.selectedAttributes), for: .normal)
         }
+        buttonTakeOutTappedPublisher.send()
     }
 }
 

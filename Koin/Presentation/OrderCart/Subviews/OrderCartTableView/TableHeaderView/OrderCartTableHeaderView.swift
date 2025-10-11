@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class OrderCartTableHeaderView: UIView {
     
     // MARK: - Properties
+    let buttonDeliveryTappedPublisher = PassthroughSubject<Void, Never>()
+    let buttonTakeOutTappedPublisher = PassthroughSubject<Void, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Components
     private let segmentedControl = OrderCartSegmentedControl()
@@ -29,6 +33,7 @@ final class OrderCartTableHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        bind()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -51,6 +56,14 @@ final class OrderCartTableHeaderView: UIView {
                 descriptionLabel.text = "이 가게는 배달주문만 가능해요"
             }
         }
+    }
+    private func bind() {
+        segmentedControl.buttonDeliveryTappedPublisher.sink { [weak self] in
+            self?.buttonDeliveryTappedPublisher.send()
+        }.store(in: &subscriptions)
+        segmentedControl.buttonTakeOutTappedPublisher.sink { [weak self] in
+            self?.buttonTakeOutTappedPublisher.send()
+        }.store(in: &subscriptions)
     }
 }
 

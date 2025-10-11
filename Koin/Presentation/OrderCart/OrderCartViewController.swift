@@ -87,7 +87,7 @@ final class OrderCartViewController: UIViewController {
         .store(in: &subscriptions)
         
         
-        // MARK: - TableView
+        // MARK: - TableView - 가게 상세페이지로 이동
         orderCartTableView.moveToShopPublisher.sink { [weak self] in
             guard let self = self, let orderableShopId = self.orderableShopId else {
                 return
@@ -146,6 +146,16 @@ final class OrderCartViewController: UIViewController {
         // MARK: - Empty View
         orderCartEmptyView.addMenuButtonTappedPublisher.sink { [weak self] in
             self?.popToOrderTabbarViewController()
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - TableHeaderView - 배달/포장 전환
+        orderCartTableHeaderView.buttonDeliveryTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.fetchCartDelivery)
+        }
+        .store(in: &subscriptions)
+        orderCartTableHeaderView.buttonTakeOutTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.fetchCartTakeOut)
         }
         .store(in: &subscriptions)
     }

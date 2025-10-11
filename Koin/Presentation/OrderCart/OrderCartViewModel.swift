@@ -12,6 +12,8 @@ final class OrderCartViewModel {
     
     enum Input {
         case viewDidLoad
+        case fetchCartDelivery
+        case fetchCartTakeOut
     }
     enum Output {
         case updateCart(cart: Cart)
@@ -19,18 +21,26 @@ final class OrderCartViewModel {
     
     // MARK: - Properties
     private let fetchCartUseCase: FetchCartUseCase
+    private let fetchCartDeliveryUseCase: FetchCartDeliveryUseCase
+    private let fetchCartTakeOutUseCase: FetchCartTakeOutUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
-    init(fetchCartUseCase: FetchCartUseCase) {
+    init(fetchCartUseCase: FetchCartUseCase,
+         fetchCartDeliveryUseCase: FetchCartDeliveryUseCase,
+         fetchCartTakeOutUseCase: FetchCartTakeOutUseCase) {
         self.fetchCartUseCase = fetchCartUseCase
+        self.fetchCartDeliveryUseCase = fetchCartDeliveryUseCase
+        self.fetchCartTakeOutUseCase = fetchCartTakeOutUseCase
     }
     // MARK: - Transform
     func transform(with input: PassthroughSubject<Input, Never>) -> PassthroughSubject<Output, Never> {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad: self?.fetchCart()
+            case .fetchCartDelivery: self?.fetchCartDelivery()
+            case .fetchCartTakeOut: self?.fetchCartTakeOut()
             }
         }
         .store(in: &subscriptions)
@@ -48,6 +58,24 @@ extension OrderCartViewModel {
                     print("fetchingCartUseCase Failed : \(failure)")
                 }
             },
+                  receiveValue: { [weak self] cart in
+                self?.outputSubject.send(.updateCart(cart: cart))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchCartDelivery() {
+        fetchCartDeliveryUseCase.execute()
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] cart in
+                self?.outputSubject.send(.updateCart(cart: cart))
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchCartTakeOut() {
+        fetchCartTakeOutUseCase.execute()
+            .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] cart in
                 self?.outputSubject.send(.updateCart(cart: cart))
             })
