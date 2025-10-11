@@ -36,7 +36,6 @@ struct OptionGroup: Decodable {
     }
 }
 
-// MARK: - Price
 struct MenuPrice: Decodable {
     let id: Int
     let name: String?

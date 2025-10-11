@@ -2,42 +2,27 @@
 //  OrderMenu.swift
 //  koin
 //
-//  Created by 김성민 on 10/11/25.
+//  Created by 김성민 on 10/12/25.
 //
 
 import Foundation
 
-struct MenuGroup: Equatable {
+struct OrderMenu {
     let id: Int
     let name: String
-    let menus: [MenuSummary]
+    let description: String
+    let images: [String]
+    let prices: [DetailMenuPrice]
+    let optionGroups: [MenuOptionGroup]
 }
 
-struct MenuSummary: Equatable {
-    let id: Int
-    let name: String
-    let description: String?
-    let thumbnailURL: URL?
-    let isSoldOut: Bool
-    let prices: [MenuPrice]
-}
-
-struct MenuDetail: Equatable {
-    let id: Int
-    let name: String
-    let description: String?
-    let images: [URL]
-    let prices: [MenuPrice]
-    let optionGroups: [OptionGroup]
-}
-
-struct MenuPrice: Equatable {
+struct DetailMenuPrice {
     let id: Int
     let name: String?
     let amount: Int
 }
 
-struct OptionGroup: Equatable {
+struct MenuOptionGroup {
     let id: Int
     let name: String
     let description: String
@@ -47,8 +32,48 @@ struct OptionGroup: Equatable {
     let options: [MenuOption]
 }
 
-struct MenuOption: Equatable {
+struct MenuOption {
     let id: Int
     let name: String
     let extraAmount: Int
 }
+
+extension OrderMenu {
+    init(from dto: OrderMenuDTO) {
+        self.id = dto.id
+        self.name = dto.name
+        self.description = dto.description
+        self.images = dto.images
+        self.prices = dto.menuPrices.map { DetailMenuPrice(from: $0) }
+        self.optionGroups = dto.optionGroups.map { MenuOptionGroup(from: $0) }
+    }
+}
+
+extension DetailMenuPrice {
+    init(from dto: MenuPrice) {
+        self.id = dto.id
+        self.name = dto.name
+        self.amount = dto.price
+    }
+}
+
+extension MenuOptionGroup {
+    init(from dto: OptionGroup) {
+        self.id = dto.id
+        self.name = dto.name
+        self.description = dto.description
+        self.isRequired = dto.isRequired
+        self.minSelect = dto.minSelect
+        self.maxSelect = dto.maxSelect
+        self.options = dto.options.map { MenuOption(from: $0) }
+    }
+}
+
+extension MenuOption {
+    init(from dto: MenuPrice) {
+        self.id = dto.id
+        self.name = dto.name ?? ""
+        self.extraAmount = dto.price
+    }
+}
+
