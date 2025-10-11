@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchCartDeliveryUseCase {
-    func execute() -> AnyPublisher<Cart, Error>
+    func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error>
 }
 
 final class DefaultFetchCartDeliveryUseCase: FetchCartDeliveryUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchCartDeliveryUseCase: FetchCartDeliveryUseCase {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<Cart, Error> {
+    func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> {
         repository.fetchCart(parameter: .delivery)
             .eraseToAnyPublisher()
     }

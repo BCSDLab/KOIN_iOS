@@ -59,7 +59,7 @@ extension OrderCartViewModel {
                     print("fetchingCartUseCase Failed : \(failure)")
                 }
             },
-                  receiveValue: { [weak self] cart in
+                  receiveValue: { [weak self] (cart, isFromDelivery) in
                 self?.outputSubject.send(.updateCart(cart: cart))
                 self?.outputSubject.send(.updateSegment(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable))
             })
@@ -69,7 +69,7 @@ extension OrderCartViewModel {
     private func fetchCartDelivery() {
         fetchCartDeliveryUseCase.execute()
             .sink(receiveCompletion: { _ in },
-                  receiveValue: { [weak self] cart in
+                  receiveValue: { [weak self] (cart, isFromDelivery) in
                 self?.outputSubject.send(.updateCart(cart: cart))
             })
             .store(in: &subscriptions)
@@ -78,7 +78,7 @@ extension OrderCartViewModel {
     private func fetchCartTakeOut() {
         fetchCartTakeOutUseCase.execute()
             .sink(receiveCompletion: { _ in },
-                  receiveValue: { [weak self] cart in
+                  receiveValue: { [weak self] (cart, isFromDelivery) in
                 self?.outputSubject.send(.updateCart(cart: cart))
             })
             .store(in: &subscriptions)

@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchCartUseCase {
-    func execute() -> AnyPublisher<Cart, Error>
+    func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error>
 }
 
 final class DefaultFetchCartUseCase: FetchCartUseCase {
@@ -19,9 +19,9 @@ final class DefaultFetchCartUseCase: FetchCartUseCase {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<Cart, Error> {
+    func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> {
         repository.fetchCart(parameter: .delivery)
-            .catch { [weak self] error -> AnyPublisher<Cart, Error> in
+            .catch { [weak self] error -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> in
                 guard let self = self else {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
