@@ -83,7 +83,8 @@ final class OrderCartViewController: UIViewController {
                                                         isTakeOutAvailable: isTakeOutAvailable)
                 self.orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
                                                              height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
-                
+            case .removeItemFromTableView(let cartMenuItemId):
+                self.orderCartTableView.removeItem(cartMenuItemId: cartMenuItemId)
             }
         }
         .store(in: &subscriptions)
@@ -126,7 +127,7 @@ final class OrderCartViewController: UIViewController {
         }
         .store(in: &subscriptions)
         orderCartTableView.deleteItemPublisher.sink { [weak self] cartMenuItemId in
-            print("delete item")
+            self?.inputSubject.send(.deleteItem(cartMenuItemId: cartMenuItemId))
         }
         .store(in: &subscriptions)
         orderCartTableView.changeOptionPublisher.sink { [weak self] cartMenuItemId in

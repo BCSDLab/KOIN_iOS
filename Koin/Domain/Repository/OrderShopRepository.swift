@@ -20,4 +20,5 @@ protocol OrderShopRepository {
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error>
     func fetchCart(parameter: FetchCartParameter) -> AnyPublisher<(Cart, isFromDelivery: Bool), Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
 }

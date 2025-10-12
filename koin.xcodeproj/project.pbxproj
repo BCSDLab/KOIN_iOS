@@ -13,6 +13,7 @@
 		7A5CDE1A97BC0F2555EA3427 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B06307D0DB5AAB444EC7DEA /* Pods_koin.framework */; };
 		7C93BA922E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BA902E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift */; };
 		7C93BA932E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BA912E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift */; };
+		7C93BB042E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -779,6 +780,7 @@
 		65E3F51D56EA9404A37D5B8A /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		7C93BA902E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartDeliveryUseCase.swift; sourceTree = "<group>"; };
 		7C93BA912E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartTakeOutUseCase.swift; sourceTree = "<group>"; };
+		7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCartMenuItemUseCase.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -3976,6 +3978,7 @@
 				B458C1352E78F9AD00AB5BF1 /* FetchCartUseCase.swift */,
 				7C93BA902E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift */,
 				7C93BA912E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift */,
+				7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4735,6 +4738,7 @@
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				B4B582652E6D687E0035A861 /* ShopDetailImagesCollectionView.swift in Sources */,
 				B4B582662E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift in Sources */,
+				7C93BB042E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift in Sources */,
 				B458C1052E77BDB000AB5BF1 /* CartSummaryDTO.swift in Sources */,
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,

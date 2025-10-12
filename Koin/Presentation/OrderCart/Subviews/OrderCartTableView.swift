@@ -142,7 +142,7 @@ extension OrderCartTableView: UITableViewDataSource {
 
 extension OrderCartTableView {
     
-    private func removeItem(cartMenuItemId: Int) {
+    func removeItem(cartMenuItemId: Int) {
         /// menuId에 해당하는 indexPath를 찾습니다.
         var indexPath: IndexPath? = nil
         for row in 0..<numberOfRows(inSection: 0) {

@@ -19,6 +19,7 @@ enum OrderAPI {
     case fetchCartItemsCount
     case fetchCart(parameter: String)
     case resetCart
+    case deleteCartMenuItem(cartMenuItemId: Int)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -40,12 +41,13 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchCartItemsCount: return "/cart/items/count"
         case .fetchCart: return "/cart"
         case .resetCart: return "/cart/reset"
+        case .deleteCartMenuItem(let cartMenuItemId): return "/cart/delete/\(cartMenuItemId)"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .resetCart: .delete
+        case .resetCart, .deleteCartMenuItem: .delete
         default: .get
         }
     }
@@ -53,7 +55,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart, .resetCart:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart, .resetCart, .deleteCartMenuItem:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }

@@ -17,6 +17,7 @@ final class OrderCartListCell: UITableViewCell {
     let changeOptionPublisher = PassthroughSubject<Int, Never>()
     private(set) var cartMenuItemId: Int? = nil
     private var indexPath: IndexPath? = nil
+    private var item: CartItem? = nil
     
     // MARK: - Components
     private let insetBackgroundView = UIView().then {
@@ -91,6 +92,7 @@ final class OrderCartListCell: UITableViewCell {
     }
     
     func configure(item: CartItem, isFirstRow: Bool, isLastRow: Bool, indexPath: IndexPath) {
+        self.item = item
         cartMenuItemId = item.cartMenuItemId
         nameLabel.text = item.name
         if let menuThumbnailImageUrl = item.menuThumbnailImageUrl {

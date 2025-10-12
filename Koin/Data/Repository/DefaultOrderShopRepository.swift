@@ -88,4 +88,9 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             }
             .eraseToAnyPublisher()
     }
+    
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.deleteCartMenuItem(cartMenuItemId: cartMenuItemId)
+            .eraseToAnyPublisher()
+    }
 }
