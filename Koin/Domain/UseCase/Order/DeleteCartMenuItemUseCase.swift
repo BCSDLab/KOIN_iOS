@@ -5,7 +5,6 @@
 //  Created by 홍기정 on 10/12/25.
 //
 
-import Foundation
 import Combine
 
 protocol DeleteCartMenuItemUseCase {
@@ -14,7 +13,7 @@ protocol DeleteCartMenuItemUseCase {
 
 final class DefaultDeleteCartMenuItemUseCase: DeleteCartMenuItemUseCase {
     
-    let repository: OrderShopRepository
+    private let repository: OrderShopRepository
     
     init(repository: OrderShopRepository) {
         self.repository = repository

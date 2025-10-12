@@ -13,7 +13,7 @@ protocol FetchCartItemsCountUseCase {
 
 final class DefaultFetchCartItemsCountUseCase: FetchCartItemsCountUseCase {
     
-    let repository: OrderShopRepository
+    private let repository: OrderShopRepository
     
     init(repository: OrderShopRepository) {
         self.repository = repository

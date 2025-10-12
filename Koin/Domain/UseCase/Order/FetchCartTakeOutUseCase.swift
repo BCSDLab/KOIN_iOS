@@ -13,7 +13,7 @@ protocol FetchCartTakeOutUseCase {
 
 final class DefaultFetchCartTakeOutUseCase: FetchCartTakeOutUseCase {
     
-    let repository: OrderShopRepository
+    private let repository: OrderShopRepository
     
     init(repository: OrderShopRepository) {
         self.repository = repository

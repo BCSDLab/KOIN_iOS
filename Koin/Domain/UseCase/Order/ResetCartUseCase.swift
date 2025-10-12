@@ -13,7 +13,7 @@ protocol ResetCartUseCase {
 
 final class DefaultResetCartUseCase: ResetCartUseCase {
     
-    let repository: OrderShopRepository
+    private let repository: OrderShopRepository
     
     init(repository: OrderShopRepository) {
         self.repository = repository

@@ -13,7 +13,7 @@ protocol FetchOrderShopMenusGroupsFromShopUseCase {
 
 final class DefaultFetchOrderShopMenusGroupsFromShopUseCase: FetchOrderShopMenusGroupsFromShopUseCase {
     
-    let repository: ShopRepository
+    private let repository: ShopRepository
     
     init(repository: ShopRepository) {
         self.repository = repository
