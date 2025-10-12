@@ -15,11 +15,13 @@ final class OrderCartViewModel {
         case fetchCartDelivery
         case fetchCartTakeOut
         case deleteItem(cartMenuItemId: Int)
+        case resetCart
     }
     enum Output {
         case updateSegment(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool)
         case updateCart(cart: Cart, isFromDelivery: Bool)
         case removeItemFromTableView(cartMenuItemId: Int)
+        case emptyCart
     }
     
     // MARK: - Properties
@@ -27,15 +29,17 @@ final class OrderCartViewModel {
     private let fetchCartDeliveryUseCase: FetchCartDeliveryUseCase
     private let fetchCartTakeOutUseCase: FetchCartTakeOutUseCase
     private let deleteCartMenuItemUseCase: DeleteCartMenuItemUseCase
+    private let resetCartUseCase: ResetCartUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
-    init(fetchCartUseCase: FetchCartUseCase, fetchCartDeliveryUseCase: FetchCartDeliveryUseCase, fetchCartTakeOutUseCase: FetchCartTakeOutUseCase, deleteCartMenuItemUseCase: DeleteCartMenuItemUseCase) {
+    init(fetchCartUseCase: FetchCartUseCase, fetchCartDeliveryUseCase: FetchCartDeliveryUseCase, fetchCartTakeOutUseCase: FetchCartTakeOutUseCase, deleteCartMenuItemUseCase: DeleteCartMenuItemUseCase, resetCartUseCase: ResetCartUseCase) {
         self.fetchCartUseCase = fetchCartUseCase
         self.fetchCartDeliveryUseCase = fetchCartDeliveryUseCase
         self.fetchCartTakeOutUseCase = fetchCartTakeOutUseCase
         self.deleteCartMenuItemUseCase = deleteCartMenuItemUseCase
+        self.resetCartUseCase = resetCartUseCase
     }
     
     // MARK: - Transform
@@ -46,6 +50,7 @@ final class OrderCartViewModel {
             case .fetchCartDelivery: self?.fetchCartDelivery()
             case .fetchCartTakeOut: self?.fetchCartTakeOut()
             case .deleteItem(let cartMenuItemId): self?.deleteItem(cartMenuItemId: cartMenuItemId)
+            case .resetCart: self?.resetCart()
             }
         }
         .store(in: &subscriptions)
@@ -109,6 +114,17 @@ extension OrderCartViewModel {
                 self?.outputSubject.send(.removeItemFromTableView(cartMenuItemId: cartMenuItemId))
                 print("deleteItem succeeded")
             })
+            .store(in: &subscriptions)
+    }
+    
+    private func resetCart() {
+        resetCartUseCase.execute()
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .failure(let failure): print("resetCart Failed : \(failure.message)")
+                case .finished: self?.outputSubject.send(.emptyCart)
+                }
+            }, receiveValue: { _ in })
             .store(in: &subscriptions)
     }
 }

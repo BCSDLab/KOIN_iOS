@@ -85,6 +85,8 @@ final class OrderCartViewController: UIViewController {
                                                              height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
             case .removeItemFromTableView(let cartMenuItemId):
                 self.orderCartTableView.removeItem(cartMenuItemId: cartMenuItemId)
+            case .emptyCart:
+                self.emptyCart()
             }
         }
         .store(in: &subscriptions)
@@ -189,7 +191,10 @@ extension OrderCartViewController {
             return
         }
         let resetCartPopUpView = OrderCartPopUpView()
-        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", emptyCart: emptyCart)
+        let completion: ()->Void = { [weak self] in
+            self?.inputSubject.send(.resetCart)
+        }
+        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", completion: completion)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
@@ -205,7 +210,10 @@ extension OrderCartViewController {
             return
         }
         let resetCartPopUpView = OrderCartPopUpView()
-        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", emptyCart: emptyCart)
+        let completion: ()->Void = { [weak self] in
+            self?.inputSubject.send(.resetCart)
+        }
+        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", completion: completion)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }

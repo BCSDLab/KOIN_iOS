@@ -295,7 +295,12 @@ extension ShopDetailViewController {
             let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
             let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
             let deleteCartMenuItemUseCase = DefaultDeleteCartMenuItemUseCase(repository: repository)
-            let viewModel = OrderCartViewModel(fetchCartUseCase: fetchCartUseCase, fetchCartDeliveryUseCase: fetchCartDeliveryUseCase, fetchCartTakeOutUseCase: fetchCartTakeOutUseCase, deleteCartMenuItemUseCase: deleteCartMenuItemUseCase)
+            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+            let viewModel = OrderCartViewModel(fetchCartUseCase: fetchCartUseCase,
+                                               fetchCartDeliveryUseCase: fetchCartDeliveryUseCase,
+                                               fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
+                                               deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
+                                               resetCartUseCase: resetCartUseCase)
             let viewController = OrderCartViewController(viewModel: viewModel)
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
