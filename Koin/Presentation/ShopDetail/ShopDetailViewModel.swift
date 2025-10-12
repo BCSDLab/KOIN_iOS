@@ -53,9 +53,7 @@ final class ShopDetailViewModel {
     private let orderableShopId: Int?
     private let shopId: Int?
     private let isFromOrder: Bool
-    
-    var currentOrderableShopId: Int? { orderableShopId }
-    
+        
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,

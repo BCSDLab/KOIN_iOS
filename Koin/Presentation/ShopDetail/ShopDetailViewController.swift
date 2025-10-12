@@ -18,9 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var isAddingMenuAvailable: Bool = true
     private let orderableShopId: Int?
-    
-    var currentOrderableShopId: Int? { orderableShopId }
-    
+        
     // MARK: - Components
     private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
