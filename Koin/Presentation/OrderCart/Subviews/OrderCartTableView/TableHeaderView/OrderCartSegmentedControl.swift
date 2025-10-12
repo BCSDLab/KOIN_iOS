@@ -120,7 +120,7 @@ extension OrderCartSegmentedControl {
             buttonDelivery.setAttributedTitle(NSAttributedString(string: "배달", attributes: disabledAtrributes), for: .normal)
             buttonTakeOut.setAttributedTitle(NSAttributedString(string: "포장", attributes: selectedAttributes), for: .normal)
         default:
-            print("invalid state")
+            return // 장바구니가 비어있음
         }
     }
     
