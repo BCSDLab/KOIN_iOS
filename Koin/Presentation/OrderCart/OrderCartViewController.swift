@@ -61,28 +61,9 @@ final class OrderCartViewController: UIViewController {
             }
             switch output {
             case .updateCart(let cart, let isFromDelivery):
-                if cart.items.isEmpty {
-                    self.orderCartEmptyView.isHidden = false
-                    self.orderCartTableView.isHidden = true
-                    self.orderCartBottomSheet.isHidden = true
-                }
-                else {
-                    self.orderCartEmptyView.isHidden = true
-                    self.orderCartTableView.isHidden = false
-                    self.orderCartBottomSheet.isHidden = false
-                    self.orderableShopId = cart.orderableShopId
-                    self.orderCartTableView.configure(cart: cart)
-                    self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
-                                                        itemsAmount: cart.itemsAmount,
-                                                        finalPaymentAmount: cart.finalPaymentAmount,
-                                                        itemsCount: cart.items.count,
-                                                        isFromDelivery: isFromDelivery)
-                }
+                self.updateCart(cart: cart, isFromDelivery: isFromDelivery)
             case .updateSegment(let isDeliveryAvailable, let isTakeOutAvailable):
-                self.orderCartTableHeaderView.configure(isDeliveryAvailable: isDeliveryAvailable,
-                                                        isTakeOutAvailable: isTakeOutAvailable)
-                self.orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
-                                                             height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
+                self.updateSegment(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
             case .removeItemFromTableView(let cartMenuItemId):
                 self.orderCartTableView.removeItem(cartMenuItemId: cartMenuItemId)
             case .emptyCart:
@@ -201,6 +182,31 @@ extension OrderCartViewController {
 }
 
 extension OrderCartViewController {
+    
+    private func updateCart(cart: Cart, isFromDelivery: Bool) {
+        if cart.items.isEmpty {
+            self.orderCartEmptyView.isHidden = false
+            self.orderCartTableView.isHidden = true
+            self.orderCartBottomSheet.isHidden = true
+        }
+        else {
+            self.orderCartEmptyView.isHidden = true
+            self.orderCartTableView.isHidden = false
+            self.orderCartBottomSheet.isHidden = false
+            self.orderableShopId = cart.orderableShopId
+            self.orderCartTableView.configure(cart: cart)
+            self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
+                                                itemsAmount: cart.itemsAmount,
+                                                finalPaymentAmount: cart.finalPaymentAmount,
+                                                itemsCount: cart.items.count,
+                                                isFromDelivery: isFromDelivery)
+        }
+    }
+
+    private func updateSegment(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        orderCartTableHeaderView.configure(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
+        orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
+    }
     
     private func orderButtonTapped() {
         guard let windowScene = UIApplication.shared.connectedScenes
