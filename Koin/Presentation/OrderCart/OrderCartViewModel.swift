@@ -43,7 +43,7 @@ final class OrderCartViewModel {
     }
     
     // MARK: - Transform
-    func transform(with input: PassthroughSubject<Input, Never>) -> PassthroughSubject<Output, Never> {
+    func transform(with input: PassthroughSubject<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad: self?.fetchCart()
@@ -55,7 +55,7 @@ final class OrderCartViewModel {
         }
         .store(in: &subscriptions)
         
-        return outputSubject
+        return outputSubject.eraseToAnyPublisher()
     }
 }
 
