@@ -45,7 +45,7 @@ extension UIViewController {
         case .orderTransparent:
             appearance.backgroundColor = UIColor.clear
             appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral0),
+                .foregroundColor: UIColor.clear,
                 .font: UIFont.appFont(.pretendardSemiBold, size: 18)
             ]
         }
