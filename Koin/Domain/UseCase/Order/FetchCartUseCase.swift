@@ -22,7 +22,7 @@ final class DefaultFetchCartUseCase: FetchCartUseCase {
     func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> {
         repository.fetchCart(parameter: .delivery)
             .map {
-                return ($0, isFromDelivery: false)
+                return ($0, isFromDelivery: true)
             }
             .catch { [weak self] error -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> in
                 guard let self = self else {
