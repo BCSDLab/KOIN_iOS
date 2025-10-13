@@ -11,7 +11,13 @@
 
 ---
 
-### ⚙️ Tech Stack
+## 📕 Project Information
+
+| iOS Minimum Target | Swift Version |
+|--------------------|---------------|
+| iOS 16.0           | Swift 5     |
+
+## ⚙️ Tech Stack
 
 ### 🎨 UI
 - UIKit
