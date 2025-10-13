@@ -21,6 +21,9 @@ final class DefaultFetchCartTakeOutUseCase: FetchCartTakeOutUseCase {
     
     func execute() -> AnyPublisher<(Cart, isFromDelivery: Bool), Error> {
         repository.fetchCart(parameter: .takeOut)
+            .map {
+                return ($0, isFromDelivery: false)
+            }
             .eraseToAnyPublisher()
     }
 }
