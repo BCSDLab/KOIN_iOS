@@ -172,10 +172,10 @@ extension OrderCartViewController {
             return
         }
         let resetCartPopUpView = OrderCartPopUpView()
-        let completion: ()->Void = { [weak self] in
+        let resetCart: ()->Void = { [weak self] in
             self?.inputSubject.send(.resetCart)
         }
-        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", completion: completion)
+        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", completion: resetCart)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
@@ -216,10 +216,10 @@ extension OrderCartViewController {
             return
         }
         let resetCartPopUpView = OrderCartPopUpView()
-        let completion: ()->Void = { [weak self] in
+        let resetCart: ()->Void = { [weak self] in
             self?.inputSubject.send(.resetCart)
         }
-        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", completion: completion)
+        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", completion: resetCart)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
