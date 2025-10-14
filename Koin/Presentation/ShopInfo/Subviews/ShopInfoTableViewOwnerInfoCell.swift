@@ -18,8 +18,8 @@ final class ShopInfoTableViewOwnerInfoCell: UITableViewCell {
     
     private let titleStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 8
         $0.alignment = .leading
+        $0.distribution = .equalSpacing
     }
     private let nameTitleLabel = UILabel().then { $0.text = "대표자명" }
     private let shopNameTitleLabel = UILabel().then { $0.text = "상호명" }
@@ -86,7 +86,14 @@ extension ShopInfoTableViewOwnerInfoCell {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
+        [nameTitleLabel, shopNameTitleLabel, addressTitleLabel, companyRegistrationNumberTitleLabel,
+         nameValueLabel, shopNameValueLabel, addressValueLabel, companyRegistrationNumberValueLabel].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+            }
+        }
         titleStackView.snp.makeConstraints {
+            $0.height.equalTo(112)
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(companyRegistrationNumberTitleLabel.intrinsicContentSize.width)

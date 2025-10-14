@@ -18,8 +18,8 @@ final class ShopInfoTableViewNameCell: UITableViewCell {
     
     private let titleStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 8
         $0.alignment = .leading
+        $0.distribution = .equalSpacing
     }
     private let nameTitleLabel = UILabel().then { $0.text = "상호명" }
     private let addressTitleLabel = UILabel().then { $0.text = "주소" }
@@ -29,8 +29,8 @@ final class ShopInfoTableViewNameCell: UITableViewCell {
     
     private let valueStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 8
         $0.alignment = .leading
+        $0.distribution = .equalSpacing
     }
     private let nameValueLabel = UILabel()
     private let addressValueLabel = UILabel()
@@ -114,13 +114,21 @@ extension ShopInfoTableViewNameCell {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
+        [nameTitleLabel, addressTitleLabel, runTimeTitleLabel, closedDaysTitleLabel, phoneTitleLabel,
+         nameValueLabel, addressValueLabel, runTimeValueLabel, closedDaysValueLabel, phoneValueLabel].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+            }
+        }
         titleStackView.snp.makeConstraints {
+            $0.height.equalTo(142)
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(runTimeTitleLabel.intrinsicContentSize.width)
             $0.bottom.equalToSuperview().offset(-18)
         }
         valueStackView.snp.makeConstraints {
+            $0.height.equalTo(142)
             $0.top.equalTo(titleStackView.snp.top)
             $0.leading.equalTo(titleStackView.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().offset(-22)
