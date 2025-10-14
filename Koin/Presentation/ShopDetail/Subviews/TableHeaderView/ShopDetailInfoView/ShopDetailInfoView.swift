@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class ShopDetailInfoView: UIView {
+    
+    // MARK: - Properties
+    let navigateToShopInfoPublisher = PassthroughSubject<ShopInfoTableView.HighlightableCell, Never>()
     
     // MARK: - Components
     private let shopTitleLabel = UILabel().then {
@@ -56,6 +60,7 @@ final class ShopDetailInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        addTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -146,6 +151,25 @@ extension ShopDetailInfoView {
             $0.textAlignment = .center
             $0.clipsToBounds = true
         }
+    }
+}
+
+extension ShopDetailInfoView {
+    
+    private func addTargets() {
+        moreInfoButton.addTarget(self, action: #selector(moreInfoButtonTapped), for: .touchUpInside)
+        orderAmountDelieveryTipView.addTarget(self, action: #selector(orderAmountDelieveryTipViewTapped), for: .touchUpInside)
+        introductionView.addTarget(self, action: #selector(introductionViewTapped), for: .touchUpInside)
+    }
+    
+    @objc private func moreInfoButtonTapped() {
+        navigateToShopInfoPublisher.send(.name)
+    }
+    @objc private func orderAmountDelieveryTipViewTapped() {
+        navigateToShopInfoPublisher.send(.deliveryTips)
+    }
+    @objc private func introductionViewTapped() {
+        navigateToShopInfoPublisher.send(.notice)
     }
 }
 

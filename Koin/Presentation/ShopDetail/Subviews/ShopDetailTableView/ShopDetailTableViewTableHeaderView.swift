@@ -14,6 +14,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
+    let navigateToShopInfoPublisher = PassthroughSubject<ShopInfoTableView.HighlightableCell, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Components
@@ -79,6 +80,12 @@ final class ShopDetailTableViewTableHeaderView: UIView {
         
         menuGroupNameCollectionView.shouldSetContentInset.sink { [weak self] shouldSetContentInset in
             self?.shouldSetContentInsetPublisher.send(shouldSetContentInset)
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - InfoView
+        infoView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
+            self?.navigateToShopInfoPublisher.send(shouldHighlight)
         }
         .store(in: &subscriptions)
     }

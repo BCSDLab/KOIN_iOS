@@ -48,6 +48,7 @@ extension UIViewController {
                 .foregroundColor: UIColor.clear,
                 .font: UIFont.appFont(.pretendardSemiBold, size: 18)
             ]
+            navigationItem.backButtonTitle = ""
         }
         appearance.shadowColor = nil
         navigationController?.navigationBar.standardAppearance = appearance
