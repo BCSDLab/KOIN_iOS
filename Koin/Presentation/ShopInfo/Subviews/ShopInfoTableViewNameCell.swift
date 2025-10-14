@@ -50,22 +50,39 @@ final class ShopInfoTableViewNameCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(title: String, name: String, address: String, openTime: String, closeTime: String, closedDays: [String], phone: String) {
+    func configure(title: String, name: String, address: String, openTime: String, closeTime: String, closedDays: [ClosedDay], phone: String) {
         titleLabel.text = title
         nameValueLabel.text = name
         addressValueLabel.text = address
         runTimeValueLabel.text = "\(openTime) ~ \(closeTime)"
+        configureClosedDays(closedDays: closedDays)
+        phoneValueLabel.text = phone
+    }
+}
+
+extension ShopInfoTableViewNameCell {
+    
+    private func configureClosedDays(closedDays: [ClosedDay]) {
         if closedDays.isEmpty {
             closedDaysValueLabel.text = "연중무휴"
         }
         else {
-            var text = "매주"
-            closedDays.forEach {
-                text += " \($0)"
-            }
-            closedDaysValueLabel.text = text
+            closedDaysValueLabel.text = "매주 " + closedDays
+                .map { toKorean(closedDay: $0) }
+                .joined(separator: ", ")
+        }   
+    }
+    
+    private func toKorean(closedDay: ClosedDay) -> String {
+        switch closedDay {
+        case .monday: "월요일"
+        case .tuesday: "화요일"
+        case .wednesday: "수요일"
+        case .thursday: "목요일"
+        case .friday: "금요일"
+        case .saturday: "토요일"
+        case .sunday: "일요일"
         }
-        phoneValueLabel.text = phone
     }
 }
 
