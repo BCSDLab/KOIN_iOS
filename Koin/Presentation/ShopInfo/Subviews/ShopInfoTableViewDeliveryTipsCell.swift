@@ -23,6 +23,13 @@ final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
     }).then {
         $0.isScrollEnabled = false
     }
+    private let trailingBorderView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }
+    private let bottomBorderView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral300)
+    }    
+    
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral50)
     }
@@ -48,7 +55,7 @@ final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
 extension ShopInfoTableViewDeliveryTipsCell {
     
     private func setUpLayout() {
-        [titleLabel, deliveryTipsCollectionView, separatorView].forEach {
+        [titleLabel, deliveryTipsCollectionView, trailingBorderView, bottomBorderView, separatorView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -67,6 +74,15 @@ extension ShopInfoTableViewDeliveryTipsCell {
         separatorView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(6)
+        }
+        
+        trailingBorderView.snp.makeConstraints {
+            $0.top.bottom.trailing.equalTo(deliveryTipsCollectionView)
+            $0.width.equalTo(1)
+        }
+        bottomBorderView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalTo(deliveryTipsCollectionView)
+            $0.height.equalTo(1)
         }
     }
         
