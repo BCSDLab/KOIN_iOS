@@ -270,9 +270,9 @@ extension ShopDetailViewModel {
                 }
             },
                   receiveValue: { [weak self] orderMenu in
-                      print("호출 성공 \(orderMenu)")
-                      self?.outputSubject.send(.updateMenuDetail(orderMenu))
-                  })
+                print("호출 성공 \(orderMenu)")
+                self?.outputSubject.send(.updateMenuDetail(orderMenu))
+            })
             .store(in: &subscriptions)
     }
     

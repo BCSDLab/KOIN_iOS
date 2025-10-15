@@ -449,8 +449,7 @@ extension OrderHomeViewController {
                 let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
                 let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
                 let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
-                let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(
-                    repository: repository)
+                let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
                 let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                     fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                     fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
