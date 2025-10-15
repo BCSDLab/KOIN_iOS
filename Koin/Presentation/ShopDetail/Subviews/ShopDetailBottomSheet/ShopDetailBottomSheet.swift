@@ -24,7 +24,7 @@ final class ShopDetailBottomSheet: UIView {
     }
     private let priceLabel = UILabel().then {
         $0.text = "0원"
-        $0.font = .appFont(.pretendardBold, size: 18)
+        $0.font = .appFont(.pretendardSemiBold, size: 18)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
     }

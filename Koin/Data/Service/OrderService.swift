@@ -20,6 +20,7 @@ protocol OrderService {
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
     func fetchCart() -> AnyPublisher<CartDto, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -89,6 +90,12 @@ final class DefaultOrderService: OrderService {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error> {
+        request(.fetchOrderMenu(orderableShopId: orderableShopId,
+                                orderableShopMenuId: orderableShopMenuId))
             .eraseToAnyPublisher()
     }
     

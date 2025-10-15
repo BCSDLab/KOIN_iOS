@@ -78,6 +78,7 @@ final class OrderCartViewController: UIViewController {
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+            let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
             let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -85,8 +86,9 @@ final class OrderCartViewController: UIViewController {
                                                 fetchCartUseCase: fetchCartUseCase,
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
+                                                fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                 orderableShopId: orderableShopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)

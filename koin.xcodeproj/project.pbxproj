@@ -3,14 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		3B2B134C2E9AA8A20051AF6A /* OrderMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B134B2E9AA8A20051AF6A /* OrderMenu.swift */; };
+		3B2B134E2E9AA9B10051AF6A /* FetchOrderMenuUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B134D2E9AA9B10051AF6A /* FetchOrderMenuUseCase.swift */; };
 		3B6E30EE2E6C11ED006CD0E1 /* OrderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
-		7A5CDE1A97BC0F2555EA3427 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B06307D0DB5AAB444EC7DEA /* Pods_koin.framework */; };
+		3BB065652E9A9E9C00463919 /* OrderMenuDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */; };
+		7B3A4FD8ADDB6D14329BFFCA /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4474681F96A1650D4E61884 /* Pods_koin.framework */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -174,6 +177,8 @@
 		B416ABA42E8D9DB90073F705 /* OrderCartPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416ABA32E8D9DB90073F705 /* OrderCartPopUpView.swift */; };
 		B4208EAA2E8AF805009FD4AD /* OrderCartSegmentedControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4208EA92E8AF805009FD4AD /* OrderCartSegmentedControlCell.swift */; };
 		B4208EAD2E8B14A9009FD4AD /* OrderCartBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4208EAB2E8B14A9009FD4AD /* OrderCartBottomSheet.swift */; };
+		9EE37A360F8158E1B5E43C53 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB008D52B6ECA2678E32F913 /* Pods_NotificationService.framework */; };
+		B416ABB52E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */; };
 		B4254AF82E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */; };
 		B438AED82E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AED32E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift */; };
 		B438AEDA2E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AED52E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift */; };
@@ -222,6 +227,7 @@
 		B4B582662E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B582642E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift */; };
 		B4B5826C2E6D884A0035A861 /* ShopDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B5826B2E6D884A0035A861 /* ShopDetailInfoView.swift */; };
 		B4B582722E6D8FAE0035A861 /* ShopDetailCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B582712E6D8FAE0035A861 /* ShopDetailCustomButton.swift */; };
+		B8B37205489AF6DFC894DDA4 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
 		D2078BE82BC4273200A39861 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BE72BC4273200A39861 /* CALayer.swift */; };
@@ -727,7 +733,6 @@
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
-		DA73484DB6BBBAC03C387191 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FF2553F810D38EE5917C9C /* Pods_NotificationService.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -770,11 +775,14 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
-		30FF2553F810D38EE5917C9C /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B2B134B2E9AA8A20051AF6A /* OrderMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderMenu.swift; sourceTree = "<group>"; };
+		3B2B134D2E9AA9B10051AF6A /* FetchOrderMenuUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderMenuUseCase.swift; sourceTree = "<group>"; };
 		3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilter.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
-		572D1ECBD34519DAA66FD3D1 /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
-		65E3F51D56EA9404A37D5B8A /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+		3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderMenuDTO.swift; sourceTree = "<group>"; };
+		70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+		7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A37509640D01810B159A297 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -928,9 +936,6 @@
 		83EBB88D2D16B41F00346018 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionView.swift; sourceTree = "<group>"; };
 		83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCollectionViewCell.swift; sourceTree = "<group>"; };
-		8DE4BE4DF8C4D427B0224934 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
-		9B06307D0DB5AAB444EC7DEA /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C399424465E6665390AF4BF /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2C42845091F00D6C310 /* koinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2CE2845091F00D6C310 /* koinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -949,7 +954,9 @@
 		B416ABA32E8D9DB90073F705 /* OrderCartPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartPopUpView.swift; sourceTree = "<group>"; };
 		B4208EA92E8AF805009FD4AD /* OrderCartSegmentedControlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartSegmentedControlCell.swift; sourceTree = "<group>"; };
 		B4208EAB2E8B14A9009FD4AD /* OrderCartBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartBottomSheet.swift; sourceTree = "<group>"; };
+		B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailTableViewTableHeaderView.swift; sourceTree = "<group>"; };
 		B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusFromShopUseCase.swift; sourceTree = "<group>"; };
+		B4360BDE13BBCCAB9E0A7A9A /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 		B438AED32E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusGroupsUsecase.swift; sourceTree = "<group>"; };
 		B438AED42E75526600E889C4 /* FetchOrderShopMenusUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusUseCase.swift; sourceTree = "<group>"; };
 		B438AED52E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryUseCase.swift; sourceTree = "<group>"; };
@@ -997,6 +1004,7 @@
 		B4B582642E6D687E0035A861 /* ShopDetailImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		B4B5826B2E6D884A0035A861 /* ShopDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailInfoView.swift; sourceTree = "<group>"; };
 		B4B582712E6D8FAE0035A861 /* ShopDetailCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailCustomButton.swift; sourceTree = "<group>"; };
+		C4474681F96A1650D4E61884 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
 		D2078BE72BC4273200A39861 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
@@ -1506,6 +1514,7 @@
 		D8F5C54F2E6F0EE600FB6708 /* OrderInProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInProgress.swift; sourceTree = "<group>"; };
 		D8F5C5512E6F122100FB6708 /* FetchOrderInProgressUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderInProgressUseCase.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
+		E3106E81CB48A71BD3FC3812 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -1517,7 +1526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA73484DB6BBBAC03C387191 /* Pods_NotificationService.framework in Frameworks */,
+				B8B37205489AF6DFC894DDA4 /* Pods_NotificationService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1525,7 +1534,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A5CDE1A97BC0F2555EA3427 /* Pods_koin.framework in Frameworks */,
+				7B3A4FD8ADDB6D14329BFFCA /* Pods_koin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1553,6 +1562,15 @@
 				D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */,
 			);
 			path = Register;
+			sourceTree = "<group>";
+		};
+		7C93BA132E995B31006F9D76 /* TableHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+			);
+			path = TableHeaderView;
 			sourceTree = "<group>";
 		};
 		8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */ = {
@@ -1999,6 +2017,15 @@
 			path = NoticeListCollectionView;
 			sourceTree = "<group>";
 		};
+		882F81AEF1268B0100228423 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */,
+				C4474681F96A1650D4E61884 /* Pods_koin.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A001E2AB2845091D00D6C310 = {
 			isa = PBXGroup;
 			children = (
@@ -2012,7 +2039,7 @@
 				A001E2B52845091D00D6C310 /* Products */,
 				F03EA30E3DEB1860A8D41CB5 /* Pods */,
 				D2F4FD542CBE0726008C91D8 /* Recovered References */,
-				E48873D0977AA60E96FFD50D /* Frameworks */,
+				882F81AEF1268B0100228423 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2121,9 +2148,11 @@
 		B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */ = {
 			isa = PBXGroup;
 			children = (
+				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B49C1CD62E6F1F1600150BE2 /* ShopDetailTableView.swift */,
 				B49C1CD82E6F320200150BE2 /* ShopDetailTableViewCell.swift */,
 				B49C1CDA2E6F320E00150BE2 /* ShopDetailTableViewHeaderView.swift */,
+				B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */,
 			);
 			path = ShopDetailTableView;
 			sourceTree = "<group>";
@@ -2148,13 +2177,11 @@
 		B4B5825B2E6D67810035A861 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
-				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+				7C93BA132E995B31006F9D76 /* TableHeaderView */,
+				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
-				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B438AEEF2E75E18600E889C4 /* ShopDetailPopUpView */,
 				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
-				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -3828,6 +3855,7 @@
 				B458C1042E77BDB000AB5BF1 /* CartSummaryDTO.swift */,
 				B458C11F2E785F1300AB5BF1 /* CartItemsCountDTO.swift */,
 				B458C1312E78F50300AB5BF1 /* CartDTO.swift */,
+				3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3846,6 +3874,7 @@
 				B458C1062E77BE4200AB5BF1 /* CartSummary.swift */,
 				B458C1212E785FDC00AB5BF1 /* CartItemsCount.swift */,
 				B458C1332E78F54B00AB5BF1 /* Cart.swift */,
+				3B2B134B2E9AA8A20051AF6A /* OrderMenu.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3962,6 +3991,7 @@
 				B458C1232E78605500AB5BF1 /* FetchCartItemsCountUseCase.swift */,
 				B458C1252E7874D000AB5BF1 /* ResetCartUseCase.swift */,
 				B458C1352E78F9AD00AB5BF1 /* FetchCartUseCase.swift */,
+				3B2B134D2E9AA9B10051AF6A /* FetchOrderMenuUseCase.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3984,22 +4014,13 @@
 			path = EventOrderShopCollectionView;
 			sourceTree = "<group>";
 		};
-		E48873D0977AA60E96FFD50D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				30FF2553F810D38EE5917C9C /* Pods_NotificationService.framework */,
-				9B06307D0DB5AAB444EC7DEA /* Pods_koin.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				65E3F51D56EA9404A37D5B8A /* Pods-NotificationService.debug.xcconfig */,
-				8DE4BE4DF8C4D427B0224934 /* Pods-NotificationService.release.xcconfig */,
-				572D1ECBD34519DAA66FD3D1 /* Pods-koin.debug.xcconfig */,
-				9C399424465E6665390AF4BF /* Pods-koin.release.xcconfig */,
+				70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */,
+				E3106E81CB48A71BD3FC3812 /* Pods-NotificationService.release.xcconfig */,
+				B4360BDE13BBCCAB9E0A7A9A /* Pods-koin.debug.xcconfig */,
+				7A37509640D01810B159A297 /* Pods-koin.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -4011,7 +4032,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 839D711E2BEB1570001BC7F7 /* Build configuration list for PBXNativeTarget "NotificationService" */;
 			buildPhases = (
-				5379B7A6012DD691F608BF82 /* [CP] Check Pods Manifest.lock */,
+				72AAD59C84A976BA5F2C8817 /* [CP] Check Pods Manifest.lock */,
 				839D71122BEB1570001BC7F7 /* Sources */,
 				839D71132BEB1570001BC7F7 /* Frameworks */,
 				839D71142BEB1570001BC7F7 /* Resources */,
@@ -4029,12 +4050,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A001E2D82845091F00D6C310 /* Build configuration list for PBXNativeTarget "koin" */;
 			buildPhases = (
-				DB4E2256C2545FA46C23683A /* [CP] Check Pods Manifest.lock */,
+				3238294EE2EAF2D17CC694D2 /* [CP] Check Pods Manifest.lock */,
 				A001E2B02845091D00D6C310 /* Sources */,
 				A001E2B12845091D00D6C310 /* Frameworks */,
 				A001E2B22845091D00D6C310 /* Resources */,
 				8360D27A2BEAA3AD00909861 /* Embed Foundation Extensions */,
-				E879223D8A0A80805AF0CA5B /* [CP] Embed Pods Frameworks */,
+				ECF0D047C256EE161EB4E10F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4112,7 +4133,6 @@
 				};
 			};
 			buildConfigurationList = A001E2AF2845091D00D6C310 /* Build configuration list for PBXProject "koin" */;
-			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -4120,6 +4140,7 @@
 				Base,
 			);
 			mainGroup = A001E2AB2845091D00D6C310;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -4179,29 +4200,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5379B7A6012DD691F608BF82 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NotificationService-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DB4E2256C2545FA46C23683A /* [CP] Check Pods Manifest.lock */ = {
+		3238294EE2EAF2D17CC694D2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4223,7 +4222,29 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E879223D8A0A80805AF0CA5B /* [CP] Embed Pods Frameworks */ = {
+		72AAD59C84A976BA5F2C8817 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NotificationService-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ECF0D047C256EE161EB4E10F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4293,6 +4314,7 @@
 				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */,
 				D8C24A082E1AC96C008D8ABA /* DefaultOrderShopRepository.swift in Sources */,
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
+				3BB065652E9A9E9C00463919 /* OrderMenuDTO.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
 				D23944632C3842E900048F45 /* MenuListViewController.swift in Sources */,
 				D89E8A9C2E03B48B00624C30 /* OrderHomeViewController.swift in Sources */,
@@ -4612,6 +4634,7 @@
 				D8B1A9EE2E321EB300943535 /* ShopSortOptionSheetViewController.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
+				3B2B134E2E9AA9B10051AF6A /* FetchOrderMenuUseCase.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
@@ -4686,6 +4709,7 @@
 				B458C1092E77BF0000AB5BF1 /* FetchCartSummaryUseCase.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				D2F13E5B2BD0AD8100172A9D /* NotiViewController.swift in Sources */,
+				3B2B134C2E9AA8A20051AF6A /* OrderMenu.swift in Sources */,
 				D2B7EC0E2D415B3900EE46B0 /* DeleteArticleModalViewController.swift in Sources */,
 				83B7457F2C9B4F35005868BD /* NoticeListSearchTableViewFooter.swift in Sources */,
 				D27A5D982C6B7DEB00C4275F /* DeleteReviewModalViewController.swift in Sources */,
@@ -4745,6 +4769,7 @@
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
+				B416ABB52E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift in Sources */,
 				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
 				83E770F42D04A21500EB3F84 /* ShuttleRouteDTO.swift in Sources */,
 				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,
@@ -5002,7 +5027,7 @@
 /* Begin XCBuildConfiguration section */
 		839D711F2BEB1570001BC7F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 65E3F51D56EA9404A37D5B8A /* Pods-NotificationService.debug.xcconfig */;
+			baseConfigurationReference = 70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5035,7 +5060,7 @@
 		};
 		839D71202BEB1570001BC7F7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8DE4BE4DF8C4D427B0224934 /* Pods-NotificationService.release.xcconfig */;
+			baseConfigurationReference = E3106E81CB48A71BD3FC3812 /* Pods-NotificationService.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5183,7 +5208,7 @@
 		};
 		A001E2D92845091F00D6C310 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 572D1ECBD34519DAA66FD3D1 /* Pods-koin.debug.xcconfig */;
+			baseConfigurationReference = B4360BDE13BBCCAB9E0A7A9A /* Pods-koin.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -5221,7 +5246,7 @@
 		};
 		A001E2DA2845091F00D6C310 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9C399424465E6665390AF4BF /* Pods-koin.release.xcconfig */;
+			baseConfigurationReference = 7A37509640D01810B159A297 /* Pods-koin.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

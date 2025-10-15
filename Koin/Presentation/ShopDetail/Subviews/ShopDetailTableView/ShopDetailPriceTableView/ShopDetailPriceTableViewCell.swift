@@ -24,7 +24,7 @@ final class ShopDetailPriceTableViewCell: UITableViewCell {
     }
     private let priceLabel = UILabel().then {
         $0.numberOfLines = 1
-        $0.font = .appFont(.pretendardBold, size: 14)
+        $0.font = .appFont(.pretendardSemiBold, size: 14)
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
         $0.textAlignment = .left
