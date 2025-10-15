@@ -85,4 +85,12 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .map { Cart(from: $0) }
             .eraseToAnyPublisher()
     }
+    
+    func fetchOrderMenu(orderableShopId: Int,
+                        orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error> {
+        service.fetchOrderMenu(orderableShopId: orderableShopId,
+                               orderableShopMenuId: orderableShopMenuId)
+            .map { OrderMenu(from: $0) }
+            .eraseToAnyPublisher()
+    }
 }

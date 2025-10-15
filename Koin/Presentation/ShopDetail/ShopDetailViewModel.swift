@@ -14,6 +14,7 @@ final class ShopDetailViewModel {
     case viewDidLoad
     case viewWillAppear
     case resetCart
+    case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
     }
     
     // MARK: - Output
@@ -25,6 +26,7 @@ final class ShopDetailViewModel {
     case updateBottomSheet(cartSummary: CartSummary)
     case updateIsAddingMenuAvailable(Bool)
     case updateCartItemsCount(count: Int)
+    case updateMenuDetail(OrderMenu)
     }
     
     // MARK: - Properties
@@ -44,11 +46,14 @@ final class ShopDetailViewModel {
     private let fetchCartUseCase: FetchCartUseCase?
     private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
     private let resetCartUseCase: ResetCartUseCase?
+    //주문상세
+    private let fetchOrderMenuUseCase: FetchOrderMenuUseCase?
+    
     // Properties
     private let orderableShopId: Int?
     private let shopId: Int?
     private let isFromOrder: Bool
-    
+        
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
@@ -57,6 +62,7 @@ final class ShopDetailViewModel {
          fetchCartUseCase: DefaultFetchCartUseCase,
          fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase,
          resetCartUseCase: DefaultResetCartUseCase,
+         fetchOrderMenuUseCase: FetchOrderMenuUseCase,
          orderableShopId: Int) {
         // 기본정보 OrderApi
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
@@ -72,6 +78,9 @@ final class ShopDetailViewModel {
         self.fetchOrderShopMenusGroupsFromShopUseCase = nil
         self.fetchOrderShopMenusFromShopUseCase = nil
         self.fetchShopDataUseCase = nil
+        //상세
+        self.fetchOrderMenuUseCase = fetchOrderMenuUseCase
+        
         // properties
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
@@ -82,6 +91,7 @@ final class ShopDetailViewModel {
          fetchOrderShopMenusGroupsFromShopUseCase: DefaultFetchOrderShopMenusGroupsFromShopUseCase,
          fetchOrderShopMenusFromShopUseCase: DefaultFetchOrderShopMenusFromShopUseCase,
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
+         
          shopId: Int) {
         // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
@@ -97,6 +107,8 @@ final class ShopDetailViewModel {
         self.fetchCartUseCase = nil
         self.fetchCartItemsCountUseCase = nil
         self.resetCartUseCase = nil
+        //주문상세
+        self.fetchOrderMenuUseCase = nil
         // Properties
         self.orderableShopId = nil
         self.shopId = shopId
@@ -127,6 +139,10 @@ final class ShopDetailViewModel {
                 self.fetchCartItemsCount()
             case .resetCart: // 장바구니 비우기
                 self.resetCart()
+            
+            case .fetchMenuDetail(let orderableShopId, let orderableShopMenuId):
+                self.fetchOrderMenu(orderableShopId: orderableShopId,
+                                     orderableShopMenuId: orderableShopMenuId)
             }
         }
         .store(in: &subscriptions)
@@ -243,4 +259,21 @@ extension ShopDetailViewModel {
             })
             .store(in: &subscriptions)
     }
+    
+    private func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) {
+        fetchOrderMenuUseCase?
+            .execute(orderableShopId: orderableShopId,
+                     orderableShopMenuId: orderableShopMenuId)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("호출 실패: \(error)")
+                }
+            },
+                  receiveValue: { [weak self] orderMenu in
+                print("호출 성공 \(orderMenu)")
+                self?.outputSubject.send(.updateMenuDetail(orderMenu))
+            })
+            .store(in: &subscriptions)
+    }
+    
 }
