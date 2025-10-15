@@ -164,6 +164,8 @@
 		83EBB88E2D16B41F00346018 /* BusAreaSelectedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB88D2D16B41F00346018 /* BusAreaSelectedCollectionView.swift */; };
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
+		9EE37A360F8158E1B5E43C53 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB008D52B6ECA2678E32F913 /* Pods_NotificationService.framework */; };
+		B416ABB52E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */; };
 		B4254AF82E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */; };
 		B438AED82E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AED32E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift */; };
 		B438AEDA2E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AED52E75526600E889C4 /* FetchOrderShopSummaryUseCase.swift */; };
@@ -924,6 +926,7 @@
 		A001E2CE2845091F00D6C310 /* koinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailTableViewTableHeaderView.swift; sourceTree = "<group>"; };
 		B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusFromShopUseCase.swift; sourceTree = "<group>"; };
 		B4360BDE13BBCCAB9E0A7A9A /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 		B438AED32E75526600E889C4 /* FetchOrderShopMenusGroupsUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusGroupsUsecase.swift; sourceTree = "<group>"; };
@@ -1535,6 +1538,15 @@
 			path = Register;
 			sourceTree = "<group>";
 		};
+		7C93BA132E995B31006F9D76 /* TableHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
+				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+			);
+			path = TableHeaderView;
+			sourceTree = "<group>";
+		};
 		8316DCD72CDF5C64009AF9A4 /* ExpressTimetableTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2066,9 +2078,11 @@
 		B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */ = {
 			isa = PBXGroup;
 			children = (
+				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B49C1CD62E6F1F1600150BE2 /* ShopDetailTableView.swift */,
 				B49C1CD82E6F320200150BE2 /* ShopDetailTableViewCell.swift */,
 				B49C1CDA2E6F320E00150BE2 /* ShopDetailTableViewHeaderView.swift */,
+				B416ABB42E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift */,
 			);
 			path = ShopDetailTableView;
 			sourceTree = "<group>";
@@ -2093,13 +2107,11 @@
 		B4B5825B2E6D67810035A861 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				B4B5825C2E6D67950035A861 /* ShopDetailImagesCollectionView */,
-				B4B582682E6D87900035A861 /* ShopDetailInfoView */,
+				7C93BA132E995B31006F9D76 /* TableHeaderView */,
+				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 				B4B3EB272E6E834100F8A23A /* ShopDetailMenuGroupCollectionView */,
-				B46C43CF2E82228A000E5ACD /* ShopDetailPriceTableView */,
 				B438AEEF2E75E18600E889C4 /* ShopDetailPopUpView */,
 				B49C1CDE2E70043300150BE2 /* ShopDetailBottomSheet */,
-				B49C1CD52E6F1F0200150BE2 /* ShopDetailTableView */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -4673,6 +4685,7 @@
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
 				D27DD0982BA608310081FD36 /* MenuView.swift in Sources */,
+				B416ABB52E8DB3EA0073F705 /* ShopDetailTableViewTableHeaderView.swift in Sources */,
 				D224216B2C8A3E0B00E8B480 /* PolicyListCollectionViewCell.swift in Sources */,
 				83E770F42D04A21500EB3F84 /* ShuttleRouteDTO.swift in Sources */,
 				D224216C2C8A3E0B00E8B480 /* PolicyListTableView.swift in Sources */,

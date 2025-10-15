@@ -14,6 +14,7 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
     private var menuGroup: [MenuGroup] = []
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
+    let shouldSetContentInset = PassthroughSubject<Bool, Never>()
     
     // MARK: - Initiailizer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -47,6 +48,7 @@ extension ShopDetailMenuGroupCollectionView {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         configureSelectedCell(indexPath)
+        shouldSetContentInset.send(true)
         didSelectCellPublisher.send(indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
