@@ -50,7 +50,7 @@ final class ShopDetailViewModel {
     private let fetchOrderMenuUseCase: FetchOrderMenuUseCase?
     
     // Properties
-    private let orderableShopId: Int?
+    private(set) var orderableShopId: Int?
     private let shopId: Int?
     private let isFromOrder: Bool
         

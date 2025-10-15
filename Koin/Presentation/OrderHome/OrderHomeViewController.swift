@@ -460,7 +460,7 @@ extension OrderHomeViewController {
                                                     fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                     orderableShopId: orderableShopId)
     
-                let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: nil)
+                let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
                 navigationControllerDelegate?.pushViewController(viewController, animated: true)
             }
             .store(in: &subscriptions)

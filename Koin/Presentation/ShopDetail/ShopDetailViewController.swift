@@ -17,8 +17,6 @@ final class ShopDetailViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
-    private let orderableShopId: Int?
-        
     private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
     // MARK: - Components
@@ -60,7 +58,6 @@ final class ShopDetailViewController: UIViewController {
     init(viewModel: ShopDetailViewModel, isFromOrder: Bool, orderableShopId: Int?) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
-        self.orderableShopId = orderableShopId
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -164,7 +161,7 @@ extension ShopDetailViewController {
             .sink { [weak self] menuId in
                 guard let self = self, self.isFromOrder else { return } // Shop에서 왔으면 종료
                 if isAddingMenuAvailable {
-                    self.inputSubject.send(.fetchMenuDetail(orderableShopId: orderableShopId ?? -1, orderableShopMenuId: menuId))
+                    self.inputSubject.send(.fetchMenuDetail(orderableShopId: viewModel.orderableShopId ?? -1, orderableShopMenuId: menuId))
                           
                     navigateToMenuDetail(menuId: menuId)
                 }
