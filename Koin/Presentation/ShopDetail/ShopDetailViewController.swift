@@ -267,9 +267,13 @@ extension ShopDetailViewController {
             }
 
         } else {
-            let orderCartWebViewController = OrderCartWebViewController()
-            orderCartWebViewController.title = "장바구니"
-            navigationController?.pushViewController(orderCartWebViewController, animated: true)
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
+            let useCase = DefaultFetchCartUseCase(repository: repository)
+            let viewModel = OrderCartViewModel(fetchCartUseCase: useCase)
+            let viewController = OrderCartViewController(viewModel: viewModel)
+            viewController.title = "장바구니"
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
     // MARK: - show/hide popUpView

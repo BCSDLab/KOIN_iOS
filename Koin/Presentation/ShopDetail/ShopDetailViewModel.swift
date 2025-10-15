@@ -30,7 +30,7 @@ final class ShopDetailViewModel {
     }
     
     // MARK: - Properties
-    let outputSubject = PassthroughSubject<Output, Never>()
+    private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     // 기본정보 OrderApi
     private let fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?
