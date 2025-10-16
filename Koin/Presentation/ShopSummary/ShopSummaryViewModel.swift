@@ -1,5 +1,5 @@
 //
-//  ShopDetailViewModel.swift
+//  ShopSummaryViewModel.swift
 //  koin
 //
 //  Created by 홍기정 on 9/5/25.
@@ -7,7 +7,7 @@
 
 import Combine
 
-final class ShopDetailViewModel {
+final class ShopSummaryViewModel {
     
     // MARK: - Input
     enum Input {
@@ -150,7 +150,7 @@ final class ShopDetailViewModel {
     }
 }
 
-extension ShopDetailViewModel {
+extension ShopSummaryViewModel {
     // MARK: - 기본정보 OrderApi
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
@@ -216,7 +216,7 @@ extension ShopDetailViewModel {
             .store(in: &subscriptions)
     }
 }
-extension ShopDetailViewModel {
+extension ShopSummaryViewModel {
     // MARK: - 장바구니 ShopApi (OrderHome에서 진입시에만 사용)
     
     private func fetchCartSummary(orderableShopId: Int) {

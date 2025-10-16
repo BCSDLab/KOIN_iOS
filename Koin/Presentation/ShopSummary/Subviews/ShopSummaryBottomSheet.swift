@@ -1,5 +1,5 @@
 //
-//  ShopDetailBottomSheet.swift
+//  ShopSummaryBottomSheet.swift
 //  koin
 //
 //  Created by 홍기정 on 9/9/25.
@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-final class ShopDetailBottomSheet: UIView {
+final class ShopSummaryBottomSheet: UIView {
     
     // MARK: - Properties
     var shopMinimumOrderAmount: Int = 0
@@ -74,7 +74,7 @@ final class ShopDetailBottomSheet: UIView {
     }
 }
 
-extension ShopDetailBottomSheet {
+extension ShopSummaryBottomSheet {
     private func setUpButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePlacement = .leading

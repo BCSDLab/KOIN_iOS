@@ -1,5 +1,5 @@
 //
-//  ShopDetailThumbnailCollectionViewCell.swift
+//  ShopSummaryThumbnailCollectionViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 9/7/25.
@@ -10,7 +10,7 @@ import SnapKit
 import Kingfisher
 import Then
 
-final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
+final class ShopSummaryImagesCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Component
     private let imageView = UIImageView().then {
@@ -40,7 +40,7 @@ final class ShopDetailImagesCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension ShopDetailImagesCollectionViewCell {
+extension ShopSummaryImagesCollectionViewCell {
 
     private func configureView() {
         addSubview(imageView)

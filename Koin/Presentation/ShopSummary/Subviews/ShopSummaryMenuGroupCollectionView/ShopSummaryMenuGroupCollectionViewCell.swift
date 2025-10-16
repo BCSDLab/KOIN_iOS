@@ -1,5 +1,5 @@
 //
-//  ShopDetailMenuGroupCollectionViewCell.swift
+//  ShopSummaryMenuGroupCollectionViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 9/8/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
+final class ShopSummaryMenuGroupCollectionViewCell: UICollectionViewCell {
     
     private let label = UILabel().then {
         $0.font = .appFont(.pretendardSemiBold, size: 14)
@@ -28,7 +28,7 @@ final class ShopDetailMenuGroupCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension ShopDetailMenuGroupCollectionViewCell {
+extension ShopSummaryMenuGroupCollectionViewCell {
     
     func setSelected(isSelected: Bool){
         label.textColor = isSelected ? .appColor(.new500) : .appColor(.neutral400)
@@ -40,7 +40,7 @@ extension ShopDetailMenuGroupCollectionViewCell {
     }
 }
 
-extension ShopDetailMenuGroupCollectionViewCell {
+extension ShopSummaryMenuGroupCollectionViewCell {
     
     private func configureView() {
         backgroundColor = .appColor(.neutral0)

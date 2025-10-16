@@ -1,5 +1,5 @@
 //
-//  ShopDetailThumbnailCollectionView.swift
+//  ShopSummaryThumbnailCollectionView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/7/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+final class ShopSummaryImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
     private var orderImages: [OrderImage] = []
@@ -29,14 +29,14 @@ final class ShopDetailImagesCollectionView: UICollectionView, UICollectionViewDe
     }
 }
 
-extension ShopDetailImagesCollectionView {
+extension ShopSummaryImagesCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if(orderImages.isEmpty) { return 1 }
         return orderImages.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailImagesCollectionViewCell.identifier, for: indexPath) as? ShopDetailImagesCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopSummaryImagesCollectionViewCell.identifier, for: indexPath) as? ShopSummaryImagesCollectionViewCell else {
             return UICollectionViewCell()
         }
         if(orderImages.isEmpty) {
@@ -51,7 +51,7 @@ extension ShopDetailImagesCollectionView {
     }
 }
 
-extension ShopDetailImagesCollectionView {
+extension ShopSummaryImagesCollectionView {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let width = self.frame.width
@@ -63,12 +63,12 @@ extension ShopDetailImagesCollectionView {
     }
 }
 
-extension ShopDetailImagesCollectionView {
+extension ShopSummaryImagesCollectionView {
     
     private func commonInit() {
         isPagingEnabled = true
         dataSource = self
         delegate = self
-        register(ShopDetailImagesCollectionViewCell.self, forCellWithReuseIdentifier: ShopDetailImagesCollectionViewCell.identifier)
+        register(ShopSummaryImagesCollectionViewCell.self, forCellWithReuseIdentifier: ShopSummaryImagesCollectionViewCell.identifier)
     }
 }

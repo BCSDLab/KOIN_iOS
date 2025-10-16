@@ -1,5 +1,5 @@
 //
-//  ShopDetailMenuGroupCollectionView.swift
+//  ShopSummaryMenuGroupCollectionView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/8/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+final class ShopSummaryMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
     private var menuGroup: [MenuGroup] = []
@@ -44,7 +44,7 @@ final class ShopDetailMenuGroupCollectionView: UICollectionView, UICollectionVie
     }
 }
 
-extension ShopDetailMenuGroupCollectionView {
+extension ShopSummaryMenuGroupCollectionView {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         configureSelectedCell(indexPath)
@@ -58,7 +58,7 @@ extension ShopDetailMenuGroupCollectionView {
         return menuGroup.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier, for: indexPath) as? ShopDetailMenuGroupCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopSummaryMenuGroupCollectionViewCell.identifier, for: indexPath) as? ShopSummaryMenuGroupCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(menuGroup[indexPath.row].name)
@@ -73,7 +73,7 @@ extension ShopDetailMenuGroupCollectionView {
     }
 }
 
-extension ShopDetailMenuGroupCollectionView {
+extension ShopSummaryMenuGroupCollectionView {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOffset = self.contentOffset
@@ -81,25 +81,25 @@ extension ShopDetailMenuGroupCollectionView {
     }
 }
 
-extension ShopDetailMenuGroupCollectionView {
+extension ShopSummaryMenuGroupCollectionView {
     
     private func configureSelectedCell(_ indexPath: IndexPath) {
-        if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
+        if let cell = cellForItem(at: indexPath) as? ShopSummaryMenuGroupCollectionViewCell {
             cell.setSelected(isSelected: true)
         }
     }
     private func configureDeselectedCell(_ indexPath: IndexPath) {
-        if let cell = cellForItem(at: indexPath) as? ShopDetailMenuGroupCollectionViewCell {
+        if let cell = cellForItem(at: indexPath) as? ShopSummaryMenuGroupCollectionViewCell {
             cell.setSelected(isSelected: false)
         }
     }
 }
 
-extension ShopDetailMenuGroupCollectionView {
+extension ShopSummaryMenuGroupCollectionView {
     
     private func commonInit() {
         self.delegate = self
         self.dataSource = self
-        register(ShopDetailMenuGroupCollectionViewCell.self, forCellWithReuseIdentifier: ShopDetailMenuGroupCollectionViewCell.identifier)
+        register(ShopSummaryMenuGroupCollectionViewCell.self, forCellWithReuseIdentifier: ShopSummaryMenuGroupCollectionViewCell.identifier)
     }
 }

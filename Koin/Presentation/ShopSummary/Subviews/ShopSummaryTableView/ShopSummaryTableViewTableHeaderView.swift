@@ -1,5 +1,5 @@
 //
-//  ShopDetailTableViewTableHeaderView.swift
+//  ShopSummaryTableViewTableHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 10/2/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailTableViewTableHeaderView: UIView {
+final class ShopSummaryTableViewTableHeaderView: UIView {
     
     // MARK: - Properties
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
@@ -17,7 +17,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Components
-    private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let imagesCollectionView = ShopSummaryImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
         $0.minimumLineSpacing = 0
@@ -30,11 +30,11 @@ final class ShopDetailTableViewTableHeaderView: UIView {
         $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
     }
-    private let infoView = ShopDetailInfoView()
+    private let infoView = ShopSummaryInfoView()
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral100)
     }
-    private let menuGroupNameCollectionView = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let menuGroupNameCollectionView = ShopSummaryMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
         $0.scrollDirection = .horizontal
     }).then {
@@ -94,7 +94,7 @@ final class ShopDetailTableViewTableHeaderView: UIView {
     }
 }
 
-extension ShopDetailTableViewTableHeaderView {
+extension ShopSummaryTableViewTableHeaderView {
     
     func updateInfoView(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         imagesCollectionView.configure(orderImage: orderShopSummary.images)
@@ -109,7 +109,7 @@ extension ShopDetailTableViewTableHeaderView {
     }
 }
 
-extension ShopDetailTableViewTableHeaderView {
+extension ShopSummaryTableViewTableHeaderView {
     
     private func setUpLayout() {
         [separatorView, imagesCollectionView, imagesPageControl, infoView, menuGroupNameCollectionView].forEach {

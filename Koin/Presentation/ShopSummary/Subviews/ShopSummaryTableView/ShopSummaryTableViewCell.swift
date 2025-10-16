@@ -1,5 +1,5 @@
 //
-//  ShopDetailTableViewCell.swift
+//  ShopSummaryTableViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 9/9/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailTableViewCell: UITableViewCell {
+final class ShopSummaryTableViewCell: UITableViewCell {
     
     // MARK: - Components
     private var insetBackgroundView = UIView().then { $0.backgroundColor = .yellow }
@@ -34,7 +34,7 @@ final class ShopDetailTableViewCell: UITableViewCell {
         $0.textAlignment = .left
     }
     private let paddingView = UIView().then { $0.backgroundColor = .red }
-    private let priceTableView = ShopDetailPriceTableView(frame: .zero, style: .plain).then {
+    private let priceTableView = ShopSummaryPriceTableView(frame: .zero, style: .plain).then {
         $0.isScrollEnabled = false
         $0.sectionHeaderTopPadding = 0
         $0.separatorStyle = .none
@@ -148,7 +148,7 @@ final class ShopDetailTableViewCell: UITableViewCell {
     }
 }
 
-extension ShopDetailTableViewCell {
+extension ShopSummaryTableViewCell {
 
     private func setUpLayout() {
         [insetBackgroundView].forEach {
