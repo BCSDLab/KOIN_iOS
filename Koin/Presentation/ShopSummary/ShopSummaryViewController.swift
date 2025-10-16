@@ -1,5 +1,5 @@
 //
-//  ShopDetailViewController.swift
+//  ShopSummaryViewController.swift
 //  koin
 //
 //  Created by 홍기정 on 9/5/25.
@@ -8,24 +8,24 @@
 import UIKit
 import Combine
 
-final class ShopDetailViewController: UIViewController {
+final class ShopSummaryViewController: UIViewController {
     
     // MARK: - Properties
-    private let viewModel: ShopDetailViewModel
+    private let viewModel: ShopSummaryViewModel
     private let isFromOrder: Bool
-    private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
+    private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
     private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
     // MARK: - Components
-    private let tableHeaderView = ShopDetailTableViewTableHeaderView()
+    private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     private let navigationBarLikeView = UIView().then {
         $0.backgroundColor = .appColor(.newBackground)
         $0.layer.opacity = 0
     }
-    private let menuGroupNameCollectionViewSticky = ShopDetailMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+    private let menuGroupNameCollectionViewSticky = ShopSummaryMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
         $0.scrollDirection = .horizontal
     }).then {
@@ -38,7 +38,7 @@ final class ShopDetailViewController: UIViewController {
         $0.layer.masksToBounds = false
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
     }
-    private let menuGroupTableView = ShopDetailTableView(frame: .zero, style: .grouped).then {
+    private let menuGroupTableView = ShopSummaryTableView(frame: .zero, style: .grouped).then {
         $0.contentInsetAdjustmentBehavior = .never
         $0.backgroundColor = .clear
         $0.sectionFooterHeight = .zero
@@ -47,15 +47,15 @@ final class ShopDetailViewController: UIViewController {
         $0.rowHeight = UITableView.automaticDimension
         $0.estimatedRowHeight = 112
     }
-    private let bottomSheet = ShopDetailBottomSheet().then {
+    private let bottomSheet = ShopSummaryBottomSheet().then {
         $0.isHidden = true
     }
-    private let popUpView = ShopDetailPopUpView().then {
+    private let popUpView = ShopSummaryPopUpView().then {
         $0.isHidden = true
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopDetailViewModel, isFromOrder: Bool, orderableShopId: Int?) {
+    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
         super.init(nibName: nil, bundle: nil)
@@ -80,7 +80,7 @@ final class ShopDetailViewController: UIViewController {
     }
 }
 
-extension ShopDetailViewController {
+extension ShopSummaryViewController {
     
     // MARK: - bind
     private func bind() {
@@ -289,7 +289,7 @@ extension ShopDetailViewController {
     }
 }
 
-extension ShopDetailViewController {
+extension ShopSummaryViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
         menuGroupTableView.snp.makeConstraints {

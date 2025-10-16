@@ -1,5 +1,5 @@
 //
-//  ShopDetailPriceTableViewCell.swift
+//  ShopSummaryPriceTableViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 9/23/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class ShopDetailPriceTableViewCell: UITableViewCell {
+final class ShopSummaryPriceTableViewCell: UITableViewCell {
     
     // MARK: - Component
     private let stackView = UIStackView().then {
@@ -55,7 +55,7 @@ final class ShopDetailPriceTableViewCell: UITableViewCell {
     }
 }
 
-extension ShopDetailPriceTableViewCell {
+extension ShopSummaryPriceTableViewCell {
     
     private func configureView() {
         [nameLabel, priceLabel].forEach {

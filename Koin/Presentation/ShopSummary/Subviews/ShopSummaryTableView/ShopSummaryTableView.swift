@@ -1,5 +1,5 @@
 //
-//  ShopDetailTableView.swift
+//  ShopSummaryTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/8/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Properties
     private var menuGroupName: [String] = []
@@ -69,7 +69,7 @@ final class ShopDetailTableView: UITableView, UITableViewDelegate, UITableViewDa
     }
 }
 
-extension ShopDetailTableView {
+extension ShopSummaryTableView {
     // numberOf
     func numberOfSections(in tableView: UITableView) -> Int {
         return names.count
@@ -79,7 +79,7 @@ extension ShopDetailTableView {
     }
     // viewFor, cellFor
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: ShopDetailTableViewHeaderView.identifier) as? ShopDetailTableViewHeaderView else {
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: ShopSummaryTableViewHeaderView.identifier) as? ShopSummaryTableViewHeaderView else {
             return UITableViewHeaderFooterView()
         }
         view.configure(groupName: menuGroupName[section])
@@ -87,7 +87,7 @@ extension ShopDetailTableView {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopDetailTableViewCell.identifier, for: indexPath) as? ShopDetailTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopSummaryTableViewCell.identifier, for: indexPath) as? ShopSummaryTableViewCell else {
             return UITableViewCell()
         }
         cell.configure(name: names[indexPath.section][indexPath.row],
@@ -106,7 +106,7 @@ extension ShopDetailTableView {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-extension ShopDetailTableView: UIScrollViewDelegate {
+extension ShopSummaryTableView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
@@ -125,13 +125,13 @@ extension ShopDetailTableView: UIScrollViewDelegate {
     }
 }
 
-extension ShopDetailTableView {
+extension ShopSummaryTableView {
     
     private func commonInit() {
         dataSource = self
         delegate = self
-        register(ShopDetailTableViewCell.self, forCellReuseIdentifier: ShopDetailTableViewCell.identifier)
-        register(ShopDetailTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: ShopDetailTableViewHeaderView.identifier)
+        register(ShopSummaryTableViewCell.self, forCellReuseIdentifier: ShopSummaryTableViewCell.identifier)
+        register(ShopSummaryTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: ShopSummaryTableViewHeaderView.identifier)
     }
 }
 

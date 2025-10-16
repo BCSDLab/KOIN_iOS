@@ -1,5 +1,5 @@
 //
-//  ShopDetailPopupView.swift
+//  ShopSummaryPopupView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/12/25.
@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-final class ShopDetailPopUpView: UIView {
+final class ShopSummaryPopUpView: UIView {
     
     // MARK: - Properties
     let leftButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -77,7 +77,7 @@ final class ShopDetailPopUpView: UIView {
     }
 }
 
-extension ShopDetailPopUpView {
+extension ShopSummaryPopUpView {
 
     private func setUpLayouts() {
         [dimView, popUpView, label, leftButton, rightButton].forEach {
@@ -117,7 +117,7 @@ extension ShopDetailPopUpView {
     }
 }
 
-extension ShopDetailPopUpView {
+extension ShopSummaryPopUpView {
  
     @objc private func leftButtonTapped() {
         leftButtonTappedPublisher.send()

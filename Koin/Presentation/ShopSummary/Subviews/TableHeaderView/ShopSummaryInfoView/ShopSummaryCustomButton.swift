@@ -1,5 +1,5 @@
 //
-//  ShopDetailCustomButton.swift
+//  ShopSummaryCustomButton.swift
 //  koin
 //
 //  Created by 홍기정 on 9/7/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopDetailCustomButton: UIButton {
+final class ShopSummaryCustomButton: UIButton {
     
     // MARK: - Components
     private let minimumOrderLabel = UILabel().then {
@@ -79,7 +79,7 @@ final class ShopDetailCustomButton: UIButton {
     }
 }
 
-extension ShopDetailCustomButton {
+extension ShopSummaryCustomButton {
     
     private func configureInorderableLabel() {
         [inorderableLabel].forEach {

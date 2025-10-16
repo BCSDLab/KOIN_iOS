@@ -1,5 +1,5 @@
 //
-//  ShopDetailInfoView.swift
+//  ShopSummaryInfoView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/7/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopDetailInfoView: UIView {
+final class ShopSummaryInfoView: UIView {
     
     // MARK: - Components
     private let shopTitleLabel = UILabel().then {
@@ -49,8 +49,8 @@ final class ShopDetailInfoView: UIView {
     private let isPayCardAvailableLabel = UILabel()
     private let isPayBankAvailableLabel = UILabel()
     
-    private let orderAmountDelieveryTipView = ShopDetailCustomButton()
-    private let introductionView = ShopDetailCustomButton()
+    private let orderAmountDelieveryTipView = ShopSummaryCustomButton()
+    private let introductionView = ShopSummaryCustomButton()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -82,7 +82,7 @@ final class ShopDetailInfoView: UIView {
                              payBank: payBank)
     }
 }
-extension ShopDetailInfoView {
+extension ShopSummaryInfoView {
     
     private func setUpIsAvailableView(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
         isDeliveryAvailableLabel.text = isDelieveryAvailable ? "배달 가능" : "배달 불가"
@@ -149,7 +149,7 @@ extension ShopDetailInfoView {
     }
 }
 
-extension ShopDetailInfoView {
+extension ShopSummaryInfoView {
     
     private func setUpLayouts() {
         [starImageView, ratingLabel, separatorLabel, reviewLabel, reviewButton].forEach {

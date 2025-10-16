@@ -1,5 +1,5 @@
 //
-//  ShopDetailPriceTableView.swift
+//  ShopSummaryPriceTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 9/23/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopDetailPriceTableView: UITableView {
+final class ShopSummaryPriceTableView: UITableView {
     
     // MARK: - Properties
     var prices: [Price] = []
@@ -27,7 +27,7 @@ final class ShopDetailPriceTableView: UITableView {
     }
 }
 
-extension ShopDetailPriceTableView: UITableViewDelegate {
+extension ShopSummaryPriceTableView: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return false
@@ -40,13 +40,13 @@ extension ShopDetailPriceTableView: UITableViewDelegate {
     }
 }
 
-extension ShopDetailPriceTableView: UITableViewDataSource {
+extension ShopSummaryPriceTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return prices.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopDetailPriceTableViewCell.identifier, for: indexPath) as? ShopDetailPriceTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ShopSummaryPriceTableViewCell.identifier, for: indexPath) as? ShopSummaryPriceTableViewCell else {
             return UITableViewCell()
         }
         cell.configure(price: prices[indexPath.row])
@@ -54,11 +54,11 @@ extension ShopDetailPriceTableView: UITableViewDataSource {
     }
 }
 
-extension ShopDetailPriceTableView {
+extension ShopSummaryPriceTableView {
     
     private func commonInit() {
         delegate = self
         dataSource = self
-        register(ShopDetailPriceTableViewCell.self, forCellReuseIdentifier: ShopDetailPriceTableViewCell.identifier)
+        register(ShopSummaryPriceTableViewCell.self, forCellReuseIdentifier: ShopSummaryPriceTableViewCell.identifier)
     }
 }
