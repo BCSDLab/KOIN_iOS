@@ -159,6 +159,7 @@
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		B3103C316BEE49DB381AB154 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */; };
+		B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61FAA162EA3A39D005BE539 /* Typography.swift */; };
 		B65422FA2EA12D9A00018F15 /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65422F92EA12D9A00018F15 /* ColorSystem.swift */; };
 		B65422FC2EA12DD700018F15 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65422FB2EA12DD700018F15 /* UIColor+Hex.swift */; };
 		BE696CF7ECA5FAE839896DAA /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CCC0E0747FEA60867679C70 /* Pods_NotificationService.framework */; };
@@ -837,6 +838,7 @@
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B61FAA162EA3A39D005BE539 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		B65422F92EA12D9A00018F15 /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
 		B65422FB2EA12DD700018F15 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		C9EC2A4D19115EFB044A52BE /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
@@ -1849,9 +1851,18 @@
 			path = koinUITests;
 			sourceTree = "<group>";
 		};
+		B61FAA152EA3A394005BE539 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				B61FAA162EA3A39D005BE539 /* Typography.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		B65422F52EA12BE700018F15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				B61FAA152EA3A394005BE539 /* Font */,
 				B65422F82EA12D9200018F15 /* Color */,
 			);
 			path = DesignSystem;
@@ -4025,6 +4036,7 @@
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
 				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
+				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
 				D27DD0FA2BA6292C0081FD36 /* LandOptionCollectionView.swift in Sources */,
 				D23944652C38432100048F45 /* EventListViewController.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
