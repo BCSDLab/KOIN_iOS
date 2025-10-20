@@ -133,9 +133,16 @@ extension ShopSummaryViewController {
             self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
             }
             .store(in: &subscriptions)
+        
         tableHeaderView.shouldSetContentInsetPublisher.sink { [weak self] shouldSetContentInset in
             let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
             self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
+            }
+            .store(in: &subscriptions)
+        
+        tableHeaderView.reviewButtonTappedPublisher
+            .sink { [weak self] in
+                self?.navigateToReviewListViewController()
             }
             .store(in: &subscriptions)
         
@@ -144,6 +151,7 @@ extension ShopSummaryViewController {
             self?.tableHeaderView.update(contentOffset: contentOffset)
             }
             .store(in: &subscriptions)
+        
         menuGroupNameCollectionViewSticky.didSelectCellPublisher
             .sink { [weak self] indexPath in
                 guard let self = self else { return }
@@ -234,6 +242,7 @@ extension ShopSummaryViewController {
     @objc private func navigationButtonTapped() {
         navigationController?.pushViewController(UIViewController(), animated: true)
     }
+    
     @objc private func didTapCart() {
         if UserDataManager.shared.userId.isEmpty {
             let popupView = OrderLoginPopupView()
@@ -286,6 +295,11 @@ extension ShopSummaryViewController {
     // MARK: - navigate to menu detail
     private func navigateToMenuDetail(menuId: Int) {
         print("다음화면으로!")
+    }
+    
+    // TODO: -
+    private func navigateToReviewListViewController() {
+        print("리뷰 버튼 탭")
     }
 }
 

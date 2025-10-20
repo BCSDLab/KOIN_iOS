@@ -6,9 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 final class ShopSummaryInfoView: UIView {
     
+    // MARK: - Properties
+    let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+
     // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
@@ -62,6 +66,7 @@ final class ShopSummaryInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -88,6 +93,12 @@ final class ShopSummaryInfoView: UIView {
                              isTakeoutAvailable: isTakeoutAvailable,
                              payCard: payCard,
                              payBank: payBank)
+    }
+    
+    private func setAddTarget() {
+        reviewButton.addAction(UIAction { [weak self] _ in
+            self?.reviewButtonTappedPublisher.send()
+        }, for: .touchUpInside)
     }
 }
 
