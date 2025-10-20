@@ -9,47 +9,53 @@ import UIKit
 
 final class ShopSummaryInfoView: UIView {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 20)
         $0.numberOfLines = 0
         $0.lineBreakMode = .byWordWrapping
     }
+    
     private let rateReviewStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 4
         $0.alignment = .center
     }
+    
     private let starImageView = UIImageView(image: UIImage.appImage(asset: .star)?.resize(to: CGSize(width: 25, height: 25)))
+    
     private let ratingLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardSemiBold, size: 14)
         $0.textColor = UIColor.appColor(.neutral800)
     }
+    
     private let separatorLabel = UILabel().then {
         $0.text = "·"
         $0.font = UIFont.appFont(.pretendardRegular, size: 13)
         $0.textColor = UIColor.appColor(.neutral800)
     }
-    private let reviewLabel = UILabel().then {
-        $0.text = "리뷰"
-        $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
-        $0.textColor = UIColor.appColor(.neutral800)
-    }
+    
     private let reviewButton = UIButton()
+    
     private let moreInfoButton = UIButton()
     
-    let isAvailableStackView = UIStackView().then {
+    private let isAvailableStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 8
         $0.alignment = .fill
     }
+    
     private let isDeliveryAvailableLabel = UILabel()
+    
     private let isTakeoutAvailableLabel = UILabel()
+    
     private let isPayCardAvailableLabel = UILabel()
+    
     private let isPayBankAvailableLabel = UILabel()
     
     private let orderAmountDelieveryTipView = ShopSummaryCustomButton()
+    
     private let introductionView = ShopSummaryCustomButton()
     
     // MARK: - Initializer
@@ -57,6 +63,7 @@ final class ShopSummaryInfoView: UIView {
         super.init(frame: frame)
         configureView()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -75,6 +82,7 @@ final class ShopSummaryInfoView: UIView {
             isFromOrder: isFromOrder)
         introductionView.configure(introduction: orderShopSummary.introduction)
     }
+    
     func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
         setUpIsAvailableView(isDelieveryAvailable: isDelieveryAvailable,
                              isTakeoutAvailable: isTakeoutAvailable,
@@ -82,6 +90,7 @@ final class ShopSummaryInfoView: UIView {
                              payBank: payBank)
     }
 }
+
 extension ShopSummaryInfoView {
     
     private func setUpIsAvailableView(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
@@ -98,21 +107,36 @@ extension ShopSummaryInfoView {
             isTakeoutAvailableLabel.isHidden = true
         }
     }
+    
     private func setUpReviewButton(reviewCount: Int) {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .newChevronRight)
-        configuration.imagePadding = 0
+        configuration.imagePadding = 4
         configuration.imagePlacement = .trailing
         configuration.contentInsets = .zero
+        configuration.image = UIImage.appImage(asset: .newChevronRight)
+        
         reviewButton.configuration = configuration
         
-        reviewButton.setAttributedTitle(NSAttributedString(
+        let reviewText = NSMutableAttributedString(
+            string: "리뷰 ",
+            attributes: [
+                .font: UIFont.appFont(.pretendardSemiBold, size: 12),
+                .foregroundColor: UIColor.appColor(.neutral800)
+            ]
+        )
+        
+        let countText = NSAttributedString(
             string: "\(reviewCount)개",
             attributes: [
-                .font : UIFont.appFont(.pretendardSemiBold, size: 13),
-                .foregroundColor : UIColor.appColor(.neutral800)
-            ]), for: .normal)
+                .font: UIFont.appFont(.pretendardSemiBold, size: 13),
+                .foregroundColor: UIColor.appColor(.neutral800)
+            ]
+        )
+        
+        reviewText.append(countText)
+        reviewButton.setAttributedTitle(reviewText, for: .normal)
     }
+    
     private func setUpMoreInfoButton() {
         var configuration = UIButton.Configuration.plain()
         configuration.imagePadding = 4
@@ -133,11 +157,13 @@ extension ShopSummaryInfoView {
         
         moreInfoButton.tintColor = .appColor(.neutral400)
     }
+    
     private func setUpShadows(){
         [moreInfoButton, isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel, orderAmountDelieveryTipView, introductionView].forEach {
             $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
         }
     }
+    
     private func setUpIsAvailableView() {
         [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel].forEach {
             $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
@@ -152,43 +178,51 @@ extension ShopSummaryInfoView {
 extension ShopSummaryInfoView {
     
     private func setUpLayouts() {
-        [starImageView, ratingLabel, separatorLabel, reviewLabel, reviewButton].forEach {
+        [starImageView, ratingLabel, separatorLabel, reviewButton].forEach {
             rateReviewStackView.addArrangedSubview($0)
         }
+        
         [isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel].forEach {
             isAvailableStackView.addArrangedSubview($0)
         }
+        
         [shopTitleLabel, rateReviewStackView, moreInfoButton, orderAmountDelieveryTipView, introductionView, isAvailableStackView].forEach {
             addSubview($0)
         }
     }
+    
     private func setUpConstraints() {
         shopTitleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalToSuperview().offset(18)
             $0.height.equalTo(32)
         }
+        
         rateReviewStackView.snp.makeConstraints {
             $0.leading.equalTo(shopTitleLabel)
             $0.top.equalTo(shopTitleLabel.snp.bottom).offset(8)
             $0.height.equalTo(25)
         }
+        
         moreInfoButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-24)
             $0.centerY.equalTo(rateReviewStackView.snp.centerY)
             $0.height.equalTo(24)
         }
+        
         isAvailableStackView.snp.makeConstraints {
             $0.height.equalTo(23)
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(rateReviewStackView.snp.bottom).offset(16)
-        }        
+        }
+        
         orderAmountDelieveryTipView.snp.makeConstraints {
             $0.leading.equalTo(shopTitleLabel)
             $0.top.equalTo(isAvailableStackView.snp.bottom).offset(16)
             $0.height.equalTo(56)
             $0.width.equalTo((UIScreen.main.bounds.width - 60)/2)
         }
+        
         introductionView.snp.makeConstraints {
             $0.trailing.equalTo(moreInfoButton)
             $0.top.equalTo(orderAmountDelieveryTipView)
@@ -203,11 +237,13 @@ extension ShopSummaryInfoView {
                 $0.width.equalTo(61)
             }
         }
+        
         isPayBankAvailableLabel.snp.makeConstraints {
             $0.height.equalTo(23)
             $0.width.equalTo(79)
         }
     }
+    
     private func configureView() {
         setUpMoreInfoButton()
         setUpShadows()
