@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Then
 import UIKit
 
 final class ReviewListViewController: UIViewController {
@@ -20,9 +19,9 @@ final class ReviewListViewController: UIViewController {
     // MARK: - UI Components
     
     private let writeReviewButton = UIButton().then {
-        $0.setTitleColor(UIColor.appColor(.primary600), for: .normal)
-        $0.layer.borderColor = UIColor.appColor(.primary600).cgColor
-        $0.layer.cornerRadius = 4
+        $0.setTitleColor(UIColor.appColor(.new500), for: .normal)
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
+        $0.layer.cornerRadius = 8
         $0.layer.borderWidth = 1.0
         $0.setTitle("리뷰 작성하기", for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
@@ -461,9 +460,9 @@ extension ReviewListViewController {
     
     private func setupConstraints() {
         writeReviewButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
-            $0.leading.equalTo(view.snp.leading).offset(16)
-            $0.trailing.equalTo(view.snp.trailing).offset(-16)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-28)
             $0.height.equalTo(40)
         }
         
@@ -502,7 +501,7 @@ extension ReviewListViewController {
     }
     
     private func configureView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.appColor(.newBackground)
         setUpLayout()
         setupConstraints()
     }
