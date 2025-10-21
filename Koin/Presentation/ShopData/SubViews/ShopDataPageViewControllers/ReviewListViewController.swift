@@ -103,32 +103,7 @@ final class ReviewListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar()
-    }
-    
-    // FIXME: - 네비게이션 바 스타일
-    func configureNavigationBar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        if let navigationBar = navigationController?.navigationBar {
-            if #available(iOS 15.0, *) {
-                let appearance = UINavigationBarAppearance()
-                appearance.configureWithDefaultBackground()
-                appearance.backgroundColor = .systemBackground
-                
-                navigationBar.standardAppearance = appearance
-                navigationBar.scrollEdgeAppearance = appearance
-                navigationBar.compactAppearance = appearance
-            } else {
-                navigationBar.barTintColor = .systemBackground
-                navigationBar.isTranslucent = false
-            }
-            
-            navigationBar.tintColor = .label
-            navigationBar.titleTextAttributes = [
-                .foregroundColor: UIColor.label
-            ]
-        }
+        configureNavigationBar(style: .white)
     }
         
     private func bind() {
