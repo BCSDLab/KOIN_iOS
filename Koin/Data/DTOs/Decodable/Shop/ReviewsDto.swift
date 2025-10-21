@@ -105,11 +105,12 @@ extension ReviewDto {
 extension ReviewsDto {
     func toDomain(shopId: Int) -> ShopReview {
         return ShopReview(
-            reviewStatistics: statistics,
+            statistics: statistics,
             totalPage: totalPage,
             currentPage: currentPage,
             totalCount: totalCount,
-            review: reviews.map { $0.toDomain(shopId: shopId) }
+            currentCount: currentCount,
+            reviews: reviews.map { $0.toDomain(shopId: shopId) }
         )
     }
 }
