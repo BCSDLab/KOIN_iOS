@@ -313,14 +313,12 @@ extension ShopSummaryViewController {
     
     // MARK: - Navigation
     private func navigateToReviewListViewController() {
-        guard let shopId = cachedShopId, let shopName = cachedShopName else {
-            print("Shop 정보를 불러오지 못함")
+        guard let shopId = viewModel.getShopId(),
+              let shopName = viewModel.getShopName() else {
             return
         }
         
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
-        reviewListViewController.title = "리뷰"
-        
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
 }

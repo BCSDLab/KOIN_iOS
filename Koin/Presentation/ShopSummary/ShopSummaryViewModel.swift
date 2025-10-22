@@ -59,7 +59,8 @@ final class ShopSummaryViewModel {
     private let isFromOrder: Bool
     
     private var cachedShopName: String?
-    
+    private var cachedOrderShopSummary: OrderShopSummary?
+
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
@@ -157,12 +158,19 @@ final class ShopSummaryViewModel {
     
     // MARK: - Public Methods
     
-    /// 현재 상점 ID 반환
+    /// 현재 shopId 반환
     func getShopId() -> Int? {
-        if let orderableShopId = orderableShopId {
-            return orderableShopId
+        if isFromOrder {
+            let shopId = cachedOrderShopSummary?.shopId
+            return shopId
+        } else {
+            return shopId
         }
-        return shopId
+    }
+    
+    // 현재 orderableShopId 반환
+    func getOrderableShopId() -> Int? {
+        return orderableShopId
     }
     
     /// 현재 상점 이름 반환
@@ -175,15 +183,26 @@ extension ShopSummaryViewModel {
     // MARK: - 기본정보 OrderApi
     
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
+        
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { _ in },
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("❌ [ViewModel] Fetch failed: \(error)")
+                }
+            },
                   receiveValue: { [weak self] orderShopSummary in
-                guard let isFromOrder = self?.isFromOrder else { return }
+                guard let self = self else { return }
                 
-                self?.cachedShopName = orderShopSummary.name
+                self.cachedOrderShopSummary = orderShopSummary
+                self.cachedShopName = orderShopSummary.name
                 
-                self?.outputSubject.send(.updateInfoView(orderShopSummary, isFromOrder: isFromOrder))
-                self?.outputSubject.send(.updateIsAvailables(delivery: orderShopSummary.isDeliveryAvailable, takeOut: orderShopSummary.isTakeoutAvailable, payBank: orderShopSummary.payBank, payCard: orderShopSummary.payCard))
+                self.outputSubject.send(.updateInfoView(orderShopSummary, isFromOrder: true))
+                self.outputSubject.send(.updateIsAvailables(
+                    delivery: orderShopSummary.isDeliveryAvailable,
+                    takeOut: orderShopSummary.isTakeoutAvailable,
+                    payBank: orderShopSummary.payBank,
+                    payCard: orderShopSummary.payCard
+                ))
             })
             .store(in: &subscriptions)
     }
@@ -215,6 +234,7 @@ extension ShopSummaryViewModel {
                 guard let isFromOrder = self?.isFromOrder else { return }
                 
                 self?.cachedShopName = shopSummary.name
+                self?.cachedOrderShopSummary = shopSummary
                 
                 self?.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })

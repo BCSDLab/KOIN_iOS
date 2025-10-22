@@ -149,7 +149,9 @@ extension ReviewListViewModel {
 private extension ReviewListViewModel {
 
     func request(page: Int, shouldReset: Bool) {
-        guard !paginationState.isLoading else { return }
+        guard !paginationState.isLoading else {
+            return
+        }
         
         paginationState.isLoading = true
         outputSubject.send(.updateLoadingState(true))
@@ -167,9 +169,7 @@ private extension ReviewListViewModel {
                 self.outputSubject.send(.updateLoadingState(false))
                 
                 if case let .failure(error) = completion {
-                    #if DEBUG
                     print("❌ fetchReviewList error: \(error)")
-                    #endif
                 }
             } receiveValue: { [weak self] shopReview in
                 guard let self else { return }
