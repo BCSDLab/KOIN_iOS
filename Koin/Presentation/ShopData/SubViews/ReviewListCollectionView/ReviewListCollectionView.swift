@@ -40,9 +40,16 @@ final class ReviewListCollectionView: UICollectionView {
     private func commonInit() {
         register(ReviewListCollectionViewCell.self, forCellWithReuseIdentifier: ReviewListCollectionViewCell.identifier)
         register(ReviewListHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ReviewListHeaderView.identifier)
+        
+        if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.minimumLineSpacing = 24
+        }
+        
         isScrollEnabled = false
         dataSource = self
         delegate = self
+        
+        backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 
@@ -136,7 +143,10 @@ extension ReviewListCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewListCollectionViewCell.identifier, for: indexPath) as? ReviewListCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ReviewListCollectionViewCell.identifier,
+            for: indexPath
+        ) as? ReviewListCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -151,7 +161,11 @@ extension ReviewListCollectionView: UICollectionViewDataSource {
             return UICollectionReusableView()
         }
         
-        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewListHeaderView.identifier, for: indexPath) as? ReviewListHeaderView else {
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: ReviewListHeaderView.identifier,
+            for: indexPath
+        ) as? ReviewListHeaderView else {
             return UICollectionReusableView()
         }
         
@@ -165,7 +179,7 @@ extension ReviewListCollectionView: UICollectionViewDataSource {
 extension ReviewListCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 64)
+        return CGSize(width: collectionView.bounds.width, height: 58)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -180,11 +194,7 @@ extension ReviewListCollectionView {
     
     private func configureCell(_ cell: ReviewListCollectionViewCell, at indexPath: IndexPath) {
         let reviewItem = reviewList[indexPath.row]
-        let backgroundColor = reviewItem.isMine
-            ? UIColor.appColor(.primary500).withAlphaComponent(0.03)
-            : .systemBackground
-        
-        cell.configure(review: reviewItem, backgroundColor: backgroundColor)
+        cell.configure(review: reviewItem)
     }
     
     private func bindCellPublishers(_ cell: ReviewListCollectionViewCell, at indexPath: IndexPath) {
@@ -242,16 +252,16 @@ extension ReviewListCollectionView {
         )
         
         let reviewItem = reviewList[indexPath.row]
-        let backgroundColor = reviewItem.isMine
-            ? UIColor.appColor(.primary500).withAlphaComponent(0.03)
-            : .systemBackground
-        
-        dummyCell.configure(review: reviewItem, backgroundColor: backgroundColor)
+        dummyCell.configure(review: reviewItem)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        let estimatedSize = dummyCell.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
         
         return estimatedSize.height
     }

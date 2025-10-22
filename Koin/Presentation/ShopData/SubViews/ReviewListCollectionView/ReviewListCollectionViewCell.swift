@@ -98,13 +98,11 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         resetStackView()
         resetVisibility()
     }
-    
-    // MARK: - Public Methods
-    
-    func configure(review: Review, backgroundColor: UIColor) {
+        
+    func configure(review: Review) {
         bind()
         configureContent(review: review)
-        configureAppearance(review: review, backgroundColor: backgroundColor)
+        configureAppearance(review: review)
         updateLayout(review: review)
     }
 }
@@ -162,11 +160,7 @@ extension ReviewListCollectionViewCell {
         setupOrderedMenuNames(list: review.menuNames)
     }
     
-    private func configureAppearance(review: Review, backgroundColor: UIColor) {
-        contentView.backgroundColor = backgroundColor
-        self.backgroundColor = backgroundColor
-        reviewImageCollectionView.backgroundColor = backgroundColor
-        
+    private func configureAppearance(review: Review) {
         myReviewImageView.isHidden = !review.isMine
         optionButton.isSelected = review.isMine
         
@@ -218,19 +212,19 @@ extension ReviewListCollectionViewCell {
     private func updateMyReviewImageViewLayout(isMine: Bool) {
         if isMine {
             myReviewImageView.snp.remakeConstraints {
-                $0.top.equalToSuperview().offset(12)
+                $0.top.equalToSuperview()
                 $0.leading.equalToSuperview().offset(24)
                 $0.width.equalTo(97)
                 $0.height.equalTo(25)
             }
             writerLabel.snp.remakeConstraints {
-                $0.top.equalTo(myReviewImageView.snp.bottom).offset(5)
+                $0.top.equalTo(myReviewImageView.snp.bottom).offset(6.5)
                 $0.leading.equalToSuperview().offset(24)
             }
         } else {
             myReviewImageView.snp.removeConstraints()
             writerLabel.snp.remakeConstraints {
-                $0.top.equalToSuperview().offset(12)
+                $0.top.equalToSuperview()
                 $0.leading.equalToSuperview().offset(24)
             }
         }
@@ -313,14 +307,14 @@ extension ReviewListCollectionViewCell {
         }
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
         
         writerLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
         
@@ -370,8 +364,9 @@ extension ReviewListCollectionViewCell {
         }
     }
     
-    func configureView() {
+    private func configureView() {
         setupLayout()
         setupConstraints()
+        self.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
