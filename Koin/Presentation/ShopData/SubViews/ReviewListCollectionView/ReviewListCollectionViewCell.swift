@@ -6,19 +6,24 @@
 //
 
 import Combine
-import DropDown
-import Then
 import UIKit
+import DropDown
+import SnapKit
+import Then
 
 final class ReviewListCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Properties
+    // MARK: - Publishers
+    
     let modifyButtonPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let reportButtonPublisher = PassthroughSubject<Void, Never>()
     let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
-    private let dropDown = DropDown()
+    
+    // MARK: - Properties
+    
     var cancellables = Set<AnyCancellable>()
+    private let dropDown = DropDown()
     
     // MARK: - UI Components
     
@@ -63,8 +68,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         flowLayout.minimumLineSpacing = 8
         flowLayout.scrollDirection = .horizontal
         flowLayout.itemSize = .init(width: 148, height: 148)
-        let collectionView = ReviewImageCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
+        return ReviewImageCollectionView(frame: .zero, collectionViewLayout: flowLayout)
     }()
     
     private let orderedMenuNameStackView = UIStackView().then {
@@ -72,111 +76,195 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        cancellables.forEach { $0.cancel() }
-        cancellables.removeAll()
-        myReviewImageView.snp.removeConstraints()
-        writerLabel.snp.removeConstraints()
-        orderedMenuNameStackView.arrangedSubviews.forEach { view in
-                orderedMenuNameStackView.removeArrangedSubview(view)
-                view.removeFromSuperview()
-            }
-        reportedReviewImageView.isHidden = true
-        reviewTextLabel.isHidden = false
-        orderedMenuNameStackView.isHidden = false
-        reviewImageCollectionView.isHidden = false
-        orderedMenuNameStackView.snp.removeConstraints()
-    }
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         configureDropDown()
-        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
     
-    private func bind() {
-        reviewImageCollectionView.imageTapPublisher.sink { [weak self] image in
-            self?.imageTapPublisher.send(image)
-        }.store(in: &cancellables)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        resetCancellables()
+        resetConstraints()
+        resetStackView()
+        resetVisibility()
     }
     
+    // MARK: - Public Methods
     
     func configure(review: Review, backgroundColor: UIColor) {
         bind()
-        writerLabel.text = review.nickName
-        if review.isModified {
-            writtenDayLabel.text = "\(review.createdAt) (수정됨)"
-        } else {
-            writtenDayLabel.text = review.createdAt
+        configureContent(review: review)
+        configureAppearance(review: review, backgroundColor: backgroundColor)
+        updateLayout(review: review)
+    }
+}
+
+// MARK: - Private Methods
+extension ReviewListCollectionViewCell {
+    
+    private func setAddTarget() {
+        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
+    }
+    
+    private func bind() {
+        reviewImageCollectionView.imageTapPublisher
+            .sink { [weak self] image in
+                self?.imageTapPublisher.send(image)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func resetCancellables() {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    
+    private func resetConstraints() {
+        myReviewImageView.snp.removeConstraints()
+        writerLabel.snp.removeConstraints()
+        orderedMenuNameStackView.snp.removeConstraints()
+    }
+    
+    private func resetStackView() {
+        orderedMenuNameStackView.arrangedSubviews.forEach { view in
+            orderedMenuNameStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
         }
+    }
+    
+    private func resetVisibility() {
+        reportedReviewImageView.isHidden = true
+        reviewTextLabel.isHidden = false
+        orderedMenuNameStackView.isHidden = false
+        reviewImageCollectionView.isHidden = false
+    }
+}
+
+// MARK: - Configuration
+extension ReviewListCollectionViewCell {
+    
+    private func configureContent(review: Review) {
+        writerLabel.text = review.nickName
+        writtenDayLabel.text = formatWrittenDay(createdAt: review.createdAt, isModified: review.isModified)
         reviewTextLabel.text = review.content
         scoreView.rating = Double(review.rating)
         reviewImageCollectionView.setReviewImageList(review.imageUrls)
-        setUpOrderedMenuNames(list: review.menuNames)
-        myReviewImageView.isHidden = !review.isMine
-        reviewImageCollectionView.isHidden = review.imageUrls.isEmpty || review.isReported
+        setupOrderedMenuNames(list: review.menuNames)
+    }
+    
+    private func configureAppearance(review: Review, backgroundColor: UIColor) {
+        contentView.backgroundColor = backgroundColor
+        self.backgroundColor = backgroundColor
         reviewImageCollectionView.backgroundColor = backgroundColor
-        self.contentView.backgroundColor = backgroundColor
-        self.backgroundColor = backgroundColor
+        
+        myReviewImageView.isHidden = !review.isMine
         optionButton.isSelected = review.isMine
-        self.backgroundColor = backgroundColor
-        showMyReviewImageView(review.isMine)
-        disappearImageCollectionView(review.imageUrls.isEmpty || review.isReported)
+        
         if review.isReported {
             reportedReviewImageView.isHidden = false
             reviewTextLabel.isHidden = true
             orderedMenuNameStackView.isHidden = true
         }
+        
+        let shouldHideImages = review.imageUrls.isEmpty || review.isReported
+        reviewImageCollectionView.isHidden = shouldHideImages
     }
     
-    private func showMyReviewImageView(_ isMine: Bool) {
+    private func updateLayout(review: Review) {
+        updateMyReviewImageViewLayout(isMine: review.isMine)
+        updateOrderedMenuNameStackViewLayout(
+            shouldHideImages: review.imageUrls.isEmpty || review.isReported
+        )
+    }
+    
+    private func formatWrittenDay(createdAt: String, isModified: Bool) -> String {
+        return isModified ? "\(createdAt) (수정됨)" : createdAt
+    }
+    
+    private func setupOrderedMenuNames(list: [String]) {
+        list.forEach { menuName in
+            let label = createMenuNameLabel(text: menuName)
+            orderedMenuNameStackView.addArrangedSubview(label)
+        }
+    }
+    
+    private func createMenuNameLabel(text: String) -> InsetLabel {
+        let label = InsetLabel(top: 0, left: 10, bottom: 0, right: 10)
+        label.text = text
+        label.font = UIFont.appFont(.pretendardRegular, size: 12)
+        label.textColor = UIColor.appColor(.primary300)
+        label.layer.cornerRadius = 5
+        label.layer.borderWidth = 1.0
+        label.layer.borderColor = UIColor.appColor(.primary300).cgColor
+        label.layer.masksToBounds = true
+        label.textAlignment = .center
+        return label
+    }
+}
+
+// MARK: - Layout Updates
+extension ReviewListCollectionViewCell {
+    
+    private func updateMyReviewImageViewLayout(isMine: Bool) {
         if isMine {
-            myReviewImageView.snp.remakeConstraints { make in
-                make.top.equalTo(self.snp.top).offset(12)
-                make.leading.equalTo(self.snp.leading).offset(24)
-                make.width.equalTo(97)
-                make.height.equalTo(25)
+            myReviewImageView.snp.remakeConstraints {
+                $0.top.equalToSuperview().offset(12)
+                $0.leading.equalToSuperview().offset(24)
+                $0.width.equalTo(97)
+                $0.height.equalTo(25)
             }
-            writerLabel.snp.remakeConstraints { make in
-                make.top.equalTo(myReviewImageView.snp.bottom).offset(5)
-                make.leading.equalTo(self.snp.leading).offset(24)
+            writerLabel.snp.remakeConstraints {
+                $0.top.equalTo(myReviewImageView.snp.bottom).offset(5)
+                $0.leading.equalToSuperview().offset(24)
             }
         } else {
             myReviewImageView.snp.removeConstraints()
-            writerLabel.snp.makeConstraints {
-                $0.top.equalTo(self.snp.top).offset(12)
-                $0.leading.equalTo(self.snp.leading).offset(24)
+            writerLabel.snp.remakeConstraints {
+                $0.top.equalToSuperview().offset(12)
+                $0.leading.equalToSuperview().offset(24)
             }
         }
     }
     
-    // TODO: 텍스트가 비었따면ㅇ ㅓ떻게되는거지 ?
-    private func disappearImageCollectionView(_ isEmpty: Bool) {
-        orderedMenuNameStackView.snp.remakeConstraints { make in
-            make.top.equalTo(isEmpty ? reviewTextLabel.snp.bottom : reviewImageCollectionView.snp.bottom).offset(10)
-            make.leading.equalTo(self.snp.leading).offset(24)
-            make.height.equalTo(25)
-            make.bottom.equalTo(self.snp.bottom)
+    private func updateOrderedMenuNameStackViewLayout(shouldHideImages: Bool) {
+        let topAnchor = shouldHideImages
+            ? reviewTextLabel.snp.bottom
+            : reviewImageCollectionView.snp.bottom
+        
+        orderedMenuNameStackView.snp.remakeConstraints {
+            $0.top.equalTo(topAnchor).offset(10)
+            $0.leading.equalToSuperview().offset(24)
+            $0.height.equalTo(25)
+            $0.bottom.equalToSuperview()
         }
     }
+}
 
-    @objc private func optionButtonTapped() {
+// MARK: - DropDown
+extension ReviewListCollectionViewCell {
+    
+    private func configureDropDown() {
+        dropDown.anchorView = optionButton
+        dropDown.direction = .any
+        dropDown.width = 109
         
-        let items: [(text: String, image: UIImage?)]
-        
-        if optionButton.isSelected {
-            items = [("수정하기", UIImage.appImage(asset: .heartFill)),
-                     ("삭제하기", UIImage.appImage(asset: .heart))]
-        } else {
-            items = [("신고하기", UIImage.appImage(asset: .koinLogo))]
+        dropDown.selectionAction = { [weak self] index, _ in
+            self?.handleDropDownSelection(at: index)
         }
+    }
+    
+    @objc private func optionButtonTapped() {
+        let items = createDropDownItems()
         
         dropDown.dataSource = items.map { $0.text }
         
@@ -190,106 +278,100 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         dropDown.show()
     }
     
-    
-    private func configureDropDown() {
-        dropDown.anchorView = optionButton
-        dropDown.direction = .any
-        dropDown.width = 109
-        
-        dropDown.selectionAction = { [weak self] (index: Int, _) in
-            
-            self?.handleDropDownSelection(at: index)
+    private func createDropDownItems() -> [(text: String, image: UIImage?)] {
+        if optionButton.isSelected {
+            return [
+                ("수정하기", UIImage.appImage(asset: .heartFill)),
+                ("삭제하기", UIImage.appImage(asset: .heart))
+            ]
+        } else {
+            return [
+                ("신고하기", UIImage.appImage(asset: .koinLogo))
+            ]
         }
     }
+    
     private func handleDropDownSelection(at index: Int) {
-        
         if optionButton.isSelected {
             switch index {
-            case 0: modifyButtonPublisher.send(())
-            default: deleteButtonPublisher.send(())
+            case 0:
+                modifyButtonPublisher.send(())
+            default:
+                deleteButtonPublisher.send(())
             }
         } else {
             reportButtonPublisher.send(())
         }
     }
-    
-    private func setUpOrderedMenuNames(list: [String]) {
-        for menuName in list {
-            let label = InsetLabel(top: 0, left: 10, bottom: 0, right: 10)
-               label.text = menuName
-               label.font = UIFont.appFont(.pretendardRegular, size: 12)
-               label.textColor = UIColor.appColor(.primary300)
-               label.layer.cornerRadius = 5
-               label.layer.borderWidth = 1.0
-               label.layer.borderColor = UIColor.appColor(.primary300).cgColor
-               label.layer.masksToBounds = true
-               label.textAlignment = .center
-               orderedMenuNameStackView.addArrangedSubview(label)
-           }
-    }
 }
 
 extension ReviewListCollectionViewCell {
-    private func setUpLayouts() {
+    
+    private func setupLayout() {
         [myReviewImageView, writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameStackView].forEach {
             contentView.addSubview($0)
         }
     }
     
-    private func setUpConstraints() {
-        contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.width.equalToSuperview()
+    func setupConstraints() {
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
         }
+        
         writerLabel.snp.makeConstraints {
-            $0.top.equalTo(self.snp.top).offset(12)
-            $0.leading.equalTo(self.snp.leading).offset(24)
+            $0.top.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(24)
         }
+        
         optionButton.snp.makeConstraints {
-            $0.centerY.equalTo(writerLabel.snp.centerY)
-            $0.trailing.equalTo(self.snp.trailing).offset(-24)
-            $0.width.equalTo(24)
-            $0.height.equalTo(24)
+            $0.centerY.equalTo(writerLabel)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.width.height.equalTo(24)
         }
+        
         scoreView.snp.makeConstraints {
             $0.top.equalTo(writerLabel.snp.bottom).offset(5.5)
-            $0.leading.equalTo(self.snp.leading).offset(24)
+            $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(88)
             $0.height.equalTo(16)
         }
+        
         writtenDayLabel.snp.makeConstraints {
-            $0.top.equalTo(scoreView.snp.top)
+            $0.top.equalTo(scoreView)
             $0.leading.equalTo(scoreView.snp.trailing).offset(12)
         }
+        
         reportedReviewImageView.snp.makeConstraints {
             $0.top.equalTo(scoreView.snp.bottom).offset(5)
-            $0.leading.equalTo(scoreView.snp.leading)
+            $0.leading.equalTo(scoreView)
             $0.width.equalTo(228)
             $0.height.equalTo(24)
         }
+        
         reviewTextLabel.snp.makeConstraints {
             $0.top.equalTo(scoreView.snp.bottom).offset(10)
-            $0.leading.equalTo(self.snp.leading).offset(24)
-            $0.trailing.equalTo(self.snp.trailing).offset(-24)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
         }
+        
         reviewImageCollectionView.snp.makeConstraints {
             $0.top.equalTo(reviewTextLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(self.snp.leading).offset(24)
-            $0.trailing.equalTo(self.snp.trailing)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(148)
         }
+        
         orderedMenuNameStackView.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(10)
-            $0.leading.equalTo(self.snp.leading).offset(24)
-            // $0.trailing.equalTo(self.snp.trailing)
+            $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(25)
-            $0.bottom.equalTo(self.snp.bottom)
+            $0.bottom.equalToSuperview()
         }
     }
     
-    private func configureView() {
-        setUpLayouts()
-        setUpConstraints()
+    func configureView() {
+        setupLayout()
+        setupConstraints()
     }
-    
 }
