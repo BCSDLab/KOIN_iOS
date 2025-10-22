@@ -319,6 +319,7 @@ extension ShopSummaryViewController {
         }
         
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
+        reviewListViewController.title = "리뷰"
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
 }

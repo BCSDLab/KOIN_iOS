@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import SnapKit
 
 final class ReviewListViewController: UIViewController {
     
@@ -17,6 +18,12 @@ final class ReviewListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
+    
+    private let scrollView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
     
     private let writeReviewButton = UIButton().then {
         $0.setTitleColor(UIColor.appColor(.new500), for: .normal)
@@ -221,17 +228,6 @@ final class ReviewListViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        deleteReviewModalViewController.cancelButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.shopDetailViewReviewDeleteCancel,
-                    .click,
-                    self.viewModel.getShopName()
-                ))
-            }
-            .store(in: &cancellables)
-        
         reviewReportLoginModalViewController.loginButtonPublisher
             .sink { [weak self] in
                 guard let self else { return }
@@ -243,25 +239,16 @@ final class ReviewListViewController: UIViewController {
                 self.showLoginScreen()
             }
             .store(in: &cancellables)
-        
-        reviewReportLoginModalViewController.cancelButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.shopDetailViewReviewReportCancel,
-                    .click,
-                    self.viewModel.getShopName()
-                ))
-            }
-            .store(in: &cancellables)
     }
+    
+    // MARK: - Actions
     
     private func setAddTarget() {
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
     }
 }
 
-// MARK: - Update UI
+// MARK: - Private Methods
 extension ReviewListViewController {
     
     private func updateReviewList(reviews: [Review], sortType: ReviewSortType, isMineOnly: Bool, shouldReset: Bool
@@ -453,27 +440,39 @@ extension ReviewListViewController {
 extension ReviewListViewController {
     
     private func setUpLayout() {
-        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView].forEach {
-            view.addSubview($0)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView
+        ].forEach {
+            contentView.addSubview($0)
         }
     }
     
     private func setupConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
         writeReviewButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-28)
+            $0.top.equalToSuperview().offset(30)
+            $0.horizontalEdges.equalToSuperview().inset(24)
             $0.height.equalTo(40)
         }
         
         totalScoreLabel.snp.makeConstraints {
             $0.top.equalTo(writeReviewButton.snp.bottom).offset(26)
-            $0.leading.equalTo(view.snp.leading).offset(45)
+            $0.leading.equalToSuperview().offset(45)
         }
         
         totalScoreView.snp.makeConstraints {
             $0.top.equalTo(totalScoreLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(88)
             $0.height.equalTo(16)
         }
@@ -481,20 +480,20 @@ extension ReviewListViewController {
         scoreChartCollectionView.snp.makeConstraints {
             $0.top.equalTo(writeReviewButton.snp.bottom).offset(14)
             $0.leading.equalTo(totalScoreView.snp.trailing).offset(14)
-            $0.trailing.equalTo(view.snp.trailing)
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(95)
         }
         
         reviewListCollectionView.snp.makeConstraints {
             $0.top.equalTo(scoreChartCollectionView.snp.bottom).offset(14)
-            $0.leading.equalTo(view.snp.leading)
-            $0.trailing.equalTo(view.snp.trailing)
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
+            $0.bottom.equalToSuperview().offset(-20)
         }
         
         nonReviewImageView.snp.makeConstraints {
             $0.top.equalTo(scoreChartCollectionView.snp.bottom).offset(95)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalToSuperview()
             $0.width.equalTo(244)
             $0.height.equalTo(262)
         }
@@ -502,6 +501,10 @@ extension ReviewListViewController {
     
     private func configureView() {
         view.backgroundColor = UIColor.appColor(.newBackground)
+        
+        scoreChartCollectionView.isScrollEnabled = false
+        reviewListCollectionView.isScrollEnabled = false
+        
         setUpLayout()
         setupConstraints()
     }
