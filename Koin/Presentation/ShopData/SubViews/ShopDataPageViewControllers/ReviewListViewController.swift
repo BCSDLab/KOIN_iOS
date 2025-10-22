@@ -20,7 +20,7 @@ final class ReviewListViewController: UIViewController {
     // MARK: - UI Components
     
     private let scrollView = UIScrollView().then {
-        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
     }
     
     private let contentView = UIView()

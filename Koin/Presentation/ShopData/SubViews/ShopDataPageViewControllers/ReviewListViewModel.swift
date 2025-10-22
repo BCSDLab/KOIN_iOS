@@ -177,15 +177,8 @@ private extension ReviewListViewModel {
                 self.paginationState.currentPage = shopReview.currentPage
                 self.paginationState.totalPage = shopReview.totalPage
 
-                self.outputSubject.send(
-                    .setReviewList(
-                        reviews: shopReview.reviews,
-                        sortType: self.sorter,
-                        isMineOnly: self.isMineOnly,
-                        currentPage: shopReview.currentPage,
-                        totalPage: shopReview.totalPage,
-                        shouldReset: shouldReset
-                    )
+                self.outputSubject.send(.setStatistics(shopReview.statistics))
+                self.outputSubject.send(.setReviewList(reviews: shopReview.reviews, sortType: self.sorter, isMineOnly: self.isMineOnly, currentPage: shopReview.currentPage, totalPage: shopReview.totalPage, shouldReset: shouldReset)
                 )
             }
             .store(in: &subscriptions)
