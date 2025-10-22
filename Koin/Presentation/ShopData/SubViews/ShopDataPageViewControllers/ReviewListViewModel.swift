@@ -47,7 +47,7 @@ final class ReviewListViewModel: ViewModelProtocol {
     // MARK: - IO
     enum Input {
         case viewDidLoad
-        case fetchNext(page: Int)
+        case fetchReviewListNext(page: Int)
         case changeFilter(sorter: ReviewSortType?, isMine: Bool?)
         case checkLogin((Int, Int)?)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
@@ -106,10 +106,10 @@ final class ReviewListViewModel: ViewModelProtocol {
                 guard let self else { return }
                 switch event {
                 case .viewDidLoad:
-                    self.request(page: 1, shouldReset: true)
+                    self.fetchReviewList(page: 1, shouldReset: true)
 
-                case let .fetchNext(page):
-                    self.request(page: page, shouldReset: false)
+                case let .fetchReviewListNext(page):
+                    self.fetchReviewList(page: page, shouldReset: false)
 
                 case let .changeFilter(sorter, isMine):
                     if let sorter = sorter {
@@ -118,7 +118,7 @@ final class ReviewListViewModel: ViewModelProtocol {
                     if let isMine = isMine {
                         self.isMineOnly = isMine
                     }
-                    self.request(page: 1, shouldReset: true)
+                    self.fetchReviewList(page: 1, shouldReset: true)
 
                 case let .checkLogin(parameter):
                     self.checkLogin(parameter: parameter)
@@ -148,7 +148,7 @@ extension ReviewListViewModel {
 // MARK: - Private Methods
 private extension ReviewListViewModel {
 
-    func request(page: Int, shouldReset: Bool) {
+    func fetchReviewList(page: Int, shouldReset: Bool) {
         guard !paginationState.isLoading else {
             return
         }
