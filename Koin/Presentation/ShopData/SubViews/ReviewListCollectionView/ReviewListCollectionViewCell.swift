@@ -7,7 +7,6 @@
 
 import Combine
 import UIKit
-import DropDown
 import SnapKit
 import Then
 
@@ -23,7 +22,6 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     
     var cancellables = Set<AnyCancellable>()
-    private let dropDown = DropDown()
     
     // MARK: - UI Components
     
@@ -36,8 +34,41 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
-    private let optionButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .option), for: .normal)
+    private let modifyButton = UIButton().then {
+        var config = UIButton.Configuration.filled()
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
+        config.baseBackgroundColor = UIColor.appColor(.neutral200)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
+        config.cornerStyle = .capsule
+        
+        var titleAttributed = AttributedString("수정")
+        titleAttributed.font = UIFont.appFont(.pretendardSemiBold, size: 12)
+        config.attributedTitle = titleAttributed
+        
+        $0.configuration = config
+        $0.isHidden = true
+    }
+
+    private let deleteButton = UIButton().then {
+        var config = UIButton.Configuration.filled()
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
+        config.baseBackgroundColor = UIColor.appColor(.neutral200)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
+        config.cornerStyle = .capsule
+        
+        var titleAttributed = AttributedString("삭제")
+        titleAttributed.font = UIFont.appFont(.pretendardSemiBold, size: 12)
+        config.attributedTitle = titleAttributed
+        
+        $0.configuration = config
+        $0.isHidden = true
+    }
+    
+    private let reportButton = UIButton().then {
+        $0.setTitle("신고하기", for: .normal)
+        $0.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isHidden = true
     }
     
     private let scoreView = ScoreView().then {
@@ -76,12 +107,11 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
-    // MARK: - Initialize
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        configureDropDown()
         setAddTarget()
     }
     
@@ -98,7 +128,9 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         resetStackView()
         resetVisibility()
     }
-        
+    
+    // MARK: - Public Methods
+    
     func configure(review: Review) {
         bind()
         configureContent(review: review)
@@ -111,7 +143,9 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
 extension ReviewListCollectionViewCell {
     
     private func setAddTarget() {
-        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
+        modifyButton.addTarget(self, action: #selector(modifyButtonTapped), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
@@ -145,6 +179,10 @@ extension ReviewListCollectionViewCell {
         reviewTextLabel.isHidden = false
         orderedMenuNameStackView.isHidden = false
         reviewImageCollectionView.isHidden = false
+        
+        modifyButton.isHidden = true
+        deleteButton.isHidden = true
+        reportButton.isHidden = true
     }
 }
 
@@ -162,7 +200,16 @@ extension ReviewListCollectionViewCell {
     
     private func configureAppearance(review: Review) {
         myReviewImageView.isHidden = !review.isMine
-        optionButton.isSelected = review.isMine
+        
+        if review.isMine {
+            modifyButton.isHidden = false
+            deleteButton.isHidden = false
+            reportButton.isHidden = true
+        } else {
+            modifyButton.isHidden = true
+            deleteButton.isHidden = true
+            reportButton.isHidden = false
+        }
         
         if review.isReported {
             reportedReviewImageView.isHidden = false
@@ -244,65 +291,27 @@ extension ReviewListCollectionViewCell {
     }
 }
 
-// FIXME: - DropDown
+// MARK: - @objc
 extension ReviewListCollectionViewCell {
     
-    private func configureDropDown() {
-        dropDown.anchorView = optionButton
-        dropDown.direction = .any
-        dropDown.width = 109
-        
-        dropDown.selectionAction = { [weak self] index, _ in
-            self?.handleDropDownSelection(at: index)
-        }
+    @objc private func modifyButtonTapped() {
+        modifyButtonPublisher.send(())
     }
     
-    @objc private func optionButtonTapped() {
-        let items = createDropDownItems()
-        
-        dropDown.dataSource = items.map { $0.text }
-        
-        dropDown.customCellConfiguration = { (index: Int, item: String, cell: DropDownCell) in
-            if let customCell = cell as? ImageDropDownCell {
-                let itemData = items[index]
-                customCell.configure(text: itemData.text, image: itemData.image)
-            }
-        }
-        
-        dropDown.show()
+    @objc private func deleteButtonTapped() {
+        deleteButtonPublisher.send(())
     }
     
-    private func createDropDownItems() -> [(text: String, image: UIImage?)] {
-        if optionButton.isSelected {
-            return [
-                ("수정하기", UIImage.appImage(asset: .heartFill)),
-                ("삭제하기", UIImage.appImage(asset: .heart))
-            ]
-        } else {
-            return [
-                ("신고하기", UIImage.appImage(asset: .koinLogo))
-            ]
-        }
-    }
-    
-    private func handleDropDownSelection(at index: Int) {
-        if optionButton.isSelected {
-            switch index {
-            case 0:
-                modifyButtonPublisher.send(())
-            default:
-                deleteButtonPublisher.send(())
-            }
-        } else {
-            reportButtonPublisher.send(())
-        }
+    @objc private func reportButtonTapped() {
+        reportButtonPublisher.send(())
     }
 }
 
+// MARK: - Layout
 extension ReviewListCollectionViewCell {
     
     private func setupLayout() {
-        [myReviewImageView, writerLabel, optionButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameStackView].forEach {
+        [myReviewImageView, writerLabel, modifyButton, deleteButton, reportButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -318,10 +327,21 @@ extension ReviewListCollectionViewCell {
             $0.leading.equalToSuperview().offset(24)
         }
         
-        optionButton.snp.makeConstraints {
+        reportButton.snp.makeConstraints {
             $0.centerY.equalTo(writerLabel)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.width.height.equalTo(24)
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.centerY.equalTo(writerLabel)
+            $0.height.equalTo(31)
+            $0.trailing.equalToSuperview().offset(-24)
+        }
+        
+        modifyButton.snp.makeConstraints {
+            $0.centerY.equalTo(writerLabel)
+            $0.height.equalTo(31)
+            $0.trailing.equalTo(deleteButton.snp.leading).offset(-8)
         }
         
         scoreView.snp.makeConstraints {
