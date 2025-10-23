@@ -102,12 +102,25 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         return ReviewImageCollectionView(frame: .zero, collectionViewLayout: flowLayout)
     }()
     
-    private let orderedMenuNameStackView = UIStackView().then {
-        $0.axis = .horizontal
+    private let orderedMenuNameContainerView = UIStackView().then {
+        $0.axis = .vertical
         $0.spacing = 10
+        $0.alignment = .leading
     }
     
-    // MARK: - Initialization
+    private let firstRowOrderedMenuNameStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 10
+        $0.alignment = .leading
+    }
+    
+    private let secondRowOrderedMenuNameStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 10
+        $0.alignment = .leading
+    }
+    
+    // MARK: - Initialize
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -128,9 +141,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         resetStackView()
         resetVisibility()
     }
-    
-    // MARK: - Public Methods
-    
+        
     func configure(review: Review) {
         bind()
         configureContent(review: review)
@@ -139,7 +150,6 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Private Methods
 extension ReviewListCollectionViewCell {
     
     private func setAddTarget() {
@@ -164,12 +174,16 @@ extension ReviewListCollectionViewCell {
     private func resetConstraints() {
         myReviewImageView.snp.removeConstraints()
         writerLabel.snp.removeConstraints()
-        orderedMenuNameStackView.snp.removeConstraints()
+        orderedMenuNameContainerView.snp.removeConstraints()
     }
     
     private func resetStackView() {
-        orderedMenuNameStackView.arrangedSubviews.forEach { view in
-            orderedMenuNameStackView.removeArrangedSubview(view)
+        firstRowOrderedMenuNameStackView.arrangedSubviews.forEach { view in
+            firstRowOrderedMenuNameStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        secondRowOrderedMenuNameStackView.arrangedSubviews.forEach { view in
+            secondRowOrderedMenuNameStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
     }
@@ -177,7 +191,7 @@ extension ReviewListCollectionViewCell {
     private func resetVisibility() {
         reportedReviewImageView.isHidden = true
         reviewTextLabel.isHidden = false
-        orderedMenuNameStackView.isHidden = false
+        orderedMenuNameContainerView.isHidden = false
         reviewImageCollectionView.isHidden = false
         
         modifyButton.isHidden = true
@@ -214,7 +228,7 @@ extension ReviewListCollectionViewCell {
         if review.isReported {
             reportedReviewImageView.isHidden = false
             reviewTextLabel.isHidden = true
-            orderedMenuNameStackView.isHidden = true
+            orderedMenuNameContainerView.isHidden = true
         }
         
         let shouldHideImages = review.imageUrls.isEmpty || review.isReported
@@ -223,7 +237,7 @@ extension ReviewListCollectionViewCell {
     
     private func updateLayout(review: Review) {
         updateMyReviewImageViewLayout(isMine: review.isMine)
-        updateOrderedMenuNameStackViewLayout(
+        updateOrderedMenuNameContainerLayout(
             shouldHideImages: review.imageUrls.isEmpty || review.isReported
         )
     }
@@ -234,14 +248,26 @@ extension ReviewListCollectionViewCell {
     }
     
     private func setupOrderedMenuNames(list: [String]) {
-        list.forEach { menuName in
-            let label = createMenuNameLabel(text: menuName)
-            orderedMenuNameStackView.addArrangedSubview(label)
+        let firstRowCount = min(4, list.count)
+        
+        for i in 0..<firstRowCount {
+            let label = createMenuNameLabel(text: list[i])
+            firstRowOrderedMenuNameStackView.addArrangedSubview(label)
+        }
+        
+        if list.count > 4 {
+            for i in 4..<min(5, list.count) {
+                let label = createMenuNameLabel(text: list[i])
+                secondRowOrderedMenuNameStackView.addArrangedSubview(label)
+            }
+            secondRowOrderedMenuNameStackView.isHidden = false
+        } else {
+            secondRowOrderedMenuNameStackView.isHidden = true
         }
     }
     
-    private func createMenuNameLabel(text: String) -> InsetLabel {
-        let label = InsetLabel(top: 0, left: 10, bottom: 0, right: 10)
+    private func createMenuNameLabel(text: String) -> UILabel {
+        let label = InsetLabel(top: 3, left: 10, bottom: 3, right: 10)
         label.text = text
         label.font = UIFont.appFont(.pretendardRegular, size: 12)
         label.textColor = UIColor.appColor(.new300)
@@ -278,15 +304,14 @@ extension ReviewListCollectionViewCell {
         }
     }
     
-    private func updateOrderedMenuNameStackViewLayout(shouldHideImages: Bool) {
+    private func updateOrderedMenuNameContainerLayout(shouldHideImages: Bool) {
         let topAnchor = shouldHideImages
             ? reviewTextLabel.snp.bottom
             : reviewImageCollectionView.snp.bottom
         
-        orderedMenuNameStackView.snp.remakeConstraints {
+        orderedMenuNameContainerView.snp.remakeConstraints {
             $0.top.equalTo(topAnchor).offset(10)
-            $0.leading.equalToSuperview().offset(24)
-            $0.height.equalTo(25)
+            $0.horizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
         }
     }
@@ -312,8 +337,12 @@ extension ReviewListCollectionViewCell {
 extension ReviewListCollectionViewCell {
     
     private func setupLayout() {
-        [myReviewImageView, writerLabel, modifyButton, deleteButton, reportButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameStackView].forEach {
+        [myReviewImageView, writerLabel, modifyButton, deleteButton, reportButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameContainerView].forEach {
             contentView.addSubview($0)
+        }
+        
+        [firstRowOrderedMenuNameStackView, secondRowOrderedMenuNameStackView].forEach {
+            orderedMenuNameContainerView.addArrangedSubview($0)
         }
     }
     
@@ -377,10 +406,9 @@ extension ReviewListCollectionViewCell {
             $0.height.equalTo(148)
         }
         
-        orderedMenuNameStackView.snp.makeConstraints {
+        orderedMenuNameContainerView.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(10)
             $0.horizontalEdges.equalToSuperview().inset(24)
-            $0.height.equalTo(25)
             $0.bottom.equalToSuperview()
         }
     }
