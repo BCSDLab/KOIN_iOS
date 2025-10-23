@@ -229,7 +229,8 @@ extension ReviewListCollectionViewCell {
     }
     
     private func formatWrittenDay(createdAt: String, isModified: Bool) -> String {
-        return isModified ? "\(createdAt) (수정됨)" : createdAt
+        let formattedDate = createdAt.replacingOccurrences(of: "-", with: ".")
+        return isModified ? "\(formattedDate) (수정됨)" : formattedDate
     }
     
     private func setupOrderedMenuNames(list: [String]) {
@@ -352,7 +353,7 @@ extension ReviewListCollectionViewCell {
         }
         
         writtenDayLabel.snp.makeConstraints {
-            $0.top.equalTo(scoreView)
+            $0.centerY.equalTo(scoreView)
             $0.leading.equalTo(scoreView.snp.trailing).offset(12)
         }
         
