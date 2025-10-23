@@ -26,13 +26,13 @@ final class ReviewImageCollectionView: UICollectionView, UICollectionViewDataSou
     private func commonInit() {
         register(ReviewImageCollectionViewCell.self, forCellWithReuseIdentifier: ReviewImageCollectionViewCell.identifier)
         dataSource = self
+        backgroundColor = .clear
     }
     
     func setReviewImageList(_ list: [String]) {
         reviewImageList = list
         reloadData()
     }
-    
 }
 
 extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
@@ -54,5 +54,4 @@ extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
         
         return cell
     }
-    
 }

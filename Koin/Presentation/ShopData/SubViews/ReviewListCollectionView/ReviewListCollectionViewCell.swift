@@ -76,7 +76,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.spacing = 10
     }
     
-    // MARK: - Initialization
+    // MARK: - Initialize
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -196,10 +196,10 @@ extension ReviewListCollectionViewCell {
         let label = InsetLabel(top: 0, left: 10, bottom: 0, right: 10)
         label.text = text
         label.font = UIFont.appFont(.pretendardRegular, size: 12)
-        label.textColor = UIColor.appColor(.primary300)
+        label.textColor = UIColor.appColor(.new300)
         label.layer.cornerRadius = 5
         label.layer.borderWidth = 1.0
-        label.layer.borderColor = UIColor.appColor(.primary300).cgColor
+        label.layer.borderColor = UIColor.appColor(.new300).cgColor
         label.layer.masksToBounds = true
         label.textAlignment = .center
         return label
@@ -244,7 +244,7 @@ extension ReviewListCollectionViewCell {
     }
 }
 
-// MARK: - DropDown
+// FIXME: - DropDown
 extension ReviewListCollectionViewCell {
     
     private func configureDropDown() {
@@ -325,7 +325,7 @@ extension ReviewListCollectionViewCell {
         }
         
         scoreView.snp.makeConstraints {
-            $0.top.equalTo(writerLabel.snp.bottom).offset(5.5)
+            $0.top.equalTo(writerLabel.snp.bottom).offset(6.5)
             $0.leading.equalToSuperview().offset(24)
             $0.width.equalTo(88)
             $0.height.equalTo(16)
@@ -358,7 +358,7 @@ extension ReviewListCollectionViewCell {
         
         orderedMenuNameStackView.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(24)
+            $0.horizontalEdges.equalToSuperview().inset(24)
             $0.height.equalTo(25)
             $0.bottom.equalToSuperview()
         }
@@ -367,6 +367,6 @@ extension ReviewListCollectionViewCell {
     private func configureView() {
         setupLayout()
         setupConstraints()
-        self.backgroundColor = UIColor.appColor(.newBackground)
+        backgroundColor = UIColor.appColor(.newBackground)
     }
 }
