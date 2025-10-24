@@ -22,7 +22,7 @@ final class ReviewListHeaderView: UICollectionReusableView {
     
     // MARK: - Publishers
     
-    let sortTypeButtonPublisher = PassthroughSubject<Void, Never>()  // ✅ 변경: 탭 이벤트만 전달
+    let sortTypeButtonPublisher = PassthroughSubject<Void, Never>()
     let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - UI Components
@@ -124,7 +124,7 @@ extension ReviewListHeaderView {
 extension ReviewListHeaderView {
     
     @objc private func sortTypeButtonTapped() {
-        sortTypeButtonPublisher.send(())  // ✅ 변경: 단순히 탭 이벤트만 전달
+        sortTypeButtonPublisher.send(())
     }
     
     @objc private func myReviewButtonTapped() {

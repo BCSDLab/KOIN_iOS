@@ -15,6 +15,9 @@ final class ReviewListCollectionView: UICollectionView {
     private(set) var reviewList: [Review] = []
     private var headerCancellables = Set<AnyCancellable>()
     
+    private var currentSortType: ReviewSortType = .latest
+    private var currentIsMineOnly: Bool = false
+    
     // MARK: - Publishers
     
     let sortTypeButtonPublisher = PassthroughSubject<Void, Never>()
@@ -66,13 +69,15 @@ extension ReviewListCollectionView {
     }
     
     func setHeader(_ fetchStandard: ReviewSortType, _ isMine: Bool) {
-        guard let headerView = supplementaryView(
+        currentSortType = fetchStandard
+        currentIsMineOnly = isMine
+        
+        if let headerView = supplementaryView(
             forElementKind: UICollectionView.elementKindSectionHeader,
             at: IndexPath(item: 0, section: 0)
-        ) as? ReviewListHeaderView else {
-            return
+        ) as? ReviewListHeaderView {
+            headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
         }
-        headerView.updateHeader(fetchStandard: fetchStandard, isMine: isMine)
     }
     
     func reportReview(_ reviewId: Int, shopId: Int) {
@@ -169,6 +174,7 @@ extension ReviewListCollectionView: UICollectionViewDataSource {
             return UICollectionReusableView()
         }
         
+        headerView.updateHeader(fetchStandard: currentSortType, isMine: currentIsMineOnly)
         bindHeaderPublishers(headerView)
         
         return headerView
