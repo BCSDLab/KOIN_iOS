@@ -137,13 +137,17 @@ final class ReviewListViewModel: ViewModelProtocol {
 }
 
 extension ReviewListViewModel {
-    
+
     func getShopName() -> String {
         return shopName
     }
     
     func getShopId() -> Int {
         return shopId
+    }
+    
+    func getCurrentSortType() -> ReviewSortType {
+        return sorter
     }
 }
 

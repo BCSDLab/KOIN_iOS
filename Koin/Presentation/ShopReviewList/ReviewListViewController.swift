@@ -164,8 +164,8 @@ final class ReviewListViewController: UIViewController {
             .store(in: &cancellables)
         
         reviewListCollectionView.sortTypeButtonPublisher
-            .sink { [weak self] type in
-                self?.inputSubject.send(.changeFilter(sorter: type, isMine: nil))
+            .sink { [weak self] _ in
+                self?.showSortBottomSheet()
             }
             .store(in: &cancellables)
         
@@ -302,6 +302,27 @@ extension ReviewListViewController {
         nonReviewListView.isHidden = reviewCount != 0
     }
     
+    private func showSortBottomSheet() {
+        let options = ReviewSortType.allCases.map { $0.koreanDescription }
+        
+        let currentSortType = viewModel.getCurrentSortType()
+        let selectedIndex = ReviewSortType.allCases.firstIndex(of: currentSortType) ?? 0
+        
+        let bottomSheet = SortTypeBottomSheetViewController(
+            options: options,
+            selectedIndex: selectedIndex
+        )
+        
+        bottomSheet.selectionPublisher
+            .sink { [weak self] index in
+                let selectedSortType = ReviewSortType.allCases[index]
+                self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
+            }
+            .store(in: &cancellables)
+        
+        present(bottomSheet, animated: false)
+    }
+    
     private func handleLoginStatus(isLogined: Bool, parameter: (Int, Int)?) {
         if !isLogined {
             let modal = parameter != nil
@@ -349,6 +370,7 @@ extension ReviewListViewController {
 }
 
 // MARK: - Navigation
+
 extension ReviewListViewController {
     
     @objc private func writeReviewButtonTapped() {
@@ -458,6 +480,7 @@ extension ReviewListViewController {
 }
 
 // MARK: - UI Function
+
 extension ReviewListViewController {
     
     private func setUpLayout() {

@@ -17,7 +17,7 @@ final class ReviewListCollectionView: UICollectionView {
     
     // MARK: - Publishers
     
-    let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
+    let sortTypeButtonPublisher = PassthroughSubject<Void, Never>()
     let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
     let modifyButtonPublisher = PassthroughSubject<(Int, Int), Never>()
     let deleteButtonPublisher = PassthroughSubject<(Int, Int), Never>()
@@ -233,8 +233,8 @@ extension ReviewListCollectionView {
         headerCancellables.removeAll()
         
         headerView.sortTypeButtonPublisher
-            .sink { [weak self] type in
-                self?.sortTypeButtonPublisher.send(type)
+            .sink { [weak self] _ in
+                self?.sortTypeButtonPublisher.send(())
             }
             .store(in: &headerCancellables)
         

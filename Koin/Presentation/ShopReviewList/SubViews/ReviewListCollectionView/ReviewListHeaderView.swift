@@ -7,8 +7,8 @@
 
 import Combine
 import UIKit
-import DropDown
 import SnapKit
+import Then
 
 final class ReviewListHeaderView: UICollectionReusableView {
     
@@ -16,9 +16,13 @@ final class ReviewListHeaderView: UICollectionReusableView {
     
     static let identifier = "ReviewListHeaderView"
     
+    // MARK: - Properties
+    
+    private var currentSortType: ReviewSortType = .latest
+    
     // MARK: - Publishers
     
-    let sortTypeButtonPublisher = PassthroughSubject<ReviewSortType, Never>()
+    let sortTypeButtonPublisher = PassthroughSubject<Void, Never>()  // ✅ 변경: 탭 이벤트만 전달
     let myReviewButtonPublisher = PassthroughSubject<Bool, Never>()
     
     // MARK: - UI Components
@@ -31,15 +35,12 @@ final class ReviewListHeaderView: UICollectionReusableView {
     
     private let myReviewButton = UIButton()
     
-    private let dropDown = DropDown()
-    
     // MARK: - Initialize
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         configureButtons()
-        setupDropDown()
         setAddTarget()
     }
     
@@ -48,6 +49,7 @@ final class ReviewListHeaderView: UICollectionReusableView {
     }
         
     func updateHeader(fetchStandard: ReviewSortType, isMine: Bool) {
+        currentSortType = fetchStandard
         configureSortTypeButton(type: fetchStandard)
         myReviewButton.isSelected = isMine
         configureMyReviewButton()
@@ -64,24 +66,6 @@ extension ReviewListHeaderView {
     private func setAddTarget() {
         sortTypeButton.addTarget(self, action: #selector(sortTypeButtonTapped), for: .touchUpInside)
         myReviewButton.addTarget(self, action: #selector(myReviewButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setupDropDown() {
-        dropDown.anchorView = sortTypeButton
-        dropDown.bottomOffset = CGPoint(x: 0, y: sortTypeButton.bounds.height + 22)
-        dropDown.direction = .bottom
-        dropDown.dataSource = ReviewSortType.allCases.map { $0.koreanDescription }
-        
-        dropDown.selectionAction = { [weak self] index, _ in
-            guard let self else { return }
-            let selectedSortType = ReviewSortType.allCases[index]
-            self.configureSortTypeButton(type: selectedSortType)
-            self.sortTypeButtonPublisher.send(selectedSortType)
-        }
-        
-        dropDown.cancelAction = { [weak self] in
-            self?.updateSortTypeButtonImage(for: .chevronDown)
-        }
     }
 }
 
@@ -134,25 +118,13 @@ extension ReviewListHeaderView {
         myReviewButton.contentHorizontalAlignment = .leading
         myReviewButton.configuration = configuration
     }
-    
-    private func updateSortTypeButtonImage(for symbol: SFSymbols) {
-        var configuration = sortTypeButton.configuration
-        let imageSize = CGSize(width: 15, height: 12)
-        let image = UIImage(systemName: symbol.rawValue)
-        let resizedImage = image?.withConfiguration(
-            UIImage.SymbolConfiguration(pointSize: imageSize.width, weight: .regular)
-        )
-        configuration?.image = resizedImage
-        sortTypeButton.configuration = configuration
-    }
 }
 
 // MARK: - @objc
 extension ReviewListHeaderView {
     
     @objc private func sortTypeButtonTapped() {
-        updateSortTypeButtonImage(for: .chevronUp)
-        dropDown.show()
+        sortTypeButtonPublisher.send(())  // ✅ 변경: 단순히 탭 이벤트만 전달
     }
     
     @objc private func myReviewButtonTapped() {
