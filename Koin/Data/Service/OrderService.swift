@@ -8,11 +8,6 @@
 import Alamofire
 import Combine
 
-enum FetchCartParameter: String {
-    case delivery = "DELIVERY"
-    case takeOut = "TAKE_OUT"
-}
-
 protocol OrderService {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDto], Error>
@@ -23,7 +18,7 @@ protocol OrderService {
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
-    func fetchCart(parameter: FetchCartParameter) -> AnyPublisher<CartDto, Error>
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
     func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
@@ -81,7 +76,7 @@ final class DefaultOrderService: OrderService {
         return requestWithResponse(.resetCart)
             .eraseToAnyPublisher()
     }
-    func fetchCart(parameter: FetchCartParameter) -> AnyPublisher<CartDto, Error> {
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error> {
         return request(.fetchCart(parameter: parameter.rawValue))
             .eraseToAnyPublisher()
     }
