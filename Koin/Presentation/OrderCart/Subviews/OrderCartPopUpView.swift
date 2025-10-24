@@ -12,7 +12,7 @@ import SnapKit
 final class OrderCartPopUpView: UIView {
     
     // MARK: - Properties
-    var completion: (() -> Void)? = nil
+    let rightButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Components
     private let dimView = UIView().then {
@@ -51,7 +51,7 @@ final class OrderCartPopUpView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(message: String, leftButtonText: String, rightButtonText: String, completion: @escaping ()->Void) {
+    func configure(message: String, leftButtonText: String, rightButtonText: String) {
         popupMessageLabel.setLineHeight(lineHeight: 1.60, text: message)
         popupMessageLabel.textAlignment = .center
         popupMessageLabel.lineBreakStrategy = .hangulWordPriority
@@ -67,7 +67,6 @@ final class OrderCartPopUpView: UIView {
                 .font: UIFont.appFont(.pretendardMedium, size: 15),
                 .foregroundColor: UIColor.appColor(.neutral0)
             ]), for: .normal)
-        self.completion = completion
     }
 }
 
@@ -117,7 +116,7 @@ extension OrderCartPopUpView {
         removeFromSuperview()
     }
     @objc private func rightButtonTapped() {
-        completion?()
+        rightButtonTappedPublisher.send()
         removeFromSuperview()
     }
 }

@@ -30,6 +30,7 @@ final class OrderCartViewController: UIViewController {
     private let orderCartBottomSheet = OrderCartBottomSheet().then {
         $0.isHidden = true
     }
+    private let resetCartPopUpView = OrderCartPopUpView()
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -144,6 +145,12 @@ final class OrderCartViewController: UIViewController {
             self?.inputSubject.send(.fetchCartTakeOut)
         }
         .store(in: &subscriptions)
+        
+        // MARK: - resetCartPopupView
+        resetCartPopUpView.rightButtonTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.resetCart)
+        }
+        .store(in: &subscriptions)
     }
 }
 
@@ -171,11 +178,7 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        let resetCartPopUpView = OrderCartPopUpView()
-        let resetCart: ()->Void = { [weak self] in
-            self?.inputSubject.send(.resetCart)
-        }
-        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", completion: resetCart)
+        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예")
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
@@ -215,11 +218,7 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        let resetCartPopUpView = OrderCartPopUpView()
-        let resetCart: ()->Void = { [weak self] in
-            self?.inputSubject.send(.resetCart)
-        }
-        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", completion: resetCart)
+        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예")
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
