@@ -63,6 +63,10 @@ final class ReviewListViewController: UIViewController {
         $0.isHidden = true
     }
     
+    private let loadingIndicator = UIActivityIndicatorView(style: .medium).then {
+        $0.hidesWhenStopped = true
+    }
+    
     // MARK: - Modal ViewControllers
     
     private lazy var reviewWriteLoginModalViewController = ReviewLoginModalViewController(message: "작성").then {
@@ -103,6 +107,7 @@ final class ReviewListViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         setAddTarget()
+        setDelegate()
         bind()
         inputSubject.send(.viewDidLoad)
     }
@@ -141,8 +146,12 @@ final class ReviewListViewController: UIViewController {
                 case let .setStatistics(statistics):
                     self.updateStatistics(statistics)
                     
-                case .updateLoadingState:
-                    break
+                case let .updateLoadingState(isLoading):
+                    if isLoading {
+                        self.loadingIndicator.startAnimating()
+                    } else {
+                        self.loadingIndicator.stopAnimating()
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -240,15 +249,32 @@ final class ReviewListViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
-    
-    // MARK: - Actions
-    
+        
     private func setAddTarget() {
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
     }
+    
+    private func setDelegate() {
+        scrollView.delegate = self
+    }
 }
 
-// MARK: - Private Methods
+extension ReviewListViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+        
+        let threshold: CGFloat = 100
+        
+        if offsetY > contentHeight - frameHeight - threshold {
+            if viewModel.canFetchMore {
+                inputSubject.send(.fetchNextPage)
+            }
+        }
+    }
+}
+
 extension ReviewListViewController {
     
     private func updateReviewList(reviews: [Review], sortType: ReviewSortType, isMineOnly: Bool, shouldReset: Bool
@@ -314,12 +340,12 @@ extension ReviewListViewController {
         let proportion = image.size.width / imageWidth
         let imageHeight = image.size.height / proportion
         
-        let zoomedImageVC = ZoomedImageViewController(
+        let zoomedImageViewController = ZoomedImageViewController(
             imageWidth: imageWidth,
             imageHeight: imageHeight.isNaN ? 100 : imageHeight
         )
-        zoomedImageVC.setImage(image)
-        present(zoomedImageVC, animated: true)
+        zoomedImageViewController.setImage(image)
+        present(zoomedImageViewController, animated: true)
     }
 }
 
@@ -350,11 +376,7 @@ extension ReviewListViewController {
     }
     
     private func navigateToModifyReview(reviewId: Int, shopId: Int) {
-        let viewController = makeShopReviewViewController(
-            reviewId: reviewId,
-            shopId: shopId,
-            shopName: viewModel.getShopName()
-        )
+        let viewController = makeShopReviewViewController(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName())
         viewController.title = "리뷰 수정하기"
         
         bindShopReviewViewController(viewController)
@@ -436,14 +458,14 @@ extension ReviewListViewController {
     }
 }
 
-// MARK: - Layout
+// MARK: - UI Function
 extension ReviewListViewController {
     
     private func setUpLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView
+        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView, loadingIndicator
         ].forEach {
             contentView.addSubview($0)
         }
@@ -497,15 +519,16 @@ extension ReviewListViewController {
             $0.width.equalTo(244)
             $0.height.equalTo(262)
         }
+        
+        loadingIndicator.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-40)
+        }
     }
     
     private func configureView() {
-        view.backgroundColor = UIColor.appColor(.newBackground)
-        
-        scoreChartCollectionView.isScrollEnabled = false
-        reviewListCollectionView.isScrollEnabled = false
-        
         setUpLayout()
         setupConstraints()
+        view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }

@@ -20,13 +20,13 @@ final class ReviewListViewModel: ViewModelProtocol {
     private let shopId: Int
     private let shopName: String
 
-    private struct PaginationState {
+    struct PaginationState {
         var currentPage: Int = 0
         var totalPage: Int = 0
         var isLoading: Bool = false
     }
     
-    private var paginationState = PaginationState()
+    private(set) var paginationState = PaginationState()
     private var deleteTarget: (reviewId: Int, shopId: Int)?
     private var sorter: ReviewSortType = .latest
     private var isMineOnly: Bool = false
@@ -43,7 +43,7 @@ final class ReviewListViewModel: ViewModelProtocol {
     // MARK: - Input/Output
     enum Input {
         case viewDidLoad
-        case fetchReviewListNext(page: Int)
+        case fetchNextPage
         case changeFilter(sorter: ReviewSortType?, isMine: Bool?)
         case checkLogin((Int, Int)?)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
@@ -109,8 +109,10 @@ final class ReviewListViewModel: ViewModelProtocol {
                 case .viewDidLoad:
                     self.fetchReviewList(page: 1, shouldReset: true)
 
-                case let .fetchReviewListNext(page):
-                    self.fetchReviewList(page: page, shouldReset: false)
+                case .fetchNextPage:
+                    guard self.canFetchMore else { return }
+                    let nextPage = self.paginationState.currentPage + 1
+                    self.fetchReviewList(page: nextPage, shouldReset: false)
 
                 case let .changeFilter(sorter, isMine):
                     if let sorter = sorter {
@@ -134,7 +136,6 @@ final class ReviewListViewModel: ViewModelProtocol {
     }
 }
 
-// MARK: - Public Methods
 extension ReviewListViewModel {
     
     func getShopName() -> String {
@@ -146,11 +147,14 @@ extension ReviewListViewModel {
     }
 }
 
-// MARK: - Private Methods
-private extension ReviewListViewModel {
+extension ReviewListViewModel {
 
-    func fetchReviewList(page: Int, shouldReset: Bool) {
+    private func fetchReviewList(page: Int, shouldReset: Bool) {
         guard !paginationState.isLoading else {
+            return
+        }
+        
+        if !shouldReset && paginationState.totalPage > 0 && page > paginationState.totalPage {
             return
         }
         
@@ -186,7 +190,10 @@ private extension ReviewListViewModel {
                 self.paginationState.currentPage = shopReview.currentPage
                 self.paginationState.totalPage = shopReview.totalPage
 
-                self.outputSubject.send(.setStatistics(shopReview.statistics))
+                if shouldReset {
+                    self.outputSubject.send(.setStatistics(shopReview.statistics))
+                }
+                
                 self.outputSubject.send(.setReviewList(
                     reviews: shopReview.reviews,
                     sortType: self.sorter,
@@ -229,7 +236,7 @@ private extension ReviewListViewModel {
             .store(in: &subscriptions)
     }
 
-    func checkLogin(parameter: (Int, Int)?) {
+    private func checkLogin(parameter: (Int, Int)?) {
         fetchUserDataUseCase.execute()
             .sink { [weak self] completion in
                 if case .failure = completion {
@@ -241,15 +248,7 @@ private extension ReviewListViewModel {
             .store(in: &subscriptions)
     }
 
-    func logAnalyticsEvent(
-        label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any
-    ) {
-        logAnalyticsEventUseCase.execute(
-            label: label,
-            category: category,
-            value: value
-        )
+    private func logAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
