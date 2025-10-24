@@ -23,7 +23,7 @@ final class OrderCartPopUpView: UIView {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8
     }
-    private let label = UILabel().then {
+    private let popupMessageLabel = UILabel().then {
         $0.textColor = .appColor(.neutral600)
         $0.font = .appFont(.pretendardRegular, size: 15)
         $0.numberOfLines = 0
@@ -34,7 +34,6 @@ final class OrderCartPopUpView: UIView {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 6
     }
-    
     private let rightButton = UIButton().then {
         $0.backgroundColor = .appColor(.new500)
         $0.layer.cornerRadius = 6
@@ -53,9 +52,9 @@ final class OrderCartPopUpView: UIView {
     }
     
     func configure(message: String, leftButtonText: String, rightButtonText: String, completion: @escaping ()->Void) {
-        label.setLineHeight(lineHeight: 1.60, text: message)
-        label.textAlignment = .center
-        label.lineBreakStrategy = .hangulWordPriority
+        popupMessageLabel.setLineHeight(lineHeight: 1.60, text: message)
+        popupMessageLabel.textAlignment = .center
+        popupMessageLabel.lineBreakStrategy = .hangulWordPriority
         leftButton.setAttributedTitle(NSAttributedString(
             string: leftButtonText,
             attributes: [
@@ -75,7 +74,7 @@ final class OrderCartPopUpView: UIView {
 extension OrderCartPopUpView {
 
     private func setUpLayouts() {
-        [dimView, popUpView, label, leftButton, rightButton].forEach {
+        [dimView, popUpView, popupMessageLabel, leftButton, rightButton].forEach {
             addSubview($0)
         }
     }
@@ -87,19 +86,19 @@ extension OrderCartPopUpView {
             $0.center.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(44)
         }
-        label.snp.makeConstraints {
+        popupMessageLabel.snp.makeConstraints {
             $0.leading.trailing.equalTo(popUpView).inset(32)
             $0.top.equalTo(popUpView.snp.top).offset(24)
         }
         leftButton.snp.makeConstraints {
-            $0.leading.equalTo(label)
-            $0.top.equalTo(label.snp.bottom).offset(24)
+            $0.leading.equalTo(popupMessageLabel)
+            $0.top.equalTo(popupMessageLabel.snp.bottom).offset(24)
             $0.width.equalTo((UIScreen.main.bounds.width-160) / 2)
             $0.height.equalTo(48)
         }
         rightButton.snp.makeConstraints {
             $0.top.equalTo(leftButton)
-            $0.trailing.equalTo(label)
+            $0.trailing.equalTo(popupMessageLabel)
             $0.bottom.equalTo(popUpView).offset(-24)
             $0.width.equalTo(leftButton)
             $0.height.equalTo(48)
