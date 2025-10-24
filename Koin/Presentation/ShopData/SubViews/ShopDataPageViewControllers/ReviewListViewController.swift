@@ -58,8 +58,7 @@ final class ReviewListViewController: UIViewController {
         return ReviewListCollectionView(frame: .zero, collectionViewLayout: flowLayout)
     }()
     
-    private let nonReviewImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .nonReview)
+    private let nonReviewListView = NonReviewListView().then {
         $0.isHidden = true
     }
     
@@ -300,7 +299,7 @@ extension ReviewListViewController {
             make.height.equalTo(height)
         }
         
-        nonReviewImageView.isHidden = reviewCount != 0
+        nonReviewListView.isHidden = reviewCount != 0
     }
     
     private func handleLoginStatus(isLogined: Bool, parameter: (Int, Int)?) {
@@ -465,7 +464,7 @@ extension ReviewListViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewImageView, loadingIndicator
+        [writeReviewButton, totalScoreLabel, totalScoreView, scoreChartCollectionView, reviewListCollectionView, nonReviewListView, loadingIndicator
         ].forEach {
             contentView.addSubview($0)
         }
@@ -513,11 +512,9 @@ extension ReviewListViewController {
             $0.bottom.equalToSuperview().offset(-20)
         }
         
-        nonReviewImageView.snp.makeConstraints {
-            $0.top.equalTo(scoreChartCollectionView.snp.bottom).offset(95)
+        nonReviewListView.snp.makeConstraints {
+            $0.top.equalTo(reviewListCollectionView.snp.bottom).offset(95)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(244)
-            $0.height.equalTo(262)
         }
         
         loadingIndicator.snp.makeConstraints {
