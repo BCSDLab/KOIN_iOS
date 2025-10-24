@@ -46,11 +46,16 @@ final class OrderCartViewModel {
     func transform(with input: PassthroughSubject<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .viewDidLoad: self?.fetchCart()
-            case .fetchCartDelivery: self?.fetchCartDelivery()
-            case .fetchCartTakeOut: self?.fetchCartTakeOut()
-            case .deleteItem(let cartMenuItemId): self?.deleteItem(cartMenuItemId: cartMenuItemId)
-            case .resetCart: self?.resetCart()
+            case .viewDidLoad:
+                self?.fetchCart()
+            case .fetchCartDelivery:
+                self?.fetchCartDelivery()
+            case .fetchCartTakeOut:
+                self?.fetchCartTakeOut()
+            case .deleteItem(let cartMenuItemId):
+                self?.deleteItem(cartMenuItemId: cartMenuItemId)
+            case .resetCart:
+                self?.resetCart()
             }
         }
         .store(in: &subscriptions)

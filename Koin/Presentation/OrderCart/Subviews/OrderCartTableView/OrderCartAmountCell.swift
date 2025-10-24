@@ -9,8 +9,6 @@ import UIKit
 
 final class OrderCartAmountCell: UITableViewCell {
     
-    // MARK: - Properties
-    
     // MARK: - Components
     private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)

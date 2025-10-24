@@ -12,7 +12,7 @@ final class OrderCartAmountHeaderView: UITableViewHeaderFooterView {
     // MARK: - Properties
     
     // MARK: - Components
-    private let label = UILabel().then {
+    private let titleLabel = UILabel().then {
         $0.text = "결제금액을 확인해주세요"
         $0.font = .appFont(.pretendardSemiBold, size: 18)
         $0.textColor = .appColor(.neutral800)
@@ -34,10 +34,10 @@ extension OrderCartAmountHeaderView {
     private func configureView() {
         backgroundView = nil
         
-        [label].forEach {
+        [titleLabel].forEach {
             contentView.addSubview($0)
         }
-        label.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.leading.equalToSuperview().offset(24)
             $0.bottom.equalToSuperview().offset(-12)
