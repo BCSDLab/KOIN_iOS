@@ -9,20 +9,17 @@ import Combine
 
 final class ReviewListViewModel: ViewModelProtocol {
 
-    // MARK: - Dependencies
     private let fetchShopReviewListUseCase: FetchShopReviewListUseCase
+    private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
 
-    // MARK: - Streams
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
 
-    // MARK: - Immutable State
     private let shopId: Int
     private let shopName: String
 
-    // MARK: - Mutable State
     private struct PaginationState {
         var currentPage: Int = 0
         var totalPage: Int = 0
@@ -34,7 +31,6 @@ final class ReviewListViewModel: ViewModelProtocol {
     private var sorter: ReviewSortType = .latest
     private var isMineOnly: Bool = false
 
-    // MARK: - Computed Properties
     var canFetchMore: Bool {
         paginationState.currentPage < paginationState.totalPage && !paginationState.isLoading
     }
@@ -44,7 +40,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         set { deleteTarget = (newValue.0, newValue.1) }
     }
 
-    // MARK: - IO
+    // MARK: - Input/Output
     enum Input {
         case viewDidLoad
         case fetchReviewListNext(page: Int)
@@ -67,26 +63,31 @@ final class ReviewListViewModel: ViewModelProtocol {
         case updateLoadingState(Bool)
     }
 
-    // MARK: - Init
+    // MARK: - Initialize
     init(
         fetchShopReviewListUseCase: FetchShopReviewListUseCase,
+        fetchMyReviewUseCase: FetchMyReviewUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
         shopId: Int,
         shopName: String
     ) {
         self.fetchShopReviewListUseCase = fetchShopReviewListUseCase
+        self.fetchMyReviewUseCase = fetchMyReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.shopId = shopId
         self.shopName = shopName
     }
     
-    // MARK: - Convenience Init
+    // MARK: - Convenience Initialize
     convenience init(shopId: Int, shopName: String) {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         self.init(
             fetchShopReviewListUseCase: DefaultFetchShopReviewListUseCase(
+                shopRepository: shopRepository
+            ),
+            fetchMyReviewUseCase: DefaultFetchMyReviewUseCase(
                 shopRepository: shopRepository
             ),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
@@ -156,6 +157,14 @@ private extension ReviewListViewModel {
         paginationState.isLoading = true
         outputSubject.send(.updateLoadingState(true))
 
+        if isMineOnly {
+            fetchMyReviewList(page: page, shouldReset: shouldReset)
+        } else {
+            fetchAllReviewList(page: page, shouldReset: shouldReset)
+        }
+    }
+    
+    private func fetchAllReviewList(page: Int, shouldReset: Bool) {
         let requestModel = FetchShopReviewRequest(
             shopId: shopId,
             page: page,
@@ -169,7 +178,7 @@ private extension ReviewListViewModel {
                 self.outputSubject.send(.updateLoadingState(false))
                 
                 if case let .failure(error) = completion {
-                    print("❌ fetchReviewList error: \(error)")
+                    print("❌ fetchAllReviewList error: \(error)")
                 }
             } receiveValue: { [weak self] shopReview in
                 guard let self else { return }
@@ -178,8 +187,44 @@ private extension ReviewListViewModel {
                 self.paginationState.totalPage = shopReview.totalPage
 
                 self.outputSubject.send(.setStatistics(shopReview.statistics))
-                self.outputSubject.send(.setReviewList(reviews: shopReview.reviews, sortType: self.sorter, isMineOnly: self.isMineOnly, currentPage: shopReview.currentPage, totalPage: shopReview.totalPage, shouldReset: shouldReset)
-                )
+                self.outputSubject.send(.setReviewList(
+                    reviews: shopReview.reviews,
+                    sortType: self.sorter,
+                    isMineOnly: self.isMineOnly,
+                    currentPage: shopReview.currentPage,
+                    totalPage: shopReview.totalPage,
+                    shouldReset: shouldReset
+                ))
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func fetchMyReviewList(page: Int, shouldReset: Bool) {
+        let requestModel = FetchMyReviewRequest(sorter: sorter)
+        
+        fetchMyReviewUseCase.execute(requestModel: requestModel, shopId: shopId)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.paginationState.isLoading = false
+                self.outputSubject.send(.updateLoadingState(false))
+                
+                if case let .failure(error) = completion {
+                    print("❌ fetchMyReviewList error: \(error)")
+                }
+            } receiveValue: { [weak self] reviews in
+                guard let self else { return }
+                
+                self.paginationState.currentPage = 1
+                self.paginationState.totalPage = 1
+
+                self.outputSubject.send(.setReviewList(
+                    reviews: reviews,
+                    sortType: self.sorter,
+                    isMineOnly: self.isMineOnly,
+                    currentPage: 1,
+                    totalPage: 1,
+                    shouldReset: shouldReset
+                ))
             }
             .store(in: &subscriptions)
     }
