@@ -2193,6 +2193,29 @@
 			path = ShopSummaryInfoView;
 			sourceTree = "<group>";
 		};
+		B613396E2EAB2372000550A1 /* ShopReviewList */ = {
+			isa = PBXGroup;
+			children = (
+				B613396F2EAB23C5000550A1 /* SubViews */,
+				D23944782C3BD97500048F45 /* ReviewListViewController.swift */,
+				D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */,
+			);
+			path = ShopReviewList;
+			sourceTree = "<group>";
+		};
+		B613396F2EAB23C5000550A1 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */,
+				D239448A2C3C9D3000048F45 /* ReviewListCollectionView */,
+				D23944A12C3CFAA500048F45 /* ScoreView.swift */,
+				B613396C2EAB1AEA000550A1 /* NonReviewListView.swift */,
+				D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */,
+				D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
 			isa = PBXGroup;
 			children = (
@@ -2620,9 +2643,6 @@
 				D23944662C38544700048F45 /* ShopDataPageViewController.swift */,
 				D23944622C3842E900048F45 /* MenuListViewController.swift */,
 				D23944642C38432100048F45 /* EventListViewController.swift */,
-				D23944782C3BD97500048F45 /* ReviewListViewController.swift */,
-				D22C54952C6B77F0000826DA /* ReviewListViewModel.swift */,
-				B613396C2EAB1AEA000550A1 /* NonReviewListView.swift */,
 			);
 			path = ShopDataPageViewControllers;
 			sourceTree = "<group>";
@@ -2765,6 +2785,7 @@
 				D27DD04E2BA608310081FD36 /* Shop */,
 				B48BFD672E6A9E82002D3A3D /* ShopSummary */,
 				D239447A2C3BF41A00048F45 /* ShopReview */,
+				B613396E2EAB2372000550A1 /* ShopReviewList */,
 				D22C54642C6924C5000826DA /* ShopReviewReport */,
 				D8C0485F2E0485B700129B14 /* OrderHome */,
 				D89E8A9A2E03B48100624C30 /* Order */,
@@ -2900,13 +2921,8 @@
 				D2078C082BC7369300A39861 /* EventListCollectionView */,
 				D2D380DE2BA69591009AD5A9 /* MenuImageCollectionView */,
 				D2D380DF2BA6959F009AD5A9 /* MenuListCollectionView */,
-				D239448A2C3C9D3000048F45 /* ReviewListCollectionView */,
-				D22C545D2C68C7CD000826DA /* ScoreChartCollectionView */,
 				D27DD0482BA608310081FD36 /* GuideLabel.swift */,
 				D27DD0492BA608310081FD36 /* PossibilityLabel.swift */,
-				D23944A12C3CFAA500048F45 /* ScoreView.swift */,
-				D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */,
-				D27A5D972C6B7DEB00C4275F /* DeleteReviewModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
