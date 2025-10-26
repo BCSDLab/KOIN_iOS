@@ -19,26 +19,32 @@ final class ToastMessageView: UIView {
     private let toastImageView = UIImageView().then {
         $0.tintColor = .white
         $0.contentMode = .scaleAspectFit
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
     private let toastLabel = UILabel().then {
         $0.textColor = .white
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
-        $0.numberOfLines = 1
+        $0.font = UIFont.setFont(.body2)
+        $0.numberOfLines = 2
+        $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     
     private let toastButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
         config.background.backgroundColor = UIColor(hexCode: "4B4B4B")
-        config.background.cornerRadius = 4
+        config.background.cornerRadius = 29
         config.baseForegroundColor = UIColor(hexCode: "FFFFFF")
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 20, bottom: 9, trailing: 20)
         
         var titleContainer = AttributeContainer()
-        titleContainer.font = UIFont.appFont(.pretendardRegular, size: 15)
+        titleContainer.font = UIFont.setFont(.body2)
         config.attributedTitle = AttributedString("", attributes: titleContainer)
         
         $0.configuration = config
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
     // MARK: - Initialize
@@ -59,8 +65,6 @@ final class ToastMessageView: UIView {
     }
 }
 
-// MARK: - Configuration
-
 extension ToastMessageView {
     private func configure(with config: ToastConfig) {
         if let icon = config.intent.toastMessageIcon {
@@ -72,26 +76,18 @@ extension ToastMessageView {
         
         toastLabel.text = config.message
         
-        switch config.variant {
-        case .standard:
-            toastButton.isHidden = true
-            toastLabel.numberOfLines = 1
-            
-        case .action(let title):
+        if let buttonTitle = config.variant.buttonTitle {
             toastButton.isHidden = false
             var buttonConfig = toastButton.configuration
             var titleContainer = AttributeContainer()
-            titleContainer.font = UIFont.appFont(.pretendardRegular, size: 15)
-            buttonConfig?.attributedTitle = AttributedString(title, attributes: titleContainer)
+            titleContainer.font = UIFont.setFont(.body2)
+            buttonConfig?.attributedTitle = AttributedString(buttonTitle, attributes: titleContainer)
             toastButton.configuration = buttonConfig
             
             toastButton.removeTarget(nil, action: nil, for: .allEvents)
             toastButton.addTarget(self, action: #selector(handleButtonTap), for: .touchUpInside)
-            toastLabel.numberOfLines = 1
-            
-        case .overflow(let lines):
+        } else {
             toastButton.isHidden = true
-            toastLabel.numberOfLines = lines
         }
         
         setUpConstraints()
@@ -115,17 +111,28 @@ extension ToastMessageView {
         let hasIcon = !toastImageView.isHidden
         let hasButton = !toastButton.isHidden
         
-        toastImageView.snp.remakeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(20)
+        if hasIcon {
+            toastImageView.snp.remakeConstraints {
+                $0.leading.equalToSuperview().offset(16)
+                $0.centerY.equalToSuperview()
+                $0.width.height.equalTo(20)
+            }
+        } else {
+            toastImageView.snp.remakeConstraints {
+                $0.width.height.equalTo(0)
+            }
         }
         
-        toastButton.snp.remakeConstraints {
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.centerY.equalToSuperview()
-            $0.height.equalTo(31)
-            $0.width.greaterThanOrEqualTo(65)
+        if hasButton {
+            toastButton.snp.remakeConstraints {
+                $0.trailing.equalToSuperview().inset(12)
+                $0.centerY.equalToSuperview()
+                $0.height.equalTo(31)
+            }
+        } else {
+            toastButton.snp.remakeConstraints {
+                $0.width.height.equalTo(0)
+            }
         }
         
         toastLabel.snp.remakeConstraints {
@@ -138,9 +145,9 @@ extension ToastMessageView {
             }
             
             if hasButton {
-                $0.trailing.equalTo(toastButton.snp.leading).offset(-12)
+                $0.trailing.lessThanOrEqualTo(toastButton.snp.leading).offset(-12)
             } else {
-                $0.trailing.equalToSuperview().offset(-16)
+                $0.trailing.equalToSuperview().inset(16)
             }
         }
     }
