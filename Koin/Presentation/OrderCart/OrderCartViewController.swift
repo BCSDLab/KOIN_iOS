@@ -14,7 +14,6 @@ final class OrderCartViewController: UIViewController {
     private let viewModel: OrderCartViewModel
     private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private var orderableShopId: Int? = nil
     
     // MARK: - Components
     private let orderCartEmptyView = OrderCartEmptyView()
@@ -76,7 +75,7 @@ final class OrderCartViewController: UIViewController {
         
         // MARK: - TableView - 가게 상세페이지로 이동
         orderCartTableView.moveToShopPublisher.sink { [weak self] in
-            guard let self = self, let orderableShopId = self.orderableShopId else {
+            guard let self = self, let orderableShopId = self.viewModel.orderableShopId else {
                 return
             }
             let service = DefaultOrderService()
@@ -196,7 +195,6 @@ extension OrderCartViewController {
             self.orderCartEmptyView.isHidden = true
             self.orderCartTableView.isHidden = false
             self.orderCartBottomSheet.isHidden = false
-            self.orderableShopId = cart.orderableShopId
             self.orderCartTableView.configure(cart: cart)
             self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
                                                 itemsAmount: cart.itemsAmount,

@@ -32,6 +32,7 @@ final class OrderCartViewModel {
     private let resetCartUseCase: ResetCartUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private(set) var orderableShopId: Int? = nil
     
     // MARK: - Initializer
     init(fetchCartUseCase: FetchCartUseCase, fetchCartDeliveryUseCase: FetchCartDeliveryUseCase, fetchCartTakeOutUseCase: FetchCartTakeOutUseCase, deleteCartMenuItemUseCase: DeleteCartMenuItemUseCase, resetCartUseCase: ResetCartUseCase) {
@@ -74,6 +75,7 @@ extension OrderCartViewModel {
                 }
             },
                   receiveValue: { [weak self] (cart, isFromDelivery) in
+                self?.orderableShopId = cart.orderableShopId
                 self?.outputSubject.send(.updateCart(cart: cart, isFromDelivery: isFromDelivery))
                 self?.outputSubject.send(.updateSegment(isDeliveryAvailable: cart.isDeliveryAvailable, isTakeOutAvailable: cart.isTakeoutAvailable))
             })
