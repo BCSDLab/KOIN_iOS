@@ -19,7 +19,7 @@ final class OrderCartListCell: UITableViewCell {
     private var indexPath: IndexPath? = nil
     private var item: CartItem? = nil
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.clipsToBounds = true

@@ -15,7 +15,7 @@ final class OrderCartTableHeaderView: UIView {
     let buttonTakeOutTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let segmentedControl = OrderCartSegmentedControl()
     private let descriptionStackView = UIStackView().then {
         $0.axis = .horizontal

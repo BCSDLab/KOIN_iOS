@@ -18,7 +18,7 @@ final class ShopDetailBottomSheet: UIView {
     
     let isMenuAddablePublisher = PassthroughSubject<Bool, Never>()
     
-    // MARK: - Component
+    // MARK: - UI Components
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral300)
     }

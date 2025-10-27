@@ -16,6 +16,7 @@
 		7C93BB042E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */; };
 		7CC6CCD22EAB7EC0004AD236 /* FetchCartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6CCD12EAB7EC0004AD236 /* FetchCartType.swift */; };
 		7CC6CCD42EAB7EEC004AD236 /* FetchCartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */; };
+		7CC6CCDB2EAF0FA3004AD236 /* OrderCartLoginPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6CCDA2EAF0FA3004AD236 /* OrderCartLoginPopUpView.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -176,7 +177,7 @@
 		B4164FC22E8A3077000ACA16 /* OrderCartAmountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4164FC12E8A3077000ACA16 /* OrderCartAmountCell.swift */; };
 		B4164FC52E8A52F7000ACA16 /* OrderCartListCellPriceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4164FC42E8A52F7000ACA16 /* OrderCartListCellPriceTableView.swift */; };
 		B4164FC72E8A5302000ACA16 /* OrderCartListCellPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4164FC62E8A5302000ACA16 /* OrderCartListCellPriceTableViewCell.swift */; };
-		B416ABA42E8D9DB90073F705 /* OrderCartPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416ABA32E8D9DB90073F705 /* OrderCartPopUpView.swift */; };
+		B416ABA42E8D9DB90073F705 /* OrderCartResetCartPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416ABA32E8D9DB90073F705 /* OrderCartResetCartPopUpView.swift */; };
 		B4208EAA2E8AF805009FD4AD /* OrderCartTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4208EA92E8AF805009FD4AD /* OrderCartTableHeaderView.swift */; };
 		B4208EAD2E8B14A9009FD4AD /* OrderCartBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4208EAB2E8B14A9009FD4AD /* OrderCartBottomSheet.swift */; };
 		B4254AF82E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */; };
@@ -785,6 +786,7 @@
 		7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCartMenuItemUseCase.swift; sourceTree = "<group>"; };
 		7CC6CCD12EAB7EC0004AD236 /* FetchCartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartType.swift; sourceTree = "<group>"; };
 		7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartRequest.swift; sourceTree = "<group>"; };
+		7CC6CCDA2EAF0FA3004AD236 /* OrderCartLoginPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartLoginPopUpView.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -956,7 +958,7 @@
 		B4164FC12E8A3077000ACA16 /* OrderCartAmountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartAmountCell.swift; sourceTree = "<group>"; };
 		B4164FC42E8A52F7000ACA16 /* OrderCartListCellPriceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartListCellPriceTableView.swift; sourceTree = "<group>"; };
 		B4164FC62E8A5302000ACA16 /* OrderCartListCellPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartListCellPriceTableViewCell.swift; sourceTree = "<group>"; };
-		B416ABA32E8D9DB90073F705 /* OrderCartPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartPopUpView.swift; sourceTree = "<group>"; };
+		B416ABA32E8D9DB90073F705 /* OrderCartResetCartPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartResetCartPopUpView.swift; sourceTree = "<group>"; };
 		B4208EA92E8AF805009FD4AD /* OrderCartTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartTableHeaderView.swift; sourceTree = "<group>"; };
 		B4208EAB2E8B14A9009FD4AD /* OrderCartBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCartBottomSheet.swift; sourceTree = "<group>"; };
 		B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -2062,7 +2064,8 @@
 				B4164FB82E8A2F9C000ACA16 /* OrderCartTableView */,
 				B4164FB22E890CBB000ACA16 /* OrderCartEmptyView.swift */,
 				B4164FB62E8A2F91000ACA16 /* OrderCartTableView.swift */,
-				B416ABA32E8D9DB90073F705 /* OrderCartPopUpView.swift */,
+				B416ABA32E8D9DB90073F705 /* OrderCartResetCartPopUpView.swift */,
+				7CC6CCDA2EAF0FA3004AD236 /* OrderCartLoginPopUpView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -4483,7 +4486,7 @@
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D283A4E62CECE7EA00C238BA /* AddDirectHeaderView.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
-				B416ABA42E8D9DB90073F705 /* OrderCartPopUpView.swift in Sources */,
+				B416ABA42E8D9DB90073F705 /* OrderCartResetCartPopUpView.swift in Sources */,
 				D26B2EC62CD65A2D00BEE07C /* TimetableViewController.swift in Sources */,
 				D22C54632C68F280000826DA /* ReviewListHeaderView.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
@@ -4756,6 +4759,7 @@
 				D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				83E770EB2D03637900EB3F84 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
+				7CC6CCDB2EAF0FA3004AD236 /* OrderCartLoginPopUpView.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,

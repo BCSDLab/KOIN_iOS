@@ -14,7 +14,7 @@ final class OrderCartBottomSheet: UIView {
     // MARK: - Properties
     let bottomSheetButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
-    // MARK: - Component
+    // MARK: - UI Components
     private let priceLabel = UILabel().then {
         $0.font = .appFont(.pretendardSemiBold, size: 18)
         $0.textColor = .appColor(.neutral800)

@@ -27,7 +27,7 @@ final class OrderCartSegmentedControl: UIView {
         .foregroundColor : UIColor.appColor(.neutral300)
     ]
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let buttonDelivery = UIButton()
     private let buttonTakeOut = UIButton()
     private let selectedBackgroundView = UIView().then {

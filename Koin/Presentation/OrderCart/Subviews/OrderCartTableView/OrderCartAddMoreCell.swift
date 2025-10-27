@@ -13,7 +13,7 @@ final class OrderCartAddMoreCell: UITableViewCell {
     // MARK: - Properties
     let moveToShopPublisher = PassthroughSubject<Void, Never>()
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8

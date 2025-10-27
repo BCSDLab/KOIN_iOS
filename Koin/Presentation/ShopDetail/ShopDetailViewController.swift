@@ -18,7 +18,7 @@ final class ShopDetailViewController: UIViewController {
     
     private var isAddingMenuAvailable: Bool = true
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let imagesCollectionView = ShopDetailImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)

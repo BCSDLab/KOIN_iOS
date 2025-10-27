@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopDetailInfoView: UIView {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 20)

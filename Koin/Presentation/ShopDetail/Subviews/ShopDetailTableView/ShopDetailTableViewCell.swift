@@ -10,7 +10,7 @@ import SnapKit
 
 final class ShopDetailTableViewCell: UITableViewCell {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private var insetBackgroundView = UIView().then { $0.backgroundColor = .yellow }
     
     private let stackView = UIStackView().then {

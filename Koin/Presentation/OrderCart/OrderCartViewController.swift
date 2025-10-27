@@ -15,7 +15,7 @@ final class OrderCartViewController: UIViewController {
     private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let orderCartEmptyView = OrderCartEmptyView()
     private let orderCartTableHeaderView = OrderCartTableHeaderView()
     private let orderCartTableView = OrderCartTableView().then {
