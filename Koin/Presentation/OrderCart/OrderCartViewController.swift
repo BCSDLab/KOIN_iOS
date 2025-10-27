@@ -29,7 +29,10 @@ final class OrderCartViewController: UIViewController {
     private let orderCartBottomSheet = OrderCartBottomSheet().then {
         $0.isHidden = true
     }
-    private let resetCartPopUpView = OrderCartPopUpView()
+    private let resetCartPopUpView = OrderCartResetCartPopUpView()
+    private let loginPopUpView = OrderCartLoginPopUpView().then {
+        $0.isHidden = true
+    }
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -68,6 +71,10 @@ final class OrderCartViewController: UIViewController {
                 self.orderCartTableView.removeItem(cartMenuItemId: cartMenuItemId)
             case .emptyCart:
                 self.emptyCart()
+            case .showLoginPopUpView:
+                self.showLoginPopUpView()
+            case .showToast(let message):
+                showToast(message: message)
             }
         }
         .store(in: &subscriptions)
@@ -150,6 +157,12 @@ final class OrderCartViewController: UIViewController {
             self?.inputSubject.send(.resetCart)
         }
         .store(in: &subscriptions)
+        
+        // MARK: - loginPopUpView
+        loginPopUpView.rightButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToLogin()
+        }
+        .store(in: &subscriptions)
     }
 }
 
@@ -177,9 +190,42 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예")
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
+    }
+}
+
+extension OrderCartViewController {
+    
+    // MARK: - show popUpView
+    private func showLoginPopUpView() {
+        
+        let popupView = OrderLoginPopupView()
+
+        if let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+           let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+            
+            popupView.frame = window.bounds
+            
+            popupView.loginButtonAction = {
+                let loginViewController = LoginViewController(
+                    viewModel: LoginViewModel(
+                        loginUseCase: DefaultLoginUseCase(
+                            userRepository: DefaultUserRepository(service: DefaultUserService())
+                        ),
+                        logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                        )
+                    )
+                )
+                loginViewController.title = "로그인"
+                self.navigationController?.pushViewController(loginViewController, animated: true)
+            }
+            
+            window.addSubview(popupView)
+        }
     }
 }
 
@@ -216,7 +262,6 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예")
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }

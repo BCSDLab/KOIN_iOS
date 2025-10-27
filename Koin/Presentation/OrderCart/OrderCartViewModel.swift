@@ -22,6 +22,8 @@ final class OrderCartViewModel {
         case updateCart(cart: Cart, isFromDelivery: Bool)
         case removeItemFromTableView(cartMenuItemId: Int)
         case emptyCart
+        case showToast(message: String)
+        case showLoginPopUpView
     }
     
     // MARK: - Properties
@@ -102,24 +104,18 @@ extension OrderCartViewModel {
     
     private func deleteItem(cartMenuItemId: Int) {
         deleteCartMenuItemUseCase.execute(cartMenuItemId: cartMenuItemId)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 if case .failure(let failure) = completion {
-                    switch failure.code {
-                    case "401":
-                        print(failure.message) /// 인증 정보 오류
-                    case "404":
-                        switch failure.code {
-                        case "NOT_FOUND_CART_ITEM": print(failure.message) /// 존재하지 않는 리소스 - 존재하지 않는 장바구니 상품
-                        case "NOT_FOUND_CART": print(failure.message) /// 존재하지 않는 리소스 - 장바구니 없음
-                        default: print("DeleteItem Failed: unknown error - \(failure)")
-                        }
-                    default:
-                        print("DeleteItem Failed: unknown error - \(failure)")
+                    if failure.code == "401" { /// 인증 정보 오류
+                        self?.outputSubject.send(.showLoginPopUpView)
+                        return
+                    }
+                    else {
+                        self?.outputSubject.send(.showToast(message: "오류")) /// 로직이 틀렸을 경우 발생할만한 오류
                     }
                 }
             }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.removeItemFromTableView(cartMenuItemId: cartMenuItemId))
-                print("deleteItem succeeded")
             })
             .store(in: &subscriptions)
     }
