@@ -35,7 +35,6 @@ protocol ShopService {
 }
 
 final class DefaultShopService: ShopService {
-
     
     private let networkService = NetworkService()
     
@@ -201,10 +200,6 @@ final class DefaultShopService: ShopService {
     
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error> {
         return request(.fetchShopEventList(requestModel))
-    }
-    
-    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDto, Error> {
-        return request(.fetchReviewList(requestModel))
     }
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {

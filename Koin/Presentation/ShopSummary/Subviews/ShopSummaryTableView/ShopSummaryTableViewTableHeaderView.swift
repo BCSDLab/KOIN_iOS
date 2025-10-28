@@ -14,9 +14,11 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
+    let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+
     private var subscriptions: Set<AnyCancellable> = []
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let imagesCollectionView = ShopSummaryImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/1.21)
@@ -30,7 +32,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
         $0.currentPageIndicatorTintColor = UIColor.appColor(.neutral0)
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral400)
     }
-    private let infoView = ShopSummaryInfoView()
+    private let shopSummaryInfoView = ShopSummaryInfoView()
     private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral100)
     }
@@ -81,6 +83,12 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
             self?.shouldSetContentInsetPublisher.send(shouldSetContentInset)
         }
         .store(in: &subscriptions)
+        
+        shopSummaryInfoView.reviewButtonTappedPublisher
+            .sink { [weak self] in
+                self?.reviewButtonTappedPublisher.send()
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - update
@@ -99,20 +107,20 @@ extension ShopSummaryTableViewTableHeaderView {
     func updateInfoView(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         imagesCollectionView.configure(orderImage: orderShopSummary.images)
         imagesPageControl.numberOfPages = orderShopSummary.images.count
-        infoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
+        shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
     }
     func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
     }
     func updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool) {
-        infoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut,payCard: payCard, payBank: payBank)
+        shopSummaryInfoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut,payCard: payCard, payBank: payBank)
     }
 }
 
 extension ShopSummaryTableViewTableHeaderView {
     
     private func setUpLayout() {
-        [separatorView, imagesCollectionView, imagesPageControl, infoView, menuGroupNameCollectionView].forEach {
+        [separatorView, imagesCollectionView, imagesPageControl, shopSummaryInfoView, menuGroupNameCollectionView].forEach {
             addSubview($0)
         }
     }
@@ -126,13 +134,13 @@ extension ShopSummaryTableViewTableHeaderView {
             $0.centerX.equalTo(imagesCollectionView)
             $0.bottom.equalTo(imagesCollectionView).offset(-15)
         }
-        infoView.snp.makeConstraints {
+        shopSummaryInfoView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(imagesCollectionView.snp.bottom)
         }
         separatorView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(infoView.snp.bottom)
+            $0.top.equalTo(shopSummaryInfoView.snp.bottom)
             $0.height.equalTo(8)
         }
         menuGroupNameCollectionView.snp.makeConstraints {

@@ -11,49 +11,56 @@ final class ShopSummaryViewModel {
     
     // MARK: - Input
     enum Input {
-    case viewDidLoad
-    case viewWillAppear
-    case resetCart
-    case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
+        case viewDidLoad
+        case viewWillAppear
+        case resetCart
+        case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
     }
     
     // MARK: - Output
     enum Output {
-    case updateInfoView(OrderShopSummary, isFromOrder: Bool)
-    case updateMenusGroups(OrderShopMenusGroups)
-    case updateMenus([OrderShopMenus])
-    case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
-    case updateBottomSheet(cartSummary: CartSummary)
-    case updateIsAddingMenuAvailable(Bool)
-    case updateCartItemsCount(count: Int)
-    case updateMenuDetail(OrderMenu)
+        case updateInfoView(OrderShopSummary, isFromOrder: Bool)
+        case updateMenusGroups(OrderShopMenusGroups)
+        case updateMenus([OrderShopMenus])
+        case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
+        case updateBottomSheet(cartSummary: CartSummary)
+        case updateIsAddingMenuAvailable(Bool)
+        case updateCartItemsCount(count: Int)
+        case updateMenuDetail(OrderMenu)
     }
     
     // MARK: - Properties
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    
     // 기본정보 OrderApi
     private let fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?
     private let fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?
     private let fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?
+    
     // 기본정보 ShopApi
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase?
     private let fetchOrderShopMenusGroupsFromShopUseCase: FetchOrderShopMenusGroupsFromShopUseCase?
     private let fetchOrderShopMenusFromShopUseCase: FetchOrderShopMenusFromShopUseCase?
     private let fetchShopDataUseCase: FetchShopDataUseCase?
+    
     // 장바구니 OrderApi
     private let fetchCartSummaryUseCase: FetchCartSummaryUseCase?
     private let fetchCartUseCase: FetchCartUseCase?
     private let fetchCartItemsCountUseCase: FetchCartItemsCountUseCase?
     private let resetCartUseCase: ResetCartUseCase?
-    //주문상세
+    
+    // 주문상세
     private let fetchOrderMenuUseCase: FetchOrderMenuUseCase?
     
     // Properties
     private(set) var orderableShopId: Int?
     private let shopId: Int?
     private let isFromOrder: Bool
-        
+    
+    private var cachedShopName: String?
+    private var cachedOrderShopSummary: OrderShopSummary?
+
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
          fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase,
@@ -73,12 +80,12 @@ final class ShopSummaryViewModel {
         self.fetchCartUseCase = fetchCartUseCase
         self.fetchCartItemsCountUseCase = fetchCartItemsCountUseCase
         self.resetCartUseCase = resetCartUseCase
-        // 기본정보 ShoApi
+        // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = nil
         self.fetchOrderShopMenusGroupsFromShopUseCase = nil
         self.fetchOrderShopMenusFromShopUseCase = nil
         self.fetchShopDataUseCase = nil
-        //상세
+        // 상세
         self.fetchOrderMenuUseCase = fetchOrderMenuUseCase
         
         // properties
@@ -86,12 +93,12 @@ final class ShopSummaryViewModel {
         self.isFromOrder = true
         self.shopId = nil
     }
+    
     // MARK: - Initializer from Shop
     init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
          fetchOrderShopMenusGroupsFromShopUseCase: DefaultFetchOrderShopMenusGroupsFromShopUseCase,
          fetchOrderShopMenusFromShopUseCase: DefaultFetchOrderShopMenusFromShopUseCase,
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
-         
          shopId: Int) {
         // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
@@ -107,7 +114,7 @@ final class ShopSummaryViewModel {
         self.fetchCartUseCase = nil
         self.fetchCartItemsCountUseCase = nil
         self.resetCartUseCase = nil
-        //주문상세
+        // 주문상세
         self.fetchOrderMenuUseCase = nil
         // Properties
         self.orderableShopId = nil
@@ -115,12 +122,12 @@ final class ShopSummaryViewModel {
         self.isFromOrder = false
     }
     
-    // MARK: Transform
+    // MARK: - Transform
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .viewDidLoad: // 기본정보 호출하기
+            case .viewDidLoad:
                 if let orderableShopId = self.orderableShopId {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
@@ -132,36 +139,74 @@ final class ShopSummaryViewModel {
                     self.fetchShopMenuList(shopId: shopId)
                     self.fetchIsAvailable(shopId: shopId)
                 }
-            case .viewWillAppear: // 장바구니 정보 호출하기
+            case .viewWillAppear:
                 guard let orderableShopId = self.orderableShopId else { return }
                 self.fetchCartSummary(orderableShopId: orderableShopId)
                 self.fetchCart()
                 self.fetchCartItemsCount()
-            case .resetCart: // 장바구니 비우기
+            case .resetCart:
                 self.resetCart()
             
             case .fetchMenuDetail(let orderableShopId, let orderableShopMenuId):
                 self.fetchOrderMenu(orderableShopId: orderableShopId,
-                                     orderableShopMenuId: orderableShopMenuId)
+                                   orderableShopMenuId: orderableShopMenuId)
             }
         }
         .store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
     }
+    
+    // MARK: - Public Methods
+    
+    /// 현재 shopId 반환
+    func getShopId() -> Int? {
+        if isFromOrder {
+            let shopId = cachedOrderShopSummary?.shopId
+            return shopId
+        } else {
+            return shopId
+        }
+    }
+    
+    // 현재 orderableShopId 반환
+    func getOrderableShopId() -> Int? {
+        return orderableShopId
+    }
+    
+    /// 현재 상점 이름 반환
+    func getShopName() -> String? {
+        return cachedShopName
+    }
 }
 
 extension ShopSummaryViewModel {
     // MARK: - 기본정보 OrderApi
+    
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
+        
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
-                  receiveValue: { [weak self] in
-                guard let isFromOrder = self?.isFromOrder else { return }
-                self?.outputSubject.send(.updateInfoView($0, isFromOrder: isFromOrder))
-                self?.outputSubject.send(.updateIsAvailables(delivery: $0.isDeliveryAvailable, takeOut: $0.isTakeoutAvailable, payBank: $0.payBank, payCard: $0.payCard))
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("❌ [ViewModel] Fetch failed: \(error)")
+                }
+            },
+                  receiveValue: { [weak self] orderShopSummary in
+                guard let self = self else { return }
+                
+                self.cachedOrderShopSummary = orderShopSummary
+                self.cachedShopName = orderShopSummary.name
+                
+                self.outputSubject.send(.updateInfoView(orderShopSummary, isFromOrder: true))
+                self.outputSubject.send(.updateIsAvailables(
+                    delivery: orderShopSummary.isDeliveryAvailable,
+                    takeOut: orderShopSummary.isTakeoutAvailable,
+                    payBank: orderShopSummary.payBank,
+                    payCard: orderShopSummary.payCard
+                ))
             })
             .store(in: &subscriptions)
     }
+    
     private func fetchOrderShopMenus(orderableShopId: Int) {
         fetchOrderShopMenusUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in },
@@ -170,9 +215,10 @@ extension ShopSummaryViewModel {
             })
             .store(in: &subscriptions)
     }
+    
     private func fetchOrderShopMenusGroups(orderableShopId: Int) {
         fetchOrderShopMenusGroupsUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { _ in /* Log 남기기 ? */ },
+            .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] orderShopMenusGroups in
                 self?.outputSubject.send(.updateMenusGroups(orderShopMenusGroups))
             })
@@ -180,11 +226,16 @@ extension ShopSummaryViewModel {
     }
 
     // MARK: - 기본정보 ShopApi
+    
     private func fetchShopSummary(shopId: Int) {
         fetchOrderShopSummaryFromShopUseCase?.execute(id: shopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 guard let isFromOrder = self?.isFromOrder else { return }
+                
+                self?.cachedShopName = shopSummary.name
+                self?.cachedOrderShopSummary = shopSummary
+                
                 self?.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })
             .store(in: &subscriptions)
@@ -216,6 +267,7 @@ extension ShopSummaryViewModel {
             .store(in: &subscriptions)
     }
 }
+
 extension ShopSummaryViewModel {
     // MARK: - 장바구니 ShopApi (OrderHome에서 진입시에만 사용)
     
@@ -235,14 +287,13 @@ extension ShopSummaryViewModel {
             .store(in: &subscriptions)
     }
     
-    
     private func resetCart() {
         resetCartUseCase?.execute()
-            .sink(receiveCompletion: { comepltion in
-                if case .failure(let errorResponse) = comepltion {
+            .sink(receiveCompletion: { completion in
+                if case .failure(let errorResponse) = completion {
                     switch errorResponse.code {
-                    case "401": print("로그인 상태가 해제됨") // figma 명세에 없고 & 가능성 낮긴 한데,, 팝업을 띄워야 할까?
-                    default: print("unknown") 
+                    case "401": print("로그인 상태가 해제됨")
+                    default: print("unknown")
                     }
                 }
             }, receiveValue: { [weak self] in
@@ -275,5 +326,4 @@ extension ShopSummaryViewModel {
             })
             .store(in: &subscriptions)
     }
-    
 }

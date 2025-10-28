@@ -8,6 +8,8 @@
 import Foundation
 
 struct OrderShopSummary {
+    let shopId: Int
+    let orderableShopId: Int
     let images: [OrderImage]
     let name: String
     let ratingAverage: Double
@@ -20,6 +22,8 @@ struct OrderShopSummary {
 
 extension OrderShopSummary {    
     init(from dto: OrderShopSummaryDto) {
+        self.shopId = dto.shopId
+        self.orderableShopId = dto.orderableShopId
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = dto.isDeliveryAvailable
@@ -31,11 +35,12 @@ extension OrderShopSummary {
         self.reviewCount = dto.reviewCount
         self.minimumDeliveryTip = dto.minimumDeliveryTip
         self.maximumDeliveryTip = dto.maximumDeliveryTip
-        self.images = dto.images.map { orderImages in
-            OrderImage(from: orderImages)
-        }
+        self.images = dto.images.map { OrderImage(from: $0) }
     }
-    init(from dto: ShopSummaryDto) {
+    
+    init(from dto: ShopSummaryDto, shopId: Int) {
+        self.shopId = shopId
+        self.orderableShopId = 0
         self.name = dto.name
         self.introduction = dto.introduction
         self.isDeliveryAvailable = false

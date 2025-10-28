@@ -5,8 +5,8 @@
 //  Created by 김나훈 on 8/11/24.
 //
 
-import Then
 import UIKit
+import SnapKit
 
 final class ScoreChartCollectionViewCell: UICollectionViewCell {
     
@@ -14,7 +14,7 @@ final class ScoreChartCollectionViewCell: UICollectionViewCell {
     
     private let scoreLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textColor = UIColor.appColor(.neutral800)
         $0.textAlignment = .right
     }
     
@@ -69,11 +69,13 @@ extension ScoreChartCollectionViewCell {
             $0.centerY.equalTo(self.snp.centerY)
             $0.width.equalTo(19)
         }
+        
         progressView.snp.makeConstraints {
             $0.leading.equalTo(scoreLabel.snp.trailing).offset(12)
             $0.trailing.equalTo(scoreCountLabel.snp.leading).offset(-12)
             $0.centerY.equalTo(self.snp.centerY)
         }
+        
         scoreCountLabel.snp.makeConstraints {
             $0.trailing.equalTo(self.snp.trailing)
             $0.centerY.equalTo(self.snp.centerY)
