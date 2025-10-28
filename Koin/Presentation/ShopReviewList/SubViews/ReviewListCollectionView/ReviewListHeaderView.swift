@@ -98,9 +98,10 @@ extension ReviewListHeaderView {
     private func configureMyReviewButton() {
         var configuration = UIButton.Configuration.plain()
         let imageSize = CGSize(width: 14.17, height: 14.17)
+        
         let image = myReviewButton.isSelected
-        ? UIImage(systemName: SFSymbols.checkmarkSquare.rawValue)
-        : UIImage(systemName: SFSymbols.square.rawValue)
+            ? UIImage.appImage(asset: .checkFill)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal)
+            : UIImage.appImage(asset: .checkEmpty)?.withTintColor(UIColor.appColor(.neutral500), renderingMode: .alwaysOriginal)
         
         let resizedImage = image?.withConfiguration(
             UIImage.SymbolConfiguration(pointSize: imageSize.width, weight: .regular)
@@ -109,12 +110,13 @@ extension ReviewListHeaderView {
         
         var text = AttributedString("내가 작성한 리뷰")
         text.font = UIFont.appFont(.pretendardRegular, size: 14)
+        text.foregroundColor = UIColor.appColor(.neutral500)
         configuration.attributedTitle = text
         
         configuration.imagePadding = 4
-        configuration.baseBackgroundColor = .systemBackground
-        configuration.baseForegroundColor = UIColor.appColor(.neutral500)
+        configuration.baseBackgroundColor = .clear
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
         myReviewButton.contentHorizontalAlignment = .leading
         myReviewButton.configuration = configuration
     }
