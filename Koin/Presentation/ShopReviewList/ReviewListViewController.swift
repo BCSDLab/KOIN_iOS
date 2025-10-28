@@ -356,7 +356,7 @@ extension ReviewListViewController {
     private func showZoomedImage(_ image: UIImage?) {
         guard let image else { return }
         
-        let imageWidth = UIScreen.main.bounds.width - 48
+        let imageWidth = UIScreen.main.bounds.width
         let proportion = image.size.width / imageWidth
         let imageHeight = image.size.height / proportion
         
