@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopInfoTableViewIntroductionCell: UITableViewCell {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let titleLabel = UILabel().then {
         $0.contentMode = .center
         $0.font = .appFont(.pretendardSemiBold, size: 15)
@@ -56,7 +56,7 @@ extension ShopInfoTableViewIntroductionCell {
             $0.leading.equalToSuperview().offset(24)
         }
         introductionLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(-8)  // MARK: - 행간으로 인한 오차 offset으로 임의 조정
+            $0.top.equalTo(titleLabel.snp.bottom).offset(-8)  // FIXME: - 행간으로 인한 오차 offset으로 임의 조정
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().offset(-18)
         }

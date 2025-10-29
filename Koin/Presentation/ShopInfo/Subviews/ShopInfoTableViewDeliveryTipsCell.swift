@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let titleLabel = UILabel().then {
         $0.contentMode = .center
         $0.font = .appFont(.pretendardSemiBold, size: 15)
@@ -34,7 +34,7 @@ final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
         $0.backgroundColor = .appColor(.neutral50)
     }
     
-    // MARK: Initializer
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()

@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopInfoTableViewOwnerInfoCell: UITableViewCell {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let titleLabel = UILabel().then {
         $0.contentMode = .center
         $0.font = .appFont(.pretendardSemiBold, size: 15)
@@ -21,10 +21,18 @@ final class ShopInfoTableViewOwnerInfoCell: UITableViewCell {
         $0.alignment = .leading
         $0.distribution = .equalSpacing
     }
-    private let nameTitleLabel = UILabel().then { $0.text = "대표자명" }
-    private let shopNameTitleLabel = UILabel().then { $0.text = "상호명" }
-    private let addressTitleLabel = UILabel().then { $0.text = "사업자 주소" }
-    private let companyRegistrationNumberTitleLabel = UILabel().then { $0.text = "사업자 등록 번호" }
+    private let nameTitleLabel = UILabel().then {
+        $0.text = "대표자명"
+    }
+    private let shopNameTitleLabel = UILabel().then {
+        $0.text = "상호명"
+    }
+    private let addressTitleLabel = UILabel().then {
+        $0.text = "사업자 주소"
+    }
+    private let companyRegistrationNumberTitleLabel = UILabel().then {
+        $0.text = "사업자 등록 번호"
+    }
     
     private let valueStackView = UIStackView().then {
         $0.axis = .vertical

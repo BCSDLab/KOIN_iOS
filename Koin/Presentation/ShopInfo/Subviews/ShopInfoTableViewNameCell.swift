@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopInfoTableViewNameCell: UITableViewCell {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let titleLabel = UILabel().then {
         $0.contentMode = .center
         $0.font = .appFont(.pretendardSemiBold, size: 15)

@@ -9,8 +9,8 @@ import UIKit
 
 final class DeliveryTipsCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Components
-    private let label = UILabel().then {
+    // MARK: - UI Components
+    private let tipLabel = UILabel().then {
         $0.textAlignment = .left
         $0.numberOfLines = 1
         $0.font = .appFont(.pretendardMedium, size: 12)
@@ -39,10 +39,10 @@ final class DeliveryTipsCollectionViewCell: UICollectionViewCell {
         if let toAmount = toAmount,
            let fromAmount = formatter.string(from: NSNumber(value: fromAmount)),
            let toAmount = formatter.string(from: NSNumber(value: toAmount)) {
-            label.text = "\(fromAmount) ~ \(toAmount)원 미만"
+            tipLabel.text = "\(fromAmount) ~ \(toAmount)원 미만"
         }
         else if let fromAmount = formatter.string(from: NSNumber(value: fromAmount)) {
-            label.text = "\(fromAmount)원 이상"
+            tipLabel.text = "\(fromAmount)원 이상"
         }
     }
     func configure(fee: Int) {
@@ -50,7 +50,7 @@ final class DeliveryTipsCollectionViewCell: UICollectionViewCell {
             $0.numberStyle = .decimal
         }
         if let fee = formatter.string(from: NSNumber(value: fee)) {
-            label.text = "\(fee)원"
+            tipLabel.text = "\(fee)원"
         }
     }
 }
@@ -58,10 +58,10 @@ final class DeliveryTipsCollectionViewCell: UICollectionViewCell {
 extension DeliveryTipsCollectionViewCell {
     
     private func configureView() {
-        [label, topBorderView, leadingBorderView].forEach {
+        [tipLabel, topBorderView, leadingBorderView].forEach {
             contentView.addSubview($0)
         }
-        label.snp.makeConstraints {
+        tipLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
         }

@@ -14,9 +14,9 @@ final class ShopInfoViewController: UIViewController {
     private let viewModel: ShopInfoViewModel
     private let shouldHighlight: ShopInfoTableView.HighlightableCell
     private var subscriptions: Set<AnyCancellable> = []
-    let inputSubject = PassthroughSubject<ShopInfoViewModel.Input, Never>()
+    private let inputSubject = PassthroughSubject<ShopInfoViewModel.Input, Never>()
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let shopInfoTableView: ShopInfoTableView = ShopInfoTableView().then {
         $0.separatorStyle = .none
         $0.allowsSelection = false
@@ -34,6 +34,7 @@ final class ShopInfoViewController: UIViewController {
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        super.viewDidLoad()
         configureNavigationBar(style: .empty)
         configureRightBarButton()
         configureView()
@@ -41,6 +42,7 @@ final class ShopInfoViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
     }
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         shopInfoTableView.scrollToHighlightedCell()
     }
 
