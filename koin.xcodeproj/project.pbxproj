@@ -1845,6 +1845,14 @@
 			path = koinUITests;
 			sourceTree = "<group>";
 		};
+		B61FAA152EA3A394005BE539 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				B61FAA162EA3A39D005BE539 /* Typography.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		B65422F52EA12BE700018F15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -4010,6 +4018,7 @@
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
 				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
+				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
 				D27DD0FA2BA6292C0081FD36 /* LandOptionCollectionView.swift in Sources */,
 				D23944652C38432100048F45 /* EventListViewController.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
