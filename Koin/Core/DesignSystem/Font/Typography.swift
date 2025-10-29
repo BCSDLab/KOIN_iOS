@@ -31,7 +31,6 @@ enum Typography {
     case caption2
     case caption2Strong
     
-    // MARK: - Font Properties
     var font: UIFont {
         let fontName: String
         let size: CGFloat
@@ -100,7 +99,6 @@ enum Typography {
         return UIFont(name: fontName, size: size) ?? .systemFont(ofSize: size)
     }
     
-    // MARK: - Line Height
     var lineHeight: CGFloat {
         let size = font.pointSize
         let percentage: CGFloat
@@ -115,13 +113,11 @@ enum Typography {
         return size * percentage
     }
     
-    // MARK: - Line Spacing Calculation
     var lineSpacing: CGFloat {
         return lineHeight - font.lineHeight
     }
 }
 
-// MARK: - Font Family
 private enum FontFamily {
     static let pretendardRegular = "Pretendard-Regular"
     static let pretendardMedium = "Pretendard-Medium"
@@ -129,11 +125,7 @@ private enum FontFamily {
     static let pretendardBold = "Pretendard-Bold"
 }
 
-// MARK: - UIFont Extension
 extension UIFont {
-    /// Typography 스타일로 폰트 생성
-    /// - Parameter typography: Typography 케이스
-    /// - Returns: 해당 Typography의 UIFont
     static func setFont(_ typography: Typography) -> UIFont {
         return typography.font
     }
