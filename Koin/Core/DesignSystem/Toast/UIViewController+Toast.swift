@@ -91,7 +91,7 @@ extension UIViewController {
     }
     
     // 버튼이 있는 Toast를 표시
-    func showToastMessage(message: String, intent: ToastIntent = .neutral, buttonTitle: String, duration: TimeInterval = 3.0, buttonAction: @escaping () -> Void) {
+    func showToastMessageWithButton(message: String, intent: ToastIntent = .neutral, buttonTitle: String, duration: TimeInterval = 3.0, buttonAction: @escaping () -> Void) {
         let config = ToastConfig(
             intent: intent,
             variant: .action(title: buttonTitle),
