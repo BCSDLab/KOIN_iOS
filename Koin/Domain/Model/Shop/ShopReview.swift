@@ -8,11 +8,12 @@
 import Foundation
 
 struct ShopReview {
-    let reviewStatistics: StatisticsDto
+    let statistics: StatisticsDto
     let totalPage: Int
     let currentPage: Int
     let totalCount: Int
-    let review: [Review]
+    let currentCount: Int
+    let reviews: [Review]
 }
 
 struct Review {

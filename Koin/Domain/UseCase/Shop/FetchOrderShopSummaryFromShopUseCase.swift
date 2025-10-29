@@ -20,8 +20,8 @@ final class DefaultFetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFr
     
     func execute(id: Int) -> AnyPublisher<OrderShopSummary, Error> {
         return repository.fetchShopSummary(id: id)
-            .map { shopSummary in
-                return OrderShopSummary(from: shopSummary)
+            .map { shopSummaryDto in
+                return OrderShopSummary(from: shopSummaryDto, shopId: id)
             }
             .eraseToAnyPublisher()
     }

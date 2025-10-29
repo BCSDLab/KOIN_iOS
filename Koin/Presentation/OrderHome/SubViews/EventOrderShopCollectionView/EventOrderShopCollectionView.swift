@@ -138,7 +138,7 @@ extension EventOrderShopCollectionView {
         let shop = eventShops[indexPath.row]
         cell.configure(shop)
         cell.onTap = { [weak self] shopId in
-            self?.cellTapPublisher.send((shopId, shop.shopName))
+            self?.cellTapPublisher.send((shop.orderableShopId, shop.shopName))
         }
         return cell
     }

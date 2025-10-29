@@ -249,12 +249,12 @@ final class ShopViewController: UIViewController {
             let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
             
-            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+            let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
                                                 fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
                                                 fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
                                                 fetchShopDataUseCase: fetchShopDataUseCase,
                                                 shopId: shopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: false)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
             viewController.title = shopName
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
