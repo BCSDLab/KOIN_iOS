@@ -1845,6 +1845,13 @@
 			path = koinUITests;
 			sourceTree = "<group>";
 		};
+		B65422F52EA12BE700018F15 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
 			isa = PBXGroup;
 			children = (
@@ -2687,6 +2694,7 @@
 		D27DD07D2BA608310081FD36 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				B65422F52EA12BE700018F15 /* DesignSystem */,
 				8354BE482C7A0394009D4D7A /* CoreData */,
 				D27DD0832BA608310081FD36 /* Workers */,
 				D27DD0712BA608310081FD36 /* Extensions */,
@@ -4437,6 +4445,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4498,6 +4507,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
