@@ -46,7 +46,7 @@ final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
     func configure(title: String, deliveryTips: [DeliveryTip]) {
         titleLabel.text = title
         deliveryTipsCollectionView.configure(deliveryTips: deliveryTips)
-        deliveryTipsCollectionView.snp.makeConstraints {
+        deliveryTipsCollectionView.snp.updateConstraints {
             $0.height.equalTo(30 * deliveryTips.count)
         }
     }
@@ -70,6 +70,7 @@ extension ShopInfoTableViewDeliveryTipsCell {
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().offset(-18)
+            $0.height.equalTo(30)
         }
         separatorView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
