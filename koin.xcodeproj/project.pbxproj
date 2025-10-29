@@ -159,9 +159,6 @@
 		83FA918B2C81E2E70090351F /* NoticeListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918A2C81E2E70090351F /* NoticeListCollectionView.swift */; };
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		B3103C316BEE49DB381AB154 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */; };
-		B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61FAA162EA3A39D005BE539 /* Typography.swift */; };
-		B65422FA2EA12D9A00018F15 /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65422F92EA12D9A00018F15 /* ColorSystem.swift */; };
-		B65422FC2EA12DD700018F15 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65422FB2EA12DD700018F15 /* UIColor+Hex.swift */; };
 		BE696CF7ECA5FAE839896DAA /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CCC0E0747FEA60867679C70 /* Pods_NotificationService.framework */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
@@ -838,9 +835,6 @@
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B61FAA162EA3A39D005BE539 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
-		B65422F92EA12D9A00018F15 /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
-		B65422FB2EA12DD700018F15 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		C9EC2A4D19115EFB044A52BE /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
@@ -1862,19 +1856,8 @@
 		B65422F52EA12BE700018F15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				B61FAA152EA3A394005BE539 /* Font */,
-				B65422F82EA12D9200018F15 /* Color */,
 			);
 			path = DesignSystem;
-			sourceTree = "<group>";
-		};
-		B65422F82EA12D9200018F15 /* Color */ = {
-			isa = PBXGroup;
-			children = (
-				B65422F92EA12D9A00018F15 /* ColorSystem.swift */,
-				B65422FB2EA12DD700018F15 /* UIColor+Hex.swift */,
-			);
-			path = Color;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -3941,7 +3924,6 @@
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
-				B65422FC2EA12DD700018F15 /* UIColor+Hex.swift in Sources */,
 				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
@@ -4253,7 +4235,6 @@
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
 				D27DD0AC2BA608310081FD36 /* CategoryCollectionViewCell.swift in Sources */,
-				B65422FA2EA12D9A00018F15 /* ColorSystem.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				D20AD6C72DFB41D00067760A /* ClubCollectionViewCell.swift in Sources */,
@@ -4473,6 +4454,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -4534,6 +4516,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
