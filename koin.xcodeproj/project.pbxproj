@@ -13,7 +13,18 @@
 		3B6E30EE2E6C11ED006CD0E1 /* OrderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */; };
 		3B6E30F02E6C1883006CD0E1 /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */; };
 		3BB065652E9A9E9C00463919 /* OrderMenuDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */; };
-		7B3A4FD8ADDB6D14329BFFCA /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4474681F96A1650D4E61884 /* Pods_koin.framework */; };
+		7C82FF6C2E9D187C006335A7 /* DeliveryTipsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF5E2E9D187C006335A7 /* DeliveryTipsCollectionView.swift */; };
+		7C82FF6D2E9D187C006335A7 /* ShopInfoTableViewIntroductionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF632E9D187C006335A7 /* ShopInfoTableViewIntroductionCell.swift */; };
+		7C82FF6E2E9D187C006335A7 /* ShopInfoTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF612E9D187C006335A7 /* ShopInfoTableView.swift */; };
+		7C82FF6F2E9D187C006335A7 /* ShopInfoTableViewOwnerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF672E9D187C006335A7 /* ShopInfoTableViewOwnerInfoCell.swift */; };
+		7C82FF702E9D187C006335A7 /* ShopInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF692E9D187C006335A7 /* ShopInfoViewController.swift */; };
+		7C82FF712E9D187C006335A7 /* ShopInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF6A2E9D187C006335A7 /* ShopInfoViewModel.swift */; };
+		7C82FF722E9D187C006335A7 /* ShopInfoTableViewNoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF652E9D187C006335A7 /* ShopInfoTableViewNoticeCell.swift */; };
+		7C82FF732E9D187C006335A7 /* DeliveryTipsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF5F2E9D187C006335A7 /* DeliveryTipsCollectionViewCell.swift */; };
+		7C82FF742E9D187C006335A7 /* ShopInfoTableViewDeliveryTipsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF622E9D187C006335A7 /* ShopInfoTableViewDeliveryTipsCell.swift */; };
+		7C82FF752E9D187C006335A7 /* ShopInfoTableViewOriginsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF662E9D187C006335A7 /* ShopInfoTableViewOriginsCell.swift */; };
+		7C82FF762E9D187C006335A7 /* ShopInfoTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF642E9D187C006335A7 /* ShopInfoTableViewNameCell.swift */; };
+		7C82FF782E9D18C7006335A7 /* ShopInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* ShopInfo.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -230,6 +241,7 @@
 		B61339712EAB374B000550A1 /* SortTypeBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61339702EAB374B000550A1 /* SortTypeBottomSheetViewController.swift */; };
 		B61339742EAB394D000550A1 /* SortTypeBottomSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61339732EAB394D000550A1 /* SortTypeBottomSheetCell.swift */; };
 		B8B37205489AF6DFC894DDA4 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */; };
+		B92C6B8A0FA84DA73E157DE7 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4474681F96A1650D4E61884 /* Pods_koin.framework */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
 		D2078BE82BC4273200A39861 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BE72BC4273200A39861 /* CALayer.swift */; };
@@ -782,9 +794,21 @@
 		3B6E30ED2E6C11ED006CD0E1 /* OrderFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilter.swift; sourceTree = "<group>"; };
 		3B6E30EF2E6C1883006CD0E1 /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
 		3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderMenuDTO.swift; sourceTree = "<group>"; };
-		70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+		66A5AE76A4C42729F48E5291 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A37509640D01810B159A297 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
+		7C82FF5E2E9D187C006335A7 /* DeliveryTipsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTipsCollectionView.swift; sourceTree = "<group>"; };
+		7C82FF5F2E9D187C006335A7 /* DeliveryTipsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTipsCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C82FF612E9D187C006335A7 /* ShopInfoTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableView.swift; sourceTree = "<group>"; };
+		7C82FF622E9D187C006335A7 /* ShopInfoTableViewDeliveryTipsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewDeliveryTipsCell.swift; sourceTree = "<group>"; };
+		7C82FF632E9D187C006335A7 /* ShopInfoTableViewIntroductionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewIntroductionCell.swift; sourceTree = "<group>"; };
+		7C82FF642E9D187C006335A7 /* ShopInfoTableViewNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewNameCell.swift; sourceTree = "<group>"; };
+		7C82FF652E9D187C006335A7 /* ShopInfoTableViewNoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewNoticeCell.swift; sourceTree = "<group>"; };
+		7C82FF662E9D187C006335A7 /* ShopInfoTableViewOriginsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewOriginsCell.swift; sourceTree = "<group>"; };
+		7C82FF672E9D187C006335A7 /* ShopInfoTableViewOwnerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoTableViewOwnerInfoCell.swift; sourceTree = "<group>"; };
+		7C82FF692E9D187C006335A7 /* ShopInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoViewController.swift; sourceTree = "<group>"; };
+		7C82FF6A2E9D187C006335A7 /* ShopInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoViewModel.swift; sourceTree = "<group>"; };
+		7C82FF772E9D18C7006335A7 /* ShopInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfo.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -1545,7 +1569,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B3A4FD8ADDB6D14329BFFCA /* Pods_koin.framework in Frameworks */,
+				B92C6B8A0FA84DA73E157DE7 /* Pods_koin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1573,6 +1597,40 @@
 				D20CFC012DA7FD8300ADEF3B /* RegisterFormViewModel.swift */,
 			);
 			path = Register;
+			sourceTree = "<group>";
+		};
+		7C82FF602E9D187C006335A7 /* DeliveryTipsCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				7C82FF5E2E9D187C006335A7 /* DeliveryTipsCollectionView.swift */,
+				7C82FF5F2E9D187C006335A7 /* DeliveryTipsCollectionViewCell.swift */,
+			);
+			path = DeliveryTipsCollectionView;
+			sourceTree = "<group>";
+		};
+		7C82FF682E9D187C006335A7 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C82FF602E9D187C006335A7 /* DeliveryTipsCollectionView */,
+				7C82FF612E9D187C006335A7 /* ShopInfoTableView.swift */,
+				7C82FF642E9D187C006335A7 /* ShopInfoTableViewNameCell.swift */,
+				7C82FF632E9D187C006335A7 /* ShopInfoTableViewIntroductionCell.swift */,
+				7C82FF652E9D187C006335A7 /* ShopInfoTableViewNoticeCell.swift */,
+				7C82FF622E9D187C006335A7 /* ShopInfoTableViewDeliveryTipsCell.swift */,
+				7C82FF672E9D187C006335A7 /* ShopInfoTableViewOwnerInfoCell.swift */,
+				7C82FF662E9D187C006335A7 /* ShopInfoTableViewOriginsCell.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C82FF6B2E9D187C006335A7 /* ShopInfo */ = {
+			isa = PBXGroup;
+			children = (
+				7C82FF682E9D187C006335A7 /* Subviews */,
+				7C82FF692E9D187C006335A7 /* ShopInfoViewController.swift */,
+				7C82FF6A2E9D187C006335A7 /* ShopInfoViewModel.swift */,
+			);
+			path = ShopInfo;
 			sourceTree = "<group>";
 		};
 		7C93BA132E995B31006F9D76 /* TableHeaderView */ = {
@@ -2798,6 +2856,7 @@
 				D27DD03D2BA608310081FD36 /* Dining */,
 				D249CD2D2C1466B5000813F9 /* DiningNotice */,
 				D27DD0452BA608310081FD36 /* ShopData */,
+				7C82FF6B2E9D187C006335A7 /* ShopInfo */,
 				D27DD04E2BA608310081FD36 /* Shop */,
 				B48BFD672E6A9E82002D3A3D /* ShopSummary */,
 				D239447A2C3BF41A00048F45 /* ShopReview */,
@@ -3428,6 +3487,7 @@
 				D23944832C3C3ABC00048F45 /* ShopReview.swift */,
 				D27A5D9D2C6BE8B700C4275F /* Shop.swift */,
 				D8B1A9EB2E321E7800943535 /* ShopSortType.swift */,
+				7C82FF772E9D18C7006335A7 /* ShopInfo.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -4039,10 +4099,10 @@
 		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */,
 				E3106E81CB48A71BD3FC3812 /* Pods-NotificationService.release.xcconfig */,
 				B4360BDE13BBCCAB9E0A7A9A /* Pods-koin.debug.xcconfig */,
 				7A37509640D01810B159A297 /* Pods-koin.release.xcconfig */,
+				66A5AE76A4C42729F48E5291 /* Pods-NotificationService.debug.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -4437,6 +4497,7 @@
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */,
+				7C82FF782E9D18C7006335A7 /* ShopInfo.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */,
@@ -4682,6 +4743,17 @@
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */,
+				7C82FF6C2E9D187C006335A7 /* DeliveryTipsCollectionView.swift in Sources */,
+				7C82FF6D2E9D187C006335A7 /* ShopInfoTableViewIntroductionCell.swift in Sources */,
+				7C82FF6E2E9D187C006335A7 /* ShopInfoTableView.swift in Sources */,
+				7C82FF6F2E9D187C006335A7 /* ShopInfoTableViewOwnerInfoCell.swift in Sources */,
+				7C82FF702E9D187C006335A7 /* ShopInfoViewController.swift in Sources */,
+				7C82FF712E9D187C006335A7 /* ShopInfoViewModel.swift in Sources */,
+				7C82FF722E9D187C006335A7 /* ShopInfoTableViewNoticeCell.swift in Sources */,
+				7C82FF732E9D187C006335A7 /* DeliveryTipsCollectionViewCell.swift in Sources */,
+				7C82FF742E9D187C006335A7 /* ShopInfoTableViewDeliveryTipsCell.swift in Sources */,
+				7C82FF752E9D187C006335A7 /* ShopInfoTableViewOriginsCell.swift in Sources */,
+				7C82FF762E9D187C006335A7 /* ShopInfoTableViewNameCell.swift in Sources */,
 				D2B219352D665B2900EAF5B1 /* ChatImageTableViewCell.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
 				D21572562CEDC1830061E725 /* ModifyFrameUseCase.swift in Sources */,
@@ -5048,7 +5120,7 @@
 /* Begin XCBuildConfiguration section */
 		839D711F2BEB1570001BC7F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70FB7F509810C950773C2895 /* Pods-NotificationService.debug.xcconfig */;
+			baseConfigurationReference = 66A5AE76A4C42729F48E5291 /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

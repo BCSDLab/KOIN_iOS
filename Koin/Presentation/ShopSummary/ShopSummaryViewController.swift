@@ -161,6 +161,14 @@ extension ShopSummaryViewController {
             }
             .store(in: &subscriptions)
         
+        tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
+            let viewModel = ShopInfoViewModel()
+            let viewController = ShopInfoViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+            viewController.title = "가게정보·원산지"
+            self?.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .store(in: &subscriptions)
+        
         // MARK: - GroupNameCollectionView
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
             self?.tableHeaderView.update(contentOffset: contentOffset)

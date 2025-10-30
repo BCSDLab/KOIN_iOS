@@ -11,8 +11,9 @@ import Combine
 final class ShopSummaryInfoView: UIView {
     
     // MARK: - Properties
+    let navigateToShopInfoPublisher = PassthroughSubject<ShopInfoTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
-
+    
     // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
@@ -66,6 +67,7 @@ final class ShopSummaryInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        addTargets()
         setAddTarget()
     }
     
@@ -183,6 +185,25 @@ extension ShopSummaryInfoView {
             $0.textAlignment = .center
             $0.clipsToBounds = true
         }
+    }
+}
+
+extension ShopSummaryInfoView {
+    
+    private func addTargets() {
+        moreInfoButton.addTarget(self, action: #selector(moreInfoButtonTapped), for: .touchUpInside)
+        orderAmountDelieveryTipView.addTarget(self, action: #selector(orderAmountDelieveryTipViewTapped), for: .touchUpInside)
+        introductionView.addTarget(self, action: #selector(introductionViewTapped), for: .touchUpInside)
+    }
+    
+    @objc private func moreInfoButtonTapped() {
+        navigateToShopInfoPublisher.send(.name)
+    }
+    @objc private func orderAmountDelieveryTipViewTapped() {
+        navigateToShopInfoPublisher.send(.deliveryTips)
+    }
+    @objc private func introductionViewTapped() {
+        navigateToShopInfoPublisher.send(.notice)
     }
 }
 
