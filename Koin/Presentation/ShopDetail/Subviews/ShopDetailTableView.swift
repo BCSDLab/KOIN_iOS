@@ -16,7 +16,7 @@ final class ShopDetailTableView: UITableView {
     }
     
     // MARK: - Properties
-    private var shopDetail: ShopDetail = ShopDetail.empty()
+    private var shopDetail: OrderShopDetail = OrderShopDetail.empty()
     private var shouldHighlight: HighlightableCell?
     
     // MARK: - Initializer
@@ -29,7 +29,7 @@ final class ShopDetailTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopDetail: ShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell) {
+    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell) {
         self.shopDetail = shopDetail
         self.shouldHighlight = shouldHighlight
         reloadData()

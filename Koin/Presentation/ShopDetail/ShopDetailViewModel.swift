@@ -15,7 +15,7 @@ final class ShopDetailViewModel {
     }
     
     enum Output {
-        case update(shopDetail: ShopDetail)
+        case update(shopDetail: OrderShopDetail)
     }
     
     // MARK: - Properties
@@ -40,6 +40,6 @@ final class ShopDetailViewModel {
 extension ShopDetailViewModel {
     
     private func fetchShopDetail() {
-        outputSubject.send(.update(shopDetail: ShopDetail.dummy()))
+        outputSubject.send(.update(shopDetail: OrderShopDetail.dummy()))
     }
 }

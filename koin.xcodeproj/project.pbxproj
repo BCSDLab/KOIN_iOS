@@ -24,7 +24,7 @@
 		7C82FF742E9D187C006335A7 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF622E9D187C006335A7 /* ShopDetailTableViewDeliveryTipsCell.swift */; };
 		7C82FF752E9D187C006335A7 /* ShopDetailTableViewOriginsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF662E9D187C006335A7 /* ShopDetailTableViewOriginsCell.swift */; };
 		7C82FF762E9D187C006335A7 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF642E9D187C006335A7 /* ShopDetailTableViewNameCell.swift */; };
-		7C82FF782E9D18C7006335A7 /* ShopInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* ShopInfo.swift */; };
+		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		8304F5FD2C7F71FF00AA8E4F /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */; };
 		8316DCDB2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */; };
 		8316DCDD2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */; };
@@ -808,7 +808,7 @@
 		7C82FF672E9D187C006335A7 /* ShopDetailTableViewOwnerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailTableViewOwnerInfoCell.swift; sourceTree = "<group>"; };
 		7C82FF692E9D187C006335A7 /* ShopDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
 		7C82FF6A2E9D187C006335A7 /* ShopDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewModel.swift; sourceTree = "<group>"; };
-		7C82FF772E9D18C7006335A7 /* ShopInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfo.swift; sourceTree = "<group>"; };
+		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		8304F5FC2C7F71FF00AA8E4F /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8316DCDA2CDF77A2009AF9A4 /* ShuttleTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTimetableTableViewCell.swift; sourceTree = "<group>"; };
 		8316DCDC2CDF7C09009AF9A4 /* ExpressOrCityTimetableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressOrCityTimetableTableViewCell.swift; sourceTree = "<group>"; };
@@ -3485,7 +3485,6 @@
 				D23944832C3C3ABC00048F45 /* ShopReview.swift */,
 				D27A5D9D2C6BE8B700C4275F /* Shop.swift */,
 				D8B1A9EB2E321E7800943535 /* ShopSortType.swift */,
-				7C82FF772E9D18C7006335A7 /* ShopInfo.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -3955,6 +3954,7 @@
 				B458C1212E785FDC00AB5BF1 /* CartItemsCount.swift */,
 				B458C1332E78F54B00AB5BF1 /* Cart.swift */,
 				3B2B134B2E9AA8A20051AF6A /* OrderMenu.swift */,
+				7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4499,7 +4499,7 @@
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				D23944A72C3D17BD00048F45 /* ReviewImageCollectionViewCell.swift in Sources */,
-				7C82FF782E9D18C7006335A7 /* ShopInfo.swift in Sources */,
+				7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */,
