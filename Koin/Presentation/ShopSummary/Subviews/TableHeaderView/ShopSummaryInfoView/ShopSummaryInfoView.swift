@@ -207,7 +207,7 @@ extension ShopSummaryInfoView {
     }
 }
 
-extension ShopDetailInfoView {
+extension ShopSummaryInfoView {
     
     private func setUpLayouts() {
         [starImageView, ratingLabel, separatorLabel, reviewButton].forEach {
