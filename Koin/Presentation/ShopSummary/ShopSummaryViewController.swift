@@ -22,7 +22,7 @@ final class ShopSummaryViewController: UIViewController {
     private var cachedShopId: Int?
     private var cachedShopName: String?
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
     private let navigationBarLikeView = UIView().then {
@@ -162,8 +162,8 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
-            let viewModel = ShopInfoViewModel()
-            let viewController = ShopInfoViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+            let viewModel = ShopDetailViewModel()
+            let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
             viewController.title = "가게정보·원산지"
             self?.navigationController?.pushViewController(viewController, animated: true)
             }

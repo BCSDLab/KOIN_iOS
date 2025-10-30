@@ -14,7 +14,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
-    let navigateToShopInfoPublisher = PassthroughSubject<ShopInfoTableView.HighlightableCell, Never>()
+    let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     

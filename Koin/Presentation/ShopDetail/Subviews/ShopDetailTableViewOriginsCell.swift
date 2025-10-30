@@ -1,5 +1,5 @@
 //
-//  ShopInfoTableViewOriginsCell.swift
+//  ShopDetailTableViewOriginsCell.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopInfoTableViewOriginsCell: UITableViewCell {
+final class ShopDetailTableViewOriginsCell: UITableViewCell {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -45,7 +45,7 @@ final class ShopInfoTableViewOriginsCell: UITableViewCell {
     }
 }
 
-extension ShopInfoTableViewOriginsCell {
+extension ShopDetailTableViewOriginsCell {
     
     private func setUpLayout() {
         [titleLabel, originsLabel, separatorView].forEach {

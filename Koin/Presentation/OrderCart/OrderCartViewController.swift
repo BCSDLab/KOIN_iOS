@@ -16,7 +16,7 @@ final class OrderCartViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var orderableShopId: Int? = nil
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let orderCartEmptyView = OrderCartEmptyView().then {
         $0.isHidden = true
     }

@@ -1,5 +1,5 @@
 //
-//  ShopInfo.swift
+//  ShopDetail.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShopInfo {
+struct ShopDetail {
     let name: String
     let address: String
     let openTime: String
@@ -49,14 +49,14 @@ struct Origin {
     let origin: String
 }
 
-extension ShopInfo {
+extension ShopDetail {
     
-    static func empty() -> ShopInfo {
-        return ShopInfo(name: " ", address: " ", openTime: " ", closeTime: " ", closedDays: [], phone: " ", introduction: " ", notice: " ", deliveryTips: [], ownerInfo: OwnerInfo(name: " ", shopName: " ", address: " ", companyRegistrationNumber: " "), origins: [])
+    static func empty() -> ShopDetail {
+        return ShopDetail(name: " ", address: " ", openTime: " ", closeTime: " ", closedDays: [], phone: " ", introduction: " ", notice: " ", deliveryTips: [], ownerInfo: OwnerInfo(name: " ", shopName: " ", address: " ", companyRegistrationNumber: " "), origins: [])
     }
     
-    static func dummy() -> ShopInfo {
-        return ShopInfo(
+    static func dummy() -> ShopDetail {
+        return ShopDetail(
             name: "김밥천국",
             address: "충청남도 천안시 동남구 병천면 충절로 1594",
             openTime: "08:00",

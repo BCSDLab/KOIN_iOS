@@ -11,7 +11,7 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
     
     // MARK: - Properties
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let segmentedControl = OrderCartSegmentedControl()
     private let descriptionStackView = UIStackView().then {
         $0.axis = .horizontal

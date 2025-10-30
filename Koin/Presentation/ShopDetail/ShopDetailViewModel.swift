@@ -1,5 +1,5 @@
 //
-//  ShopInfoViewModel.swift
+//  ShopDetailViewModel.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -8,14 +8,14 @@
 import Foundation
 import Combine
 
-final class ShopInfoViewModel {
+final class ShopDetailViewModel {
     
     enum Input {
         case viewDidLoad
     }
     
     enum Output {
-        case update(shopInfo: ShopInfo)
+        case update(shopDetail: ShopDetail)
     }
     
     // MARK: - Properties
@@ -29,7 +29,7 @@ final class ShopInfoViewModel {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case .viewDidLoad: self?.fetchShopInfo()
+            case .viewDidLoad: self?.fetchShopDetail()
             }
         }
         .store(in: &subscriptions)
@@ -37,9 +37,9 @@ final class ShopInfoViewModel {
     }
 }
 
-extension ShopInfoViewModel {
+extension ShopDetailViewModel {
     
-    private func fetchShopInfo() {
-        outputSubject.send(.update(shopInfo: ShopInfo.dummy()))
+    private func fetchShopDetail() {
+        outputSubject.send(.update(shopDetail: ShopDetail.dummy()))
     }
 }

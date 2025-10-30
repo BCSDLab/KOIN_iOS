@@ -12,7 +12,7 @@ import Then
 
 final class ShopSummaryImagesCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Component
+    // MARK: - UI Components
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
     }
