@@ -8,10 +8,16 @@
 import Foundation
 
 struct OrderShopDetailDto: Decodable {
-    let shopID, orderableShopID: Int
-    let name, address, openTime, closeTime: String
+    let shopID: Int
+    let orderableShopID: Int
+    let name: String
+    let address: String
+    let openTime: String?
+    let closeTime: String?
     let closedDays: [ClosedDayDto]
-    let phone, introduction, notice: String
+    let phone: String
+    let introduction: String?
+    let notice: String?
     let deliveryTips: [DeliveryTipDto]
     let ownerInfo: OwnerInfoDto
     let origins: [OriginDto]
@@ -57,7 +63,10 @@ struct OriginDto: Codable {
 }
 
 struct OwnerInfoDto: Codable {
-    let name, shopName, address, companyRegistrationNumber: String
+    let name: String?
+    let shopName: String?
+    let address: String?
+    let companyRegistrationNumber: String?
 
     enum CodingKeys: String, CodingKey {
         case name
