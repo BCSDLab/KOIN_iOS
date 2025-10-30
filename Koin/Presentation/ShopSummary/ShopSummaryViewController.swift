@@ -162,7 +162,10 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
-            let viewModel = ShopDetailViewModel()
+            let service = DefaultOrderService()
+            let repository = DefaultOrderShopRepository(service: service)
+            let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: repository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase, orderableShopId: self?.viewModel.orderableShopId)
             let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
             viewController.title = "가게정보·원산지"
             self?.navigationController?.pushViewController(viewController, animated: true)
