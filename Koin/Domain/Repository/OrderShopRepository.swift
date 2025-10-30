@@ -20,6 +20,6 @@ protocol OrderShopRepository {
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error>
     func fetchCart() -> AnyPublisher<Cart, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
-    func fetchOrderMenu(orderableShopId: Int,
-                        orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error>
+    func fetchOrderMenu(orderableShopId: Int,orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error>
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error>
 }
