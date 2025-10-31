@@ -21,4 +21,6 @@ protocol OrderShopRepository {
     func fetchCart(parameter: FetchCartType) -> AnyPublisher<Cart, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
     func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchOrderMenu(orderableShopId: Int,orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error>
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error>
 }

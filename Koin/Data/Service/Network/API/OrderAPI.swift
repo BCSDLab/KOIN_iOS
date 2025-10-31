@@ -20,6 +20,8 @@ enum OrderAPI {
     case fetchCart(parameter: String)
     case resetCart
     case deleteCartMenuItem(cartMenuItemId: Int)
+    case fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int)
+    case fetchOrderShopDetail(orderableShopId: Int)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -42,6 +44,8 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchCart: return "/cart"
         case .resetCart: return "/cart/reset"
         case .deleteCartMenuItem(let cartMenuItemId): return "/cart/delete/\(cartMenuItemId)"
+        case let .fetchOrderMenu(orderableShopId, orderableShopMenuId): return "/order/shop/\(orderableShopId)/menus/\(orderableShopMenuId)"
+        case .fetchOrderShopDetail(let orderableShopId): return "/order/shop/\(orderableShopId)/detail"
         }
     }
     

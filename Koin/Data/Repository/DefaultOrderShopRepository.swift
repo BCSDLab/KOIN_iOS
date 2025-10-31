@@ -90,4 +90,18 @@ final class DefaultOrderShopRepository: OrderShopRepository{
         service.deleteCartMenuItem(cartMenuItemId: cartMenuItemId)
             .eraseToAnyPublisher()
     }
+        
+    func fetchOrderMenu(orderableShopId: Int,
+                        orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error> {
+        service.fetchOrderMenu(orderableShopId: orderableShopId,
+                               orderableShopMenuId: orderableShopMenuId)
+            .map { OrderMenu(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error> {
+        service.fetchOrderShopDetail(orderableShopId: orderableShopId)
+            .map { OrderShopDetail(from: $0) }
+            .eraseToAnyPublisher()
+    }
 }

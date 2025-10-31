@@ -16,8 +16,10 @@ final class OrderCartViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-    private let orderCartEmptyView = OrderCartEmptyView()
     private let orderCartTableHeaderView = OrderCartTableHeaderView()
+    private let orderCartEmptyView = OrderCartEmptyView().then {
+        $0.isHidden = true
+    }
     private let orderCartTableView = OrderCartTableView().then {
         $0.sectionHeaderTopPadding = 0
         $0.rowHeight = UITableView.automaticDimension
@@ -94,15 +96,17 @@ final class OrderCartViewController: UIViewController {
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
-            let viewModel = ShopDetailViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
+            let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
+            let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
                                                 fetchCartSummaryUseCase: fetchCartSummaryUseCase,
                                                 fetchCartUseCase: fetchCartUseCase,
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
+                                                fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                 orderableShopId: orderableShopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, isFromOrder: true)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)

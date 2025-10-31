@@ -9,8 +9,6 @@
  
 final class OrderCartAmountHeaderView: UITableViewHeaderFooterView {
     
-    // MARK: - Properties
-    
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
         $0.text = "결제금액을 확인해주세요"
