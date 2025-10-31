@@ -9,9 +9,6 @@ import UIKit
 
 final class OrderCartListCellPriceTableViewCell: UITableViewCell {
     
-    
-    // MARK: - Properties
-    
     // MARK: - UI Components
     private let label = UILabel().then {
         $0.textColor = .appColor(.neutral500)

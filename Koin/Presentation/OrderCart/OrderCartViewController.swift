@@ -14,9 +14,9 @@ final class OrderCartViewController: UIViewController {
     private let viewModel: OrderCartViewModel
     private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private var orderableShopId: Int? = nil
     
     // MARK: - UI Components
+    private let orderCartTableHeaderView = OrderCartTableHeaderView()
     private let orderCartEmptyView = OrderCartEmptyView().then {
         $0.isHidden = true
     }
@@ -26,8 +26,15 @@ final class OrderCartViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.sectionFooterHeight = .zero
+        $0.isHidden = true
     }
-    private let orderCartBottomSheet = OrderCartBottomSheet()
+    private let orderCartBottomSheet = OrderCartBottomSheet().then {
+        $0.isHidden = true
+    }
+    private let resetCartPopUpView = OrderCartResetCartPopUpView()
+    private let loginPopUpView = OrderCartLoginPopUpView().then {
+        $0.isHidden = true
+    }
     
     // MARK: - Initializer
     init(viewModel: OrderCartViewModel) {
@@ -54,19 +61,30 @@ final class OrderCartViewController: UIViewController {
     // MARK: - Bind
     private func bind() {
         viewModel.transform(with: inputSubject).sink { [weak self] output in
+            guard let self = self else {
+                return
+            }
             switch output {
-            case .updateCart(let cart):
-                self?.orderableShopId = cart.orderableShopId
-                self?.orderCartTableView.configure(cart: cart)
-                self?.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount, totalAmount: cart.totalAmount, finalPaymentAmount: cart.finalPaymentAmount, itemsCount: cart.items.count, isPickUp: !cart.isDeliveryAvailable)
+            case .updateCart(let cart, let isFromDelivery):
+                self.updateCart(cart: cart, isFromDelivery: isFromDelivery)
+            case .updateSegment(let isDeliveryAvailable, let isTakeOutAvailable):
+                self.updateSegment(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
+            case .removeItemFromTableView(let cartMenuItemId):
+                self.orderCartTableView.removeItem(cartMenuItemId: cartMenuItemId)
+            case .emptyCart:
+                self.emptyCart()
+            case .showLoginPopUpView:
+                self.showLoginPopUpView()
+            case .showToast(let message):
+                showToast(message: message)
             }
         }
         .store(in: &subscriptions)
         
         
-        // MARK: - TableView
+        // MARK: - TableView - 가게 상세페이지로 이동
         orderCartTableView.moveToShopPublisher.sink { [weak self] in
-            guard let self = self, let orderableShopId = self.orderableShopId else {
+            guard let self = self, let orderableShopId = self.viewModel.orderableShopId else {
                 return
             }
             let service = DefaultOrderService()
@@ -103,7 +121,7 @@ final class OrderCartViewController: UIViewController {
         }
         .store(in: &subscriptions)
         orderCartTableView.deleteItemPublisher.sink { [weak self] cartMenuItemId in
-            print("delete item")
+            self?.inputSubject.send(.deleteItem(cartMenuItemId: cartMenuItemId))
         }
         .store(in: &subscriptions)
         orderCartTableView.changeOptionPublisher.sink { [weak self] cartMenuItemId in
@@ -125,6 +143,28 @@ final class OrderCartViewController: UIViewController {
         // MARK: - Empty View
         orderCartEmptyView.addMenuButtonTappedPublisher.sink { [weak self] in
             self?.popToOrderTabbarViewController()
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - TableHeaderView - 배달/포장 전환
+        orderCartTableHeaderView.buttonDeliveryTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.fetchCartDelivery)
+        }
+        .store(in: &subscriptions)
+        orderCartTableHeaderView.buttonTakeOutTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.fetchCartTakeOut)
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - resetCartPopupView
+        resetCartPopUpView.rightButtonTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.resetCart)
+        }
+        .store(in: &subscriptions)
+        
+        // MARK: - loginPopUpView
+        loginPopUpView.rightButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToLogin()
         }
         .store(in: &subscriptions)
     }
@@ -154,14 +194,70 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        let resetCartPopUpView = OrderCartPopUpView()
-        resetCartPopUpView.configure(message: "정말로 담았던 메뉴들을\n전체 삭제하시겠어요?", leftButtonText: "아니오", rightButtonText: "예", emptyCart: emptyCart)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
 }
 
 extension OrderCartViewController {
+    
+    // MARK: - show popUpView
+    private func showLoginPopUpView() {
+        
+        let popupView = OrderLoginPopupView()
+
+        if let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+           let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+            
+            popupView.frame = window.bounds
+            
+            popupView.loginButtonAction = {
+                let loginViewController = LoginViewController(
+                    viewModel: LoginViewModel(
+                        loginUseCase: DefaultLoginUseCase(
+                            userRepository: DefaultUserRepository(service: DefaultUserService())
+                        ),
+                        logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
+                            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                        )
+                    )
+                )
+                loginViewController.title = "로그인"
+                self.navigationController?.pushViewController(loginViewController, animated: true)
+            }
+            
+            window.addSubview(popupView)
+        }
+    }
+}
+
+extension OrderCartViewController {
+    
+    private func updateCart(cart: Cart, isFromDelivery: Bool) {
+        if cart.items.isEmpty {
+            self.orderCartEmptyView.isHidden = false
+            self.orderCartTableView.isHidden = true
+            self.orderCartBottomSheet.isHidden = true
+        }
+        else {
+            self.orderCartEmptyView.isHidden = true
+            self.orderCartTableView.isHidden = false
+            self.orderCartBottomSheet.isHidden = false
+            self.orderCartTableView.configure(cart: cart)
+            self.orderCartBottomSheet.configure(shopMinimumOrderAmount: cart.shopMinimumOrderAmount,
+                                                itemsAmount: cart.itemsAmount,
+                                                finalPaymentAmount: cart.finalPaymentAmount,
+                                                itemsCount: cart.items.count,
+                                                isFromDelivery: isFromDelivery)
+        }
+    }
+
+    private func updateSegment(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        orderCartTableHeaderView.configure(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
+        orderCartTableHeaderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: isDeliveryAvailable && isTakeOutAvailable ? 62 : 62+25)
+    }
     
     private func orderButtonTapped() {
         guard let windowScene = UIApplication.shared.connectedScenes
@@ -170,8 +266,6 @@ extension OrderCartViewController {
               let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
             return
         }
-        let resetCartPopUpView = OrderCartPopUpView()
-        resetCartPopUpView.configure(message: "영업시간이 아니라서 주문할 수 없어요.\n담았던 메뉴는 삭제할까요?", leftButtonText: "아니오", rightButtonText: "예", emptyCart: emptyCart)
         resetCartPopUpView.frame = window.bounds
         window.addSubview(resetCartPopUpView)
     }
@@ -214,8 +308,13 @@ extension OrderCartViewController {
         }
     }
     
+    private func setUpTableHeaderView() {
+        orderCartTableView.tableHeaderView = orderCartTableHeaderView
+    }
+    
     private func configureView() {
         view.backgroundColor = .appColor(.newBackground)
+        setUpTableHeaderView()
         setUpLayouts()
         setUpConstraints()
     }

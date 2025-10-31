@@ -1,18 +1,21 @@
 //
-//  OrderCartPopUpView.swift
+//  OrderCartLoginPopUpView.swift
 //  koin
 //
-//  Created by 홍기정 on 10/2/25.
+//  Created by 홍기정 on 10/27/25.
 //
 
 import UIKit
 import Combine
 import SnapKit
 
-final class OrderCartPopUpView: UIView {
+final class OrderCartLoginPopUpView: UIView {
     
     // MARK: - Properties
-    var emptyCart: (() -> Void)? = nil
+    let leftButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let rightButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    
+    var menuId: Int? = nil
     
     // MARK: - UI Components
     private let dimView = UIView().then {
@@ -52,7 +55,7 @@ final class OrderCartPopUpView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(message: String, leftButtonText: String, rightButtonText: String, emptyCart: @escaping ()->Void) {
+    func configure(message: String, leftButtonText: String, rightButtonText: String) {
         label.setLineHeight(lineHeight: 1.60, text: message)
         label.textAlignment = .center
         label.lineBreakStrategy = .hangulWordPriority
@@ -68,11 +71,13 @@ final class OrderCartPopUpView: UIView {
                 .font: UIFont.appFont(.pretendardMedium, size: 15),
                 .foregroundColor: UIColor.appColor(.neutral0)
             ]), for: .normal)
-        self.emptyCart = emptyCart
+    }
+    func configure(menuId: Int) {
+        self.menuId = menuId
     }
 }
 
-extension OrderCartPopUpView {
+extension OrderCartLoginPopUpView {
 
     private func setUpLayouts() {
         [dimView, popUpView, label, leftButton, rightButton].forEach {
@@ -112,13 +117,15 @@ extension OrderCartPopUpView {
     }
 }
 
-extension OrderCartPopUpView {
+extension OrderCartLoginPopUpView {
  
     @objc private func leftButtonTapped() {
-        removeFromSuperview()
+        leftButtonTappedPublisher.send()
     }
     @objc private func rightButtonTapped() {
-        emptyCart?()
-        removeFromSuperview()
+        guard let menuId else {
+            return
+        }
+        rightButtonTappedPublisher.send(menuId)
     }
 }

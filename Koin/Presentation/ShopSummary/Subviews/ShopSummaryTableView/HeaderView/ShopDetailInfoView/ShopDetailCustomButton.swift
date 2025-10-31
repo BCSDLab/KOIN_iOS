@@ -9,7 +9,7 @@ import UIKit
 
 final class ShopDetailCustomButton: UIButton {
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let minimumOrderLabel = UILabel().then {
         $0.text = "최소주문"
         $0.numberOfLines = 0

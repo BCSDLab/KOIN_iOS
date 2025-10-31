@@ -18,8 +18,9 @@ protocol OrderService {
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
-    func fetchCart() -> AnyPublisher<CartDto, Error>
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error>
     func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error>
 }
@@ -77,21 +78,12 @@ final class DefaultOrderService: OrderService {
         return requestWithResponse(.resetCart)
             .eraseToAnyPublisher()
     }
-    func fetchCart() -> AnyPublisher<CartDto, Error> {
-        request(.fetchCart(parameter: "DELIVERY"))
-            .catch { [weak self] error -> AnyPublisher<CartDto, Error> in
-                guard let self = self else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-                switch error.asAFError?.responseCode {
-                case 400:
-                    return self.request(.fetchCart(parameter: "TAKE_OUT"))
-                        .eraseToAnyPublisher()
-                default:
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-            }
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error> {
+        return request(.fetchCart(parameter: parameter.rawValue))
             .eraseToAnyPublisher()
+    }
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return requestWithResponse(.deleteCartMenuItem(cartMenuItemId: cartMenuItemId))
     }
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error> {
         request(.fetchOrderMenu(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId))

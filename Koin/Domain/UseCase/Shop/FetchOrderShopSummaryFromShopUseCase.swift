@@ -12,7 +12,8 @@ protocol FetchOrderShopSummaryFromShopUseCase {
 }
 
 final class DefaultFetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase {
-    let repository: ShopRepository
+    
+    private let repository: ShopRepository
         
     init(repository: ShopRepository) {
         self.repository = repository

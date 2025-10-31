@@ -18,8 +18,9 @@ protocol OrderShopRepository {
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error>
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error>
-    func fetchCart() -> AnyPublisher<Cart, Error>
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<Cart, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchOrderMenu(orderableShopId: Int,orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error>
     func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error>
 }

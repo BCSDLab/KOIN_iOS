@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import Combine
 
-final class OrderCartSegmentedControlCell: UITableViewCell {
+final class OrderCartTableHeaderView: UIView {
     
     // MARK: - Properties
+    let buttonDeliveryTappedPublisher = PassthroughSubject<Void, Never>()
+    let buttonTakeOutTappedPublisher = PassthroughSubject<Void, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let segmentedControl = OrderCartSegmentedControl()
@@ -26,18 +30,19 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
     }
     
     // MARK: - Initializer
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configureView()
+        bind()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(isDeliveryAvailable: Bool, isPickupAvailable: Bool) {
-        segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isPickupAvailable: isPickupAvailable)
+    func configure(isDeliveryAvailable: Bool, isTakeOutAvailable: Bool) {
+        segmentedControl.configure(isDeliveryAvailable: isDeliveryAvailable, isTakeOutAvailable: isTakeOutAvailable)
         
-        if isDeliveryAvailable && isPickupAvailable {
+        if isDeliveryAvailable && isTakeOutAvailable {
             descriptionImageView.snp.removeConstraints()
             descriptionStackView.snp.updateConstraints {
                 $0.top.equalTo(segmentedControl.snp.bottom).offset(0)
@@ -47,14 +52,22 @@ final class OrderCartSegmentedControlCell: UITableViewCell {
         else {
             if !isDeliveryAvailable {
                 descriptionLabel.text = "이 가게는 포장주문만 가능해요"
-            } else if !isPickupAvailable {
+            } else if !isTakeOutAvailable {
                 descriptionLabel.text = "이 가게는 배달주문만 가능해요"
             }
         }
     }
+    private func bind() {
+        segmentedControl.buttonDeliveryTappedPublisher.sink { [weak self] in
+            self?.buttonDeliveryTappedPublisher.send()
+        }.store(in: &subscriptions)
+        segmentedControl.buttonTakeOutTappedPublisher.sink { [weak self] in
+            self?.buttonTakeOutTappedPublisher.send()
+        }.store(in: &subscriptions)
+    }
 }
 
-extension OrderCartSegmentedControlCell {
+extension OrderCartTableHeaderView {
     
     private func setUpLayout() {
         [descriptionImageView, descriptionLabel].forEach {
@@ -62,7 +75,7 @@ extension OrderCartSegmentedControlCell {
         }
         
         [segmentedControl, descriptionStackView].forEach {
-            contentView.addSubview($0)
+            addSubview($0)
         }
     }
     
@@ -83,8 +96,7 @@ extension OrderCartSegmentedControlCell {
         }
     }
     private func configureView() {
-        backgroundColor = .clear
-        backgroundView = .none
+        backgroundColor = .appColor(.newBackground)
         setUpLayout()
         setUpConstraints()
     }

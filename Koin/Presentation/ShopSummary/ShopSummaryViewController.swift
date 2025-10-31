@@ -314,7 +314,16 @@ extension ShopSummaryViewController {
             let service = DefaultOrderService()
             let repository = DefaultOrderShopRepository(service: service)
             let useCase = DefaultFetchCartUseCase(repository: repository)
-            let viewModel = OrderCartViewModel(fetchCartUseCase: useCase)
+            let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
+            let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
+            let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
+            let deleteCartMenuItemUseCase = DefaultDeleteCartMenuItemUseCase(repository: repository)
+            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)            
+            let viewModel = OrderCartViewModel(fetchCartUseCase: fetchCartUseCase,
+                                               fetchCartDeliveryUseCase: fetchCartDeliveryUseCase,
+                                               fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
+                                               deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
+                                               resetCartUseCase: resetCartUseCase)
             let viewController = OrderCartViewController(viewModel: viewModel)
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
