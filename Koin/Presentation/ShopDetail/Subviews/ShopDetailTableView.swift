@@ -16,7 +16,7 @@ final class ShopDetailTableView: UITableView {
     }
     
     // MARK: - Properties
-    private var shopDetail: OrderShopDetail = OrderShopDetail.empty()
+    private var shopDetail: OrderShopDetail? = nil
     private var shouldHighlight: HighlightableCell?
     
     // MARK: - Initializer
@@ -63,6 +63,9 @@ extension ShopDetailTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let shopDetail else {
+            return UITableViewCell()
+        }
         switch indexPath.section {
         case 0:
             let cell = ShopDetailTableViewNameCell()

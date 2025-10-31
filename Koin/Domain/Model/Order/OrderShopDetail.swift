@@ -103,10 +103,6 @@ extension OrderShopDetail {
         self.ownerInfo = OwnerInfo(name: "", shopName: "", address: "", companyRegistrationNumber: "")
         self.origins = []
     }
-
-    static func empty() -> OrderShopDetail {
-        return OrderShopDetail(name: "", address: "", openTime: "", closeTime: "", closedDays: [], phone: "", introduction: "", notice: "", deliveryTips: [], ownerInfo: OwnerInfo(name: "", shopName: "", address: "", companyRegistrationNumber: ""), origins: [])
-    }
 }
 
 extension ClosedDay {
