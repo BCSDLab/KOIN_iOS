@@ -13,7 +13,7 @@ final class OrderCartEmptyView: UIView {
     // MARK: - Properties
     let addMenuButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let cartImageView = UIImageView(image: .appImage(asset: .shoppingCartLarge))
     private let shadowSquareImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowSquare))
     private let shadowOvaleImageView = UIImageView(image: .appImage(asset: .shoppingCartShadowOval))

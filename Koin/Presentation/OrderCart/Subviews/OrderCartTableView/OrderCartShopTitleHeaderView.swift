@@ -13,7 +13,7 @@ final class OrderCartShopTitleHeaderView: UITableViewHeaderFooterView {
     // MARK: - Properties
     let moveToShopPublisher = PassthroughSubject<Void, Never>()
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let thumbnailImageView = UIImageView().then {
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true

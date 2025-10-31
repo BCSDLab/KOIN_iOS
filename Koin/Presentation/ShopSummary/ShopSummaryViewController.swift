@@ -22,7 +22,7 @@ final class ShopSummaryViewController: UIViewController {
     private var cachedShopId: Int?
     private var cachedShopName: String?
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
     private let navigationBarLikeView = UIView().then {
@@ -162,11 +162,30 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
-            let viewModel = ShopInfoViewModel()
-            let viewController = ShopInfoViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-            viewController.title = "가게정보·원산지"
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            guard let self else {
+                return
             }
+            if let orderableShopId = self.viewModel.orderableShopId {
+                let orderService = DefaultOrderService()
+                let orderRepository = DefaultOrderShopRepository(service: orderService)
+                let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: orderRepository)
+                let viewModel = ShopDetailViewModel(fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
+                                                    orderableShopId: orderableShopId)
+                let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+                viewController.title = "가게정보·원산지"
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
+            else if let shopId = self.viewModel.shopId {
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
+                let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
+                                                    shopId: shopId)
+                let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+                viewController.title = "가게정보"
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
             .store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView

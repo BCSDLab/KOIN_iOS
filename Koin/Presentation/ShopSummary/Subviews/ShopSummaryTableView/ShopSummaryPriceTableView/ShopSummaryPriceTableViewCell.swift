@@ -10,7 +10,7 @@ import SnapKit
 
 final class ShopSummaryPriceTableViewCell: UITableViewCell {
     
-    // MARK: - Component
+    // MARK: - UI Components
     private let stackView = UIStackView().then {
         $0.alignment = .fill
         $0.spacing = 0

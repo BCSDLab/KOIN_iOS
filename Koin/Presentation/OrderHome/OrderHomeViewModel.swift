@@ -33,7 +33,7 @@ final class OrderHomeViewModel: ViewModelProtocol {
         case hideFloatingButton
     }
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var orderShopList: [OrderShop] = []

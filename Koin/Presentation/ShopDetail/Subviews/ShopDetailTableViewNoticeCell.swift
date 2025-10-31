@@ -1,5 +1,5 @@
 //
-//  ShopInfoTableViewIntroductionCell.swift
+//  ShopDetailTableViewNoticeCell.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopInfoTableViewIntroductionCell: UITableViewCell {
+final class ShopDetailTableViewNoticeCell: UITableViewCell {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -16,7 +16,7 @@ final class ShopInfoTableViewIntroductionCell: UITableViewCell {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let introductionLabel = UILabel().then {
+    private let noticeLabel = UILabel().then {
         $0.textAlignment = .left
         $0.numberOfLines = 0
         $0.font = .appFont(.pretendardMedium, size: 14)
@@ -35,16 +35,16 @@ final class ShopInfoTableViewIntroductionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(title: String, introduction: String) {
+    func configure(title: String, notice: String) {
         titleLabel.text = title
-        introductionLabel.setLineHeight(lineHeight: 1.40, text: introduction) // MARK: - 행간 140으로 임의 조정
+        noticeLabel.setLineHeight(lineHeight: 1.40, text: notice) // MARK: - 행간 140으로 임의 조정
     }
 }
 
-extension ShopInfoTableViewIntroductionCell {
+extension ShopDetailTableViewNoticeCell {
     
     private func setUpLayout() {
-        [titleLabel, introductionLabel, separatorView].forEach {
+        [titleLabel, noticeLabel, separatorView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -55,7 +55,7 @@ extension ShopInfoTableViewIntroductionCell {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
-        introductionLabel.snp.makeConstraints {
+        noticeLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(-8)  // FIXME: - 행간으로 인한 오차 offset으로 임의 조정
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().offset(-18)

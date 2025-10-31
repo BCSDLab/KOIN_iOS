@@ -1,5 +1,5 @@
 //
-//  ShopInfoTableViewDeliveryTipsCell.swift
+//  ShopDetailTableViewDeliveryTipsCell.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
+final class ShopDetailTableViewDeliveryTipsCell: UITableViewCell {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -52,7 +52,7 @@ final class ShopInfoTableViewDeliveryTipsCell: UITableViewCell {
     }
 }
 
-extension ShopInfoTableViewDeliveryTipsCell {
+extension ShopDetailTableViewDeliveryTipsCell {
     
     private func setUpLayout() {
         [titleLabel, deliveryTipsCollectionView, trailingBorderView, bottomBorderView, separatorView].forEach {

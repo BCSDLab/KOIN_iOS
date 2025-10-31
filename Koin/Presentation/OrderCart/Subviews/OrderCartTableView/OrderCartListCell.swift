@@ -18,7 +18,7 @@ final class OrderCartListCell: UITableViewCell {
     private(set) var cartMenuItemId: Int? = nil
     private var indexPath: IndexPath? = nil
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.clipsToBounds = true

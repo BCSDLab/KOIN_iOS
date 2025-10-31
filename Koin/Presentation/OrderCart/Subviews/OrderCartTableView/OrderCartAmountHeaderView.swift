@@ -11,7 +11,7 @@ final class OrderCartAmountHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Properties
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let label = UILabel().then {
         $0.text = "결제금액을 확인해주세요"
         $0.font = .appFont(.pretendardSemiBold, size: 18)

@@ -1,5 +1,5 @@
 //
-//  ShopInfoTableView.swift
+//  ShopDetailTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopInfoTableView: UITableView {
+final class ShopDetailTableView: UITableView {
     
     enum HighlightableCell {
         case name
@@ -16,7 +16,7 @@ final class ShopInfoTableView: UITableView {
     }
     
     // MARK: - Properties
-    private var shopInfo: ShopInfo = ShopInfo.empty()
+    private var shopDetail: OrderShopDetail? = nil
     private var shouldHighlight: HighlightableCell?
     
     // MARK: - Initializer
@@ -29,14 +29,14 @@ final class ShopInfoTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopInfo: ShopInfo, shouldHighlight: ShopInfoTableView.HighlightableCell) {
-        self.shopInfo = shopInfo
+    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell) {
+        self.shopDetail = shopDetail
         self.shouldHighlight = shouldHighlight
         reloadData()
     }
 }
 
-extension ShopInfoTableView {
+extension ShopDetailTableView {
     
     func scrollToHighlightedCell() {
         let indexPath = {
@@ -45,7 +45,7 @@ extension ShopInfoTableView {
             case .notice:  return IndexPath(row: 0, section: 2)
             case .deliveryTips:  return IndexPath(row: 0, section: 3)
             default:
-                print("ShopInfoTableView error")
+                print("ShopDetailTableView error")
                 return IndexPath(row: 0, section: 0)
             }
         }()
@@ -53,7 +53,7 @@ extension ShopInfoTableView {
     }
 }
 
-extension ShopInfoTableView: UITableViewDataSource {
+extension ShopDetailTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 6
@@ -63,33 +63,36 @@ extension ShopInfoTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let shopDetail else {
+            return UITableViewCell()
+        }
         switch indexPath.section {
         case 0:
-            let cell = ShopInfoTableViewNameCell()
-            cell.configure(title: shopInfo.name, name: shopInfo.name, address: shopInfo.address, openTime: shopInfo.openTime, closeTime: shopInfo.closeTime, closedDays: shopInfo.closedDays, phone: shopInfo.phone)
+            let cell = ShopDetailTableViewNameCell()
+            cell.configure(title: shopDetail.name, name: shopDetail.name, address: shopDetail.address, openTime: shopDetail.openTime, closeTime: shopDetail.closeTime, closedDays: shopDetail.closedDays, phone: shopDetail.phone)
             cell.backgroundColor = .appColor(shouldHighlight == .name ? .neutral100 : .neutral0)
             return cell
         case 1:
-            let cell = ShopInfoTableViewIntroductionCell()
-            cell.configure(title: "가게 소개", introduction: shopInfo.introduction)
+            let cell = ShopDetailTableViewIntroductionCell()
+            cell.configure(title: "가게 소개", introduction: shopDetail.introduction)
             return cell
         case 2:
-            let cell = ShopInfoTableViewNoticeCell()
-            cell.configure(title: "가게 알림", notice: shopInfo.notice)
+            let cell = ShopDetailTableViewNoticeCell()
+            cell.configure(title: "가게 알림", notice: shopDetail.notice)
             cell.backgroundColor = .appColor(shouldHighlight == .notice ? .neutral100 : .neutral0)
             return cell
         case 3:
-            let cell = ShopInfoTableViewDeliveryTipsCell()
-            cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopInfo.deliveryTips)
+            let cell = ShopDetailTableViewDeliveryTipsCell()
+            cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopDetail.deliveryTips)
             cell.backgroundColor = .appColor(shouldHighlight == .deliveryTips ? .neutral100 : .neutral0)
             return cell
         case 4:
-            let cell = ShopInfoTableViewOwnerInfoCell()
-            cell.configure(title: "사업자 정보", ownerInfo: shopInfo.ownerInfo)
+            let cell = ShopDetailTableViewOwnerInfoCell()
+            cell.configure(title: "사업자 정보", ownerInfo: shopDetail.ownerInfo)
             return cell
         case 5:
-            let cell = ShopInfoTableViewOriginsCell()
-            cell.configure(title: "원산지 표기", origins: shopInfo.origins)
+            let cell = ShopDetailTableViewOriginsCell()
+            cell.configure(title: "원산지 표기", origins: shopDetail.origins)
             return cell
         default:
             return UITableViewCell()
@@ -97,7 +100,7 @@ extension ShopInfoTableView: UITableViewDataSource {
     }
 }
 
-extension ShopInfoTableView: UITableViewDelegate {
+extension ShopDetailTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -112,7 +115,7 @@ extension ShopInfoTableView: UITableViewDelegate {
     }
 }
 
-extension ShopInfoTableView {
+extension ShopDetailTableView {
     
     private func commonInit() {
         dataSource = self

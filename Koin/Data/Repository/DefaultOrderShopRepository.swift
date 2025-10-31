@@ -93,4 +93,10 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .map { OrderMenu(from: $0) }
             .eraseToAnyPublisher()
     }
+    
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error> {
+        service.fetchOrderShopDetail(orderableShopId: orderableShopId)
+            .map { OrderShopDetail(from: $0) }
+            .eraseToAnyPublisher()
+    }
 }

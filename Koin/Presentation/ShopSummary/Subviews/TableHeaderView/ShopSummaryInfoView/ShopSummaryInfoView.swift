@@ -11,7 +11,7 @@ import Combine
 final class ShopSummaryInfoView: UIView {
     
     // MARK: - Properties
-    let navigateToShopInfoPublisher = PassthroughSubject<ShopInfoTableView.HighlightableCell, Never>()
+    let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components

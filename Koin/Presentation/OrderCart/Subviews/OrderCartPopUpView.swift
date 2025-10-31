@@ -14,7 +14,7 @@ final class OrderCartPopUpView: UIView {
     // MARK: - Properties
     var emptyCart: (() -> Void)? = nil
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let dimView = UIView().then {
         $0.backgroundColor = .appColor(.neutral800)
         $0.layer.opacity = 0.7

@@ -1,5 +1,5 @@
 //
-//  ShopInfoTableViewNoticeCell.swift
+//  ShopDetailTableViewIntroductionCell.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopInfoTableViewNoticeCell: UITableViewCell {
+final class ShopDetailTableViewIntroductionCell: UITableViewCell {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -16,7 +16,7 @@ final class ShopInfoTableViewNoticeCell: UITableViewCell {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let noticeLabel = UILabel().then {
+    private let introductionLabel = UILabel().then {
         $0.textAlignment = .left
         $0.numberOfLines = 0
         $0.font = .appFont(.pretendardMedium, size: 14)
@@ -35,16 +35,16 @@ final class ShopInfoTableViewNoticeCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(title: String, notice: String) {
+    func configure(title: String, introduction: String) {
         titleLabel.text = title
-        noticeLabel.setLineHeight(lineHeight: 1.40, text: notice) // MARK: - 행간 140으로 임의 조정
+        introductionLabel.setLineHeight(lineHeight: 1.40, text: introduction) // MARK: - 행간 140으로 임의 조정
     }
 }
 
-extension ShopInfoTableViewNoticeCell {
+extension ShopDetailTableViewIntroductionCell {
     
     private func setUpLayout() {
-        [titleLabel, noticeLabel, separatorView].forEach {
+        [titleLabel, introductionLabel, separatorView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -55,7 +55,7 @@ extension ShopInfoTableViewNoticeCell {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
-        noticeLabel.snp.makeConstraints {
+        introductionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(-8)  // FIXME: - 행간으로 인한 오차 offset으로 임의 조정
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().offset(-18)

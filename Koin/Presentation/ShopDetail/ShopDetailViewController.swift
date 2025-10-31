@@ -1,5 +1,5 @@
 //
-//  ShopInfoViewController.swift
+//  ShopDetailViewController.swift
 //  koin
 //
 //  Created by 홍기정 on 10/13/25.
@@ -8,22 +8,22 @@
 import UIKit
 import Combine
 
-final class ShopInfoViewController: UIViewController {
+final class ShopDetailViewController: UIViewController {
     
     // MARK: - Properties
-    private let viewModel: ShopInfoViewModel
-    private let shouldHighlight: ShopInfoTableView.HighlightableCell
+    private let viewModel: ShopDetailViewModel
+    private let shouldHighlight: ShopDetailTableView.HighlightableCell
     private var subscriptions: Set<AnyCancellable> = []
-    private let inputSubject = PassthroughSubject<ShopInfoViewModel.Input, Never>()
+    private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     
     // MARK: - UI Components
-    private let shopInfoTableView: ShopInfoTableView = ShopInfoTableView().then {
+    private let shopDetailTableView: ShopDetailTableView = ShopDetailTableView().then {
         $0.separatorStyle = .none
         $0.allowsSelection = false
     }
     
     // MARK: - Initailizer
-    init(viewModel: ShopInfoViewModel, shouldHighlight: ShopInfoTableView.HighlightableCell) {
+    init(viewModel: ShopDetailViewModel, shouldHighlight: ShopDetailTableView.HighlightableCell) {
         self.viewModel = viewModel
         self.shouldHighlight = shouldHighlight
         super.init(nibName: nil, bundle: nil)
@@ -43,7 +43,7 @@ final class ShopInfoViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        shopInfoTableView.scrollToHighlightedCell()
+        shopDetailTableView.scrollToHighlightedCell()
     }
 
     // MARK: - Bind
@@ -51,7 +51,7 @@ final class ShopInfoViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self = self else { return }
             switch output {
-            case .update(let shopInfo): self.shopInfoTableView.configure(shopInfo: shopInfo, shouldHighlight: self.shouldHighlight)
+            case .update(let shopDetail): self.shopDetailTableView.configure(shopDetail: shopDetail, shouldHighlight: self.shouldHighlight)
             }
         }
         .store(in: &subscriptions)
@@ -59,7 +59,7 @@ final class ShopInfoViewController: UIViewController {
     
 }
 
-extension ShopInfoViewController {
+extension ShopDetailViewController {
     
     private func configureRightBarButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -107,15 +107,15 @@ extension ShopInfoViewController {
     }
 }
 
-extension ShopInfoViewController {
+extension ShopDetailViewController {
     
     private func setUpLayouts() {
-        [shopInfoTableView].forEach {
+        [shopDetailTableView].forEach {
             view.addSubview($0)
         }
     }
     private func setUpConstraints() {
-        shopInfoTableView.snp.makeConstraints {
+        shopDetailTableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

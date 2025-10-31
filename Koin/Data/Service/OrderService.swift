@@ -21,6 +21,7 @@ protocol OrderService {
     func fetchCart() -> AnyPublisher<CartDto, Error>
     func resetCart() -> AnyPublisher<Void, ErrorResponse>
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error>
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error>
 }
 
 final class DefaultOrderService: OrderService {
@@ -92,12 +93,15 @@ final class DefaultOrderService: OrderService {
             }
             .eraseToAnyPublisher()
     }
-    
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error> {
-        request(.fetchOrderMenu(orderableShopId: orderableShopId,
-                                orderableShopMenuId: orderableShopMenuId))
+        request(.fetchOrderMenu(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId))
             .eraseToAnyPublisher()
     }
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error> {
+        request(.fetchOrderShopDetail(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    
     
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)

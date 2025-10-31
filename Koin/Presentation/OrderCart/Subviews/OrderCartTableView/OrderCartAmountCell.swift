@@ -11,7 +11,7 @@ final class OrderCartAmountCell: UITableViewCell {
     
     // MARK: - Properties
     
-    // MARK: - Components
+    // MARK: - UI Components
     private let insetBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.cornerRadius = 8
