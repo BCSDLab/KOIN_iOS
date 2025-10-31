@@ -55,7 +55,7 @@ final class ShopSummaryViewModel {
     
     // Properties
     private(set) var orderableShopId: Int?
-    private let shopId: Int?
+    private(set) var shopId: Int?
     private let isFromOrder: Bool
     
     private var cachedShopName: String?

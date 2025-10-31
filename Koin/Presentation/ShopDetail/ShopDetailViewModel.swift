@@ -21,13 +21,25 @@ final class ShopDetailViewModel {
     // MARK: - Properties
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let fetchOrderShopDetailUseCase: FetchOrderShopDetailUseCase
+    private let fetchOrderShopDetailUseCase: FetchOrderShopDetailUseCase?
+    private let fetchOrderShopDetailFromShopUseCase: FetchOrderShopDetailFromShopUseCase?
     private let orderableShopId: Int?
+    private let shopId: Int?
     
     // MARK: - Initializer
-    init(fetchOrderShopDetailUseCase: DefaultFetchOrderShopDetailUseCase, orderableShopId: Int?) {
+    init(fetchOrderShopDetailUseCase: DefaultFetchOrderShopDetailUseCase,
+         orderableShopId: Int) {
         self.fetchOrderShopDetailUseCase = fetchOrderShopDetailUseCase
         self.orderableShopId = orderableShopId
+        self.fetchOrderShopDetailFromShopUseCase = nil
+        self.shopId = nil
+    }
+    init(fetchOrderShopDetailFromShopUseCase: DefaultFetchOrderShopDetailFromShopUseCase,
+         shopId: Int) {
+        self.fetchOrderShopDetailFromShopUseCase = fetchOrderShopDetailFromShopUseCase
+        self.shopId = shopId
+        self.fetchOrderShopDetailUseCase = nil
+        self.orderableShopId = nil
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -45,20 +57,29 @@ final class ShopDetailViewModel {
 extension ShopDetailViewModel {
     
     private func fetchShopDetail() {
-        guard let orderableShopId = self.orderableShopId else {
-            print("guard let failed")
-            return
+        if let orderableShopId, let fetchOrderShopDetailUseCase {
+            fetchOrderShopDetailUseCase.execute(orderableShopId: orderableShopId)
+                .sink(receiveCompletion: { comepltion in
+                    if case .failure(let failure) = comepltion {
+                        print("fetchOrdershopDetail Failed: \(failure)")
+                    }
+                }, receiveValue: { [weak self] orderShopDetail in
+                    print("fetchOrderShopDetail Succeded")
+                    self?.outputSubject.send(.update(shopDetail: orderShopDetail))
+                })
+                .store(in: &subscriptions)
         }
-        print("orderableShopId : \(orderableShopId)")
-        fetchOrderShopDetailUseCase.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { comepltion in
-                if case .failure(let failure) = comepltion {
-                    print("fetchOrdershopDetail Failed: \(failure)")
-                }
-            }, receiveValue: { [weak self] orderShopDetail in
-                print("fetchOrderShopDetail Succeded")
-                self?.outputSubject.send(.update(shopDetail: orderShopDetail))
-            })
-            .store(in: &subscriptions)
+        else if let shopId, let fetchOrderShopDetailFromShopUseCase {
+            fetchOrderShopDetailFromShopUseCase.execute(shopId: shopId)
+                .sink(receiveCompletion: { completion in
+                    if case .failure(let failure) = completion {
+                        print("fetchOrdershopDetailFromShop Failed: \(failure)")
+                    }
+                }, receiveValue: { [weak self] orderShopDetail in
+                    print("fetchOrderShopDetailFromShop Succeded")
+                    self?.outputSubject.send(.update(shopDetail: orderShopDetail))
+                })
+                .store(in: &subscriptions)
+        }
     }
 }
