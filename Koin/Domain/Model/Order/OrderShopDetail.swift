@@ -127,7 +127,7 @@ extension DeliveryTip {
     }
     
     init(deliveryPrice: Int) {
-        self.fromAmount = 0 // FIXME: ?? 어떻게 하지...
+        self.fromAmount = 0 // FIXME: 0은 임의로 넣어뒀습니다. 디자인 변경안 나오면 수정하겠습니다
         self.toAmount = nil
         self.fee = deliveryPrice
     }
