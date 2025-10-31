@@ -71,6 +71,39 @@ extension OrderShopDetail {
         }
     }
     
+    init(from dto: ShopDataDto) {
+        self.name = dto.name ?? ""
+        self.address = dto.address ?? ""
+        if let open = dto.open {
+            if !open.isEmpty {
+                self.openTime = open[0].openTime ?? "" // FIXME: 요일별 영업시간에서, 첫번째 꺼를 꺼냈습니다...
+                self.closeTime = open[0].closeTime ?? ""
+            } else {
+                self.openTime = ""
+                self.closeTime = ""
+            }
+            
+            var closedDays: [ClosedDay] = []
+            open.forEach {
+                if $0.closed, let closedDay = ClosedDay(rawValue: $0.dayOfWeek) {
+                    closedDays.append(closedDay)
+                }
+            }
+            self.closedDays = closedDays
+        }
+        else {
+            self.openTime = ""
+            self.closeTime = ""
+            self.closedDays = []
+        }
+        self.phone = dto.phone ?? ""
+        self.introduction = dto.description ?? ""
+        self.notice = "" // FIXME: 대응되는 요소가 없어서 빈칸으로 두었습니다
+        self.deliveryTips = []
+        self.ownerInfo = OwnerInfo(name: "", shopName: "", address: "", companyRegistrationNumber: "")
+        self.origins = []
+    }
+
     static func empty() -> OrderShopDetail {
         return OrderShopDetail(name: "", address: "", openTime: "", closeTime: "", closedDays: [], phone: "", introduction: "", notice: "", deliveryTips: [], ownerInfo: OwnerInfo(name: "", shopName: "", address: "", companyRegistrationNumber: ""), origins: [])
     }
@@ -95,6 +128,12 @@ extension DeliveryTip {
         self.fromAmount = dto.fromAmount
         self.toAmount = dto.toAmount
         self.fee = dto.fee
+    }
+    
+    init(deliveryPrice: Int) {
+        self.fromAmount = 0 // FIXME: ?? 어떻게 하지...
+        self.toAmount = nil
+        self.fee = deliveryPrice
     }
 }
 
