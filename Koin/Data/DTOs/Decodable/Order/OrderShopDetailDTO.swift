@@ -8,8 +8,8 @@
 import Foundation
 
 struct OrderShopDetailDto: Decodable {
-    let shopID: Int
-    let orderableShopID: Int
+    let shopId: Int
+    let orderableShopId: Int
     let name: String
     let address: String
     let openTime: String?
@@ -23,8 +23,8 @@ struct OrderShopDetailDto: Decodable {
     let origins: [OriginDto]
 
     enum CodingKeys: String, CodingKey {
-        case shopID = "shop_id"
-        case orderableShopID = "orderable_shop_id"
+        case shopId = "shop_id"
+        case orderableShopId = "orderable_shop_id"
         case name, address
         case openTime = "open_time"
         case closeTime = "close_time"
