@@ -87,7 +87,7 @@ final class HomeViewController: UIViewController {
     }
     
     private let orderLabel = UILabel().then {
-        $0.text = "주문"
+        $0.text = "주변 상점"
         $0.textColor = UIColor.appColor(.primary500)
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
