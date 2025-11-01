@@ -81,7 +81,7 @@ final class ShopSummaryInfoView: UIView {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
         setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
-        
+        setUpMoreInfoButton(isFromOrder: isFromOrder)
         orderAmountDelieveryTipView.configure(
             minOrderAmount: orderShopSummary.minimumOrderAmount,
             minDeliveryTip: orderShopSummary.minimumDeliveryTip,
@@ -105,6 +105,15 @@ final class ShopSummaryInfoView: UIView {
 }
 
 extension ShopSummaryInfoView {
+    
+    private func setUpMoreInfoButton(isFromOrder: Bool) {
+        let text = isFromOrder ? "가게정보·원산지" : "가게정보"
+        moreInfoButton.setAttributedTitle(NSAttributedString(string: text, attributes: [
+            .font : UIFont.appFont(.pretendardRegular, size: 10),
+            .foregroundColor : UIColor.appColor(.neutral500)
+        ]), for: .normal)
+    }
+    
     
     private func setUpIsAvailableView(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
         isDeliveryAvailableLabel.text = isDelieveryAvailable ? "배달 가능" : "배달 불가"
@@ -157,10 +166,6 @@ extension ShopSummaryInfoView {
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 12, bottom: 2, trailing: 8)
         moreInfoButton.configuration = configuration
         
-        moreInfoButton.setAttributedTitle(NSAttributedString(string: "가게정보·원산지", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 10),
-            .foregroundColor : UIColor.appColor(.neutral500)
-        ]), for: .normal)
         moreInfoButton.setImage(UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate), for: .normal)
         moreInfoButton.backgroundColor = UIColor.appColor(.neutral0)
         moreInfoButton.layer.cornerRadius = 12
