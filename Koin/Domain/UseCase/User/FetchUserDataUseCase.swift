@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchUserDataUseCase {
-    func execute() -> AnyPublisher<UserDTO, ErrorResponse>
+    func execute() -> AnyPublisher<UserDto, ErrorResponse>
 }
 
 final class DefaultFetchUserDataUseCase: FetchUserDataUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchUserDataUseCase: FetchUserDataUseCase {
         self.userRepository = userRepository
     }
     
-    func execute() -> AnyPublisher<UserDTO, ErrorResponse> {
+    func execute() -> AnyPublisher<UserDto, ErrorResponse> {
         userRepository.fetchUserData()
     }
     

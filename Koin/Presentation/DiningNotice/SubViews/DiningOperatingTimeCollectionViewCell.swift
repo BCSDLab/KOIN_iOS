@@ -34,7 +34,7 @@ final class DiningOperatingTimeCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(open: CoopOpenDTO) {
+    func configure(open: CoopOpenDto) {
         timeLabel.text = open.type.rawValue
         startTimeLabel.text = open.openTime
         endTimeLabel.text = open.closeTime

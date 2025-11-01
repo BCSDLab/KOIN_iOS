@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchHotNoticeArticlesUseCase {
-    func execute(noticeId: Int?) -> AnyPublisher<[NoticeArticleDTO], Error>
+    func execute(noticeId: Int?) -> AnyPublisher<[NoticeArticleDto], Error>
 }
 
 final class DefaultFetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase {
@@ -19,10 +19,10 @@ final class DefaultFetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase 
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(noticeId: Int? = nil) -> AnyPublisher<[NoticeArticleDTO], Error> {
+    func execute(noticeId: Int? = nil) -> AnyPublisher<[NoticeArticleDto], Error> {
         return noticeListRepository.fetchHotNoticeArticle()
             .map { noticeArticles in
-                var filteredArticles: [NoticeArticleDTO]
+                var filteredArticles: [NoticeArticleDto]
                 
                 if let noticeId = noticeId {
                     filteredArticles = noticeArticles.filter { $0.id != noticeId }.map {

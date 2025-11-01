@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopCategoryListUseCase {
-    func execute() -> AnyPublisher<ShopCategoryDTO, Error>
+    func execute() -> AnyPublisher<ShopCategoryDto, Error>
 }
 
 final class DefaultFetchShopCategoryListUseCase: FetchShopCategoryListUseCase {
@@ -18,18 +18,17 @@ final class DefaultFetchShopCategoryListUseCase: FetchShopCategoryListUseCase {
       self.shopRepository = shopRepository
     }
     
-    func execute() -> AnyPublisher<ShopCategoryDTO, Error> {
+    func execute() -> AnyPublisher<ShopCategoryDto, Error> {
         return shopRepository.fetchShopCategoryList()
-            .map { shopCategoryDTO in
-                return self.removeFirstCategory(in: shopCategoryDTO)
+            .map { shopCategoryDto in
+                return self.removeFirstCategory(in: shopCategoryDto)
             }.eraseToAnyPublisher()
     }
     
-    private func removeFirstCategory(in shopCategoryDTO: ShopCategoryDTO) -> ShopCategoryDTO {
-        var shopCategory = shopCategoryDTO
+    private func removeFirstCategory(in shopCategoryDto: ShopCategoryDto) -> ShopCategoryDto {
+        var shopCategory = shopCategoryDto
         if shopCategory.shopCategories.count > 1 {
             shopCategory.totalCount -= 1
-            shopCategory.shopCategories.remove(at: 0)
         }
         return shopCategory
     }

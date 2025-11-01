@@ -8,10 +8,10 @@
 import Combine
 
 protocol UserRepository {
-    func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse>
-    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
+    func fetchUserData() -> AnyPublisher<UserDto, ErrorResponse>
+    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse>
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse>
-    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse>
+    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDto, ErrorResponse>
     func logout() -> AnyPublisher<String, Error>
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse>
@@ -21,7 +21,7 @@ protocol UserRepository {
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
     func checkLogin() -> AnyPublisher<Bool, Never>
-    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse>
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDto, ErrorResponse>
     func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse>
     func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>

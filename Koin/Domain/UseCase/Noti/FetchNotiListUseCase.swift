@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchNotiListUseCase {
-    func execute() -> AnyPublisher<NotiAgreementDTO, ErrorResponse>
+    func execute() -> AnyPublisher<NotiAgreementDto, ErrorResponse>
 }
 
 final class DefaultFetchNotiListUseCase: FetchNotiListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchNotiListUseCase: FetchNotiListUseCase {
         self.notiRepository = notiRepository
     }
     
-    func execute() -> AnyPublisher<NotiAgreementDTO, ErrorResponse> {
+    func execute() -> AnyPublisher<NotiAgreementDto, ErrorResponse> {
         return notiRepository.fetchNotiList()
     }
     

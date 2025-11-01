@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol SearchNoticeArticlesUseCase {
-    func execute(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
+    func execute(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error>
 }
 
 final class DefaultSearchNoticeArticlesUseCase: SearchNoticeArticlesUseCase {
@@ -19,7 +19,7 @@ final class DefaultSearchNoticeArticlesUseCase: SearchNoticeArticlesUseCase {
         self.noticeRepository = noticeRepository
     }
     
-    func execute(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {
+    func execute(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error> {
         return noticeRepository.searchNoticeArticle(requestModel: requestModel).map { $0.toDomain() }.eraseToAnyPublisher()
     }
 }

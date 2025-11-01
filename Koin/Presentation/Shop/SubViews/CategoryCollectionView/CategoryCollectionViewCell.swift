@@ -4,25 +4,30 @@
 //
 //  Created by 김나훈 on 3/12/24.
 //
+
 import UIKit
 
 final class CategoryCollectionViewCell: UICollectionViewCell {
+
+    // MARK: - UI Component
+    private let imageBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 8
+    }
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let imageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.contentMode = .scaleAspectFit
+    }
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.appFont(.pretendardRegular, size: 10)
-        label.lineBreakMode = .byClipping
-        label.sizeToFit()
-        return label
-    }()
+    private let titleLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.lineBreakMode = .byClipping
+        $0.sizeToFit()
+    }
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -35,29 +40,33 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
     func configure(info: ShopCategory, _ selected: Bool) {
         imageView.loadImage(from: info.imageURL)
         titleLabel.text = info.name
-        titleLabel.textColor = selected ? UIColor.appColor(.sub500) : UIColor.appColor(.neutral800)
-        if selected { titleLabel.textColor = UIColor.appColor(.sub500) }
     }
 }
 
 extension CategoryCollectionViewCell {
     private func setUpLayouts() {
-        [imageView, titleLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
+        [imageBackgroundView, imageView, titleLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.top.width.equalToSuperview()
+        imageBackgroundView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
             make.centerX.equalTo(contentView.snp.centerX)
-            make.height.equalTo(44)
+            make.width.height.equalTo(48)
         }
+        
+        imageView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(imageBackgroundView.snp.centerY)
+            make.width.height.equalTo(32)
+        }
+        
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(4)
+            make.top.equalTo(imageBackgroundView.snp.bottom).offset(8)
             make.height.equalTo(19)
-            make.centerX.equalTo(imageView.snp.centerX)
+            make.centerX.equalTo(imageBackgroundView.snp.centerX)
         }
     }
     

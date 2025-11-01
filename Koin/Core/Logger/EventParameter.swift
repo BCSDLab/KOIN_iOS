@@ -72,6 +72,10 @@ enum EventParameter {
             case benefitShopCall = "benefit_shop_call"
             
             case loginPrompt = "login_prompt"
+            
+            //order
+            case orderHistoryTabClick = "orderHistory_tabClick"
+            
             var team: String {
                 return "BUSINESS"
             }

@@ -485,7 +485,7 @@ extension CertificationFormViewController {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-    private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDTO) {
+    private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDto) {
         [verificationTextField, timerLabel, verificationButton, phoneNumberReponseLabel].forEach { $0.isHidden = false }
 
         phoneNumberReponseLabel.setImageAttributedText(image: .appImage(asset: .checkGreenCircle), attributedText: makeVerificationMessage(remainingCount: response.remainingCount, totalCount: response.totalCount))

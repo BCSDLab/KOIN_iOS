@@ -20,23 +20,23 @@ protocol BusService {
 final class DefaultBusService: BusService {
     let mockNetworkService = MockNetworkService()
     
-    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error> {
+    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {
         return request(.fetchBusTimetableList(requestModel))
     }
     
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error> {
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error> {
         return request(.searchBusInformation(requestModel))
     }
     
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error> {
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error> {
         return request(.fetchShuttleBusTimetableRoute)
     }
     
-    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {
+    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error> {
         return request(.fetchCityBusTimetableList(requestModel))
     }
     
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error> {
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error> {
         return request(.fetchEmergencyNotice)
     }
     

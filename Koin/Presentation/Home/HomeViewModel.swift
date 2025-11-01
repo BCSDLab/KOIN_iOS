@@ -30,14 +30,14 @@ final class HomeViewModel: ViewModelProtocol {
     
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
-        case updateNoticeBanners([NoticeArticleDTO], ((String, String), Int)?)
-        case putImage(ShopCategoryDTO)
+        case updateNoticeBanners([NoticeArticleDto], ((String, String), Int)?)
+        case putImage(ShopCategoryDto)
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case showForceModal
-        case updateBanner(BannerDTO, AssignAbTestResponse)
-        case setHotClub(HotClubDTO)
-        case setClubCategories(ClubCategoriesDTO)
+        case updateBanner(BannerDto, AssignAbTestResponse)
+        case setHotClub(HotClubDto)
+        case setClubCategories(ClubCategoriesDto)
     }
     
     // MARK: - Properties
@@ -102,7 +102,8 @@ final class HomeViewModel: ViewModelProtocol {
             case let .getNoticeBanner(date):
                 self?.getNoticeBanners(date: date)
             case let .getAbTestResult(abTestTitle):
-                self?.getAbTestResult(abTestTitle: abTestTitle)
+                break
+                // self?.getAbTestResult(abTestTitle: abTestTitle)
             case .getBannerAbTest(let request):
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
@@ -277,6 +278,7 @@ extension HomeViewModel {
         }.store(in: &subscriptions)
     }
     
+    /*
     private func getAbTestResult(abTestTitle: String) {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
             .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
@@ -295,8 +297,9 @@ extension HomeViewModel {
                 }
             }).store(in: &subscriptions)
     }
-    
+  
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
+  */
 }

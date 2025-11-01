@@ -20,8 +20,8 @@ final class DefaultFetchShopDataUseCase: FetchShopDataUseCase {
     }
     
     func execute(shopId: Int) -> AnyPublisher<ShopData, Error> {
-        return shopRepository.fetchShopData(requestModel: FetchShopDataRequest(shopId: shopId)).map { shopDataDTO in
-            shopDataDTO.toDomain()
+        return shopRepository.fetchShopData(requestModel: FetchShopDataRequest(shopId: shopId)).map { shopDataDto in
+            shopDataDto.toDomain()
         }.eraseToAnyPublisher()
     }
 }

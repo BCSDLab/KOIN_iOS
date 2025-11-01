@@ -37,7 +37,7 @@ final class HotNoticeArticlesTableViewCell: UITableViewCell {
         configureView()
     }
     
-    func configure(articleModel: NoticeArticleDTO) {
+    func configure(articleModel: NoticeArticleDto) {
         boardTitleLabel.text = NoticeListType(rawValue: articleModel.boardId)?.displayName
         noticeTitleLabel.text = articleModel.title
     }

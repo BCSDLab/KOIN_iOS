@@ -35,7 +35,7 @@ final class CallBenefitCollectionView: UICollectionView, UICollectionViewDataSou
         delegate = self
     }
     
-    func updateBenefits(benefits: ShopBenefitsDTO) {
+    func updateBenefits(benefits: ShopBenefitsDto) {
         self.benefits = benefits.benefits ?? []
         if let firstBenefit = benefits.benefits?.first {
             if let footerView = self.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? CallBenefitFooterView {

@@ -20,8 +20,8 @@ final class DefaultFetchShopEventListUseCase: FetchShopEventListUseCase {
     }
     
     func execute(shopId: Int) -> AnyPublisher<[ShopEvent], Error> {
-        return shopRepository.fetchShopEventList(requestModel: FetchShopDataRequest(shopId: shopId)).map { eventsDTO in
-             eventsDTO.events ?? []
+        return shopRepository.fetchShopEventList(requestModel: FetchShopDataRequest(shopId: shopId)).map { eventsDto in
+             eventsDto.events ?? []
         }.map { events in
             events.map { $0.toDomain() }
         }.eraseToAnyPublisher()
