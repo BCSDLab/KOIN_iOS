@@ -117,7 +117,7 @@ extension ShopSummaryTableViewTableHeaderView {
     func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
     }
-    func updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool) {
+    func updateIsAvailables(delivery: Bool, takeOut: Bool = false, payBank: Bool, payCard: Bool) {
         shopSummaryInfoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut,payCard: payCard, payBank: payBank)
     }
 }
