@@ -9,15 +9,16 @@ import Alamofire
 import Combine
 
 protocol BusService {
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error>
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error>
-    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error>
-    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error>
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error>
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error>
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error>
+    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error>
+    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error>
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error>
     func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error>
 }
 
 final class DefaultBusService: BusService {
+    
     let mockNetworkService = MockNetworkService()
     
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {

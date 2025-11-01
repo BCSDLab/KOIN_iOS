@@ -278,7 +278,7 @@ extension HomeViewModel {
         }.store(in: &subscriptions)
     }
     
-    /*
+    
     private func getAbTestResult(abTestTitle: String) {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
             .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
@@ -301,5 +301,4 @@ extension HomeViewModel {
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
-  */
 }
