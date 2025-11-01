@@ -332,6 +332,7 @@ extension ShopViewController {
     }
 
     private func updateEventShops(_ eventShops: [EventDto]) {
+        let eventShops: [EventDto] = []
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
