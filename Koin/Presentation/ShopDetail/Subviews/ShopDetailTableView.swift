@@ -18,6 +18,7 @@ final class ShopDetailTableView: UITableView {
     // MARK: - Properties
     private var shopDetail: OrderShopDetail? = nil
     private var shouldHighlight: HighlightableCell?
+    private var isFromOrder: Bool = false
     
     // MARK: - Initializer
     init() {
@@ -29,9 +30,10 @@ final class ShopDetailTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell) {
+    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell, isFromOrder: Bool) {
         self.shopDetail = shopDetail
         self.shouldHighlight = shouldHighlight
+        self.isFromOrder = isFromOrder
         reloadData()
     }
 }
@@ -41,14 +43,19 @@ extension ShopDetailTableView {
     func scrollToHighlightedCell() {
         let indexPath = {
             switch shouldHighlight {
-            case .name: return IndexPath(row: 0, section: 0)
-            case .notice:  return IndexPath(row: 0, section: 2)
-            case .deliveryTips:  return IndexPath(row: 0, section: 3)
+            case .name:
+                return IndexPath(row: 0, section: 0)
+            case .notice:
+                return IndexPath(row: 0, section: 2)
+            case .deliveryTips:
+                return IndexPath(row: 0, section: 3)
             default:
-                print("ShopDetailTableView error")
                 return IndexPath(row: 0, section: 0)
             }
         }()
+        guard indexPath.section < (isFromOrder ? 6 : 2) else {
+            return
+        }
         scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
@@ -56,7 +63,7 @@ extension ShopDetailTableView {
 extension ShopDetailTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return isFromOrder ? 6 : 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
