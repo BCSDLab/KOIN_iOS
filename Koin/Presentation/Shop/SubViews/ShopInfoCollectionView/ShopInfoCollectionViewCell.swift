@@ -47,6 +47,8 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
+        contentView.layer.borderWidth = 0.5
+        contentView.layer.borderColor = UIColor.appColor(.neutral200).cgColor
     }
     
     required init?(coder: NSCoder) {
