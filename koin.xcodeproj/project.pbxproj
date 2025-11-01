@@ -2222,6 +2222,8 @@
 				B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */,
 			);
 			path = Toast;
+			sourceTree = "<group>";
+		};
 		B4164FB12E890CAC000ACA16 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
