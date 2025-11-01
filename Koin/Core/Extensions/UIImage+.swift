@@ -150,6 +150,9 @@ enum ImageAsset: String {
     case club3
     case club4
     case club5
+    case toastMessageIconInformative
+    case toastMessageIconPositive
+    case toastMessageIconNegative
 }
 
 enum SFSymbols: String {

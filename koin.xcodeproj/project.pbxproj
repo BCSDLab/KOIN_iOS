@@ -80,7 +80,7 @@
 		837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
-		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		838F114E2CA51C6C00BF3B25 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -91,7 +91,7 @@
 		83BB83112CEC724300946623 /* KeywordNotiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB83102CEC724300946623 /* KeywordNotiCollectionViewCell.swift */; };
 		83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
-		83D5E9C82CCB844D00C6D4CD /* (null) in Resources */ = {isa = PBXBuildFile; };
+		83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		83D5E9E72CD248FC00C6D4CD /* DiningCollectionViewCellA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5E9E62CD248FC00C6D4CD /* DiningCollectionViewCellA.swift */; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
@@ -160,6 +160,11 @@
 		83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FA918C2C81E78B0090351F /* NoticeListCollectionViewCell.swift */; };
 		B3103C316BEE49DB381AB154 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */; };
 		B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61FAA162EA3A39D005BE539 /* Typography.swift */; };
+		B68D2CE32EA505A300F3B479 /* ToastConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE22EA505A300F3B479 /* ToastConfig.swift */; };
+		B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */; };
+		B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */; };
+		B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE82EA505B800F3B479 /* ToastVariant.swift */; };
+		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
 		BE696CF7ECA5FAE839896DAA /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CCC0E0747FEA60867679C70 /* Pods_NotificationService.framework */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
@@ -837,6 +842,11 @@
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A6A00CD4AA4F13B4CE699378 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B61FAA162EA3A39D005BE539 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		B68D2CE22EA505A300F3B479 /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
+		B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastIntent.swift; sourceTree = "<group>"; };
+		B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
+		B68D2CE82EA505B800F3B479 /* ToastVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastVariant.swift; sourceTree = "<group>"; };
+		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		C9EC2A4D19115EFB044A52BE /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
@@ -1858,9 +1868,22 @@
 		B65422F52EA12BE700018F15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				B68D2CE12EA5059600F3B479 /* Toast */,
 				B61FAA152EA3A394005BE539 /* Font */,
 			);
 			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		B68D2CE12EA5059600F3B479 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				B68D2CE22EA505A300F3B479 /* ToastConfig.swift */,
+				B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */,
+				B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */,
+				B68D2CE82EA505B800F3B479 /* ToastVariant.swift */,
+				B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */,
+			);
+			path = Toast;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -3631,7 +3654,7 @@
 				832FCC932CD667AC0044AF23 /* diningShare.gif in Resources */,
 				D2078BFA2BC4DB9E00A39861 /* Pretendard-Bold.otf in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
-				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */,
 				D2078BEF2BC4494100A39861 /* Pretendard-Regular.otf in Resources */,
 				D2078BF22BC4494100A39861 /* Pretendard-Medium.otf in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
@@ -3714,13 +3737,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3803,7 +3822,7 @@
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
 				D22C54662C69250F000826DA /* ShopReviewReportViewModel.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
-				838F114E2CA51C6C00BF3B25 /* (null) in Sources */,
+				838F114E2CA51C6C00BF3B25 /* BuildFile in Sources */,
 				D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */,
 				833D9C592C735F7700982145 /* HotArticlesNoticeTableViewCell.swift in Sources */,
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
@@ -3815,6 +3834,7 @@
 				D22C54862C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift in Sources */,
 				D208A7AA2CA1123B007040E7 /* AssignAbTestUseCase.swift in Sources */,
 				83E770ED2D0365EA00EB3F84 /* ManyBusTimetableCollectionViewCell.swift in Sources */,
+				B68D2CE32EA505A300F3B479 /* ToastConfig.swift in Sources */,
 				D2078C012BC5DD0D00A39861 /* EventShopCollectionView.swift in Sources */,
 				D22C54772C6A2A8A000826DA /* ModifyReviewUseCase.swift in Sources */,
 				835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */,
@@ -4105,6 +4125,7 @@
 				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,
 				D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */,
 				D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */,
+				B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */,
 				D2D380F22BA7199C009AD5A9 /* LoginViewModel.swift in Sources */,
 				834E1CDC2BBCE3B1003D4271 /* BusTimetableViewModel.swift in Sources */,
 				D29F21D92C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift in Sources */,
@@ -4148,6 +4169,7 @@
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
+				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
 				D2FFA9762D61F7A600EF8E56 /* ReportLostItemViewController.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
@@ -4303,6 +4325,7 @@
 				D27DD0952BA608310081FD36 /* MenuCollectionViewCell.swift in Sources */,
 				D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */,
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
+				B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */,
 				D27DD1022BA62DCC0081FD36 /* LandOptionView.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
 				D2D462622D63B90100C60864 /* ChatRepository.swift in Sources */,
@@ -4326,6 +4349,7 @@
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				D2FFA97B2D62012800EF8E56 /* ChatViewModel.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
+				B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */,
 				D2FCBE982D0060950097A388 /* SubstituteTimetableModalViewController.swift in Sources */,
 				D208A7B12CA12D5F007040E7 /* CallBenefitCollectionView.swift in Sources */,
 				8316DCE22CDF8A76009AF9A4 /* BusTimetableRouteCollectionView.swift in Sources */,
