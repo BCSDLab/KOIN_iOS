@@ -262,6 +262,7 @@ final class OrderHomeViewController: UIViewController, LottieAnimationManageable
     private func setAddTarget() {
         searchBarButton.addTarget(self, action: #selector(searchBarButtonTapped), for: .touchUpInside)
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        orderFloatingButton.addTarget(self, action: #selector(orderFloatingButtonTapped), for: .touchUpInside)
     }
 }
 
@@ -391,6 +392,11 @@ extension OrderHomeViewController {
             sheet.preferredCornerRadius = 32
         }
         present(bottomSheetViewController, animated: true)
+    }
+    
+    @objc private func orderFloatingButtonTapped() {
+        (tabBarController as? OrderTabBarViewController)?
+            .goToHistory(initialSegment: 1)
     }
     
     private func updateFilteredOrderShops(_ shops: [OrderShop]) {
@@ -616,6 +622,7 @@ extension OrderHomeViewController {
     
     private func configureView() {
         self.view.backgroundColor = UIColor.appColor(.newBackground)
+        view.bringSubviewToFront(orderFloatingButton)
         setUpLayOuts()
         setUpConstraints()
     }

@@ -15,8 +15,8 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     private var subscriptions: Set<AnyCancellable> = []
     private var isViewLoadedFirst: Bool = true
     
-    init(selectedShopID: Int? = nil, initialTabIndex: Int = 0) {
-        self.selectedShopId = selectedShopID
+    init(selectedShopId: Int? = nil, initialTabIndex: Int = 0) {
+        self.selectedShopId = selectedShopId
         self.selectedTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
     }
@@ -29,6 +29,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        
         setupNavigationRightButton()
         setupTabBarAppearance()
         
@@ -101,7 +102,9 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        
         let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
@@ -132,10 +135,38 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             selectedId: selectedTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
+
         let shopViewController = ShopViewController(viewModel: shopViewModel, navigationControllerDelegate: navigationController)
         
         let historyViewController = OrderHistoryViewController()
         
+        let shopViewController = tabBarNavigationController(
+            image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
+            rootViewController: ShopViewController(viewModel: shopViewModel),
+            title: "주변상점"
+        )
+
+        
+        let fetchOrderHistoryUseCase = DefaultFetchOrderHistoryUseCase(
+            repository: DefaultOrderHistoryRepository(service: orderService)
+        )
+
+        let orderHistoryViewModel = OrderHistoryViewModel(
+            fetchHistory: fetchOrderHistoryUseCase,
+            orderService: orderService,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+
+        )
+
+        let orderHistoryVC = OrderHistoryViewController(viewModel: orderHistoryViewModel)
+
+        let historyViewController = tabBarNavigationController(
+            image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
+            rootViewController: orderHistoryVC,
+            title: "주문내역"
+        )
+
         viewControllers = [orderHomeViewController, shopViewController, historyViewController]
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
@@ -195,6 +226,22 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         case 1: navigationItem.title = "주변 상점"
         case 2: navigationItem.title = "주문 내역"
         default: break
+        }
+    }
+    
+    func goToHistory(initialSegment: Int) {
+        let historyTabIndex = 2
+        selectedIndex = historyTabIndex
+        updateNavigationTitle(for: historyTabIndex)
+
+        guard let navigationViewController = viewControllers?[historyTabIndex] as? UINavigationController else { return }
+
+        navigationViewController.popToRootViewController(animated: false)
+
+        if let orderHistoryViewController = navigationViewController.viewControllers.first as? OrderHistoryViewController {
+            orderHistoryViewController.loadViewIfNeeded()
+            orderHistoryViewController.setInitialTab(initialSegment)
+            
         }
     }
 }

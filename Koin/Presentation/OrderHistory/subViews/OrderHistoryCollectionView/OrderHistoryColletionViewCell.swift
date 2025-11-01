@@ -8,18 +8,16 @@
 import UIKit
 import SnapKit
 
-
-
 final class OrderHistoryColletionViewCell: UICollectionViewCell {
     
     static let orderHistoryIdentifier = "OrderHistoryColletionViewCell"
-    
+    var onTapOrderInfoButton: (() -> Void)?
     
     private enum ReorderState {
-        case available // 재주문 가능
-        case beforeOpen // 오픈전 (불가능)
+        case available
+        case beforeOpen
     }
-
+    
     //MARK: - Properties
     private var reorderState: ReorderState = .available {
         didSet { reorderButton.setNeedsUpdateConfiguration() }
@@ -36,7 +34,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
     }
-
+    
     private let dayLabel = UILabel().then {
         $0.text = "??월 ??일 (?)"
         $0.textColor = UIColor.appColor(.new500)
@@ -44,24 +42,24 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
     }
-
+    
     private let menuImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 4
         $0.image = UIImage.appImage(asset: .defaultMenuImage)
     }
-
+    
     private let storeNameLabel = UILabel().then {
         $0.text = "default"
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
     }
-
+    
     private let stateLabelUnderView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral200)
     }
-
+    
     private let menuNameLabel = UILabel().then {
         $0.text = "default"
         $0.textColor = UIColor.appColor(.neutral800)
@@ -69,14 +67,14 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
     }
-
+    
     private let menuPriceLabel = UILabel().then {
         $0.text = "default"
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 14)
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
-
+    
     private let orderInfoButton = UIButton(
         configuration: {
             var config = UIButton.Configuration.plain()
@@ -87,11 +85,11 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
             config.imagePlacement = .trailing
             config.imagePadding = 4
             config.contentInsets = .init(top: 4, leading: 6, bottom: 4, trailing: 6)
-
+            
             let base = UIImage.appImage(asset: .chevronRight)?.withRenderingMode(.alwaysTemplate)
             let small = base?.preparingThumbnail(of: CGSize(width: 12, height: 12)) ?? base
             config.image = small
-
+            
             return config
         }()
     ).then {
@@ -99,7 +97,7 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
         $0.setContentHuggingPriority(.required, for: .horizontal)
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
-
+    
     private let reviewButton = UIButton(
         configuration: {
             var config = UIButton.Configuration.plain()
@@ -107,18 +105,18 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
                 .font: UIFont.appFont(.pretendardBold, size: 14)
             ]))
             config.baseForegroundColor = UIColor.appColor(.neutral600)
-
+            
             var background = UIBackgroundConfiguration.clear()
             background.cornerRadius = 8
             background.backgroundColor = UIColor.appColor(.neutral0)
             background.strokeColor = UIColor.appColor(.neutral300)
             background.strokeWidth = 1
             config.background = background
-
+            
             return config
         }()
     )
-
+    
     private let reorderButton = UIButton(
         configuration: {
             var config = UIButton.Configuration.plain()
@@ -126,43 +124,65 @@ final class OrderHistoryColletionViewCell: UICollectionViewCell {
                 .font: UIFont.appFont(.pretendardBold, size: 14)
             ]))
             config.baseForegroundColor = UIColor.appColor(.neutral0)
-
+            
             var background = UIBackgroundConfiguration.clear()
             background.cornerRadius = 8
             background.backgroundColor = UIColor.appColor(.new500)
             config.background = background
-
+            
             return config
         }()
     )
-
     
     // MARK: - Initialize
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        setupReorderButtonStateHandler()
+        setupReorderButtonState()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        stateLabel.text = nil
+        dayLabel.text = nil
+        storeNameLabel.text = nil
+        menuNameLabel.text = nil
+        menuPriceLabel.text = nil
+        
+        menuImageView.kf.cancelDownloadTask()
+        menuImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+        
+        reorderState = .available
+        reviewButton.isHidden = false
+        reorderButton.isHidden = false
+        
+        onTapOrderInfoButton = nil
+        onTapReorder = nil
+    }
+    
+    private func setAddTarget() {
+        orderInfoButton.addTarget(self, action: #selector(orderInfoButtonTapped), for: .touchUpInside)
+    }
 }
 
+extension OrderHistoryColletionViewCell {
+    @objc private func orderInfoButtonTapped() {
+        onTapOrderInfoButton?()
+    }
+}
 
 // MARK: - Set UI Function
-
-
 extension OrderHistoryColletionViewCell {
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        
     }
-    
     
     private func setUpLayouts() {
         [stateLabel, dayLabel, orderInfoButton,stateLabelUnderView, menuImageView, storeNameLabel, menuNameLabel, menuPriceLabel, reviewButton, reorderButton].forEach {
@@ -181,11 +201,10 @@ extension OrderHistoryColletionViewCell {
         stateLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(56)
         }
         
         dayLabel.snp.makeConstraints {
-            $0.leading.equalTo(stateLabel.snp.trailing)
+            $0.leading.equalTo(stateLabel.snp.trailing).offset(5)
             $0.centerY.equalTo(stateLabel)
             $0.width.equalTo(66)
         }
@@ -242,55 +261,60 @@ extension OrderHistoryColletionViewCell {
     
     // MARK: - UI Function
     
-    private func setupReorderButtonStateHandler() {
-         reorderButton.configurationUpdateHandler = { [weak self] button in
-             guard let self else { return }
-             var config = button.configuration ?? .plain()
-             var background = UIBackgroundConfiguration.clear()
-             background.cornerRadius = 8
-
-             switch self.reorderState {
-             case .available:
-                 config.attributedTitle = .init("같은 메뉴 담기", attributes: .init([
-                     .font: UIFont.appFont(.pretendardBold, size: 14)
-                 ]))
-                 config.baseForegroundColor = UIColor.appColor(.neutral0)
-                 background.backgroundColor = UIColor.appColor(.new500)
-                 button.isEnabled = true
-                 button.isHidden  = false
-
-             case .beforeOpen:
-                 config.attributedTitle = .init("같은 메뉴 담기 (오픈 전)", attributes: .init([
-                     .font: UIFont.appFont(.pretendardBold, size: 14)
-                 ]))
-                 config.baseForegroundColor = UIColor.appColor(.neutral400)
-                 background.backgroundColor = UIColor.appColor(.neutral100)
-                 button.isEnabled = false
-                 button.isHidden  = false
-             }
-
-             config.background = background
-             button.configuration = config
-         }
-         reorderButton.setNeedsUpdateConfiguration()
-     }
+    private func setupReorderButtonState() {
+        reorderButton.configurationUpdateHandler = { [weak self] button in
+            guard let self else { return }
+            var config = button.configuration ?? .plain()
+            var background = UIBackgroundConfiguration.clear()
+            background.cornerRadius = 8
+            
+            switch self.reorderState {
+            case .available:
+                config.attributedTitle = .init("같은 메뉴 담기", attributes: .init([
+                    .font: UIFont.appFont(.pretendardBold, size: 14)
+                ]))
+                config.baseForegroundColor = UIColor.appColor(.neutral0)
+                background.backgroundColor = UIColor.appColor(.new500)
+                button.isEnabled = true
+                button.isHidden  = false
+                
+            case .beforeOpen:
+                config.attributedTitle = .init("같은 메뉴 담기 (오픈 전)", attributes: .init([
+                    .font: UIFont.appFont(.pretendardBold, size: 14)
+                ]))
+                config.baseForegroundColor = UIColor.appColor(.neutral400)
+                background.backgroundColor = UIColor.appColor(.neutral100)
+                button.isEnabled = false
+                button.isHidden  = false
+            }
+            
+            config.background = background
+            button.configuration = config
+        }
+        reorderButton.setNeedsUpdateConfiguration()
+    }
     
-    func configure(
-         stateText: String,
-         dateText: String,
-         image: UIImage?,
-         storeName: String,
-         menuName: String,
-         priceText: String,
-         canReorder: Bool
-     ) {
-         stateLabel.text = stateText
-         dayLabel.text = dateText
-         menuImageView.image = image
-         storeNameLabel.text = storeName
-         menuNameLabel.text = menuName
-         menuPriceLabel.text = priceText
-         reorderState = canReorder ? .available : .beforeOpen
-         
-     }
+    func configure(with order: OrderHistory) {
+        stateLabel.text = order.status.text
+        dayLabel.text = order.orderDate.formatDateToMDEEE()
+        
+        storeNameLabel.text = order.shopName
+        menuNameLabel.text  = order.orderTitle
+        menuPriceLabel.text = "\(order.totalAmount.formattedWithComma)원"
+        
+        menuImageView.kf.setImage(
+            with: order.shopThumbnail,
+            placeholder: UIImage.appImage(asset: .defaultMenuImage),
+            options: [
+                .transition(.fade(0.2)),
+                .cacheOriginalImage,
+                .backgroundDecode
+            ]
+        )
+        
+        reorderState = order.isReorderable ? .available : .beforeOpen
+    }
+    
 }
+
+

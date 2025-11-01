@@ -23,10 +23,11 @@ protocol OrderService {
     func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error>
     func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error>
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error>
 }
 
 final class DefaultOrderService: OrderService {
-    
+ 
     let networkService = NetworkService()
     
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error> {
@@ -50,14 +51,17 @@ final class DefaultOrderService: OrderService {
         return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDto, Error> {
         return request(.fetchOrderShopMenusGroups(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDto, Error> {
         return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         request(.fetchOrderInProgress)
             .map { (dtos: [OrderInProgressDto]) in
@@ -65,10 +69,12 @@ final class DefaultOrderService: OrderService {
             }
             .eraseToAnyPublisher()
     }
+
     func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error> {
         request(.fetchCartSummary(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
+    
     func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error> {
         request(.fetchCartItemsCount)
             .eraseToAnyPublisher()
@@ -78,23 +84,33 @@ final class DefaultOrderService: OrderService {
         return requestWithResponse(.resetCart)
             .eraseToAnyPublisher()
     }
+    
     func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error> {
         return request(.fetchCart(parameter: parameter.rawValue))
             .eraseToAnyPublisher()
     }
+    
     func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse> {
         return requestWithResponse(.deleteCartMenuItem(cartMenuItemId: cartMenuItemId))
     }
+    
     func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error> {
         request(.fetchOrderMenu(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId))
             .eraseToAnyPublisher()
     }
+    
     func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error> {
         request(.fetchOrderShopDetail(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
     
-    
+    func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error> {
+        let dto = OrderHistoryQueryDTO(query)
+        return request(.fetchOrder(query: dto))
+            .map { (res: OrdersHistoryResponseDTO) in res.toPageEntity() }
+            .eraseToAnyPublisher()
+    }
+
     private func request<T: Decodable>(_ api: OrderAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .validate(statusCode: 200..<300)
@@ -115,6 +131,7 @@ final class DefaultOrderService: OrderService {
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
+    
     private func requestWithResponse(_ api: OrderAPI) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api)
             .validate(statusCode: 200..<300)
@@ -141,6 +158,7 @@ final class DefaultOrderService: OrderService {
             }
             .eraseToAnyPublisher()
     }
+    
     private func handleError(_ error: Error) -> ErrorResponse {
         if let errorResponse = error as? ErrorResponse {
             return errorResponse

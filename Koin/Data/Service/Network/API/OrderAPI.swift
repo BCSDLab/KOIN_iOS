@@ -22,6 +22,7 @@ enum OrderAPI {
     case deleteCartMenuItem(cartMenuItemId: Int)
     case fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int)
     case fetchOrderShopDetail(orderableShopId: Int)
+    case fetchOrder(query: OrderHistoryQueryDTO)
 }
 
 extension OrderAPI: Router, URLRequestConvertible {
@@ -46,6 +47,7 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .deleteCartMenuItem(let cartMenuItemId): return "/cart/delete/\(cartMenuItemId)"
         case let .fetchOrderMenu(orderableShopId, orderableShopMenuId): return "/order/shop/\(orderableShopId)/menus/\(orderableShopMenuId)"
         case .fetchOrderShopDetail(let orderableShopId): return "/order/shop/\(orderableShopId)/detail"
+        case .fetchOrder: return "/order"
         }
     }
     
@@ -59,7 +61,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart, .resetCart, .deleteCartMenuItem:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart, .resetCart, .deleteCartMenuItem, .fetchOrderShopList, .fetchOrderInProgress, .fetchOrder:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -87,6 +89,8 @@ extension OrderAPI: Router, URLRequestConvertible {
             return parameters
         case .fetchCart(let parameter):
             return ["type" : parameter]
+        case .fetchOrder(let queryDTO):
+             return queryDTO.asParameters
         default:
             return nil
         }

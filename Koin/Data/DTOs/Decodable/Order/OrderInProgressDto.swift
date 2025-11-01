@@ -9,7 +9,9 @@ import Foundation
 
 struct OrderInProgressDto: Decodable {
     let id: Int
-    let orderType: OrderInProgressTypeDto
+    let orderableShopId: Int
+    let paymentId: Int
+    let orderType: OrderInProgressTypeDTO
     let orderableShopName: String
     let orderableShopThumbnail: String
     let estimatedAt: String?
@@ -19,6 +21,8 @@ struct OrderInProgressDto: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
+        case orderableShopId = "orderable_shop_id"
+        case paymentId = "payment_id"
         case orderType = "order_type"
         case orderableShopName = "orderable_shop_name"
         case orderableShopThumbnail = "orderable_shop_thumbnail"
@@ -62,6 +66,7 @@ extension OrderInProgressDto {
 
         return OrderInProgress(
             id: id,
+            paymentId: paymentId,
             type: OrderInProgressType(rawValue: {
                 switch orderType {
                 case .delivery: return "DELIVERY"

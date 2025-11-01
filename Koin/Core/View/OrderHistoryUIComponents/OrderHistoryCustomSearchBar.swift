@@ -107,7 +107,7 @@ final class OrderHistoryCustomSearchBar: UIView {
             $0.top.equalToSuperview().inset(contentInsets.top)
             $0.bottom.equalToSuperview().inset(contentInsets.bottom)
             $0.trailing.equalToSuperview().inset(contentInsets.right)
-            $0.height.greaterThanOrEqualTo(36)
+            $0.height.greaterThanOrEqualTo(28)
         }
     }
 
@@ -122,7 +122,7 @@ final class OrderHistoryCustomSearchBar: UIView {
             $0.top.equalToSuperview().inset(contentInsets.top)
             $0.bottom.equalToSuperview().inset(contentInsets.bottom)
             $0.trailing.equalToSuperview().inset(contentInsets.right)
-            $0.height.greaterThanOrEqualTo(36)
+            $0.height.greaterThanOrEqualTo(28)
         }
         layoutIfNeeded()
     }
@@ -135,9 +135,9 @@ final class OrderHistoryCustomSearchBar: UIView {
 extension OrderHistoryCustomSearchBar: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         onReturn?(textField.text ?? "")
-        textField.resignFirstResponder()
         return true
     }
 }
+
 
 
