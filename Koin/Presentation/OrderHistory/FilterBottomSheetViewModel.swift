@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 final class FilterBottomSheetViewModel: ViewModelProtocol {
+    
     enum Input {
         case togglePeriod(OrderHistoryPeriod)
         case toggleType(OrderHistoryType)

@@ -47,11 +47,11 @@ final class DefaultUserRepository: UserRepository {
         service.checkAuth()
     }
     
-    func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse> {
+    func fetchUserData() -> AnyPublisher<UserDto, ErrorResponse> {
         service.fetchUserData()
     }
     
-    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse> {
+    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse> {
         service.modify(requestModel: requestModel)
     }
     
@@ -59,7 +59,7 @@ final class DefaultUserRepository: UserRepository {
         service.register(requestModel: requestModel)
     }
     
-    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse> {
+    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDto, ErrorResponse> {
         service.login(requestModel: requestModel)
     }
     
@@ -97,7 +97,7 @@ final class DefaultUserRepository: UserRepository {
         service.checkLogin()
     }
     
-    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDTO, ErrorResponse> {
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDto, ErrorResponse> {
         service.sendVerificationCode(requestModel: requestModel)
     }
     

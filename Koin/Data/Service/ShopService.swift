@@ -9,23 +9,25 @@ import Alamofire
 import Combine
 
 protocol ShopService {
-    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error>
-    func fetchEventList() -> AnyPublisher<EventsDTO, Error>
-    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error>
-    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error>
-    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error>
-    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error>
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    
-    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse>
-    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse>
-    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse>
+    func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, Error>
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, Error>
+    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, Error>
+    func fetchEventList() -> AnyPublisher<EventsDto, Error>
+    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, Error>
+    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, Error>
+    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, Error>
+    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error>
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
+        
+    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDto, ErrorResponse>
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDto, ErrorResponse>
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDto, ErrorResponse>
     func postReview(requestModel: WriteReviewRequest, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error>
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error>
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, Error>
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, Error>
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
@@ -33,15 +35,23 @@ protocol ShopService {
 }
 
 final class DefaultShopService: ShopService {
-
     
     private let networkService = NetworkService()
     
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error> {
+    func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, Error> {
+        request(.fetchShopMenusCategoryList(shopId: shopId))
+    }
+    
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, Error> {
+        request(.fetchShopSummary(id))
+        
+    }
+    
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, Error> {
         request(.fetchShopBenefits)
     }
     
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error> {
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, Error> {
         request(.fetchBeneficialShops(id))
     }
     
@@ -60,14 +70,14 @@ final class DefaultShopService: ShopService {
             .eraseToAnyPublisher()
     }
     
-    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+    func fetchReviewList(requestModel: FetchShopReviewRequest, retry: Bool) -> AnyPublisher<ReviewsDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchReviewList(requestModel))
-            .catch { [weak self] error -> AnyPublisher<ReviewsDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<ReviewsDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" && !retry {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: ShopAPI.fetchReviewList(requestModel)) }
-                        .catch { refreshError -> AnyPublisher<ReviewsDTO, ErrorResponse> in
+                        .catch { refreshError -> AnyPublisher<ReviewsDto, ErrorResponse> in
                             return self.fetchReviewList(requestModel: requestModel, retry: true)
                         }
                         .eraseToAnyPublisher()
@@ -78,9 +88,9 @@ final class DefaultShopService: ShopService {
             .eraseToAnyPublisher()
     }
     
-    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse> {
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchReview(reviewId, shopId))
-            .catch { [weak self] error -> AnyPublisher<OneReviewDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<OneReviewDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
@@ -93,9 +103,9 @@ final class DefaultShopService: ShopService {
             .eraseToAnyPublisher()
     }
     
-    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse> {
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchMyReviewList(requestModel, shopId))
-            .catch { [weak self] error -> AnyPublisher<MyReviewDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<MyReviewDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
@@ -168,35 +178,31 @@ final class DefaultShopService: ShopService {
             .eraseToAnyPublisher()
     }
     
-    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error> {
+    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, Error> {
         return request(.fetchShopList(requestModel))
     }
     
-    func fetchEventList() -> AnyPublisher<EventsDTO, Error> {
+    func fetchEventList() -> AnyPublisher<EventsDto, Error> {
         return request(.fetchEventList)
     }
     
-    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error> {
+    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, Error> {
         return request(.fetchShopCategoryList)
     }
     
-    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error> {
+    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, Error> {
         return request(.fetchShopData(requestModel))
     }
     
-    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error> {
+    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, Error> {
         return request(.fetchShopMenuList(requestModel))
     }
     
-    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error> {
+    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error> {
         return request(.fetchShopEventList(requestModel))
     }
     
-    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, Error> {
-        return request(.fetchReviewList(requestModel))
-    }
-    
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return request(.searchShop(text))
     }
     

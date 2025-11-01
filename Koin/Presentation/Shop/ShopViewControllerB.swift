@@ -228,7 +228,7 @@
 //        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCan, .click, value))
 //    }
 //    
-//    private func updateEventShops(_ eventShops: [EventDTO]) {
+//    private func updateEventShops(_ eventShops: [EventDto]) {
 //        
 //        eventShopCollectionView.isHidden = eventShops.isEmpty
 //        eventIndexLabel.isHidden = eventShops.isEmpty

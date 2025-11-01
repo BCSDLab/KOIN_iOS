@@ -8,6 +8,6 @@
 import Foundation
 
 struct NoticeArticlesInfo {
-    let articles: [NoticeArticleDTO]
+    let articles: [NoticeArticleDto]
     let pages: NoticeListPages
 }

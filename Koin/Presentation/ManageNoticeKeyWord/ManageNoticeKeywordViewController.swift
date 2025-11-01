@@ -207,7 +207,7 @@ extension ManageNoticeKeywordViewController {
         sender.isEnabled = false
     }
     
-    private func updateMyKeywords(keywords: [NoticeKeywordDTO]) {
+    private func updateMyKeywords(keywords: [NoticeKeywordDto]) {
         myKeywordCollectionView.updateMyKeywords(keywords: keywords)
     }
     

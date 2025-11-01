@@ -33,7 +33,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case fillComponent(OneReviewDTO)
+        case fillComponent(OneReviewDto)
         case addImage(String)
         case showToast(String, Bool)
         case updateShopName(String)

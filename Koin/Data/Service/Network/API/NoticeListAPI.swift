@@ -13,7 +13,7 @@ enum NoticeListAPI {
     case searchNoticeArticle(SearchNoticeArticleRequest)
     case fetchNoticeData(FetchNoticeDataRequest)
     case fetchHotNoticeArticles
-    case createNotificationKeyword(NoticeKeywordDTO)
+    case createNotificationKeyword(NoticeKeywordDto)
     case deleteNotificationKeyword(Int)
     case fetchNotificationKeyword
     case fetchRecommendedSearchWord(FetchRecommendedSearchWordRequest)

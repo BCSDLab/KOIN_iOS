@@ -9,21 +9,21 @@ import Alamofire
 import Combine
 
 protocol NoticeListService {
-    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
-    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error>
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error>
-    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error>
-    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error>
-    func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse>
-    func deleteNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse>
+    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error>
+    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error>
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDto, Error>
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error>
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], Error>
+    func createNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse>
+    func deleteNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<Void, ErrorResponse>
     func fetchMyNotificationKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse>
-    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error>
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error>
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
-    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error>
-    func fetchLostItem(id: Int, retry: Bool) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse>
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error>
+    func fetchLostItem(id: Int, retry: Bool) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }
@@ -33,14 +33,14 @@ final class DefaultNoticeService: NoticeListService {
     let networkService = NetworkService()
     let coreDataService = CoreDataService.shared
     
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDTO, Error> {
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDto, Error> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel))
-            .catch { [weak self] error -> AnyPublisher<NoticeListDTO, Error> in
+            .catch { [weak self] error -> AnyPublisher<NoticeListDto, Error> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" && !retry {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel)) }
-                        .catch { refreshError -> AnyPublisher<NoticeListDTO, Error> in
+                        .catch { refreshError -> AnyPublisher<NoticeListDto, Error> in
                             return self.fetchLostItemArticles(requestModel: requestModel, retry: true)
                         }
                         .eraseToAnyPublisher()
@@ -67,9 +67,9 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))
-            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
@@ -82,17 +82,17 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
         return request(.fetchLostItemList(requestModel))
     }
-    func fetchLostItem(id: Int, retry: Bool = false) -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> {
+    func fetchLostItem(id: Int, retry: Bool = false) -> AnyPublisher<LostArticleDetailDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id))
-            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<LostArticleDetailDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" && !retry {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id)) }
-                        .catch { refreshError -> AnyPublisher<LostArticleDetailDTO, ErrorResponse> in
+                        .catch { refreshError -> AnyPublisher<LostArticleDetailDto, ErrorResponse> in
                             return self.fetchLostItem(id: id, retry: true)
                         }
                         .eraseToAnyPublisher()
@@ -118,31 +118,31 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDTO, Error> {
+    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
         return request(.fetchNoticeArticles(requestModel))
     }
     
-    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDTO, Error> {
+    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error> {
         return request(.searchNoticeArticle(requestModel))
     }
     
-    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDTO, Error> {
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error> {
         return request(.fetchNoticeData(requestModel))
     }
     
-    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDTO], Error> {
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], Error> {
         return request(.fetchHotNoticeArticles)
     }
     
-    func createNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
+    func createNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
-            .catch { [weak self] error -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<NoticeKeywordDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: NoticeListAPI.createNotificationKeyword(requestModel))
                         }
-                        .catch { [weak self] _ -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> in
+                        .catch { [weak self] _ -> AnyPublisher<NoticeKeywordDto, ErrorResponse> in
                             guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                             return self.createCoreDataKeyword(requestModel: requestModel)
                         }
@@ -154,7 +154,7 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func deleteNotificationKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse> {
+    func deleteNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<Void, ErrorResponse> {
         if let id = requestModel.id {
             return networkService.request(api: NoticeListAPI.deleteNotificationKeyword(id))
                 .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
@@ -200,7 +200,7 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error> {
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error> {
         if let count = count {
             let requestModel = FetchRecommendedSearchWordRequest(count: count)
             return request(.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()
@@ -254,18 +254,18 @@ final class DefaultNoticeService: NoticeListService {
     
     private func fetchCoreDataKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse> {
         let data = self.coreDataService.fetchEntities(objectType: NoticeKeywordInformation.self)
-        var myKeywords: [NoticeKeywordDTO] = []
+        var myKeywords: [NoticeKeywordDto] = []
         if let data = data {
             for keyword in data {
-                myKeywords.append(NoticeKeywordDTO(id: nil, keyword: keyword.name ?? ""))
+                myKeywords.append(NoticeKeywordDto(id: nil, keyword: keyword.name ?? ""))
             }
         }
-        let result = NoticeKeywordsDTO(keywords: myKeywords)
+        let result = NoticeKeywordsDto(keywords: myKeywords)
         return Just(NoticeKeywordsFetchResult.successWithCoreData(result)).setFailureType(to: ErrorResponse.self)
             .eraseToAnyPublisher()
     }
     
-    private func createCoreDataKeyword(requestModel: NoticeKeywordDTO) -> AnyPublisher<NoticeKeywordDTO, ErrorResponse> {
+    private func createCoreDataKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse> {
         let keyword = NoticeKeywordInformation(context: self.coreDataService.context)
         keyword.name = requestModel.keyword
         self.coreDataService.insert(insertedObject: keyword)

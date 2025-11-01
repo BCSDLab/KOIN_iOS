@@ -12,7 +12,7 @@ enum TimetableAPI {
     case fetchFrame(semester: String)
     case deleteFrame(id: Int)
     case createFrame(semester: String)
-    case modifyFrame(frame: FrameDTO)
+    case modifyFrame(frame: FrameDto)
     case fetchLecture(frameId: Int)
     case modifyLecture(request: LectureRequest)
     case postLecture(request: LectureRequest)

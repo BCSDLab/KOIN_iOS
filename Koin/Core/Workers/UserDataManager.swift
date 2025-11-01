@@ -17,7 +17,7 @@ final class UserDataManager {
     
     private init() {}
     
-    func setUserData(userData: UserDTO) {
+    func setUserData(userData: UserDto) {
         if let studentNumber = userData.studentNumber, !studentNumber.isEmpty {
             userId = "\(studentNumber.prefix(6))_\(userData.id)"
         } else {

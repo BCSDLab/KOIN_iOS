@@ -339,7 +339,7 @@ extension NotiViewController {
         inputSubject.send(.switchDetailChanged(senderType, sender.isOn))
     }
     
-    private func changeSwitch(_ dto: NotiAgreementDTO) {
+    private func changeSwitch(_ dto: NotiAgreementDto) {
         dto.subscribes?.forEach { subscribe in
             switch subscribe.type {
             case .diningSoldOut:

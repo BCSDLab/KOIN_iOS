@@ -11,7 +11,17 @@ enum OrderAPI {
     case fetchOrderShopList(FetchOrderShopListRequest)
     case fetchOrderEventShop
     case searchShop(String)
+    case fetchOrderShopMenusGroups(orderableShopId: Int)
+    case fetchOrderShopMenus(orderableShopId: Int)
+    case fetchOrderShopSummary(orderableShopId: Int)
     case fetchOrderInProgress
+    case fetchCartSummary(orderableShopId: Int)
+    case fetchCartItemsCount
+    case fetchCart(parameter: String)
+    case resetCart
+    case deleteCartMenuItem(cartMenuItemId: Int)
+    case fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int)
+    case fetchOrderShopDetail(orderableShopId: Int)
     case fetchOrder(query: OrderHistoryQueryDTO)
 }
 
@@ -26,13 +36,24 @@ extension OrderAPI: Router, URLRequestConvertible {
         case .fetchOrderShopList: return "/order/shops"
         case .fetchOrderEventShop: return "/order/shops/events"
         case .searchShop(let text): return "/shops/search/related/\(text)"
+        case .fetchOrderShopMenusGroups(let orderableShopId): return "/order/shop/\(orderableShopId)/menus/groups"
+        case .fetchOrderShopMenus(let orderableShopId): return "/order/shop/\(orderableShopId)/menus"
+        case .fetchOrderShopSummary(let orderableShopId): return "/order/shop/\(orderableShopId)/summary"
         case .fetchOrderInProgress: return "/order/in-progress"
+        case .fetchCartSummary(let orderableShopId): return "/cart/summary/\(orderableShopId)"
+        case .fetchCartItemsCount: return "/cart/items/count"
+        case .fetchCart: return "/cart"
+        case .resetCart: return "/cart/reset"
+        case .deleteCartMenuItem(let cartMenuItemId): return "/cart/delete/\(cartMenuItemId)"
+        case let .fetchOrderMenu(orderableShopId, orderableShopMenuId): return "/order/shop/\(orderableShopId)/menus/\(orderableShopMenuId)"
+        case .fetchOrderShopDetail(let orderableShopId): return "/order/shop/\(orderableShopId)/detail"
         case .fetchOrder: return "/order"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
+        case .resetCart, .deleteCartMenuItem: .delete
         default: .get
         }
     }
@@ -40,7 +61,7 @@ extension OrderAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchOrderShopList, .fetchOrderInProgress, .fetchOrder:
+        case .fetchOrderShopList, .fetchOrderInProgress, .fetchCartSummary, .fetchCartItemsCount, .fetchCart, .resetCart, .deleteCartMenuItem, .fetchOrderShopList, .fetchOrderInProgress, .fetchOrder:
             if let token = KeychainWorker.shared.read(key: .access) {
                 baseHeaders["Authorization"] = "Bearer \(token)"
             }
@@ -66,6 +87,8 @@ extension OrderAPI: Router, URLRequestConvertible {
                 parameters["category_filter"] = categoryFilter
             }
             return parameters
+        case .fetchCart(let parameter):
+            return ["type" : parameter]
         case .fetchOrder(let queryDTO):
              return queryDTO.asParameters
         default:
@@ -77,6 +100,8 @@ extension OrderAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchOrderShopList:
             return URLEncoding(arrayEncoding: .noBrackets)
+        case .resetCart:
+            return nil
         default:
             return URLEncoding.default
         }

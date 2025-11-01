@@ -10,12 +10,12 @@ import UIKit
 
 final class ModifyFrameModalViewController: UIViewController {
     
-    let deleteButtonPublisher = PassthroughSubject<FrameDTO, Never>()
+    let deleteButtonPublisher = PassthroughSubject<FrameDto, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
-    let saveButtonPublisher = PassthroughSubject<FrameDTO, Never>()
+    let saveButtonPublisher = PassthroughSubject<FrameDto, Never>()
     var containerWidth: CGFloat
     var containerHeight: CGFloat
-    var frame: FrameDTO = FrameDTO(id: 0, timetableName: "", isMain: false)
+    var frame: FrameDto = FrameDto(id: 0, timetableName: "", isMain: false)
     
     private let messageLabel = UILabel().then {
         $0.text = "시간표 설정"
@@ -91,7 +91,7 @@ final class ModifyFrameModalViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
-    func configure(frame: FrameDTO) {
+    func configure(frame: FrameDto) {
         self.frame = frame
         self.textField.text = frame.timetableName
         self.frame = frame

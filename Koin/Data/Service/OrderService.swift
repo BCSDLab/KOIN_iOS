@@ -9,40 +9,98 @@ import Alamofire
 import Combine
 
 protocol OrderService {
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error>
-    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error>
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error>
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDto], Error>
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDto], Error>
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDto, Error>
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDto, Error>
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
-    
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error>
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error>
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error>
+    func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error>
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error>
     func fetchOrderHistory(query: OrderHistoryQuery) -> AnyPublisher<OrdersPage, Error>
-
 }
 
 final class DefaultOrderService: OrderService {
  
+    let networkService = NetworkService()
     
-    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDTO], Error> {
+    func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShopDto], Error> {
         return request(.fetchOrderShopList(requestModel))
             .eraseToAnyPublisher()
     }
     
-    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDTO], Error> {
-        request(.fetchOrderEventShop)
-            .map { (response: OrderShopEventListResponseDTO) in
+    func fetchOrderEventShop() -> AnyPublisher<[OrderShopEventDto], Error> {
+        return request(.fetchOrderEventShop)
+            .map { (response: OrderShopEventListResponseDto) in
                 response.shopEvents
             }
             .eraseToAnyPublisher()
     }
     
-    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return request(.searchShop(text))
+    }
+    
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenusDto], Error> {
+        return request(.fetchOrderShopMenus(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroupsDto, Error> {
+        return request(.fetchOrderShopMenusGroups(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummaryDto, Error> {
+        return request(.fetchOrderShopSummary(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
     }
     
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         request(.fetchOrderInProgress)
-            .map { (dtos: [OrderInProgressDTO]) in
+            .map { (dtos: [OrderInProgressDto]) in
                 dtos.map { $0.toEntity() }
             }
+            .eraseToAnyPublisher()
+    }
+
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummaryDto, Error> {
+        request(.fetchCartSummary(orderableShopId: orderableShopId))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCountDto, Error> {
+        request(.fetchCartItemsCount)
+            .eraseToAnyPublisher()
+    }
+    
+    func resetCart() -> AnyPublisher<Void, ErrorResponse> {
+        return requestWithResponse(.resetCart)
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<CartDto, Error> {
+        return request(.fetchCart(parameter: parameter.rawValue))
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return requestWithResponse(.deleteCartMenuItem(cartMenuItemId: cartMenuItemId))
+    }
+    
+    func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) -> AnyPublisher<OrderMenuDTO, Error> {
+        request(.fetchOrderMenu(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId))
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetailDto, Error> {
+        request(.fetchOrderShopDetail(orderableShopId: orderableShopId))
             .eraseToAnyPublisher()
     }
     
@@ -72,6 +130,39 @@ final class DefaultOrderService: OrderService {
             }
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
-        
+    }
+    
+    private func requestWithResponse(_ api: OrderAPI) -> AnyPublisher<Void, ErrorResponse> {
+        return AF.request(api)
+            .validate(statusCode: 200..<300)
+            .publishData(emptyResponseCodes: [200])
+            .tryMap { response in
+                switch response.result {
+                case .success:
+                    return ()
+                case .failure(let afError):
+                    guard let response = response.response else {
+                        throw URLError(.badServerResponse)
+                    }
+                    switch response.statusCode {
+                    case 401:
+                        throw ErrorResponse(code: "401", message: "")
+                    default:
+                        let afError = AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: response.statusCode))
+                        throw afError
+                    }
+                }
+            }
+            .mapError { error -> ErrorResponse in
+                self.handleError(error)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    private func handleError(_ error: Error) -> ErrorResponse {
+        if let errorResponse = error as? ErrorResponse {
+            return errorResponse
+        }
+        return ErrorResponse(code: "", message: "알 수 없는 에러")
     }
 }

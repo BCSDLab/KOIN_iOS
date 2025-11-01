@@ -10,8 +10,8 @@ import UIKit
 
 final class DeleteFrameModalViewController: UIViewController {
     
-    let deleteButtonPublisher = PassthroughSubject<FrameDTO, Never>()
-    private var frame: FrameDTO? = nil
+    let deleteButtonPublisher = PassthroughSubject<FrameDto, Never>()
+    private var frame: FrameDto? = nil
     
     private let messageLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
@@ -61,7 +61,7 @@ final class DeleteFrameModalViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func configure(frame: FrameDTO) {
+    func configure(frame: FrameDto) {
         self.frame = frame
         
         let frameName = frame.timetableName

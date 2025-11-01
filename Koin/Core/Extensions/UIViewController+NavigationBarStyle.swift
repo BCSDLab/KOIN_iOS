@@ -13,6 +13,8 @@ extension UIViewController {
         case fill
         case empty
         case order
+        case orderTransparent
+        case white
     }
     
     func configureNavigationBar(style: NavigationBarStyle) {
@@ -41,11 +43,31 @@ extension UIViewController {
                 .font: UIFont.appFont(.pretendardMedium, size: 18)
             ]
             navigationItem.backButtonTitle = ""
+        case .orderTransparent:
+            appearance.backgroundColor = UIColor.clear
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.clear,
+                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
+        case .white:
+            appearance.backgroundColor = UIColor.white
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.appColor(.neutral800),
+                .font: UIFont.appFont(.pretendardMedium, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
         }
         appearance.shadowColor = nil
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = style == .fill ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
+        
+        switch style {
+        case .fill, .orderTransparent:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral0)
+        case .empty, .order, .white:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral800)
+        }
     }
 }

@@ -11,6 +11,16 @@ import Combine
 protocol OrderShopRepository {
     func fetchOrderShopList(requestModel: FetchOrderShopListRequest) -> AnyPublisher<[OrderShop], Error>
     func fetchOrderEventShop() -> AnyPublisher<[OrderShopEvent], Error>
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error>
-    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> 
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error>
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error>
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error>
+    func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error>
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error>
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error>
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<Cart, Error>
+    func resetCart() -> AnyPublisher<Void, ErrorResponse>
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchOrderMenu(orderableShopId: Int,orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error>
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error>
 }

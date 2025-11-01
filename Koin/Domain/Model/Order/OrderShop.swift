@@ -5,6 +5,7 @@
 //  Created by 이은지 on 6/30/25.
 //
 
+
 import Foundation
 
 struct OrderShop {
@@ -23,29 +24,6 @@ struct OrderShop {
     let categoryIds: [Int]
     let images: [OrderImage]?
     let openStatus: String
-
-    enum CodingKeys: String, CodingKey {
-        case shopId = "shop_id"
-        case orderableShopId = "orderable_shop_id"
-        case name
-        case isDeliveryAvailable = "is_delivery_available"
-        case isTakeoutAvailable = "is_takeout_available"
-        case serviceEvent = "service_event"
-        case minimumOrderAmount = "minimum_order_amount"
-        case ratingAverage = "rating_average"
-        case reviewCount = "review_count"
-        case minimumDeliveryTip = "minimum_delivery_tip"
-        case maximumDeliveryTip = "maximum_delivery_tip"
-        case isOpen = "is_open"
-        case categoryIds = "category_ids"
-        case images
-        case openStatus = "open_status"
-    }
-}
-
-struct OrderImage {
-    let imageUrl: String
-    let isThumbnail: Bool
 }
 
 struct OrderOpen {
@@ -53,13 +31,6 @@ struct OrderOpen {
     let closed: Bool
     let openTime: String
     let closeTime: String
-
-    enum CodingKeys: String, CodingKey {
-        case dayOfWeek = "day_of_week"
-        case closed
-        case openTime = "open_time"
-        case closeTime = "close_time"
-    }
 }
 
 enum OrderDayOfWeek: String {
@@ -73,7 +44,7 @@ enum OrderDayOfWeek: String {
 }
 
 extension OrderShop {
-    init(dto: OrderShopDTO) {
+    init(dto: OrderShopDto) {
         shopId = dto.shopId
         orderableShopId = dto.orderableShopId
         name = dto.name
@@ -93,14 +64,14 @@ extension OrderShop {
 }
 
 extension OrderImage {
-    init(dto: OrderImageDTO) {
+    init(dto: OrderImageDto) {
         imageUrl = dto.imageUrl
         isThumbnail = dto.isThumbnail
     }
 }
 
 extension OrderOpen {
-    init(dto: OpenInfoDTO) {
+    init(dto: OpenInfoDto) {
         dayOfWeek = OrderDayOfWeek(rawValue: dto.dayOfWeek) ?? .monday
         closed = dto.closed
         openTime = dto.openTime ?? ""

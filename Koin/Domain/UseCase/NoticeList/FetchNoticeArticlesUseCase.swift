@@ -22,7 +22,7 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
     }
     
     func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType? = nil) -> AnyPublisher<NoticeArticlesInfo, Error> {
-        let response: AnyPublisher<NoticeListDTO, Error>
+        let response: AnyPublisher<NoticeListDto, Error>
         
         if let keyWord = keyWord { // 키워드로 검색해서 찾을 경우
             let searchRequest = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
@@ -35,14 +35,14 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
             let fetchRequest = FetchNoticeArticlesRequest(boardId: boardId, page: page, limit: maxArticleListNumber)
             response = noticeListRepository.fetchNoticeArticles(requestModel: fetchRequest)
         } else { // boardId는 꼭 필요하기 때문에 없다면 빈 배열을 반환
-            response = Just(NoticeListDTO(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0))
+            response = Just(NoticeListDto(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
         
         return response
             .map { [weak self] articles in
-                let newArticles: NoticeListDTO = articles.toDomain()
+                let newArticles: NoticeListDto = articles.toDomain()
                 let pages = self?.makePages(currentPage: articles.currentPage, totalPage: articles.totalPage) ?? NoticeListPages(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
                 return NoticeArticlesInfo(articles: newArticles.articles ?? [], pages: pages)
             }

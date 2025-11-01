@@ -101,7 +101,7 @@ extension DiningViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func processSubscribes(response: NotiAgreementDTO) -> (Bool, Bool) {
+    private func processSubscribes(response: NotiAgreementDto) -> (Bool, Bool) {
         var diningSoldOutPermit: Bool = false
         var diningImageUploadPermit: Bool = false
         

@@ -241,7 +241,7 @@ extension BusSearchViewController {
         }
     }
     
-    private func updateEmergencyNotice(notice: BusNoticeDTO) {
+    private func updateEmergencyNotice(notice: BusNoticeDto) {
         updateLayoutsByNotice(isDeleted: false)
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id

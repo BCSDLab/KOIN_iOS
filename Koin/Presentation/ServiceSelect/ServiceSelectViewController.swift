@@ -159,7 +159,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
 
 extension ServiceSelectViewController {
     
-    private func changeViewOption(profile: UserDTO?) {
+    private func changeViewOption(profile: UserDto?) {
         var config = UIButton.Configuration.plain()
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         var attributedLoginString = AttributedString.init(stringLiteral: "로그인")

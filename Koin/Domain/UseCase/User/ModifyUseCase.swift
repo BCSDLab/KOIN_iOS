@@ -8,7 +8,7 @@
 import Combine
 
 protocol ModifyUseCase {
-    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
+    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse>
 }
 
 final class DefaultModifyUseCase: ModifyUseCase {
@@ -19,7 +19,7 @@ final class DefaultModifyUseCase: ModifyUseCase {
         self.userRepository = userRepository
     }
     
-    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse> {
+    func execute(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse> {
         var mutableRequestModel = requestModel
         mutableRequestModel.sha256()
         return userRepository.modify(requestModel: mutableRequestModel)

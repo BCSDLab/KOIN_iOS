@@ -17,8 +17,10 @@ struct OrderShopEvent {
     let thumbnailImages: [String]
     let startDate: String
     let endDate: String
+}
 
-    init(dto: OrderShopEventDTO) {
+extension OrderShopEvent {
+    init(dto: OrderShopEventDto) {
         self.orderableShopId = dto.orderableShopId
         self.shopId = dto.shopId
         self.shopName = dto.shopName

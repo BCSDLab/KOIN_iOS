@@ -30,12 +30,78 @@ final class DefaultOrderShopRepository: OrderShopRepository{
             .eraseToAnyPublisher()
     }
     
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return service.searchRelatedShops(text: text)
+    }
+    
+    func fetchOrderShopMenus(orderableShopId: Int) -> AnyPublisher<[OrderShopMenus], Error> {
+        service.fetchOrderShopMenus(orderableShopId: orderableShopId)
+            .map { dto in
+                dto.map { OrderShopMenus(from: $0) }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopMenusGroups(orderableShopId: Int) -> AnyPublisher<OrderShopMenusGroups, Error> {
+        service.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+            .map { dto in
+                OrderShopMenusGroups(from: dto)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopSummary(orderableShopId: Int) -> AnyPublisher<OrderShopSummary, Error> {
+        service.fetchOrderShopSummary(orderableShopId: orderableShopId)
+            .map { dto in
+                return OrderShopSummary(from: dto)
+            }
+            .eraseToAnyPublisher()
     }
     
     func fetchOrderInProgress() -> AnyPublisher<[OrderInProgress], Error> {
         service.fetchOrderInProgress()
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartSummary(orderableShopId: Int) -> AnyPublisher<CartSummary, Error> {
+        service.fetchCartSummary(orderableShopId: orderableShopId)
+            .map { CartSummary(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCartItemsCount() -> AnyPublisher<CartItemsCount, Error> {
+        service.fetchCartItemsCount()
+            .map { CartItemsCount(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func resetCart() -> AnyPublisher<Void, ErrorResponse> {
+        service.resetCart()
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCart(parameter: FetchCartType) -> AnyPublisher<Cart, Error> {
+        service.fetchCart(parameter: parameter)
+            .map { Cart(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteCartMenuItem(cartMenuItemId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.deleteCartMenuItem(cartMenuItemId: cartMenuItemId)
+            .eraseToAnyPublisher()
+    }
+        
+    func fetchOrderMenu(orderableShopId: Int,
+                        orderableShopMenuId: Int) -> AnyPublisher<OrderMenu, Error> {
+        service.fetchOrderMenu(orderableShopId: orderableShopId,
+                               orderableShopMenuId: orderableShopMenuId)
+            .map { OrderMenu(from: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchOrderShopDetail(orderableShopId: Int) -> AnyPublisher<OrderShopDetail, Error> {
+        service.fetchOrderShopDetail(orderableShopId: orderableShopId)
+            .map { OrderShopDetail(from: $0) }
             .eraseToAnyPublisher()
     }
 }

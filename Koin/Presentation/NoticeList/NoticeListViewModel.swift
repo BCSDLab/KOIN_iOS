@@ -13,14 +13,14 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Input {
         case changeBoard(NoticeListType)
         case changePage(Int)
-        case getUserKeywordList(NoticeKeywordDTO? = nil)
+        case getUserKeywordList(NoticeKeywordDto? = nil)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case checkAuth
         case checkLogin
     }
     enum Output {
-        case updateBoard([NoticeArticleDTO], NoticeListPages, NoticeListType)
-        case updateUserKeywordList([NoticeKeywordDTO], Int)
+        case updateBoard([NoticeArticleDto], NoticeListPages, NoticeListType)
+        case updateUserKeywordList([NoticeKeywordDto], Int)
         case isLogined(Bool)
         case showIsLogined(Bool)
     }
@@ -33,7 +33,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
-    private(set) var noticeList: [NoticeArticleDTO] = []
+    private(set) var noticeList: [NoticeArticleDto] = []
     var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
@@ -106,7 +106,7 @@ extension NoticeListViewModel {
         }).store(in: &subscriptions)
     }
     
-    private func getUserKeywordList(keyword: NoticeKeywordDTO? = nil) {
+    private func getUserKeywordList(keyword: NoticeKeywordDto? = nil) {
         var keywordIndex = 0
         if let keyword = keyword {
             if keyword.id != -1 {
@@ -128,7 +128,7 @@ extension NoticeListViewModel {
         })
     }
     
-    private func fetchUserKeyword(completion: @escaping ([NoticeKeywordDTO]) -> Void) {
+    private func fetchUserKeyword(completion: @escaping ([NoticeKeywordDto]) -> Void) {
         fetchMyKeywordUseCase.execute().sink(receiveCompletion: { response in
             if case let .failure(error) = response {
                 Log.make().error("\(error)")

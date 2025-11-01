@@ -389,7 +389,7 @@ extension HomeViewController {
 
         return false
     }
-    private func showBanner(banner: BannerDTO, abTestResult: AssignAbTestResponse) {
+    private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
         if banner.count == 0 { return }
         let viewController: UIViewController
         if abTestResult.variableName == .bottomBanner {
@@ -518,11 +518,11 @@ extension HomeViewController {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
+    private func updateHotArticles(articles: [NoticeArticleDto], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
     }
     
-    private func putImage(data: ShopCategoryDTO) {
+    private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
@@ -546,10 +546,10 @@ extension HomeViewController {
     private func didTapCell(at id: Int) {
         let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
         let categoryId = id == 0 ? 1 : id
-
+        
         let initialTabIndex = orderableCategoryIds.contains(categoryId) ? 0 : 1
         
-        let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: initialTabIndex)
+        let orderTabBarViewController = OrderTabBarViewController(selectedShopId: categoryId, initialTabIndex: initialTabIndex)
         navigationController?.pushViewController(orderTabBarViewController, animated: true)
     }
     
