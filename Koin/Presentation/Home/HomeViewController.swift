@@ -549,7 +549,7 @@ extension HomeViewController {
         
         let initialTabIndex = orderableCategoryIds.contains(categoryId) ? 0 : 1
         
-        let orderTabBarViewController = OrderTabBarViewController(selectedShopID: categoryId, initialTabIndex: initialTabIndex)
+        let orderTabBarViewController = OrderTabBarViewController(selectedShopId: categoryId, initialTabIndex: initialTabIndex)
         navigationController?.pushViewController(orderTabBarViewController, animated: true)
     }
     

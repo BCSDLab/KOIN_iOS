@@ -11,7 +11,7 @@ struct OrderInProgressDto: Decodable {
     let id: Int
     let orderableShopId: Int
     let paymentId: Int
-    let orderType: OrderInProgressTypeDTO
+    let orderType: OrderInProgressTypeDto
     let orderableShopName: String
     let orderableShopThumbnail: String
     let estimatedAt: String?

@@ -8,13 +8,15 @@
 import UIKit
 import Combine
 
-final class OrderTabBarViewController: UITabBarController, UITabBarControllerDelegate {
+final class OrderTabBarViewController: UITabBarController {
     
+    // MARK: - Properties
     private var selectedShopId: Int?
     private var selectedTabIndex: Int
     private var subscriptions: Set<AnyCancellable> = []
     private var isViewLoadedFirst: Bool = true
     
+    // MARK: - Initialization
     init(selectedShopId: Int? = nil, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopId
         self.selectedTabIndex = initialTabIndex
@@ -32,13 +34,13 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         
         setupNavigationRightButton()
         setupTabBarAppearance()
-        
         updateNavigationTitle(for: selectedTabIndex)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
+        
         if isViewLoadedFirst {
             configureController()
             selectedIndex = selectedTabIndex
@@ -46,11 +48,10 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         }
     }
 
-    
     // MARK: - Navigation Right Bar Button
     private func setupNavigationRightButton() {
         let cartImage = UIImage.appImage(asset: .shoppingCart)?
-                          .withRenderingMode(.alwaysTemplate)
+            .withRenderingMode(.alwaysTemplate)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: cartImage,
@@ -61,39 +62,31 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
     }
 
     @objc private func didTapCart() {
-        if UserDataManager.shared.userId.isEmpty {
-            let popupView = OrderLoginPopupView()
-
-            if let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
-
-                popupView.frame = window.bounds
-
-                popupView.loginButtonAction = {
-                    let loginViewController = LoginViewController(
-                        viewModel: LoginViewModel(
-                            loginUseCase: DefaultLoginUseCase(
-                                userRepository: DefaultUserRepository(service: DefaultUserService())
-                            ),
-                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-                            )
-                        )
-                    )
-                    loginViewController.title = "로그인"
-                    self.navigationController?.pushViewController(loginViewController, animated: true)
-                }
-
-                window.addSubview(popupView)
-            }
-
-        } else {
-            let orderCartWebViewController = OrderCartWebViewController()
-            orderCartWebViewController.title = "장바구니"
-            navigationController?.pushViewController(orderCartWebViewController, animated: true)
+        guard !UserDataManager.shared.userId.isEmpty else {
+            showLoginPopup()
+            return
         }
+        
+        let orderCartWebViewController = OrderCartWebViewController()
+        orderCartWebViewController.title = "장바구니"
+        navigationController?.pushViewController(orderCartWebViewController, animated: true)
+    }
+    
+    private func showLoginPopup() {
+        guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive })?
+            .windows
+            .first(where: { $0.isKeyWindow }) else { return }
+        
+        let popupView = OrderLoginPopupView()
+        popupView.frame = window.bounds
+        
+        popupView.loginButtonAction = { [weak self] in
+            self?.navigateToLogin()
+        }
+        
+        window.addSubview(popupView)
     }
 
     // MARK: - Configure TabBar
@@ -102,33 +95,81 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         let shopRepository = DefaultShopRepository(service: shopService)
         let orderService = DefaultOrderService()
         let orderRepository = DefaultOrderShopRepository(service: orderService)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
+            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+        )
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
-        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(orderShopRepository: orderRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(orderShopRepository: orderRepository)
-        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(orderShopRepository: orderRepository)
-        let fetchOrderTrackingUseCase = DefaultFetchOrderInProgressUseCase(orderShopRepository: orderRepository)
+        let orderHomeViewController = makeOrderHomeViewController(
+            orderRepository: orderRepository,
+            shopRepository: shopRepository
+        )
+        
+        let shopViewController = makeShopViewController(shopRepository: shopRepository)
+        
+        let orderHistoryViewController = makeOrderHistoryViewController(
+            orderService: orderService,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+        )
+        
+        viewControllers = [orderHomeViewController, shopViewController, orderHistoryViewController]
+        
+        configureTabBarItems()
+    }
+    
+    private func makeOrderHomeViewController(
+        orderRepository: OrderShopRepository,
+        shopRepository: ShopRepository
+    ) -> UIViewController {
+        let fetchOrderEventShopUseCase = DefaultFetchOrderEventShopUseCase(
+            orderShopRepository: orderRepository
+        )
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(
+            shopRepository: shopRepository
+        )
+        let fetchOrderShopListUseCase = DefaultFetchOrderShopListUseCase(
+            orderShopRepository: orderRepository
+        )
+        let searchOrderShopUseCase = DefaultSearchOrderShopUseCase(
+            orderShopRepository: orderRepository
+        )
+        let fetchOrderTrackingUseCase = DefaultFetchOrderInProgressUseCase(
+            orderShopRepository: orderRepository
+        )
 
-        let orderHomeViewModel = OrderHomeViewModel(
+        let viewModel = OrderHomeViewModel(
             fetchOrderEventShopUseCase: fetchOrderEventShopUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             fetchOrderShopListUseCase: fetchOrderShopListUseCase,
-            fetchOrderTrackingUseCase: fetchOrderTrackingUseCase, searchOrderShopUseCase: searchOrderShopUseCase,
+            fetchOrderTrackingUseCase: fetchOrderTrackingUseCase,
+            searchOrderShopUseCase: searchOrderShopUseCase,
             selectedId: selectedShopId ?? 1
         )
-        let orderHomeViewController = OrderHomeViewController(viewModel: orderHomeViewModel, navigationControllerDelegate: navigationController)
-
+        
+        let viewController = OrderHomeViewController(
+            viewModel: viewModel,
+            navigationControllerDelegate: navigationController
+        )
+        
+        return viewController
+    }
+    
+    private func makeShopViewController(shopRepository: ShopRepository) -> UIViewController {
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchShopEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(
+            shopRepository: shopRepository
+        )
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(
+            shopRepository: shopRepository
+        )
 
-        let shopViewModel = ShopViewModel(
+        let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchShopEventListUseCase,
+            fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
@@ -136,56 +177,51 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             selectedId: selectedTabIndex == 1 ? selectedShopId ?? 0 : 0
         )
 
-        let shopViewController = ShopViewController(viewModel: shopViewModel, navigationControllerDelegate: navigationController)
-        
-        let historyViewController = OrderHistoryViewController()
-        
-        let shopViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: ShopViewController(viewModel: shopViewModel),
-            title: "주변상점"
+        let viewController = ShopViewController(
+            viewModel: viewModel,
+            navigationControllerDelegate: navigationController
         )
-
         
+        return viewController
+    }
+    
+    private func makeOrderHistoryViewController(
+        orderService: OrderService,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    ) -> UIViewController {
         let fetchOrderHistoryUseCase = DefaultFetchOrderHistoryUseCase(
             repository: DefaultOrderHistoryRepository(service: orderService)
         )
 
-        let orderHistoryViewModel = OrderHistoryViewModel(
+        let viewModel = OrderHistoryViewModel(
             fetchHistory: fetchOrderHistoryUseCase,
             orderService: orderService,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             getUserScreenTimeUseCase: getUserScreenTimeUseCase
-
         )
 
-        let orderHistoryVC = OrderHistoryViewController(viewModel: orderHistoryViewModel)
-
-        let historyViewController = tabBarNavigationController(
-            image: UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate),
-            rootViewController: orderHistoryVC,
-            title: "주문내역"
-        )
-
-        viewControllers = [orderHomeViewController, shopViewController, historyViewController]
+        let viewController = OrderHistoryViewController(viewModel: viewModel)
+        return viewController
+    }
+    
+    private func configureTabBarItems() {
         tabBar.tintColor = UIColor.appColor(.new500)
         tabBar.unselectedItemTintColor = UIColor.appColor(.neutral300)
         
+        guard let items = tabBar.items, items.count == 3 else { return }
         
-        tabBar.items?[0].image = UIImage.appImage(asset: .orderHomeTabBar)?.withRenderingMode(.alwaysTemplate)
-        tabBar.items?[1].image = UIImage.appImage(asset: .orderShopTabBar)?.withRenderingMode(.alwaysTemplate)
-        tabBar.items?[2].image = UIImage.appImage(asset: .orderDetailTabBar)?.withRenderingMode(.alwaysTemplate)
+        items[0].image = UIImage.appImage(asset: .orderHomeTabBar)?
+            .withRenderingMode(.alwaysTemplate)
+        items[0].title = "홈"
         
-        tabBar.items?[0].title = "홈"
-        tabBar.items?[1].title = "주변상점"
-        tabBar.items?[2].title = "주문내역"
-    }
-    
-    // MARK: - UITabBarControllerDelegate
-    func tabBarController(_ tabBarController: UITabBarController,
-                          didSelect viewController: UIViewController) {
-        selectedTabIndex = tabBarController.selectedIndex
-        updateNavigationTitle(for: selectedIndex)
+        items[1].image = UIImage.appImage(asset: .orderShopTabBar)?
+            .withRenderingMode(.alwaysTemplate)
+        items[1].title = "주변상점"
+        
+        items[2].image = UIImage.appImage(asset: .orderDetailTabBar)?
+            .withRenderingMode(.alwaysTemplate)
+        items[2].title = "주문내역"
     }
     
     // MARK: - Appearance
@@ -206,9 +242,11 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
             .font: UIFont.appFont(.pretendardBold, size: 12)
         ]
 
-        for style in [appearance.stackedLayoutAppearance,
-                      appearance.inlineLayoutAppearance,
-                      appearance.compactInlineLayoutAppearance] {
+        for style in [
+            appearance.stackedLayoutAppearance,
+            appearance.inlineLayoutAppearance,
+            appearance.compactInlineLayoutAppearance
+        ] {
             style.selected.iconColor = selectedColor
             style.normal.iconColor = unselectedColor
             style.selected.titleTextAttributes = selectedAttrs
@@ -219,7 +257,7 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         tabBar.scrollEdgeAppearance = appearance
     }
 
-    // MARK: - updateNavigationTitle
+    // MARK: - Navigation Title
     private func updateNavigationTitle(for index: Int) {
         switch index {
         case 0: navigationItem.title = "주문"
@@ -229,19 +267,28 @@ final class OrderTabBarViewController: UITabBarController, UITabBarControllerDel
         }
     }
     
+    // MARK: - Public Methods
     func goToHistory(initialSegment: Int) {
         let historyTabIndex = 2
         selectedIndex = historyTabIndex
         updateNavigationTitle(for: historyTabIndex)
 
-        guard let navigationViewController = viewControllers?[historyTabIndex] as? UINavigationController else { return }
-
-        navigationViewController.popToRootViewController(animated: false)
-
-        if let orderHistoryViewController = navigationViewController.viewControllers.first as? OrderHistoryViewController {
-            orderHistoryViewController.loadViewIfNeeded()
-            orderHistoryViewController.setInitialTab(initialSegment)
-            
+        guard let historyVC = viewControllers?[historyTabIndex] as? OrderHistoryViewController else {
+            return
         }
+
+        historyVC.loadViewIfNeeded()
+        historyVC.setInitialTab(initialSegment)
+    }
+}
+
+// MARK: - UITabBarControllerDelegate
+extension OrderTabBarViewController: UITabBarControllerDelegate {
+    func tabBarController(
+        _ tabBarController: UITabBarController,
+        didSelect viewController: UIViewController
+    ) {
+        selectedTabIndex = tabBarController.selectedIndex
+        updateNavigationTitle(for: selectedIndex)
     }
 }
