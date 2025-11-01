@@ -32,7 +32,7 @@ final class OrderTabBarViewController: UITabBarController {
         super.viewDidLoad()
         delegate = self
         
-        setupNavigationRightButton()
+        // setupNavigationRightButton() // MARK: 주변상점 우선 배포
         setupTabBarAppearance()
         updateNavigationTitle(for: selectedTabIndex)
     }
@@ -226,6 +226,8 @@ final class OrderTabBarViewController: UITabBarController {
     
     // MARK: - Appearance
     private func setupTabBarAppearance() {
+        self.tabBar.isHidden = true
+        /*
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
@@ -255,6 +257,7 @@ final class OrderTabBarViewController: UITabBarController {
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
+         */
     }
 
     // MARK: - Navigation Title

@@ -360,7 +360,7 @@ extension ShopViewController {
     
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview()
         }
 
         contentView.snp.makeConstraints {
