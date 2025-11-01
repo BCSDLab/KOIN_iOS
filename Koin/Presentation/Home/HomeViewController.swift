@@ -542,12 +542,10 @@ extension HomeViewController {
     }
     
     private func didTapCell(at id: Int) {
-        let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
-        let categoryId = id == 0 ? 1 : id
+        //let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
+        let initialTabIndex = 1 // orderableCategoryIds.contains(categoryId) ? 0 : 1 // MARK: 주변상점으로만 진입
         
-        let initialTabIndex = orderableCategoryIds.contains(categoryId) ? 0 : 1
-        
-        let orderTabBarViewController = OrderTabBarViewController(selectedShopId: categoryId, initialTabIndex: initialTabIndex)
+        let orderTabBarViewController = OrderTabBarViewController(selectedShopId: id, initialTabIndex: initialTabIndex)
         navigationController?.pushViewController(orderTabBarViewController, animated: true)
     }
     

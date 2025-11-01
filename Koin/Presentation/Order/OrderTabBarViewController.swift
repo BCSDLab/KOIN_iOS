@@ -11,13 +11,13 @@ import Combine
 final class OrderTabBarViewController: UITabBarController {
     
     // MARK: - Properties
-    private var selectedShopId: Int?
+    private var selectedShopId: Int
     private var selectedTabIndex: Int
     private var subscriptions: Set<AnyCancellable> = []
     private var isViewLoadedFirst: Bool = true
     
     // MARK: - Initialization
-    init(selectedShopId: Int? = nil, initialTabIndex: Int = 0) {
+    init(selectedShopId: Int = 1, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopId
         self.selectedTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
@@ -144,7 +144,7 @@ final class OrderTabBarViewController: UITabBarController {
             fetchOrderShopListUseCase: fetchOrderShopListUseCase,
             fetchOrderTrackingUseCase: fetchOrderTrackingUseCase,
             searchOrderShopUseCase: searchOrderShopUseCase,
-            selectedId: selectedShopId ?? 1
+            selectedId: selectedShopId
         )
         
         let viewController = OrderHomeViewController(
@@ -174,7 +174,7 @@ final class OrderTabBarViewController: UITabBarController {
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: selectedTabIndex == 1 ? selectedShopId ?? 0 : 0
+            selectedId: selectedTabIndex == 1 ? selectedShopId : 0
         )
 
         let viewController = ShopViewController(
