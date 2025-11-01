@@ -6,20 +6,20 @@
 //
 
 import Combine
-import Foundation
 
 protocol FetchShuttleBusTimetableUseCase {
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error>
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, Error>
 }
 
 final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseCase {
-    let repository: BusRepository
+    
+    private let repository: BusRepository
     
     init(repository: BusRepository) {
         self.repository = repository
     }
     
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
-        return repository.fetchShuttleBusTimetable(id: id).map { $0.toDomain() }.eraseToAnyPublisher()
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, Error> {
+        return repository.fetchShuttleBusTimetable(id: id)
     }
 }

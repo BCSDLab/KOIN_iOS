@@ -18,7 +18,7 @@ final class HomeViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
     private var scrollDirection: ScrollLog = .scrollToDown
-    
+        
     // MARK: - UI Components
     
     private let wrapperView = UIView().then { _ in
@@ -63,7 +63,6 @@ final class HomeViewController: UIViewController {
     
     private let noticePageControl = UIPageControl(frame: .zero).then {
         $0.currentPage = 0
-        $0.numberOfPages = 4
         $0.currentPageIndicatorTintColor = .appColor(.primary400)
         $0.pageIndicatorTintColor = .appColor(.neutral300)
     }
@@ -157,7 +156,7 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         checkAndShowBanner()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
         inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
@@ -520,6 +519,7 @@ extension HomeViewController {
     
     private func updateHotArticles(articles: [NoticeArticleDto], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
+        noticePageControl.numberOfPages = articles.count
     }
     
     private func putImage(data: ShopCategoryDto) {
@@ -534,11 +534,9 @@ extension HomeViewController {
             goDiningPageButton.isHidden = false
         }
         else if result.variableName == .bannerNew {
-            noticePageControl.numberOfPages = 5
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            noticePageControl.numberOfPages = 4
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
@@ -604,8 +602,8 @@ extension HomeViewController {
     }
 }
 
+// AB Test
 extension HomeViewController {
-    
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
         case 0: return .cornerA

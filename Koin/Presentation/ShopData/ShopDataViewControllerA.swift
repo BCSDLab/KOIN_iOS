@@ -278,6 +278,7 @@
 //    }
 //}
 //
+
 //
 //extension ShopDataViewControllerA: UIScrollViewDelegate {
 //    func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -35,7 +35,9 @@ final class DefaultBusRepository: BusRepository {
         return service.fetchEmergencyNotice()
     }
     
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
-        return service.fetchShuttleBusTimetable(id: id)
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetable, Error> {
+        service.fetchShuttleBusTimetable(id: id)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
 }

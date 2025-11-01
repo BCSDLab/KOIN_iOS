@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 enum ShuttleTimetableType {
     case goSchool
@@ -15,14 +14,14 @@ enum ShuttleTimetableType {
 }
 
 final class BusTimetableDataViewModel: ViewModelProtocol {
-    // MARK: - properties
+
     enum Input {
         case getBusTimetable(ShuttleTimetableType)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
-        case updateBusRoute(ShuttleBusTimetableDto, ShuttleTimetableType)
+        case updateBusRoute(ShuttleBusTimetable, ShuttleTimetableType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -50,15 +49,17 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     }
     
     private func getShuttleBusTimetable(shuttleTimetableType: ShuttleTimetableType) {
-        fetchShuttleTimetableUseCase.execute(id: shuttleRouteId).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchShuttleTimetableUseCase.execute(id: shuttleRouteId)
+            .sink { [weak self] completion in
+                guard self != nil else { return }
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            } receiveValue: { [weak self] timetable in
+                guard let self else { return }
+                self.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
             }
-        }, receiveValue: { [weak self] timetable in
-            self?.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
-            print(timetable)
-            print(shuttleTimetableType)
-        }).store(in: &subscriptions)
+            .store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

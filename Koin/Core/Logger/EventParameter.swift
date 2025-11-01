@@ -14,7 +14,6 @@ protocol EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
-        
         enum ForceUpdate: String, EventLabelType {
             case forcedUpdatePageView = "forced_update_page_view"
             case forceUpdateExit = "forced_update_exit"
@@ -26,10 +25,13 @@ enum EventParameter {
             }
         }
         
-        enum ABTest: String, EventLabelType {
+        enum AbTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
             case businessCall = "BUSINESS_call_1"
             case campusClub1 = "CAMPUS_club_1"
+            case dining2shop1 = "dining2shop_1"
+            case diningToShop = "dining_to_shop"
+            case diningToShopClose = "dining_to_shop_close"
             var team: String {
                 return "AB_TEST"
             }
@@ -209,6 +211,7 @@ enum EventParameter {
         case abTestDining = "a/b test 로깅(식단 메인 진입점)"
         case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"
         case abTestCall = "a/b test 로깅(전화하기)"
+        case abTestDiningEntry = "a/b test 로깅(메인화면 식단 진입)"
         case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"

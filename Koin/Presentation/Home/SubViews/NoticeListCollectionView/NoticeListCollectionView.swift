@@ -144,8 +144,7 @@ extension NoticeListCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoticeListCollectionViewCell.identifier, for: indexPath) as? NoticeListCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let newIndex = bannerCount == 5 ? indexPath.row - 1 : indexPath.row
-            let noticeArticleTitle = popularNoticeList[newIndex]
+            let noticeArticleTitle = popularNoticeList[indexPath.row - 1]
             cell.configure(title: noticeArticleTitle.title ?? "")
             return cell
         }
