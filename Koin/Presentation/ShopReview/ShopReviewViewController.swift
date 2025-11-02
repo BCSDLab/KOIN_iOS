@@ -21,8 +21,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         
     private var reviewTextViewHeight: Constraint?
     private var minTextViewHeight: CGFloat {
-        let font = UIFont.appFont(.pretendardRegular, size: 14)
-        let inset = reviewTextView.textContainerInset.top + reviewTextView.textContainerInset.bottom
+        let font = UIFont.setFont(.body2)
+//        let inset = reviewTextView.textContainerInset.top + reviewTextView.textContainerInset.bottom
         return ceil(font.lineHeight + 24)
     }
     private let maxTextViewHeight: CGFloat = 398
@@ -79,6 +79,27 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.text = "리뷰와 관련된 사진을 업로드해주세요."
     }
     
+    private let uploadimageButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage.appImage(asset: .addPhotoAlternate)?.withRenderingMode(.alwaysTemplate)
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
+        config.imagePlacement = .top
+        config.imagePadding = 6
+        
+        var attributedString = AttributeContainer()
+        attributedString.font = UIFont.appFont(.pretendardMedium, size: 12)
+        attributedString.foregroundColor = UIColor.appColor(.neutral500)
+        
+        config.attributedTitle = AttributedString("0/3", attributes: attributedString)
+        
+        config.background.backgroundColor = UIColor.appColor(.neutral0)
+        config.background.cornerRadius = 10
+        config.contentInsets = .init(top: 18, leading: 16, bottom: 14, trailing: 16)
+        
+        return UIButton(configuration: config, primaryAction: nil)
+    }()
+    
+    
     private let imageCountLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.sub500)
@@ -87,20 +108,20 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 9
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        flowLayout.minimumLineSpacing = 21
+        flowLayout.sectionInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
         flowLayout.scrollDirection = .horizontal
         let collectionView = ReviewImageUploadCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = UIColor.appColor(.neutral100)
+        collectionView.backgroundColor = UIColor.appColor(.newBackground)
         return collectionView
     }()
     
-    private let uploadimageButton = UIButton().then {
-        $0.setTitle("사진 등록하기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-    }
+//    private let uploadimageButton = UIButton().then {
+//        $0.setTitle("사진 등록하기", for: .normal)
+//        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
+//        $0.backgroundColor = UIColor.appColor(.neutral100)
+//        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+//    }
     
     private let reviewDescriptionLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
@@ -229,7 +250,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         }
         
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
-            self?.uploadimageButton.isEnabled = count < 3
+            self?.updateUploadMenuImage(count: count)
             self?.imageCountLabel.text = "\(count)/3"
         }.store(in: &subscriptions)
         
@@ -302,6 +323,17 @@ extension ShopReviewViewController {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
+    }
+    
+    private func updateUploadMenuImage(count: Int){
+        var config = uploadimageButton.configuration
+        var attributedString = AttributeContainer()
+        attributedString.font = UIFont.setFont(.caption2Strong)
+        config?.attributedTitle = AttributedString("\(count)/3", attributes: attributedString)
+        
+        uploadimageButton.configuration = config
+        
+        uploadimageButton.isEnabled = count < 3
     }
     
     private func submitReviewButtonTapped() {
@@ -394,16 +426,15 @@ extension ShopReviewViewController {
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
         }
         imageUploadCollectionView.snp.makeConstraints {
-            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.height.equalTo(112)
+            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(6)
+            $0.leading.equalTo(uploadimageButton.snp.trailing).offset(16)
+            $0.trailing.equalTo(scrollView.snp.trailing)
+            $0.height.equalTo(98)
         }
         uploadimageButton.snp.makeConstraints {
-            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(8)
+            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(12)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.height.equalTo(46)
+            $0.height.width.equalTo(92)
         }
         reviewDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
