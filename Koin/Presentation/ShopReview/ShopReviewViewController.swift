@@ -175,7 +175,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .white)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
     }
     
@@ -411,6 +411,7 @@ extension ShopReviewViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
+        scrollView.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 
