@@ -14,19 +14,28 @@ final class NotificationHandler {
     private init() {}
     
     func handleIncomingURL(url: URL, rootViewController: UIViewController?) {
-            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-            
-            var parameters: [String: String] = [:]
-            components.queryItems?.forEach { queryItem in
-                parameters[queryItem.name] = queryItem.value
-            }
-
-            if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
-                handleDiningNavigation(date: date, type: type, place: place, rootViewController: rootViewController)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
-            }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+        
+        var parameters: [String: String] = [:]
+        components.queryItems?.forEach { queryItem in
+            parameters[queryItem.name] = queryItem.value
         }
+        
+        if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
+            handleDiningNavigation(date: date, type: type, place: place, rootViewController: rootViewController)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
+            return
+        }
+        
+        let pathComponents = url.pathComponents
+        if pathComponents.contains("clubs"),
+           let clubIdIndex = pathComponents.firstIndex(of: "clubs"),
+           clubIdIndex + 1 < pathComponents.count {
+            let clubId = pathComponents[clubIdIndex + 1]
+            handleClubNavigation(clubId: clubId, tab: parameters["tab"], eventId: parameters["eventId"], rootViewController: rootViewController)
+        }
+    }
     
     private func handleDiningNavigation(date: String, type: String, place: String, rootViewController: UIViewController?) {
         let diningService = DefaultDiningService()
@@ -60,6 +69,26 @@ final class NotificationHandler {
             navigationController.pushViewController(diningViewController, animated: true)
         } else {
             let navigationController = UINavigationController(rootViewController: diningViewController)
+            rootViewController?.present(navigationController, animated: true, completion: nil)
+        }
+    }
+    
+    private func handleClubNavigation(clubId: String, tab: String?, eventId: String?, rootViewController: UIViewController?) {
+        var parameterString = "/clubs/\(clubId)"
+        
+        if let tab = tab {
+            parameterString += "?tab=\(tab)"
+            if let eventId = eventId {
+                parameterString += "&eventId=\(eventId)"
+            }
+        }
+        
+        let clubWebViewController = ClubWebViewController(parameter: parameterString)
+        
+        if let navigationController = rootViewController as? UINavigationController {
+            navigationController.pushViewController(clubWebViewController, animated: true)
+        } else {
+            let navigationController = UINavigationController(rootViewController: clubWebViewController)
             rootViewController?.present(navigationController, animated: true, completion: nil)
         }
     }
