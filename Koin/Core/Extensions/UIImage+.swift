@@ -191,6 +191,7 @@ enum ImageAsset: String {
     case packaging
     case sleepBcsdSymbol
     case addPhotoAlternate
+    case cancelGray
 }
 
 enum SFSymbols: String {
