@@ -9,6 +9,7 @@ import Combine
 import PhotosUI
 import Then
 import UIKit
+import SnapKit
 
 final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     // MARK: - Properties
@@ -17,6 +18,14 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let inputSubject: PassthroughSubject<ShopReviewViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     let writeCompletePublisher = PassthroughSubject<(Bool, Int?, WriteReviewRequest), Never>()
+        
+    private var reviewTextViewHeight: Constraint?
+    private var minTextViewHeight: CGFloat {
+        let font = UIFont.appFont(.pretendardRegular, size: 14)
+        let inset = reviewTextView.textContainerInset.top + reviewTextView.textContainerInset.bottom
+        return ceil(font.lineHeight + 24)
+    }
+    private let maxTextViewHeight: CGFloat = 398
     
     // MARK: - UI Components
     
@@ -110,7 +119,15 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.layer.cornerRadius = 4
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         $0.layer.borderWidth = 1.0
+        $0.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        $0.textContainer.lineFragmentPadding = 0
         $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let textViewPlaceHorderLabel = UILabel().then {
+        $0.font = UIFont.setFont(.body2)
+        $0.textColor = UIColor.appColor(.neutral400)
+        $0.text = "리뷰를 작성해주세요."
     }
     
     private let reviewMenuLabel = UILabel().then {
@@ -241,7 +258,27 @@ extension ShopReviewViewController {
     func textViewDidChange(_ textView: UITextView) {
         let characterCount = textView.text.count
         reviewDescriptionWordLimitLabel.text = "\(characterCount)/500"
+        textViewPlaceHorderLabel.isHidden = !textView.text.isEmpty
+        calculateTextViewHeight()
     }
+    
+    private func calculateTextViewHeight() {
+        let width = reviewTextView.bounds.width
+        guard width > 0 else {return}
+        
+        let targetSize = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let fittedHeight = reviewTextView.sizeThatFits(targetSize).height
+        
+        let clampedHeight = min(max(fittedHeight, minTextViewHeight) , maxTextViewHeight)
+        reviewTextView.isScrollEnabled = (fittedHeight > maxTextViewHeight)
+
+        let apply = {
+            self.reviewTextViewHeight?.update(offset: clampedHeight)
+            self.view.layoutIfNeeded()
+        }
+        UIView.animate(withDuration: 0.15, animations: apply)
+    }
+
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let currentText = textView.text ?? ""
@@ -380,8 +417,15 @@ extension ShopReviewViewController {
             $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(5)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.height.equalTo(398)
+            self.reviewTextViewHeight = $0.height.equalTo(minTextViewHeight).constraint
         }
+        
+        reviewTextView.addSubview(textViewPlaceHorderLabel)
+        textViewPlaceHorderLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+        }
+        
         reviewMenuLabel.snp.makeConstraints {
             $0.top.equalTo(reviewTextView.snp.bottom).offset(27)
             $0.leading.equalTo(scrollView.snp.leading).offset(32)
