@@ -37,6 +37,7 @@ final class OrderTabBarViewController: UITabBarController {
         super.viewDidLoad()
         delegate = self
         
+        configureView()
         setupNavigationRightButton()
         setupTabBarAppearance()
         updateNavigationTitle(for: selectedTabIndex)
@@ -45,7 +46,13 @@ final class OrderTabBarViewController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .transparent)
-        configureDummyNavigationBar()
+        
+        if let navigationController {
+            let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height
+            dummyNavigationBar.snp.updateConstraints {
+                $0.height.equalTo(navigationBarHeight)
+            }
+        }        
         
         if isViewLoadedFirst {
             configureController()
@@ -300,18 +307,14 @@ extension OrderTabBarViewController: UITabBarControllerDelegate {
 }
 
 extension OrderTabBarViewController {
-    private func configureDummyNavigationBar() {
-        guard let navigationController else {
-            return
-        }
-        
+    
+    private func configureView() {
         [dummyNavigationBar].forEach {
             view.addSubview($0)
         }
-        let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height
         dummyNavigationBar.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(navigationBarHeight)
+            $0.height.equalTo(0)
         }
     }
 }
