@@ -28,14 +28,15 @@ class TagCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        configureView()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func commonInit(){
+    private func configureView(){
         setUpLayouts()
         setUpConstraints( )
     }
@@ -71,6 +72,15 @@ class TagCollectionViewCell: UICollectionViewCell {
     }
 
     //MARK: - @Objc
+    @objc private func cancelButtonTapped() {
+        onTapCancel?()
+    }
+    
+    //MARK: - setAddTarget
+    private func setAddTarget(){
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+    }
+    
     
 }
 
