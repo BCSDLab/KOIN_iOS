@@ -323,6 +323,7 @@ extension ShopReviewViewController {
         imageUploadCollectionView.updateImageUrls(response.imageUrls)
         reviewTextView.text = response.content
         tagCollectionView.setTags(response.menuNames)
+        syncReviewTextUI()
     }
     
     @objc private func uploadImageButtonTapped() {
@@ -512,6 +513,16 @@ extension ShopReviewViewController {
         guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
         tagCollectionView.add(text)
         textField.text = nil
+    }
+    
+    private func syncReviewTextUI() {
+        let text = reviewTextView.text ?? ""
+        textViewPlaceHorderLabel.isHidden = !text.isEmpty
+        
+        let count = text.count
+        reviewDescriptionWordLimitLabel.text = "\(count)/500"
+        
+        calculateTextViewHeight()
     }
     
 }
