@@ -27,6 +27,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     }
     private let maxTextViewHeight: CGFloat = 398
     
+    private var tagHeightConstraint: Constraint?
+    
     // MARK: - UI Components
     
     private let scrollView = UIScrollView().then { _ in
@@ -172,6 +174,47 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         return collectionView
     }()
     
+    private let addMenuLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.text = "주문 메뉴"
+    }
+    
+    private let addMenuDescriptioLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.text = "입력한 메뉴가 태그로 추가돼요"
+    }
+
+    private let addMenuCountLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+        $0.text = "0/5"
+    }
+    
+    private let addMenuTextField = UITextField().then {
+        $0.font = UIFont.setFont(.body2)
+        $0.placeholder = "메뉴명을 입력해주세요."
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.layer.cornerRadius = 4
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 1.0
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
+    }
+    
+    private let tagCollectionView: TagCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        flowLayout.minimumInteritemSpacing = 8
+        flowLayout.minimumLineSpacing = 8
+        let collectionView = TagCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.maxCount = 5
+        return collectionView
+    }()
+    
     private let submitReviewButton = DebouncedButton().then {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.setTitle("작성하기", for: .normal)
@@ -209,6 +252,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         }
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
+        addMenuTextField.addTarget(self, action: #selector(didTextFieldReturn), for: .primaryActionTriggered)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -260,7 +304,21 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
                 $0.height.equalTo(55 * count)
             }
         }.store(in: &subscriptions)
+        
+        tagCollectionView.onCountChange = { [weak self] count in
+            self?.addMenuCountLabel.text = "\(count)/5"
+            self?.addMenuTextField.isHidden = count == self?.tagCollectionView.maxCount
+        }
+        
+        tagCollectionView.onHeightChange = { [weak self] height in
+            self?.tagHeightConstraint?.update(offset: height)
+            self?.view.layoutIfNeeded()
+        }
+        
+        
     }
+    
+    
 }
 
 extension ShopReviewViewController {
@@ -372,7 +430,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMenuCollectionView].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMenuCollectionView,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -461,14 +519,32 @@ extension ShopReviewViewController {
             $0.top.equalTo(reviewTextView.snp.bottom).offset(27)
             $0.leading.equalTo(scrollView.snp.leading).offset(32)
         }
-        addMenuButton.snp.makeConstraints {
-            $0.top.equalTo(reviewMenuLabel.snp.bottom).offset(5)
+        
+        addMenuLabel.snp.makeConstraints {
+            $0.top.equalTo(reviewTextView.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().inset(24)
+        }
+        addMenuDescriptioLabel.snp.makeConstraints{
+            $0.top.equalTo(addMenuLabel.snp.bottom)
+            $0.leading.equalTo(addMenuLabel.snp.leading)
+        }
+        addMenuCountLabel.snp.makeConstraints{
+            $0.bottom.equalTo(addMenuDescriptioLabel.snp.bottom)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
+        }
+        tagCollectionView.snp.makeConstraints{
+            $0.top.equalTo(addMenuDescriptioLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            tagHeightConstraint = $0.height.greaterThanOrEqualTo(1).constraint
+        }
+        addMenuTextField.snp.makeConstraints {
+            $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
         }
         addMenuCollectionView.snp.makeConstraints {
-            $0.top.equalTo(addMenuButton.snp.bottom).offset(8)
+            $0.top.equalTo(addMenuTextField.snp.bottom).offset(8)
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
@@ -490,3 +566,12 @@ extension ShopReviewViewController {
     }
 }
 
+
+extension ShopReviewViewController {
+    @objc private func didTextFieldReturn(_ textField: UITextField) {
+        guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
+        tagCollectionView.add(text)
+        textField.text = nil
+    }
+    
+}
