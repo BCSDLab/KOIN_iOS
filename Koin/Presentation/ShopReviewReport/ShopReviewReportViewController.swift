@@ -80,7 +80,8 @@ final class ShopReviewReportViewController: UIViewController {
         $0.isScrollEnabled = false
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        $0.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        $0.textContainer.lineFragmentPadding = 0
     }
     
     private let reportButton = UIButton().then {
@@ -317,14 +318,14 @@ extension ShopReviewReportViewController {
             $0.top.equalTo(checkButton.snp.bottom).offset(13)
             $0.leading.equalTo(view.snp.leading).offset(28)
             $0.trailing.equalTo(view.snp.trailing).offset(-20)
-            $0.height.greaterThanOrEqualTo(46)
+            $0.height.greaterThanOrEqualTo(42)
             $0.bottom.equalTo(scrollView.snp.bottom).offset(-20)
         }
         
         etcReportPlaceholderLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.top.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(12)
+            $0.trailing.equalToSuperview().offset(-12)
         }
         
         reportButton.snp.makeConstraints {
