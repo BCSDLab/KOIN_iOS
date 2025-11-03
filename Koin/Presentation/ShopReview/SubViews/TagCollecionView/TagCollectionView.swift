@@ -12,6 +12,7 @@ final class TagCollectionView: UICollectionView, UICollectionViewDataSource,    
     var maxCount: Int = 5
     private(set) var items: [String] = []
     var onHeightChange: ((CGFloat) -> Void)?
+    var onCountChange: ((Int) -> Void)?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -48,6 +49,7 @@ final class TagCollectionView: UICollectionView, UICollectionViewDataSource,    
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             let height = self.collectionViewLayout.collectionViewContentSize.height
+            self.onCountChange?(self.items.count)
             self.onHeightChange?(height)
         }
     }
