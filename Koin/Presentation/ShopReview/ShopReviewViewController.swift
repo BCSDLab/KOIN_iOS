@@ -22,7 +22,6 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private var reviewTextViewHeight: Constraint?
     private var minTextViewHeight: CGFloat {
         let font = UIFont.setFont(.body2)
-//        let inset = reviewTextView.textContainerInset.top + reviewTextView.textContainerInset.bottom
         return ceil(font.lineHeight + 24)
     }
     private let maxTextViewHeight: CGFloat = 398
@@ -101,13 +100,6 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         return UIButton(configuration: config, primaryAction: nil)
     }()
     
-    
-    private let imageCountLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.sub500)
-        $0.text = "0/3"
-    }
-    
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 21
@@ -117,13 +109,6 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         collectionView.backgroundColor = UIColor.appColor(.newBackground)
         return collectionView
     }()
-    
-//    private let uploadimageButton = UIButton().then {
-//        $0.setTitle("사진 등록하기", for: .normal)
-//        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-//        $0.backgroundColor = UIColor.appColor(.neutral100)
-//        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-//    }
     
     private let reviewDescriptionLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
@@ -157,22 +142,6 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral800)
     }
-    
-    private let addMenuButton = UIButton().then {
-        $0.setTitle("메뉴 추가하기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-    }
-    
-    private let addMenuCollectionView: AddMenuCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 9
-        flowLayout.scrollDirection = .vertical
-        let collectionView = AddMenuCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.isHidden = true
-        return collectionView
-    }()
     
     private let addMenuLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
@@ -251,7 +220,6 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             self?.submitReviewButtonTapped()
         }
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
-        addMenuButton.addTarget(self, action: #selector(addMenuButtonTapped), for: .touchUpInside)
         addMenuTextField.addTarget(self, action: #selector(didTextFieldReturn), for: .primaryActionTriggered)
     }
     
@@ -288,23 +256,15 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         totalScoreView.onRatingChanged = { [weak self] score in
             self?.totalScoreLabel.text = "\(Int(score))"
             self?.submitReviewButton.titleLabel?.textColor = UIColor.appColor(.neutral0)
-            self?.submitReviewButton.backgroundColor = UIColor.appColor(.primary500)
+            self?.submitReviewButton.backgroundColor = UIColor.appColor(.new500)
             self?.submitReviewButton.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
             self?.submitReviewButton.isEnabled = true
         }
         
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] count in
             self?.updateUploadMenuImage(count: count)
-            self?.imageCountLabel.text = "\(count)/3"
         }.store(in: &subscriptions)
-        
-        addMenuCollectionView.menuItemCountPublisher.sink { [weak self] count in
-            self?.addMenuCollectionView.isHidden = count == 0
-            self?.addMenuCollectionView.snp.updateConstraints {
-                $0.height.equalTo(55 * count)
-            }
-        }.store(in: &subscriptions)
-        
+                
         tagCollectionView.onCountChange = { [weak self] count in
             self?.addMenuCountLabel.text = "\(count)/5"
             self?.addMenuTextField.isHidden = count == self?.tagCollectionView.maxCount
@@ -314,11 +274,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             self?.tagHeightConstraint?.update(offset: height)
             self?.view.layoutIfNeeded()
         }
-        
-        
     }
-    
-    
 }
 
 extension ShopReviewViewController {
@@ -328,10 +284,6 @@ extension ShopReviewViewController {
     
     @objc private func appWillEnterForeground() {
         inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
-    }
-    
-    @objc private func addMenuButtonTapped() {
-        addMenuCollectionView.addMenuItem()
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -370,7 +322,7 @@ extension ShopReviewViewController {
         totalScoreView.rating = Double(response.rating)
         imageUploadCollectionView.updateImageUrls(response.imageUrls)
         reviewTextView.text = response.content
-        addMenuCollectionView.setMenuItem(item: response.menuNames)
+        tagCollectionView.setTags(response.menuNames)
     }
     
     @objc private func uploadImageButtonTapped() {
@@ -395,7 +347,7 @@ extension ShopReviewViewController {
     }
     
     private func submitReviewButtonTapped() {
-        let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: addMenuCollectionView.menuItem)
+        let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: tagCollectionView.items)
         inputSubject.send(.writeReview(requestModel))
     }
 }
@@ -430,7 +382,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageCountLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel, addMenuButton, addMenuCollectionView,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -479,10 +431,6 @@ extension ShopReviewViewController {
             $0.top.equalTo(imageLabel.snp.bottom)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
-        imageCountLabel.snp.makeConstraints {
-            $0.top.equalTo(imageDescriptionLabel.snp.top)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
-        }
         imageUploadCollectionView.snp.makeConstraints {
             $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(6)
             $0.leading.equalTo(uploadimageButton.snp.trailing).offset(16)
@@ -500,7 +448,7 @@ extension ShopReviewViewController {
         }
         reviewDescriptionWordLimitLabel.snp.makeConstraints {
             $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
-            $0.trailing.equalTo(imageCountLabel.snp.trailing)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
         }
         reviewTextView.snp.makeConstraints {
             $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(5)
@@ -508,7 +456,6 @@ extension ShopReviewViewController {
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             self.reviewTextViewHeight = $0.height.equalTo(minTextViewHeight).constraint
         }
-        
         reviewTextView.addSubview(textViewPlaceHorderLabel)
         textViewPlaceHorderLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -542,13 +489,6 @@ extension ShopReviewViewController {
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
-        }
-        addMenuCollectionView.snp.makeConstraints {
-            $0.top.equalTo(addMenuTextField.snp.bottom).offset(8)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
-            $0.height.equalTo(1)
         }
         submitReviewButton.snp.makeConstraints {
             $0.leading.equalTo(view.snp.leading).offset(24)
