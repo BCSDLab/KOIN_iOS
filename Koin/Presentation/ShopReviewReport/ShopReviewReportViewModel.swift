@@ -62,12 +62,12 @@ extension ShopReviewReportViewModel {
                 self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] _ in
-            self?.outputSubject.send(.showToast("리뷰가 신고되었습니다.", true))
+            self?.outputSubject.send(.showToast("리뷰가 신고되었어요.", true))
             self?.outputSubject.send(.sendReviewInfo(self?.reviewId ?? 0, self?.shopId ?? 0))
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: self?.shopName ?? "")
         }.store(in: &subscriptions)
-
     }
+    
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }

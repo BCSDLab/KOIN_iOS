@@ -20,7 +20,9 @@ final class ShopReviewReportViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then {
+        $0.delaysContentTouches = false
+    }
     
     private let reportReasonLabel = UILabel().then {
         $0.text = "신고 이유를 선택해주세요."
@@ -29,10 +31,10 @@ final class ShopReviewReportViewController: UIViewController {
     }
     
     private let reportGuideLabel = UILabel().then {
-        $0.text = "접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.\n블라인드 처리까지 시간이 소요될 수 있습니다."
         $0.numberOfLines = 2
         $0.textColor = UIColor.appColor(.gray)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.setLineHeight(lineHeight: 1.4, text: "접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.\n블라인드 처리까지 시간이 소요될 수 있습니다.")
     }
     
     private let nonSubjectReportView = ReportDetailView(frame: .zero, title: "주제에 맞지 않음", description: "해당 음식점과 관련 없는 리뷰입니다.").then { _ in
@@ -112,9 +114,8 @@ final class ShopReviewReportViewController: UIViewController {
         bind()
         configureView()
         hideKeyboardWhenTappedAround()
-        etcReportTextView.delegate = self
-        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
-        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
+        setAddTarget()
+        setDelegate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,7 +131,7 @@ final class ShopReviewReportViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showToast(message, success):
-                self?.showToast(message: message, success: success)
+                self?.showToastMessage(message: message, intent: .neutral)
                 if success {
                     self?.navigationController?.popViewController(animated: true)
                 }
@@ -154,6 +155,15 @@ final class ShopReviewReportViewController: UIViewController {
                 }
                 .store(in: &subscriptions)
         }
+    }
+    
+    private func setAddTarget() {
+        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
+        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setDelegate() {
+        etcReportTextView.delegate = self
     }
 }
 
@@ -250,45 +260,45 @@ extension ShopReviewReportViewController {
         
         reportReasonLabel.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.top).offset(24)
-            $0.leading.equalToSuperview().offset(24)
+            $0.leading.equalTo(view.snp.leading).offset(24)
         }
         
         reportGuideLabel.snp.makeConstraints {
             $0.top.equalTo(reportReasonLabel.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().offset(24)
+            $0.leading.equalTo(view.snp.leading).offset(24)
         }
         
         nonSubjectReportView.snp.makeConstraints {
-            $0.top.equalTo(reportGuideLabel.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.top.equalTo(reportGuideLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.equalTo(76)
         }
         
         spamReportView.snp.makeConstraints {
             $0.top.equalTo(nonSubjectReportView.snp.bottom)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.equalTo(76)
         }
         
         curseReportView.snp.makeConstraints {
             $0.top.equalTo(spamReportView.snp.bottom)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.equalTo(76)
         }
         
         personalInfoReportView.snp.makeConstraints {
             $0.top.equalTo(curseReportView.snp.bottom)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.equalTo(76)
         }
         
         checkButton.snp.makeConstraints {
             $0.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
-            $0.leading.equalToSuperview().offset(28)
+            $0.leading.equalTo(view.snp.leading).offset(28)
             $0.width.equalTo(16)
             $0.height.equalTo(16)
         }

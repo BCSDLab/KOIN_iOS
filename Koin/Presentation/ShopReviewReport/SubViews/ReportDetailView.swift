@@ -17,17 +17,20 @@ final class ReportDetailView: UIView {
     // MARK: - UI Components
     
     private let checkButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .circle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .circle)?.resize(to: CGSize(width: 16, height: 16)), for: .normal)
+        $0.isUserInteractionEnabled = true
     }
     
     private let reportTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.isUserInteractionEnabled = false
     }
     
     private let reportDescriptionLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isUserInteractionEnabled = false
     }
     
     private let separateView = UIView().then {
@@ -54,7 +57,10 @@ final class ReportDetailView: UIView {
 extension ReportDetailView {
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
+        let image = checkButton.isSelected
+            ? UIImage.appImage(asset: .filledCircle)?.resize(to: CGSize(width: 16, height: 16))?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal)
+            : UIImage.appImage(asset: .circle)?.resize(to: CGSize(width: 16, height: 16))
+        checkButton.setImage(image, for: .normal)
         checkButtonPublisher.send(())
     }
     
@@ -65,36 +71,36 @@ extension ReportDetailView {
     func getReportInfo() -> (title: String, content: String) {
         return (title: reportTitleLabel.text ?? "", content: reportDescriptionLabel.text ?? "")
     }
-    
 }
+
 extension ReportDetailView {
     private func setUpLayOuts() {
-        [checkButton, reportTitleLabel, reportDescriptionLabel, separateView].forEach {
+        [separateView, checkButton, reportTitleLabel, reportDescriptionLabel].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        checkButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(26)
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.height.equalTo(16)
+        }
+        
         reportTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(self.snp.top).offset(16)
+            $0.top.equalToSuperview().offset(16)
             $0.leading.equalTo(checkButton.snp.trailing).offset(16)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-16)
         }
         
         reportDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(reportTitleLabel.snp.bottom).offset(5)
             $0.leading.equalTo(checkButton.snp.trailing).offset(16)
-        }
-        
-        checkButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(26)
-            $0.leading.equalToSuperview().offset(8)
-            $0.width.equalTo(16)
-            $0.height.equalTo(16)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-16)
         }
         
         separateView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(1)
         }
     }
@@ -102,5 +108,7 @@ extension ReportDetailView {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+        self.backgroundColor = .clear
+        self.isUserInteractionEnabled = true
     }
 }

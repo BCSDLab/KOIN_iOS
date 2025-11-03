@@ -12,8 +12,15 @@ extension UILabel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeight
         
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: self.font as Any,  // ← 현재 폰트 유지
+                .foregroundColor: self.textColor as Any,  // ← 현재 색상 유지
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        
         self.attributedText = attributedString
     }
     
