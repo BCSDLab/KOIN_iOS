@@ -131,13 +131,11 @@ final class ShopReviewReportViewController: UIViewController {
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .showToast(message, success):
-                self?.showToastMessage(message: message, intent: .neutral)
-                if success {
-                    self?.navigationController?.popViewController(animated: true)
-                }
+            case let .showToast(message):
+                self?.showToastMessage(message: message, intent: .neutral, bottomInset: 70)
             case let .sendReviewInfo(reviewId, shopId):
                 self?.reviewInfoPublisher.send((reviewId, shopId))
+                self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
         

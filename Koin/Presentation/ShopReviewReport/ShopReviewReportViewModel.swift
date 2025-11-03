@@ -18,7 +18,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-        case showToast(String, Bool)
+        case showToast(String)
         case sendReviewInfo(Int, Int)
     }
     
@@ -59,12 +59,12 @@ extension ShopReviewReportViewModel {
     private func reportReview(_ requestModel: ReportReviewRequest) {
         reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showToast(error.message, false))
+                self?.outputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] _ in
-            self?.outputSubject.send(.showToast("리뷰가 신고되었어요.", true))
-            self?.outputSubject.send(.sendReviewInfo(self?.reviewId ?? 0, self?.shopId ?? 0))
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: self?.shopName ?? "")
+            guard let self = self else { return }
+            self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
+            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: self.shopName)
         }.store(in: &subscriptions)
     }
     
