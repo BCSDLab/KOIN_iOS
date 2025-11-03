@@ -6,8 +6,8 @@
 //
 
 import Combine
-import Then
 import UIKit
+import SnapKit
 
 final class ShopReviewReportViewController: UIViewController, UITextViewDelegate {
     
@@ -19,19 +19,19 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
     let reviewInfoPublisher = PassthroughSubject<(Int, Int), Never>()
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView().then { _ in
-    }
+    
+    private let scrollView = UIScrollView()
     
     private let reportReasonLabel = UILabel().then {
         $0.text = "신고 이유를 선택해주세요."
         $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
     }
     
     private let reportGuideLabel = UILabel().then {
         $0.text = "접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.\n블라인드 처리까지 시간이 소요될 수 있습니다."
         $0.numberOfLines = 2
-        $0.textColor = UIColor.appColor(.neutral500)
+        $0.textColor = UIColor.appColor(.gray)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
@@ -59,6 +59,7 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
     
     private let textCountLabel = UILabel().then {
         $0.text = "0/150"
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     
@@ -67,7 +68,7 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
         $0.isEditable = false
-        $0.layer.borderColor = UIColor.appColor(.neutral800).cgColor
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
@@ -75,8 +76,6 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
         $0.setTitle("신고하기", for: .normal)
         $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
         $0.isEnabled = false
-        $0.titleLabel?.textColor = UIColor.appColor(.neutral800)
-        $0.backgroundColor = UIColor.appColor(.neutral400)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
@@ -109,7 +108,7 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .white)
     }
     
     // MARK: - Bind
@@ -158,8 +157,7 @@ extension ShopReviewReportViewController {
         let anySelected = anySelectedInReportViews || anySelectedInViewController
         
         reportButton.isEnabled = anySelected
-        reportButton.titleLabel?.textColor = anySelected ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
-        reportButton.backgroundColor = anySelected ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral400)
+        reportButton.backgroundColor = anySelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -177,12 +175,9 @@ extension ShopReviewReportViewController {
     
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
-        
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
-        textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.sub500) : UIColor.appColor(.neutral800)
-        etcReportTextView.layer.borderColor = checkButton.isSelected ? UIColor.appColor(.sub500).cgColor : UIColor.appColor(.neutral800).cgColor
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
+        textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.gray)
         etcReportTextView.isEditable = checkButton.isSelected
-        
         updateReportButtonState()
     }
     @objc private func reportButtonTapped() {
@@ -211,82 +206,94 @@ extension ShopReviewReportViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(reportButton)
+        
         [reportReasonLabel, reportGuideLabel, nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView, checkButton, etcLabel, textCountLabel, etcReportTextView].forEach {
             scrollView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.snp.bottom).offset(-100)
+        }
         
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-100)
+        reportReasonLabel.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.top).offset(24)
+            $0.leading.equalTo(view.snp.leading).offset(24)
         }
-        reportReasonLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(24)
-            make.leading.equalTo(view.snp.leading).offset(24)
+        
+        reportGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(reportReasonLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(view.snp.leading).offset(24)
         }
-        reportGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(reportReasonLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(24)
+        
+        nonSubjectReportView.snp.makeConstraints {
+            $0.top.equalTo(reportGuideLabel.snp.bottom).offset(32)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.height.equalTo(76)
         }
-        nonSubjectReportView.snp.makeConstraints { make in
-            make.top.equalTo(reportGuideLabel.snp.bottom).offset(32)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(76)
+        
+        spamReportView.snp.makeConstraints {
+            $0.top.equalTo(nonSubjectReportView.snp.bottom)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.height.equalTo(76)
         }
-        spamReportView.snp.makeConstraints { make in
-            make.top.equalTo(nonSubjectReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(76)
+        
+        curseReportView.snp.makeConstraints {
+            $0.top.equalTo(spamReportView.snp.bottom)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.height.equalTo(76)
         }
-        curseReportView.snp.makeConstraints { make in
-            make.top.equalTo(spamReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(76)
+        
+        personalInfoReportView.snp.makeConstraints {
+            $0.top.equalTo(curseReportView.snp.bottom)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.height.equalTo(76)
         }
-        personalInfoReportView.snp.makeConstraints { make in
-            make.top.equalTo(curseReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(76)
+        
+        checkButton.snp.makeConstraints {
+            $0.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
+            $0.leading.equalTo(view.snp.leading).offset(28)
+            $0.width.equalTo(16)
+            $0.height.equalTo(16)
         }
-        checkButton.snp.makeConstraints { make in
-            make.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
-            make.leading.equalTo(view.snp.leading).offset(28)
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+        
+        etcLabel.snp.makeConstraints {
+            $0.centerY.equalTo(checkButton.snp.centerY)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
         }
-        etcLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(checkButton.snp.centerY)
-            make.leading.equalTo(checkButton.snp.trailing).offset(16)
+        
+        textCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(checkButton.snp.centerY)
+            $0.trailing.equalTo(view.snp.trailing).offset(-34)
         }
-        textCountLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(checkButton.snp.centerY)
-            make.trailing.equalTo(view.snp.trailing).offset(-34)
+        
+        etcReportTextView.snp.makeConstraints {
+            $0.top.equalTo(checkButton.snp.bottom).offset(13)
+            $0.leading.equalTo(view.snp.leading).offset(28)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.height.equalTo(156)
+            $0.bottom.equalTo(scrollView.snp.bottom)
         }
-        etcReportTextView.snp.makeConstraints { make in
-            make.top.equalTo(checkButton.snp.bottom).offset(13)
-            make.leading.equalTo(view.snp.leading).offset(28)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(156)
-            make.bottom.equalTo(scrollView.snp.bottom)
-        }
-        reportButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-20)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
-            make.height.equalTo(48)
+        
+        reportButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom).offset(-20)
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.height.equalTo(48)
         }
     }
+    
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 

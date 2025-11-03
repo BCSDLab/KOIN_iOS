@@ -6,8 +6,8 @@
 //
 
 import Combine
-import Then
 import UIKit
+import SnapKit
 
 final class ReportDetailView: UIView {
     
@@ -31,7 +31,7 @@ final class ReportDetailView: UIView {
     }
     
     private let separateView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     override init(frame: CGRect) {
@@ -54,7 +54,7 @@ final class ReportDetailView: UIView {
 extension ReportDetailView {
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
+        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
         checkButtonPublisher.send(())
     }
     
@@ -75,25 +75,27 @@ extension ReportDetailView {
     }
     
     private func setUpConstraints() {
-        reportTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(14)
-            make.leading.equalTo(checkButton.snp.trailing).offset(16)
+        reportTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(self.snp.top).offset(16)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
         }
-        reportDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(reportTitleLabel.snp.bottom).offset(5)
-            make.leading.equalTo(checkButton.snp.trailing).offset(16)
+        
+        reportDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(reportTitleLabel.snp.bottom).offset(5)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
         }
-        checkButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(26)
-            make.leading.equalTo(self.snp.leading).offset(8)
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+        
+        checkButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(26)
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.equalTo(16)
+            $0.height.equalTo(16)
         }
-        separateView.snp.makeConstraints { make in
-            make.top.equalTo(reportDescriptionLabel.snp.bottom).offset(14)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.height.equalTo(1)
+        
+        separateView.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
     
