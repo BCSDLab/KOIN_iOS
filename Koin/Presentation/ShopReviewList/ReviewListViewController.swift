@@ -351,6 +351,7 @@ extension ReviewListViewController {
     private func deleteReview() {
         let (reviewId, shopId) = viewModel.deleteParameter
         reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
+        showToastMessage(message: "리뷰가 삭제되었어요")
     }
     
     private func showZoomedImage(_ image: UIImage?) {
