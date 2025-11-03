@@ -36,7 +36,7 @@ extension UIViewController {
         
         toastMessageView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(window.safeAreaLayoutGuide).inset(70)
+            $0.bottom.equalTo(window.safeAreaLayoutGuide).inset(config.bottomInset)
         }
         
         showToastWithAnimation(toastMessageView, duration: duration)
@@ -81,21 +81,23 @@ extension UIViewController {
 extension UIViewController {
     
     // 기본 Toast를 표시
-    func showToastMessage(message: String, intent: ToastIntent = .neutral, duration: TimeInterval = 3.0) {
+    func showToastMessage(message: String, intent: ToastIntent = .neutral, duration: TimeInterval = 3.0, bottomInset: CGFloat = 24) {
         let config = ToastConfig(
             intent: intent,
             variant: .standard,
-            message: message
+            message: message,
+            bottomInset: bottomInset
         )
         showToastMessage(config: config, duration: duration)
     }
     
     // 버튼이 있는 Toast를 표시
-    func showToastMessageWithButton(message: String, intent: ToastIntent = .neutral, buttonTitle: String, duration: TimeInterval = 3.0, buttonAction: @escaping () -> Void) {
+    func showToastMessageWithButton(message: String, intent: ToastIntent = .neutral, buttonTitle: String, duration: TimeInterval = 3.0, bottomInset: CGFloat = 24, buttonAction: @escaping () -> Void) {
         let config = ToastConfig(
             intent: intent,
             variant: .action(title: buttonTitle),
-            message: message
+            message: message,
+            bottomInset: bottomInset
         )
         showToastMessage(config: config, duration: duration, buttonAction: buttonAction)
     }
