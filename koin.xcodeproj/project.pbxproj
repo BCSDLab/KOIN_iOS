@@ -432,8 +432,6 @@
 		D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */; };
 		D22C54862C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */; };
 		D22C54882C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */; };
-		D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */; };
-		D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */; };
 		D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */; };
 		D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */; };
 		D22C54942C6B1383000826DA /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */; };
@@ -1262,8 +1260,6 @@
 		D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileUseCase.swift; sourceTree = "<group>"; };
 		D22C54852C6AAF7A000826DA /* ReviewImageUploadCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionView.swift; sourceTree = "<group>"; };
 		D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionViewCell.swift; sourceTree = "<group>"; };
-		D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionView.swift; sourceTree = "<group>"; };
-		D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Publisher.swift"; sourceTree = "<group>"; };
 		D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
 		D22C54932C6B1383000826DA /* ReviewLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLoginModalViewController.swift; sourceTree = "<group>"; };
@@ -2735,7 +2731,6 @@
 			children = (
 				3BA1AA292EB88B7400B9CFC9 /* TagCollecionView */,
 				D22C54892C6AC732000826DA /* ReviewImageUploadCollectionView */,
-				D22C548A2C6AC746000826DA /* AddMenuCollectionView */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -2747,15 +2742,6 @@
 				D22C54872C6AAFBF000826DA /* ReviewImageUploadCollectionViewCell.swift */,
 			);
 			path = ReviewImageUploadCollectionView;
-			sourceTree = "<group>";
-		};
-		D22C548A2C6AC746000826DA /* AddMenuCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				D22C548B2C6AC776000826DA /* AddMenuCollectionView.swift */,
-				D22C548D2C6AC77F000826DA /* AddMenuCollectionViewCell.swift */,
-			);
-			path = AddMenuCollectionView;
 			sourceTree = "<group>";
 		};
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
@@ -4737,7 +4723,6 @@
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
-				D22C548E2C6AC77F000826DA /* AddMenuCollectionViewCell.swift in Sources */,
 				D2FCBE922D004EF30097A388 /* TimetableText+.swift in Sources */,
 				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				833D9C542C73451B00982145 /* NoticeDataViewModel.swift in Sources */,
@@ -5162,7 +5147,6 @@
 				D2078C0C2BC736B300A39861 /* EventListCollectionViewCell.swift in Sources */,
 				D27DD09E2BA608310081FD36 /* DiningCollectionViewCellB.swift in Sources */,
 				B4B3EB262E6E7CAD00F8A23A /* OrderShopMenus.swift in Sources */,
-				D22C548C2C6AC776000826DA /* AddMenuCollectionView.swift in Sources */,
 				D2FCBEA82D0AE54D0097A388 /* ShopDataViewControllerB.swift in Sources */,
 				B438AEDE2E75582F00E889C4 /* OrderShopSummaryDTO.swift in Sources */,
 				D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */,

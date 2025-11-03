@@ -118,7 +118,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     private let reviewDescriptionWordLimitLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.sub500)
+        $0.textColor = UIColor.appColor(.neutral500)
         $0.text = "0/500"
     }
     
@@ -187,6 +187,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let submitReviewButton = DebouncedButton().then {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.setTitle("작성하기", for: .normal)
+        $0.layer.cornerRadius = 8
         $0.backgroundColor = UIColor.appColor(.neutral200)
         $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
         $0.isEnabled = false
@@ -490,6 +491,7 @@ extension ShopReviewViewController {
             $0.leading.equalTo(scrollView.snp.leading).offset(24)
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
             $0.height.equalTo(46)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
         }
         submitReviewButton.snp.makeConstraints {
             $0.leading.equalTo(view.snp.leading).offset(24)
@@ -502,7 +504,7 @@ extension ShopReviewViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = UIColor.appColor(.newBackground)
         scrollView.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
