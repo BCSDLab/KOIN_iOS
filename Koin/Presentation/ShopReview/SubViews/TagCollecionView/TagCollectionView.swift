@@ -44,6 +44,19 @@ final class TagCollectionView: UICollectionView, UICollectionViewDataSource,    
         reloadAndPublish()
     }
     
+    func setTags(_ tags: [String]) {
+        items = tags
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter{ !$0.isEmpty }
+            .map { $0 }
+        reloadAndPublish()
+    }
+    
+    func clear() {
+        items.removeAll()
+        reloadAndPublish()
+    }
+    
     private func reloadAndPublish() {
         reloadData()
         DispatchQueue.main.async { [weak self] in
