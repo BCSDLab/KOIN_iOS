@@ -9,7 +9,7 @@ import Combine
 import UIKit
 import SnapKit
 
-final class ShopReviewReportViewController: UIViewController, UITextViewDelegate {
+final class ShopReviewReportViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -59,29 +59,40 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
     
     private let textCountLabel = UILabel().then {
         $0.text = "0/150"
-        $0.textColor = UIColor.appColor(.new500)
+        $0.textColor = UIColor.appColor(.gray)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     
+    private let etcReportPlaceholderLabel = UILabel().then {
+        $0.text = "신고 사유를 입력해주세요."
+        $0.textColor = UIColor.appColor(.neutral400)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.numberOfLines = 0
+    }
+
     private let etcReportTextView = UITextView().then {
         $0.layer.cornerRadius = 5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
         $0.isEditable = false
+        $0.isScrollEnabled = false
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
     }
     
     private let reportButton = UIButton().then {
         $0.setTitle("신고하기", for: .normal)
         $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
         $0.isEnabled = false
+        $0.backgroundColor = UIColor.appColor(.neutral300)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
     }
     
-    // MARK: - Initialization
+    // MARK: - Initialize
     
     init(viewModel: ShopReviewReportViewModel) {
         self.viewModel = viewModel
@@ -144,8 +155,28 @@ final class ShopReviewReportViewController: UIViewController, UITextViewDelegate
                 .store(in: &subscriptions)
         }
     }
+}
+
+// MARK: - UITextViewDelegate
+extension ShopReviewReportViewController: UITextViewDelegate {
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        return updatedText.count <= 150
+    }
     
+    func textViewDidChange(_ textView: UITextView) {
+        let characterCount = textView.text.count
+        textCountLabel.text = "\(characterCount)/150"
+        etcReportPlaceholderLabel.isHidden = !textView.text.isEmpty
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
 }
 
 extension ShopReviewReportViewController {
@@ -160,26 +191,21 @@ extension ShopReviewReportViewController {
         reportButton.backgroundColor = anySelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let currentText = textView.text ?? ""
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        
-        return updatedText.count <= 150
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let characterCount = textView.text.count
-        textCountLabel.text = "\(characterCount)/150"
-    }
-    
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
         checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
         textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.gray)
         etcReportTextView.isEditable = checkButton.isSelected
+        
+        if !checkButton.isSelected {
+            etcReportTextView.text = ""
+            etcReportPlaceholderLabel.isHidden = false
+            textCountLabel.text = "0/150"
+        }
+        
         updateReportButtonState()
     }
+    
     @objc private func reportButtonTapped() {
         var reports: [Report] = []
         let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
@@ -199,17 +225,20 @@ extension ShopReviewReportViewController {
         let requestModel = ReportReviewRequest(reports: reports)
         inputSubject.send(.reportReview(requestModel))
     }
-    
 }
 
+// MARK: - UI Function
 extension ShopReviewReportViewController {
+    
     private func setUpLayOuts() {
         view.addSubview(scrollView)
-        view.addSubview(reportButton)
         
         [reportReasonLabel, reportGuideLabel, nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView, checkButton, etcLabel, textCountLabel, etcReportTextView].forEach {
             scrollView.addSubview($0)
         }
+        
+        etcReportTextView.addSubview(etcReportPlaceholderLabel)
+        view.addSubview(reportButton)
     }
     
     private func setUpConstraints() {
@@ -221,45 +250,45 @@ extension ShopReviewReportViewController {
         
         reportReasonLabel.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.top).offset(24)
-            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.leading.equalToSuperview().offset(24)
         }
         
         reportGuideLabel.snp.makeConstraints {
             $0.top.equalTo(reportReasonLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.leading.equalToSuperview().offset(24)
         }
         
         nonSubjectReportView.snp.makeConstraints {
-            $0.top.equalTo(reportGuideLabel.snp.bottom).offset(32)
-            $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.top.equalTo(reportGuideLabel.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(76)
         }
         
         spamReportView.snp.makeConstraints {
             $0.top.equalTo(nonSubjectReportView.snp.bottom)
-            $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(76)
         }
         
         curseReportView.snp.makeConstraints {
             $0.top.equalTo(spamReportView.snp.bottom)
-            $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(76)
         }
         
         personalInfoReportView.snp.makeConstraints {
             $0.top.equalTo(curseReportView.snp.bottom)
-            $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(76)
         }
         
         checkButton.snp.makeConstraints {
             $0.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
-            $0.leading.equalTo(view.snp.leading).offset(28)
+            $0.leading.equalToSuperview().offset(28)
             $0.width.equalTo(16)
             $0.height.equalTo(16)
         }
@@ -278,15 +307,21 @@ extension ShopReviewReportViewController {
             $0.top.equalTo(checkButton.snp.bottom).offset(13)
             $0.leading.equalTo(view.snp.leading).offset(28)
             $0.trailing.equalTo(view.snp.trailing).offset(-20)
-            $0.height.equalTo(156)
-            $0.bottom.equalTo(scrollView.snp.bottom)
+            $0.height.greaterThanOrEqualTo(46)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-20)
+        }
+        
+        etcReportPlaceholderLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(14)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         reportButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.snp.bottom).offset(-20)
-            $0.leading.equalTo(view.snp.leading).offset(24)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-            $0.height.equalTo(48)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.height.equalTo(46)
         }
     }
     
@@ -296,4 +331,3 @@ extension ShopReviewReportViewController {
         view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
-
