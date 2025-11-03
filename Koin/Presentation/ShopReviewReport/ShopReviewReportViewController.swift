@@ -117,11 +117,17 @@ final class ShopReviewReportViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setAddTarget()
         setDelegate()
+        setupKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .white)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Bind
@@ -167,6 +173,7 @@ final class ShopReviewReportViewController: UIViewController {
 }
 
 // MARK: - UITextViewDelegate
+
 extension ShopReviewReportViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -189,6 +196,62 @@ extension ShopReviewReportViewController: UITextViewDelegate {
 }
 
 extension ShopReviewReportViewController {
+    private func setupKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+            return
+        }
+        
+        let keyboardHeight = keyboardFrame.height
+        
+        let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - view.safeAreaInsets.bottom + 100, right: 0)
+        scrollView.contentInset = contentInset
+        scrollView.scrollIndicatorInsets = contentInset
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self else { return }
+            
+            let textViewFrame = self.etcReportTextView.convert(self.etcReportTextView.bounds, to: self.view)
+            let visibleHeight = self.view.frame.height - keyboardHeight
+            
+            if textViewFrame.maxY > visibleHeight {
+                let scrollOffset = textViewFrame.maxY - visibleHeight + 20
+                let newOffset = CGPoint(x: 0, y: self.scrollView.contentOffset.y + scrollOffset)
+                
+                self.scrollView.setContentOffset(newOffset, animated: true)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+            return
+        }
+        
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.scrollView.contentInset = .zero
+            self?.scrollView.scrollIndicatorInsets = .zero
+        }
+    }
+}
+
+extension ShopReviewReportViewController {
     
     private func updateReportButtonState() {
         let anySelectedInReportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView].contains { $0.isCheckButtonSelected() }
@@ -206,7 +269,10 @@ extension ShopReviewReportViewController {
         textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.gray)
         etcReportTextView.isEditable = checkButton.isSelected
         
-        if !checkButton.isSelected {
+        if checkButton.isSelected {
+            etcReportTextView.becomeFirstResponder()
+        } else {
+            etcReportTextView.resignFirstResponder()
             etcReportTextView.text = ""
             etcReportPlaceholderLabel.isHidden = false
             textCountLabel.text = "0/150"
@@ -237,6 +303,7 @@ extension ShopReviewReportViewController {
 }
 
 // MARK: - UI Function
+
 extension ShopReviewReportViewController {
     
     private func setUpLayOuts() {
