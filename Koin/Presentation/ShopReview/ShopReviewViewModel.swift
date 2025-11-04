@@ -20,6 +20,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let uploadFileUseCase: UploadFileUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
+    var ieEdit: Bool { reviewId != nil}
     private let shopName: String
     private let shopId: Int
     
