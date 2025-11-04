@@ -544,7 +544,7 @@ extension ShopReviewViewController {
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         viewController.onStop = { [weak self, weak viewController] in
-            viewController?.dismiss(animated: true)
+            viewController?.dismiss(animated: false)
             self?.navigationController?.popViewController(animated: true)
         }
         present(viewController, animated: false)

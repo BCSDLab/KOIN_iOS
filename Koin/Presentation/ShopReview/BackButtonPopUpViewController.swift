@@ -105,10 +105,10 @@ final class BackButtonPopUpViewController: UIViewController {
     
     
     @objc private func stopButtonTapped() {
-        dismiss(animated: true) { [weak self] in self?.onStop?() }
+        dismiss(animated: false) { [weak self] in self?.onStop?() }
     }
     
     @objc private func keepButtonTapped() {
-        dismiss(animated: true)
+        dismiss(animated: false)
     }
 }
