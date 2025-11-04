@@ -228,6 +228,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .white)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
+        setNavigationItem()
     }
     
     // MARK: - Bind
@@ -527,4 +528,32 @@ extension ShopReviewViewController {
         calculateTextViewHeight()
     }
     
+    @objc private func backButtonTapped(){
+        if viewModel.isEdit {
+            presentExitConfirm()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func presentExitConfirm() {
+        guard presentedViewController == nil,
+              navigationController?.transitionCoordinator == nil else { return }
+        
+        let viewController = BackButtonPopUpViewController()
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.onStop = { [weak self, weak viewController] in
+            viewController?.dismiss(animated: true)
+            self?.navigationController?.popViewController(animated: true)
+        }
+        present(viewController, animated: false)
+    }
+    
+    private func setNavigationItem() {
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage.appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(backButtonTapped)
+        )
+    }
 }
