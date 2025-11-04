@@ -22,7 +22,7 @@ final class ShopSummaryViewModel {
         case updateInfoView(OrderShopSummary, isFromOrder: Bool)
         case updateMenusGroups(OrderShopMenusGroups)
         case updateMenus([OrderShopMenus])
-        case updateIsAvailables(delivery: Bool, takeOut: Bool?, payBank: Bool, payCard: Bool)
+        case updateIsAvailables(delivery: Bool, takeOut: Bool = false, payBank: Bool, payCard: Bool)
         case updateBottomSheet(cartSummary: CartSummary)
         case updateIsAddingMenuAvailable(Bool)
         case updateCartItemsCount(count: Int)
@@ -262,7 +262,7 @@ extension ShopSummaryViewModel {
     private func fetchIsAvailable(shopId: Int) {
         fetchShopDataUseCase?.execute(shopId: shopId)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
-                self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, takeOut: nil, payBank: $0.payBank, payCard: $0.payCard))
+                self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, payBank: $0.payBank, payCard: $0.payCard))
             })
             .store(in: &subscriptions)
     }

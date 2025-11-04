@@ -51,13 +51,18 @@ final class ShopSummaryInfoView: UIView {
         $0.alignment = .fill
     }
     
-    private let isDeliveryAvailableLabel = UILabel()
-    
-    private let isTakeoutAvailableLabel = UILabel()
-    
-    private let isPayCardAvailableLabel = UILabel()
-    
-    private let isPayBankAvailableLabel = UILabel()
+    private let isDeliveryAvailableLabel = UILabel().then {
+        $0.text = "배달 가능"
+    }
+    private let isTakeoutAvailableLabel = UILabel().then {
+        $0.text = "포장 가능"
+    }
+    private let isPayCardAvailableLabel = UILabel().then {
+        $0.text = "카드가능"
+    }
+    private let isPayBankAvailableLabel = UILabel().then {
+        $0.text = "계좌이체 가능"
+    }
     
     private let orderAmountDelieveryTipView = ShopSummaryCustomButton()
     
@@ -81,7 +86,7 @@ final class ShopSummaryInfoView: UIView {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
         setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
-        
+        setUpMoreInfoButton(isFromOrder: isFromOrder)
         orderAmountDelieveryTipView.configure(
             minOrderAmount: orderShopSummary.minimumOrderAmount,
             minDeliveryTip: orderShopSummary.minimumDeliveryTip,
@@ -90,11 +95,11 @@ final class ShopSummaryInfoView: UIView {
         introductionView.configure(introduction: orderShopSummary.introduction)
     }
     
-    func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
-        setUpIsAvailableView(isDelieveryAvailable: isDelieveryAvailable,
-                             isTakeoutAvailable: isTakeoutAvailable,
-                             payCard: payCard,
-                             payBank: payBank)
+    func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool = false, payCard: Bool, payBank: Bool) {
+        isDeliveryAvailableLabel.isHidden = !isDelieveryAvailable ? true : false
+        isTakeoutAvailableLabel.isHidden = !isTakeoutAvailable ? true : false
+        isPayCardAvailableLabel.isHidden = !payCard ? true : false
+        isPayBankAvailableLabel.isHidden = !payBank ? true : false
     }
     
     private func setAddTarget() {
@@ -106,19 +111,12 @@ final class ShopSummaryInfoView: UIView {
 
 extension ShopSummaryInfoView {
     
-    private func setUpIsAvailableView(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool?, payCard: Bool, payBank: Bool) {
-        isDeliveryAvailableLabel.text = isDelieveryAvailable ? "배달 가능" : "배달 불가"
-        isDeliveryAvailableLabel.textColor = isDelieveryAvailable ? .appColor(.new300) : .appColor(.neutral400)
-        isTakeoutAvailableLabel.text = isTakeoutAvailable ?? true ? "포장 가능" : "포장 불가"
-        isTakeoutAvailableLabel.textColor = isTakeoutAvailable ?? true ? .appColor(.new300) : .appColor(.neutral400)
-        isPayCardAvailableLabel.text = payCard ? "카드가능" : "카드불가"
-        isPayCardAvailableLabel.textColor = payCard ? .appColor(.new300) : .appColor(.neutral400)
-        isPayBankAvailableLabel.text = payBank ? "계좌이체가능" : "계좌이체불가"
-        isPayBankAvailableLabel.textColor = payBank ? .appColor(.new300) : .appColor(.neutral400)
-        
-        if isTakeoutAvailable == nil {
-            isTakeoutAvailableLabel.isHidden = true
-        }
+    private func setUpMoreInfoButton(isFromOrder: Bool) {
+        let text = isFromOrder ? "가게정보·원산지" : "가게정보"
+        moreInfoButton.setAttributedTitle(NSAttributedString(string: text, attributes: [
+            .font : UIFont.appFont(.pretendardRegular, size: 10),
+            .foregroundColor : UIColor.appColor(.neutral500)
+        ]), for: .normal)
     }
     
     private func setUpReviewButton(reviewCount: Int) {
@@ -157,10 +155,6 @@ extension ShopSummaryInfoView {
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 12, bottom: 2, trailing: 8)
         moreInfoButton.configuration = configuration
         
-        moreInfoButton.setAttributedTitle(NSAttributedString(string: "가게정보·원산지", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 10),
-            .foregroundColor : UIColor.appColor(.neutral500)
-        ]), for: .normal)
         moreInfoButton.setImage(UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate), for: .normal)
         moreInfoButton.backgroundColor = UIColor.appColor(.neutral0)
         moreInfoButton.layer.cornerRadius = 12
@@ -184,6 +178,7 @@ extension ShopSummaryInfoView {
             $0.layer.cornerRadius = 11.5
             $0.textAlignment = .center
             $0.clipsToBounds = true
+            $0.textColor = .appColor(.new300)
         }
     }
 }

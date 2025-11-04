@@ -273,6 +273,9 @@ extension ShopSummaryViewController {
 
     // MARK: - Navigation Right Bar Button
     private func configureRightBarButton() {
+        guard isFromOrder else {
+            return
+        }
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: .appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
             style: .plain,

@@ -25,6 +25,9 @@ final class ShopDetailViewModel {
     private let fetchOrderShopDetailFromShopUseCase: FetchOrderShopDetailFromShopUseCase?
     private let orderableShopId: Int?
     private let shopId: Int?
+    var isFromOrder: Bool {
+        return self.orderableShopId != nil
+    }
     
     // MARK: - Initializer
     init(fetchOrderShopDetailUseCase: DefaultFetchOrderShopDetailUseCase,
