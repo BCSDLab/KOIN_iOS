@@ -91,7 +91,7 @@ final class BackButtonPopUpViewController: UIViewController {
             $0.top.equalToSuperview().offset(24)
         }
         stopButton.snp.makeConstraints{
-            $0.bottom.equalToSuperview().offset(-24)
+            $0.height.equalTo(48)
             $0.leading.equalToSuperview().offset(32)
             $0.top.equalTo(titleLabel.snp.bottom).offset(24)
         }
