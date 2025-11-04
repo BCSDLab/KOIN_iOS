@@ -215,6 +215,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         reviewTextView.delegate = self
         inputSubject.send(.checkModify)
         inputSubject.send(.updateShopName)
+        setUpKeyboard()
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         submitReviewButton.throttle(interval: .seconds(3)) { [weak self] in
@@ -222,6 +223,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         }
         uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         addMenuTextField.addTarget(self, action: #selector(didTextFieldReturn), for: .primaryActionTriggered)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -555,5 +557,60 @@ extension ShopReviewViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage.appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(backButtonTapped)
         )
+    }
+}
+
+
+extension ShopReviewViewController {
+    func setUpKeyboard() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+        guard
+            let keyboardFrame = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let currentView = UIResponder.currentResponder as? UIView
+        else { return }
+        
+        let keyboardYTop = keyboardFrame.cgRectValue.origin.y
+        let convertedTextFieldFrame = view.convert(currentView.frame, from : currentView.superview)
+        let textFieldYBottom = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
+        if textFieldYBottom > keyboardYTop {
+            let textFieldYTop = convertedTextFieldFrame.origin.y
+            let properTextFieldHeight = textFieldYTop - keyboardYTop / 1.3
+            view.frame.origin.y = -properTextFieldHeight
+        }
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+        if view.frame.origin.y != 0 {
+            view.frame.origin.y = 0
+        }
+    }
+    
+}
+
+extension UIResponder {
+
+    private struct Static {
+        static weak var responder: UIResponder?
+    }
+
+    static var currentResponder: UIResponder? {
+        Static.responder = nil
+        UIApplication.shared.sendAction(#selector(UIResponder._trap), to: nil, from: nil, for: nil)
+        return Static.responder
+    }
+
+    @objc private func _trap() {
+        Static.responder = self
     }
 }
