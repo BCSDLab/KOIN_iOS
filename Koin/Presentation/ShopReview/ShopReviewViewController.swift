@@ -175,11 +175,11 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     }
     
     private let tagCollectionView: TagCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumInteritemSpacing = 8
-        flowLayout.minimumLineSpacing = 8
-        let collectionView = TagCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        let LeftAlignedFlowlayout = LeftAlignedFlowLayout()
+        LeftAlignedFlowlayout.scrollDirection = .vertical
+        LeftAlignedFlowlayout.minimumInteritemSpacing = 8
+        LeftAlignedFlowlayout.minimumLineSpacing = 8
+        let collectionView = TagCollectionView(frame: .zero, collectionViewLayout: LeftAlignedFlowlayout)
         collectionView.maxCount = 5
         return collectionView
     }()
