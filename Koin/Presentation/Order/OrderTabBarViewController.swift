@@ -178,6 +178,9 @@ final class OrderTabBarViewController: UITabBarController {
         let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(
             shopRepository: shopRepository
         )
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
 
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
@@ -186,6 +189,8 @@ final class OrderTabBarViewController: UITabBarController {
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: selectedTabIndex == 1 ? selectedShopId : 0
         )
 

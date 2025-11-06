@@ -20,7 +20,10 @@ final class ShopViewModel: ViewModelProtocol {
         case getShopInfo
         case getShopBenefits
         case getBeneficialShops(Int)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
+     
     
     enum Output {
         case putImage(ShopCategoryDto)
@@ -40,6 +43,11 @@ final class ShopViewModel: ViewModelProtocol {
     private let searchShopUseCase: SearchShopUseCase
     private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
     private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
+
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+    private var categories: [ShopCategory] = []
+    private var lastCategoryId: Int?
     
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
@@ -54,6 +62,8 @@ final class ShopViewModel: ViewModelProtocol {
          searchShopUseCase: SearchShopUseCase,
          fetchShopBenefitUseCase: FetchShopBenefitUseCase,
          fetchBeneficialShopUseCase: FetchBeneficialShopUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          selectedId: Int) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
@@ -62,6 +72,8 @@ final class ShopViewModel: ViewModelProtocol {
         self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
         self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -98,6 +110,14 @@ final class ShopViewModel: ViewModelProtocol {
                 self.fetchShopBenefits()
                 self.getEventShopList()
                 self.fetchBeneficialShops(id: 1)
+                
+            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
+                self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+                
+            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
+                self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+
+            
             }
         }.store(in: &subscriptions)
         
@@ -161,10 +181,16 @@ extension ShopViewModel {
     private func getShopCategory() {
         fetchShopCategoryListUseCase.execute()
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
+                self?.categories = response.shopCategories
                 self?.outputSubject.send(.putImage(response))
             }).store(in: &subscriptions)
     }
     
+    private func categoryName(for id: Int) -> String {
+        if id == 0 { return "전체보기" }
+        return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
+    }
+
     private func searchShop(_ text: String) {
         searchShopUseCase.execute(text: text).sink { completion in
             if case let .failure(error) = completion {
@@ -197,4 +223,27 @@ extension ShopViewModel {
     func getShopId(at index: Int) -> Int {
         return shopList[index].id
     }
+}
+
+extension ShopViewModel {
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if eventLabelNeededDuration != nil {
+            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            
+            if eventLabelNeededDuration == .shopCategories {
+                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            }
+            
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
+    }
+    
+    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+
+
 }

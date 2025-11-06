@@ -187,6 +187,9 @@ final class NotificationHandler {
         let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
         
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
@@ -194,6 +197,8 @@ final class NotificationHandler {
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: 0
         )
         let shopViewController = ShopViewController(viewModel: viewModel)
