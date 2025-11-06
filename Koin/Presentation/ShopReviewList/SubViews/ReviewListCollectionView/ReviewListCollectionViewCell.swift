@@ -89,9 +89,8 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
         $0.numberOfLines = 0
     }
     
-    private let reportedReviewImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .reportedImageView)
-        $0.isHidden = true
+    private let reportedReviewLabel = UILabel().then {
+        $0.setImageText(image: UIImage.appImage(asset: .blind)?.withTintColor(UIColor.appColor(.neutral500)), text: "신고에 의해 숨김 처리 되었습니다.", font: UIFont.appFont(.pretendardMedium, size: 14), textColor: UIColor.appColor(.neutral500), imageSize: CGSize(width: 24, height: 24))
     }
     
     private let reviewImageCollectionView: ReviewImageCollectionView = {
@@ -174,6 +173,7 @@ extension ReviewListCollectionViewCell {
     private func resetConstraints() {
         myReviewImageView.snp.removeConstraints()
         writerLabel.snp.removeConstraints()
+        reportedReviewLabel.snp.removeConstraints()
         orderedMenuNameContainerView.snp.removeConstraints()
     }
     
@@ -189,8 +189,12 @@ extension ReviewListCollectionViewCell {
     }
     
     private func resetVisibility() {
-        reportedReviewImageView.isHidden = true
+        myReviewImageView.isHidden = false
+        writerLabel.isHidden = false
+        scoreView.isHidden = false
+        writtenDayLabel.isHidden = false
         reviewTextLabel.isHidden = false
+        reportedReviewLabel.isHidden = true
         orderedMenuNameContainerView.isHidden = false
         reviewImageCollectionView.isHidden = false
         
@@ -226,20 +230,38 @@ extension ReviewListCollectionViewCell {
         }
         
         if review.isReported {
-            reportedReviewImageView.isHidden = false
+            myReviewImageView.isHidden = true
+            writerLabel.isHidden = true
+            modifyButton.isHidden = true
+            deleteButton.isHidden = true
+            reportButton.isHidden = true
+            scoreView.isHidden = true
+            writtenDayLabel.isHidden = true
             reviewTextLabel.isHidden = true
+            reviewImageCollectionView.isHidden = true
             orderedMenuNameContainerView.isHidden = true
+            reportedReviewLabel.isHidden = false
+        } else {
+            writerLabel.isHidden = false
+            scoreView.isHidden = false
+            writtenDayLabel.isHidden = false
+            reviewTextLabel.isHidden = false
+            reportedReviewLabel.isHidden = true
+            
+            let shouldHideImages = review.imageUrls.isEmpty
+            reviewImageCollectionView.isHidden = shouldHideImages
         }
-        
-        let shouldHideImages = review.imageUrls.isEmpty || review.isReported
-        reviewImageCollectionView.isHidden = shouldHideImages
     }
     
     private func updateLayout(review: Review) {
-        updateMyReviewImageViewLayout(isMine: review.isMine)
-        updateOrderedMenuNameContainerLayout(
-            shouldHideImages: review.imageUrls.isEmpty || review.isReported
-        )
+        if review.isReported {
+            updateReportedReviewLayout()
+        } else {
+            updateMyReviewImageViewLayout(isMine: review.isMine)
+            updateOrderedMenuNameContainerLayout(
+                shouldHideImages: review.imageUrls.isEmpty
+            )
+        }
     }
     
     private func formatWrittenDay(createdAt: String, isModified: Bool) -> String {
@@ -283,6 +305,13 @@ extension ReviewListCollectionViewCell {
 // MARK: - Layout Updates
 extension ReviewListCollectionViewCell {
     
+    private func updateReportedReviewLayout() {
+        reportedReviewLabel.snp.remakeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(24)
+        }
+    }
+    
     private func updateMyReviewImageViewLayout(isMine: Bool) {
         if isMine {
             myReviewImageView.snp.remakeConstraints {
@@ -291,12 +320,14 @@ extension ReviewListCollectionViewCell {
                 $0.width.equalTo(97)
                 $0.height.equalTo(25)
             }
+            
             writerLabel.snp.remakeConstraints {
                 $0.top.equalTo(myReviewImageView.snp.bottom).offset(6.5)
                 $0.leading.equalToSuperview().offset(24)
             }
         } else {
             myReviewImageView.snp.removeConstraints()
+            
             writerLabel.snp.remakeConstraints {
                 $0.top.equalToSuperview()
                 $0.leading.equalToSuperview().offset(24)
@@ -333,11 +364,11 @@ extension ReviewListCollectionViewCell {
     }
 }
 
-// MARK: - Layout
+// MARK: - UI Function
 extension ReviewListCollectionViewCell {
     
     private func setupLayout() {
-        [myReviewImageView, writerLabel, modifyButton, deleteButton, reportButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewImageView, reviewImageCollectionView, orderedMenuNameContainerView].forEach {
+        [myReviewImageView, writerLabel, modifyButton, deleteButton, reportButton, scoreView, writtenDayLabel, reviewTextLabel, reportedReviewLabel, reviewImageCollectionView, orderedMenuNameContainerView].forEach {
             contentView.addSubview($0)
         }
         
@@ -386,11 +417,9 @@ extension ReviewListCollectionViewCell {
             $0.leading.equalTo(scoreView.snp.trailing).offset(12)
         }
         
-        reportedReviewImageView.snp.makeConstraints {
-            $0.top.equalTo(scoreView.snp.bottom).offset(5)
-            $0.leading.equalTo(scoreView)
-            $0.width.equalTo(228)
-            $0.height.equalTo(24)
+        reportedReviewLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(24)
         }
         
         reviewTextLabel.snp.makeConstraints {

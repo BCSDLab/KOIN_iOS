@@ -11,4 +11,5 @@ struct ToastConfig {
     let intent: ToastIntent
     let variant: ToastVariant
     let message: String
+    let bottomInset: CGFloat
 }
