@@ -332,6 +332,7 @@ extension ShopViewController {
     }
 
     private func updateEventShops(_ eventShops: [EventDto]) {
+        let eventShops: [EventDto] = []
         eventShopCollectionView.isHidden = eventShops.isEmpty
         eventIndexLabel.isHidden = eventShops.isEmpty
         if !eventShops.isEmpty {
@@ -360,7 +361,7 @@ extension ShopViewController {
     
     private func setUpConstraints() {
         scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview()
         }
 
         contentView.snp.makeConstraints {

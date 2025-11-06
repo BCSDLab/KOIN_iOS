@@ -51,6 +51,12 @@ final class OrderCategoryCollectionView: UICollectionView {
 
     func updateCategory(_ id: Int) {
         selectedId = id
+        for index in 0..<shopCategories.count {
+            if shopCategories[index].id == selectedId {
+                let selectedIndexPath = IndexPath(row: index, section: 0)
+                scrollToItem(at: selectedIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        }
         reloadData()
     }
 }

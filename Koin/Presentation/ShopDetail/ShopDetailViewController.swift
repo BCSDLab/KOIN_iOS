@@ -51,7 +51,10 @@ final class ShopDetailViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self = self else { return }
             switch output {
-            case .update(let shopDetail): self.shopDetailTableView.configure(shopDetail: shopDetail, shouldHighlight: self.shouldHighlight)
+            case .update(let shopDetail):
+                self.shopDetailTableView.configure(shopDetail: shopDetail,
+                                                   shouldHighlight: self.shouldHighlight,
+                                                   isFromOrder: self.viewModel.isFromOrder)
             }
         }
         .store(in: &subscriptions)

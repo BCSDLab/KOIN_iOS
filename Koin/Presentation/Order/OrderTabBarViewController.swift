@@ -11,13 +11,18 @@ import Combine
 final class OrderTabBarViewController: UITabBarController {
     
     // MARK: - Properties
-    private var selectedShopId: Int?
+    private var selectedShopId: Int
     private var selectedTabIndex: Int
     private var subscriptions: Set<AnyCancellable> = []
     private var isViewLoadedFirst: Bool = true
     
+    // MARK: - UI Components
+    private let dummyNavigationBar = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+    }
+    
     // MARK: - Initialization
-    init(selectedShopId: Int? = nil, initialTabIndex: Int = 0) {
+    init(selectedShopId: Int = 1, initialTabIndex: Int = 0) {
         self.selectedShopId = selectedShopId
         self.selectedTabIndex = initialTabIndex
         super.init(nibName: nil, bundle: nil)
@@ -31,15 +36,22 @@ final class OrderTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
-        
-        setupNavigationRightButton()
+        configureView()
+        // setupNavigationRightButton() // MARK: 주변상점 우선 배포
         setupTabBarAppearance()
         updateNavigationTitle(for: selectedTabIndex)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .transparent)
+        
+        if let navigationController {
+            let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height
+            dummyNavigationBar.snp.updateConstraints {
+                $0.height.equalTo(navigationBarHeight)
+            }
+        }        
         
         if isViewLoadedFirst {
             configureController()
@@ -144,7 +156,7 @@ final class OrderTabBarViewController: UITabBarController {
             fetchOrderShopListUseCase: fetchOrderShopListUseCase,
             fetchOrderTrackingUseCase: fetchOrderTrackingUseCase,
             searchOrderShopUseCase: searchOrderShopUseCase,
-            selectedId: selectedShopId ?? 1
+            selectedId: selectedShopId
         )
         
         let viewController = OrderHomeViewController(
@@ -174,7 +186,7 @@ final class OrderTabBarViewController: UITabBarController {
             searchShopUseCase: searchShopUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: selectedTabIndex == 1 ? selectedShopId ?? 0 : 0
+            selectedId: selectedTabIndex == 1 ? selectedShopId : 0
         )
 
         let viewController = ShopViewController(
@@ -226,6 +238,8 @@ final class OrderTabBarViewController: UITabBarController {
     
     // MARK: - Appearance
     private func setupTabBarAppearance() {
+        self.tabBar.isHidden = true
+        /*
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
@@ -255,6 +269,7 @@ final class OrderTabBarViewController: UITabBarController {
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
+         */
     }
 
     // MARK: - Navigation Title
@@ -290,5 +305,18 @@ extension OrderTabBarViewController: UITabBarControllerDelegate {
     ) {
         selectedTabIndex = tabBarController.selectedIndex
         updateNavigationTitle(for: selectedIndex)
+    }
+}
+
+extension OrderTabBarViewController {
+    
+    private func configureView() {
+        [dummyNavigationBar].forEach {
+            view.addSubview($0)
+        }
+        dummyNavigationBar.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(0)
+        }
     }
 }

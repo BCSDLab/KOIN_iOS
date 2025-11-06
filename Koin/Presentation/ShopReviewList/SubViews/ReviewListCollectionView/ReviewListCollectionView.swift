@@ -252,12 +252,17 @@ extension ReviewListCollectionView {
     }
     
     private func calculateCellHeight(for indexPath: IndexPath, width: CGFloat) -> CGFloat {
+        let reviewItem = reviewList[indexPath.row]
+        
+        if reviewItem.isReported {
+            return 24
+        }
+        
         let estimatedHeight: CGFloat = 1000
         let dummyCell = ReviewListCollectionViewCell(
             frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight)
         )
         
-        let reviewItem = reviewList[indexPath.row]
         dummyCell.configure(review: reviewItem)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()

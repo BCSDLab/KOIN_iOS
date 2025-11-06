@@ -6,8 +6,8 @@
 //
 
 import Combine
-import Then
 import UIKit
+import SnapKit
 
 final class ReportDetailView: UIView {
     
@@ -17,21 +17,24 @@ final class ReportDetailView: UIView {
     // MARK: - UI Components
     
     private let checkButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .circle), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .circle)?.resize(to: CGSize(width: 16, height: 16)), for: .normal)
+        $0.isUserInteractionEnabled = true
     }
     
     private let reportTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.isUserInteractionEnabled = false
     }
     
     private let reportDescriptionLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.isUserInteractionEnabled = false
     }
     
     private let separateView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral200)
+        $0.backgroundColor = UIColor.appColor(.neutral300)
     }
     
     override init(frame: CGRect) {
@@ -54,7 +57,10 @@ final class ReportDetailView: UIView {
 extension ReportDetailView {
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
+        let image = checkButton.isSelected
+            ? UIImage.appImage(asset: .filledCircle)?.resize(to: CGSize(width: 16, height: 16))?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal)
+            : UIImage.appImage(asset: .circle)?.resize(to: CGSize(width: 16, height: 16))
+        checkButton.setImage(image, for: .normal)
         checkButtonPublisher.send(())
     }
     
@@ -65,40 +71,44 @@ extension ReportDetailView {
     func getReportInfo() -> (title: String, content: String) {
         return (title: reportTitleLabel.text ?? "", content: reportDescriptionLabel.text ?? "")
     }
-    
 }
+
 extension ReportDetailView {
     private func setUpLayOuts() {
-        [checkButton, reportTitleLabel, reportDescriptionLabel, separateView].forEach {
+        [separateView, checkButton, reportTitleLabel, reportDescriptionLabel].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        reportTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(14)
-            make.leading.equalTo(checkButton.snp.trailing).offset(16)
+        checkButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(26)
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.height.equalTo(16)
         }
-        reportDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(reportTitleLabel.snp.bottom).offset(5)
-            make.leading.equalTo(checkButton.snp.trailing).offset(16)
+        
+        reportTitleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-16)
         }
-        checkButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(26)
-            make.leading.equalTo(self.snp.leading).offset(8)
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+        
+        reportDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(reportTitleLabel.snp.bottom).offset(5)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
+            $0.trailing.lessThanOrEqualToSuperview().offset(-16)
         }
-        separateView.snp.makeConstraints { make in
-            make.top.equalTo(reportDescriptionLabel.snp.bottom).offset(14)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.height.equalTo(1)
+        
+        separateView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
+        self.backgroundColor = .clear
+        self.isUserInteractionEnabled = true
     }
 }

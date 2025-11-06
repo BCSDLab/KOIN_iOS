@@ -351,6 +351,7 @@ extension ReviewListViewController {
     private func deleteReview() {
         let (reviewId, shopId) = viewModel.deleteParameter
         reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
+        showToastMessage(message: "리뷰가 삭제되었어요")
     }
     
     private func showZoomedImage(_ image: UIImage?) {
@@ -473,6 +474,7 @@ extension ReviewListViewController {
     private func bindShopReviewReportViewController(_ viewController: ShopReviewReportViewController) {
         viewController.reviewInfoPublisher
             .sink { [weak self] tuple in
+                self?.showToastMessage(message: "리뷰가 신고되었어요.", intent: .neutral)
                 self?.reviewListCollectionView.reportReview(tuple.0, shopId: tuple.1)
             }
             .store(in: &cancellables)
