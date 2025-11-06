@@ -59,6 +59,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
+    private var shopCategories: [ShopCategory] = []
     
     // MARK: - Initialization
     init(fetchDiningListUseCase: FetchDiningListUseCase,
@@ -229,8 +230,13 @@ extension HomeViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
+            self?.shopCategories = response.shopCategories
             self?.outputSubject.send(.putImage(response))
         }.store(in: &subscriptions)
+    }
+    
+    func getCategoryName(for id: Int) -> String? {
+        return shopCategories.first(where: { $0.id == id })?.name
     }
     
     private func checkLogin() {

@@ -252,9 +252,15 @@ final class HomeViewController: UIViewController {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        
-        categoryCollectionView.cellTapPublisher.sink { [weak self] id in
-            self?.didTapCell(at: id)
+        // FIXME: - durationTime이 0으로 들어가는 현상 수정
+        categoryCollectionView.cellTapPublisher.sink { [weak self] shopName in
+            guard let self = self else { return }
+            
+            let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
+            
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
+            
+            self.didTapCell(at: shopName)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
