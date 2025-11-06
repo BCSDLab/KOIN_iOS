@@ -19,6 +19,9 @@ final class ShopViewController: UIViewController {
     
     private let navigationControllerDelegate: UINavigationController?
     
+    private var categories: [ShopCategory] = []
+    private var currentCategoryId: Int = 0
+    
     // MARK: - UI Components
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -189,11 +192,16 @@ final class ShopViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        self.currentCategoryId = viewModel.selectedId
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         eventShopCollectionView.stopAutoScroll()
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+        self.currentCategoryId = viewModel.selectedId
     }
     
     deinit {
@@ -237,7 +245,18 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
 
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
-            self?.inputSubject.send(.changeCategory(categoryId))
+            guard let self else { return }
+            
+            let previousPage = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
+            let currentPage  = self.categories.first(where: { $0.id == categoryId })?.name ?? "알 수 없음"
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
+            
+            self.currentCategoryId = categoryId
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+            self.inputSubject.send(.changeCategory(categoryId))
+            
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
@@ -328,6 +347,7 @@ extension ShopViewController {
     }
 
     private func putImage(data: ShopCategoryDto) {
+        self.categories = data.shopCategories
         categoryCollectionView.updateCategories(data.shopCategories)
     }
 
