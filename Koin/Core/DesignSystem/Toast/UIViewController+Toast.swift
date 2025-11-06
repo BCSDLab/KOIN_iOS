@@ -27,8 +27,8 @@ extension UIViewController {
         removeExistingToast(from: window)
         
         var toastMessageView: ToastMessageView!
-        toastMessageView = ToastMessageView(config: config) { [weak self] in
-            self?.dismissToast(toastMessageView)
+        toastMessageView = ToastMessageView(config: config) {
+            UIViewController.dismissToast(toastMessageView)
             buttonAction?()
         }
         
@@ -45,19 +45,19 @@ extension UIViewController {
     private func showToastWithAnimation(_ toastMessageView: ToastMessageView, duration: TimeInterval) {
         toastMessageView.alpha = 0
         toastMessageView.transform = CGAffineTransform(translationX: 0, y: 20)
-        
+
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut, .allowUserInteraction]) {
             toastMessageView.alpha = 1
             toastMessageView.transform = .identity
-        } completion: { [weak self] _ in
+        } completion: { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak toastMessageView] in
                 guard let toastMessageView = toastMessageView else { return }
-                self?.dismissToast(toastMessageView)
+                UIViewController.dismissToast(toastMessageView)
             }
         }
     }
     
-    private func dismissToast(_ toastView: ToastMessageView) {
+    private static func dismissToast(_ toastView: ToastMessageView) {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseIn, .beginFromCurrentState]) {
             toastView.alpha = 0
             toastView.transform = CGAffineTransform(translationX: 0, y: 20)
