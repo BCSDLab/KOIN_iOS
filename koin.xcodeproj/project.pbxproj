@@ -26,6 +26,7 @@
 		7C82FF752E9D187C006335A7 /* ShopDetailTableViewOriginsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF662E9D187C006335A7 /* ShopDetailTableViewOriginsCell.swift */; };
 		7C82FF762E9D187C006335A7 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF642E9D187C006335A7 /* ShopDetailTableViewNameCell.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
+		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift */; };
 		7C93BA922E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BA902E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift */; };
 		7C93BA932E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BA912E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift */; };
 		7C93BB042E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */; };
@@ -841,6 +842,7 @@
 		7C82FF692E9D187C006335A7 /* ShopDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
 		7C82FF6A2E9D187C006335A7 /* ShopDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDetailViewModel.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
+		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C93BA902E9AAB3A006F9D76 /* FetchCartDeliveryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartDeliveryUseCase.swift; sourceTree = "<group>"; };
 		7C93BA912E9AAB3A006F9D76 /* FetchCartTakeOutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartTakeOutUseCase.swift; sourceTree = "<group>"; };
 		7C93BB032E9B95E2006F9D76 /* DeleteCartMenuItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCartMenuItemUseCase.swift; sourceTree = "<group>"; };
@@ -3950,6 +3952,7 @@
 				B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */,
 				B46B8D3B2E771CAA00A8E797 /* FetchOrderShopMenusGroupsFromShopUseCase.swift */,
 				B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */,
+				7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -4400,8 +4403,8 @@
 				B46B8D262E770A3100A8E797 /* Pretendard-Bold.otf in Resources */,
 				B46B8D272E770A3100A8E797 /* Pretendard-Medium.otf in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
-				83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */,
-				83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
 				D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */,
@@ -4482,9 +4485,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4537,6 +4544,7 @@
 				D289875A2D2FF2FF00AA7285 /* PostLostItemViewModel.swift in Sources */,
 				D2FCBE9C2D02C2D20097A388 /* SelectDeptModalViewController.swift in Sources */,
 				D27DD1002BA6294A0081FD36 /* LandImageCollectionViewCell.swift in Sources */,
+				7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndMenusGroupsFromShopUseCase.swift in Sources */,
 				D27DD0D62BA6085E0081FD36 /* LandViewModel.swift in Sources */,
 				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */,
 				D8C24A082E1AC96C008D8ABA /* DefaultOrderShopRepository.swift in Sources */,
