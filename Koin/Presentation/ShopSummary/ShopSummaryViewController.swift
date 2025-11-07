@@ -184,6 +184,9 @@ extension ShopSummaryViewController {
             guard let self else {
                 return
             }
+            let shopName = self.viewModel.getShopName() ?? self.cachedShopName ?? "알 수 없음"
+            
+            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, shopName))
             if let orderableShopId = self.viewModel.orderableShopId {
                 let orderService = DefaultOrderService()
                 let orderRepository = DefaultOrderShopRepository(service: orderService)
