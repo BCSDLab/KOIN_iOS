@@ -207,7 +207,7 @@ final class ShopViewController: UIViewController {
         guard !didTapBack, (self.parent?.isMovingFromParent ?? false) else { return }
         didTapBack = true
         
-        let previousPage = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
+        let previousPage = getCategoryName(for: currentCategoryId)
         let currentPage = "메인"
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
@@ -261,8 +261,9 @@ final class ShopViewController: UIViewController {
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             guard let self else { return }
             
-            let previousPage = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
-            let currentPage  = self.categories.first(where: { $0.id == categoryId })?.name ?? "알 수 없음"
+            let previousPage = self.getCategoryName(for: self.currentCategoryId)
+            let currentPage  = self.getCategoryName(for: categoryId)
+            
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
             
@@ -324,8 +325,8 @@ extension ShopViewController {
     }
     
     @objc private func searchDidBegin(_ textField: UITextField) {
-        let currentCategoryName = categories.first(where: { $0.id == currentCategoryId })?.name ?? "알 수 없음"
-        
+        let currentCategoryName = getCategoryName(for: currentCategoryId)
+
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
     }
 
@@ -343,8 +344,8 @@ extension ShopViewController {
         
         let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
         
-        let categoryName = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
-        
+        let categoryName = getCategoryName(for: currentCategoryId)
+
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
             let value: String
@@ -375,7 +376,7 @@ extension ShopViewController {
 extension ShopViewController {
     private func handleOpenShopToggle() {
         openShopToggleButton.isSelected.toggle()
-        let categoryName = categories.first(where: { $0.id == currentCategoryId })?.name ?? "알 수 없음"
+        let categoryName = getCategoryName(for: currentCategoryId)
         let value = "check_open_\(categoryName)"
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         inputSubject.send(.filterOpenShops(openShopToggleButton.isSelected))
