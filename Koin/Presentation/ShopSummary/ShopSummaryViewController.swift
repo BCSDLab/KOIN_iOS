@@ -270,6 +270,14 @@ extension ShopSummaryViewController {
             }
             .store(in: &subscriptions)
         
+        menuGroupTableView.didEndScrollPublisher
+            .sink { [ weak self ] in
+                let shopName = self?.viewModel.getShopName() ?? self?.cachedShopName ?? "알 수 없음"
+                self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopName))
+            }
+            .store(in: &subscriptions)
+            
+        
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in
