@@ -94,7 +94,7 @@ extension OrderShopDetail {
         self.phone = dto.phone ?? ""
         self.introduction = dto.description ?? ""
         self.notice = "" // FIXME: 대응되는 요소가 없어서 빈칸으로 두었습니다
-        self.deliveryTips = []
+        self.deliveryTips = [DeliveryTip(fromAmount: 0, toAmount: nil, fee: dto.deliveryPrice)]
         self.ownerInfo = OwnerInfo(name: "", shopName: "", address: "", companyRegistrationNumber: "")
         self.origins = []
     }
