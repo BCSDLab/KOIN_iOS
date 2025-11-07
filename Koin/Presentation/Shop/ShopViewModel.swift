@@ -21,6 +21,8 @@ final class ShopViewModel: ViewModelProtocol {
         case getShopBenefits
         case getBeneficialShops(Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
+        
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
      
@@ -113,6 +115,9 @@ final class ShopViewModel: ViewModelProtocol {
                 
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+                
+            case let .logEventDirect(label, category, value):
+                self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
                 
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
