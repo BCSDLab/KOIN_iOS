@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class ShopSummaryViewModel {
     
@@ -15,6 +16,10 @@ final class ShopSummaryViewModel {
         case viewWillAppear
         case resetCart
         case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
+        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
+
     }
     
     // MARK: - Output
@@ -53,6 +58,11 @@ final class ShopSummaryViewModel {
     // 주문상세
     private let fetchOrderMenuUseCase: FetchOrderMenuUseCase?
     
+    //로깅
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+
+    
     // Properties
     private(set) var orderableShopId: Int?
     private(set) var shopId: Int?
@@ -70,6 +80,8 @@ final class ShopSummaryViewModel {
          fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase,
          resetCartUseCase: DefaultResetCartUseCase,
          fetchOrderMenuUseCase: FetchOrderMenuUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          orderableShopId: Int) {
         // 기본정보 OrderApi
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
@@ -92,6 +104,8 @@ final class ShopSummaryViewModel {
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
         self.shopId = nil
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
     
     // MARK: - Initializer from Shop
@@ -99,6 +113,8 @@ final class ShopSummaryViewModel {
          fetchOrderShopMenusGroupsFromShopUseCase: DefaultFetchOrderShopMenusGroupsFromShopUseCase,
          fetchOrderShopMenusFromShopUseCase: DefaultFetchOrderShopMenusFromShopUseCase,
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int) {
         // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
@@ -120,6 +136,8 @@ final class ShopSummaryViewModel {
         self.orderableShopId = nil
         self.shopId = shopId
         self.isFromOrder = false
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
     
     // MARK: - Transform
@@ -150,6 +168,17 @@ final class ShopSummaryViewModel {
             case .fetchMenuDetail(let orderableShopId, let orderableShopMenuId):
                 self.fetchOrderMenu(orderableShopId: orderableShopId,
                                    orderableShopMenuId: orderableShopMenuId)
+                
+            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
+                self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+                
+            case let .logEventDirect(label, category, value):
+                self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+                
+            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
+                self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+
+
             }
         }
         .store(in: &subscriptions)
@@ -328,3 +357,24 @@ extension ShopSummaryViewModel {
     }
 }
 
+extension ShopSummaryViewModel {
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if eventLabelNeededDuration != nil {
+            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            
+            if eventLabelNeededDuration == .shopDetailViewBack {
+                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            }
+            
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
+    }
+    
+    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+
+}
