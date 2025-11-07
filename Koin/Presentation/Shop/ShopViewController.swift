@@ -22,6 +22,8 @@ final class ShopViewController: UIViewController {
     private var categories: [ShopCategory] = []
     private var currentCategoryId: Int = 0
     
+    private var didTapBack = false
+    
     // MARK: - UI Components
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -192,15 +194,26 @@ final class ShopViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
+        self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
         self.currentCategoryId = viewModel.selectedId
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        eventShopCollectionView.stopAutoScroll()
+        guard !didTapBack, (self.parent?.isMovingFromParent ?? false) else { return }
+        didTapBack = true
+        
+        let previousPage = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
+        let currentPage = "메인"
+        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
+        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, eventCategory, currentPage, previousPage, nil, nil, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+        eventShopCollectionView.stopAutoScroll()
         self.currentCategoryId = viewModel.selectedId
     }
     
