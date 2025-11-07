@@ -46,7 +46,7 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .fetchShopList: return "/v3/shops"
         case .fetchEventList: return "/shops/events"
         case .fetchShopCategoryList: return "/shops/categories"
-        case .fetchShopData(let request): return "/shops/\(request.shopId)"
+        case .fetchShopData(let request): return "/v2/shops/\(request.shopId)"
         case .fetchShopMenuList(let request): return "/shops/\(request.shopId)/menus"
         case .fetchShopEventList(let request): return "/shops/\(request.shopId)/events"
         case .fetchShopMenusCategoryList(let shopId): return "/shops/\(shopId)/menus/categories"
