@@ -283,6 +283,9 @@ final class ShopViewController: UIViewController {
     private func setAddTarget() {
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
+        searchTextField.addTarget(self, action: #selector(searchDidBegin(_:)), for: .editingDidBegin)
+
+        
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
         openShopToggleButton.addAction(UIAction { [weak self] _ in self?.handleOpenShopToggle() }, for: .touchUpInside)
@@ -297,6 +300,13 @@ extension ShopViewController {
         dimView.isHidden = false
         inputSubject.send(.searchTextChanged(text))
     }
+    
+    @objc private func searchDidBegin(_ textField: UITextField) {
+        let currentCategoryName = categories.first(where: { $0.id == currentCategoryId })?.name ?? "알 수 없음"
+        
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
+    }
+
 
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
         if !searchTextField.frame.contains(sender.location(in: view)) {
