@@ -353,6 +353,9 @@ extension ShopViewController {
 extension ShopViewController {
     private func handleOpenShopToggle() {
         openShopToggleButton.isSelected.toggle()
+        let categoryName = categories.first(where: { $0.id == currentCategoryId })?.name ?? "알 수 없음"
+        let value = "check_open_\(categoryName)"
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         inputSubject.send(.filterOpenShops(openShopToggleButton.isSelected))
     }
 
