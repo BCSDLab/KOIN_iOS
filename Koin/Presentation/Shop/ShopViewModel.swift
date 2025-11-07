@@ -235,7 +235,7 @@ extension ShopViewModel {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
             
-            if eventLabelNeededDuration == .shopCategories {
+            if eventLabelNeededDuration == .shopCategories || eventLabelNeededDuration == .shopCategoriesBack {
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             }
             
