@@ -238,7 +238,7 @@ final class OrderTabBarViewController: UITabBarController {
     
     // MARK: - Appearance
     private func setupTabBarAppearance() {
-        self.tabBar.isHidden = true
+        self.tabBar.isHidden = false
         /*
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
