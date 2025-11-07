@@ -198,6 +198,7 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
         self.currentCategoryId = viewModel.selectedId
     }
     
@@ -270,6 +271,8 @@ final class ShopViewController: UIViewController {
             self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self.inputSubject.send(.changeCategory(categoryId))
             
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
@@ -288,6 +291,12 @@ final class ShopViewController: UIViewController {
                                                 shopId: shopId)
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
             viewController.title = shopName
+            let previousPage = self?.getCategoryName(for: self?.currentCategoryId ?? 0) ?? "알 수 없음"
+            let currentPage = shopName
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
+
+            
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
@@ -401,6 +410,11 @@ extension ShopViewController {
             eventShopCollectionView.setEventShops(eventShops)
             eventIndexLabel.text = "1/\(eventShops.count)"
         }
+    }
+    
+    private func getCategoryName(for id: Int) -> String {
+        if id == 0 { return "전체보기" }
+        return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
     }
 }
 
