@@ -22,6 +22,9 @@ final class ShopSummaryViewController: UIViewController {
     private var cachedShopId: Int?
     private var cachedShopName: String?
     
+    private var didTapBack = false
+    private let backCategoryName: String
+    
     // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
@@ -63,10 +66,11 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?) {
+    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?, backCategoryName: String) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
         self.cachedShopId = viewModel.getShopId()
+        self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -88,6 +92,21 @@ final class ShopSummaryViewController: UIViewController {
         configureRightBarButton()
         inputSubject.send(.viewWillAppear)
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
+    }
+    
+    
+    //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
+        let shopName = self.viewModel.getShopName() ?? self.cachedShopName ?? "알 수 없음"
+        let currentPage = self.backCategoryName
+        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
+        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
+        
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
     }
 }
 
@@ -327,7 +346,7 @@ extension ShopSummaryViewController {
                                                fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
                                                deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
                                                resetCartUseCase: resetCartUseCase)
-            let viewController = OrderCartViewController(viewModel: viewModel)
+            let viewController = OrderCartViewController(viewModel: viewModel,backCategoryName: self.backCategoryName)
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
         }

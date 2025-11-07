@@ -456,6 +456,10 @@ extension OrderHomeViewController {
                 let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
                 let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
                 let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+
+                
                 let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                     fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                     fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -464,9 +468,11 @@ extension OrderHomeViewController {
                                                     fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                     resetCartUseCase: resetCartUseCase,
                                                     fetchOrderMenuUseCase: fetchOrderMenuUseCase,
+                                                     logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                     getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                                     orderableShopId: orderableShopId)
     
-                let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
+                let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "" )
                 navigationControllerDelegate?.pushViewController(viewController, animated: true)
             }
             .store(in: &subscriptions)
@@ -520,6 +526,8 @@ extension OrderHomeViewController: UICollectionViewDelegate {
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
             let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(
                 repository: DefaultOrderShopRepository(service: DefaultOrderService())
             )
@@ -531,8 +539,10 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
+                                                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                                 orderableShopId: orderableShopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "")
             viewController.title = title
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }

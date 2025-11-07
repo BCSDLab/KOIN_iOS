@@ -115,7 +115,7 @@ extension ShopDetailViewController {
                                                fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
                                                deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
                                                resetCartUseCase: resetCartUseCase)
-            let viewController = OrderCartViewController(viewModel: viewModel)
+            let viewController = OrderCartViewController(viewModel: viewModel, backCategoryName: "")
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
         }

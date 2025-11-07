@@ -284,15 +284,18 @@ final class ShopViewController: UIViewController {
             let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: repository)
             let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-            
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            let previousPage = self?.getCategoryName(for: self?.currentCategoryId ?? 0) ?? "알 수 없음"
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
                                                 fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
                                                 fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
                                                 fetchShopDataUseCase: fetchShopDataUseCase,
+                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                                 shopId: shopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
             viewController.title = shopName
-            let previousPage = self?.getCategoryName(for: self?.currentCategoryId ?? 0) ?? "알 수 없음"
             let currentPage = shopName
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
