@@ -321,8 +321,17 @@ extension ShopViewController {
         
         let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
         
+        let categoryName = self.categories.first(where: { $0.id == self.currentCategoryId })?.name ?? "알 수 없음"
+        
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
+            let value: String
+            switch sort {
+            case .basic: value = "check_default_\(categoryName)"
+            case .review: value = "check_review_\(categoryName)"
+            case .rating: value = "check_star_\(categoryName)"
+            }
+            self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         }
         
         bottomSheetViewController.modalPresentationStyle = .pageSheet
