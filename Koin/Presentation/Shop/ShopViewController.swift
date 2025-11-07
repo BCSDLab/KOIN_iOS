@@ -189,6 +189,7 @@ final class ShopViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setAddTarget()
         searchTextField.delegate = self
+        scrollView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -509,3 +510,21 @@ extension ShopViewController {
     }
 }
 
+extension ShopViewController: UIScrollViewDelegate {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate && scrollView == self.scrollView {
+            makeScrollLog()
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == self.scrollView {
+            makeScrollLog()
+        }
+    }
+    
+    private func makeScrollLog() {
+        let categoryName = getCategoryName(for: currentCategoryId)
+        
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
+    }
+}
