@@ -108,6 +108,11 @@ final class ShopSearchViewController: UIViewController {
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        shopSearchTableView.didScrollPublisher.sink { [weak self] in
+            guard self?.shopSearchTableView.isHidden == false else { return } // 화면 진입시 키보드 사라짐 방지
+            self?.dismissKeyboard()
+        }.store(in: &subscriptions)
     }
 }
     

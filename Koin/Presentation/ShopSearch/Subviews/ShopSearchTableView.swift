@@ -14,6 +14,7 @@ final class ShopSearchTableView: UITableView {
     private var shopNameSearchResult: [ShopNameSearchResult] = []
     private var menuNameSearchResult: [MenuNameSearchResult] = []
     let didTapCellPublisher = PassthroughSubject<Int, Never>()
+    let didScrollPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -81,7 +82,12 @@ extension ShopSearchTableView: UITableViewDataSource {
             return UITableViewCell()
         }
     }
-    
+}
+
+extension ShopSearchTableView {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        didScrollPublisher.send()
+    }
 }
 
 extension ShopSearchTableView {
