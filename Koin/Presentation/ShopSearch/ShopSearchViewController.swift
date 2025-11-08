@@ -78,6 +78,10 @@ final class ShopSearchViewController: UIViewController {
         setAddTarget()
         setDelegate()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchTextField.becomeFirstResponder()
+    }
     
     // MARK: Bind
     private func bind() {
@@ -90,7 +94,7 @@ final class ShopSearchViewController: UIViewController {
         }.store(in: &subscriptions)
     }
 }
-
+    
 extension ShopSearchViewController {
     
     private func setAddTarget() {
