@@ -59,7 +59,7 @@ extension ShopSearchTableViewShopNameCell {
         shopNameLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(28)
-            $0.trailing.equalTo(arrowUpLeftImageView.snp.leading).offset(-8)
+            $0.trailing.lessThanOrEqualTo(arrowUpLeftImageView.snp.leading).offset(-8)
         }
         arrowUpLeftImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()

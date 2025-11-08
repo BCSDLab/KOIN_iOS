@@ -27,7 +27,6 @@ final class ShopSearchTableViewMenuNameCell: UITableViewCell {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textColor = .appColor(.neutral500)
         $0.numberOfLines = 1
-        $0.textAlignment = .left
     }
     let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
@@ -70,15 +69,17 @@ extension ShopSearchTableViewMenuNameCell {
         menuNameLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(28)
+            $0.trailing.lessThanOrEqualToSuperview()
         }
         separatorLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(menuNameLabel.snp.trailing).offset(4)
+            $0.trailing.lessThanOrEqualToSuperview()
         }
         shopNameLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(separatorLabel.snp.trailing).offset(4)
-            $0.trailing.equalToSuperview()
+            $0.trailing.lessThanOrEqualToSuperview()
         }
         separatorView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
