@@ -23,3 +23,28 @@ struct MenuNameSearchResult {
     let menuName: String
 }
 
+extension ShopSearch {
+    init(from dto: ShopSearchDto) {
+        self.shopNameSearchResults = dto.shopNameSearchResults.map {
+            return ShopNameSearchResult(from: $0)
+        }
+        self.menuNameSearchResults = dto.menuNameSearchResults.map {
+            return MenuNameSearchResult(from: $0)
+        }
+    }
+}
+
+extension ShopNameSearchResult {
+    init(from dto: ShopNameSearchResultDto) {
+        self.shopID = dto.shopID
+        self.shopName = dto.shopName
+    }
+}
+
+extension MenuNameSearchResult {
+    init(from dto: MenuNameSearchResultDto) {
+        self.shopID = dto.shopID
+        self.shopName = dto.shopName
+        self.menuName = dto.menuName
+    }
+}
