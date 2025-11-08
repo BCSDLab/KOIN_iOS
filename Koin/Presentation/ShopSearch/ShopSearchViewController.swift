@@ -16,6 +16,9 @@ final class ShopSearchViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let backgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+    }
     private let searchTextField = UITextField().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = UIColor.appColor(.neutral600)
@@ -57,6 +60,8 @@ final class ShopSearchViewController: UIViewController {
     private let shopSearchTableView = ShopSearchTableView().then {
         $0.backgroundColor = .appColor(.newBackground)
         $0.isHidden = true
+        $0.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -16)
+        $0.clipsToBounds = false
     }
     
     // MARK: - Initializer
@@ -169,7 +174,7 @@ extension ShopSearchViewController {
 extension ShopSearchViewController {
     
     private func setUpLayouts() {
-        [searchTextField, dimView, shopSearchTableView].forEach {
+        [dimView, shopSearchTableView, backgroundView, searchTextField].forEach {
             view.addSubview($0)
         }
     }
@@ -186,6 +191,10 @@ extension ShopSearchViewController {
         shopSearchTableView.snp.makeConstraints {
             $0.top.bottom.equalTo(dimView)
             $0.leading.trailing.equalToSuperview().inset(16)
+        }
+        backgroundView.snp.makeConstraints {
+            $0.leading.trailing.top.equalToSuperview()
+            $0.bottom.equalTo(dimView.snp.top)
         }
     }
     
