@@ -16,6 +16,7 @@ final class ShopSearchTableViewMenuNameCell: UITableViewCell {
     let menuNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral500)
+        $0.numberOfLines = 1
     }
     let separatorLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 14)
@@ -25,6 +26,8 @@ final class ShopSearchTableViewMenuNameCell: UITableViewCell {
     let shopNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textColor = .appColor(.neutral500)
+        $0.numberOfLines = 1
+        $0.textAlignment = .left
     }
     let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
@@ -34,6 +37,7 @@ final class ShopSearchTableViewMenuNameCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        contentView.backgroundColor = .appColor(.newBackground)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -74,6 +78,7 @@ extension ShopSearchTableViewMenuNameCell {
         shopNameLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(separatorLabel.snp.trailing).offset(4)
+            $0.trailing.equalToSuperview()
         }
         separatorView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()

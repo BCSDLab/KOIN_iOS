@@ -47,8 +47,10 @@ final class ShopViewController: UIViewController {
         
         config.background.backgroundColor = .white
         config.background.cornerRadius = 12
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16,
-                                                       bottom: 0, trailing: 160)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12,
+                                                       bottom: 0, trailing: 0)
+        
+        $0.contentHorizontalAlignment = .leading
         
         $0.configuration = config
         $0.tintColor = .appColor(.neutral500)
@@ -380,8 +382,8 @@ extension ShopViewController {
         }
 
         searchBarButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalToSuperview().offset(8)
+            $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(40)
         }
 

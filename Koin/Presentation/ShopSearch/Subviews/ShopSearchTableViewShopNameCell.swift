@@ -16,6 +16,8 @@ final class ShopSearchTableViewShopNameCell: UITableViewCell {
     let shopNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textColor = .appColor(.neutral500)
+        $0.textAlignment = .left
+        $0.numberOfLines = 1
     }
     let arrowUpLeftImageView = UIImageView(image: .appImage(asset: .arrowUpLeft))
     let separatorView = UIView().then {
@@ -26,6 +28,7 @@ final class ShopSearchTableViewShopNameCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        contentView.backgroundColor = .appColor(.newBackground)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -56,6 +59,7 @@ extension ShopSearchTableViewShopNameCell {
         shopNameLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(28)
+            $0.trailing.equalTo(arrowUpLeftImageView.snp.leading).offset(-8)
         }
         arrowUpLeftImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
