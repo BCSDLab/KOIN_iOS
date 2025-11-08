@@ -32,6 +32,8 @@ protocol ShopService {
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearchDto, Error>
+    
 }
 
 final class DefaultShopService: ShopService {
@@ -204,6 +206,10 @@ final class DefaultShopService: ShopService {
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
         return request(.searchShop(text))
+    }
+    
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearchDto, Error> {
+        return request(.fetchSearchShop(requestModel))
     }
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {

@@ -274,7 +274,10 @@ final class ShopViewController: UIViewController {
 // MARK: - @objc
 extension ShopViewController {
     @objc private func searchBarButtonTapped() {
-        let viewModel = ShopSearchViewModel()
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        let fetchSearchShopUseCase = DefaultFetchSearchShopUseCase(repository: shopRepository)
+        let viewModel = ShopSearchViewModel(fetchSearchShopUseCase: fetchSearchShopUseCase)
         let viewController = ShopSearchViewController(viewModel: viewModel)
         navigationControllerDelegate?.pushViewController(viewController, animated: true)
     }

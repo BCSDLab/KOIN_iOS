@@ -56,7 +56,7 @@ final class ShopSearchViewController: UIViewController {
     
     private let shopSearchTableView = ShopSearchTableView().then {
         $0.backgroundColor = .appColor(.newBackground)
-        $0.isHidden = false
+        $0.isHidden = true
     }
     
     // MARK: - Initializer
@@ -75,15 +75,49 @@ final class ShopSearchViewController: UIViewController {
         configureNavigationBar(style: .order)
         navigationItem.title = "검색"
         bind()
+        setAddTarget()
+        setDelegate()
     }
     
     // MARK: Bind
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { input in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] input in
+            guard let self else { return }
             switch input {
-            default: return
+            case .update(let shopSearch):
+                self.updateTableView(shopSearch: shopSearch)
             }
         }.store(in: &subscriptions)
+    }
+}
+
+extension ShopSearchViewController {
+    
+    private func setAddTarget() {
+        searchTextField.addTarget(self, action: #selector(keywordDidChange(_:)), for: .editingChanged)
+    }
+    private func setDelegate() {
+        searchTextField.delegate = self
+    }
+    
+    @objc private func keywordDidChange(_ sender: UITextField) {
+        guard let text = searchTextField.text else { return }
+        if text == "" {
+            dimView.isHidden = false
+            shopSearchTableView.isHidden = true
+        }
+        else {
+            inputSubject.send(.keywordDidChange(text))
+        }
+    }
+}
+
+extension ShopSearchViewController {
+    
+    private func updateTableView(shopSearch: ShopSearch) {
+        dimView.isHidden = true
+        shopSearchTableView.isHidden = false
+        shopSearchTableView.configure(shopSearch: shopSearch)
     }
 }
 
