@@ -8,7 +8,7 @@
 import Foundation
 
 struct FetchShopSearchRequest: Encodable {
-    let keyword: Int
+    let keyword: String
     
     enum CodingKeys: String, CodingKey {
         case keyword
