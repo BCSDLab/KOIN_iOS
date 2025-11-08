@@ -13,7 +13,7 @@ final class ShopSearchTableView: UITableView {
     // MARK: - Properties
     private var shopNameSearchResult: [ShopNameSearchResult] = []
     private var menuNameSearchResult: [MenuNameSearchResult] = []
-    private let navigatePublisher = PassthroughSubject<Int, Never>()
+    let didTapCellPublisher = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -46,7 +46,7 @@ extension ShopSearchTableView: UITableViewDelegate {
                 return menuNameSearchResult[indexPath.row].shopID
             }
         }()
-        navigatePublisher.send(shopId)
+        didTapCellPublisher.send(shopId)
     }
 }
 

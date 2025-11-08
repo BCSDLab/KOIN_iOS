@@ -72,12 +72,15 @@ final class ShopSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureNavigationBar(style: .order)
         navigationItem.title = "검색"
         bind()
         setAddTarget()
         setDelegate()
         searchTextField.becomeFirstResponder()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .order)
     }
     
     // MARK: Bind
@@ -88,6 +91,22 @@ final class ShopSearchViewController: UIViewController {
             case .update(let shopSearch):
                 self.updateTableView(shopSearch: shopSearch)
             }
+        }.store(in: &subscriptions)
+        
+        shopSearchTableView.didTapCellPublisher.sink { [weak self] shopId in
+            let shopService = DefaultShopService()
+            let shopRepository = DefaultShopRepository(service: shopService)
+            let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
+            let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: shopRepository)
+            let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: shopRepository)
+            let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
+            let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+                                                 fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
+                                                 fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
+                                                 fetchShopDataUseCase: fetchShopDataUseCase,
+                                                 shopId: shopId)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
