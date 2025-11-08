@@ -77,9 +77,6 @@ final class ShopSearchViewController: UIViewController {
         bind()
         setAddTarget()
         setDelegate()
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         searchTextField.becomeFirstResponder()
     }
     
