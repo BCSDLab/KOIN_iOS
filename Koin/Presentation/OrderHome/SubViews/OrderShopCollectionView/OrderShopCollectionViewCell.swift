@@ -24,7 +24,7 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
     }
     
     private let shopTitleLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
@@ -32,7 +32,7 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
     }
     
     private let ratingLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardBold, size: 12)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
@@ -94,7 +94,7 @@ final class OrderShopCollectionViewCell: UICollectionViewCell {
     private let statusLabel = UILabel().then {
         $0.text = "영업이 종료된 가게에요!"
         $0.textColor = .white
-        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
     }
     
     override init(frame: CGRect) {
