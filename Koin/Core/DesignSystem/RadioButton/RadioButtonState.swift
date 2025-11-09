@@ -9,21 +9,17 @@ import Foundation
 
 enum RadioButtonState {
     case normal
-    case hover
-    case touch
-    case focus
-    
     case selected
-    case selectedEmphasized
-    
+
+    case hover
     case hoverSelected
-    case hoverSelectedEmphasized
-    
+
+    case touch
     case touchSelected
-    case touchSelectedEmphasized
-    
+
+    case focus
     case focusSelected
-    case focusSelectedEmphasized
-    
+
     case disabled
+    case disabledSelected
 }
