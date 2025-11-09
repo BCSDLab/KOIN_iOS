@@ -36,7 +36,7 @@ final class ShopDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar(style: .empty)
-        configureRightBarButton()
+        //configureRightBarButton()
         configureView()
         bind()
         inputSubject.send(.viewDidLoad)
