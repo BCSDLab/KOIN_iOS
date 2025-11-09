@@ -68,14 +68,16 @@ final class ShopSummaryCustomButton: UIButton {
         configureIntroductionView()
     }
     func configure(minOrderAmount: Int?, minDeliveryTip: Int?, maxDelieveryTip: Int?, isFromOrder: Bool) {
-        if isFromOrder {
-            configureOrderAmountDelieveryTipView()
-            minimumOrderSubLabel.text = "\((minOrderAmount ?? 0).formattedWithComma)원"
-            deliveryTipSubLabel.text = "\((minDeliveryTip ?? 0).formattedWithComma) - \((maxDelieveryTip ?? 0).formattedWithComma)원"
-        }
-        else {
-            configureInorderableLabel()
-        }
+        //if isFromOrder {
+        
+        configureOrderAmountDelieveryTipView()
+        minimumOrderSubLabel.text = "\((minOrderAmount ?? 0).formattedWithComma)원"
+        deliveryTipSubLabel.text = "\((minDeliveryTip ?? 0).formattedWithComma) - \((maxDelieveryTip ?? 0).formattedWithComma)원"
+        
+        //}
+        //else {
+        //    configureInorderableLabel()
+        //}
     }
 }
 
@@ -108,12 +110,12 @@ extension ShopSummaryCustomButton {
         }
         minimumOrderSubLabel.snp.makeConstraints {
             $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
-            //$0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+            $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(minimumOrderLabel)
         }
         deliveryTipSubLabel.snp.makeConstraints {
             $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
-            $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+            $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
         rightImageView.snp.makeConstraints {
