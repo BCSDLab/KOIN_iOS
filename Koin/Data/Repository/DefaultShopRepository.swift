@@ -92,7 +92,15 @@ final class DefaultShopRepository: ShopRepository {
         return service.postCallNotification(shopId: shopId)
     }
     
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> { // TODO: 삭제 예정
         return service.searchRelatedShops(text: text)
+    }
+    
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, Error> {
+        return service.fetchSearchShop(requestModel: requestModel)
+            .map { dto in
+                ShopSearch(from: dto)
+            }
+            .eraseToAnyPublisher()
     }
 }

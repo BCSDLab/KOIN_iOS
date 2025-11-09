@@ -9,6 +9,6 @@ import UIKit.UITableViewCell
 
 extension UITableViewCell {
     static var identifier: String {
-        return String(describing: type(of: self))
+        return String(describing: self)
     }
 }

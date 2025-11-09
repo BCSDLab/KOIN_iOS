@@ -32,5 +32,6 @@ protocol ShopRepository {
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, Error>
 }
 

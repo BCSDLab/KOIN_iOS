@@ -30,6 +30,8 @@ enum ShopAPI {
     
     case postCallNotification(Int)
     case uploadFiles([Data])
+    
+    case fetchSearchShop(FetchShopSearchRequest)
 }
 
 extension ShopAPI: Router, URLRequestConvertible {
@@ -59,7 +61,8 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .reportReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)/reports"
         case .uploadFiles: return "/shops/upload/files"
         case .postCallNotification(let shopId): return "/shops/\(shopId)/call-notification"
-        case .searchShop(let text): return "/shops/search/related/\(text)"
+        case .searchShop(let text): return "/shops/search/related/\(text)" // TODO: 삭제 예정
+        case .fetchSearchShop: return "/v2/shops/search/related"
         
         }
     }
@@ -119,13 +122,15 @@ extension ShopAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .reportReview(let request, _, _):
             return try? JSONEncoder().encode(request)
+        case .fetchSearchShop(let requestModel):
+            return ["keyword" : requestModel.keyword]
         }
     }
     public var encoding: ParameterEncoding? {
         switch self {
         case .fetchEventList, .fetchShopCategoryList, .fetchReviewList, .searchShop:
             return URLEncoding.default
-        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList:
+        case .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchSearchShop:
             return URLEncoding.queryString
         case .postReview, .modifyReview, .reportReview:
             return JSONEncoding.default

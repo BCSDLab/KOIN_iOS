@@ -27,40 +27,42 @@ final class ShopViewController: UIViewController {
     
     private let categoryCollectionView = OrderCategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    private let searchTextField = UITextField().then {
-        $0.placeholder = "검색어를 입력해주세요."
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.tintColor = UIColor.appColor(.neutral500)
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 12
-        $0.layer.masksToBounds = true
+    private let searchBarButton = UIButton(type: .system).then {
+        var config = UIButton.Configuration.plain()
         
-        let imageView = UIImageView(image: UIImage.appImage(asset: .search)?.withRenderingMode(.alwaysTemplate))
-        imageView.tintColor = UIColor.appColor(.neutral500)
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        if let base = UIImage.appImage(asset: .search){
+            let sized = base.withConfiguration(
+                UIImage.SymbolConfiguration(pointSize: 8, weight: .regular)
+            )
+            config.image = sized.withTintColor(
+                .appColor(.neutral500),
+                renderingMode: .alwaysTemplate
+            )
+        }
+        config.imagePlacement = .leading
+        config.imagePadding = 8
         
-        let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-        iconContainer.addSubview(imageView)
-        imageView.center = iconContainer.center
+        var titleAttribute = AttributedString("검색어를 입력해주세요.")
+        titleAttribute.font = UIFont.appFont(.pretendardRegular, size: 14)
+        titleAttribute.foregroundColor = UIColor.appColor(.neutral400)
+        config.attributedTitle = titleAttribute
         
-        $0.leftView = iconContainer
-        $0.leftViewMode = .always
+        config.background.backgroundColor = .white
+        config.background.cornerRadius = 12
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12,
+                                                       bottom: 0, trailing: 0)
         
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 32))
-        $0.rightView = paddingView
-        $0.rightViewMode = .always
+        $0.contentHorizontalAlignment = .leading
+        
+        $0.configuration = config
+        $0.tintColor = .appColor(.neutral500)
         
         $0.layer.shadowColor = UIColor.black.cgColor
         $0.layer.shadowOffset = CGSize(width: 0, height: 2)
         $0.layer.shadowRadius = 4
         $0.layer.shadowOpacity = 0.04
         $0.layer.masksToBounds = false
-        
-        $0.setNeedsLayout()
     }
-    
     private let searchedShopCollectionView = RelatedShopCollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
@@ -185,7 +187,6 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
         hideKeyboardWhenTappedAround()
         setAddTarget()
-        searchTextField.delegate = self
         scrollView.delegate = self
     }
     
@@ -279,14 +280,13 @@ final class ShopViewController: UIViewController {
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음"
+            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음" 
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                                fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
-                                                fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
-                                                fetchShopDataUseCase: fetchShopDataUseCase,
+                                                 fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+                                                 fetchShopDataUseCase: fetchShopDataUseCase,
                                                  logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                shopId: shopId)
+                                                 shopId: shopId)
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
             viewController.title = shopName
             let currentPage = shopName
@@ -300,10 +300,7 @@ final class ShopViewController: UIViewController {
     }
     
     private func setAddTarget() {
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        
-        searchTextField.addTarget(self, action: #selector(searchDidBegin(_:)), for: .editingDidBegin)
-
+        searchBarButton.addTarget(self, action: #selector(searchBarButtonTapped), for: .touchUpInside)
         
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
@@ -313,26 +310,16 @@ final class ShopViewController: UIViewController {
 
 // MARK: - @objc
 extension ShopViewController {
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        searchedShopCollectionView.isHidden = false
-        dimView.isHidden = false
-        inputSubject.send(.searchTextChanged(text))
-    }
-    
-    @objc private func searchDidBegin(_ textField: UITextField) {
-        let currentCategoryName = viewModel.selectedCategoryName
-
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
-    }
-
-
-    @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
-        if !searchTextField.frame.contains(sender.location(in: view)) {
-            searchedShopCollectionView.isHidden = true
-            dimView.isHidden = true
-            searchTextField.resignFirstResponder()
-        }
+    @objc private func searchBarButtonTapped() {
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        let fetchSearchShopUseCase = DefaultFetchSearchShopUseCase(repository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = ShopSearchViewModel(fetchSearchShopUseCase: fetchSearchShopUseCase,
+                                            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                            selectedCategoryName: viewModel.selectedCategoryName)
+        let viewController = ShopSearchViewController(viewModel: viewModel)
+        navigationControllerDelegate?.pushViewController(viewController, animated: true)
     }
 
     @objc private func sortButtonTapped() {
@@ -414,7 +401,7 @@ extension ShopViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [categoryCollectionView, searchTextField, searchedShopCollectionView, dimView, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView].forEach {
+        [categoryCollectionView, searchBarButton, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -429,26 +416,14 @@ extension ShopViewController {
             $0.width.equalToSuperview()
         }
 
-        searchTextField.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
-            $0.leading.trailing.equalToSuperview().inset(16)
+        searchBarButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(8)
+            $0.leading.trailing.equalToSuperview().inset(24)
             $0.height.equalTo(40)
         }
 
-        searchedShopCollectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-
-        dimView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom)
-            $0.leading.trailing.equalTo(searchedShopCollectionView)
-            $0.bottom.equalToSuperview()
-        }
-
         categoryCollectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom).offset(12)
+            $0.top.equalTo(searchBarButton.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(71)
         }
