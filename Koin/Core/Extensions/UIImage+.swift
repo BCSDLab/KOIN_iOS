@@ -119,6 +119,7 @@ enum ImageAsset: String {
     case checkFill
     case checkEmpty
     case callBlue
+    case callNew
     case qrCode
     case incorrectInfo
     case swap
