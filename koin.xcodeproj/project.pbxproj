@@ -162,7 +162,6 @@
 		B6183EAB2EC09DC800C88BCF /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6183EAA2EC09DC800C88BCF /* RadioButton.swift */; };
 		B6183EAE2EC0A19A00C88BCF /* RadioButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6183EAD2EC0A19A00C88BCF /* RadioButtonState.swift */; };
 		B6183EB02EC0A1A600C88BCF /* RadioButtonColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6183EAF2EC0A1A600C88BCF /* RadioButtonColors.swift */; };
-		B6183EB22EC0A1AC00C88BCF /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6183EB12EC0A1AC00C88BCF /* RadioButtonGroup.swift */; };
 		B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61FAA162EA3A39D005BE539 /* Typography.swift */; };
 		B68D2CE32EA505A300F3B479 /* ToastConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE22EA505A300F3B479 /* ToastConfig.swift */; };
 		B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */; };
@@ -848,7 +847,6 @@
 		B6183EAA2EC09DC800C88BCF /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		B6183EAD2EC0A19A00C88BCF /* RadioButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonState.swift; sourceTree = "<group>"; };
 		B6183EAF2EC0A1A600C88BCF /* RadioButtonColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonColors.swift; sourceTree = "<group>"; };
-		B6183EB12EC0A1AC00C88BCF /* RadioButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
 		B61FAA162EA3A39D005BE539 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		B68D2CE22EA505A300F3B479 /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
 		B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastIntent.swift; sourceTree = "<group>"; };
@@ -1871,7 +1869,6 @@
 				B6183EAA2EC09DC800C88BCF /* RadioButton.swift */,
 				B6183EAD2EC0A19A00C88BCF /* RadioButtonState.swift */,
 				B6183EAF2EC0A1A600C88BCF /* RadioButtonColors.swift */,
-				B6183EB12EC0A1AC00C88BCF /* RadioButtonGroup.swift */,
 			);
 			path = RadioButton;
 			sourceTree = "<group>";
@@ -4194,7 +4191,6 @@
 				D27DD0C62BA608310081FD36 /* UIImageView+.swift in Sources */,
 				83A261802C77358300383BC9 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
-				B6183EB22EC0A1AC00C88BCF /* RadioButtonGroup.swift in Sources */,
 				83FA918D2C81E78B0090351F /* NoticeListCollectionViewCell.swift in Sources */,
 				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				83EBB8842D0FF89000346018 /* BusSearchResultTableViewFooter.swift in Sources */,
