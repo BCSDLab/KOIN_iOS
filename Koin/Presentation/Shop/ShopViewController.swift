@@ -245,15 +245,13 @@ final class ShopViewController: UIViewController {
             let repository = DefaultShopRepository(service: service)
             
             let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
-            let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: repository)
-            let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
+            let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
             
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                                fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
-                                                fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
-                                                fetchShopDataUseCase: fetchShopDataUseCase,
-                                                shopId: shopId)
+                                                 fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+                                                 fetchShopDataUseCase: fetchShopDataUseCase,
+                                                 shopId: shopId)
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
             viewController.title = shopName
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
