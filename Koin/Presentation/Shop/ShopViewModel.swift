@@ -49,10 +49,13 @@ final class ShopViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private var categories: [ShopCategory] = []
+    var selectedCategoryName: String { categoryName(for: selectedId) }
     private var lastCategoryId: Int?
     
     private var subscriptions: Set<AnyCancellable> = []
     private var shopList: [Shop] = []
+    
+    
     
     private var sortStandard: FetchShopListRequest = .init(sorter: .none, filter: [], query: nil)
     private(set) var selectedId: Int
@@ -191,7 +194,7 @@ extension ShopViewModel {
             }).store(in: &subscriptions)
     }
     
-    private func categoryName(for id: Int) -> String {
+    func categoryName(for id: Int) -> String {
         if id == 0 { return "전체보기" }
         return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
     }

@@ -19,9 +19,6 @@ final class ShopViewController: UIViewController {
     
     private let navigationControllerDelegate: UINavigationController?
     
-    private var categories: [ShopCategory] = []
-    private var currentCategoryId: Int = 0
-    
     private var didTapBack = false
     
     // MARK: - UI Components
@@ -200,7 +197,6 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
-        self.currentCategoryId = viewModel.selectedId
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -208,7 +204,7 @@ final class ShopViewController: UIViewController {
         guard !didTapBack, (self.parent?.isMovingFromParent ?? false) else { return }
         didTapBack = true
         
-        let previousPage = getCategoryName(for: currentCategoryId)
+        let previousPage = viewModel.selectedCategoryName
         let currentPage = "메인"
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
@@ -216,7 +212,6 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, eventCategory, currentPage, previousPage, nil, nil, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
         eventShopCollectionView.stopAutoScroll()
-        self.currentCategoryId = viewModel.selectedId
     }
     
     deinit {
@@ -262,13 +257,11 @@ final class ShopViewController: UIViewController {
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             guard let self else { return }
             
-            let previousPage = self.getCategoryName(for: self.currentCategoryId)
-            let currentPage  = self.getCategoryName(for: categoryId)
+            let previousPage = self.viewModel.selectedCategoryName
+            let currentPage  = self.viewModel.categoryName(for: categoryId)
             
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
-            
-            self.currentCategoryId = categoryId
             
             self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self.inputSubject.send(.changeCategory(categoryId))
@@ -287,7 +280,7 @@ final class ShopViewController: UIViewController {
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            let previousPage = self?.getCategoryName(for: self?.currentCategoryId ?? 0) ?? "알 수 없음"
+            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음"
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
                                                 fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
                                                 fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
@@ -329,7 +322,7 @@ extension ShopViewController {
     }
     
     @objc private func searchDidBegin(_ textField: UITextField) {
-        let currentCategoryName = getCategoryName(for: currentCategoryId)
+        let currentCategoryName = viewModel.selectedCategoryName
 
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
     }
@@ -348,7 +341,7 @@ extension ShopViewController {
         
         let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
         
-        let categoryName = getCategoryName(for: currentCategoryId)
+        let categoryName = viewModel.selectedCategoryName
 
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
@@ -380,7 +373,7 @@ extension ShopViewController {
 extension ShopViewController {
     private func handleOpenShopToggle() {
         openShopToggleButton.isSelected.toggle()
-        let categoryName = getCategoryName(for: currentCategoryId)
+        let categoryName = viewModel.selectedCategoryName
         let value = "check_open_\(categoryName)"
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         inputSubject.send(.filterOpenShops(openShopToggleButton.isSelected))
@@ -396,7 +389,6 @@ extension ShopViewController {
     }
 
     private func putImage(data: ShopCategoryDto) {
-        self.categories = data.shopCategories
         categoryCollectionView.updateCategories(data.shopCategories)
     }
 
@@ -415,11 +407,6 @@ extension ShopViewController {
             eventShopCollectionView.setEventShops(eventShops)
             eventIndexLabel.text = "1/\(eventShops.count)"
         }
-    }
-    
-    private func getCategoryName(for id: Int) -> String {
-        if id == 0 { return "전체보기" }
-        return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
     }
 }
 
@@ -523,7 +510,7 @@ extension ShopViewController: UIScrollViewDelegate {
     }
     
     private func makeScrollLog() {
-        let categoryName = getCategoryName(for: currentCategoryId)
+        let categoryName = viewModel.selectedCategoryName
         
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
     }
