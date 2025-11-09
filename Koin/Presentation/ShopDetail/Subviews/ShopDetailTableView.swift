@@ -53,7 +53,7 @@ extension ShopDetailTableView {
                 return IndexPath(row: 0, section: 0)
             }
         }()
-        guard indexPath.section < (isFromOrder ? 6 : 2) else {
+        guard indexPath.section < (isFromOrder ? 6 : 3) else {
             return
         }
         scrollToRow(at: indexPath, at: .top, animated: true)
@@ -63,7 +63,7 @@ extension ShopDetailTableView {
 extension ShopDetailTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return isFromOrder ? 6 : 2
+        return isFromOrder ? 6 : 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -84,10 +84,18 @@ extension ShopDetailTableView: UITableViewDataSource {
             cell.configure(title: "가게 소개", introduction: shopDetail.introduction)
             return cell
         case 2:
-            let cell = ShopDetailTableViewNoticeCell()
-            cell.configure(title: "가게 알림", notice: shopDetail.notice)
-            cell.backgroundColor = .appColor(shouldHighlight == .notice ? .neutral100 : .neutral0)
-            return cell
+            switch isFromOrder {
+            case true:
+                let cell = ShopDetailTableViewNoticeCell()
+                cell.configure(title: "가게 알림", notice: shopDetail.notice)
+                cell.backgroundColor = .appColor(shouldHighlight == .notice ? .neutral100 : .neutral0)
+                return cell
+            case false:
+                let cell = ShopDetailTableViewDeliveryTipsCell()
+                cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopDetail.deliveryTips)
+                cell.backgroundColor = .appColor(shouldHighlight == .deliveryTips ? .neutral100 : .neutral0)
+                return cell
+            }
         case 3:
             let cell = ShopDetailTableViewDeliveryTipsCell()
             cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopDetail.deliveryTips)
