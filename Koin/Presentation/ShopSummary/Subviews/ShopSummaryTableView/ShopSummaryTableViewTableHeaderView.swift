@@ -49,7 +49,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     
     // MARK: - Initializer
     init() {
-        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 1.21 + 212 + 8 + 66)
+        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 1.21 + 212 + 8 + 66 + 56)
         super.init(frame: frame)
         configureView()
         bind()
@@ -113,6 +113,9 @@ extension ShopSummaryTableViewTableHeaderView {
         imagesCollectionView.configure(orderImage: orderShopSummary.images)
         imagesPageControl.numberOfPages = orderShopSummary.images.count
         shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
+        
+        // test
+        shopSummaryInfoView.configure(phonenumber: "010-1234-5678")
     }
     func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
