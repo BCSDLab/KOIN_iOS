@@ -13,6 +13,7 @@ final class ShopSummaryInfoView: UIView {
     // MARK: - Properties
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
@@ -198,6 +199,7 @@ extension ShopSummaryInfoView {
         moreInfoButton.addTarget(self, action: #selector(moreInfoButtonTapped), for: .touchUpInside)
         orderAmountDelieveryTipButton.addTarget(self, action: #selector(orderAmountDelieveryTipButtonTapped), for: .touchUpInside)
         introductionButton.addTarget(self, action: #selector(introductionButtonTapped), for: .touchUpInside)
+        phoneButton.addTarget(self, action: #selector(phoneButtonTapped), for: .touchUpInside)
     }
     
     @objc private func moreInfoButtonTapped() {
@@ -208,6 +210,9 @@ extension ShopSummaryInfoView {
     }
     @objc private func introductionButtonTapped() {
         navigateToShopInfoPublisher.send(.notice)
+    }
+    @objc private func phoneButtonTapped() {
+        phoneButtonTappedPublisher.send()
     }
 }
 

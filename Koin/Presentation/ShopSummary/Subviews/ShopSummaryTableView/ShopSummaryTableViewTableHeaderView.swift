@@ -16,6 +16,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -92,6 +93,11 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
         shopSummaryInfoView.reviewButtonTappedPublisher
             .sink { [weak self] in
                 self?.reviewButtonTappedPublisher.send()
+            }
+            .store(in: &subscriptions)
+        shopSummaryInfoView.phoneButtonTappedPublisher
+            .sink { [weak self] in
+                self?.phoneButtonTappedPublisher.send()
             }
             .store(in: &subscriptions)
     }

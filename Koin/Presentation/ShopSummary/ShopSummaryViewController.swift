@@ -192,6 +192,11 @@ extension ShopSummaryViewController {
         }
             .store(in: &subscriptions)
         
+        tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
+            self?.makePhonecall()
+            }
+            .store(in: &subscriptions)
+        
         // MARK: - GroupNameCollectionView
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
             self?.tableHeaderView.update(contentOffset: contentOffset)
@@ -320,7 +325,6 @@ extension ShopSummaryViewController {
         } else {
             let service = DefaultOrderService()
             let repository = DefaultOrderShopRepository(service: service)
-            let useCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
             let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
@@ -364,6 +368,20 @@ extension ShopSummaryViewController {
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
         reviewListViewController.title = "리뷰"
         navigationController?.pushViewController(reviewListViewController, animated: true)
+    }
+}
+
+extension ShopSummaryViewController {
+    
+    private func makePhonecall() {
+        if let phoneUrl = URL(string: "tel://" + self.viewModel.phonenumber.replacingOccurrences(of: "-", with: "")),
+           UIApplication.shared.canOpenURL(phoneUrl){
+            print("open")
+            UIApplication.shared.open(phoneUrl)
+        }
+        else {
+            print("parsing error")
+        }
     }
 }
 

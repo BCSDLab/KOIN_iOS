@@ -34,6 +34,7 @@ final class ShopSummaryViewModel {
     // MARK: - Properties
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private(set) var phonenumber: String = ""
     
     // 기본정보 OrderApi
     private let fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?
@@ -231,6 +232,7 @@ extension ShopSummaryViewModel {
         fetchOrderShopDetailUseCase?.execute(orderableShopId: orderableShopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] orderShopDetail in
+                self?.phonenumber = orderShopDetail.phone
                 self?.outputSubject.send(.updatePhonenumber(phonenumber: orderShopDetail.phone))
             })
             .store(in: &subscriptions)
@@ -267,6 +269,7 @@ extension ShopSummaryViewModel {
         fetchShopDataUseCase?.execute(shopId: shopId)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, payBank: $0.payBank, payCard: $0.payCard))
+                self?.phonenumber = $0.phone
                 self?.outputSubject.send(.updatePhonenumber(phonenumber: $0.phone))
                 self?.outputSubject.send(.updateOrderAmountDeliveryTips(maxDeliveryTip: $0.deliveryPrice))
             })
