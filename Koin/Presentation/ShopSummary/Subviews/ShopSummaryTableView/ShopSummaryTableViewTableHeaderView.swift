@@ -113,10 +113,19 @@ extension ShopSummaryTableViewTableHeaderView {
         imagesCollectionView.configure(orderImage: orderShopSummary.images)
         imagesPageControl.numberOfPages = orderShopSummary.images.count
         shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
-        
-        // test
-        shopSummaryInfoView.configure(phonenumber: "010-1234-5678")
     }
+    
+    func configure(phonenumber: String) {
+        shopSummaryInfoView.configure(phonenumber: phonenumber)
+    }
+    
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+        shopSummaryInfoView.configure(minOrderAmount: minOrderAmount,
+                                      minDeliveryTip: minDeliveryTip,
+                                      maxDelieveryTip: maxDelieveryTip,
+                                      isFromOrder: isFromOrder)
+    }
+    
     func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
     }

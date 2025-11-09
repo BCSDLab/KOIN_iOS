@@ -88,16 +88,19 @@ final class ShopSummaryInfoView: UIView {
         phoneButton.configure(phonenumber: phonenumber)
     }
     
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+        orderAmountDelieveryTipButton.configure(minOrderAmount: minOrderAmount,
+                                                minDeliveryTip: minDeliveryTip,
+                                                maxDelieveryTip: maxDelieveryTip,
+                                                isFromOrder: isFromOrder)
+        
+    }
+    
     func configure(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
         setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
         setUpMoreInfoButton(isFromOrder: isFromOrder)
-        orderAmountDelieveryTipButton.configure(
-            minOrderAmount: orderShopSummary.minimumOrderAmount,
-            minDeliveryTip: orderShopSummary.minimumDeliveryTip,
-            maxDelieveryTip: orderShopSummary.maximumDeliveryTip,
-            isFromOrder: isFromOrder)
         introductionButton.configure(introduction: orderShopSummary.introduction)
     }
     

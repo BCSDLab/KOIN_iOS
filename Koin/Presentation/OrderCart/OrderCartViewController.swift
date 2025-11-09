@@ -97,6 +97,7 @@ final class OrderCartViewController: UIViewController {
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
             let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
+            let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: repository)
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -104,7 +105,8 @@ final class OrderCartViewController: UIViewController {
                                                 fetchCartUseCase: fetchCartUseCase,
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
-                                                fetchOrderMenuUseCase: fetchOrderMenuUseCase,
+                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
+                                                 fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
                                                 orderableShopId: orderableShopId)
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
             self.navigationController?.pushViewController(viewController, animated: true)

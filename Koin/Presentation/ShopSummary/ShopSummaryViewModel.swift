@@ -27,6 +27,8 @@ final class ShopSummaryViewModel {
         case updateIsAddingMenuAvailable(Bool)
         case updateCartItemsCount(count: Int)
         case updateMenuDetail(OrderMenu)
+        case updatePhonenumber(phonenumber: String)
+        case updateOrderAmountDeliveryTips(minOrderAmount: Int = 0, minDeliveryTip: Int = 0, maxDeliveryTip: Int = 0)
     }
     
     // MARK: - Properties
@@ -37,6 +39,7 @@ final class ShopSummaryViewModel {
     private let fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase?
     private let fetchOrderShopMenusGroupsUseCase: FetchOrderShopMenusGroupsUseCase?
     private let fetchOrderShopMenusUseCase: FetchOrderShopMenusUseCase?
+    private let fetchOrderShopDetailUseCase: FetchOrderShopDetailUseCase?
     
     // 기본정보 ShopApi
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase?
@@ -69,11 +72,13 @@ final class ShopSummaryViewModel {
          fetchCartItemsCountUseCase: DefaultFetchCartItemsCountUseCase,
          resetCartUseCase: DefaultResetCartUseCase,
          fetchOrderMenuUseCase: FetchOrderMenuUseCase,
+         fetchOrderShopDetailUseCase: FetchOrderShopDetailUseCase,
          orderableShopId: Int) {
         // 기본정보 OrderApi
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
         self.fetchOrderShopMenusGroupsUseCase = fetchOrderShopMenusGroupsUseCase
+        self.fetchOrderShopDetailUseCase = fetchOrderShopDetailUseCase
         // 장바구니 OrderApi
         self.fetchCartSummaryUseCase = fetchCartSummaryUseCase
         self.fetchCartUseCase = fetchCartUseCase
@@ -83,6 +88,7 @@ final class ShopSummaryViewModel {
         self.fetchOrderShopSummaryFromShopUseCase = nil
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = nil
         self.fetchShopDataUseCase = nil
+        
         // 상세
         self.fetchOrderMenuUseCase = fetchOrderMenuUseCase
         
@@ -93,9 +99,9 @@ final class ShopSummaryViewModel {
     }
     
     // MARK: - Initializer from Shop
-    init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
-         fetchOrderShopMenusAndGroupsFromShopUseCase: DefaultFetchOrderShopMenusAndGroupsFromShopUseCase,
-         fetchShopDataUseCase: DefaultFetchShopDataUseCase,
+    init(fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase,
+         fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase,
+         fetchShopDataUseCase: FetchShopDataUseCase,
          shopId: Int) {
         // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
@@ -105,6 +111,7 @@ final class ShopSummaryViewModel {
         self.fetchOrderShopSummaryUseCase = nil
         self.fetchOrderShopMenusUseCase = nil
         self.fetchOrderShopMenusGroupsUseCase = nil
+        self.fetchOrderShopDetailUseCase = nil
         // 장바구니 OrderApi
         self.fetchCartSummaryUseCase = nil
         self.fetchCartUseCase = nil
@@ -128,6 +135,7 @@ final class ShopSummaryViewModel {
                     self.fetchOrderShopSummaryAndIsAvailable(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenus(orderableShopId: orderableShopId)
                     self.fetchOrderShopMenusGroups(orderableShopId: orderableShopId)
+                    self.fetchOrderShopPhonenumber(orderableShopId: orderableShopId)
                 }
                 else if let shopId = shopId {
                     self.fetchShopSummary(shopId: shopId)
@@ -180,11 +188,7 @@ extension ShopSummaryViewModel {
     private func fetchOrderShopSummaryAndIsAvailable(orderableShopId: Int) {
         
         fetchOrderShopSummaryUseCase?.execute(orderableShopId: orderableShopId)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print("❌ [ViewModel] Fetch failed: \(error)")
-                }
-            },
+            .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] orderShopSummary in
                 guard let self = self else { return }
                 
@@ -198,6 +202,9 @@ extension ShopSummaryViewModel {
                     payBank: orderShopSummary.payBank,
                     payCard: orderShopSummary.payCard
                 ))
+                self.outputSubject.send(.updateOrderAmountDeliveryTips(minOrderAmount: orderShopSummary.minimumOrderAmount,
+                                                                       minDeliveryTip: orderShopSummary.minimumDeliveryTip,
+                                                                       maxDeliveryTip: orderShopSummary.maximumDeliveryTip))
             })
             .store(in: &subscriptions)
     }
@@ -219,6 +226,16 @@ extension ShopSummaryViewModel {
             })
             .store(in: &subscriptions)
     }
+    
+    private func fetchOrderShopPhonenumber(orderableShopId: Int) {
+        fetchOrderShopDetailUseCase?.execute(orderableShopId: orderableShopId)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] orderShopDetail in
+                self?.outputSubject.send(.updatePhonenumber(phonenumber: orderShopDetail.phone))
+            })
+            .store(in: &subscriptions)
+    }
+    
 
     // MARK: - 기본정보 ShopApi
     
@@ -250,6 +267,8 @@ extension ShopSummaryViewModel {
         fetchShopDataUseCase?.execute(shopId: shopId)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] in
                 self?.outputSubject.send(.updateIsAvailables(delivery: $0.delivery, payBank: $0.payBank, payCard: $0.payCard))
+                self?.outputSubject.send(.updatePhonenumber(phonenumber: $0.phone))
+                self?.outputSubject.send(.updateOrderAmountDeliveryTips(maxDeliveryTip: $0.deliveryPrice))
             })
             .store(in: &subscriptions)
     }
