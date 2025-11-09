@@ -10,7 +10,7 @@ import SnapKit
 
 final class RadioButton: UIControl {
     
-    // MARK: - State
+    // MARK: - Properties
     
     override var isSelected: Bool {
         didSet {
@@ -35,6 +35,8 @@ final class RadioButton: UIControl {
             updateAppearance()
         }
     }
+    
+    // MARK: - Constants
     
     private enum Metric {
         static let circleSize: CGFloat = 20
@@ -76,17 +78,34 @@ final class RadioButton: UIControl {
     init(title: String) {
         super.init(frame: .zero)
         radioButtonTitleLabel.text = title
-        setAddTarget()
         configureView()
-        setupHoverGesture()
+        setupGestures()
         updateAppearance()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Gesture Handling
+
+extension RadioButton {
     
-    // MARK: - Hover Support
+    private func setupGestures() {
+        setupTapGesture()
+        setupHoverGesture()
+    }
+    
+    private func setupTapGesture() {
+        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+    }
+    
+    @objc private func handleTap() {
+        guard isEnabled else { return }
+        isSelected.toggle()
+        sendActions(for: .valueChanged)
+    }
     
     private func setupHoverGesture() {
         if #available(iOS 13.4, *) {
@@ -106,8 +125,12 @@ final class RadioButton: UIControl {
             break
         }
     }
+}
+
+// MARK: - Focus Handling
+
+extension RadioButton {
     
-    // MARK: - Focus Support
     override var canBecomeFocused: Bool {
         return isEnabled
     }
@@ -116,18 +139,12 @@ final class RadioButton: UIControl {
         super.didUpdateFocus(in: context, with: coordinator)
         updateAppearance()
     }
+}
+
+// MARK: - Appearance Update
+
+extension RadioButton {
     
-    private func setAddTarget() {
-        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
-    }
-    
-    @objc private func handleTap() {
-        guard isEnabled else { return }
-        isSelected.toggle()
-        sendActions(for: .valueChanged)
-    }
-    
-    // MARK: - Appearance Update
     private func updateAppearance() {
         let state = getCurrentState()
         let colors = getColors(for: state)
@@ -148,7 +165,7 @@ final class RadioButton: UIControl {
         } else if isHovered {
             return isSelected ? .hoverSelected : .hover
         } else if isSelected {
-            return  .selected
+            return .selected
         } else {
             return .normal
         }
