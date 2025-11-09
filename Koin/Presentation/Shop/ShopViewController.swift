@@ -185,7 +185,6 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
         hideKeyboardWhenTappedAround()
         setAddTarget()
-        //searchTextField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -265,7 +264,6 @@ final class ShopViewController: UIViewController {
     
     private func setAddTarget() {
         searchBarButton.addTarget(self, action: #selector(searchBarButtonTapped), for: .touchUpInside)
-        //searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
