@@ -253,7 +253,6 @@ final class HomeViewController: UIViewController {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        // FIXME: - durationTime이 0으로 들어가는 현상 수정
         categoryCollectionView.cellTapPublisher.sink { [weak self] shopName in
             guard let self = self else { return }
             
