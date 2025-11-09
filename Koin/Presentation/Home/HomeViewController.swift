@@ -178,6 +178,7 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopCategories))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -252,9 +253,15 @@ final class HomeViewController: UIViewController {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        
-        categoryCollectionView.cellTapPublisher.sink { [weak self] id in
-            self?.didTapCell(at: id)
+        categoryCollectionView.cellTapPublisher.sink { [weak self] shopName in
+            guard let self = self else { return }
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .mainShopCategories))
+
+            let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
+                        
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
+            self.didTapCell(at: shopName)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
@@ -343,6 +350,9 @@ extension HomeViewController {
                 let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
                 let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
                 let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+                
 
                 let viewModel = ShopViewModel(
                     fetchShopListUseCase: fetchShopListUseCase,
@@ -351,6 +361,8 @@ extension HomeViewController {
                     searchShopUseCase: searchShopUseCase,
                     fetchShopBenefitUseCase: fetchShopBenefitUseCase,
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                     selectedId: 0
                 )
                 let shopViewController = ShopViewController(viewModel: viewModel)

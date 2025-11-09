@@ -59,6 +59,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
+    private var shopCategories: [ShopCategory] = []
     
     // MARK: - Initialization
     init(fetchDiningListUseCase: FetchDiningListUseCase,
@@ -229,8 +230,13 @@ extension HomeViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
+            self?.shopCategories = response.shopCategories
             self?.outputSubject.send(.putImage(response))
         }.store(in: &subscriptions)
+    }
+    
+    func getCategoryName(for id: Int) -> String? {
+        return shopCategories.first(where: { $0.id == id })?.name
     }
     
     private func checkLogin() {
@@ -244,7 +250,7 @@ extension HomeViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-            if eventLabelNeededDuration == .mainShopBenefit || eventLabelNeededDuration == .benefitShopCategories {
+            if eventLabelNeededDuration == .mainShopBenefit || eventLabelNeededDuration == .benefitShopCategories || eventLabelNeededDuration == .mainShopCategories {
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             }
             

@@ -14,6 +14,7 @@ final class OrderCartViewController: UIViewController {
     private let viewModel: OrderCartViewModel
     private let inputSubject = PassthroughSubject<OrderCartViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private let backCategoryName: String
     
     // MARK: - UI Components
     private let orderCartTableHeaderView = OrderCartTableHeaderView()
@@ -37,8 +38,9 @@ final class OrderCartViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: OrderCartViewModel) {
+    init(viewModel: OrderCartViewModel, backCategoryName: String) {
         self.viewModel = viewModel
+        self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -97,6 +99,9 @@ final class OrderCartViewController: UIViewController {
             let fetchCartItemsCountUseCase = DefaultFetchCartItemsCountUseCase(repository: repository)
             let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
             let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -105,8 +110,12 @@ final class OrderCartViewController: UIViewController {
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
-                                                orderableShopId: orderableShopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId)
+                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                orderableShopId: orderableShopId
+                                                )
+            
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: self.backCategoryName)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)

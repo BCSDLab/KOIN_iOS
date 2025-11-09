@@ -26,6 +26,7 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
     let navigationBarOpacityPublisher = PassthroughSubject<Float, Never>()
     let shouldShowStickyPublisher = PassthroughSubject<Bool, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
+    let didEndScrollPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, style: UITableView.Style) {
@@ -122,6 +123,16 @@ extension ShopSummaryTableView: UIScrollViewDelegate {
         self.navigationBarOpacityPublisher.send(Float(opacity))
         self.shouldShowStickyPublisher.send(shouldShowSticky)
         self.shouldSetContentInsetPublisher.send(shouldShowSticky)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            didEndScrollPublisher.send()
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        didEndScrollPublisher.send()
     }
 }
 

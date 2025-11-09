@@ -19,6 +19,8 @@ final class ShopViewController: UIViewController {
     
     private let navigationControllerDelegate: UINavigationController?
     
+    private var didTapBack = false
+    
     // MARK: - UI Components
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -184,15 +186,31 @@ final class ShopViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         setAddTarget()
         searchTextField.delegate = self
+        scrollView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
+        self.didTapBack = false
+        inputSubject.send(.getUserScreenAction(Date(), .enterVC))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        guard !didTapBack, (self.parent?.isMovingFromParent ?? false) else { return }
+        didTapBack = true
+        
+        let previousPage = viewModel.selectedCategoryName
+        let currentPage = "메인"
+        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
+        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, eventCategory, currentPage, previousPage, nil, nil, .shopCategoriesBack))
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
         eventShopCollectionView.stopAutoScroll()
     }
     
@@ -237,7 +255,19 @@ final class ShopViewController: UIViewController {
         }.store(in: &subscriptions)
 
         categoryCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
-            self?.inputSubject.send(.changeCategory(categoryId))
+            guard let self else { return }
+            
+            let previousPage = self.viewModel.selectedCategoryName
+            let currentPage  = self.viewModel.categoryName(for: categoryId)
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
+            self.inputSubject.send(.changeCategory(categoryId))
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
@@ -247,13 +277,23 @@ final class ShopViewController: UIViewController {
             let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
             let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-            
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음"
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                                 fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                                                 fetchShopDataUseCase: fetchShopDataUseCase,
-                                                 shopId: shopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
+                                                fetchOrderShopMenusGroupsFromShopUseCase: fetchOrderShopMenusGroupsFromShopUseCase,
+                                                fetchOrderShopMenusFromShopUseCase: fetchOrderShopMenusFromShopUseCase,
+                                                fetchShopDataUseCase: fetchShopDataUseCase,
+                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                shopId: shopId)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
             viewController.title = shopName
+            let currentPage = shopName
+            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
+
+            
             self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
@@ -261,6 +301,9 @@ final class ShopViewController: UIViewController {
     
     private func setAddTarget() {
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        searchTextField.addTarget(self, action: #selector(searchDidBegin(_:)), for: .editingDidBegin)
+
         
         sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
         
@@ -276,6 +319,13 @@ extension ShopViewController {
         dimView.isHidden = false
         inputSubject.send(.searchTextChanged(text))
     }
+    
+    @objc private func searchDidBegin(_ textField: UITextField) {
+        let currentCategoryName = viewModel.selectedCategoryName
+
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
+    }
+
 
     @objc private func dismissCollectionView(_ sender: UITapGestureRecognizer) {
         if !searchTextField.frame.contains(sender.location(in: view)) {
@@ -290,8 +340,17 @@ extension ShopViewController {
         
         let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
         
+        let categoryName = viewModel.selectedCategoryName
+
         bottomSheetViewController.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
+            let value: String
+            switch sort {
+            case .basic: value = "check_default_\(categoryName)"
+            case .review: value = "check_review_\(categoryName)"
+            case .rating: value = "check_star_\(categoryName)"
+            }
+            self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         }
         
         bottomSheetViewController.modalPresentationStyle = .pageSheet
@@ -313,6 +372,9 @@ extension ShopViewController {
 extension ShopViewController {
     private func handleOpenShopToggle() {
         openShopToggleButton.isSelected.toggle()
+        let categoryName = viewModel.selectedCategoryName
+        let value = "check_open_\(categoryName)"
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         inputSubject.send(.filterOpenShops(openShopToggleButton.isSelected))
     }
 
@@ -434,3 +496,21 @@ extension ShopViewController {
     }
 }
 
+extension ShopViewController: UIScrollViewDelegate {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate && scrollView == self.scrollView {
+            makeScrollLog()
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == self.scrollView {
+            makeScrollLog()
+        }
+    }
+    
+    private func makeScrollLog() {
+        let categoryName = viewModel.selectedCategoryName
+        
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
+    }
+}
