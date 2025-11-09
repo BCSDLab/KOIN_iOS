@@ -23,7 +23,7 @@ final class ShopSummaryViewController: UIViewController {
     private var cachedShopName: String?
     
     private var didTapBack = false
-    private let backCategoryName: String
+    private let backCategoryName: String?
     
     // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
@@ -66,7 +66,7 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?, backCategoryName: String) {
+    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?, backCategoryName: String? = nil) {
         self.viewModel = viewModel
         self.isFromOrder = isFromOrder
         self.cachedShopId = viewModel.getShopId()
@@ -106,7 +106,9 @@ final class ShopSummaryViewController: UIViewController {
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
         
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
+        if currentPage != nil {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
+        }
     }
 }
 
@@ -365,7 +367,8 @@ extension ShopSummaryViewController {
                                                fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
                                                deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
                                                resetCartUseCase: resetCartUseCase)
-            let viewController = OrderCartViewController(viewModel: viewModel,backCategoryName: self.backCategoryName)
+            let backCategoryName = self.backCategoryName ?? "알 수 없음" // FIXME: 
+            let viewController = OrderCartViewController(viewModel: viewModel, backCategoryName: backCategoryName)
             viewController.title = "장바구니"
             navigationController?.pushViewController(viewController, animated: true)
         }

@@ -106,14 +106,13 @@ final class ShopSearchViewController: UIViewController {
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            let previousPage = "알 수 없음" //self?.viewModel.selectedCategoryName ?? "알 수 없음" // FIXME: 이거 뭐예요ㅠㅠ
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
                                                  fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
                                                  fetchShopDataUseCase: fetchShopDataUseCase,
                                                  logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                                  shopId: shopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
@@ -174,14 +173,13 @@ extension ShopSearchViewController {
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let previousPage = "알 수 없음" //self?.viewModel.selectedCategoryName ?? "알 수 없음" // FIXME: 이거 뭐예요ㅠㅠ
         let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
                                              fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
                                              fetchShopDataUseCase: fetchShopDataUseCase,
                                              logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                              getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                              shopId: shopId)
-        let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
+        let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
