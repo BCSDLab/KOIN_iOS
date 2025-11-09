@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import SnapKit
 
 final class RadioButton: UIControl {
     
     // MARK: - State
+    
     override var isSelected: Bool {
         didSet {
             updateAppearance()
@@ -28,38 +30,54 @@ final class RadioButton: UIControl {
         }
     }
     
-    var isEmphasized: Bool = false {
-        didSet {
-            updateAppearance()
-        }
-    }
-    
     private var isHovered: Bool = false {
         didSet {
             updateAppearance()
         }
     }
     
-    // MARK: - UI Components
-    private let focusRingView = UIView()
-    private let circleView = UIView()
-    private let innerCircleView = UIView()
-    private let label = UILabel()
-    
-    // MARK: - Constants
     private enum Metric {
-        static let circleSize: CGFloat = 24
-        static let innerCircleSize: CGFloat = 12
+        static let circleSize: CGFloat = 20
+        static let innerCircleSize: CGFloat = 11.67
         static let focusRingSize: CGFloat = 28
-        static let spacing: CGFloat = 8
+        static let spacing: CGFloat = 12
     }
     
-    // MARK: - Initialization
+    // MARK: - UI Components
+    
+    private let focusRingView = UIView().then {
+        $0.isUserInteractionEnabled = false
+        $0.layer.borderWidth = 2
+        $0.layer.borderColor = UIColor.purple700.cgColor
+        $0.alpha = 0
+        $0.layer.cornerRadius = Metric.focusRingSize / 2
+    }
+    
+    private let circleView = UIView().then {
+        $0.isUserInteractionEnabled = false
+        $0.layer.borderWidth = 2
+        $0.layer.cornerRadius = Metric.circleSize / 2
+    }
+    
+    private let innerCircleView = UIView().then {
+        $0.isUserInteractionEnabled = false
+        $0.alpha = 0
+        $0.layer.cornerRadius = Metric.innerCircleSize / 2
+    }
+    
+    private let radioButtonTitleLabel = UILabel().then {
+        $0.font = .setFont(.body1)
+        $0.textColor = .gray800
+        $0.isUserInteractionEnabled = false
+    }
+    
+    // MARK: - Initialize
+    
     init(title: String) {
         super.init(frame: .zero)
-        label.text = title
-        setupUI()
-        setupLayout()
+        radioButtonTitleLabel.text = title
+        setAddTarget()
+        configureView()
         setupHoverGesture()
         updateAppearance()
     }
@@ -68,71 +86,8 @@ final class RadioButton: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup
-    private func setupUI() {
-        // Focus ring view
-        focusRingView.isUserInteractionEnabled = false
-        focusRingView.layer.borderWidth = 2
-        focusRingView.layer.borderColor = UIColor.systemPurple.cgColor
-        focusRingView.alpha = 0
-        addSubview(focusRingView)
-        
-        // Circle view
-        circleView.isUserInteractionEnabled = false
-        circleView.layer.borderWidth = 2
-        addSubview(circleView)
-        
-        // Inner circle view
-        innerCircleView.isUserInteractionEnabled = false
-        innerCircleView.alpha = 0
-        circleView.addSubview(innerCircleView)
-        
-        // Label
-        label.font = .systemFont(ofSize: 16)
-        label.isUserInteractionEnabled = false
-        addSubview(label)
-        
-        // Touch handling
-        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
-    }
-    
-    private func setupLayout() {
-        focusRingView.translatesAutoresizingMaskIntoConstraints = false
-        circleView.translatesAutoresizingMaskIntoConstraints = false
-        innerCircleView.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            // Focus ring view
-            focusRingView.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
-            focusRingView.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
-            focusRingView.widthAnchor.constraint(equalToConstant: Metric.focusRingSize),
-            focusRingView.heightAnchor.constraint(equalToConstant: Metric.focusRingSize),
-            
-            // Circle view
-            circleView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            circleView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            circleView.widthAnchor.constraint(equalToConstant: Metric.circleSize),
-            circleView.heightAnchor.constraint(equalToConstant: Metric.circleSize),
-            
-            // Inner circle view
-            innerCircleView.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
-            innerCircleView.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
-            innerCircleView.widthAnchor.constraint(equalToConstant: Metric.innerCircleSize),
-            innerCircleView.heightAnchor.constraint(equalToConstant: Metric.innerCircleSize),
-            
-            // Label
-            label.leadingAnchor.constraint(equalTo: circleView.trailingAnchor, constant: Metric.spacing),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-        
-        focusRingView.layer.cornerRadius = Metric.focusRingSize / 2
-        circleView.layer.cornerRadius = Metric.circleSize / 2
-        innerCircleView.layer.cornerRadius = Metric.innerCircleSize / 2
-    }
-    
     // MARK: - Hover Support
+    
     private func setupHoverGesture() {
         if #available(iOS 13.4, *) {
             let hoverGesture = UIHoverGestureRecognizer(target: self, action: #selector(handleHover(_:)))
@@ -162,7 +117,10 @@ final class RadioButton: UIControl {
         updateAppearance()
     }
     
-    // MARK: - Touch Handling (Toggle 기능)
+    private func setAddTarget() {
+        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+    }
+    
     @objc private func handleTap() {
         guard isEnabled else { return }
         isSelected.toggle()
@@ -174,26 +132,23 @@ final class RadioButton: UIControl {
         let state = getCurrentState()
         let colors = getColors(for: state)
         
-        // 애니메이션 제거 - 직접 업데이트
         circleView.layer.borderColor = colors.border.cgColor
-        circleView.backgroundColor = colors.background
         innerCircleView.backgroundColor = colors.innerCircle
         innerCircleView.alpha = isSelected ? 1 : 0
-        label.textColor = colors.text
         focusRingView.alpha = isFocused ? 1 : 0
     }
     
     private func getCurrentState() -> RadioButtonState {
         if !isEnabled {
-            return .disabled
+            return isSelected ? .disabledSelected : .disabled
         } else if isFocused {
-            return isSelected ? (isEmphasized ? .focusSelectedEmphasized : .focusSelected) : .focus
+            return isSelected ? .focusSelected : .focus
         } else if isHighlighted {
-            return isSelected ? (isEmphasized ? .touchSelectedEmphasized : .touchSelected) : .touch
+            return isSelected ? .touchSelected : .touch
         } else if isHovered {
-            return isSelected ? (isEmphasized ? .hoverSelectedEmphasized : .hoverSelected) : .hover
+            return isSelected ? .hoverSelected : .hover
         } else if isSelected {
-            return isEmphasized ? .selectedEmphasized : .selected
+            return  .selected
         } else {
             return .normal
         }
@@ -201,170 +156,102 @@ final class RadioButton: UIControl {
     
     private func getColors(for state: RadioButtonState) -> RadioButtonColors {
         switch state {
-        // Not Selected States
         case .normal:
             return RadioButtonColors(
-                border: UIColor.appColor(.gray),
-                background: .clear,
-                innerCircle: .clear,
-                text: .label
+                border: .gray700,
+                innerCircle: .clear
             )
-        case .hover:
-            return RadioButtonColors(
-                border: .systemGray2,
-                background: .systemGray6,
-                innerCircle: .clear,
-                text: .label
-            )
-        case .touch:
-            return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.1),
-                innerCircle: .clear,
-                text: .label
-            )
-        case .focus:
-            return RadioButtonColors(
-                border: .systemPurple,
-                background: .clear,
-                innerCircle: .clear,
-                text: .label
-            )
-            
-        // Selected States
         case .selected:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .clear,
-                innerCircle: .systemPurple,
-                text: .label
-            )
-        case .selectedEmphasized:
-            return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.15),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .purple700,
+                innerCircle: .purple700
             )
             
-        // Selected + Interactive States
+        case .hover:
+            return RadioButtonColors(
+                border: .gray600,
+                innerCircle: .clear
+            )
         case .hoverSelected:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.05),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .purple600,
+                innerCircle: .purple600
             )
-        case .hoverSelectedEmphasized:
+            
+        case .touch:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.2),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .gray800,
+                innerCircle: .clear
             )
         case .touchSelected:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.15),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .purple800,
+                innerCircle: .purple800
             )
-        case .touchSelectedEmphasized:
+            
+        case .focus:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.25),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .gray600,
+                innerCircle: .clear
             )
         case .focusSelected:
             return RadioButtonColors(
-                border: .systemPurple,
-                background: .clear,
-                innerCircle: .systemPurple,
-                text: .label
-            )
-        case .focusSelectedEmphasized:
-            return RadioButtonColors(
-                border: .systemPurple,
-                background: .systemPurple.withAlphaComponent(0.15),
-                innerCircle: .systemPurple,
-                text: .label
+                border: .purple600,
+                innerCircle: .purple600
             )
             
-        // Disabled
         case .disabled:
             return RadioButtonColors(
-                border: .systemGray4,
-                background: .clear,
-                innerCircle: .systemGray4,
-                text: .systemGray3
+                border: .gray400,
+                innerCircle: .clear
+            )
+        case .disabledSelected:
+            return RadioButtonColors(
+                border: .gray400,
+                innerCircle: .gray400
             )
         }
     }
 }
 
-// MARK: - Supporting Types
-enum RadioButtonState {
-    // Not Selected
-    case normal
-    case hover
-    case touch
-    case focus
-    
-    // Selected
-    case selected
-    case selectedEmphasized
-    
-    // Selected + Interactive
-    case hoverSelected
-    case hoverSelectedEmphasized
-    case touchSelected
-    case touchSelectedEmphasized
-    case focusSelected
-    case focusSelectedEmphasized
-    
-    // Disabled
-    case disabled
-}
+// MARK: - UI Functions
 
-struct RadioButtonColors {
-    let border: UIColor
-    let background: UIColor
-    let innerCircle: UIColor
-    let text: UIColor
-}
-
-final class RadioButtonGroup {
-    private var buttons: [RadioButton] = []
-    var selectedButton: RadioButton?
+extension RadioButton {
     
-    var onSelectionChanged: ((RadioButton?) -> Void)?
-    
-    func addButton(_ button: RadioButton) {
-        buttons.append(button)
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .valueChanged)
-    }
-    
-    @objc private func buttonTapped(_ button: RadioButton) {
-        if button.isSelected {
-            // 선택된 버튼을 다시 눌렀을 때 - 다른 버튼들은 해제
-            buttons.forEach {
-                if $0 != button {
-                    $0.isSelected = false
-                }
-            }
-            selectedButton = button
-        } else {
-            // 선택 해제된 경우
-            if selectedButton == button {
-                selectedButton = nil
-            }
+    private func setUpLayout() {
+        [focusRingView, circleView, radioButtonTitleLabel].forEach {
+            addSubview($0)
         }
-        onSelectionChanged?(selectedButton)
+        
+        circleView.addSubview(innerCircleView)
     }
     
-    func deselectAll() {
-        buttons.forEach { $0.isSelected = false }
-        selectedButton = nil
+    private func setUpConstraints() {
+        focusRingView.snp.makeConstraints {
+            $0.center.equalTo(circleView)
+            $0.size.equalTo(Metric.focusRingSize)
+        }
+        
+        circleView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.size.equalTo(Metric.circleSize)
+        }
+        
+        innerCircleView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(Metric.innerCircleSize)
+        }
+        
+        radioButtonTitleLabel.snp.makeConstraints {
+            $0.leading.equalTo(circleView.snp.trailing).offset(Metric.spacing)
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+    }
+    
+    private func configureView() {
+        setUpLayout()
+        setUpConstraints()
     }
 }
