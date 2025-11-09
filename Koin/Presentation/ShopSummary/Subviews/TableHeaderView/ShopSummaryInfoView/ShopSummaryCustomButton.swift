@@ -67,12 +67,18 @@ final class ShopSummaryCustomButton: UIButton {
         introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction ?? "공지사항")
         configureIntroductionView()
     }
-    func configure(minOrderAmount: Int?, minDeliveryTip: Int?, maxDelieveryTip: Int?, isFromOrder: Bool) {
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
         //if isFromOrder {
         
         configureOrderAmountDelieveryTipView()
-        minimumOrderSubLabel.text = "\((minOrderAmount ?? 0).formattedWithComma)원"
-        deliveryTipSubLabel.text = "\((minDeliveryTip ?? 0).formattedWithComma) - \((maxDelieveryTip ?? 0).formattedWithComma)원"
+        minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
+        
+        if minDeliveryTip == 0, maxDelieveryTip == 0 {
+            deliveryTipSubLabel.text = "0원"
+        }
+        else {
+            deliveryTipSubLabel.text = "\(minDeliveryTip.formattedWithComma) - \(maxDelieveryTip.formattedWithComma)원"
+        }
         
         //}
         //else {
