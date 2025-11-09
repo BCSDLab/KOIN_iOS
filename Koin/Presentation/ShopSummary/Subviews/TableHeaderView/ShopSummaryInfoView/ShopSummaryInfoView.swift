@@ -273,7 +273,8 @@ extension ShopSummaryInfoView {
         
         phoneButton.snp.makeConstraints {
             $0.top.equalTo(orderAmountDelieveryTipButton.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.leading.equalTo(shopTitleLabel)
+            $0.trailing.equalTo(moreInfoButton)
             $0.height.equalTo(44)
             $0.bottom.equalToSuperview().offset(-18)
         }
