@@ -13,6 +13,7 @@ final class ShopSummaryInfoView: UIView {
     // MARK: - Properties
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     private let shopTitleLabel = UILabel().then {
@@ -64,9 +65,11 @@ final class ShopSummaryInfoView: UIView {
         $0.text = "계좌이체 가능"
     }
     
-    private let orderAmountDelieveryTipView = ShopSummaryCustomButton()
+    private let orderAmountDelieveryTipButton = ShopSummaryCustomButton()
     
-    private let introductionView = ShopSummaryCustomButton()
+    private let introductionButton = ShopSummaryCustomButton()
+    
+    private let phoneButton = ShopSummaryPhoneButton()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -82,17 +85,24 @@ final class ShopSummaryInfoView: UIView {
     
     // MARK: - configure
     
+    func configure(phonenumber: String) {
+        phoneButton.configure(phonenumber: phonenumber)
+    }
+    
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+        orderAmountDelieveryTipButton.configure(minOrderAmount: minOrderAmount,
+                                                minDeliveryTip: minDeliveryTip,
+                                                maxDelieveryTip: maxDelieveryTip,
+                                                isFromOrder: isFromOrder)
+        
+    }
+    
     func configure(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         shopTitleLabel.text = orderShopSummary.name
         ratingLabel.text = String(orderShopSummary.ratingAverage)
         setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
         setUpMoreInfoButton(isFromOrder: isFromOrder)
-        orderAmountDelieveryTipView.configure(
-            minOrderAmount: orderShopSummary.minimumOrderAmount,
-            minDeliveryTip: orderShopSummary.minimumDeliveryTip,
-            maxDelieveryTip: orderShopSummary.maximumDeliveryTip,
-            isFromOrder: isFromOrder)
-        introductionView.configure(introduction: orderShopSummary.introduction)
+        introductionButton.configure(introduction: orderShopSummary.introduction)
     }
     
     func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool = false, payCard: Bool, payBank: Bool) {
@@ -166,7 +176,7 @@ extension ShopSummaryInfoView {
     }
     
     private func setUpShadows(){
-        [moreInfoButton, isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel, orderAmountDelieveryTipView, introductionView].forEach {
+        [moreInfoButton, isDeliveryAvailableLabel, isTakeoutAvailableLabel, isPayCardAvailableLabel, isPayBankAvailableLabel, orderAmountDelieveryTipButton, introductionButton, phoneButton].forEach {
             $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
         }
     }
@@ -187,18 +197,22 @@ extension ShopSummaryInfoView {
     
     private func addTargets() {
         moreInfoButton.addTarget(self, action: #selector(moreInfoButtonTapped), for: .touchUpInside)
-        orderAmountDelieveryTipView.addTarget(self, action: #selector(orderAmountDelieveryTipViewTapped), for: .touchUpInside)
-        introductionView.addTarget(self, action: #selector(introductionViewTapped), for: .touchUpInside)
+        orderAmountDelieveryTipButton.addTarget(self, action: #selector(orderAmountDelieveryTipButtonTapped), for: .touchUpInside)
+        introductionButton.addTarget(self, action: #selector(introductionButtonTapped), for: .touchUpInside)
+        phoneButton.addTarget(self, action: #selector(phoneButtonTapped), for: .touchUpInside)
     }
     
     @objc private func moreInfoButtonTapped() {
         navigateToShopInfoPublisher.send(.name)
     }
-    @objc private func orderAmountDelieveryTipViewTapped() {
+    @objc private func orderAmountDelieveryTipButtonTapped() {
         navigateToShopInfoPublisher.send(.deliveryTips)
     }
-    @objc private func introductionViewTapped() {
+    @objc private func introductionButtonTapped() {
         navigateToShopInfoPublisher.send(.notice)
+    }
+    @objc private func phoneButtonTapped() {
+        phoneButtonTappedPublisher.send()
     }
 }
 
@@ -213,7 +227,7 @@ extension ShopSummaryInfoView {
             isAvailableStackView.addArrangedSubview($0)
         }
         
-        [shopTitleLabel, rateReviewStackView, moreInfoButton, orderAmountDelieveryTipView, introductionView, isAvailableStackView].forEach {
+        [shopTitleLabel, rateReviewStackView, moreInfoButton, orderAmountDelieveryTipButton, introductionButton, isAvailableStackView, phoneButton].forEach {
             addSubview($0)
         }
     }
@@ -243,18 +257,25 @@ extension ShopSummaryInfoView {
             $0.top.equalTo(rateReviewStackView.snp.bottom).offset(16)
         }
         
-        orderAmountDelieveryTipView.snp.makeConstraints {
+        orderAmountDelieveryTipButton.snp.makeConstraints {
             $0.leading.equalTo(shopTitleLabel)
             $0.top.equalTo(isAvailableStackView.snp.bottom).offset(16)
             $0.height.equalTo(56)
             $0.width.equalTo((UIScreen.main.bounds.width - 60)/2)
         }
         
-        introductionView.snp.makeConstraints {
+        introductionButton.snp.makeConstraints {
             $0.trailing.equalTo(moreInfoButton)
-            $0.top.equalTo(orderAmountDelieveryTipView)
-            $0.height.equalTo(orderAmountDelieveryTipView)
-            $0.width.equalTo(orderAmountDelieveryTipView)
+            $0.top.equalTo(orderAmountDelieveryTipButton)
+            $0.height.equalTo(orderAmountDelieveryTipButton)
+            $0.width.equalTo(orderAmountDelieveryTipButton)
+        }
+        
+        phoneButton.snp.makeConstraints {
+            $0.top.equalTo(orderAmountDelieveryTipButton.snp.bottom).offset(12)
+            $0.leading.equalTo(shopTitleLabel)
+            $0.trailing.equalTo(moreInfoButton)
+            $0.height.equalTo(44)
             $0.bottom.equalToSuperview().offset(-18)
         }
         

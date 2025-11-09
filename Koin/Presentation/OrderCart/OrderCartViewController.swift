@@ -101,7 +101,7 @@ final class OrderCartViewController: UIViewController {
             let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            
+            let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: repository)
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -112,9 +112,9 @@ final class OrderCartViewController: UIViewController {
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                  logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                 fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
                                                 orderableShopId: orderableShopId
                                                 )
-            
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: self.backCategoryName)
             self.navigationController?.pushViewController(viewController, animated: true)
         }

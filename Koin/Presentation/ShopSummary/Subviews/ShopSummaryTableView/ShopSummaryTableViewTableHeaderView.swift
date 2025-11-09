@@ -16,6 +16,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -49,7 +50,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     
     // MARK: - Initializer
     init() {
-        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 1.21 + 212 + 8 + 66)
+        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 1.21 + 212 + 8 + 66 + 56)
         super.init(frame: frame)
         configureView()
         bind()
@@ -94,6 +95,11 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
                 self?.reviewButtonTappedPublisher.send()
             }
             .store(in: &subscriptions)
+        shopSummaryInfoView.phoneButtonTappedPublisher
+            .sink { [weak self] in
+                self?.phoneButtonTappedPublisher.send()
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - update
@@ -114,6 +120,18 @@ extension ShopSummaryTableViewTableHeaderView {
         imagesPageControl.numberOfPages = orderShopSummary.images.count
         shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
     }
+    
+    func configure(phonenumber: String) {
+        shopSummaryInfoView.configure(phonenumber: phonenumber)
+    }
+    
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+        shopSummaryInfoView.configure(minOrderAmount: minOrderAmount,
+                                      minDeliveryTip: minDeliveryTip,
+                                      maxDelieveryTip: maxDelieveryTip,
+                                      isFromOrder: isFromOrder)
+    }
+    
     func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
     }

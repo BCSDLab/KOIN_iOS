@@ -458,8 +458,7 @@ extension OrderHomeViewController {
                 let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(repository: repository)
                 let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
                 let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-
-                
+                let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: repository)
                 let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                     fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                     fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -470,6 +469,7 @@ extension OrderHomeViewController {
                                                     fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                      logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                      getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                     fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
                                                     orderableShopId: orderableShopId)
     
                 let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "" )
@@ -531,6 +531,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
             let fetchOrderMenuUseCase = DefaultFetchOrderMenuUseCase(
                 repository: DefaultOrderShopRepository(service: DefaultOrderService())
             )
+            let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: repository)
             let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryUseCase: fetchOrderShopSummaryUseCase,
                                                 fetchOrderShopMenusUseCase: fetchOrderShopMenusUseCase,
                                                 fetchOrderShopMenusGroupsUseCase: fetchOrderShopMenusGroupsUseCase,
@@ -541,6 +542,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                 fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
                                                 orderableShopId: orderableShopId)
             let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "")
             viewController.title = title

@@ -116,35 +116,39 @@ extension ShopSummaryViewController {
     private func bind() {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         output.sink { [weak self] output in
+            guard let self else { return }
             switch output {
             case .updateInfoView(let orderShopSummary, let isFromOrder):
-                self?.cachedShopName = orderShopSummary.name
-                self?.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
-                
+                self.cachedShopName = orderShopSummary.name
+                self.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
+            case .updatePhonenumber(let phonenumber):
+                self.tableHeaderView.configure(phonenumber: phonenumber)
+            case .updateOrderAmountDeliveryTips(let minOrderAmount, let minDeliveryTip, let maxDeliveryTip):
+                self.tableHeaderView.configure(minOrderAmount: minOrderAmount, minDeliveryTip: minDeliveryTip, maxDelieveryTip: maxDeliveryTip, isFromOrder: self.isFromOrder)
             case .updateMenusGroups(let orderShopMenusGroups):
-                self?.tableHeaderView.updateMenusGroups(orderShopMenusGroups: orderShopMenusGroups)
-                self?.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
+                self.tableHeaderView.updateMenusGroups(orderShopMenusGroups: orderShopMenusGroups)
+                self.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
                 
             case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
-                self?.tableHeaderView.updateIsAvailables(delivery: delivery, takeOut: takeOut, payBank: payBank, payCard: payCard)
+                self.tableHeaderView.updateIsAvailables(delivery: delivery, takeOut: takeOut, payBank: payBank, payCard: payCard)
                 
             // 기본정보 - tableView
             case .updateMenus(let orderShopMenus):
-                self?.menuGroupTableView.configure(orderShopMenus)
+                self.menuGroupTableView.configure(orderShopMenus)
                 
             // 장바구니
             case let .updateBottomSheet(cartSummary):
-                self?.bottomSheet.isHidden = !cartSummary.isAvailable
-                self?.bottomSheet.configure(cartSummary: cartSummary)
-                self?.updateTableViewConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
+                self.bottomSheet.isHidden = !cartSummary.isAvailable
+                self.bottomSheet.configure(cartSummary: cartSummary)
+                self.updateTableViewConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
                 
             case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
-                self?.isAddingMenuAvailable = isAddingMenuAvailable
+                self.isAddingMenuAvailable = isAddingMenuAvailable
                 
             case let .updateCartItemsCount(count):
-                self?.bottomSheet.configure(count: count)
+                self.bottomSheet.configure(count: count)
                 if count == 0 {
-                    self?.isAddingMenuAvailable = true
+                    self.isAddingMenuAvailable = true
                 }
                 
             case .updateMenuDetail(let orderMenu):
@@ -208,6 +212,11 @@ extension ShopSummaryViewController {
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
         }
+            .store(in: &subscriptions)
+        
+        tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
+            self?.makePhonecall()
+            }
             .store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView
@@ -346,7 +355,6 @@ extension ShopSummaryViewController {
         } else {
             let service = DefaultOrderService()
             let repository = DefaultOrderShopRepository(service: service)
-            let useCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
             let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
             let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
@@ -390,6 +398,20 @@ extension ShopSummaryViewController {
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
         reviewListViewController.title = "리뷰"
         navigationController?.pushViewController(reviewListViewController, animated: true)
+    }
+}
+
+extension ShopSummaryViewController {
+    
+    private func makePhonecall() {
+        if let phoneUrl = URL(string: "tel://" + self.viewModel.phonenumber.replacingOccurrences(of: "-", with: "")),
+           UIApplication.shared.canOpenURL(phoneUrl){
+            print("open")
+            UIApplication.shared.open(phoneUrl)
+        }
+        else {
+            print("parsing error")
+        }
     }
 }
 

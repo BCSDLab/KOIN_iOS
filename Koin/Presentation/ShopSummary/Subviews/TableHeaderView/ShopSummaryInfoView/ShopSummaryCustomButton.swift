@@ -67,15 +67,23 @@ final class ShopSummaryCustomButton: UIButton {
         introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction ?? "공지사항")
         configureIntroductionView()
     }
-    func configure(minOrderAmount: Int?, minDeliveryTip: Int?, maxDelieveryTip: Int?, isFromOrder: Bool) {
-        if isFromOrder {
-            configureOrderAmountDelieveryTipView()
-            minimumOrderSubLabel.text = "\((minOrderAmount ?? 0).formattedWithComma)원"
-            deliveryTipSubLabel.text = "\((minDeliveryTip ?? 0).formattedWithComma) - \((maxDelieveryTip ?? 0).formattedWithComma)원"
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+        //if isFromOrder {
+        
+        configureOrderAmountDelieveryTipView()
+        minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
+        
+        if minDeliveryTip == 0, maxDelieveryTip == 0 {
+            deliveryTipSubLabel.text = "0원"
         }
         else {
-            configureInorderableLabel()
+            deliveryTipSubLabel.text = "\(minDeliveryTip.formattedWithComma) - \(maxDelieveryTip.formattedWithComma)원"
         }
+        
+        //}
+        //else {
+        //    configureInorderableLabel()
+        //}
     }
 }
 
@@ -108,12 +116,12 @@ extension ShopSummaryCustomButton {
         }
         minimumOrderSubLabel.snp.makeConstraints {
             $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
-            //$0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+            $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(minimumOrderLabel)
         }
         deliveryTipSubLabel.snp.makeConstraints {
             $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
-            $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+            $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
         rightImageView.snp.makeConstraints {
