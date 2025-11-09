@@ -11,7 +11,8 @@ struct ShopSummaryDto: Decodable {
     let shopId: Int
     let name: String
     let introduction: String?
-    let ratingAverage, reviewCount: Int
+    let ratingAverage: Double
+    let reviewCount: Int
     let images: [ShopImageDto]
 
     enum CodingKeys: String, CodingKey {

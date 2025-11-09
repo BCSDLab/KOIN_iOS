@@ -275,8 +275,7 @@ final class ShopViewController: UIViewController {
             let repository = DefaultShopRepository(service: service)
             
             let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
-            let fetchOrderShopMenusGroupsFromShopUseCase = DefaultFetchOrderShopMenusGroupsFromShopUseCase(repository: repository)
-            let fetchOrderShopMenusFromShopUseCase = DefaultFetchOrderShopMenusFromShopUseCase(shopRepository: repository)
+            let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
             let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
