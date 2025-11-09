@@ -12,23 +12,23 @@ import SnapKit
 final class ShopSearchTableViewMenuNameCell: UITableViewCell {
     
     // MARK: - UI Components
-    let menuImageView = UIImageView(image: UIImage.appImage(asset: .menu))
-    let menuNameLabel = UILabel().then {
+    private let menuImageView = UIImageView(image: UIImage.appImage(asset: .menu))
+    private let menuNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral500)
         $0.numberOfLines = 1
     }
-    let separatorLabel = UILabel().then {
+    private let separatorLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral500)
         $0.text = "|"
     }
-    let shopNameLabel = UILabel().then {
+    private let shopNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textColor = .appColor(.neutral500)
         $0.numberOfLines = 1
     }
-    let separatorView = UIView().then {
+    private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
     

@@ -12,15 +12,15 @@ import SnapKit
 final class ShopSearchTableViewShopNameCell: UITableViewCell {
     
     // MARK: - UI Components
-    let storeImageView = UIImageView(image: UIImage.appImage(asset: .store))
-    let shopNameLabel = UILabel().then {
+    private let storeImageView = UIImageView(image: UIImage.appImage(asset: .store))
+    private let shopNameLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textColor = .appColor(.neutral500)
         $0.textAlignment = .left
         $0.numberOfLines = 1
     }
-    let arrowUpLeftImageView = UIImageView(image: .appImage(asset: .arrowUpLeft))
-    let separatorView = UIView().then {
+    private let arrowUpLeftImageView = UIImageView(image: .appImage(asset: .arrowUpLeft))
+    private let separatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
     
