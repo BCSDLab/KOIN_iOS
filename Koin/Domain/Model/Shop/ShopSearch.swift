@@ -13,12 +13,12 @@ struct ShopSearch {
 }
 
 struct ShopNameSearchResult: Codable {
-    let shopID: Int
+    let shopId: Int
     let shopName: String
 }
 
 struct MenuNameSearchResult {
-    let shopID: Int
+    let shopId: Int
     let shopName: String
     let menuName: String
 }
@@ -36,14 +36,14 @@ extension ShopSearch {
 
 extension ShopNameSearchResult {
     init(from dto: ShopNameSearchResultDto) {
-        self.shopID = dto.shopID
+        self.shopId = dto.shopId
         self.shopName = dto.shopName
     }
 }
 
 extension MenuNameSearchResult {
     init(from dto: MenuNameSearchResultDto) {
-        self.shopID = dto.shopID
+        self.shopId = dto.shopId
         self.shopName = dto.shopName
         self.menuName = dto.menuName
     }

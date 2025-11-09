@@ -42,9 +42,9 @@ extension ShopSearchTableView: UITableViewDelegate {
         let shopId: Int = {
             switch indexPath.section {
             case 0:
-                return shopNameSearchResult[indexPath.row].shopID
+                return shopNameSearchResult[indexPath.row].shopId
             default:
-                return menuNameSearchResult[indexPath.row].shopID
+                return menuNameSearchResult[indexPath.row].shopId
             }
         }()
         didTapCellPublisher.send(shopId)

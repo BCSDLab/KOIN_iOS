@@ -27,12 +27,12 @@ struct ShopSearchDto: Decodable {
 
 // MARK: - MenuNameSearchResult
 struct MenuNameSearchResultDto: Decodable {
-    let shopID: Int
+    let shopId: Int
     let shopName: String
     let menuName: String
 
     enum CodingKeys: String, CodingKey {
-        case shopID = "shop_id"
+        case shopId = "shop_id"
         case shopName = "shop_name"
         case menuName = "menu_name"
     }
@@ -40,11 +40,11 @@ struct MenuNameSearchResultDto: Decodable {
 
 // MARK: - ShopNameSearchResult
 struct ShopNameSearchResultDto: Decodable {
-    let shopID: Int
+    let shopId: Int
     let shopName: String
 
     enum CodingKeys: String, CodingKey {
-        case shopID = "shop_id"
+        case shopId = "shop_id"
         case shopName = "shop_name"
     }
 }
