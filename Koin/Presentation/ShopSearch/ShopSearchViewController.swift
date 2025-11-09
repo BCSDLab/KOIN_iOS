@@ -16,6 +16,9 @@ final class ShopSearchViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let navigationBackgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+    }
     private let backgroundView = UIView().then {
         $0.backgroundColor = .appColor(.newBackground)
     }
@@ -85,7 +88,7 @@ final class ShopSearchViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .transparent)
     }
     
     // MARK: Bind
@@ -187,11 +190,15 @@ extension ShopSearchViewController {
 extension ShopSearchViewController {
     
     private func setUpLayouts() {
-        [dimView, shopSearchTableView, backgroundView, searchTextField].forEach {
+        [navigationBackgroundView, dimView, shopSearchTableView, backgroundView, searchTextField].forEach {
             view.addSubview($0)
         }
     }
     private func setUpConstraints() {
+        navigationBackgroundView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(UIApplication.topSafeAreaHeight() + (navigationController?.navigationBar.frame.height ?? 0))
+        }
         searchTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview().inset(24)
