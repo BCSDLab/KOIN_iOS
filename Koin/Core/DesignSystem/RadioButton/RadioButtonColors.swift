@@ -9,6 +9,5 @@ import UIKit
 
 struct RadioButtonColors {
     let border: UIColor
-    let background: UIColor
     let innerCircle: UIColor
 }
