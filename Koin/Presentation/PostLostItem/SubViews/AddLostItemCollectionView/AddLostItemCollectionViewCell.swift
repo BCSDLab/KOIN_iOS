@@ -83,6 +83,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
+        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
     
     private let categoryLabel = UILabel().then {
