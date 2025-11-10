@@ -462,18 +462,49 @@ extension AddLostItemCollectionViewCell {
 }
 
 extension AddLostItemCollectionViewCell: UITextViewDelegate {
+            
+    // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // 스크롤
+        shouldScrollTo(textView)
+        
+        // placeholder 비우기
+        if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
+            textView.text = ""
+            textView.textColor = UIColor.appColor(.neutral800)
+        }
+    }
     
+    // MARK: 내용 수정 - 글자수 제한, 스크롤
     func textViewDidChange(_ textView: UITextView) {
+        // 글자수 제한
         let maxCharacters = 1000
         if textView.text.count > maxCharacters {
             textView.text = String(textView.text.prefix(maxCharacters))
         }
         contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
         contentPublisher.send(textView.text)
+        
+        // 스크롤
+        shouldScrollTo(textView)
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        
+    // MARK: 내용 수정 완료 - placeholder 만들기
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = textViewPlaceHolder
+            textView.textColor = UIColor.appColor(.neutral500)
+        }
+    }
+    
+    // MARK: 키보드 닫기
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder() // 키보드 숨김
+        return true
+    }
+    
+    // MARK: 스크롤
+    private func shouldScrollTo(_ textView: UITextView) {
         guard let collectionView = self.superview as? UICollectionView,
               let rootView = collectionView.superview else { return }
         
@@ -481,28 +512,13 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         let absoluteFrame = textView.convert(textView.bounds, to: rootView)
         
         // 텍스트뷰의 Y 좌표값 전송
-        
         textViewFocusPublisher.send(absoluteFrame.origin.y)
-        if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
-            textView.text = ""
-            textView.textColor = UIColor.appColor(.neutral800)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = textViewPlaceHolder
-            textView.textColor = UIColor.appColor(.neutral500)
-        }
-    }
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder() // 키보드 숨김
-        return true
     }
 }
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
+    // MARK: 키보드 닫기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // 키보드 숨김
         return true
