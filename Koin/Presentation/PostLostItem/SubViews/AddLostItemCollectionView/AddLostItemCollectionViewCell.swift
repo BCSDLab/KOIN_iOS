@@ -309,8 +309,7 @@ extension AddLostItemCollectionViewCell{
         dropdownView.backgroundColor = UIColor.appColor(.neutral100)
         dropdownView.layer.cornerRadius = 12
         dropdownView.clipsToBounds = true
-        dropdownView.layer.borderWidth = 1
-        dropdownView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        dropdownView.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
         
         // 드롭다운에서 날짜 변경 시 호출
         dropdownView.onDateSelected = { [weak self] selectedDate in
@@ -329,18 +328,14 @@ extension AddLostItemCollectionViewCell{
         dropdownView.translatesAutoresizingMaskIntoConstraints = false
         
         // 드롭다운 위치 지정
-        NSLayoutConstraint.activate([
-            dropdownView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
-            dropdownView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
-            dropdownView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 8),
-            dropdownView.heightAnchor.constraint(equalToConstant: 114)
-        ])
-        
+        dropdownView.snp.makeConstraints {
+            $0.top.equalTo(dateButton.snp.bottom).offset(4)
+            $0.leading.trailing.equalTo(dateButton)
+        }
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropdown))
-        self.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
-        dropdownView.tag = 999
+        self.addGestureRecognizer(tapGesture)
     }
     @objc private func dismissDropdown() {
         self.viewWithTag(999)?.removeFromSuperview()
