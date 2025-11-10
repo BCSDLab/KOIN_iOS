@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class DatePickerDropdownView: UIView {
+    
+    let valueChangedPublisher = PassthroughSubject<Date, Never>()
     
     private let datePicker = UIDatePicker().then {
         $0.datePickerMode = .date
@@ -22,6 +25,7 @@ final class DatePickerDropdownView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        datePicker.addTarget(self, action: #selector(datePickerValueChagned), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -59,5 +63,9 @@ final class DatePickerDropdownView: UIView {
     func confirmSelection() {
         
         onDateSelected?(datePicker.date)  // 현재 보이는 날짜로 설정
+    }
+    
+    @objc private func datePickerValueChagned() {
+        valueChangedPublisher.send(datePicker.date)
     }
 }

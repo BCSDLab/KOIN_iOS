@@ -121,6 +121,14 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
     
+    private let dropdownView = DatePickerDropdownView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
+        $0.isHidden = true
+    }
+    
     private let locationLabel = UILabel().then { _ in
     }
     
@@ -160,7 +168,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        configureTapGestureToDismissKeyboard()
+        configureTapGestureToDismissKeyboardDropdown()
         
         // AddTarget
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
@@ -177,7 +185,18 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
-        }.store(in: &cancellable)
+            }.store(in: &cancellable)
+        dropdownView.valueChangedPublisher.sink { [weak self] selectedDate in
+            let formattedDate = {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy년 M월 d일"
+                return formatter.string(from: selectedDate)
+            }()
+            self?.dateButton.setTitle(formattedDate, for: .normal)
+            self?.dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            self?.datePublisher.send(formattedDate)
+            self?.dateWarningLabel.isHidden = true
+            }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -286,8 +305,8 @@ extension AddLostItemCollectionViewCell {
         }
     }
     
-    private func configureTapGestureToDismissKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+    private func configureTapGestureToDismissKeyboardDropdown() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardDropdown))
         contentView.addGestureRecognizer(tapGesture)
     }
 }
@@ -314,6 +333,9 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
+        // dropdown이 열려있다면 닫는다
+        dismissDropdown()
+        
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
@@ -330,7 +352,7 @@ extension AddLostItemCollectionViewCell{
            sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
     
-    @objc private func dismissKeyboard() {
+    @objc private func dismissKeyboardDropdown() {
         contentView.endEditing(true)  // 키보드 숨기기
         dismissDropdown()
     }
@@ -410,55 +432,14 @@ extension AddLostItemCollectionViewCell {
 
 extension AddLostItemCollectionViewCell {
     
-    // MARK: - dropdown 생성
+    // MARK: - dropdown 닫기/열기
     @objc private func dateButtonTapped(button: UIButton) {
-        dateWarningLabel.isHidden = true
-        //     dateButtonPublisher.send()
-        if let existingDropdown = self.viewWithTag(999) {
-            existingDropdown.removeFromSuperview()
-            return
-        }
-        
-        // 드롭다운 뷰 생성
-        let dropdownView = DatePickerDropdownView()
-        dropdownView.tag = 999
-        dropdownView.backgroundColor = UIColor.appColor(.neutral100)
-        dropdownView.layer.cornerRadius = 12
-        dropdownView.clipsToBounds = true
-        dropdownView.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
-        
-        // 드롭다운에서 날짜 변경 시 호출
-        dropdownView.onDateSelected = { [weak self] selectedDate in
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy년 M월 d일"
-            let formattedDate = formatter.string(from: selectedDate)
-            button.setTitle(formattedDate, for: .normal)
-            self?.dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            self?.datePublisher.send(formattedDate)
-            button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            dropdownView.removeFromSuperview() // 날짜 선택 시 드롭다운 닫기
-        }
-        
-        // 뷰컨트롤러에 추가
-        self.addSubview(dropdownView)
-        
-        // 드롭다운 위치 지정
-        dropdownView.snp.makeConstraints {
-            $0.top.equalTo(dateButton.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(dateButton)
-        }
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropdown))
-        tapGesture.cancelsTouchesInView = false
-        self.addGestureRecognizer(tapGesture)
+        dropdownView.isHidden = !dropdownView.isHidden
     }
-    
     // MARK: - dropdown 닫기
     @objc func dismissDropdown() {
-        if let dropdownView = self.viewWithTag(999) as? DatePickerDropdownView {
-            dropdownView.confirmSelection()  // 현재 보이는 시간 반영
-            dropdownView.removeFromSuperview()  // 드롭다운 닫기
-        }
+        dropdownView.confirmSelection()
+        dropdownView.isHidden = true
     }
 }
 
@@ -466,6 +447,9 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
     // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
     func textViewDidBeginEditing(_ textView: UITextView) {
+        // dropdown이 열려있다면 닫는다
+        dismissDropdown()
+        
         // 스크롤
         shouldScrollTo(textView)
         
@@ -521,6 +505,9 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        // dropdown이 열려있다면 닫는다
+        dismissDropdown()
+        
         // 스크롤
         shouldScrollTo(textField)
         
@@ -572,7 +559,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, dropdownView].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
@@ -663,6 +650,10 @@ extension AddLostItemCollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-16)
             make.width.height.equalTo(24)
+        }
+        dropdownView.snp.makeConstraints {
+            $0.top.equalTo(dateButton.snp.bottom).offset(4)
+            $0.leading.trailing.equalTo(dateButton)
         }
         locationLabel.snp.makeConstraints { make in
             make.top.equalTo(dateButton.snp.bottom).offset(16)
