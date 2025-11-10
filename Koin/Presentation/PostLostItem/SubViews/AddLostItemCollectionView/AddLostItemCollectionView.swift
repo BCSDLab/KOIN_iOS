@@ -50,8 +50,9 @@ extension AddLostItemCollectionView {
     
     func dismissKeyBoardDatePicker() {
         self.endEditing(true) // 키보드 닫기
-        visibleCells.forEach { cell in
-            (cell as? AddLostItemCollectionViewCell)?.dismissDropdown()
+        for row in 0..<numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(row: row, section: 0)
+            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
         }
     }
 }
