@@ -722,7 +722,7 @@ extension AddLostItemCollectionViewCell {
             
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-            button.layer.cornerRadius = 14
+            button.layer.cornerRadius = 19
             button.clipsToBounds = true
             button.titleLabel?.numberOfLines = 1
             button.titleLabel?.textAlignment = .center
