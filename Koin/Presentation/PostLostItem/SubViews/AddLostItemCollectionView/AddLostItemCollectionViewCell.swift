@@ -425,7 +425,7 @@ extension AddLostItemCollectionViewCell {
         }
         
         if self.type != .lost {
-            if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if locationTextField.textColor == UIColor.appColor(.neutral500) {
                 locationWarningLabel.isHidden = false
                 isValid = false
             }
