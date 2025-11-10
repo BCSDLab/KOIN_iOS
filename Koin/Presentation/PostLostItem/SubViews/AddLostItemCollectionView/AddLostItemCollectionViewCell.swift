@@ -310,6 +310,9 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell{
     
     @objc private func addImageButtonTapped() {
+        // 드롭다운 열려있다면 닫기
+        dismissDropdown()
+        
         addImageButtonPublisher.send()
         
         // TODO: 높이 해결
@@ -328,6 +331,9 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
+        // 드롭다운 열려있다면 닫기
+        dismissDropdown()
+    
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
@@ -421,6 +427,9 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 닫기/열기
     @objc private func dateButtonTapped(button: UIButton) {
+        if dropdownView.isHidden {
+            self.endEditing(true)
+        }
         dropdownView.isHidden = !dropdownView.isHidden
     }
     // MARK: - dropdown 닫기
@@ -434,6 +443,9 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
     // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
     func textViewDidBeginEditing(_ textView: UITextView) {
+        // 드롭다운 열려있다면 닫기
+        dismissDropdown()
+        
         // 스크롤
         shouldScrollTo(textView)
         
@@ -468,7 +480,8 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
     
     // MARK: 키보드 닫기
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder() // 키보드 숨김
+        //textView.resignFirstResponder() // 키보드 숨김
+        self.endEditing(true)
         return true
     }
     
@@ -489,6 +502,9 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        // 드롭다운 열려있다면 닫기
+        dismissDropdown()
+        
         // 스크롤
         shouldScrollTo(textField)
         
@@ -520,7 +536,8 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 키보드 닫기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 숨김
+        //textField.resignFirstResponder() // 키보드 숨김
+        self.endEditing(true)
         return true
     }
     
