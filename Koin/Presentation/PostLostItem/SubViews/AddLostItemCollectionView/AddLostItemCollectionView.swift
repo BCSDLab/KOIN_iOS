@@ -55,6 +55,12 @@ extension AddLostItemCollectionView {
             (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
         }
     }
+    private func dismissKeyDatePicker() {
+        for row in 0..<numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(row: row, section: 0)
+            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+        }
+    }
 }
 
 extension AddLostItemCollectionView {
@@ -146,6 +152,9 @@ extension AddLostItemCollectionView {
         }.store(in: &cell.cancellables)
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
+        }.store(in: &cell.cancellables)
+        cell.shouldDismissDropDownPublisher.sink { [weak self] in
+            self?.dismissKeyDatePicker()
         }.store(in: &cell.cancellables)
         return cell
     }

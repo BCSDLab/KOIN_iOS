@@ -24,6 +24,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let locationPublisher = PassthroughSubject<String, Never>()         // 분실 장소
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()   // 내용
     let contentPublisher = PassthroughSubject<String, Never>()          // 내용
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>() // 모든 cell의 dropdown 닫기
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
@@ -310,8 +311,8 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell{
     
     @objc private func addImageButtonTapped() {
-        // 드롭다운 열려있다면 닫기
-        dismissDropdown()
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
         
         addImageButtonPublisher.send()
         
@@ -331,8 +332,8 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
-        // 드롭다운 열려있다면 닫기
-        dismissDropdown()
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
     
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
@@ -443,8 +444,8 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
     // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
     func textViewDidBeginEditing(_ textView: UITextView) {
-        // 드롭다운 열려있다면 닫기
-        dismissDropdown()
+        // 열려있는 드롭다운  닫기
+        shouldDismissDropDownPublisher.send()
         
         // 스크롤
         shouldScrollTo(textView)
@@ -502,8 +503,8 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // 드롭다운 열려있다면 닫기
-        dismissDropdown()
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
         
         // 스크롤
         shouldScrollTo(textField)
