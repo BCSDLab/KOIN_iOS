@@ -102,6 +102,9 @@ extension AddLostItemCollectionView {
                 case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
                 }
             }.store(in: &footerCancellables)
+            footerView.shouldDismissDropDownPublisher.sink { [weak self] in
+                self?.dismissKeyDatePicker()
+            }.store(in: &footerCancellables)
             return footerView
         }
         return UICollectionReusableView()

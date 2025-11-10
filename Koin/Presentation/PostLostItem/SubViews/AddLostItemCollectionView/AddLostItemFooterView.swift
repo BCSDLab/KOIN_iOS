@@ -12,6 +12,7 @@ final class AddLostItemFooterView: UICollectionReusableView {
     
     static let identifier = "AddLostItemFooterView"
     let addItemButtonPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>() // 모든 cell의 dropdown 닫기
     
     private let addItemButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -42,6 +43,7 @@ final class AddLostItemFooterView: UICollectionReusableView {
 extension AddLostItemFooterView {
     @objc private func addItemButtonTapped() {
         addItemButtonPublisher.send()
+        shouldDismissDropDownPublisher.send()
     }
     
 }
