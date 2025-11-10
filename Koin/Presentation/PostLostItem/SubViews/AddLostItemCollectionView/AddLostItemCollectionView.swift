@@ -63,7 +63,7 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     }
     func dismissDatePicker() {
         visibleCells.forEach { cell in
-            (cell as? AddLostItemCollectionViewCell)?.dismissDatePicker()
+            (cell as? AddLostItemCollectionViewCell)?.dismissDropdown()
         }
     }
 }
