@@ -13,6 +13,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     private var cancellable = Set<AnyCancellable>()
+    
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()   // 품목 삭제
     let addImageButtonPublisher = PassthroughSubject<Void, Never>() // 사진 등록
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()  // 사진 등록
@@ -326,10 +327,7 @@ extension AddLostItemCollectionViewCell{
         deleteButtonPublisher.send()
     }
     
-    @objc private func stackButtonTapped(_ sender: UIButton) {
-        // dropdown이 열려있다면 닫는다
-        dismissDropdown()
-        
+    @objc private func stackButtonTapped(_ sender: UIButton) {        
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in

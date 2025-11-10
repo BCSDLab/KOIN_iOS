@@ -10,39 +10,33 @@ import UIKit
 
 final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var footerCancellables = Set<AnyCancellable>()
+    // MARK: - Properties
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
+    
+    private var footerCancellables = Set<AnyCancellable>()
+    
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
     
+    // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionHeadersPinToVisibleBounds = true
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
-    private func commonInit() {
-        showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator = false
-        contentInset = .zero
-        isScrollEnabled = false
-        register(AddLostItemCollectionViewCell.self, forCellWithReuseIdentifier: AddLostItemCollectionViewCell.identifier)
-        register(AddLostItemFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostItemFooterView.identifier)
-        dataSource = self
-        delegate = self
-        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
-    }
+}
+
+extension AddLostItemCollectionView {
     
     func setType(type: LostItemType) {
         self.type = type
@@ -153,5 +147,20 @@ extension AddLostItemCollectionView {
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
         return cell
+    }
+}
+
+extension AddLostItemCollectionView {
+    
+    private func commonInit() {
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        contentInset = .zero
+        isScrollEnabled = false
+        register(AddLostItemCollectionViewCell.self, forCellWithReuseIdentifier: AddLostItemCollectionViewCell.identifier)
+        register(AddLostItemFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostItemFooterView.identifier)
+        dataSource = self
+        delegate = self
+        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
     }
 }
