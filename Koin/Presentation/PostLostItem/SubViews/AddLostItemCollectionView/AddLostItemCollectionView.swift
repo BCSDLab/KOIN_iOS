@@ -56,9 +56,6 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     
     func dismissKeyBoardDatePicker() {
         self.endEditing(true) // 키보드 닫기
-        dismissDatePicker()
-    }
-    func dismissDatePicker() {
         visibleCells.forEach { cell in
             (cell as? AddLostItemCollectionViewCell)?.dismissDropdown()
         }

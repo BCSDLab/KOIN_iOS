@@ -71,7 +71,6 @@ final class PostLostItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        setDelegate()
         bind()
         writeButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.writeButtonTapped()
@@ -226,17 +225,6 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
-    }
-}
-
-extension PostLostItemViewController: UIScrollViewDelegate {
-    
-    private func setDelegate() {
-        scrollView.delegate = self
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        addLostItemCollectionView.dismissDatePicker()
     }
 }
 
