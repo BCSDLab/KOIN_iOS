@@ -188,6 +188,9 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
+        imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
+            self?.dismissDropdown()
+            }.store(in: &cancellable)
         dropdownView.valueChangedPublisher.sink { [weak self] selectedDate in
             let formattedDate = {
                 let formatter = DateFormatter()
@@ -329,6 +332,9 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func deleteCellButtonTapped() {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+        
         deleteButtonPublisher.send()
     }
     

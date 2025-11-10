@@ -11,6 +11,7 @@ import UIKit
 final class LostItemImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     
@@ -46,6 +47,9 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func cancelButtonTapped() {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+        
         cancelButtonPublisher.send(())
     }
 }
