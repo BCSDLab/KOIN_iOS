@@ -13,18 +13,16 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     private var cancellable = Set<AnyCancellable>()
-    
-    let deleteButtonPublisher = PassthroughSubject<Void, Never>()   // 품목 삭제
-    let addImageButtonPublisher = PassthroughSubject<Void, Never>() // 사진 등록
-    let imageUrlsPublisher = PassthroughSubject<[String], Never>()  // 사진 등록
-    let categoryPublisher = PassthroughSubject<String, Never>()     // 품목 선택
-    //let dateButtonPublisher = PassthroughSubject<Void, Never>()
-    let datePublisher = PassthroughSubject<String, Never>()         // 날짜 선택
-    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()  // 분실 장소
-    let locationPublisher = PassthroughSubject<String, Never>()         // 분실 장소
-    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()   // 내용
-    let contentPublisher = PassthroughSubject<String, Never>()          // 내용
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>() // 모든 cell의 dropdown 닫기
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let addImageButtonPublisher = PassthroughSubject<Void, Never>()
+    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let datePublisher = PassthroughSubject<String, Never>()
+    let categoryPublisher = PassthroughSubject<String, Never>()
+    let locationPublisher = PassthroughSubject<String, Never>()
+    let contentPublisher = PassthroughSubject<String, Never>()
+    let imageUrlsPublisher = PassthroughSubject<[String], Never>()
+    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
@@ -209,7 +207,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
         self.type = type
-        
         textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
         
@@ -271,36 +268,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - helper
 extension AddLostItemCollectionViewCell {
-
-    private func setUpTexts(_ type: LostItemType) {
-        let texts = [
-            "품목이 선택되지 않았습니다.",
-            "\(type.description)일자가 입력되지 않았습니다.",
-            "\(type.description)장소가 입력되지 않았습니다."
-        ]
-        
-        let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
-        
-        labels.enumerated().forEach { index, label in
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = UIImage.appImage(asset: .warningOrange)
-            imageAttachment.bounds = CGRect(x: 0, y: -4, width: 16, height: 16)
-            let spacingAttachment = NSTextAttachment()
-            spacingAttachment.bounds = CGRect(x: 0, y: 0, width: 6, height: 1)
-            let attributedString = NSMutableAttributedString()
-            attributedString.append(NSAttributedString(attachment: imageAttachment))
-            attributedString.append(NSAttributedString(attachment: spacingAttachment))
-            let text = texts[index]
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.appFont(.pretendardRegular, size: 12),
-                .foregroundColor: UIColor.appColor(.sub500)
-            ]
-            attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
-            label.attributedText = attributedString
-        }
-    }
     
     // MARK: 스크롤
     private func shouldScrollTo(_ view: UIView) {
@@ -705,6 +673,33 @@ extension AddLostItemCollectionViewCell {
         [pictureLabel, categoryLabel, dateLabel, locationLabel, contentLabel].forEach {
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+        }
+    }
+    private func setUpTexts(_ type: LostItemType) {
+        let texts = [
+            "품목이 선택되지 않았습니다.",
+            "\(type.description)일자가 입력되지 않았습니다.",
+            "\(type.description)장소가 입력되지 않았습니다."
+        ]
+        
+        let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
+        
+        labels.enumerated().forEach { index, label in
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage.appImage(asset: .warningOrange)
+            imageAttachment.bounds = CGRect(x: 0, y: -4, width: 16, height: 16)
+            let spacingAttachment = NSTextAttachment()
+            spacingAttachment.bounds = CGRect(x: 0, y: 0, width: 6, height: 1)
+            let attributedString = NSMutableAttributedString()
+            attributedString.append(NSAttributedString(attachment: imageAttachment))
+            attributedString.append(NSAttributedString(attachment: spacingAttachment))
+            let text = texts[index]
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.appFont(.pretendardRegular, size: 12),
+                .foregroundColor: UIColor.appColor(.sub500)
+            ]
+            attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
+            label.attributedText = attributedString
         }
     }
     
