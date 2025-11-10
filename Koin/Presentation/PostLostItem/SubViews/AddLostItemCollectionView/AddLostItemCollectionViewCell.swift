@@ -445,7 +445,7 @@ extension AddLostItemCollectionViewCell {
             isValid = false
         }
         
-        if let title = dateButton.title(for: .normal), title.contains("장소") {
+        if let title = dateButton.title(for: .normal), title.contains("일자") {
             dateWarningLabel.isHidden = false
             isValid = false
         }
