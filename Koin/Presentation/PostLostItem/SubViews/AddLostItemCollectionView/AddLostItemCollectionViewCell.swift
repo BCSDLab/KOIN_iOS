@@ -121,7 +121,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
     
-    private let dropdownView = DatePickerDropdownView().then {
+    private lazy var dropdownView = DatePickerDropdownView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
@@ -168,7 +168,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        configureTapGestureToDismissKeyboardDropdown()
         
         // AddTarget
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
@@ -304,11 +303,6 @@ extension AddLostItemCollectionViewCell {
             label.attributedText = attributedString
         }
     }
-    
-    private func configureTapGestureToDismissKeyboardDropdown() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardDropdown))
-        contentView.addGestureRecognizer(tapGesture)
-    }
 }
 
 // MARK: - @objc
@@ -352,7 +346,8 @@ extension AddLostItemCollectionViewCell{
            sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
     
-    @objc private func dismissKeyboardDropdown() {
+    @objc func dismissKeyboardDropdown() {
+        print("dismiss happened")
         contentView.endEditing(true)  // 키보드 숨기기
         dismissDropdown()
     }
@@ -447,9 +442,6 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
     // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
     func textViewDidBeginEditing(_ textView: UITextView) {
-        // dropdown이 열려있다면 닫는다
-        dismissDropdown()
-        
         // 스크롤
         shouldScrollTo(textView)
         
@@ -505,9 +497,6 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // dropdown이 열려있다면 닫는다
-        dismissDropdown()
-        
         // 스크롤
         shouldScrollTo(textField)
         

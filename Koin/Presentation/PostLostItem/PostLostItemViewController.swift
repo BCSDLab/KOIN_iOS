@@ -89,6 +89,7 @@ final class PostLostItemViewController: UIViewController {
             navigationItem.title = "분실물 신고"
         }
         addLostItemCollectionView.setType(type: viewModel.type)
+        configureTapGestureToDismissKeyboardDropdown()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -236,6 +237,18 @@ extension PostLostItemViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         addLostItemCollectionView.dismissDatePicker()
+    }
+}
+
+extension PostLostItemViewController {
+    
+    private func configureTapGestureToDismissKeyboardDropdown() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardDropdown))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboardDropdown() {
+        addLostItemCollectionView.dismissKeyBoardDatePicker()
     }
 }
 

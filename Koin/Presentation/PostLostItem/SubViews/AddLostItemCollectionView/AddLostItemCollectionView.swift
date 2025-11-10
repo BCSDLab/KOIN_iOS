@@ -42,9 +42,6 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         dataSource = self
         delegate = self
         articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-           tapGesture.cancelsTouchesInView = false  // Allows taps to pass through to collection view cells
-           addGestureRecognizer(tapGesture)
     }
     
     func setType(type: LostItemType) {
@@ -57,9 +54,9 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         collectionViewLayout.invalidateLayout()
     }
     
-    @objc private func dismissKeyboard() {
-        
-        self.endEditing(true)
+    func dismissKeyBoardDatePicker() {
+        self.endEditing(true) // 키보드 닫기
+        dismissDatePicker()
     }
     func dismissDatePicker() {
         visibleCells.forEach { cell in
