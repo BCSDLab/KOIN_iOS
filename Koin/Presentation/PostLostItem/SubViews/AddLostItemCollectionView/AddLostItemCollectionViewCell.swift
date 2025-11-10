@@ -189,18 +189,10 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
         imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.dismissDropdown()
+            self?.shouldDismissDropDownPublisher.send()
             }.store(in: &cancellable)
         dropdownView.valueChangedPublisher.sink { [weak self] selectedDate in
-            let formattedDate = {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy년 M월 d일"
-                return formatter.string(from: selectedDate)
-            }()
-            self?.dateButton.setTitle(formattedDate, for: .normal)
-            self?.dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            self?.datePublisher.send(formattedDate)
-            self?.dateWarningLabel.isHidden = true
+            self?.dropdownValueChanged(selectedDate)
             }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
@@ -308,6 +300,18 @@ extension AddLostItemCollectionViewCell {
             attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
             label.attributedText = attributedString
         }
+    }
+    
+    // MARK: 스크롤
+    private func shouldScrollTo(_ view: UIView) {
+        guard let collectionView = self.superview as? UICollectionView,
+              let rootView = collectionView.superview else { return }
+        
+        // 텍스트뷰의 절대적인 Y 좌표 계산
+        let absoluteFrame = view.convert(view.bounds, to: rootView)
+        
+        // 텍스트뷰의 Y 좌표값 전송
+        textFieldFocusPublisher.send(absoluteFrame.origin.y)
     }
 }
 
@@ -435,8 +439,12 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 닫기/열기
     @objc private func dateButtonTapped(button: UIButton) {
+        // 열려있는 드롭다운  닫기
+        shouldDismissDropDownPublisher.send()
+        
         if dropdownView.isHidden {
             self.endEditing(true)
+            shouldScrollTo(dropdownView)
         }
         dropdownView.isHidden = !dropdownView.isHidden
     }
@@ -444,6 +452,21 @@ extension AddLostItemCollectionViewCell {
     @objc func dismissDropdown() {
         dropdownView.confirmSelection()
         dropdownView.isHidden = true
+    }
+    
+    // MARK: - dropdown 값 변화
+    private func dropdownValueChanged(_ selectedDate: Date) {
+        shouldScrollTo(dropdownView)
+        
+        let formattedDate = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy년 M월 d일"
+            return formatter.string(from: selectedDate)
+        }()
+        dateButton.setTitle(formattedDate, for: .normal)
+        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        datePublisher.send(formattedDate)
+        dateWarningLabel.isHidden = true
     }
 }
 
@@ -492,18 +515,6 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         self.endEditing(true)
         return true
     }
-    
-    // MARK: 스크롤
-    private func shouldScrollTo(_ textView: UITextView) {
-        guard let collectionView = self.superview as? UICollectionView,
-              let rootView = collectionView.superview else { return }
-        
-        // 텍스트뷰의 절대적인 Y 좌표 계산
-        let absoluteFrame = textView.convert(textView.bounds, to: rootView)
-        
-        // 텍스트뷰의 Y 좌표값 전송
-        textViewFocusPublisher.send(absoluteFrame.origin.y)
-    }
 }
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
@@ -547,18 +558,6 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         //textField.resignFirstResponder() // 키보드 숨김
         self.endEditing(true)
         return true
-    }
-    
-    // MARK: 스크롤
-    private func shouldScrollTo(_ textField: UITextField) {
-        guard let collectionView = self.superview as? UICollectionView,
-              let rootView = collectionView.superview else { return }
-        
-        // 텍스트뷰의 절대적인 Y 좌표 계산
-        let absoluteFrame = textField.convert(textField.bounds, to: rootView)
-        
-        // 텍스트뷰의 Y 좌표값 전송
-        textFieldFocusPublisher.send(absoluteFrame.origin.y)
     }
 }
 
