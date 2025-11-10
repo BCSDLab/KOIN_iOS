@@ -439,13 +439,15 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 닫기/열기
     @objc private func dateButtonTapped(button: UIButton) {
-        // 열려있는 드롭다운  닫기
-        shouldDismissDropDownPublisher.send()
-        
+        // 닫혀있는 dropdown을 열 경우 - 키보드 닫기, scroll, 다른 dropdown 모두 닫기
         if dropdownView.isHidden {
             self.endEditing(true)
             shouldScrollTo(dropdownView)
+            
+            // 열려있는 드롭다운  닫기
+            shouldDismissDropDownPublisher.send()
         }
+
         dropdownView.isHidden = !dropdownView.isHidden
     }
     // MARK: - dropdown 닫기
