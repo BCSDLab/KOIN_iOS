@@ -10,21 +10,23 @@ import UIKit
 
 final class AddLostItemCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     private var cancellable = Set<AnyCancellable>()
-    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
-    let addImageButtonPublisher = PassthroughSubject<Void, Never>()
-    let dateButtonPublisher = PassthroughSubject<Void, Never>()
-    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
-    let datePublisher = PassthroughSubject<String, Never>()
-    let categoryPublisher = PassthroughSubject<String, Never>()
-    let locationPublisher = PassthroughSubject<String, Never>()
-    let contentPublisher = PassthroughSubject<String, Never>()
-    let imageUrlsPublisher = PassthroughSubject<[String], Never>()
-    private var type: LostItemType = .lost
+    let deleteButtonPublisher = PassthroughSubject<Void, Never>()   // 품목 삭제
+    let addImageButtonPublisher = PassthroughSubject<Void, Never>() // 사진 등록
+    let imageUrlsPublisher = PassthroughSubject<[String], Never>()  // 사진 등록
+    let categoryPublisher = PassthroughSubject<String, Never>()     // 품목 선택
+    //let dateButtonPublisher = PassthroughSubject<Void, Never>()
+    let datePublisher = PassthroughSubject<String, Never>()         // 날짜 선택
+    let locationPublisher = PassthroughSubject<String, Never>()     // 분실 장소
+    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()   // 내용
+    let contentPublisher = PassthroughSubject<String, Never>()      // 내용
     
+    private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
     
+    // MARK: - UI Components
     private let separateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
@@ -151,37 +153,46 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.text = textViewPlaceHolder
     }
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        contentTextView.delegate = self
         configureTapGestureToDismissKeyboard()
+        
+        // AddTarget
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
+        
+        // SetDelegate
+        contentTextView.delegate = self
         locationTextField.delegate = self
+        
+        // Bind
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
         }.store(in: &cancellable)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
     }
     
+    // MARK: - Configure
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
+        self.type = type
+        
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
         dateLabel.text = "\(type.description) 일자"
-        self.type = type
         pictureMessageLabel.text = "\(type.description)물 사진을 업로드해주세요."
         locationLabel.text = "\(type.description) 장소"
         locationTextField.attributedPlaceholder = NSAttributedString(
@@ -210,112 +221,77 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         
         let category = model.category
         var isCategorySelected = false
-           
-           for view in categoryStackView.arrangedSubviews {
-               guard let button = view as? UIButton else { continue }
-               if button.configuration?.title == category {
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-                   button.layer.borderColor = UIColor.appColor(.primary600).cgColor
-                   isCategorySelected = true
-               } else {
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-               }
-           }
-           
-           if !isCategorySelected {
-               categoryStackView.arrangedSubviews.forEach { view in
-                   guard let button = view as? UIButton else { return }
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-               }
-           }
+        
+        for view in categoryStackView.arrangedSubviews {
+            guard let button = view as? UIButton else { continue }
+            if button.configuration?.title == category {
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+                button.layer.borderColor = UIColor.appColor(.primary600).cgColor
+                isCategorySelected = true
+            } else {
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            }
+        }
+        
+        if !isCategorySelected {
+            categoryStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton else { return }
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            }
+        }
+    }
+}
 
-    }
-    
-    func setImage(url: [String]) {
-        imageUploadCollectionView.updateImageUrls(url)
-    }
-    
-    func getCellData() -> PostLostItemRequest {
-        let category = categoryStackView.arrangedSubviews
-            .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
-            .first ?? "카드"
+// MARK: - helper
+extension AddLostItemCollectionViewCell {
+
+    private func setUpTexts(_ type: LostItemType) {
+        let texts = [
+            "품목이 선택되지 않았습니다.",
+            "\(type.description)일자가 입력되지 않았습니다.",
+            "\(type.description)장소가 입력되지 않았습니다."
+        ]
         
-        let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        : ""
+        let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
         
-        let foundDate = dateButton.titleLabel?.text ?? ""
-        let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
-        
-        
-        let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
-        ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        : ""
-        return PostLostItemRequest(
-            category: category,
-            location: location,
-            foundDate: formattedFoundDate,
-            content: content,
-            images: imageUploadCollectionView.imageUrls,
-            registeredAt: "2025-01-10",
-            updatedAt: "2025-01-10"
-        )
-    }
-    func convertToISODate(from koreanDate: String) -> String? {
-        let inputFormatter = DateFormatter()
-        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-        inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-        
-        let outputFormatter = DateFormatter()
-        outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
-        outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
-        
-        if let date = inputFormatter.date(from: koreanDate) {
-            return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
-        } else {
-            return nil
+        labels.enumerated().forEach { index, label in
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage.appImage(asset: .warningOrange)
+            imageAttachment.bounds = CGRect(x: 0, y: -4, width: 16, height: 16)
+            let spacingAttachment = NSTextAttachment()
+            spacingAttachment.bounds = CGRect(x: 0, y: 0, width: 6, height: 1)
+            let attributedString = NSMutableAttributedString()
+            attributedString.append(NSAttributedString(attachment: imageAttachment))
+            attributedString.append(NSAttributedString(attachment: spacingAttachment))
+            let text = texts[index]
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.appFont(.pretendardRegular, size: 12),
+                .foregroundColor: UIColor.appColor(.sub500)
+            ]
+            attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
+            label.attributedText = attributedString
         }
     }
     
+    private func configureTapGestureToDismissKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        contentView.addGestureRecognizer(tapGesture)
+    }
 }
 
-extension AddLostItemCollectionViewCell: UITextViewDelegate {
-    
+// MARK: - @objc
+extension AddLostItemCollectionViewCell{
     
     @objc private func locationTextFieldDidChange(_ textField: UITextField) {
         if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             locationWarningLabel.isHidden = true
         }
         locationPublisher.send(textField.text ?? "")
-    }
-    
-    
-    func validateInputs() -> Bool {
-        var isValid = true
-        if self.type != .lost {
-               if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                   locationWarningLabel.isHidden = false
-                   isValid = false
-               }
-           }
-        
-        if let title = dateButton.title(for: .normal), title.contains("장소") {
-            dateWarningLabel.isHidden = false
-            isValid = false
-        }
-
-        
-        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
-        if selectedCategory == nil {
-            categoryWarningLabel.isHidden = false
-            isValid = false
-        }
-        return isValid
     }
     @objc private func dateButtonTapped(button: UIButton) {
         dateWarningLabel.isHidden = true
@@ -401,6 +377,92 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
            sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
            sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
     }
+    
+    @objc private func dismissKeyboard() {
+        contentView.endEditing(true)  // 키보드 숨기기
+
+        if let dropdownView = self.viewWithTag(999) as? DatePickerDropdownView {
+            dropdownView.confirmSelection()  // 현재 보이는 시간 반영
+            dropdownView.removeFromSuperview()  // 드롭다운 닫기
+        }
+    }
+}
+
+extension AddLostItemCollectionViewCell {
+
+    func setImage(url: [String]) {
+        imageUploadCollectionView.updateImageUrls(url)
+    }
+    
+    func getCellData() -> PostLostItemRequest {
+        let category = categoryStackView.arrangedSubviews
+            .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
+            .first ?? "카드"
+        
+        let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        : ""
+        
+        let foundDate = dateButton.titleLabel?.text ?? ""
+        let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
+        
+        
+        let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
+        ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        : ""
+        return PostLostItemRequest(
+            category: category,
+            location: location,
+            foundDate: formattedFoundDate,
+            content: content,
+            images: imageUploadCollectionView.imageUrls,
+            registeredAt: "2025-01-10",
+            updatedAt: "2025-01-10"
+        )
+    }
+    func convertToISODate(from koreanDate: String) -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
+        inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
+        outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
+        
+        if let date = inputFormatter.date(from: koreanDate) {
+            return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
+        } else {
+            return nil
+        }
+    }
+    
+    func validateInputs() -> Bool {
+        var isValid = true
+        
+        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
+        if selectedCategory == nil {
+            categoryWarningLabel.isHidden = false
+            isValid = false
+        }
+        
+        if let title = dateButton.title(for: .normal), title.contains("장소") {
+            dateWarningLabel.isHidden = false
+            isValid = false
+        }
+        
+        if self.type != .lost {
+            if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                locationWarningLabel.isHidden = false
+                isValid = false
+            }
+        }
+        
+        return isValid
+    }
+}
+
+extension AddLostItemCollectionViewCell: UITextViewDelegate {
+    
     func textViewDidChange(_ textView: UITextView) {
         let maxCharacters = 1000
         if textView.text.count > maxCharacters {
@@ -433,10 +495,22 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             textView.textColor = UIColor.appColor(.neutral500)
         }
     }
-    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder() // 키보드 숨김
+        return true
+    }
 }
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // 키보드 숨김
+        return true
+    }
+}
+
+extension AddLostItemCollectionViewCell {
+    
     private func setUpLayouts() {
         [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
             contentView.addSubview($0)
@@ -574,36 +648,8 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
         }
-        
     }
     
-    private func setUpTexts(_ type: LostItemType) {
-        let texts = [
-            "품목이 선택되지 않았습니다.",
-            "\(type.description)일자가 입력되지 않았습니다.",
-            "\(type.description)장소가 입력되지 않았습니다."
-        ]
-        
-        let labels: [UILabel] = [categoryWarningLabel, dateWarningLabel, locationWarningLabel]
-        
-        labels.enumerated().forEach { index, label in
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = UIImage.appImage(asset: .warningOrange)
-            imageAttachment.bounds = CGRect(x: 0, y: -4, width: 16, height: 16)
-            let spacingAttachment = NSTextAttachment()
-            spacingAttachment.bounds = CGRect(x: 0, y: 0, width: 6, height: 1)
-            let attributedString = NSMutableAttributedString()
-            attributedString.append(NSAttributedString(attachment: imageAttachment))
-            attributedString.append(NSAttributedString(attachment: spacingAttachment))
-            let text = texts[index]
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.appFont(.pretendardRegular, size: 12),
-                .foregroundColor: UIColor.appColor(.sub500)
-            ]
-            attributedString.append(NSAttributedString(string: text, attributes: textAttributes))
-            label.attributedText = attributedString
-        }
-    }
     private func setUpStackView() {
         let items = ["카드", "신분증", "지갑", "전자제품", "기타"]
         let widths = [49, 61, 49, 73, 49]
@@ -653,27 +699,5 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         setUpConstraints()
         setUpAttributes()
         setUpStackView()
-    }
-    private func configureTapGestureToDismissKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        contentView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        contentView.endEditing(true)  // 키보드 숨기기
-
-        if let dropdownView = self.viewWithTag(999) as? DatePickerDropdownView {
-            dropdownView.confirmSelection()  // 현재 보이는 시간 반영
-            dropdownView.removeFromSuperview()  // 드롭다운 닫기
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 숨김
-        return true
-    }
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder() // 키보드 숨김
-        return true
     }
 }

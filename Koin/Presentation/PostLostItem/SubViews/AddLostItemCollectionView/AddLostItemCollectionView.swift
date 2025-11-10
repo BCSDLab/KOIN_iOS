@@ -122,9 +122,11 @@ extension AddLostItemCollectionView {
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
         }.store(in: &cell.cancellables)
-        cell.dateButtonPublisher.sink { [weak self] _ in
+        /*
+         cell.dateButtonPublisher.sink { [weak self] _ in
             self?.dateButtonPublisher.send()
-        }.store(in: &cell.cancellables)
+         }.store(in: &cell.cancellables)
+        */
         cell.textViewFocusPublisher.sink { [weak self] value in
             self?.textViewFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
