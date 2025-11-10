@@ -325,7 +325,6 @@ extension AddLostItemCollectionViewCell{
         
         // 뷰컨트롤러에 추가
         self.addSubview(dropdownView)
-        dropdownView.translatesAutoresizingMaskIntoConstraints = false
         
         // 드롭다운 위치 지정
         dropdownView.snp.makeConstraints {
@@ -386,6 +385,10 @@ extension AddLostItemCollectionViewCell{
 }
 
 extension AddLostItemCollectionViewCell {
+    
+    func dismissDatePicker() {
+        dismissDropdown()
+    }
 
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
