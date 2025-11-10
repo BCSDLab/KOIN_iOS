@@ -327,7 +327,7 @@ extension AddLostItemCollectionViewCell{
         deleteButtonPublisher.send()
     }
     
-    @objc private func stackButtonTapped(_ sender: UIButton) {        
+    @objc private func stackButtonTapped(_ sender: UIButton) {
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
@@ -342,12 +342,6 @@ extension AddLostItemCollectionViewCell{
            sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
            sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
            sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
-    }
-    
-    @objc func dismissKeyboardDropdown() {
-        print("dismiss happened")
-        contentView.endEditing(true)  // 키보드 숨기기
-        dismissDropdown()
     }
 }
 
