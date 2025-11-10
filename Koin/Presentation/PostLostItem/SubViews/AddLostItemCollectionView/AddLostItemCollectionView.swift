@@ -15,6 +15,7 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
@@ -127,6 +128,9 @@ extension AddLostItemCollectionView {
             self?.dateButtonPublisher.send()
          }.store(in: &cell.cancellables)
         */
+        cell.textFieldFocusPublisher.sink { [weak self] value in
+            self?.textFieldFocusPublisher.send(value)
+        }.store(in: &cell.cancellables)
         cell.textViewFocusPublisher.sink { [weak self] value in
             self?.textViewFocusPublisher.send(value)
         }.store(in: &cell.cancellables)

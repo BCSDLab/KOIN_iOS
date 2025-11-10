@@ -141,6 +141,13 @@ final class PostLostItemViewController: UIViewController {
                 }
             }.store(in: &subscriptions)
         
+        addLostItemCollectionView.textFieldFocusPublisher
+            .sink { [weak self] yOffset in
+                UIView.animate(withDuration: 0.3) {
+                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
+                }
+            }.store(in: &subscriptions)
+        
         addLostItemCollectionView.logPublisher.sink { [weak self] value in
             self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
         }.store(in: &subscriptions)

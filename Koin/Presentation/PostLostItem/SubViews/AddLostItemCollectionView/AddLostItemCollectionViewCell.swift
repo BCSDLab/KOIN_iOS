@@ -19,12 +19,14 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let categoryPublisher = PassthroughSubject<String, Never>()     // 품목 선택
     //let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let datePublisher = PassthroughSubject<String, Never>()         // 날짜 선택
-    let locationPublisher = PassthroughSubject<String, Never>()     // 분실 장소
+    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()  // 분실 장소
+    let locationPublisher = PassthroughSubject<String, Never>()         // 분실 장소
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()   // 내용
-    let contentPublisher = PassthroughSubject<String, Never>()      // 내용
+    let contentPublisher = PassthroughSubject<String, Never>()          // 내용
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
+    private var textFieldPlaceHolder = ""
     
     // MARK: - UI Components
     private let separateView = UIView().then {
@@ -133,6 +135,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.leftViewMode = .always
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
+        $0.textColor = UIColor.appColor(.neutral500)
     }
     
     private let contentLabel = UILabel().then {
@@ -191,18 +194,23 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
         self.type = type
         
+        textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
+        
         dateLabel.text = "\(type.description) 일자"
         pictureMessageLabel.text = "\(type.description)물 사진을 업로드해주세요."
         locationLabel.text = "\(type.description) 장소"
-        locationTextField.attributedPlaceholder = NSAttributedString(
-            string: "\(type.description) 장소를 입력해주세요.",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
-        )
         setUpTexts(type)
         itemCountLabel.text = "\(type.description)물 \(index + 1)"
         
-        locationTextField.text = model.location
+        switch model.location == "" {
+        case true:
+            locationTextField.text = textFieldPlaceHolder
+        case false:
+            locationTextField.text = model.location
+            locationTextField.textColor = UIColor.appColor(.neutral800)
+        }
+        
         if model.foundDate.isEmpty {
             dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
@@ -287,12 +295,6 @@ extension AddLostItemCollectionViewCell {
 // MARK: - @objc
 extension AddLostItemCollectionViewCell{
     
-    @objc private func locationTextFieldDidChange(_ textField: UITextField) {
-        if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
-            locationWarningLabel.isHidden = true
-        }
-        locationPublisher.send(textField.text ?? "")
-    }
     @objc private func dateButtonTapped(button: UIButton) {
         dateWarningLabel.isHidden = true
         //     dateButtonPublisher.send()
@@ -400,8 +402,7 @@ extension AddLostItemCollectionViewCell {
             .first ?? "카드"
         
         let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        : ""
+        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) : ""
         
         let foundDate = dateButton.titleLabel?.text ?? ""
         let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
@@ -518,10 +519,53 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
+    // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // 스크롤
+        shouldScrollTo(textField)
+        
+        // placeholder 비우기
+        if textField.textColor == UIColor.appColor(.neutral500) {
+            textField.text = ""
+            textField.textColor = UIColor.appColor(.neutral800)
+        }
+    }
+    
+    // MARK: 장소 수정 - 스크롤
+    @objc private func locationTextFieldDidChange(_ textField: UITextField) {
+        // 스크롤
+        shouldScrollTo(textField)
+        
+        if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
+            locationWarningLabel.isHidden = true
+        }
+        locationPublisher.send(textField.text ?? "")
+    }
+    
+    // MARK: 장소 수정 완료 - placeholder 만들기
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
+            textField.textColor = UIColor.appColor(.neutral500)
+            textField.text = "\(type.description) 장소를 입력해주세요."
+        }
+    }
+    
     // MARK: 키보드 닫기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // 키보드 숨김
         return true
+    }
+    
+    // MARK: 스크롤
+    private func shouldScrollTo(_ textField: UITextField) {
+        guard let collectionView = self.superview as? UICollectionView,
+              let rootView = collectionView.superview else { return }
+        
+        // 텍스트뷰의 절대적인 Y 좌표 계산
+        let absoluteFrame = textField.convert(textField.bounds, to: rootView)
+        
+        // 텍스트뷰의 Y 좌표값 전송
+        textFieldFocusPublisher.send(absoluteFrame.origin.y)
     }
 }
 
