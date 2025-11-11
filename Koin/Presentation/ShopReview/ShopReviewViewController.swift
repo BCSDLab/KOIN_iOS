@@ -396,7 +396,7 @@ extension ShopReviewViewController {
         
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.snp.bottom).offset(-100)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
         }
         shopNameLabel.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.top).offset(24)
@@ -500,7 +500,7 @@ extension ShopReviewViewController {
             $0.leading.equalTo(view.snp.leading).offset(24)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.height.equalTo(48)
-            $0.bottom.equalTo(view.snp.bottom).offset(-20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
     
@@ -575,27 +575,25 @@ extension ShopReviewViewController {
     
     
     @objc func keyboardWillShow(_ sender: Notification) {
-        guard
-            let keyboardFrame = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
-            let currentView = UIResponder.currentResponder as? UIView
-        else { return }
-        
-        let keyboardYTop = keyboardFrame.cgRectValue.origin.y
-        let convertedTextFieldFrame = view.convert(currentView.frame, from : currentView.superview)
-        let textFieldYBottom = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
-        if textFieldYBottom > keyboardYTop {
-            let textFieldYTop = convertedTextFieldFrame.origin.y
-            let properTextFieldHeight = textFieldYTop - keyboardYTop / 1.3
-            view.frame.origin.y = -properTextFieldHeight
+        guard let keyboardFrameValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrameInView = view.convert(keyboardFrameValue.cgRectValue, from: nil)
+        let coveredHeight = max(0, keyboardFrameInView.height - view.safeAreaInsets.bottom)
+        UIView.animate(withDuration: 0.2) {
+            self.additionalSafeAreaInsets.bottom = coveredHeight
+            self.view.layoutIfNeeded()
+        }
+        if let activeView = UIResponder.currentResponder as? UIView {
+            let targetRect = scrollView.convert(activeView.bounds, from: activeView).insetBy(dx: 0, dy: -16)
+            scrollView.scrollRectToVisible(targetRect, animated: true)
         }
     }
-    
+
     @objc func keyboardWillHide(_ sender: Notification) {
-        if view.frame.origin.y != 0 {
-            view.frame.origin.y = 0
+        UIView.animate(withDuration: 0.2) {
+            self.additionalSafeAreaInsets.bottom = 0
+            self.view.layoutIfNeeded()
         }
     }
-    
 }
 
 extension UIResponder {
@@ -614,3 +612,4 @@ extension UIResponder {
         Static.responder = self
     }
 }
+
