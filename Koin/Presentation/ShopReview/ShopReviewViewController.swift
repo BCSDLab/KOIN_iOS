@@ -103,7 +103,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 21
-        flowLayout.sectionInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
+        flowLayout.sectionInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 8)
         flowLayout.scrollDirection = .horizontal
         let collectionView = ReviewImageUploadCollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.appColor(.newBackground)
