@@ -305,7 +305,7 @@ extension ShopReviewViewController {
             self.reviewTextViewHeight?.update(offset: clampedHeight)
             self.view.layoutIfNeeded()
         }
-        UIView.animate(withDuration: 0.15, animations: apply)
+        UIView.animate(withDuration: 0, animations: apply)
     }
 
     
