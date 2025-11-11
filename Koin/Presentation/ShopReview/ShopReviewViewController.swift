@@ -236,7 +236,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             case let .fillComponent(response):
                 self?.fillComponent(response)
             case let .showToast(message, success):
-                self?.showToast(message: message, success: success)
+                self?.showToastMessage(message: message)
                 if success {
                     self?.navigationController?.popViewController(animated: true)
                 }
