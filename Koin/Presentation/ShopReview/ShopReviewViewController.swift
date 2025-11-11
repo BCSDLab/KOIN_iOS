@@ -62,14 +62,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.backgroundColor = UIColor.appColor(.neutral200)
     }
     
-    private let moreInfoLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.neutral600)
-        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.text = "더 많은 정보를 작성해보세요!"
-    }
-    
     private let imageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.text = "사진"
     }
@@ -111,7 +105,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     }()
     
     private let reviewDescriptionLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.text = "내용"
     }
@@ -387,7 +381,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -424,12 +418,8 @@ extension ShopReviewViewController {
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             $0.height.equalTo(1)
         }
-        moreInfoLabel.snp.makeConstraints {
-            $0.top.equalTo(separateView.snp.bottom).offset(24)
-            $0.leading.equalTo(scrollView.snp.leading).offset(20)
-        }
         imageLabel.snp.makeConstraints {
-            $0.top.equalTo(moreInfoLabel.snp.bottom).offset(16)
+            $0.top.equalTo(separateView.snp.bottom).offset(24)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
         imageDescriptionLabel.snp.makeConstraints {
@@ -449,7 +439,7 @@ extension ShopReviewViewController {
         }
         reviewDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
-            $0.leading.equalTo(scrollView.snp.leading).offset(32)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
         }
         reviewDescriptionWordLimitLabel.snp.makeConstraints {
             $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
