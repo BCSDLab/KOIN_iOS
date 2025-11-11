@@ -10,7 +10,10 @@ import Combine
 
 final class DatePickerDropdownView: UIView {
     
-    let valueChangedPublisher = PassthroughSubject<Date, Never>()
+    let valueChangedPublisher = PassthroughSubject<Void, Never>()
+    var dateValue: Date {
+        return datePicker.date
+    }
     
     private let datePicker = UIDatePicker().then {
         $0.datePickerMode = .date
@@ -59,13 +62,7 @@ final class DatePickerDropdownView: UIView {
         }
     }
     
-    
-    func confirmSelection() {
-        
-        onDateSelected?(datePicker.date)  // 현재 보이는 날짜로 설정
-    }
-    
     @objc private func datePickerValueChagned() {
-        valueChangedPublisher.send(datePicker.date)
+        valueChangedPublisher.send()
     }
 }

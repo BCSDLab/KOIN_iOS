@@ -113,6 +113,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.image = UIImage.appImage(asset: .chevronDown)
         $0.isUserInteractionEnabled = false
     }
+    
     private let dateButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
@@ -128,6 +129,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
         $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
         $0.isHidden = true
+        $0.transform = CGAffineTransform(translationX: 0, y: -20)
+        $0.alpha = 0
     }
     
     private let locationLabel = UILabel().then { _ in
@@ -189,8 +192,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
             self?.shouldDismissDropDownPublisher.send()
             }.store(in: &cancellable)
-        dropdownView.valueChangedPublisher.sink { [weak self] selectedDate in
-            self?.dropdownValueChanged(selectedDate)
+        dropdownView.valueChangedPublisher.sink { [weak self] in
+            self?.dropdownValueChanged()
             }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
@@ -405,33 +408,45 @@ extension AddLostItemCollectionViewCell {
 
 extension AddLostItemCollectionViewCell {
     
-    // MARK: - dropdown 닫기/열기
+    // MARK: - dropdown 열기/닫기
     @objc private func dateButtonTapped(button: UIButton) {
-        // 닫혀있는 dropdown을 열 경우 - 키보드 닫기, scroll, 다른 dropdown 모두 닫기
-        if dropdownView.isHidden {
-            self.endEditing(true)
-            shouldScrollTo(dropdownView)
-            
-            // 열려있는 드롭다운  닫기
-            shouldDismissDropDownPublisher.send()
-        }
-
-        dropdownView.isHidden = !dropdownView.isHidden
+        dropdownView.isHidden ? presentDropdown() : dismissDropdown()
     }
+    
+    // MARK: - dropdown 열기
+    private func presentDropdown() {
+        self.endEditing(true)                   // 열려있는 키보드 닫기
+        //shouldDismissDropDownPublisher.send()   // 다른 dropdown 모두 닫기 // FIXME: 애니메이션과 충돌
+        dropdownValueChanged()                  // 초기값 바로 적용하기
+        
+        dropdownView.isHidden = false
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self else { return }
+            dropdownView.alpha = 1
+            dropdownView.transform = CGAffineTransform(translationX: 0, y: 0)
+        }
+    }
+    
     // MARK: - dropdown 닫기
     @objc func dismissDropdown() {
-        dropdownView.confirmSelection()
-        dropdownView.isHidden = true
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self else { return }
+            dropdownView.alpha = 0
+            dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.2 ) { [weak self] in
+            self?.dropdownView.isHidden = true
+        }
     }
     
     // MARK: - dropdown 값 변화
-    private func dropdownValueChanged(_ selectedDate: Date) {
+    private func dropdownValueChanged() {
         shouldScrollTo(dropdownView)
         
         let formattedDate = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월 d일"
-            return formatter.string(from: selectedDate)
+            return formatter.string(from: dropdownView.dateValue)
         }()
         dateButton.setTitle(formattedDate, for: .normal)
         dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
@@ -534,7 +549,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, dropdownView].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
@@ -615,20 +630,22 @@ extension AddLostItemCollectionViewCell {
             make.trailing.equalTo(addPictureButton.snp.trailing)
             make.height.equalTo(22)
         }
-        dateButton.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(8)
-            make.leading.equalTo(itemCountLabel.snp.leading)
-            make.height.equalTo(40)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-24)
-        }
-        chevronImage.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-16)
-            make.width.height.equalTo(24)
+
+        dateButton.snp.makeConstraints {
+            $0.top.equalTo(dateLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(itemCountLabel.snp.leading)
+            $0.trailing.equalTo(contentView.snp.trailing).offset(-24)
+            $0.height.equalTo(40)
         }
         dropdownView.snp.makeConstraints {
             $0.top.equalTo(dateButton.snp.bottom).offset(4)
             $0.leading.trailing.equalTo(dateButton)
+        }
+        
+        chevronImage.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(24)
         }
         locationLabel.snp.makeConstraints { make in
             make.top.equalTo(dateButton.snp.bottom).offset(16)
