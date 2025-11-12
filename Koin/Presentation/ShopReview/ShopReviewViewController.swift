@@ -74,7 +74,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.text = "리뷰와 관련된 사진을 업로드해주세요."
     }
     
-    private let uploadimageButton: UIButton = {
+    private let uploadimageButton: DashedBorderButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage.appImage(asset: .addPhotoAlternate)?.withRenderingMode(.alwaysTemplate)
         config.baseForegroundColor = UIColor.appColor(.neutral500)
@@ -91,7 +91,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         config.background.cornerRadius = 10
         config.contentInsets = .init(top: 18, leading: 16, bottom: 14, trailing: 16)
         
-        return UIButton(configuration: config, primaryAction: nil)
+        return DashedBorderButton(configuration: config, primaryAction: nil)
     }()
     
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
@@ -300,12 +300,10 @@ extension ShopReviewViewController {
         
         let clampedHeight = min(max(fittedHeight, minTextViewHeight) , maxTextViewHeight)
         reviewTextView.isScrollEnabled = (fittedHeight > maxTextViewHeight)
-
-        let apply = {
+        
+        UIView.performWithoutAnimation {
             self.reviewTextViewHeight?.update(offset: clampedHeight)
-            self.view.layoutIfNeeded()
         }
-        UIView.animate(withDuration: 0, animations: apply)
     }
 
     
