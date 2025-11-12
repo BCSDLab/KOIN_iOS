@@ -358,7 +358,6 @@ extension HomeViewController {
                     fetchShopListUseCase: fetchShopListUseCase,
                     fetchEventListUseCase: fetchEventListUseCase,
                     fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-                    searchShopUseCase: searchShopUseCase,
                     fetchShopBenefitUseCase: fetchShopBenefitUseCase,
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                     logAnalyticsEventUseCase: logAnalyticsEventUseCase,
