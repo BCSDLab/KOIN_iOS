@@ -4000,8 +4000,6 @@
 				D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */,
 				B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */,
 				7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */,
-				B46B8D3B2E771CAA00A8E797 /* FetchOrderShopMenusGroupsFromShopUseCase.swift */,
-				B4254AF72E7D318B0036F656 /* FetchOrderShopMenusFromShopUseCase.swift */,
 				7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */,
 				7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */,
 			);

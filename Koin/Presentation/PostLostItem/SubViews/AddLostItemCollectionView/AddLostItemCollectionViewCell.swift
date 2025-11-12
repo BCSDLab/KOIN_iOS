@@ -10,21 +10,25 @@ import UIKit
 
 final class AddLostItemCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
-    let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let datePublisher = PassthroughSubject<String, Never>()
     let categoryPublisher = PassthroughSubject<String, Never>()
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
+    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
+    
     private var type: LostItemType = .lost
-    
     private var textViewPlaceHolder = ""
+    private var textFieldPlaceHolder = ""
     
+    // MARK: - UI Components
     private let separateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
@@ -77,6 +81,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
+        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
     
     private let categoryLabel = UILabel().then {
@@ -108,6 +113,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.image = UIImage.appImage(asset: .chevronDown)
         $0.isUserInteractionEnabled = false
     }
+    
     private let dateButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 8
@@ -115,6 +121,16 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
         $0.contentHorizontalAlignment = .left
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+    }
+    
+    private lazy var dropdownView = DatePickerDropdownView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
+        $0.isHidden = true
+        $0.transform = CGAffineTransform(translationX: 0, y: -20)
+        $0.alpha = 0
     }
     
     private let locationLabel = UILabel().then { _ in
@@ -131,6 +147,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.leftViewMode = .always
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
+        $0.textColor = UIColor.appColor(.neutral500)
     }
     
     private let contentLabel = UILabel().then {
@@ -151,47 +168,65 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.text = textViewPlaceHolder
     }
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        contentTextView.delegate = self
-        configureTapGestureToDismissKeyboard()
+        
+        // AddTarget
         deleteCellButton.addTarget(self, action: #selector(deleteCellButtonTapped), for: .touchUpInside)
         addPictureButton.addTarget(self, action: #selector(addImageButtonTapped), for: .touchUpInside)
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         locationTextField.addTarget(self, action: #selector(locationTextFieldDidChange), for: .editingChanged)
+        
+        // SetDelegate
+        contentTextView.delegate = self
         locationTextField.delegate = self
+        
+        // Bind
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
-        }.store(in: &cancellable)
+            }.store(in: &cancellable)
+        imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
+            self?.shouldDismissDropDownPublisher.send()
+            }.store(in: &cancellable)
+        dropdownView.valueChangedPublisher.sink { [weak self] in
+            self?.dropdownValueChanged()
+            }.store(in: &cancellable)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
     }
     
+    // MARK: - Configure
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
-        textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
-        dateLabel.text = "\(type.description) 일자"
         self.type = type
+        textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
+        textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
+        
+        dateLabel.text = "\(type.description) 일자"
         pictureMessageLabel.text = "\(type.description)물 사진을 업로드해주세요."
         locationLabel.text = "\(type.description) 장소"
-        locationTextField.attributedPlaceholder = NSAttributedString(
-            string: "\(type.description) 장소를 입력해주세요.",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500)]
-        )
         setUpTexts(type)
         itemCountLabel.text = "\(type.description)물 \(index + 1)"
         
-        locationTextField.text = model.location
+        switch model.location == "" {
+        case true:
+            locationTextField.text = textFieldPlaceHolder
+        case false:
+            locationTextField.text = model.location
+            locationTextField.textColor = UIColor.appColor(.neutral800)
+        }
+        
         if model.foundDate.isEmpty {
             dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
@@ -210,32 +245,96 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         
         let category = model.category
         var isCategorySelected = false
-           
-           for view in categoryStackView.arrangedSubviews {
-               guard let button = view as? UIButton else { continue }
-               if button.configuration?.title == category {
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-                   button.layer.borderColor = UIColor.appColor(.primary600).cgColor
-                   isCategorySelected = true
-               } else {
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-               }
-           }
-           
-           if !isCategorySelected {
-               categoryStackView.arrangedSubviews.forEach { view in
-                   guard let button = view as? UIButton else { return }
-                   button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                   button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                   button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-               }
-           }
+        
+        for view in categoryStackView.arrangedSubviews {
+            guard let button = view as? UIButton else { continue }
+            if button.configuration?.title == category {
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+                button.layer.borderColor = UIColor.appColor(.primary600).cgColor
+                isCategorySelected = true
+            } else {
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            }
+        }
+        
+        if !isCategorySelected {
+            categoryStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton else { return }
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            }
+        }
+    }
+}
 
+extension AddLostItemCollectionViewCell {
+    
+    private func shouldScrollTo(_ view: UIView) {
+        guard let collectionView = self.superview as? UICollectionView,
+              let rootView = collectionView.superview else { return }
+        
+        // 텍스트뷰의 절대적인 Y 좌표 계산
+        let absoluteFrame = view.convert(view.bounds, to: rootView)
+        
+        // 텍스트뷰의 Y 좌표값 전송
+        textFieldFocusPublisher.send(absoluteFrame.origin.y)
+    }
+}
+
+// MARK: - @objc
+extension AddLostItemCollectionViewCell{
+    
+    @objc private func addImageButtonTapped() {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+        
+        addImageButtonPublisher.send()
+        
+        // TODO: 높이 해결
+        //        imageUploadCollectionView.snp.updateConstraints { make in
+        //            make.height.equalTo(123)
+        //        }
+        //        self.setNeedsLayout()
+        //           self.layoutIfNeeded()
+        //
+        //           // Notify collection view to recalculate layout
+        //           (self.superview as? UICollectionView)?.performBatchUpdates(nil)
     }
     
+    @objc private func deleteCellButtonTapped() {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+        
+        deleteButtonPublisher.send()
+    }
+    
+    @objc private func stackButtonTapped(_ sender: UIButton) {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+    
+        categoryWarningLabel.isHidden = true
+        categoryPublisher.send(sender.titleLabel?.text ?? "")
+        categoryStackView.arrangedSubviews.forEach { view in
+               guard let button = view as? UIButton else { return }
+               button.isSelected = false
+               button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
+               button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
+               button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+           }
+
+           sender.isSelected = true
+           sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+           sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
+           sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
+    }
+}
+
+extension AddLostItemCollectionViewCell {
+
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
     }
@@ -246,8 +345,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             .first ?? "카드"
         
         let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        : ""
+        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) : ""
         
         let foundDate = dateButton.titleLabel?.text ?? ""
         let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
@@ -282,163 +380,180 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
-}
-
-extension AddLostItemCollectionViewCell: UITextViewDelegate {
-    
-    
-    @objc private func locationTextFieldDidChange(_ textField: UITextField) {
-        if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
-            locationWarningLabel.isHidden = true
-        }
-        locationPublisher.send(textField.text ?? "")
-    }
-    
-    
     func validateInputs() -> Bool {
         var isValid = true
-        if self.type != .lost {
-               if let text = locationTextField.text, text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                   locationWarningLabel.isHidden = false
-                   isValid = false
-               }
-           }
-        
-        if let title = dateButton.title(for: .normal), title.contains("장소") {
-            dateWarningLabel.isHidden = false
-            isValid = false
-        }
-
         
         let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
         if selectedCategory == nil {
             categoryWarningLabel.isHidden = false
             isValid = false
         }
+        
+        if let title = dateButton.title(for: .normal), title.contains("일자") {
+            dateWarningLabel.isHidden = false
+            isValid = false
+        }
+        
+        if self.type != .lost {
+            if locationTextField.textColor == UIColor.appColor(.neutral500) {
+                locationWarningLabel.isHidden = false
+                isValid = false
+            }
+        }
+
         return isValid
     }
+}
+
+extension AddLostItemCollectionViewCell {
+    
+    // MARK: - dropdown 열기/닫기
     @objc private func dateButtonTapped(button: UIButton) {
-        dateWarningLabel.isHidden = true
-        //     dateButtonPublisher.send()
-        if let existingDropdown = self.viewWithTag(999) {
-            existingDropdown.removeFromSuperview()
-            return
+        dropdownView.isHidden ? presentDropdown() : dismissDropdown()
+    }
+    
+    private func presentDropdown() {
+        // 열려있는 키보드 닫기
+        self.endEditing(true)
+        
+        // 열려있는 다른 dropdown 모두 닫기
+        //shouldDismissDropDownPublisher.send() // FIXME: 애니메이션과 충돌
+        
+        // 초기값 바로 적용하기
+        dropdownValueChanged()
+        
+        dropdownView.isHidden = false
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            guard let self else { return }
+            dropdownView.alpha = 1
+            dropdownView.transform = CGAffineTransform(translationX: 0, y: 0)
         }
+    }
+    
+    @objc func dismissDropdown() {
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self else { return }
+            dropdownView.alpha = 0
+            dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
+            self?.dropdownView.isHidden = true
+        }
+    }
+    
+    private func dropdownValueChanged() {
+        shouldScrollTo(dropdownView)
         
-        // 드롭다운 뷰 생성
-        let dropdownView = DatePickerDropdownView()
-        dropdownView.tag = 999
-        dropdownView.backgroundColor = UIColor.appColor(.neutral100)
-        dropdownView.layer.cornerRadius = 12
-        dropdownView.clipsToBounds = true
-        dropdownView.layer.borderWidth = 1
-        dropdownView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        
-        // 드롭다운에서 날짜 변경 시 호출
-        dropdownView.onDateSelected = { [weak self] selectedDate in
+        let formattedDate = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월 d일"
-            let formattedDate = formatter.string(from: selectedDate)
-            button.setTitle(formattedDate, for: .normal)
-            self?.dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            self?.datePublisher.send(formattedDate)
-            button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            dropdownView.removeFromSuperview() // 날짜 선택 시 드롭다운 닫기
-        }
-        
-        // 뷰컨트롤러에 추가
-        self.addSubview(dropdownView)
-        dropdownView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // 드롭다운 위치 지정
-        NSLayoutConstraint.activate([
-            dropdownView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
-            dropdownView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
-            dropdownView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 8),
-            dropdownView.heightAnchor.constraint(equalToConstant: 114)
-        ])
-        
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDropdown))
-        self.addGestureRecognizer(tapGesture)
-        tapGesture.cancelsTouchesInView = false
-        dropdownView.tag = 999
+            return formatter.string(from: dropdownView.dateValue)
+        }()
+        dateButton.setTitle(formattedDate, for: .normal)
+        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        datePublisher.send(formattedDate)
+        dateWarningLabel.isHidden = true
     }
-    @objc private func dismissDropdown() {
-        self.viewWithTag(999)?.removeFromSuperview()
-    }
-    
-    @objc private func addImageButtonTapped() {
-        addImageButtonPublisher.send()
-        
-        // TODO: 높이 해결
-        //        imageUploadCollectionView.snp.updateConstraints { make in
-        //            make.height.equalTo(123)
-        //        }
-        //        self.setNeedsLayout()
-        //           self.layoutIfNeeded()
-        //
-        //           // Notify collection view to recalculate layout
-        //           (self.superview as? UICollectionView)?.performBatchUpdates(nil)
-    }
-    @objc private func deleteCellButtonTapped() {
-        deleteButtonPublisher.send()
-    }
-    
-    @objc private func stackButtonTapped(_ sender: UIButton) {
-        categoryWarningLabel.isHidden = true
-        categoryPublisher.send(sender.titleLabel?.text ?? "")
-        categoryStackView.arrangedSubviews.forEach { view in
-               guard let button = view as? UIButton else { return }
-               button.isSelected = false
-               button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-               button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-               button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-           }
+}
 
-           sender.isSelected = true
-           sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
-           sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-           sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
-    }
-    func textViewDidChange(_ textView: UITextView) {
-        let maxCharacters = 1000
-        if textView.text.count > maxCharacters {
-            textView.text = String(textView.text.prefix(maxCharacters))
-        }
-        contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
-        contentPublisher.send(textView.text)
-    }
-    
+extension AddLostItemCollectionViewCell: UITextViewDelegate {
+            
+    // MARK: 내용 수정 시작
     func textViewDidBeginEditing(_ textView: UITextView) {
+        // 열려있는 드롭다운  닫기
+        shouldDismissDropDownPublisher.send()
         
-        guard let collectionView = self.superview as? UICollectionView,
-              let rootView = collectionView.superview else { return }
+        // 스크롤
+        shouldScrollTo(textView)
         
-        // 텍스트뷰의 절대적인 Y 좌표 계산
-        let absoluteFrame = textView.convert(textView.bounds, to: rootView)
-        
-        // 텍스트뷰의 Y 좌표값 전송
-        
-        textViewFocusPublisher.send(absoluteFrame.origin.y)
+        // placeholder 비우기
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
         }
     }
     
+    // MARK: 내용 수정
+    func textViewDidChange(_ textView: UITextView) {
+        // 글자수 제한
+        let maxCharacters = 1000
+        if textView.text.count > maxCharacters {
+            textView.text = String(textView.text.prefix(maxCharacters))
+        }
+        
+        contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
+        contentPublisher.send(textView.text)
+        
+        // 스크롤
+        shouldScrollTo(textView)
+    }
+    
+    // MARK: 내용 수정 완료
     func textViewDidEndEditing(_ textView: UITextView) {
+        // placeholder 만들기
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
         }
     }
     
+    // MARK: 내용 수정 완료
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        // 키보드 닫기
+        self.endEditing(true)
+        return true
+    }
 }
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
+    
+    // MARK: 장소 수정 시작
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // 열려있는 dropdown 닫기
+        shouldDismissDropDownPublisher.send()
+        
+        // 스크롤
+        shouldScrollTo(textField)
+        
+        // placeholder 비우기
+        if textField.textColor == UIColor.appColor(.neutral500) {
+            textField.text = ""
+            textField.textColor = UIColor.appColor(.neutral800)
+        }
+    }
+    
+    // MARK: 장소 수정
+    @objc private func locationTextFieldDidChange(_ textField: UITextField) {
+        // 스크롤
+        shouldScrollTo(textField)
+        
+        if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
+            locationWarningLabel.isHidden = true
+        }
+        locationPublisher.send(textField.text ?? "")
+    }
+    
+    // MARK: 장소 수정 완료
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        //  placeholder 만들기
+        if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
+            textField.textColor = UIColor.appColor(.neutral500)
+            textField.text = "\(type.description) 장소를 입력해주세요."
+        }
+    }
+    
+    // MARK: 장소 수정 완료
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // 키보드 닫기
+        self.endEditing(true)
+        return true
+    }
+}
+
+extension AddLostItemCollectionViewCell {
+    
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, dateButton, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
@@ -519,12 +634,18 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             make.trailing.equalTo(addPictureButton.snp.trailing)
             make.height.equalTo(22)
         }
-        dateButton.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(8)
-            make.leading.equalTo(itemCountLabel.snp.leading)
-            make.height.equalTo(40)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-24)
+
+        dateButton.snp.makeConstraints {
+            $0.top.equalTo(dateLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(itemCountLabel.snp.leading)
+            $0.trailing.equalTo(contentView.snp.trailing).offset(-24)
+            $0.height.equalTo(40)
         }
+        dropdownView.snp.makeConstraints {
+            $0.top.equalTo(dateButton.snp.bottom).offset(4)
+            $0.leading.trailing.equalTo(dateButton)
+        }
+        
         chevronImage.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-16)
@@ -574,9 +695,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
         }
-        
     }
-    
     private func setUpTexts(_ type: LostItemType) {
         let texts = [
             "품목이 선택되지 않았습니다.",
@@ -604,6 +723,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             label.attributedText = attributedString
         }
     }
+    
     private func setUpStackView() {
         let items = ["카드", "신분증", "지갑", "전자제품", "기타"]
         let widths = [49, 61, 49, 73, 49]
@@ -625,7 +745,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
             
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-            button.layer.cornerRadius = 14
+            button.layer.cornerRadius = 19
             button.clipsToBounds = true
             button.titleLabel?.numberOfLines = 1
             button.titleLabel?.textAlignment = .center
@@ -653,27 +773,5 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         setUpConstraints()
         setUpAttributes()
         setUpStackView()
-    }
-    private func configureTapGestureToDismissKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        contentView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        contentView.endEditing(true)  // 키보드 숨기기
-
-        if let dropdownView = self.viewWithTag(999) as? DatePickerDropdownView {
-            dropdownView.confirmSelection()  // 현재 보이는 시간 반영
-            dropdownView.removeFromSuperview()  // 드롭다운 닫기
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 숨김
-        return true
-    }
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder() // 키보드 숨김
-        return true
     }
 }
