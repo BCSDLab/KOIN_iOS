@@ -273,7 +273,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
 
 extension AddLostItemCollectionViewCell {
     
-    // MARK: 스크롤
     private func shouldScrollTo(_ view: UIView) {
         guard let collectionView = self.superview as? UICollectionView,
               let rootView = collectionView.superview else { return }
@@ -413,33 +412,35 @@ extension AddLostItemCollectionViewCell {
         dropdownView.isHidden ? presentDropdown() : dismissDropdown()
     }
     
-    // MARK: - dropdown 열기
     private func presentDropdown() {
-        self.endEditing(true)                   // 열려있는 키보드 닫기
-        //shouldDismissDropDownPublisher.send()   // 다른 dropdown 모두 닫기 // FIXME: 애니메이션과 충돌
-        dropdownValueChanged()                  // 초기값 바로 적용하기
+        // 열려있는 키보드 닫기
+        self.endEditing(true)
+        
+        // 열려있는 다른 dropdown 모두 닫기
+        //shouldDismissDropDownPublisher.send() // FIXME: 애니메이션과 충돌
+        
+        // 초기값 바로 적용하기
+        dropdownValueChanged()
         
         dropdownView.isHidden = false
-        UIView.animate(withDuration: 0.1) { [weak self] in
+        UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self else { return }
             dropdownView.alpha = 1
             dropdownView.transform = CGAffineTransform(translationX: 0, y: 0)
         }
     }
     
-    // MARK: - dropdown 닫기
     @objc func dismissDropdown() {
         UIView.animate(withDuration: 0.1) { [weak self] in
             guard let self else { return }
             dropdownView.alpha = 0
             dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.2 ) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
             self?.dropdownView.isHidden = true
         }
     }
     
-    // MARK: - dropdown 값 변화
     private func dropdownValueChanged() {
         shouldScrollTo(dropdownView)
         
@@ -457,7 +458,7 @@ extension AddLostItemCollectionViewCell {
 
 extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
-    // MARK: 내용 수정 시작 - 스크롤, placeholder 비우기
+    // MARK: 내용 수정 시작
     func textViewDidBeginEditing(_ textView: UITextView) {
         // 열려있는 드롭다운  닫기
         shouldDismissDropDownPublisher.send()
@@ -472,13 +473,14 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         }
     }
     
-    // MARK: 내용 수정 - 글자수 제한, 스크롤
+    // MARK: 내용 수정
     func textViewDidChange(_ textView: UITextView) {
         // 글자수 제한
         let maxCharacters = 1000
         if textView.text.count > maxCharacters {
             textView.text = String(textView.text.prefix(maxCharacters))
         }
+        
         contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
         contentPublisher.send(textView.text)
         
@@ -486,17 +488,18 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         shouldScrollTo(textView)
     }
     
-    // MARK: 내용 수정 완료 - placeholder 만들기
+    // MARK: 내용 수정 완료
     func textViewDidEndEditing(_ textView: UITextView) {
+        // placeholder 만들기
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
         }
     }
     
-    // MARK: 키보드 닫기
+    // MARK: 내용 수정 완료
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        //textView.resignFirstResponder() // 키보드 숨김
+        // 키보드 닫기
         self.endEditing(true)
         return true
     }
@@ -504,7 +507,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
 
 extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
-    // MARK: 장소 수정 시작 - 스크롤, placeholder 비우기
+    // MARK: 장소 수정 시작
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // 열려있는 dropdown 닫기
         shouldDismissDropDownPublisher.send()
@@ -519,7 +522,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         }
     }
     
-    // MARK: 장소 수정 - 스크롤
+    // MARK: 장소 수정
     @objc private func locationTextFieldDidChange(_ textField: UITextField) {
         // 스크롤
         shouldScrollTo(textField)
@@ -530,17 +533,18 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         locationPublisher.send(textField.text ?? "")
     }
     
-    // MARK: 장소 수정 완료 - placeholder 만들기
+    // MARK: 장소 수정 완료
     func textFieldDidEndEditing(_ textField: UITextField) {
+        //  placeholder 만들기
         if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             textField.textColor = UIColor.appColor(.neutral500)
             textField.text = "\(type.description) 장소를 입력해주세요."
         }
     }
     
-    // MARK: 키보드 닫기
+    // MARK: 장소 수정 완료
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //textField.resignFirstResponder() // 키보드 숨김
+        // 키보드 닫기
         self.endEditing(true)
         return true
     }

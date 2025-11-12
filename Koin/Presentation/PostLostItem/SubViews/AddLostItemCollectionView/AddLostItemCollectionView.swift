@@ -63,10 +63,7 @@ extension AddLostItemCollectionView {
     
     func dismissKeyBoardDatePicker() {
         self.endEditing(true) // 키보드 닫기
-        for row in 0..<numberOfItems(inSection: 0) {
-            let indexPath = IndexPath(row: row, section: 0)
-            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
-        }
+        dismissDatePicker()
     }
     private func dismissDatePicker() {
         for row in 0..<numberOfItems(inSection: 0) {
@@ -138,11 +135,6 @@ extension AddLostItemCollectionView {
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
         }.store(in: &cell.cancellables)
-        /*
-         cell.dateButtonPublisher.sink { [weak self] _ in
-            self?.dateButtonPublisher.send()
-         }.store(in: &cell.cancellables)
-        */
         cell.textFieldFocusPublisher.sink { [weak self] value in
             self?.textFieldFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
