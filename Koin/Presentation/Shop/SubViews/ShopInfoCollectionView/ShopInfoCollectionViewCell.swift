@@ -19,7 +19,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
         $0.numberOfLines = 0
         $0.lineBreakMode = .byWordWrapping
     }
@@ -27,7 +27,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     private let starImageView = UIImageView()
     
     private let ratingLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardBold, size: 12)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
     }
     
