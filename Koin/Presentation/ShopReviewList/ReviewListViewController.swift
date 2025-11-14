@@ -113,7 +113,7 @@ final class ReviewListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .white)
+        configureNavigationBar(style: .empty)
     }
         
     private func bind() {

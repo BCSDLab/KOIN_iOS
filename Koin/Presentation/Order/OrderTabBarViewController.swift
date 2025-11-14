@@ -44,7 +44,7 @@ final class OrderTabBarViewController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .transparent)
+        configureNavigationBar(style: .transparentBlack)
         
         if let navigationController {
             let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height

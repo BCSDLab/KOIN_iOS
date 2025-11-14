@@ -88,7 +88,7 @@ final class ShopSearchViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .transparent)
+        configureNavigationBar(style: .transparentBlack)
     }
     
     // MARK: Bind
