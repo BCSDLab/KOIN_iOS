@@ -21,7 +21,7 @@ final class ReviewImageUploadCollectionViewCell: UICollectionViewCell {
     
 
     private let cancelButton =  UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .cancelYellow), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .cancelGray), for: .normal)
     }
 
 
@@ -43,6 +43,9 @@ final class ReviewImageUploadCollectionViewCell: UICollectionViewCell {
     
     func configure(imageUrl: String) {
         imageView.loadImage(from: imageUrl)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
     }
     
     @objc private func cancelButtonTapped() {
@@ -58,17 +61,14 @@ extension ReviewImageUploadCollectionViewCell {
     }
     
     private func setUpConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).offset(8)
-            make.leading.equalTo(contentView.snp.leading)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-5)
-            make.bottom.equalTo(contentView.snp.bottom).offset(8)
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
-        cancelButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
-            make.trailing.equalTo(contentView.snp.trailing)
-            make.width.equalTo(16)
-            make.height.equalTo(16)
+        cancelButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-6)
+            $0.trailing.equalToSuperview().offset(6)
+            $0.width.equalTo(16)
+            $0.height.equalTo(16)
         }
     }
     

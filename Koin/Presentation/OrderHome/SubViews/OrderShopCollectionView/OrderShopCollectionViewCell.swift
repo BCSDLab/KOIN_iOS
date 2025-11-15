@@ -1,0 +1,259 @@
+//
+//  OrderShopCollectionViewCell.swift
+//  koin
+//
+//  Created by 이은지 on 6/30/25.
+//
+
+import UIKit
+import SnapKit
+import Kingfisher
+
+final class OrderShopCollectionViewCell: UICollectionViewCell {
+        
+    private var itemRow: Int?
+    private var shopId: Int = 0
+    private var orderableShopId: Int = 0
+    private var minimumOrderLabel: Int = 0
+    private var shopTitleLabelTopConstraint: Constraint?
+    
+    private let shopImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
+    }
+    
+    private let shopTitleLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let starImageView = UIImageView().then { _ in
+    }
+    
+    private let ratingLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardBold, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+    }
+    
+    private let reviewCountLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral500)
+    }
+    
+    private let deliveryImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .delivery)
+    }
+    
+    private let deliveryLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral600)
+    }
+
+    private let infoStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 8
+        $0.distribution = .fillProportionally
+    }
+
+    private let freeDeliveryLabel = UILabel().then {
+        $0.text = "배달비 무료"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+
+    private let takeoutAvailableLabel = UILabel().then {
+        $0.text = "픽업가능"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+
+    private let serviceEventLabel = UILabel().then {
+        $0.text = "서비스 증정"
+        $0.font = .appFont(.pretendardRegular, size: 10)
+        $0.textColor = .appColor(.neutral600)
+        $0.textAlignment = .center
+        $0.backgroundColor = .appColor(.neutral100)
+        $0.layer.cornerRadius = 10
+        $0.layer.masksToBounds = true
+    }
+    
+    private let statusView = UIView().then {
+        $0.backgroundColor = .black
+        $0.alpha = 0.6
+    }
+    
+    private let statusLabel = UILabel().then {
+        $0.text = "영업이 종료된 가게에요!"
+        $0.textColor = .white
+        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureView()
+        
+        contentView.layer.cornerRadius = 8
+        contentView.layer.masksToBounds = true
+        contentView.backgroundColor = .white
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func dataBind(_ info: OrderShop, itemRow: Int) {
+        self.itemRow = itemRow
+        
+        shopId = info.shopId
+        orderableShopId = info.orderableShopId
+        
+        let thumbnailURL = info.images?.first(where: { $0.isThumbnail })?.imageUrl
+        let imageURL = thumbnailURL ?? info.images?.first?.imageUrl
+
+        if let urlString = imageURL, let url = URL(string: urlString) {
+            shopImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage.appImage(asset: .defaultMenuImage)
+            )
+        } else {
+            shopImageView.image = UIImage.appImage(asset: .defaultMenuImage)
+        }
+        
+        shopTitleLabel.text = info.name
+        
+        starImageView.image = info.ratingAverage > 0
+            ? UIImage.appImage(asset: .star)
+            : UIImage.appImage(asset: .emptyStar)
+        ratingLabel.text = String(format: "%.1f", info.ratingAverage)
+        
+        switch info.reviewCount {
+        case 0:
+            reviewCountLabel.text = "첫 번째 리뷰를 작성해보세요 :)"
+        case 1...9:
+            reviewCountLabel.text = "(리뷰 \(info.reviewCount)개)"
+        default:
+            reviewCountLabel.text = "(리뷰 10+개)"
+        }
+        
+        if info.isDeliveryAvailable {
+            if info.minimumDeliveryTip == 0 && info.maximumDeliveryTip == 0 {
+                deliveryLabel.text = "배달비 무료"
+            } else {
+                deliveryLabel.text = "배달비 \(info.minimumDeliveryTip)원~\(info.maximumDeliveryTip)원"
+            }
+        } else {
+            deliveryLabel.text = "배달 불가"
+        }
+        
+        minimumOrderLabel = Int(info.minimumOrderAmount)
+        statusView.isHidden  = info.isOpen
+        statusLabel.isHidden = info.isOpen
+
+        freeDeliveryLabel.isHidden = !(info.minimumDeliveryTip == 0 && info.maximumDeliveryTip == 0)
+        takeoutAvailableLabel.isHidden = !info.isTakeoutAvailable
+        serviceEventLabel.isHidden = !info.serviceEvent
+        
+        let shouldChangeTop = !freeDeliveryLabel.isHidden || !takeoutAvailableLabel.isHidden || !serviceEventLabel.isHidden
+
+        shopTitleLabel.snp.remakeConstraints {
+            $0.leading.equalTo(shopImageView.snp.trailing).offset(20)
+            $0.top.equalToSuperview().offset(shouldChangeTop ? 15 : 25)
+            $0.height.equalTo(26)
+        }
+        self.contentView.layoutIfNeeded()
+    }
+}
+
+extension OrderShopCollectionViewCell {
+    private func setUpLayouts() {
+        [shopImageView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, deliveryImageView, deliveryLabel, infoStackView, statusView, statusLabel].forEach {
+            contentView.addSubview($0)
+        }
+
+        [freeDeliveryLabel, takeoutAvailableLabel, serviceEventLabel].forEach {
+            infoStackView.addArrangedSubview($0)
+        }
+    }
+    
+    private func setUpConstraints() {
+        shopImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.verticalEdges.equalToSuperview()
+            $0.width.equalTo(shopImageView.snp.height)
+        }
+
+        starImageView.snp.makeConstraints {
+            $0.leading.equalTo(shopTitleLabel.snp.leading)
+            $0.top.equalTo(shopTitleLabel.snp.bottom).offset(5.5)
+            $0.width.height.equalTo(16)
+        }
+        
+        ratingLabel.snp.makeConstraints {
+            $0.leading.equalTo(starImageView.snp.trailing).offset(4)
+            $0.centerY.equalTo(starImageView.snp.centerY)
+            $0.height.equalTo(19)
+        }
+        
+        reviewCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(ratingLabel.snp.trailing).offset(4)
+            $0.centerY.equalTo(starImageView.snp.centerY)
+            $0.height.equalTo(19)
+        }
+        
+        deliveryImageView.snp.makeConstraints {
+            $0.leading.equalTo(shopTitleLabel.snp.leading)
+            $0.top.equalTo(reviewCountLabel.snp.bottom).offset(3.5)
+            $0.width.height.equalTo(16)
+        }
+        
+        deliveryLabel.snp.makeConstraints {
+            $0.leading.equalTo(deliveryImageView.snp.trailing).offset(4)
+            $0.centerY.equalTo(deliveryImageView.snp.centerY)
+            $0.height.equalTo(19)
+        }
+
+        infoStackView.snp.makeConstraints {
+            $0.leading.equalTo(deliveryImageView.snp.leading)
+            $0.top.equalTo(deliveryLabel.snp.bottom).offset(8)
+            $0.height.equalTo(20)
+        }
+        
+        freeDeliveryLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(66)
+            $0.height.equalTo(20)
+        }
+        
+        takeoutAvailableLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(55)
+            $0.height.equalTo(20)
+        }
+        
+        serviceEventLabel.snp.makeConstraints {
+            $0.width.greaterThanOrEqualTo(66)
+            $0.height.equalTo(20)
+        }
+        
+        statusView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        statusLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+    }
+    
+    private func configureView() {
+        setUpLayouts()
+        setUpConstraints()
+    }
+}

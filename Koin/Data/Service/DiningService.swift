@@ -9,8 +9,8 @@ import Alamofire
 import Combine
 
 protocol DiningService {
-    func fetchDiningList(requestModel: FetchDiningListRequest, retry: Bool) -> AnyPublisher<[DiningDTO], ErrorResponse>
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDTO, Error>
+    func fetchDiningList(requestModel: FetchDiningListRequest, retry: Bool) -> AnyPublisher<[DiningDto], ErrorResponse>
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error>
     func diningLike(requestModel: DiningLikeRequest, isLiked: Bool) -> AnyPublisher<Void, ErrorResponse>
 }
 
@@ -18,14 +18,14 @@ final class DefaultDiningService: DiningService {
     
     private let networkService = NetworkService()
     
-    func fetchDiningList(requestModel: FetchDiningListRequest, retry: Bool = false) -> AnyPublisher<[DiningDTO], ErrorResponse> {
+    func fetchDiningList(requestModel: FetchDiningListRequest, retry: Bool = false) -> AnyPublisher<[DiningDto], ErrorResponse> {
         return networkService.requestWithResponse(api: DiningAPI.fetchDiningList(requestModel))
-            .catch { [weak self] error -> AnyPublisher<[DiningDTO], ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<[DiningDto], ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" && !retry {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: DiningAPI.fetchDiningList(requestModel)) }
-                        .catch { refreshError -> AnyPublisher<[DiningDTO], ErrorResponse> in
+                        .catch { refreshError -> AnyPublisher<[DiningDto], ErrorResponse> in
                             return self.fetchDiningList(requestModel: requestModel, retry: true)
                         }
                         .eraseToAnyPublisher()
@@ -37,7 +37,7 @@ final class DefaultDiningService: DiningService {
     }
     
     
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDTO, Error> {
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error> {
         return request(.fetchCoopShopList)
     }
     

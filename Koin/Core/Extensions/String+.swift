@@ -269,4 +269,26 @@ extension String {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter.date(from: self)
     }
+    
+    // 이메일 정규식
+    var isValidEmailFormat: Bool {
+        let regex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
+    }
+    
+    // hh:mm -> 오후 h시 mm분 변환
+    func toKoreanTimeString() -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "HH:mm"
+
+        guard let date = inputFormatter.date(from: self) else {
+            return self
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        outputFormatter.dateFormat = "a h시 m분"
+
+        return outputFormatter.string(from: date)
+    }
 }

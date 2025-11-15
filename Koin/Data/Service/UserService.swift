@@ -11,22 +11,141 @@ import Combine
 protocol UserService {
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func register(requestModel: UserRegisterRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse>
-    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse>
-    func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse>
+    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDto, ErrorResponse>
+    func fetchUserData() -> AnyPublisher<UserDto, ErrorResponse>
     func revoke() -> AnyPublisher<Void, ErrorResponse>
-    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse>
+    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse>
     func checkPassword(requestModel: CheckPasswordRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse>
     func checkLogin() -> AnyPublisher<Bool, Never>
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDto, ErrorResponse>
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse>
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse>
+    func sendVerificationEmail(requestModel: SendVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
+    func checkVerificationEmail(requestModel: CheckVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
+    func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse>
+    func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse>
+    func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
+    func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>
+    func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultUserService: UserService {
+    func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.changePassword(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.changePassword(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    
     private let networkService = NetworkService()
+    
+    func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.resetPasswordSms(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.resetPasswordSms(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.resetPasswordEmail(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.resetPasswordEmail(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.findIdSms(requestModel))
+            .catch { [weak self] error -> AnyPublisher<FindIdSmsResponse, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.findIdSms(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.findIdEmail(requestModel))
+            .catch { [weak self] error -> AnyPublisher<FindIdEmailResponse, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.findIdEmail(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func sendVerificationEmail(requestModel: SendVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.sendVerificationEmail(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.sendVerificationEmail(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func checkVerificationEmail(requestModel: CheckVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.checkVerificationEmail(requestModel))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.request(api: UserAPI.checkVerificationEmail(requestModel)) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func checkLogin() -> AnyPublisher<Bool, Never> {
         networkService.request(api: UserAPI.checkLogin)
-            .map { _ in true } 
+            .map { _ in true }
             .catch { [weak self] error -> AnyPublisher<Bool, Never> in
                 guard let self = self else {
                     return Just(false).eraseToAnyPublisher()
@@ -44,9 +163,6 @@ final class DefaultUserService: UserService {
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }
-
-
-
     
     func checkAuth() -> AnyPublisher<UserTypeResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.checkAuth)
@@ -62,6 +178,7 @@ final class DefaultUserService: UserService {
             }
             .eraseToAnyPublisher()
     }
+    
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.findPassword(requestModel))
     }
@@ -70,27 +187,46 @@ final class DefaultUserService: UserService {
         networkService.request(api: UserAPI.register(requestModel))
     }
     
+    func checkDuplicatedPhoneNumber(requestModel: CheckDuplicatedPhoneNumberRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedPhoneNumber(requestModel))
+    }
+    
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.checkDuplicatedNickname(requestModel))
     }
     
-    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDTO, ErrorResponse> {
+    func login(requestModel: LoginRequest) -> AnyPublisher<TokenDto, ErrorResponse> {
         networkService.requestWithResponse(api: UserAPI.login(requestModel))
     }
     
-    func fetchUserData() -> AnyPublisher<UserDTO, ErrorResponse> {
-        return networkService.requestWithResponse(api: UserAPI.fetchUserData)
-            .catch { [weak self] error -> AnyPublisher<UserDTO, ErrorResponse> in
+    func fetchUserData() -> AnyPublisher<UserDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.checkAuth)
+            .catch { [weak self] error -> AnyPublisher<UserTypeResponse, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.fetchUserData) }
+                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.checkAuth) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
-            .eraseToAnyPublisher()
+            .flatMap { [weak self] userTypeResponse -> AnyPublisher<UserDto, ErrorResponse> in
+                guard let self = self else { return Empty().eraseToAnyPublisher() }
+                let userType = userTypeResponse.userType
+                let api: UserAPI = userType == .student ? .fetchStudentUserData : .fetchGeneralUserData
+                return self.networkService.requestWithResponse(api: api)
+                    .catch { [weak self] error -> AnyPublisher<UserDto, ErrorResponse> in
+                        guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                        if error.code == "401" {
+                            return self.networkService.refreshToken()
+                                .flatMap { _ in self.networkService.requestWithResponse(api: api) }
+                                .eraseToAnyPublisher()
+                        } else {
+                            return Fail(error: error).eraseToAnyPublisher()
+                        }
+                    }.eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
     }
     
     func revoke() -> AnyPublisher<Void, ErrorResponse> {
@@ -108,17 +244,33 @@ final class DefaultUserService: UserService {
             .eraseToAnyPublisher()
     }
     
-    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDTO, ErrorResponse> {
-        return networkService.requestWithResponse(api: UserAPI.modify(requestModel))
-            .catch { [weak self] error -> AnyPublisher<UserDTO, ErrorResponse> in
+    func modify(requestModel: UserPutRequest) -> AnyPublisher<UserDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.checkAuth)
+            .catch { [weak self] error -> AnyPublisher<UserTypeResponse, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.modify(requestModel)) }
+                        .flatMap { _ in self.networkService.requestWithResponse(api: UserAPI.checkAuth) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
+            }
+            .flatMap { [weak self] userTypeResponse -> AnyPublisher<UserDto, ErrorResponse> in
+                guard let self = self else { return Empty().eraseToAnyPublisher() }
+                let userType = userTypeResponse.userType
+                let api: UserAPI = userType == .student ? .modifyStudentUserData(requestModel) : .modifyGeneralUserData(requestModel)
+                return self.networkService.requestWithResponse(api: api)
+                    .catch { [weak self] error -> AnyPublisher<UserDto, ErrorResponse> in
+                        guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                        if error.code == "401" {
+                            return self.networkService.refreshToken()
+                                .flatMap { _ in self.networkService.requestWithResponse(api: api) }
+                                .eraseToAnyPublisher()
+                        } else {
+                            return Fail(error: error).eraseToAnyPublisher()
+                        }
+                    }.eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
@@ -136,5 +288,25 @@ final class DefaultUserService: UserService {
                 }
             }
             .eraseToAnyPublisher()
+    }
+    
+    func sendVerificationCode(requestModel: SendVerificationCodeRequest) -> AnyPublisher<SendVerificationCodeDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: UserAPI.sendVerificationCode(requestModel))
+    }
+    
+    func checkVerificationCode(requestModel: CheckVerificationCodeRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.checkVerificationCode(requestModel))
+    }
+    
+    func checkDuplicatedId(requestModel: CheckDuplicatedIdRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.checkDuplicatedId(requestModel))
+    }
+    
+    func studentRegisterForm(requestModel: StudentRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.studentRegisterForm(requestModel))
+    }
+    
+    func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
+        networkService.request(api: UserAPI.generalRegisterForm(requestModel))
     }
 }

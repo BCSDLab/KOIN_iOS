@@ -18,7 +18,7 @@ final class HomeViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
     private var scrollDirection: ScrollLog = .scrollToDown
-    
+        
     // MARK: - UI Components
     
     private let wrapperView = UIView().then { _ in
@@ -51,6 +51,8 @@ final class HomeViewController: UIViewController {
     
     private let busView = BusView()
     
+    private let clubView = ClubView()
+    
     private let noticeListCollectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout:  UICollectionViewFlowLayout().then{
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 175)
         $0.scrollDirection = .horizontal
@@ -61,7 +63,6 @@ final class HomeViewController: UIViewController {
     
     private let noticePageControl = UIPageControl(frame: .zero).then {
         $0.currentPage = 0
-        $0.numberOfPages = 4
         $0.currentPageIndicatorTintColor = .appColor(.primary400)
         $0.pageIndicatorTintColor = .appColor(.neutral300)
     }
@@ -85,8 +86,8 @@ final class HomeViewController: UIViewController {
         $0.configuration = configuration
     }
     
-    private let shopLabel = UILabel().then {
-        $0.text = "주변상점"
+    private let orderLabel = UILabel().then {
+        $0.text = "주변 상점"
         $0.textColor = UIColor.appColor(.primary500)
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
@@ -123,6 +124,9 @@ final class HomeViewController: UIViewController {
     private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
     }
     
+    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
+    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
+    
     // MARK: - Initialization
     
     init(viewModel: HomeViewModel) {
@@ -142,6 +146,7 @@ final class HomeViewController: UIViewController {
         bind()
         print(KeychainWorker.shared.read(key: .access))
         print(KeychainWorker.shared.read(key: .fcm))
+        print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         configureView()
         configureSwipeGestures()
@@ -150,12 +155,10 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-   //     print(KeychainWorker.shared.read(key: .access) ?? "")
-        
-     //   print("위가 엑세스 아래가 리프레시")
-     //   print("위가 엑세스 아래가 리프레시")
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ABTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
+        checkAndShowBanner()
+        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         inputSubject.send(.getAbTestResult("c_main_dining_v1"))
+        inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
     }
     
@@ -175,6 +178,7 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopCategories))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -209,7 +213,28 @@ final class HomeViewController: UIViewController {
                 self?.navigateToForceUpdate(version: version)
             case let .setAbTestResult(abTestResult):
                 self?.setAbTestResult(result: abTestResult)
+            case .showForceModal:
+                self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
+            case .updateBanner(let banner, let abTestResult):
+                self?.showBanner(banner: banner, abTestResult: abTestResult)
+            case .setHotClub(let hotClub):
+                self?.clubView.setupHotClub(club: hotClub)
+            case .setClubCategories(let response):
+                self?.clubView.setupClubCategories(categories: response.clubCategories)
             }
+        }.store(in: &subscriptions)
+        
+        clubView.clubCategoryPublisher.sink { [weak self] id in
+            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs?categoryId=\(id)"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.clubListButtonPublisher.sink { [weak self] in
+            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
+        }.store(in: &subscriptions)
+        
+        clubView.hotClubButtonPublisher.sink { [weak self] id in
+         //   self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs/\(id)"), animated: true)
+            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
         }.store(in: &subscriptions)
         
         logoView.lineButtonPublisher.sink { [weak self] in
@@ -228,9 +253,15 @@ final class HomeViewController: UIViewController {
             self?.noticePageControl.currentPage = page
         }.store(in: &subscriptions)
         
-        
-        categoryCollectionView.cellTapPublisher.sink { [weak self] id in
-            self?.didTapCell(at: id)
+        categoryCollectionView.cellTapPublisher.sink { [weak self] shopName in
+            guard let self = self else { return }
+            
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .mainShopCategories))
+
+            let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
+                        
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
+            self.didTapCell(at: shopName)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
@@ -274,10 +305,129 @@ final class HomeViewController: UIViewController {
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
+        
+        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
+            self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
+    private func handleBannerTap(_ banner: Banner) {
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
+        if let version = banner.version {
+            // 현재 앱 버전
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            
+            let isOld = isVersion(currentVersion, lowerThan: version)
+            
+            if isOld {
+                showToast(message: "해당 기능을 사용하기 위해서는 업데이트가 꼭 필요해요")
+                  
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                      if let appStoreURL = URL(string: "https://apps.apple.com/kr/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622") {
+                          UIApplication.shared.open(appStoreURL)
+                      }
+                  }
+                  
+                  return
+            }
+        }
+        
+        if let redirect = banner.redirectLink {
+            if redirect == "shop" {
+                dismiss(animated: true)
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                
+                let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+                let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+                let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+                let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+                let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+                let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+                
+
+                let viewModel = ShopViewModel(
+                    fetchShopListUseCase: fetchShopListUseCase,
+                    fetchEventListUseCase: fetchEventListUseCase,
+                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+                    searchShopUseCase: searchShopUseCase,
+                    fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+                    fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                    selectedId: 0
+                )
+                let shopViewController = ShopViewController(viewModel: viewModel)
+                navigationController?.pushViewController(shopViewController, animated: true)
+            } else if redirect == "dining" {
+                dismiss(animated: true)
+                navigatetoDining()
+            } else if redirect == "keyword" {
+                dismiss(animated: true)
+                let noticeListService = DefaultNoticeService()
+                let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+                let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+                let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService()))
+                let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+                let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+        }
+    }
+    private func isVersion(_ currentVersion: String, lowerThan requiredVersion: String) -> Bool {
+        let currentComponents = currentVersion.split(separator: ".").compactMap { Int($0) }
+        let requiredComponents = requiredVersion.split(separator: ".").compactMap { Int($0) }
+
+        for i in 0..<max(currentComponents.count, requiredComponents.count) {
+            let current = i < currentComponents.count ? currentComponents[i] : 0
+            let required = i < requiredComponents.count ? requiredComponents[i] : 0
+            if current < required { return true }
+            if current > required { return false }
+        }
+
+        return false
+    }
+    private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
+        if banner.count == 0 { return }
+        let viewController: UIViewController
+        if abTestResult.variableName == .bottomBanner {
+            bannerViewControllerA.setBanners(banners: banner.banners)
+            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        } else {
+            bannerViewControllerB.setBanners(banners: banner.banners)
+            viewController = bannerViewControllerB
+            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
+        }
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
+    }
+    
+    private func checkAndShowBanner() {
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
+            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+               Date() < thresholdDate {
+                return
+            }
+        }
+        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+    }
     
     @objc private func tapBusQrCode() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))
@@ -379,15 +529,13 @@ extension HomeViewController {
         }
     }
     
-    private func updateHotArticles(articles: [NoticeArticleDTO], phrases: ((String, String), Int)?) {
+    private func updateHotArticles(articles: [NoticeArticleDto], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
+        noticePageControl.numberOfPages = articles.count
     }
     
-    private func putImage(data: ShopCategoryDTO) {
-        var categories = data.shopCategories
-        let newCategory = ShopCategory(id: -1, name: "혜택", imageURL: "https://ifh.cc/g/M4raFL.png")
-        categories.insert(newCategory, at: 0)
-        categoryCollectionView.updateCategories(categories)
+    private func putImage(data: ShopCategoryDto) {
+        categoryCollectionView.updateCategories(data.shopCategories)
     }
     
     private func setAbTestResult(result: AssignAbTestResponse) {
@@ -398,56 +546,23 @@ extension HomeViewController {
             goDiningPageButton.isHidden = false
         }
         else if result.variableName == .bannerNew {
-            noticePageControl.numberOfPages = 5
             inputSubject.send(.getNoticeBanner(Date()))
         }
         else {
-            noticePageControl.numberOfPages = 4
             inputSubject.send(.getNoticeBanner(nil))
         }
     }
     
-    func didTapCell(at id: Int) {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
+    private func didTapCell(at id: Int) {
+        //let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
+        let initialTabIndex = 1 // orderableCategoryIds.contains(categoryId) ? 0 : 1 // MARK: 주변상점으로만 진입
         
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: id
-        )
-        
-        if id >= 0 {
-            let shopViewController = ShopViewControllerA(viewModel: viewModel)
-            shopViewController.title = "주변상점"
-            navigationController?.pushViewController(shopViewController, animated: true)
-            
-            let category = MakeParamsForLog().makeValueForLogAboutStoreId(id: id)
-            inputSubject.send(.getUserScreenAction(Date(), .leaveVC, .mainShopCategories))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, category, "메인", category, .leaveVC, .mainShopCategories))
-        } else if id == -1 {
-            let shopViewController = ShopViewControllerB(viewModel: viewModel, section: .callBenefit)
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopBenefit, .click, "전화주문혜택", "메인", "benefit", .leaveVC, .mainShopCategories))
-            navigationController?.pushViewController(shopViewController, animated: true)
-        }
+        let orderTabBarViewController = OrderTabBarViewController(selectedShopId: id, initialTabIndex: initialTabIndex)
+        navigationController?.pushViewController(orderTabBarViewController, animated: true)
     }
     
     @objc private func refresh() {
         inputSubject.send(.categorySelected(getDiningPlace()))
-        
         refreshControl.endRefreshing()
     }
     
@@ -484,6 +599,7 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
+     //   let viewController = ClubWebViewController()
         let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
@@ -496,8 +612,8 @@ extension HomeViewController {
     }
 }
 
+// AB Test
 extension HomeViewController {
-    
     private func getDiningPlace() -> DiningPlace {
         switch cornerSegmentControl.selectedSegmentIndex {
         case 0: return .cornerA
@@ -560,7 +676,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, shopLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -629,17 +745,21 @@ extension HomeViewController {
             make.height.equalTo(65)
             make.width.equalTo(scrollView.snp.width)
         }
-        shopLabel.snp.makeConstraints { make in
-            make.top.equalTo(busView.snp.bottom).offset(40)
+        clubView.snp.makeConstraints { make in
+            make.top.equalTo(busView.snp.bottom).offset(24)
+            make.horizontalEdges.equalTo(scrollView)
+        }
+        orderLabel.snp.makeConstraints { make in
+            make.top.equalTo(clubView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(shopLabel.snp.bottom).offset(11)
+            make.top.equalTo(orderLabel.snp.bottom).offset(11)
             make.leading.equalTo(scrollView.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
-            make.height.equalTo(146)
+            make.height.equalTo(166)
         }
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)

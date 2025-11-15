@@ -10,8 +10,8 @@ import UIKit
 
 final class NoticeKeywordCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     //MARK: - Properties
-    private var noticeKeywordList: [NoticeKeywordDTO] = []
-    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    private var noticeKeywordList: [NoticeKeywordDto] = []
+    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     var subscriptions = Set<AnyCancellable>()
@@ -37,15 +37,15 @@ final class NoticeKeywordCollectionView: UICollectionView, UICollectionViewDataS
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }
     
-    func updateUserKeywordList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
+    func updateUserKeywordList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
         // 모두보기 키워드는 viewModel에서 넣어서 오기 때문에 배열의 개수가 하나일 때, 알림설정 키워드가 없음.
         noticeKeywordList.removeAll()
         if keywordList.count == 0 {
-            noticeKeywordList.append(NoticeKeywordDTO(id: -1, keyword: "모두보기"))
-            noticeKeywordList.append(NoticeKeywordDTO(id: nil, keyword: "새 키워드 추가"))
+            noticeKeywordList.append(NoticeKeywordDto(id: -1, keyword: "모두보기"))
+            noticeKeywordList.append(NoticeKeywordDto(id: nil, keyword: "새 키워드 추가"))
         }
         else { // id가 -1일때 모두보기이다.
-            noticeKeywordList.append(NoticeKeywordDTO(id: -1, keyword: "모두보기"))
+            noticeKeywordList.append(NoticeKeywordDto(id: -1, keyword: "모두보기"))
         }
         noticeKeywordList.append(contentsOf: keywordList)
         selectedKeywordIdx = keywordIdx

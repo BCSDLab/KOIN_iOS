@@ -11,7 +11,7 @@ import UIKit
 final class HotNoticeArticlesTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var popularNoticeArticles: [NoticeArticleDTO] = []
+    private var popularNoticeArticles: [NoticeArticleDto] = []
     let tapHotArticlePublisher = PassthroughSubject<(Int, String, Int), Never>()
     
     // MARK: - Initialization
@@ -32,7 +32,7 @@ final class HotNoticeArticlesTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    func updatePopularArticles(notices: [NoticeArticleDTO]) {
+    func updatePopularArticles(notices: [NoticeArticleDto]) {
         self.popularNoticeArticles = notices
         reloadData()
     }

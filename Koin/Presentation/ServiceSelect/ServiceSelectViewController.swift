@@ -12,6 +12,7 @@ import UIKit
 final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
+    
     private let viewModel: ServiceSelectViewModel
     private let inputSubject: PassthroughSubject<ServiceSelectViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -100,6 +101,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
+    
     private var chatButton: UIBarButtonItem?
     
     // MARK: - Initialization
@@ -115,6 +117,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     }
     
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
@@ -156,7 +159,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
 
 extension ServiceSelectViewController {
     
-    private func changeViewOption(profile: UserDTO?) {
+    private func changeViewOption(profile: UserDto?) {
         var config = UIButton.Configuration.plain()
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         var attributedLoginString = AttributedString.init(stringLiteral: "로그인")
@@ -204,7 +207,8 @@ extension ServiceSelectViewController {
     }
     
     @objc private func settingButtonTapped() {
-        let viewController = SettingsViewController(viewModel: SettingsViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))))
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewController = SettingsViewController(viewModel: SettingsViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -214,6 +218,7 @@ extension ServiceSelectViewController {
             showToast(message: "로그인이 필요한 기능입니다.")
             return 
         }
+        
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "쪽지"))
         let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
         navigationController?.pushViewController(viewController, animated: true)
@@ -230,8 +235,7 @@ extension ServiceSelectViewController {
             let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
             loginViewController.title = "로그인"
             navigationController?.pushViewController(loginViewController, animated: true)
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburgerLogin, .click, "햄버거 로그인"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그인 시도"))
         }
     }
     @objc private func timetableSelectButtonTapped() {
@@ -257,30 +261,8 @@ extension ServiceSelectViewController {
     }
     
     @objc func shopSelectButtonTapped() {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: 0
-        )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
-        shopViewController.title = "주변상점"
-        navigationController?.pushViewController(shopViewController, animated: true)
+        let orderTabBarViewController = OrderTabBarViewController(initialTabIndex: 1)
+        navigationController?.pushViewController(orderTabBarViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
@@ -387,6 +369,7 @@ extension ServiceSelectViewController {
         
         let loginAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.inputSubject.send(.logOut)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.hamburger, .click, "로그아웃"))
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         

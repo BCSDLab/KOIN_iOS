@@ -23,11 +23,11 @@ final class DefaultChatRepository: ChatRepository {
         service.blockUser(articleId: articleId, chatRoomId: chatRoomId)
     }
     
-    func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse> {
+    func fetchChatRoom() -> AnyPublisher<[ChatRoomDto], ErrorResponse> {
         service.fetchChatRoom()
     }
     
-    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse> {
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse> {
         service.fetchChatDetail(articleId: articleId, chatRoomId: chatRoomId)
     }
 }

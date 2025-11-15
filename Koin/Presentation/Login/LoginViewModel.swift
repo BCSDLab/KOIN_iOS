@@ -6,16 +6,20 @@
 //
 
 import Combine
+import Foundation
 
 final class LoginViewModel: ViewModelProtocol {
     
     enum Input {
         case login(String, String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     enum Output {
         case showErrorMessage(String)
         case loginSuccess
+        case showForceModal
+        case showModifyModal
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -32,10 +36,12 @@ final class LoginViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .login(email, password):
-                self?.login(email: email, password: password)
+            case let .login(loginId, loginPw):
+                self?.login(loginId: loginId, loginPw: loginPw)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logSessionEvent(label, category, value, sessionId):
+                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         
@@ -45,15 +51,14 @@ final class LoginViewModel: ViewModelProtocol {
 
 extension LoginViewModel {
 
-    private func login(email: String, password: String) {
-        loginUseCase.execute(email: email, password: password).sink { [weak self] completion in
+    private func login(loginId: String, loginPw: String) {
+        loginUseCase.execute(loginId: loginId, loginPw: loginPw).sink { [weak self] completion in
             if case .failure(let error) = completion {
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
         } receiveValue: { [weak self] response in
             KeychainWorker.shared.create(key: .access, token: response.token)
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
-            self?.outputSubject.send(.loginSuccess)
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
             self?.setUserInfo()
         }.store(in: &subscriptions)
@@ -63,14 +68,38 @@ extension LoginViewModel {
             if case .failure(let error) = completion {
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
-        } receiveValue: { userData in
-            UserDataManager.shared.setUserData(userData: userData)
+        } receiveValue: { [weak self] response in
+            UserDataManager.shared.setUserData(userData: response)
+            if response.userType == "STUDENT" {
+                if response.name == nil ||
+                    response.phoneNumber == nil ||
+                    response.gender == nil ||
+                    response.major == nil ||
+                    response.studentNumber == nil {
+                    
+                    if !UserDefaults.standard.bool(forKey: "forceModal") {
+                        self?.outputSubject.send(.showForceModal)
+                        UserDefaults.standard.set(true, forKey: "forceModal")
+                    } else {
+                        self?.outputSubject.send(.showModifyModal)
+                    }
+                    
+                } else {
+                    self?.outputSubject.send(.loginSuccess)
+                }
+            } else {
+                self?.outputSubject.send(.loginSuccess)
+            }
         }.store(in: &subscriptions)
 
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }
 

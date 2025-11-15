@@ -18,8 +18,8 @@ final class BusTimetableViewModel: ViewModelProtocol {
     enum Output {
         case updateBusRoute(busType: BusType, firstBusRoute: [String], secondBusRoute: [String]?)
         case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
-        case updateShuttleBusRoutes(busRoutes: ShuttleRouteDTO)
-        case updateEmergencyNotice(notice: BusNoticeDTO)
+        case updateShuttleBusRoutes(busRoutes: ShuttleRouteDto)
+        case updateEmergencyNotice(notice: BusNoticeDto)
         case updateStopLabel(busStop: String)
     }
     

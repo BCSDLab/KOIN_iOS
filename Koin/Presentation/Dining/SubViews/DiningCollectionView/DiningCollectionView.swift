@@ -19,7 +19,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     let logScrollPublisher = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     private var scrollDirection: ScrollLog = .scrollToDown
-    private var aBTestResult: UserAssignType = .shareNew
+    private var abTestResult: UserAssignType = .shareNew
     
     //MARK: - UI Components
     private let diningShareToolTipImageView = CancelableImageView(frame: .zero)
@@ -47,12 +47,12 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     
     func setAbTestResult(result: AssignAbTestResponse) {
         if result.variableName == .shareNew {
-            aBTestResult = .shareNew
+            abTestResult = .shareNew
         }
         else if result.variableName == .shareOriginal {
-            aBTestResult = .shareOriginal
+            abTestResult = .shareOriginal
         }
-        if aBTestResult == .shareNew {
+        if abTestResult == .shareNew {
             contentInset = .init(top: 16, left: 24, bottom: 0, right: 24)
         }
         else {
@@ -113,7 +113,7 @@ extension DiningCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let diningItem = diningList[indexPath.row]
-        if aBTestResult == .shareNew {
+        if abTestResult == .shareNew {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiningCollectionViewCellB.reuseIdentifier, for: indexPath) as? DiningCollectionViewCellB else {
                 return UICollectionViewCell()
             }
@@ -146,7 +146,7 @@ extension DiningCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if aBTestResult == .shareOriginal {
+        if abTestResult == .shareOriginal {
             let width = collectionView.frame.width, estimatedHeight: CGFloat = 1000
             let dummyCell = DiningCollectionViewCellA(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
             dummyCell.configure(info: diningList[indexPath.row])
@@ -173,7 +173,7 @@ extension DiningCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if aBTestResult == .shareOriginal {
+        if abTestResult == .shareOriginal {
             return 8
         }
         else {

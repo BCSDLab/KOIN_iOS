@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchFrameUseCase {
-    func execute(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse>
+    func execute(semester: String) -> AnyPublisher<[FrameDto], ErrorResponse>
 }
 
 final class DefaultFetchFrameUseCase: FetchFrameUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchFrameUseCase: FetchFrameUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse> {
+    func execute(semester: String) -> AnyPublisher<[FrameDto], ErrorResponse> {
         return timetableRepository.fetchFrame(semester: semester)
     }
     

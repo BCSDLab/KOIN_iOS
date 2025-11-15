@@ -23,7 +23,7 @@ final class DefaultNotiRepository: NotiRepository {
         service.changeNotiDetail(method: method, requestModel: requestModel)
     }
     
-    func fetchNotiList() -> AnyPublisher<NotiAgreementDTO, ErrorResponse> {
+    func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse> {
         service.fetchNotiList()
     }
     

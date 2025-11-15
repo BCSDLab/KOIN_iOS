@@ -11,6 +11,7 @@ import UIKit
 final class LostItemImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     
@@ -18,19 +19,17 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     
     private let imageView = UIImageView().then { _ in
     }
-    
 
     private let cancelButton =  UIButton().then {
         $0.setImage(UIImage.appImage(asset: .cancelBlue), for: .normal)
     }
 
-
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-    }
-    
+    }    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -46,6 +45,7 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func cancelButtonTapped() {
+        shouldDismissDropDownPublisher.send()
         cancelButtonPublisher.send(())
     }
 }

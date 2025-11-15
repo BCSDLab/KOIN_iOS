@@ -13,7 +13,7 @@ final class NoticeListHeaderView: UITableViewHeaderFooterView {
     // MARK: - Properties
     
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let typeButtonPublisher = PassthroughSubject<Void, Never>()
     var subscriptions = Set<AnyCancellable>()
@@ -105,7 +105,7 @@ extension NoticeListHeaderView {
     }
 
     
-    func updateKeyWordsList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
+    func updateKeyWordsList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
         noticeKeywordCollectionView.updateUserKeywordList(keywordList: keywordList, keywordIdx: keywordIdx)
     }
 }

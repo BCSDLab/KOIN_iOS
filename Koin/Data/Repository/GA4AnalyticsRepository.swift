@@ -13,6 +13,9 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
     init(service: LogAnalyticsService) {
         self.service = service
     }
+    func logEvent(name: String, label: String, value: String, category: String) {
+        return service.logEvent(name: name, label: label, value: value, category: category)
+    }
     
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         
@@ -22,5 +25,10 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {
         
         return service.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)
+    }
+    
+    
+    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        return service.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }
