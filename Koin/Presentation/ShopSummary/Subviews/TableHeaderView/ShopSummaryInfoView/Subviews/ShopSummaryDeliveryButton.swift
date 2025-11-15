@@ -12,33 +12,37 @@ final class ShopSummaryDeliveryButton: UIButton {
     // MARK: - UI Components
     private let minimumOrderLabel = UILabel().then {
         $0.text = "최소주문"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     private let deliveryTipLabel = UILabel().then {
         $0.text = "배달금액"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     private let minimumOrderSubLabel = UILabel().then {
         $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     private let deliveryTipSubLabel = UILabel().then {
         $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     private let inorderableLabel = UILabel().then {
         $0.setLineHeight(lineHeight: 1.60, text: "코인 주문이\n불가능한 매장이예요.")
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
         $0.font = .appFont(.pretendardSemiBold, size: 12)
         $0.textColor = .appColor(.neutral400)
         $0.textAlignment = .center
@@ -108,7 +112,7 @@ extension ShopSummaryDeliveryButton {
             $0.centerY.equalTo(minimumOrderLabel)
         }
         deliveryTipSubLabel.snp.makeConstraints {
-            $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
+            $0.leading.equalTo(deliveryTipLabel.snp.trailing).offset(8)
             $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
