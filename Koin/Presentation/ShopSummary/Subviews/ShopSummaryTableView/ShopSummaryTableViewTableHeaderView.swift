@@ -123,6 +123,9 @@ extension ShopSummaryTableViewTableHeaderView {
     func updateInfoView(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
         imagesCollectionView.configure(orderImage: orderShopSummary.images)
         imagesPageControl.numberOfPages = orderShopSummary.images.count
+        if orderShopSummary.images.count <= 1 {
+            imagesPageControl.isHidden = true
+        }
         shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
     }
     
