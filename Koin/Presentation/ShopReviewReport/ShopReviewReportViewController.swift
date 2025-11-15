@@ -125,7 +125,7 @@ final class ShopReviewReportViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .white)
+        configureNavigationBar(style: .empty)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

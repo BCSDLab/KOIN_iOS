@@ -65,9 +65,9 @@ final class ShopSummaryInfoView: UIView {
         $0.text = "계좌이체 가능"
     }
     
-    private let orderAmountDelieveryTipButton = ShopSummaryCustomButton()
+    private let orderAmountDelieveryTipButton = ShopSummaryDeliveryButton()
     
-    private let introductionButton = ShopSummaryCustomButton()
+    private let introductionButton = ShopSummaryIntroductionButton()
     
     private let phoneButton = ShopSummaryPhoneButton()
     

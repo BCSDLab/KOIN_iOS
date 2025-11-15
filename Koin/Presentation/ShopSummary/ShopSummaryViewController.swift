@@ -21,6 +21,7 @@ final class ShopSummaryViewController: UIViewController {
     
     private var cachedShopId: Int?
     private var cachedShopName: String?
+    private var cachedImages: [OrderImage] = []
     
     private var didTapBack = false
     private let backCategoryName: String?
@@ -122,6 +123,7 @@ extension ShopSummaryViewController {
             switch output {
             case .updateInfoView(let orderShopSummary, let isFromOrder):
                 self.cachedShopName = orderShopSummary.name
+                self.cachedImages = orderShopSummary.images
                 self.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
             case .updatePhonenumber(let phonenumber):
                 self.tableHeaderView.configure(phonenumber: phonenumber)
@@ -303,6 +305,19 @@ extension ShopSummaryViewController {
                 self?.navigateToMenuDetail(menuId: menuId)
             }
             .store(in: &subscriptions)
+        
+        // MARK: - ThumbnailImage
+        tableHeaderView.didTapThumbnailPublisher
+            .sink { [weak self] indexPath in
+                guard let self,
+                      0 < self.cachedImages.count,
+                      self.cachedImages.first?.imageUrl != nil else { return }
+                
+                let zoomedViewController = ZoomedImageViewControllerB()
+                zoomedViewController.configure(urls: cachedImages.map { return $0.imageUrl ?? "" },
+                                               initialIndexPath: indexPath)
+                self.present(zoomedViewController, animated: true)
+            }.store(in: &subscriptions)
     }
     
     // MARK: - shouldShowBottomSheet

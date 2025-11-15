@@ -91,8 +91,14 @@ final class ShopSummaryTableViewCell: UITableViewCell {
         
         if let url = thumbnailImage {
             thumbnailImageView.loadImageWithSpinner(from: url)
+            stackView.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-(12+88+12))
+            }
         } else {
             thumbnailImageView.image = nil
+            stackView.snp.updateConstraints {
+                $0.trailing.equalToSuperview().offset(-12)
+            }
         }
         
         setCornerRadius(isFirstRow: isFirstRow, isLastRow: isLastRow)
@@ -188,7 +194,7 @@ extension ShopSummaryTableViewCell {
         stackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalTo(thumbnailImageView.snp.leading).offset(-12)
+            $0.trailing.equalToSuperview().offset(-12)
             $0.top.greaterThanOrEqualToSuperview().offset(12)
             $0.bottom.lessThanOrEqualToSuperview().offset(-12)
         }

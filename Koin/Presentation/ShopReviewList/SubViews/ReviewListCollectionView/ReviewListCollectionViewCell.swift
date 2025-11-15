@@ -17,7 +17,7 @@ final class ReviewListCollectionViewCell: UICollectionViewCell {
     let modifyButtonPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let reportButtonPublisher = PassthroughSubject<Void, Never>()
-    let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
+    let imageTapPublisher = PassthroughSubject<([String], IndexPath), Never>()
     
     // MARK: - Properties
     
@@ -159,8 +159,8 @@ extension ReviewListCollectionViewCell {
     
     private func bind() {
         reviewImageCollectionView.imageTapPublisher
-            .sink { [weak self] image in
-                self?.imageTapPublisher.send(image)
+            .sink { [weak self] (imageUrls, indexPath) in
+                self?.imageTapPublisher.send((imageUrls, indexPath))
             }
             .store(in: &cancellables)
     }

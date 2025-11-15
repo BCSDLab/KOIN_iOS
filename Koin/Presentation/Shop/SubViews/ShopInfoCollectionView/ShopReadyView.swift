@@ -13,7 +13,7 @@ final class ShopReadyView: UIView {
     // MARK: - UI Components
     
     private let shopReadyLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardBold, size: 16)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
         $0.textColor = UIColor.appColor(.neutral0)
     }
     

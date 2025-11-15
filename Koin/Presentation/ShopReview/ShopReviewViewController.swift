@@ -222,7 +222,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .white)
+        configureNavigationBar(style: .empty)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         setNavigationItem()
     }
