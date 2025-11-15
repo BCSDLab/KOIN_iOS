@@ -62,14 +62,8 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.backgroundColor = UIColor.appColor(.neutral200)
     }
     
-    private let moreInfoLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.neutral600)
-        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.text = "더 많은 정보를 작성해보세요!"
-    }
-    
     private let imageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.text = "사진"
     }
@@ -80,7 +74,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.text = "리뷰와 관련된 사진을 업로드해주세요."
     }
     
-    private let uploadimageButton: UIButton = {
+    private let uploadimageButton: DashedBorderButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage.appImage(asset: .addPhotoAlternate)?.withRenderingMode(.alwaysTemplate)
         config.baseForegroundColor = UIColor.appColor(.neutral500)
@@ -97,13 +91,13 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         config.background.cornerRadius = 10
         config.contentInsets = .init(top: 18, leading: 16, bottom: 14, trailing: 16)
         
-        return UIButton(configuration: config, primaryAction: nil)
+        return DashedBorderButton(configuration: config, primaryAction: nil)
     }()
     
     private let imageUploadCollectionView: ReviewImageUploadCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 21
-        flowLayout.sectionInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
+        flowLayout.sectionInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 8)
         flowLayout.scrollDirection = .horizontal
         let collectionView = ReviewImageUploadCollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.appColor(.newBackground)
@@ -111,7 +105,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     }()
     
     private let reviewDescriptionLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        $0.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.text = "내용"
     }
@@ -242,7 +236,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             case let .fillComponent(response):
                 self?.fillComponent(response)
             case let .showToast(message, success):
-                self?.showToast(message: message, success: success)
+                self?.showToastMessage(message: message)
                 if success {
                     self?.navigationController?.popViewController(animated: true)
                 }
@@ -306,12 +300,10 @@ extension ShopReviewViewController {
         
         let clampedHeight = min(max(fittedHeight, minTextViewHeight) , maxTextViewHeight)
         reviewTextView.isScrollEnabled = (fittedHeight > maxTextViewHeight)
-
-        let apply = {
+        
+        UIView.performWithoutAnimation {
             self.reviewTextViewHeight?.update(offset: clampedHeight)
-            self.view.layoutIfNeeded()
         }
-        UIView.animate(withDuration: 0.15, animations: apply)
     }
 
     
@@ -387,7 +379,7 @@ extension ShopReviewViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, moreInfoLabel, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
             scrollView.addSubview($0)
         }
     }
@@ -396,7 +388,7 @@ extension ShopReviewViewController {
         
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.snp.bottom).offset(-100)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
         }
         shopNameLabel.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.top).offset(24)
@@ -424,12 +416,8 @@ extension ShopReviewViewController {
             $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
             $0.height.equalTo(1)
         }
-        moreInfoLabel.snp.makeConstraints {
-            $0.top.equalTo(separateView.snp.bottom).offset(24)
-            $0.leading.equalTo(scrollView.snp.leading).offset(20)
-        }
         imageLabel.snp.makeConstraints {
-            $0.top.equalTo(moreInfoLabel.snp.bottom).offset(16)
+            $0.top.equalTo(separateView.snp.bottom).offset(24)
             $0.leading.equalTo(shopNameLabel.snp.leading)
         }
         imageDescriptionLabel.snp.makeConstraints {
@@ -449,7 +437,7 @@ extension ShopReviewViewController {
         }
         reviewDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
-            $0.leading.equalTo(scrollView.snp.leading).offset(32)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
         }
         reviewDescriptionWordLimitLabel.snp.makeConstraints {
             $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
@@ -500,7 +488,7 @@ extension ShopReviewViewController {
             $0.leading.equalTo(view.snp.leading).offset(24)
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.height.equalTo(48)
-            $0.bottom.equalTo(view.snp.bottom).offset(-20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
     
@@ -575,27 +563,25 @@ extension ShopReviewViewController {
     
     
     @objc func keyboardWillShow(_ sender: Notification) {
-        guard
-            let keyboardFrame = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
-            let currentView = UIResponder.currentResponder as? UIView
-        else { return }
-        
-        let keyboardYTop = keyboardFrame.cgRectValue.origin.y
-        let convertedTextFieldFrame = view.convert(currentView.frame, from : currentView.superview)
-        let textFieldYBottom = convertedTextFieldFrame.origin.y + convertedTextFieldFrame.size.height
-        if textFieldYBottom > keyboardYTop {
-            let textFieldYTop = convertedTextFieldFrame.origin.y
-            let properTextFieldHeight = textFieldYTop - keyboardYTop / 1.3
-            view.frame.origin.y = -properTextFieldHeight
+        guard let keyboardFrameValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrameInView = view.convert(keyboardFrameValue.cgRectValue, from: nil)
+        let coveredHeight = max(0, keyboardFrameInView.height - view.safeAreaInsets.bottom)
+        UIView.animate(withDuration: 0.2) {
+            self.additionalSafeAreaInsets.bottom = coveredHeight
+            self.view.layoutIfNeeded()
+        }
+        if let activeView = UIResponder.currentResponder as? UIView {
+            let targetRect = scrollView.convert(activeView.bounds, from: activeView).insetBy(dx: 0, dy: -16)
+            scrollView.scrollRectToVisible(targetRect, animated: true)
         }
     }
-    
+
     @objc func keyboardWillHide(_ sender: Notification) {
-        if view.frame.origin.y != 0 {
-            view.frame.origin.y = 0
+        UIView.animate(withDuration: 0.2) {
+            self.additionalSafeAreaInsets.bottom = 0
+            self.view.layoutIfNeeded()
         }
     }
-    
 }
 
 extension UIResponder {
@@ -614,3 +600,4 @@ extension UIResponder {
         Static.responder = self
     }
 }
+
