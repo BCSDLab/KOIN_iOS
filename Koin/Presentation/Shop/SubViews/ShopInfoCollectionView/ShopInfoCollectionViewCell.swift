@@ -11,6 +11,8 @@ import Kingfisher
 
 final class ShopInfoCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - UI Components
+    
     private let shopImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -20,8 +22,8 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     private let shopTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
-        $0.numberOfLines = 0
-        $0.lineBreakMode = .byWordWrapping
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     private let starImageView = UIImageView()
@@ -41,6 +43,8 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
     }
     
+    // MARK: - Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
@@ -55,7 +59,6 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // FIXME: - 이 "testimage.com"가 왜 로그에 뜨는지 모르겠음. 서버에도 없는데?!
     func configure(info: Shop) {
         if let urlString = info.images.first, let url = URL(string: urlString) {
             shopImageView.kf.setImage(
@@ -80,7 +83,10 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: - UI Functions
+
 extension ShopInfoCollectionViewCell {
+    
     private func setUpLayouts() {
         [shopImageView, shopTitleLabel, starImageView, ratingLabel, reviewCountLabel, shopReadyView].forEach {
             contentView.addSubview($0)
@@ -97,6 +103,7 @@ extension ShopInfoCollectionViewCell {
         shopTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(39.5)
             $0.leading.equalTo(shopImageView.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(26)
         }
         
