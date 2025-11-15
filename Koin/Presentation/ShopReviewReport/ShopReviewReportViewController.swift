@@ -37,20 +37,22 @@ final class ShopReviewReportViewController: UIViewController {
         $0.setLineHeight(lineHeight: 1.4, text: "접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.\n블라인드 처리까지 시간이 소요될 수 있습니다.")
     }
     
-    private let nonSubjectReportView = ReportDetailView(frame: .zero, title: "주제에 맞지 않음", description: "해당 음식점과 관련 없는 리뷰입니다.").then { _ in
+    private let nonSubjectReportView = ReportDetailView(frame: .zero, title: "주제에 맞지 않음", description: "해당 음식점과 관련 없는 리뷰입니다.")
+    
+    private let spamReportView = ReportDetailView(frame: .zero, title: "스팸", description: "광고가 포함된 리뷰입니다.")
+    
+    private let curseReportView = ReportDetailView(frame: .zero, title: "욕설", description: "욕설, 성적인 언어, 비방하는 글이 포함된 리뷰입니다.")
+    
+    private let personalInfoReportView = ReportDetailView(frame: .zero, title: "개인정보", description: "개인정보가 포함된 리뷰입니다.")
+    
+    private let etcContainerView = UIView().then {
+        $0.backgroundColor = .clear
+        $0.isUserInteractionEnabled = true
     }
     
-    private let spamReportView = ReportDetailView(frame: .zero, title: "스팸", description: "광고가 포함된 리뷰입니다.").then { _ in
-    }
-    
-    private let curseReportView = ReportDetailView(frame: .zero, title: "욕설", description: "욕설, 성적인 언어, 비방하는 글이 포함된 리뷰입니다.").then { _ in
-    }
-    
-    private let personalInfoReportView = ReportDetailView(frame: .zero, title: "개인정보", description: "개인정보가 포함된 리뷰입니다.").then { _ in
-    }
-    
-    private let checkButton = UIButton().then {
+    private let etcCheckButton = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .circle), for: .normal)
+        $0.isUserInteractionEnabled = false
     }
     
     private let etcLabel = UILabel().then {
@@ -59,7 +61,7 @@ final class ShopReviewReportViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
-    private let textCountLabel = UILabel().then {
+    private let etcTextCountLabel = UILabel().then {
         $0.text = "0/150"
         $0.textColor = UIColor.appColor(.gray)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
@@ -118,6 +120,7 @@ final class ShopReviewReportViewController: UIViewController {
         setAddTarget()
         setDelegate()
         setupKeyboardNotifications()
+        setupEtcGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -163,12 +166,16 @@ final class ShopReviewReportViewController: UIViewController {
     }
     
     private func setAddTarget() {
-        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
         reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
     }
     
     private func setDelegate() {
         etcReportTextView.delegate = self
+    }
+    
+    private func setupEtcGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(etcContainerTapped))
+        etcContainerView.addGestureRecognizer(tapGesture)
     }
 }
 
@@ -186,7 +193,7 @@ extension ShopReviewReportViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         let characterCount = textView.text.count
-        textCountLabel.text = "\(characterCount)/150"
+        etcTextCountLabel.text = "\(characterCount)/150"
         etcReportPlaceholderLabel.isHidden = !textView.text.isEmpty
         
         UIView.animate(withDuration: 0.2) {
@@ -196,6 +203,7 @@ extension ShopReviewReportViewController: UITextViewDelegate {
 }
 
 extension ShopReviewReportViewController {
+    
     private func setupKeyboardNotifications() {
         NotificationCenter.default.addObserver(
             self,
@@ -255,7 +263,7 @@ extension ShopReviewReportViewController {
     
     private func updateReportButtonState() {
         let anySelectedInReportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView].contains { $0.isCheckButtonSelected() }
-        let anySelectedInViewController = checkButton.isSelected
+        let anySelectedInViewController = etcCheckButton.isSelected
         
         let anySelected = anySelectedInReportViews || anySelectedInViewController
         
@@ -263,19 +271,19 @@ extension ShopReviewReportViewController {
         reportButton.backgroundColor = anySelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
     }
     
-    @objc private func checkButtonTapped() {
-        checkButton.isSelected.toggle()
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
-        textCountLabel.textColor = checkButton.isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.gray)
-        etcReportTextView.isEditable = checkButton.isSelected
+    @objc private func etcContainerTapped() {
+        etcCheckButton.isSelected.toggle()
+        etcCheckButton.setImage(etcCheckButton.isSelected ? UIImage.appImage(asset: .filledCircle)?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal) : UIImage.appImage(asset: .circle), for: .normal)
+        etcTextCountLabel.textColor = etcCheckButton.isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.gray)
+        etcReportTextView.isEditable = etcCheckButton.isSelected
         
-        if checkButton.isSelected {
+        if etcCheckButton.isSelected {
             etcReportTextView.becomeFirstResponder()
         } else {
             etcReportTextView.resignFirstResponder()
             etcReportTextView.text = ""
             etcReportPlaceholderLabel.isHidden = false
-            textCountLabel.text = "0/150"
+            etcTextCountLabel.text = "0/150"
         }
         
         updateReportButtonState()
@@ -292,7 +300,7 @@ extension ShopReviewReportViewController {
                 reports.append(report)
             }
         }
-        if checkButton.isSelected, let etcText = etcReportTextView.text {
+        if etcCheckButton.isSelected, let etcText = etcReportTextView.text {
             let report = Report(title: "기타", content: etcText)
             reports.append(report)
         }
@@ -306,11 +314,15 @@ extension ShopReviewReportViewController {
 
 extension ShopReviewReportViewController {
     
-    private func setUpLayOuts() {
+    private func setUpLayouts() {
         view.addSubview(scrollView)
         
-        [reportReasonLabel, reportGuideLabel, nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView, checkButton, etcLabel, textCountLabel, etcReportTextView].forEach {
+        [reportReasonLabel, reportGuideLabel, nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView, etcContainerView, etcReportTextView].forEach {
             scrollView.addSubview($0)
+        }
+        
+        [etcCheckButton, etcLabel, etcTextCountLabel].forEach {
+            etcContainerView.addSubview($0)
         }
         
         etcReportTextView.addSubview(etcReportPlaceholderLabel)
@@ -362,25 +374,31 @@ extension ShopReviewReportViewController {
             $0.height.equalTo(76)
         }
         
-        checkButton.snp.makeConstraints {
+        etcContainerView.snp.makeConstraints {
             $0.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
-            $0.leading.equalTo(view.snp.leading).offset(28)
-            $0.width.equalTo(16)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.equalTo(16)
         }
         
-        etcLabel.snp.makeConstraints {
-            $0.centerY.equalTo(checkButton.snp.centerY)
-            $0.leading.equalTo(checkButton.snp.trailing).offset(16)
+        etcCheckButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.height.equalTo(16)
         }
         
-        textCountLabel.snp.makeConstraints {
-            $0.centerY.equalTo(checkButton.snp.centerY)
-            $0.trailing.equalTo(view.snp.trailing).offset(-34)
+        etcLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(etcCheckButton.snp.trailing).offset(16)
+        }
+        
+        etcTextCountLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-14)
         }
         
         etcReportTextView.snp.makeConstraints {
-            $0.top.equalTo(checkButton.snp.bottom).offset(13)
+            $0.top.equalTo(etcContainerView.snp.bottom).offset(13)
             $0.leading.equalTo(view.snp.leading).offset(28)
             $0.trailing.equalTo(view.snp.trailing).offset(-20)
             $0.height.greaterThanOrEqualTo(42)
@@ -402,7 +420,7 @@ extension ShopReviewReportViewController {
     }
     
     private func configureView() {
-        setUpLayOuts()
+        setUpLayouts()
         setUpConstraints()
         view.backgroundColor = UIColor.appColor(.newBackground)
     }
