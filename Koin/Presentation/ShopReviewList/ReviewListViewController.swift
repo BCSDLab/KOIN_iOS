@@ -170,6 +170,8 @@ final class ReviewListViewController: UIViewController {
                     } else {
                         self.loadingIndicator.stopAnimating()
                     }
+                case .toggleMyReviewButton:
+                    reviewListCollectionView.toggleMyReviewButton()
                 }
             }
             .store(in: &cancellables)
@@ -179,11 +181,10 @@ final class ReviewListViewController: UIViewController {
         reviewListCollectionView.myReviewButtonPublisher
             .sink { [weak self] isMine in
                 guard let self else { return }
-                
                 if isMine {
-                    self.inputSubject.send(.checkLoginForMyReviewFilter)
-                } else {
                     self.inputSubject.send(.changeFilter(sorter: nil, isMine: false))
+                } else {
+                    self.inputSubject.send(.checkLoginForMyReviewFilter)
                 }
             }
             .store(in: &cancellables)

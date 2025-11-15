@@ -58,6 +58,15 @@ final class ReviewListCollectionView: UICollectionView {
 
 extension ReviewListCollectionView {
     
+    func toggleMyReviewButton() {
+        if let headerView = supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionHeader,
+            at: IndexPath(item: 0, section: 0)
+        ) as? ReviewListHeaderView {
+            headerView.toggleMyReviewButton()
+        }
+    }
+    
     func addReviewList(_ list: [Review]) {
         reviewList.append(contentsOf: list)
         reloadData()

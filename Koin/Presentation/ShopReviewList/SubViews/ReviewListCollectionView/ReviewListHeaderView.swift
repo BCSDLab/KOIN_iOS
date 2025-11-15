@@ -72,6 +72,11 @@ extension ReviewListHeaderView {
 // MARK: - Button Configuration
 extension ReviewListHeaderView {
     
+    func toggleMyReviewButton() {
+        myReviewButton.isSelected.toggle()
+        configureMyReviewButton()
+    }
+    
     private func configureSortTypeButton(type: ReviewSortType) {
         var configuration = UIButton.Configuration.plain()
         
@@ -130,8 +135,6 @@ extension ReviewListHeaderView {
     }
     
     @objc private func myReviewButtonTapped() {
-        myReviewButton.isSelected.toggle()
-        configureMyReviewButton()
         myReviewButtonPublisher.send(myReviewButton.isSelected)
     }
 }

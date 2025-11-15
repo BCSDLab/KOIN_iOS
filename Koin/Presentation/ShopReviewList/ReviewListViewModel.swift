@@ -78,6 +78,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         )
         case setStatistics(StatisticsDto)
         case updateLoadingState(Bool)
+        case toggleMyReviewButton
     }
 
     // MARK: - Initialize
@@ -288,6 +289,7 @@ extension ReviewListViewModel {
                 
             case .myReviewFilter:
                 self.outputSubject.send(.applyMyReviewFilter)
+                self.outputSubject.send(.toggleMyReviewButton)
                 
             case .reportReview:
                 if let parameter {
