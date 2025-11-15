@@ -8,11 +8,12 @@
 import UIKit
 import Combine
 
-final class ShopSummaryImagesCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+final class ShopSummaryImagesCollectionView: UICollectionView {
     
     // MARK: - Properties
     private var orderImages: [OrderImage] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
+    let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
     
     // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -29,7 +30,7 @@ final class ShopSummaryImagesCollectionView: UICollectionView, UICollectionViewD
     }
 }
 
-extension ShopSummaryImagesCollectionView {
+extension ShopSummaryImagesCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if(orderImages.isEmpty) { return 1 }
@@ -46,20 +47,25 @@ extension ShopSummaryImagesCollectionView {
         cell.configure(url: orderImages[indexPath.row].imageUrl)
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return false
+
+}
+
+extension ShopSummaryImagesCollectionView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        didTapThumbnailPublisher.send(indexPath)
     }
 }
 
 extension ShopSummaryImagesCollectionView {
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let width = self.frame.width
-        let currentPage = contentOffset.x
-        guard 0 <= currentPage else {
+        let row = Int(contentOffset.x / width + 0.5)
+        guard 0 <= row else {
             return
         }
-        didScrollOutputSubject.send(Int(currentPage))
+        didScrollOutputSubject.send(row)
     }
 }
 

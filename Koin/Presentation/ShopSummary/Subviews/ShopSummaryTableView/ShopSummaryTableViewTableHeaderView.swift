@@ -17,6 +17,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -66,6 +67,10 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
             self?.imagesPageControl.currentPage = currentPage
         }
         .store(in: &subscriptions)
+        
+        imagesCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
+            self?.didTapThumbnailPublisher.send(indexPath)
+        }.store(in: &subscriptions)
         
         // MARK: - MenuGroupName CollectionView
         menuGroupNameCollectionView.didScrollPublisher.sink { [weak self] contentOffset in
