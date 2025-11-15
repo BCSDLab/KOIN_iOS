@@ -11,31 +11,27 @@ import UIKit
 
 final class ReviewLoginModalViewController: UIViewController {
     
-    let loginButtonPublisher = PassthroughSubject<Void, Never>()
+    // MARK: - Properties
+    
     private let message: String
+    
+    // MARK: - Publisher
+    
+    let loginButtonPublisher = PassthroughSubject<Void, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     
+    // MARK: - UI Components
+
     private lazy var messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
         $0.textColor = UIColor.appColor(.neutral600)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 8
-        let text = "리뷰를 작성하기 위해\n 로그인이 필요해요."
-        let attributedString = NSMutableAttributedString(string: text, attributes: [.paragraphStyle: paragraphStyle])
-        $0.attributedText = attributedString
         $0.numberOfLines = 2
         $0.textAlignment = .center
     }
     
-    
     private lazy var subMessageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        let text = "리뷰작성은 회원만 사용 가능합니다."
-        let attributedString = NSMutableAttributedString(string: text)
-        $0.attributedText = attributedString
         $0.numberOfLines = 1
         $0.textAlignment = .center
     }
@@ -66,6 +62,8 @@ final class ReviewLoginModalViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
+    // MARK: - Initializer
+    
     init(message: String) {
         self.message = message
         super.init(nibName: nil, bundle: nil)
@@ -75,11 +73,54 @@ final class ReviewLoginModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        configureMessages()
+        setAddTarget()
+    }
+    
+    private func setAddTarget() {
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    }
+    
+    private func configureMessages() {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 8
+        
+        let mainText: String
+        let subText: String
+        
+        switch message {
+        case "작성":
+            mainText = "리뷰를 작성하기 위해\n로그인이 필요해요."
+            subText = "리뷰 작성은 회원만 사용 가능합니다."
+            
+        case "신고":
+            mainText = "리뷰를 신고하기 위해\n로그인이 필요해요."
+            subText = "리뷰 신고는 회원만 사용 가능합니다."
+            
+        default:
+            mainText = "리뷰를 작성하기 위해\n로그인이 필요해요."
+            subText = "리뷰 작성은 회원만 사용 가능합니다."
+        }
+        
+        let mainAttributedString = NSMutableAttributedString(
+            string: mainText,
+            attributes: [.paragraphStyle: paragraphStyle]
+        )
+        messageLabel.attributedText = mainAttributedString
+        
+        let subParagraphStyle = NSMutableParagraphStyle()
+        subParagraphStyle.lineSpacing = 6
+        let subAttributedString = NSMutableAttributedString(
+            string: subText,
+            attributes: [.paragraphStyle: subParagraphStyle]
+        )
+        subMessageLabel.attributedText = subAttributedString
     }
     
     @objc private func closeButtonTapped() {
@@ -92,6 +133,8 @@ final class ReviewLoginModalViewController: UIViewController {
         loginButtonPublisher.send(())
     }
 }
+
+// MARK: - UI Functions
 
 extension ReviewLoginModalViewController {
     

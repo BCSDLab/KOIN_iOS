@@ -12,25 +12,24 @@ import SnapKit
 final class ReportDetailView: UIView {
     
     // MARK: - Properties
+    
     let checkButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     
     private let checkButton = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .circle)?.resize(to: CGSize(width: 16, height: 16)), for: .normal)
-        $0.isUserInteractionEnabled = true
+        $0.isUserInteractionEnabled = false
     }
     
     private let reportTitleLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.isUserInteractionEnabled = false
     }
     
     private let reportDescriptionLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.neutral500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.isUserInteractionEnabled = false
     }
     
     private let separateView = UIView().then {
@@ -48,14 +47,20 @@ final class ReportDetailView: UIView {
     
     convenience init(frame: CGRect, title: String, description: String) {
         self.init(frame: frame)
-        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
         reportTitleLabel.text = title
         reportDescriptionLabel.text = description
+        setupGesture()
+    }
+    
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        self.addGestureRecognizer(tapGesture)
     }
 }
 
 extension ReportDetailView {
-    @objc private func checkButtonTapped() {
+    
+    @objc private func viewTapped() {
         checkButton.isSelected.toggle()
         let image = checkButton.isSelected
             ? UIImage.appImage(asset: .filledCircle)?.resize(to: CGSize(width: 16, height: 16))?.withTintColor(UIColor.appColor(.new500), renderingMode: .alwaysOriginal)
