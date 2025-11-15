@@ -21,7 +21,7 @@ final class ShopViewController: UIViewController {
     
     private var didTapBack = false
     
-    // MARK: - UI Components
+    // MARK: - UI Components    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -174,7 +174,7 @@ final class ShopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .transparentBlack)
         self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
