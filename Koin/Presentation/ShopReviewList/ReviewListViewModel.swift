@@ -276,6 +276,18 @@ extension ReviewListViewModel {
                 self.outputSubject.send(.showWriteReviewLoginModal)
                 
             case .myReviewFilter:
+                isMineOnly=true
+                self.paginationState.currentPage = 1
+                self.paginationState.totalPage = 1
+
+                self.outputSubject.send(.setReviewList(
+                    reviews: [],
+                    sortType: self.sorter,
+                    isMineOnly: self.isMineOnly,
+                    currentPage: 1,
+                    totalPage: 1,
+                    shouldReset: true
+                ))
                 self.outputSubject.send(.showMyReviewFilterError)
                 
             case .reportReview:
