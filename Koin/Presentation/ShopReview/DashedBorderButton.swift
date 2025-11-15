@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DashedBorderButton: UIButton {
+final class DashedBorderButton: UIButton {
 
     private let dashedBorderLayer = CAShapeLayer()
     
