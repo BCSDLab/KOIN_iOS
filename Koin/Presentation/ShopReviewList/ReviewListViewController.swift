@@ -131,8 +131,24 @@ final class ReviewListViewController: UIViewController {
                 guard let self else { return }
                 
                 switch output {
-                case let .updateLoginStatus(isLogined, parameter):
-                    self.handleLoginStatus(isLogined: isLogined, parameter: parameter)
+                case .showWriteReviewLoginModal:
+                    self.present(self.reviewWriteLoginModalViewController, animated: true)
+                    
+                case .showReportReviewLoginModal:
+                    self.present(self.reviewReportLoginModalViewController, animated: true)
+                    
+                case .showMyReviewFilterError:
+                    self.reviewListCollectionView.updateMyReviewCheckbox(false)
+                    self.nonReviewListView.isHidden = false
+                    
+                case .navigateToWriteReview:
+                    self.navigateToWriteReview()
+                    
+                case let .navigateToReportReview(reviewId, shopId):
+                    self.navigateToReportReview(reviewId: reviewId, shopId: shopId)
+                    
+                case .applyMyReviewFilter:
+                    self.inputSubject.send(.changeFilter(sorter: nil, isMine: true))
                     
                 case let .setReviewList(reviews, sortType, isMineOnly, _, _, shouldReset):
                     self.updateReviewList(
@@ -159,7 +175,13 @@ final class ReviewListViewController: UIViewController {
     private func bindCollectionView() {
         reviewListCollectionView.myReviewButtonPublisher
             .sink { [weak self] isMine in
-                self?.inputSubject.send(.changeFilter(sorter: nil, isMine: isMine))
+                guard let self else { return }
+                
+                if isMine {
+                    self.inputSubject.send(.checkLoginForMyReviewFilter)
+                } else {
+                    self.inputSubject.send(.changeFilter(sorter: nil, isMine: false))
+                }
             }
             .store(in: &cancellables)
         
@@ -183,7 +205,7 @@ final class ReviewListViewController: UIViewController {
         
         reviewListCollectionView.reportButtonPublisher
             .sink { [weak self] parameter in
-                self?.inputSubject.send(.checkLogin(parameter))
+                self?.inputSubject.send(.checkLoginForReportReview(parameter))
             }
             .store(in: &cancellables)
         
@@ -323,21 +345,6 @@ extension ReviewListViewController {
         present(bottomSheet, animated: false)
     }
     
-    private func handleLoginStatus(isLogined: Bool, parameter: (Int, Int)?) {
-        if !isLogined {
-            let modal = parameter != nil
-                ? reviewReportLoginModalViewController
-                : reviewWriteLoginModalViewController
-            present(modal, animated: true)
-        } else {
-            if let parameter {
-                navigateToReportReview(reviewId: parameter.0, shopId: parameter.1)
-            } else {
-                navigateToWriteReview()
-            }
-        }
-    }
-    
     private func handleDeleteReview(_ parameter: (Int, Int)) {
         viewModel.deleteParameter = parameter
         inputSubject.send(.logEvent(
@@ -375,7 +382,7 @@ extension ReviewListViewController {
 extension ReviewListViewController {
     
     @objc private func writeReviewButtonTapped() {
-        inputSubject.send(.checkLogin(nil))
+        inputSubject.send(.checkLoginForWriteReview)
     }
     
     private func navigateToWriteReview() {

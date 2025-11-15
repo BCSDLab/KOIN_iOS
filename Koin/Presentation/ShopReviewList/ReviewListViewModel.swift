@@ -39,18 +39,33 @@ final class ReviewListViewModel: ViewModelProtocol {
         get { deleteTarget ?? (0, 0) }
         set { deleteTarget = (newValue.0, newValue.1) }
     }
+    
+    private enum LoginCheckContext {
+        case writeReview
+        case myReviewFilter
+        case reportReview
+    }
+    
+    private var loginCheckContext: LoginCheckContext = .writeReview
 
     // MARK: - Input/Output
     enum Input {
         case viewDidLoad
         case fetchNextPage
         case changeFilter(sorter: ReviewSortType?, isMine: Bool?)
-        case checkLogin((Int, Int)?)
+        case checkLoginForWriteReview
+        case checkLoginForMyReviewFilter
+        case checkLoginForReportReview((Int, Int))
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
-        case updateLoginStatus(Bool, (Int, Int)?)
+        case showWriteReviewLoginModal
+        case showReportReviewLoginModal
+        case showMyReviewFilterError
+        case navigateToWriteReview
+        case navigateToReportReview(Int, Int)
+        case applyMyReviewFilter
         case setReviewList(
             reviews: [Review],
             sortType: ReviewSortType,
@@ -123,7 +138,16 @@ final class ReviewListViewModel: ViewModelProtocol {
                     }
                     self.fetchReviewList(page: 1, shouldReset: true)
 
-                case let .checkLogin(parameter):
+                case .checkLoginForWriteReview:
+                    self.loginCheckContext = .writeReview
+                    self.checkLogin(parameter: nil)
+
+                case .checkLoginForMyReviewFilter:
+                    self.loginCheckContext = .myReviewFilter
+                    self.checkLogin(parameter: nil)
+
+                case let .checkLoginForReportReview(parameter):
+                    self.loginCheckContext = .reportReview
                     self.checkLogin(parameter: parameter)
 
                 case let .logEvent(label, category, value):
@@ -243,11 +267,34 @@ extension ReviewListViewModel {
     private func checkLogin(parameter: (Int, Int)?) {
         fetchUserDataUseCase.execute()
             .sink { [weak self] completion in
+                guard let self else { return }
                 if case .failure = completion {
-                    self?.outputSubject.send(.updateLoginStatus(false, parameter))
+                    switch self.loginCheckContext {
+                    case .writeReview:
+                        self.outputSubject.send(.showWriteReviewLoginModal)
+                        
+                    case .myReviewFilter:
+                        self.outputSubject.send(.showMyReviewFilterError)
+                        
+                    case .reportReview:
+                        self.outputSubject.send(.showReportReviewLoginModal)
+                    }
                 }
             } receiveValue: { [weak self] _ in
-                self?.outputSubject.send(.updateLoginStatus(true, parameter))
+                guard let self else { return }
+                
+                switch self.loginCheckContext {
+                case .writeReview:
+                    self.outputSubject.send(.navigateToWriteReview)
+                    
+                case .myReviewFilter:
+                    self.outputSubject.send(.applyMyReviewFilter)
+                    
+                case .reportReview:
+                    if let parameter {
+                        self.outputSubject.send(.navigateToReportReview(parameter.0, parameter.1))
+                    }
+                }
             }
             .store(in: &subscriptions)
     }
