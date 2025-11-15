@@ -13,6 +13,7 @@ final class ReviewListViewModel: ViewModelProtocol {
     private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let deleteReviewUseCase: DeleteReviewUseCase
 
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -56,6 +57,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         case checkLoginForWriteReview
         case checkLoginForMyReviewFilter
         case checkLoginForReportReview((Int, Int))
+        case deleteReview(Int, Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
@@ -66,6 +68,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         case navigateToWriteReview
         case navigateToReportReview(Int, Int)
         case applyMyReviewFilter
+        case deleteReview(Int, Int)
         case setReviewList(
             reviews: [Review],
             sortType: ReviewSortType,
@@ -84,6 +87,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         fetchMyReviewUseCase: FetchMyReviewUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
+        deleteReviewUseCase: DeleteReviewUseCase,
         shopId: Int,
         shopName: String
     ) {
@@ -91,6 +95,7 @@ final class ReviewListViewModel: ViewModelProtocol {
         self.fetchMyReviewUseCase = fetchMyReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
+        self.deleteReviewUseCase = deleteReviewUseCase
         self.shopId = shopId
         self.shopName = shopName
     }
@@ -110,6 +115,9 @@ final class ReviewListViewModel: ViewModelProtocol {
             ),
             fetchUserDataUseCase: DefaultFetchUserDataUseCase(
                 userRepository: DefaultUserRepository(service: DefaultUserService())
+            ),
+            deleteReviewUseCase: DefaultDeleteReviewUseCase(
+                shopRepository: shopRepository
             ),
             shopId: shopId,
             shopName: shopName
@@ -149,6 +157,9 @@ final class ReviewListViewModel: ViewModelProtocol {
                 case let .checkLoginForReportReview(parameter):
                     self.loginCheckContext = .reportReview
                     self.checkLogin(parameter: parameter)
+                    
+                case let .deleteReview(reviewId, shopId):
+                    self.deleteReview(reviewId: reviewId, shopId: shopId)
 
                 case let .logEvent(label, category, value):
                     self.logAnalyticsEvent(label: label, category: category, value: value)
@@ -295,6 +306,20 @@ extension ReviewListViewModel {
                         self.outputSubject.send(.navigateToReportReview(parameter.0, parameter.1))
                     }
                 }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func deleteReview(reviewId: Int, shopId: Int) {
+        deleteReviewUseCase.execute(reviewId: reviewId, shopId: shopId)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                if case let .failure(error) = completion {
+                    print("❌ deleteReview error: \(error)")
+                }
+            } receiveValue: { [weak self] _ in
+                guard let self else { return }
+                self.outputSubject.send(.deleteReview(reviewId, shopId))
             }
             .store(in: &subscriptions)
     }

@@ -138,7 +138,6 @@ final class ReviewListViewController: UIViewController {
                     self.present(self.reviewReportLoginModalViewController, animated: true)
                     
                 case .showMyReviewFilterError:
-                    self.reviewListCollectionView.updateMyReviewCheckbox(false)
                     self.nonReviewListView.isHidden = false
                     
                 case .navigateToWriteReview:
@@ -157,6 +156,10 @@ final class ReviewListViewController: UIViewController {
                         isMineOnly: isMineOnly,
                         shouldReset: shouldReset
                     )
+                    
+                case let .deleteReview(reviewId, shopId):
+                    self.reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
+                    self.showToastMessage(message: "리뷰가 삭제되었어요")
                     
                 case let .setStatistics(statistics):
                     self.updateStatistics(statistics)
@@ -357,8 +360,7 @@ extension ReviewListViewController {
     
     private func deleteReview() {
         let (reviewId, shopId) = viewModel.deleteParameter
-        reviewListCollectionView.disappearReview(reviewId, shopId: shopId)
-        showToastMessage(message: "리뷰가 삭제되었어요")
+        inputSubject.send(.deleteReview(reviewId, shopId))
     }
     
     private func showZoomedImage(_ image: UIImage?) {
