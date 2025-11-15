@@ -37,8 +37,7 @@ final class ZoomedImageCollectionViewCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(url: String) {
         imageView.kf.setImage(
-            with: URL(string: url),
-            placeholder: UIImage.appImage(asset: .defaultMenuImage)
+            with: URL(string: url)
         )
     }
     
