@@ -141,7 +141,6 @@ final class ReviewListViewController: UIViewController {
                         isMineOnly: isMineOnly,
                         shouldReset: shouldReset
                     )
-                    
                 case let .setStatistics(statistics):
                     self.updateStatistics(statistics)
                     
@@ -194,8 +193,8 @@ final class ReviewListViewController: UIViewController {
             .store(in: &cancellables)
         
         reviewListCollectionView.imageTapPublisher
-            .sink { [weak self] image in
-                self?.showZoomedImage(image)
+            .sink { [weak self] (imageUrls, indexPath) in
+                self?.showZoomedImage(imageUrls, indexPath)
             }
             .store(in: &cancellables)
     }
@@ -354,18 +353,9 @@ extension ReviewListViewController {
         showToastMessage(message: "리뷰가 삭제되었어요")
     }
     
-    private func showZoomedImage(_ image: UIImage?) {
-        guard let image else { return }
-        
-        let imageWidth = UIScreen.main.bounds.width
-        let proportion = image.size.width / imageWidth
-        let imageHeight = image.size.height / proportion
-        
-        let zoomedImageViewController = ZoomedImageViewController(
-            imageWidth: imageWidth,
-            imageHeight: imageHeight.isNaN ? 100 : imageHeight
-        )
-        zoomedImageViewController.setImage(image)
+    private func showZoomedImage(_ imageUrls: [String], _ initialIndexpath: IndexPath) {
+        let zoomedImageViewController = ZoomedImageViewControllerB()
+        zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: initialIndexpath)
         present(zoomedImageViewController, animated: true)
     }
 }

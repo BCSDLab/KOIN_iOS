@@ -8,16 +8,17 @@
 import Combine
 import UIKit
 
-final class ReviewImageCollectionView: UICollectionView, UICollectionViewDataSource {
+final class ReviewImageCollectionView: UICollectionView {
     
+    // MARK: - Properties
     private var reviewImageList: [String] = []
-    let imageTapPublisher = PassthroughSubject<UIImage?, Never>()
+    let imageTapPublisher = PassthroughSubject<([String], IndexPath), Never>()
     
+    // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
@@ -25,6 +26,7 @@ final class ReviewImageCollectionView: UICollectionView, UICollectionViewDataSou
     
     private func commonInit() {
         register(ReviewImageCollectionViewCell.self, forCellWithReuseIdentifier: ReviewImageCollectionViewCell.identifier)
+        delegate = self
         dataSource = self
         backgroundColor = .clear
     }
@@ -35,7 +37,7 @@ final class ReviewImageCollectionView: UICollectionView, UICollectionViewDataSou
     }
 }
 
-extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
+extension ReviewImageCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return reviewImageList.count
@@ -47,11 +49,14 @@ extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
         }
         let reviewImage = reviewImageList[indexPath.row]
         cell.configure(imageURL: reviewImage)
-        
-        cell.imageTapPublisher.sink { [weak self] image in
-            self?.imageTapPublisher.send(image)
-        }.store(in: &cell.cancellables)
-        
         return cell
+    }
+}
+
+extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        imageTapPublisher.send((reviewImageList, indexPath))
+        print("tapped")
     }
 }
