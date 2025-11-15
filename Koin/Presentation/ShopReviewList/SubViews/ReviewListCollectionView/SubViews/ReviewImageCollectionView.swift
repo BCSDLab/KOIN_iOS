@@ -57,6 +57,5 @@ extension ReviewImageCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         imageTapPublisher.send((reviewImageList, indexPath))
-        print("tapped")
     }
 }
