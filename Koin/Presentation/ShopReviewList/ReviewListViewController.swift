@@ -295,6 +295,16 @@ extension ReviewListViewController: UIScrollViewDelegate {
             }
         }
     }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+    }
+
 }
 
 extension ReviewListViewController {
