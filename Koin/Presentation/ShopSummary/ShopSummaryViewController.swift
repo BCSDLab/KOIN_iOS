@@ -402,7 +402,7 @@ extension ShopSummaryViewController {
     
     // MARK: - Navigation
     private func navigateToReviewListViewController() {
-        guard let shopId = viewModel.getShopId() else { return }
+        guard let shopId = viewModel.shopId else { return }
         
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: viewModel.shopName)
         reviewListViewController.title = "리뷰"

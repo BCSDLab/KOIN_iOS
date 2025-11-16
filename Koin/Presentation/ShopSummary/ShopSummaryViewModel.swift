@@ -67,7 +67,7 @@ final class ShopSummaryViewModel {
 
     // Properties
     let orderableShopId: Int?
-    let shopId: Int?
+    private(set) var shopId: Int?
     let shopName: String
     let isFromOrder: Bool
     
@@ -185,24 +185,10 @@ final class ShopSummaryViewModel {
                 
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
-
-
             }
         }
         .store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
-    }
-    
-    // MARK: - Public Methods
-    
-    /// 현재 shopId 반환
-    func getShopId() -> Int? {
-        if isFromOrder {
-            let shopId = cachedOrderShopSummary?.shopId
-            return shopId
-        } else {
-            return shopId
-        }
     }
 }
 
@@ -217,7 +203,7 @@ extension ShopSummaryViewModel {
                 guard let self = self else { return }
                 
                 self.cachedThumbnailImages = orderShopSummary.images
-                self.cachedOrderShopSummary = orderShopSummary
+                self.shopId = orderShopSummary.shopId
                 
                 self.outputSubject.send(.updateInfoView(orderShopSummary, isFromOrder: true))
                 self.outputSubject.send(.updateIsAvailables(
