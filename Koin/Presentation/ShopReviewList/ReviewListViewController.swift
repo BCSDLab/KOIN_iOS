@@ -16,6 +16,7 @@ final class ReviewListViewController: UIViewController {
     private let viewModel: ReviewListViewModel
     private let inputSubject: PassthroughSubject<ReviewListViewModel.Input, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
+    private var didTapBack = false
     
     // MARK: - UI Components
     
@@ -114,7 +115,21 @@ final class ReviewListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBack))
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
+        let shopName = self.viewModel.getShopName()
+        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
+        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
+        
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
+        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, eventCategory, shopName, nil, nil, nil, .shopDetailViewReviewBack))
+        
+    }
+
         
     private func bind() {
         bindViewModel()
