@@ -266,8 +266,9 @@ final class ShopViewController: UIViewController {
                                                  fetchShopDataUseCase: fetchShopDataUseCase,
                                                  logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                 shopId: shopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil, backCategoryName: previousPage)
+                                                 shopId: shopId,
+                                                 shopName: shopName)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, backCategoryName: previousPage)
             viewController.title = shopName
             let currentPage = shopName
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))

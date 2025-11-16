@@ -12,15 +12,12 @@ final class ShopSummaryViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: ShopSummaryViewModel
-    private let isFromOrder: Bool
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
     private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
-    private var cachedShopId: Int?
-    private var cachedShopName: String?
     private var cachedImages: [OrderImage] = []
     
     private var didTapBack = false
@@ -67,10 +64,8 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, isFromOrder: Bool, orderableShopId: Int?, backCategoryName: String? = nil) {
+    init(viewModel: ShopSummaryViewModel, backCategoryName: String? = nil) {
         self.viewModel = viewModel
-        self.isFromOrder = isFromOrder
-        self.cachedShopId = viewModel.getShopId()
         self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
@@ -102,7 +97,7 @@ final class ShopSummaryViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
-        let shopName = self.viewModel.getShopName() ?? self.cachedShopName ?? "알 수 없음"
+        let shopName = self.viewModel.shopName
         let currentPage = self.backCategoryName
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
@@ -123,13 +118,12 @@ extension ShopSummaryViewController {
             guard let self else { return }
             switch output {
             case .updateInfoView(let orderShopSummary, let isFromOrder):
-                self.cachedShopName = orderShopSummary.name
                 self.cachedImages = orderShopSummary.images
                 self.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
             case .updatePhonenumber(let phonenumber):
                 self.tableHeaderView.configure(phonenumber: phonenumber)
             case .updateOrderAmountDeliveryTips(let minOrderAmount, let minDeliveryTip, let maxDeliveryTip):
-                self.tableHeaderView.configure(minOrderAmount: minOrderAmount, minDeliveryTip: minDeliveryTip, maxDelieveryTip: maxDeliveryTip, isFromOrder: self.isFromOrder)
+                self.tableHeaderView.configure(minOrderAmount: minOrderAmount, minDeliveryTip: minDeliveryTip, maxDelieveryTip: maxDeliveryTip, isFromOrder: self.viewModel.isFromOrder)
             case .updateMenusGroups(let orderShopMenusGroups):
                 self.tableHeaderView.updateMenusGroups(orderShopMenusGroups: orderShopMenusGroups)
                 self.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
@@ -190,12 +184,8 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
-            guard let self else {
-                return
-            }
-            let shopName = self.viewModel.getShopName() ?? self.cachedShopName ?? "알 수 없음"
-            
-            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, shopName))
+            guard let self else { return }
+            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
             if let orderableShopId = self.viewModel.orderableShopId {
                 let orderService = DefaultOrderService()
                 let orderRepository = DefaultOrderShopRepository(service: orderService)
@@ -222,11 +212,9 @@ extension ShopSummaryViewController {
         tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
             self?.makePhonecall()
             
-            guard let self, let shopName = self.viewModel.getShopName() ?? self.cachedShopName else {
-                return
-            }
+            guard let self else { return }
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
             }
             .store(in: &subscriptions)
         
@@ -250,7 +238,7 @@ extension ShopSummaryViewController {
         // MARK: - tableView
         menuGroupTableView.didTapCellPublisher
             .sink { [weak self] menuId in
-                guard let self = self, self.isFromOrder else { return }
+                guard let self, self.viewModel.isFromOrder else { return }
                 if isAddingMenuAvailable {
                     self.inputSubject.send(.fetchMenuDetail(orderableShopId: viewModel.orderableShopId ?? -1, orderableShopMenuId: menuId))
                     navigateToMenuDetail(menuId: menuId)
@@ -292,8 +280,8 @@ extension ShopSummaryViewController {
         
         menuGroupTableView.didEndScrollPublisher
             .sink { [ weak self ] in
-                let shopName = self?.viewModel.getShopName() ?? self?.cachedShopName ?? "알 수 없음"
-                self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, shopName))
+                guard let self else { return }
+                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
             }
             .store(in: &subscriptions)
             
@@ -336,9 +324,8 @@ extension ShopSummaryViewController {
 
     // MARK: - Navigation Right Bar Button
     private func configureRightBarButton() {
-        guard isFromOrder else {
-            return
-        }
+        if !viewModel.isFromOrder { return }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: .appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
             style: .plain,
@@ -415,12 +402,9 @@ extension ShopSummaryViewController {
     
     // MARK: - Navigation
     private func navigateToReviewListViewController() {
-        guard let shopId = viewModel.getShopId(),
-              let shopName = viewModel.getShopName() else {
-            return
-        }
+        guard let shopId = viewModel.getShopId() else { return }
         
-        let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
+        let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: viewModel.shopName)
         reviewListViewController.title = "리뷰"
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
