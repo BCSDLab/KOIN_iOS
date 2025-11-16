@@ -114,7 +114,21 @@ final class ReviewListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBack))
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard self.isMovingFromParent || self.isBeingDismissed else { return }
+        let shopName = self.viewModel.getShopName()
+        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
+        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
+        
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
+        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, eventCategory, shopName, nil, nil, nil, .shopDetailViewReviewBack))
+        
+    }
+
         
     private func bind() {
         bindViewModel()
@@ -253,9 +267,20 @@ final class ReviewListViewController: UIViewController {
                 self.inputSubject.send(.logEvent(
                     EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
                     .click,
-                    self.viewModel.getShopName()
+                    "O"
                 ))
                 self.deleteReview()
+            }
+            .store(in: &cancellables)
+        
+        deleteReviewModalViewController.cancelButtonPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.inputSubject.send(.logEvent(
+                    EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
+                    .click,
+                    "X"
+                ))
             }
             .store(in: &cancellables)
         
@@ -295,6 +320,16 @@ extension ReviewListViewController: UIScrollViewDelegate {
             }
         }
     }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+    }
+
 }
 
 extension ReviewListViewController {
@@ -339,6 +374,8 @@ extension ReviewListViewController {
         bottomSheet.selectionPublisher
             .sink { [weak self] index in
                 let selectedSortType = ReviewSortType.allCases[index]
+                
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewCan, .click, options[index]))
                 self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
             }
             .store(in: &cancellables)

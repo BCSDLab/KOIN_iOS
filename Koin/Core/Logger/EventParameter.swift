@@ -68,6 +68,7 @@ enum EventParameter {
             case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
             case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
+            case shopDetailViewReviewCan = "shop_detail_view_review_can"
             case mainShopBenefit = "main_shop_benefit"
             case benefitShopCategories = "benefit_shop_categories"
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
@@ -235,5 +236,6 @@ enum EventParameter {
         case benefitShopClick
         case benefitShopCall
         case shopCategoriesBack
+        case shopDetailViewReviewBack = "shop_detail_view_review_back"
     }
 }
