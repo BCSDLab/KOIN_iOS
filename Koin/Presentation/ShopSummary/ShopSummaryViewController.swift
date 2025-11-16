@@ -223,7 +223,6 @@ extension ShopSummaryViewController {
             self?.makePhonecall()
             
             guard let self, let shopName = self.viewModel.getShopName() ?? self.cachedShopName else {
-                print("cannot find shopName")
                 return
             }
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
