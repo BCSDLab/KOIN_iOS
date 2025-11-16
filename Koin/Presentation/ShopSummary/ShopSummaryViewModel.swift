@@ -19,7 +19,6 @@ final class ShopSummaryViewModel {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
-
     }
     
     // MARK: - Output
@@ -72,7 +71,6 @@ final class ShopSummaryViewModel {
     let isFromOrder: Bool
     
     private var cachedThumbnailImages: [OrderImage] = []
-    private var cachedOrderShopSummary: OrderShopSummary?
 
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
@@ -257,7 +255,6 @@ extension ShopSummaryViewModel {
                       let self else { return }
                 
                 self.cachedThumbnailImages = shopSummary.images
-                self.cachedOrderShopSummary = shopSummary
                 
                 self.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })
