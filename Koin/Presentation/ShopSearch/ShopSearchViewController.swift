@@ -101,7 +101,8 @@ final class ShopSearchViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        shopSearchTableView.didTapCellPublisher.sink { [weak self] shopId in
+        shopSearchTableView.didTapCellPublisher.sink { [weak self] (shopId, shopName) in
+            self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
             self?.navigateTo(shopId: shopId)
         }.store(in: &subscriptions)
         

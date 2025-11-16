@@ -13,7 +13,7 @@ final class ShopSearchTableView: UITableView {
     // MARK: - Properties
     private var shopNameSearchResult: [ShopNameSearchResult] = []
     private var menuNameSearchResult: [MenuNameSearchResult] = []
-    let didTapCellPublisher = PassthroughSubject<Int, Never>()
+    let didTapCellPublisher = PassthroughSubject<(Int, String), Never>()
     let didScrollPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
@@ -38,16 +38,16 @@ extension ShopSearchTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         deselectRow(at: indexPath, animated: true)
-        
-        let shopId: Int = {
+
+        let (shopId, shopName): (Int, String) = {
             switch indexPath.section {
             case 0:
-                return shopNameSearchResult[indexPath.row].shopId
+                return (shopNameSearchResult[indexPath.row].shopId, shopNameSearchResult[indexPath.row].shopName)
             default:
-                return menuNameSearchResult[indexPath.row].shopId
+                return (menuNameSearchResult[indexPath.row].shopId, menuNameSearchResult[indexPath.row].shopName)
             }
         }()
-        didTapCellPublisher.send(shopId)
+        didTapCellPublisher.send((shopId, shopName))
     }
 }
 
