@@ -51,6 +51,10 @@ final class ShopSearchViewModel {
 
 extension ShopSearchViewModel {
     
+    func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+    
     private func fetchSearchShop(_ keyword: String) {
         fetchSearchShopUseCase.execute(keyword: keyword)
             .sink(receiveCompletion: { completion in

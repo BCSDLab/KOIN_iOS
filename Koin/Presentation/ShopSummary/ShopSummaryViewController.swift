@@ -94,6 +94,7 @@ final class ShopSummaryViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
     
@@ -220,6 +221,12 @@ extension ShopSummaryViewController {
         
         tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
             self?.makePhonecall()
+            
+            guard let self, let shopName = self.viewModel.getShopName() ?? self.cachedShopName else {
+                return
+            }
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
             }
             .store(in: &subscriptions)
         

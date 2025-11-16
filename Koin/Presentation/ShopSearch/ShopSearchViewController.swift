@@ -101,22 +101,9 @@ final class ShopSearchViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        shopSearchTableView.didTapCellPublisher.sink { [weak self] shopId in
-            let shopService = DefaultShopService()
-            let shopRepository = DefaultShopRepository(service: shopService)
-            let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
-            let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: shopRepository)
-            let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                                 fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                                                 fetchShopDataUseCase: fetchShopDataUseCase,
-                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                 shopId: shopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
-            self?.navigationController?.pushViewController(viewController, animated: true)
+        shopSearchTableView.didTapCellPublisher.sink { [weak self] (shopId, shopName) in
+            self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
+            self?.navigateTo(shopId: shopId)
         }.store(in: &subscriptions)
         
         shopSearchTableView.didScrollPublisher.sink { [weak self] in

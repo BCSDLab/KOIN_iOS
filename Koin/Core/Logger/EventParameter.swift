@@ -50,6 +50,7 @@ enum EventParameter {
             case shopCategoriesEvent = "shop_categories_event"
             case shopDetailViewEvent = "shop_detail_view_event"
             case shopCategoriesSearch = "shop_categories_search"
+            case shopCategoriesSearchClick = "shop_categories_search_click"
             case shopDetailView = "shop_detail_view"
             case shopDetailViewReview = "shop_detail_view_review"
             case shopDetailViewBack = "shop_detail_view_back"
