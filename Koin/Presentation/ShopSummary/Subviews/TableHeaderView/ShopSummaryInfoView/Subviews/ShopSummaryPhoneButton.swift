@@ -14,6 +14,7 @@ final class ShopSummaryPhoneButton: UIButton {
         $0.axis = .horizontal
         $0.spacing = 0
         $0.alignment = .center
+        $0.isUserInteractionEnabled = false
     }
     let phoneImageView = UIImageView(image: .callNew)
     let paddingViewWidth8 = UIView().then {

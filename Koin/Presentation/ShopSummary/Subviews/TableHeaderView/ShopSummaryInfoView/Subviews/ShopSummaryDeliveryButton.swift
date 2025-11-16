@@ -7,49 +7,48 @@
 
 import UIKit
 
-final class ShopSummaryCustomButton: UIButton {
+final class ShopSummaryDeliveryButton: UIButton {
     
     // MARK: - UI Components
     private let minimumOrderLabel = UILabel().then {
         $0.text = "최소주문"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     private let deliveryTipLabel = UILabel().then {
         $0.text = "배달금액"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral800)
         $0.contentMode = .center
-    }
-    private let introductionLabel = UILabel().then {
-        $0.numberOfLines = 2
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral800)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     private let minimumOrderSubLabel = UILabel().then {
         $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     private let deliveryTipSubLabel = UILabel().then {
         $0.numberOfLines = 1
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.textAlignment = .left
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     private let inorderableLabel = UILabel().then {
         $0.setLineHeight(lineHeight: 1.60, text: "코인 주문이\n불가능한 매장이예요.")
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
         $0.font = .appFont(.pretendardSemiBold, size: 12)
         $0.textColor = .appColor(.neutral400)
         $0.textAlignment = .center
+        $0.isHidden = true
     }
     
-    private let leftImageView = UIImageView(image: UIImage.appImage(asset: .speaker))
     private let rightImageView = UIImageView(image: UIImage.appImage(asset: .newChevronRight)?.withRenderingMode(.alwaysTemplate)).then {
         $0.tintColor = .appColor(.neutral500)
     }
@@ -62,15 +61,9 @@ final class ShopSummaryCustomButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    func configure(introduction: String?) {
-        introductionLabel.setLineHeight(lineHeight: 1.6, text: introduction ?? "공지사항")
-        configureIntroductionView()
-    }
+    
     func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
-        //if isFromOrder {
         
-        configureOrderAmountDelieveryTipView()
         minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
         
         if minDeliveryTip == 0, maxDelieveryTip == 0 {
@@ -80,29 +73,28 @@ final class ShopSummaryCustomButton: UIButton {
             deliveryTipSubLabel.text = "\(minDeliveryTip.formattedWithComma) - \(maxDelieveryTip.formattedWithComma)원"
         }
         
-        //}
-        //else {
-        //    configureInorderableLabel()
+        //if isFromOrder {
+        // setUpIsHidden()
         //}
     }
 }
 
-extension ShopSummaryCustomButton {
+extension ShopSummaryDeliveryButton {
     
-    private func configureInorderableLabel() {
-        [inorderableLabel].forEach {
-            addSubview($0)
+    private func setUpIsHidden() {
+        [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel, rightImageView].forEach {
+            $0.isHidden = true
         }
-        inorderableLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-4)
+        inorderableLabel.isHidden = false
+    }
+    
+    private func setUpLayout() {
+        [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel, rightImageView, inorderableLabel].forEach {
+            addSubview($0)
         }
     }
-
-    private func configureOrderAmountDelieveryTipView() {
-        [minimumOrderLabel, minimumOrderSubLabel, deliveryTipLabel, deliveryTipSubLabel, rightImageView].forEach {
-            addSubview($0)
-        }
+    
+    private func setUpConstraints() {
         
         minimumOrderLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(12)
@@ -120,7 +112,7 @@ extension ShopSummaryCustomButton {
             $0.centerY.equalTo(minimumOrderLabel)
         }
         deliveryTipSubLabel.snp.makeConstraints {
-            $0.leading.equalTo(minimumOrderLabel.snp.trailing).offset(8)
+            $0.leading.equalTo(deliveryTipLabel.snp.trailing).offset(8)
             $0.trailing.lessThanOrEqualTo(rightImageView.snp.leading).offset(-7)
             $0.centerY.equalTo(deliveryTipLabel)
         }
@@ -129,30 +121,16 @@ extension ShopSummaryCustomButton {
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(20)
         }
-    }
-    
-    private func configureIntroductionView() {
-        [leftImageView, introductionLabel, rightImageView].forEach {
-            addSubview($0)
-        }
-        
-        leftImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(12)
-            $0.centerY.equalToSuperview()
-        }
-        introductionLabel.snp.makeConstraints {
-            $0.leading.equalTo(leftImageView.snp.trailing).offset(7)
-            $0.trailing.equalTo(rightImageView.snp.leading).offset(-7)
+        inorderableLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview().offset(-4)
-        }
-        rightImageView.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(20)
         }
     }
     
     private func configureView() {
+        setUpLayout()
+        setUpConstraints()
+        
         backgroundColor = .appColor(.neutral0)
         layer.cornerRadius = 12
     }

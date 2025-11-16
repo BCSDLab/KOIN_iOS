@@ -14,7 +14,6 @@ final class ShopViewModel: ViewModelProtocol {
         case viewDidLoad
         case viewDidLoadB
         case changeCategory(Int)
-        case searchTextChanged(String)
         case sortOptionDidChange(ShopSortType)
         case filterOpenShops(Bool)
         case getShopInfo
@@ -22,7 +21,6 @@ final class ShopViewModel: ViewModelProtocol {
         case getBeneficialShops(Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
-        
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
      
@@ -33,8 +31,6 @@ final class ShopViewModel: ViewModelProtocol {
         case updateEventShops([EventDto])
         case updateShopBenefits(ShopBenefitsDto)
         case updateBeneficialShops([Shop])
-        case showSearchedResult([Keyword])
-        case navigateToShopData(Int, String, Int)
         case updateSortButtonTitle(String)
     }
     
@@ -42,7 +38,6 @@ final class ShopViewModel: ViewModelProtocol {
     private let fetchShopListUseCase: FetchShopListUseCase
     private let fetchEventListUseCase: FetchEventListUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
-    private let searchShopUseCase: SearchShopUseCase
     private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
     private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
 
@@ -64,7 +59,6 @@ final class ShopViewModel: ViewModelProtocol {
     init(fetchShopListUseCase: FetchShopListUseCase,
          fetchEventListUseCase: FetchEventListUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
-         searchShopUseCase: SearchShopUseCase,
          fetchShopBenefitUseCase: FetchShopBenefitUseCase,
          fetchBeneficialShopUseCase: FetchBeneficialShopUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
@@ -73,7 +67,6 @@ final class ShopViewModel: ViewModelProtocol {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
-        self.searchShopUseCase = searchShopUseCase
         self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
         self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
@@ -93,11 +86,6 @@ final class ShopViewModel: ViewModelProtocol {
                     self.selectedId = id
                     self.getShopInfo(id: self.selectedId)
                 }
-            case let .searchTextChanged(text):
-                self.sortStandard.query = text
-                self.getShopInfo(id: self.selectedId)
-                self.searchShop(text)
-                self.searchShops(text)
             case let .sortOptionDidChange(newSortType):
                 self.currentSortType = newSortType
                 self.sortStandard.sorter = newSortType.fetchSortType
@@ -197,16 +185,6 @@ extension ShopViewModel {
     func categoryName(for id: Int) -> String {
         if id == 0 { return "전체보기" }
         return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
-    }
-
-    private func searchShop(_ text: String) {
-        searchShopUseCase.execute(text: text).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showSearchedResult(response.keywords ?? []))
-        }.store(in: &subscriptions)
     }
     
     private func changeCategory(_ id: Int) {

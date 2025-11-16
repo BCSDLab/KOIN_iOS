@@ -6,14 +6,16 @@
 //
 
 import Combine
+import Foundation
 
 final class ReviewListViewModel: ViewModelProtocol {
 
     private let fetchShopReviewListUseCase: FetchShopReviewListUseCase
     private let fetchMyReviewUseCase: FetchMyReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let fetchUserDataUseCase: FetchUserDataUseCase
     private let deleteReviewUseCase: DeleteReviewUseCase
+    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
+
 
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -59,6 +61,10 @@ final class ReviewListViewModel: ViewModelProtocol {
         case checkLoginForReportReview((Int, Int))
         case deleteReview(Int, Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEventWithDuration(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
+
+
     }
 
     enum Output {
@@ -86,16 +92,16 @@ final class ReviewListViewModel: ViewModelProtocol {
         fetchShopReviewListUseCase: FetchShopReviewListUseCase,
         fetchMyReviewUseCase: FetchMyReviewUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-        fetchUserDataUseCase: FetchUserDataUseCase,
         deleteReviewUseCase: DeleteReviewUseCase,
+        getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
         shopId: Int,
         shopName: String
     ) {
         self.fetchShopReviewListUseCase = fetchShopReviewListUseCase
         self.fetchMyReviewUseCase = fetchMyReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.fetchUserDataUseCase = fetchUserDataUseCase
         self.deleteReviewUseCase = deleteReviewUseCase
+        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
         self.shopId = shopId
         self.shopName = shopName
     }
@@ -113,12 +119,10 @@ final class ReviewListViewModel: ViewModelProtocol {
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
                 repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
             ),
-            fetchUserDataUseCase: DefaultFetchUserDataUseCase(
-                userRepository: DefaultUserRepository(service: DefaultUserService())
-            ),
             deleteReviewUseCase: DefaultDeleteReviewUseCase(
                 shopRepository: shopRepository
             ),
+            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
             shopId: shopId,
             shopName: shopName
         )
@@ -131,7 +135,6 @@ final class ReviewListViewModel: ViewModelProtocol {
                 switch event {
                 case .viewDidLoad:
                     self.fetchReviewList(page: 1, shouldReset: true)
-
                 case .fetchNextPage:
                     guard self.canFetchMore else { return }
                     let nextPage = self.paginationState.currentPage + 1
@@ -162,7 +165,13 @@ final class ReviewListViewModel: ViewModelProtocol {
                     self.deleteReview(reviewId: reviewId, shopId: shopId)
 
                 case let .logEvent(label, category, value):
-                    self.logAnalyticsEvent(label: label, category: category, value: value)
+                    self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+                    
+                case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
+                    self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+                    
+                case let .logEventWithDuration(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
+                    self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
                 }
             }
             .store(in: &subscriptions)
@@ -276,38 +285,44 @@ extension ReviewListViewModel {
     }
 
     private func checkLogin(parameter: (Int, Int)?) {
-        fetchUserDataUseCase.execute()
-            .sink { [weak self] completion in
-                guard let self else { return }
-                if case .failure = completion {
-                    switch self.loginCheckContext {
-                    case .writeReview:
-                        self.outputSubject.send(.showWriteReviewLoginModal)
-                        
-                    case .myReviewFilter:
-                        self.outputSubject.send(.showMyReviewFilterError)
-                        
-                    case .reportReview:
-                        self.outputSubject.send(.showReportReviewLoginModal)
-                    }
-                }
-            } receiveValue: { [weak self] _ in
-                guard let self else { return }
+        switch UserDataManager.shared.userId.isEmpty {
+        case true:
+            switch self.loginCheckContext {
+            case .writeReview:
+                self.outputSubject.send(.showWriteReviewLoginModal)
                 
-                switch self.loginCheckContext {
-                case .writeReview:
-                    self.outputSubject.send(.navigateToWriteReview)
-                    
-                case .myReviewFilter:
-                    self.outputSubject.send(.applyMyReviewFilter)
-                    
-                case .reportReview:
-                    if let parameter {
-                        self.outputSubject.send(.navigateToReportReview(parameter.0, parameter.1))
-                    }
+            case .myReviewFilter:
+                isMineOnly=true
+                self.paginationState.currentPage = 1
+                self.paginationState.totalPage = 1
+
+                self.outputSubject.send(.setReviewList(
+                    reviews: [],
+                    sortType: self.sorter,
+                    isMineOnly: self.isMineOnly,
+                    currentPage: 1,
+                    totalPage: 1,
+                    shouldReset: true
+                ))
+                self.outputSubject.send(.showMyReviewFilterError)
+                
+            case .reportReview:
+                self.outputSubject.send(.showReportReviewLoginModal)
+            }
+        case false:
+            switch self.loginCheckContext {
+            case .writeReview:
+                self.outputSubject.send(.navigateToWriteReview)
+                
+            case .myReviewFilter:
+                self.outputSubject.send(.applyMyReviewFilter)
+                
+            case .reportReview:
+                if let parameter {
+                    self.outputSubject.send(.navigateToReportReview(parameter.0, parameter.1))
                 }
             }
-            .store(in: &subscriptions)
+        }
     }
     
     private func deleteReview(reviewId: Int, shopId: Int) {
@@ -324,7 +339,24 @@ extension ReviewListViewModel {
             .store(in: &subscriptions)
     }
 
-    private func logAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        if eventLabelNeededDuration != nil {
+            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
+            
+            if eventLabelNeededDuration == .shopDetailViewReviewBack {
+                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            }
+            
+            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
+        }
+        else {
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        }
     }
+    
+    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
+    }
+    
+
 }

@@ -125,7 +125,7 @@ final class ShopReviewReportViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .white)
+        configureNavigationBar(style: .empty)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -291,6 +291,7 @@ extension ShopReviewReportViewController {
     
     @objc private func reportButtonTapped() {
         var reports: [Report] = []
+        var selectedItems: [String] = []
         let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
         
         for reportView in reportViews {
@@ -298,15 +299,15 @@ extension ShopReviewReportViewController {
                 let reportInfo = reportView.getReportInfo()
                 let report = Report(title: reportInfo.title, content: reportInfo.content)
                 reports.append(report)
+                selectedItems.append(reportInfo.title)
             }
         }
         if etcCheckButton.isSelected, let etcText = etcReportTextView.text {
-            let report = Report(title: "기타", content: etcText)
-            reports.append(report)
+            selectedItems.append("기타 (\(etcText))")
         }
     
         let requestModel = ReportReviewRequest(reports: reports)
-        inputSubject.send(.reportReview(requestModel))
+        inputSubject.send(.reportReview(requestModel,selectedItems))
     }
 }
 

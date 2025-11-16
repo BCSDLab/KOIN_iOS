@@ -21,6 +21,7 @@ final class ShopSummaryViewController: UIViewController {
     
     private var cachedShopId: Int?
     private var cachedShopName: String?
+    private var cachedImages: [OrderImage] = []
     
     private var didTapBack = false
     private let backCategoryName: String?
@@ -93,6 +94,7 @@ final class ShopSummaryViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
+        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
     
@@ -122,6 +124,7 @@ extension ShopSummaryViewController {
             switch output {
             case .updateInfoView(let orderShopSummary, let isFromOrder):
                 self.cachedShopName = orderShopSummary.name
+                self.cachedImages = orderShopSummary.images
                 self.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
             case .updatePhonenumber(let phonenumber):
                 self.tableHeaderView.configure(phonenumber: phonenumber)
@@ -218,6 +221,12 @@ extension ShopSummaryViewController {
         
         tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
             self?.makePhonecall()
+            
+            guard let self, let shopName = self.viewModel.getShopName() ?? self.cachedShopName else {
+                return
+            }
+            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
             }
             .store(in: &subscriptions)
         
@@ -303,6 +312,19 @@ extension ShopSummaryViewController {
                 self?.navigateToMenuDetail(menuId: menuId)
             }
             .store(in: &subscriptions)
+        
+        // MARK: - ThumbnailImage
+        tableHeaderView.didTapThumbnailPublisher
+            .sink { [weak self] indexPath in
+                guard let self,
+                      0 < self.cachedImages.count,
+                      self.cachedImages.first?.imageUrl != nil else { return }
+                
+                let zoomedViewController = ZoomedImageViewControllerB()
+                zoomedViewController.configure(urls: cachedImages.map { return $0.imageUrl ?? "" },
+                                               initialIndexPath: indexPath)
+                self.present(zoomedViewController, animated: true)
+            }.store(in: &subscriptions)
     }
     
     // MARK: - shouldShowBottomSheet
@@ -400,6 +422,7 @@ extension ShopSummaryViewController {
         
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: shopName)
         reviewListViewController.title = "리뷰"
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopName))
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
 }

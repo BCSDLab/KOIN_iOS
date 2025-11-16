@@ -21,7 +21,7 @@ final class ShopViewController: UIViewController {
     
     private var didTapBack = false
     
-    // MARK: - UI Components
+    // MARK: - UI Components    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -62,24 +62,6 @@ final class ShopViewController: UIViewController {
         $0.layer.shadowRadius = 4
         $0.layer.shadowOpacity = 0.04
         $0.layer.masksToBounds = false
-    }
-    private let searchedShopCollectionView = RelatedShopCollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    ).then {
-        guard let layout = $0.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        layout.scrollDirection = .vertical
-        let screenWidth = UIScreen.main.bounds.width
-        let cellWidth = screenWidth - 32
-        layout.itemSize = CGSize(width: cellWidth, height: 40)
-        layout.minimumLineSpacing = 0
-        $0.isScrollEnabled = false
-        $0.isHidden = true
-    }
-    
-    private let dimView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
-        $0.isHidden = true
     }
     
     private let sortButton = UIButton(type: .system).then {
@@ -192,7 +174,7 @@ final class ShopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .transparentBlack)
         self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
@@ -234,8 +216,6 @@ final class ShopViewController: UIViewController {
                 self.putImage(data: response)
             case let .updateEventShops(eventShops):
                 self.updateEventShops(eventShops)
-            case let .showSearchedResult(result):
-                self.searchedShopCollectionView.updateShop(keywords: result)
             case let .updateSortButtonTitle(newTitle):
                 var config = self.sortButton.configuration ?? .plain()
                 var attribute = AttributedString(newTitle)

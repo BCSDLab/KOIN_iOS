@@ -22,7 +22,6 @@ final class ShopSummaryImagesCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         clipsToBounds = true
         configureView()
-        backgroundColor = .yellow
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -30,12 +29,11 @@ final class ShopSummaryImagesCollectionViewCell: UICollectionViewCell {
     
     func configure(url: String?) {
         guard let url else {
-            imageView.image = UIImage.appImage(asset: .defaultMenuImage)
+            imageView.image = UIImage()
             return
         }
         imageView.kf.setImage(
-            with: URL(string: url),
-            placeholder: UIImage.appImage(asset: .defaultMenuImage)
+            with: URL(string: url)
         )
     }
 }

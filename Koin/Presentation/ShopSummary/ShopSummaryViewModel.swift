@@ -65,12 +65,12 @@ final class ShopSummaryViewModel {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
 
-    
     // Properties
     private(set) var orderableShopId: Int?
     private(set) var shopId: Int?
     private let isFromOrder: Bool
     
+    private var cachedThumbnailImages: [OrderImage] = []
     private var cachedShopName: String?
     private var cachedOrderShopSummary: OrderShopSummary?
 
@@ -222,6 +222,7 @@ extension ShopSummaryViewModel {
                   receiveValue: { [weak self] orderShopSummary in
                 guard let self = self else { return }
                 
+                self.cachedThumbnailImages = orderShopSummary.images
                 self.cachedOrderShopSummary = orderShopSummary
                 self.cachedShopName = orderShopSummary.name
                 
@@ -274,12 +275,14 @@ extension ShopSummaryViewModel {
         fetchOrderShopSummaryFromShopUseCase?.execute(id: shopId)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
-                guard let isFromOrder = self?.isFromOrder else { return }
+                guard let isFromOrder = self?.isFromOrder,
+                      let self else { return }
                 
-                self?.cachedShopName = shopSummary.name
-                self?.cachedOrderShopSummary = shopSummary
+                self.cachedThumbnailImages = shopSummary.images
+                self.cachedShopName = shopSummary.name
+                self.cachedOrderShopSummary = shopSummary
                 
-                self?.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
+                self.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })
             .store(in: &subscriptions)
     }
@@ -369,12 +372,13 @@ extension ShopSummaryViewModel {
 extension ShopSummaryViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
-            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-            
-            if eventLabelNeededDuration == .shopDetailViewBack {
+            var durationTime: Double = 0.0
+            switch eventLabelNeededDuration {
+            case .shopDetailViewBack, .shopCall:
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            default:
+                break
             }
-            
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
         }
         else {
