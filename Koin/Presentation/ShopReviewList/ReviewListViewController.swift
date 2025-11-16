@@ -268,9 +268,20 @@ final class ReviewListViewController: UIViewController {
                 self.inputSubject.send(.logEvent(
                     EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
                     .click,
-                    self.viewModel.getShopName()
+                    "O"
                 ))
                 self.deleteReview()
+            }
+            .store(in: &cancellables)
+        
+        deleteReviewModalViewController.cancelButtonPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.inputSubject.send(.logEvent(
+                    EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
+                    .click,
+                    "X"
+                ))
             }
             .store(in: &cancellables)
         
