@@ -372,12 +372,13 @@ extension ShopSummaryViewModel {
 extension ShopSummaryViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
-            var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-            
-            if eventLabelNeededDuration == .shopDetailViewBack {
+            var durationTime: Double = 0.0
+            switch eventLabelNeededDuration {
+            case .shopDetailViewBack, .shopCall:
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
+            default:
+                break
             }
-            
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
         }
         else {
