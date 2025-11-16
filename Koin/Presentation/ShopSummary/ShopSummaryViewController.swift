@@ -240,7 +240,7 @@ extension ShopSummaryViewController {
             .sink { [weak self] menuId in
                 guard let self, self.viewModel.isFromOrder else { return }
                 if isAddingMenuAvailable {
-                    self.inputSubject.send(.fetchMenuDetail(orderableShopId: viewModel.orderableShopId ?? -1, orderableShopMenuId: menuId))
+                    self.inputSubject.send(.fetchMenuDetail(orderableShopMenuId: menuId))
                     navigateToMenuDetail(menuId: menuId)
                 }
                 else {

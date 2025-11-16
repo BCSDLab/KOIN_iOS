@@ -15,7 +15,7 @@ final class ShopSummaryViewModel {
         case viewDidLoad
         case viewWillAppear
         case resetCart
-        case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
+        case fetchMenuDetail(orderableShopMenuId: Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
@@ -173,9 +173,8 @@ final class ShopSummaryViewModel {
             case .resetCart:
                 self.resetCart()
             
-            case .fetchMenuDetail(let orderableShopId, let orderableShopMenuId):
-                self.fetchOrderMenu(orderableShopId: orderableShopId,
-                                   orderableShopMenuId: orderableShopMenuId)
+            case .fetchMenuDetail(let orderableShopMenuId):
+                self.fetchOrderMenu(orderableShopMenuId: orderableShopMenuId)
                 
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
@@ -330,10 +329,9 @@ extension ShopSummaryViewModel {
             .store(in: &subscriptions)
     }
     
-    private func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) {
-        fetchOrderMenuUseCase?
-            .execute(orderableShopId: orderableShopId,
-                     orderableShopMenuId: orderableShopMenuId)
+    private func fetchOrderMenu(orderableShopMenuId: Int) {
+        guard let orderableShopId else { return }
+        fetchOrderMenuUseCase?.execute(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("호출 실패: \(error)")
