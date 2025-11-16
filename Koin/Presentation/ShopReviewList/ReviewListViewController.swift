@@ -375,6 +375,8 @@ extension ReviewListViewController {
         bottomSheet.selectionPublisher
             .sink { [weak self] index in
                 let selectedSortType = ReviewSortType.allCases[index]
+                
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewCan, .click, options[index]))
                 self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
             }
             .store(in: &cancellables)
