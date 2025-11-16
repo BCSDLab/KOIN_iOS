@@ -234,5 +234,6 @@ enum EventParameter {
         case benefitShopClick
         case benefitShopCall
         case shopCategoriesBack
+        case shopDetailViewReviewBack = "shop_detail_view_review_back"
     }
 }
