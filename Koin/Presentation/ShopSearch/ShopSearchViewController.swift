@@ -103,7 +103,7 @@ final class ShopSearchViewController: UIViewController {
         
         shopSearchTableView.didTapCellPublisher.sink { [weak self] (shopId, shopName) in
             self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
-            self?.navigateTo(shopId: shopId)
+            self?.navigateTo(shopId: shopId, shopName: shopName)
         }.store(in: &subscriptions)
         
         shopSearchTableView.didScrollPublisher.sink { [weak self] in
@@ -155,7 +155,7 @@ extension ShopSearchViewController {
 
 extension ShopSearchViewController {
     
-    private func navigateTo(shopId: Int) {
+    private func navigateTo(shopId: Int, shopName: String) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
@@ -168,8 +168,9 @@ extension ShopSearchViewController {
                                              fetchShopDataUseCase: fetchShopDataUseCase,
                                              logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                              getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                             shopId: shopId)
-        let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: false, orderableShopId: nil)
+                                             shopId: shopId,
+                                             shopName: shopName)
+        let viewController = ShopSummaryViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

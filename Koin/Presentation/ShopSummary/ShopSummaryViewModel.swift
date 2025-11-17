@@ -15,11 +15,10 @@ final class ShopSummaryViewModel {
         case viewDidLoad
         case viewWillAppear
         case resetCart
-        case fetchMenuDetail(orderableShopId: Int, orderableShopMenuId: Int)
+        case fetchMenuDetail(orderableShopMenuId: Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
-
     }
     
     // MARK: - Output
@@ -61,18 +60,17 @@ final class ShopSummaryViewModel {
     // 주문상세
     private let fetchOrderMenuUseCase: FetchOrderMenuUseCase?
     
-    //로깅
+    // 로깅
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
 
     // Properties
-    private(set) var orderableShopId: Int?
+    let orderableShopId: Int?
     private(set) var shopId: Int?
-    private let isFromOrder: Bool
+    let shopName: String
+    let isFromOrder: Bool
     
     private var cachedThumbnailImages: [OrderImage] = []
-    private var cachedShopName: String?
-    private var cachedOrderShopSummary: OrderShopSummary?
 
     // MARK: - Initializer from OrderHome
     init(fetchOrderShopSummaryUseCase: FetchOrderShopSummaryUseCase,
@@ -86,7 +84,8 @@ final class ShopSummaryViewModel {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          fetchOrderShopDetailUseCase: FetchOrderShopDetailUseCase,
-         orderableShopId: Int) {
+         orderableShopId: Int,
+         shopName: String) {
         // 기본정보 OrderApi
         self.fetchOrderShopSummaryUseCase = fetchOrderShopSummaryUseCase
         self.fetchOrderShopMenusUseCase = fetchOrderShopMenusUseCase
@@ -101,14 +100,14 @@ final class ShopSummaryViewModel {
         self.fetchOrderShopSummaryFromShopUseCase = nil
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = nil
         self.fetchShopDataUseCase = nil
-        
         // 상세
         self.fetchOrderMenuUseCase = fetchOrderMenuUseCase
-        
         // properties
         self.orderableShopId = orderableShopId
         self.isFromOrder = true
         self.shopId = nil
+        self.shopName = shopName
+        // 로깅
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
@@ -119,7 +118,8 @@ final class ShopSummaryViewModel {
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
-         shopId: Int) {
+         shopId: Int,
+         shopName: String) {
         // 기본정보 ShopApi
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
@@ -140,6 +140,8 @@ final class ShopSummaryViewModel {
         self.orderableShopId = nil
         self.shopId = shopId
         self.isFromOrder = false
+        self.shopName = shopName
+        // 로깅
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
@@ -169,9 +171,8 @@ final class ShopSummaryViewModel {
             case .resetCart:
                 self.resetCart()
             
-            case .fetchMenuDetail(let orderableShopId, let orderableShopMenuId):
-                self.fetchOrderMenu(orderableShopId: orderableShopId,
-                                   orderableShopMenuId: orderableShopMenuId)
+            case .fetchMenuDetail(let orderableShopMenuId):
+                self.fetchOrderMenu(orderableShopMenuId: orderableShopMenuId)
                 
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
@@ -181,34 +182,10 @@ final class ShopSummaryViewModel {
                 
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
                 self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
-
-
             }
         }
         .store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
-    }
-    
-    // MARK: - Public Methods
-    
-    /// 현재 shopId 반환
-    func getShopId() -> Int? {
-        if isFromOrder {
-            let shopId = cachedOrderShopSummary?.shopId
-            return shopId
-        } else {
-            return shopId
-        }
-    }
-    
-    // 현재 orderableShopId 반환
-    func getOrderableShopId() -> Int? {
-        return orderableShopId
-    }
-    
-    /// 현재 상점 이름 반환
-    func getShopName() -> String? {
-        return cachedShopName
     }
 }
 
@@ -223,8 +200,7 @@ extension ShopSummaryViewModel {
                 guard let self = self else { return }
                 
                 self.cachedThumbnailImages = orderShopSummary.images
-                self.cachedOrderShopSummary = orderShopSummary
-                self.cachedShopName = orderShopSummary.name
+                self.shopId = orderShopSummary.shopId
                 
                 self.outputSubject.send(.updateInfoView(orderShopSummary, isFromOrder: true))
                 self.outputSubject.send(.updateIsAvailables(
@@ -279,8 +255,6 @@ extension ShopSummaryViewModel {
                       let self else { return }
                 
                 self.cachedThumbnailImages = shopSummary.images
-                self.cachedShopName = shopSummary.name
-                self.cachedOrderShopSummary = shopSummary
                 
                 self.outputSubject.send(.updateInfoView(shopSummary, isFromOrder: isFromOrder))
             })
@@ -352,10 +326,9 @@ extension ShopSummaryViewModel {
             .store(in: &subscriptions)
     }
     
-    private func fetchOrderMenu(orderableShopId: Int, orderableShopMenuId: Int) {
-        fetchOrderMenuUseCase?
-            .execute(orderableShopId: orderableShopId,
-                     orderableShopMenuId: orderableShopMenuId)
+    private func fetchOrderMenu(orderableShopMenuId: Int) {
+        guard let orderableShopId else { return }
+        fetchOrderMenuUseCase?.execute(orderableShopId: orderableShopId, orderableShopMenuId: orderableShopMenuId)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("호출 실패: \(error)")

@@ -86,7 +86,9 @@ final class OrderCartViewController: UIViewController {
         
         // MARK: - TableView - 가게 상세페이지로 이동
         orderCartTableView.moveToShopPublisher.sink { [weak self] in
-            guard let self = self, let orderableShopId = self.viewModel.orderableShopId else {
+            guard let self = self,
+                  let orderableShopId = self.viewModel.orderableShopId,
+                  let shopName = self.viewModel.shopName else {
                 return
             }
             let service = DefaultOrderService()
@@ -110,12 +112,12 @@ final class OrderCartViewController: UIViewController {
                                                 fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                 resetCartUseCase: resetCartUseCase,
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
-                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                 fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
-                                                orderableShopId: orderableShopId
-                                                )
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: self.backCategoryName)
+                                                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
+                                                orderableShopId: orderableShopId,
+                                                shopName: shopName)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, backCategoryName: self.backCategoryName)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)

@@ -444,7 +444,7 @@ extension OrderHomeViewController {
         }
 
         eventOrderShopCollectionView.cellTapPublisher
-            .sink { [weak self] (orderableShopId, _) in
+            .sink { [weak self] (orderableShopId, shopName) in
                 guard let self = self else { return }
                 let service = DefaultOrderService()
                 let repository = DefaultOrderShopRepository(service: service)
@@ -467,12 +467,12 @@ extension OrderHomeViewController {
                                                     fetchCartItemsCountUseCase: fetchCartItemsCountUseCase,
                                                     resetCartUseCase: resetCartUseCase,
                                                     fetchOrderMenuUseCase: fetchOrderMenuUseCase,
-                                                     logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                                     getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                     fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
-                                                    orderableShopId: orderableShopId)
-    
-                let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "" )
+                                                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                                                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                    fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
+                                                    orderableShopId: orderableShopId,
+                                                    shopName: shopName)
+                let viewController = ShopSummaryViewController(viewModel: viewModel, backCategoryName: "")
                 navigationControllerDelegate?.pushViewController(viewController, animated: true)
             }
             .store(in: &subscriptions)
@@ -516,7 +516,7 @@ extension OrderHomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == orderShopCollectionView {
             let orderableShopId = viewModel.getOrderableShopId(at: indexPath.item)
-            let title = viewModel.getShopName(at: indexPath.item)
+            let shopName = viewModel.getShopName(at: indexPath.item)
             let service = DefaultOrderService()
             let repository = DefaultOrderShopRepository(service: service)
             let fetchOrderShopSummaryUseCase = DefaultFetchOrderShopSummaryUseCase(repository: repository)
@@ -541,10 +541,11 @@ extension OrderHomeViewController: UICollectionViewDelegate {
                                                 resetCartUseCase: resetCartUseCase,
                                                 fetchOrderMenuUseCase: fetchOrderMenuUseCase,
                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                 fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
-                                                orderableShopId: orderableShopId)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, isFromOrder: true, orderableShopId: orderableShopId, backCategoryName: "")
+                                                getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                                                fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
+                                                orderableShopId: orderableShopId,
+                                                shopName: shopName)
+            let viewController = ShopSummaryViewController(viewModel: viewModel, backCategoryName: "")
             viewController.title = title
             navigationControllerDelegate?.pushViewController(viewController, animated: true)
         }
