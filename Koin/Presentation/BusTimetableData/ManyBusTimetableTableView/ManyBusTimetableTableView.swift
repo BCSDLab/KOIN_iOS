@@ -60,20 +60,23 @@ extension ManyBusTimetableTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
+        let container = UIView()
+        container.backgroundColor = .appColor(.neutral100)
+
         let placeGuideLabel = UILabel()
         placeGuideLabel.text = "승하차장명"
+        placeGuideLabel.font = .appFont(.pretendardRegular, size: 14)
+        placeGuideLabel.textColor = .appColor(.neutral600)
         placeGuideLabel.textAlignment = .left
-        [placeGuideLabel].forEach {
-            $0.font = .appFont(.pretendardRegular, size: 14)
-            $0.textColor = .appColor(.neutral600)
-            view.addSubview($0)
+
+        container.addSubview(placeGuideLabel)
+
+        placeGuideLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(24)
+            $0.centerY.equalToSuperview()
         }
-        placeGuideLabel.frame = .init(x: 24, y: 14, width: 132, height: 38)
-        
-        view.frame = CGRect(x: 0, y: 0, width: 156, height: 52)
-        view.backgroundColor = .appColor(.neutral100)
-        return view
+
+        return container
     }
 }
 
@@ -86,9 +89,3 @@ extension ManyBusTimetableTableView: UITableViewDelegate {
         return 52
     }
 }
-
-
-
-
-
-

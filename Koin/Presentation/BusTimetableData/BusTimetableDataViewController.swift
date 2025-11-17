@@ -6,9 +6,8 @@
 //
 
 import Combine
-import SnapKit
-import Then
 import UIKit
+import SnapKit
 
 final class BusTimetableDataViewController: UIViewController, UIScrollViewDelegate {
     
@@ -18,7 +17,6 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
     private let viewModel: BusTimetableDataViewModel
     
     // MARK: - UI Components
-    
     private var shuttleRouteTypeLabel = UILabel().then {
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
@@ -233,7 +231,7 @@ extension BusTimetableDataViewController {
         )
     }
     
-    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetableDTO, shuttleTimetableType: ShuttleTimetableType) {
+    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetable, shuttleTimetableType: ShuttleTimetableType) {
         shuttleRouteTypeLabel.text = timetable.routeType.rawValue
         shuttleRouteTypeLabel.backgroundColor = UIColor.setColor(timetable.routeType.returnRouteColor())
         busTimetablePlaceLabel.text = timetable.routeName

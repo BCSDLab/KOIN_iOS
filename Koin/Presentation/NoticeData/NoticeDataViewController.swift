@@ -354,7 +354,7 @@ extension NoticeDataViewController {
         inputSubject.send(.deleteLostItem)
     }
     
-    private func updateLostItem(_ item: LostArticleDetailDTO) {
+    private func updateLostItem(_ item: LostArticleDetailDto) {
         
         titleGuideLabel.text = "\(item.type?.description ?? "")물"
         categoryLabel.text = item.category
@@ -486,7 +486,7 @@ extension NoticeDataViewController {
         }
     }
     
-    private func updatePopularArticle(notices: [NoticeArticleDTO]) {
+    private func updatePopularArticle(notices: [NoticeArticleDto]) {
         hotNoticeArticlesTableView.updatePopularArticles(notices: notices)
     }
     

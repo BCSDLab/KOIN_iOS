@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchMySemesterUseCase {
-    func execute() -> AnyPublisher<MySemesterDTO, ErrorResponse>
+    func execute() -> AnyPublisher<MySemesterDto, ErrorResponse>
 }
 
 final class DefaultFetchMySemesterUseCase: FetchMySemesterUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchMySemesterUseCase: FetchMySemesterUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute() -> AnyPublisher<MySemesterDTO, ErrorResponse> {
+    func execute() -> AnyPublisher<MySemesterDto, ErrorResponse> {
         return timetableRepository.fetchMySemester()
     }
     

@@ -18,6 +18,7 @@ enum SceneColorAsset {
     case bus1, bus2, bus3
     case yellow
     case gray
+    case newBackground, new100, new300, new400, new500, new700, new800
 }
 
 enum TimetableColorAsset {
@@ -144,6 +145,15 @@ extension UIColor {
         case .bus3: return UIColor(hexCode: "4DB297")
         case .yellow: return UIColor(hexCode: "#F4CE83")
         case .gray: return UIColor(hexCode: "8E8E8E")
+            
+        case .newBackground: return UIColor(hexCode: "F8F8FA")
+        case .new300: return UIColor(hexCode: "CE86FD")
+        case .new400: return UIColor(hexCode: "C358FC")
+        case .new500: return UIColor(hexCode: "B611F5")
+        case .new100: return UIColor(hexCode: "EAD3FE")
+        case .new700: return UIColor(hexCode: "7D08A4")
+        case .new800: return UIColor(hexCode: "600481")
+
         }
     }
     
@@ -157,15 +167,20 @@ extension UIColor {
 
 extension UIColor {
     convenience init(hexCode: String, alpha: CGFloat = 1.0) {
+        let hexCode = hexCode.trimmingCharacters(in: .whitespacesAndNewlines)
         let scanner = Scanner(string: hexCode)
-        _ = scanner.scanString("#")
+        
+        if hexCode.hasPrefix("#") {
+            scanner.currentIndex = hexCode.index(after: hexCode.startIndex)
+        }
         
         var rgb: UInt64 = 0
         scanner.scanHexInt64(&rgb)
         
-        let red = Double((rgb >> 16) & 0xFF) / 255.0
-        let green = Double((rgb >> 8) & 0xFF) / 255.0
-        let blue = Double((rgb >> 0) & 0xFF) / 255.0
+        let red = CGFloat((rgb >> 16) & 0xFF) / 255.0
+        let green = CGFloat((rgb >> 8) & 0xFF) / 255.0
+        let blue = CGFloat(rgb & 0xFF) / 255.0
+        
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
 }

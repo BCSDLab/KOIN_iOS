@@ -299,7 +299,7 @@ extension NoticeListViewController {
         }
     }
     
-    private func updateBoard(noticeList: [NoticeArticleDTO], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
+    private func updateBoard(noticeList: [NoticeArticleDto], pageInfos: NoticeListPages, noticeListType: NoticeListType) {
         fetchTypeModalViewController.setInset(inset: noticeTableView.frame.origin.y + 50)
         fetchTypeModalViewController.setText(type: viewModel.fetchType)
         noticeTableView.setType(type: viewModel.fetchType)
@@ -316,7 +316,7 @@ extension NoticeListViewController {
         }
     }
     
-    private func updateUserKeywordList(keywords: [NoticeKeywordDTO], keywordIdx: Int) {
+    private func updateUserKeywordList(keywords: [NoticeKeywordDto], keywordIdx: Int) {
         noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
     }
     

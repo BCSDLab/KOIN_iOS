@@ -10,22 +10,27 @@ import UIKit
 
 final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
+    
+    
+    
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
     
+    // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionHeadersPinToVisibleBounds = true
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
@@ -41,10 +46,10 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         dataSource = self
         delegate = self
         articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-           tapGesture.cancelsTouchesInView = false  // Allows taps to pass through to collection view cells
-           addGestureRecognizer(tapGesture)
     }
+}
+
+extension AddLostItemCollectionView {
     
     func setType(type: LostItemType) {
         self.type = type
@@ -56,11 +61,16 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         collectionViewLayout.invalidateLayout()
     }
     
-    @objc private func dismissKeyboard() {
-        
-        self.endEditing(true)
+    func dismissKeyBoardDatePicker() {
+        self.endEditing(true) // 키보드 닫기
+        dismissDatePicker()
     }
-
+    private func dismissDatePicker() {
+        for row in 0..<numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(row: row, section: 0)
+            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+        }
+    }
 }
 
 extension AddLostItemCollectionView {
@@ -102,6 +112,9 @@ extension AddLostItemCollectionView {
                 case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
                 }
             }.store(in: &footerCancellables)
+            footerView.shouldDismissDropDownPublisher.sink { [weak self] in
+                self?.dismissDatePicker()
+            }.store(in: &footerCancellables)
             return footerView
         }
         return UICollectionReusableView()
@@ -122,8 +135,8 @@ extension AddLostItemCollectionView {
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
         }.store(in: &cell.cancellables)
-        cell.dateButtonPublisher.sink { [weak self] _ in
-            self?.dateButtonPublisher.send()
+        cell.textFieldFocusPublisher.sink { [weak self] value in
+            self?.textFieldFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
         cell.textViewFocusPublisher.sink { [weak self] value in
             self?.textViewFocusPublisher.send(value)
@@ -147,6 +160,9 @@ extension AddLostItemCollectionView {
         }.store(in: &cell.cancellables)
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
+        }.store(in: &cell.cancellables)
+        cell.shouldDismissDropDownPublisher.sink { [weak self] in
+            self?.dismissDatePicker()
         }.store(in: &cell.cancellables)
         return cell
     }

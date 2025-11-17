@@ -159,7 +159,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
 
 extension ServiceSelectViewController {
     
-    private func changeViewOption(profile: UserDTO?) {
+    private func changeViewOption(profile: UserDto?) {
         var config = UIButton.Configuration.plain()
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         var attributedLoginString = AttributedString.init(stringLiteral: "로그인")
@@ -261,30 +261,8 @@ extension ServiceSelectViewController {
     }
     
     @objc func shopSelectButtonTapped() {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: 0
-        )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
-        shopViewController.title = "주변상점"
-        navigationController?.pushViewController(shopViewController, animated: true)
+        let orderTabBarViewController = OrderTabBarViewController(initialTabIndex: 1)
+        navigationController?.pushViewController(orderTabBarViewController, animated: true)
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }

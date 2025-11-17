@@ -11,20 +11,22 @@ import Foundation
 final class DiningViewModel: ViewModelProtocol {
     
     enum Input {
-        case getABTestResult
+        case getAbTestResult
         case updateDisplayDateTime(Date?, DiningType?)
         case shareMenuList(ShareDiningMenu)
         case determineInitDate
         case changeNoti(Bool, SubscribeType)
         case fetchNotiList
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
     }
+    
     enum Output {
         case updateDiningList([DiningItem], DiningType)
         case initCalendar(Date)
         case showBottomSheet((Bool, Bool))
         case showLoginModal
-        case setABTestResult(AssignAbTestResponse)
+        case setAbTestResult(AssignAbTestResponse)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -45,7 +47,16 @@ final class DiningViewModel: ViewModelProtocol {
         }
     }
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, dateProvder: DateProvider, shareMenuListUseCase: ShareMenuListUseCase, diningLikeUseCase: DiningLikeUseCase, changeNotiUseCase: ChangeNotiUseCase, fetchNotiListUsecase: FetchNotiListUseCase, changeNotiDetailUseCase: ChangeNotiDetailUseCase, assignAbTestUseCase: AssignAbTestUseCase, sharedDiningItem: CurrentDiningTime? = nil) {
+    init(fetchDiningListUseCase: FetchDiningListUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         dateProvder: DateProvider,
+         shareMenuListUseCase: ShareMenuListUseCase,
+         diningLikeUseCase: DiningLikeUseCase,
+         changeNotiUseCase: ChangeNotiUseCase,
+         fetchNotiListUsecase: FetchNotiListUseCase,
+         changeNotiDetailUseCase: ChangeNotiDetailUseCase,
+         assignAbTestUseCase: AssignAbTestUseCase,
+         sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder
@@ -79,8 +90,10 @@ final class DiningViewModel: ViewModelProtocol {
                 self.changeNoti(isOn: isOn, type: subscribeType)
             case .fetchNotiList:
                 self.fetchNotiList()
-            case .getABTestResult:
+            case .getAbTestResult:
                 self.getAbTestResult()
+            case let .logEventWithSessionId(label, category, value, sessionId):
+                self.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -101,7 +114,7 @@ extension DiningViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func processSubscribes(response: NotiAgreementDTO) -> (Bool, Bool) {
+    private func processSubscribes(response: NotiAgreementDto) -> (Bool, Bool) {
         var diningSoldOutPermit: Bool = false
         var diningImageUploadPermit: Bool = false
         
@@ -183,12 +196,24 @@ extension DiningViewModel {
             }
         }, receiveValue: { [weak self] abTestResult in
             print(abTestResult)
-            self?.outputSubject.send(.setABTestResult(abTestResult))
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
+        }).store(in: &subscriptions)
+
+        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: "dining_store")).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+            }
+        }, receiveValue: { [weak self] abTestResult in
+            print(abTestResult)
+            self?.outputSubject.send(.setAbTestResult(abTestResult))
         }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
+    
+    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    }
 }
-

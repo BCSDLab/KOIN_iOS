@@ -22,7 +22,7 @@ final class NotiViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
-        case updateSwitch(NotiAgreementDTO)
+        case updateSwitch(NotiAgreementDto)
         case changeButtonEnableStatus(Bool)
         case requestLogInAgain
     }

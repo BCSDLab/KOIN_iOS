@@ -20,8 +20,8 @@ final class DefaultFetchLandDetailUseCase: FetchLandDetailUseCase {
     }
     
     func execute(landId: Int) -> AnyPublisher<LandDetailItem, Error> {
-        return landRepository.fetchLandDetail(requestModel: FetchLandDetailRequest(id: landId)).map { landDetailDTO in
-            landDetailDTO.toDomain()
+        return landRepository.fetchLandDetail(requestModel: FetchLandDetailRequest(id: landId)).map { landDetailDto in
+            landDetailDto.toDomain()
         }.eraseToAnyPublisher()
     }
 }

@@ -49,6 +49,7 @@ enum ImageAsset: String {
     case ownerReadyImage
     case recommandMenu
     case titleMenu
+    case speaker
     case setMenu
     case sideMenu
     case arrowUp
@@ -59,6 +60,7 @@ enum ImageAsset: String {
     case emptyStar
     case coopInfo
     case arrowBack
+    case arrowBackWhite
     case heart
     case heartFill
     case share
@@ -70,9 +72,11 @@ enum ImageAsset: String {
     case filledCircle
     case cancelYellow
     case trashcan
+    case trashcanNew
     case nonReview
     case reportedImageView
     case nonMenuWeekendImage
+    case newChevronRight
     case chevronRight
     case chevronUp
     case visibility
@@ -106,12 +110,16 @@ enum ImageAsset: String {
     case plusCircle
     case classFilter
     case add
+    case addGray
+    case addThin
+    case minus
     case minusCircle
     case bookmark
     case plusBold
     case checkFill
     case checkEmpty
     case callBlue
+    case callNew
     case qrCode
     case incorrectInfo
     case swap
@@ -150,6 +158,42 @@ enum ImageAsset: String {
     case club3
     case club4
     case club5
+    case toastMessageIconInformative
+    case toastMessageIconPositive
+    case toastMessageIconNegative
+    case orderHomeTabBar
+    case orderShopTabBar
+    case orderDetailTabBar
+    case shoppingCart
+    case shoppingCartWhite
+    case shoppingCartLarge
+    case shoppingCartShadowOval
+    case shoppingCartShadowSquare
+    case filterIcon1
+    case filterIcon2
+    case filterIcon3
+    case filterIcon4
+    case delivery
+    case bcsdSymbolLogo
+    case orderEmptyLogo
+    case countIcon0
+    case countIcon1
+    case countIcon2
+    case countIcon3
+    case countIcon4
+    case countIcon5
+    case countIcon6
+    case countIcon7
+    case countIcon8
+    case countIcon9
+    case countIcon9Plus
+    case refresh
+    case delivery2
+    case packaging
+    case sleepBcsdSymbol
+    case addPhotoAlternate
+    case cancelGray
+    case cancelNew300
 }
 
 enum SFSymbols: String {

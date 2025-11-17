@@ -10,7 +10,7 @@ import UIKit
 
 final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    private var popularNoticeList: [NoticeArticleDTO] = []
+    private var popularNoticeList: [NoticeArticleDto] = []
     private var keywordNoticePhrase: ((String, String), Int)?
     let pageDidChangedPublisher = PassthroughSubject<Int, Never>()
     let tapNoticeListPublisher = PassthroughSubject<(Int, String), Never>()
@@ -39,7 +39,7 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
         isPagingEnabled = true
     }
     
-    func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO], _ keywordNoticePhrase: ((String, String), Int)?) {
+    func updateNoticeList(_ popularNoticeList: [NoticeArticleDto], _ keywordNoticePhrase: ((String, String), Int)?) {
         self.popularNoticeList = popularNoticeList
         self.keywordNoticePhrase = keywordNoticePhrase
         bannerCount = popularNoticeList.count
@@ -144,8 +144,7 @@ extension NoticeListCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoticeListCollectionViewCell.identifier, for: indexPath) as? NoticeListCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let newIndex = bannerCount == 5 ? indexPath.row - 1 : indexPath.row
-            let noticeArticleTitle = popularNoticeList[newIndex]
+            let noticeArticleTitle = popularNoticeList[indexPath.row - 1]
             cell.configure(title: noticeArticleTitle.title ?? "")
             return cell
         }

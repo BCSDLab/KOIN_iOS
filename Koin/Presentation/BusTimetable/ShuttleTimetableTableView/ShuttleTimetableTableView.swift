@@ -41,7 +41,7 @@ final class ShuttleTimetableTableView: UITableView {
         self.backgroundColor = .systemBackground
     }
     
-    func updateShuttleBusInfo(busInfo: ShuttleRouteDTO) {
+    func updateShuttleBusInfo(busInfo: ShuttleRouteDto) {
         self.busInfo = busInfo.routeRegions
         self.semesterInfo = busInfo.semesterInfo
         reloadData()

@@ -11,7 +11,7 @@ import Combine
 protocol NotiRepository {
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse>
     func changeNotiDetail(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeDetailRequest) -> AnyPublisher<Void, ErrorResponse>
-    func fetchNotiList() -> AnyPublisher<NotiAgreementDTO, ErrorResponse>
+    func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse>
 }
 
 

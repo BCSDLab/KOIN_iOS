@@ -14,7 +14,6 @@ protocol EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
-        
         enum ForceUpdate: String, EventLabelType {
             case forcedUpdatePageView = "forced_update_page_view"
             case forceUpdateExit = "forced_update_exit"
@@ -26,10 +25,13 @@ enum EventParameter {
             }
         }
         
-        enum ABTest: String, EventLabelType {
+        enum AbTest: String, EventLabelType {
             case businessBenefit = "BUSINESS_benefit_1"
             case businessCall = "BUSINESS_call_1"
             case campusClub1 = "CAMPUS_club_1"
+            case dining2shop1 = "dining2shop_1"
+            case diningToShop = "dining_to_shop"
+            case diningToShopClose = "dining_to_shop_close"
             var team: String {
                 return "AB_TEST"
             }
@@ -48,14 +50,16 @@ enum EventParameter {
             case shopCategoriesEvent = "shop_categories_event"
             case shopDetailViewEvent = "shop_detail_view_event"
             case shopCategoriesSearch = "shop_categories_search"
+            case shopCategoriesSearchClick = "shop_categories_search_click"
             case shopDetailView = "shop_detail_view"
             case shopDetailViewReview = "shop_detail_view_review"
             case shopDetailViewBack = "shop_detail_view_back"
+            case shopCategoriesBack = "shop_categories_back"
+            case shopDetailViewInfo = "shop_detail_view_info"
             
             case shopDetailViewReviewWrite = "shop_detail_view_review_write"
             case shopDetailViewReviewWriteDone = "shop_detail_view_review_write_done"
             case shopDetailViewReviewReport = "shop_detail_view_review_report"
-            case shopDetailViewReviewReportDone = "shop_detail_view_review_report_done"
             case shopDetailViewReviewBack = "shop_detail_view_review_back"
             
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
@@ -63,6 +67,7 @@ enum EventParameter {
             case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
             case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
+            case shopDetailViewReviewCan = "shop_detail_view_review_can"
             case mainShopBenefit = "main_shop_benefit"
             case benefitShopCategories = "benefit_shop_categories"
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
@@ -70,6 +75,10 @@ enum EventParameter {
             case benefitShopCall = "benefit_shop_call"
             
             case loginPrompt = "login_prompt"
+            
+            //order
+            case orderHistoryTabClick = "orderHistory_tabClick"
+            
             var team: String {
                 return "BUSINESS"
             }
@@ -205,6 +214,7 @@ enum EventParameter {
         case abTestDining = "a/b test 로깅(식단 메인 진입점)"
         case abTestKeyword = "a/b test 로깅(키워드 알림 배너)"
         case abTestCall = "a/b test 로깅(전화하기)"
+        case abTestDiningEntry = "a/b test 로깅(메인화면 식단 진입)"
         case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"
@@ -224,5 +234,7 @@ enum EventParameter {
         case benefitShopCategories
         case benefitShopClick
         case benefitShopCall
+        case shopCategoriesBack
+        case shopDetailViewReviewBack = "shop_detail_view_review_back"
     }
 }

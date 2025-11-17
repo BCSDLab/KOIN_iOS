@@ -5,10 +5,8 @@
 //  Created by JOOMINKYUNG on 12/7/24.
 //
 
-import Combine
-import SnapKit
-import Then
 import UIKit
+import SnapKit
 
 final class ManyBusTimetableTableViewCell: UITableViewCell {
     //MARK: - UI Components
@@ -23,6 +21,13 @@ final class ManyBusTimetableTableViewCell: UITableViewCell {
         $0.textColor = .appColor(.neutral500)
         $0.textAlignment = .left
     }
+    
+    private lazy var busLabelStackView = UIStackView(arrangedSubviews: [busPlaceLabel, subBusPlaceLabel]).then {
+        $0.axis = .vertical
+        $0.alignment = .leading
+        $0.distribution = .fill
+        $0.spacing = 2
+    }
    
     //MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -34,38 +39,42 @@ final class ManyBusTimetableTableViewCell: UITableViewCell {
         super.init(coder: coder)
         configureView()
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        busPlaceLabel.text = nil
+        subBusPlaceLabel.text = nil
+        subBusPlaceLabel.isHidden = false
+    }
+
     func configure(busPlace: String, subBusPlace: String?) {
-        let isSubBusPlace = subBusPlace != nil ? true : false
-        setUpConstraints(isSubBusPlace: isSubBusPlace)
         busPlaceLabel.text = busPlace
-        subBusPlaceLabel.text = subBusPlace ?? ""
+        if let sub = subBusPlace, !sub.isEmpty {
+            subBusPlaceLabel.text = sub
+            subBusPlaceLabel.isHidden = false
+        } else {
+            subBusPlaceLabel.text = nil
+            subBusPlaceLabel.isHidden = true
+        }
     }
 }
 
 extension ManyBusTimetableTableViewCell {
     private func setUpLayouts() {
-        [busPlaceLabel, subBusPlaceLabel].forEach {
+        [busLabelStackView].forEach {
             contentView.addSubview($0)
         }
     }
     
-    private func setUpConstraints(isSubBusPlace: Bool) {
-        busPlaceLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.width.equalTo(132)
-            $0.height.equalTo(26)
+    private func setUpConstraints() {
+        busLabelStackView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
-        }
-        subBusPlaceLabel.snp.makeConstraints {
-            $0.top.equalTo(busPlaceLabel.snp.bottom)
-            $0.leading.equalTo(busPlaceLabel)
-            $0.height.equalTo(19)
         }
     }
     
     private func configureView() {
         setUpLayouts()
+        setUpConstraints()
     }
 }
-

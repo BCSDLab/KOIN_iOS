@@ -12,6 +12,10 @@ extension UIViewController {
     enum NavigationBarStyle {
         case fill
         case empty
+        case order
+        case orderTransparent
+        case transparentBlack
+        case transparentWhite
     }
     
     func configureNavigationBar(style: NavigationBarStyle) {
@@ -33,11 +37,45 @@ extension UIViewController {
                 .font: UIFont.appFont(.pretendardMedium, size: 18)
             ]
             navigationItem.backButtonTitle = ""
+        case .order:
+            appearance.backgroundColor = UIColor.appColor(.newBackground)
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.appColor(.neutral800),
+                .font: UIFont.appFont(.pretendardMedium, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
+        case .orderTransparent:
+            appearance.backgroundColor = UIColor.clear
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.clear,
+                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
+        case .transparentBlack:
+            appearance.backgroundColor = UIColor.clear
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.appColor(.neutral800),
+                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
+        case .transparentWhite:
+            appearance.backgroundColor = UIColor.clear
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.appColor(.neutral0),
+                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
+            ]
+            navigationItem.backButtonTitle = ""
         }
         appearance.shadowColor = nil
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = style == .fill ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
+        
+        switch style {
+        case .fill, .orderTransparent, .transparentWhite:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral0)
+        case .empty, .order, .transparentBlack:
+            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral800)
+        }
     }
 }

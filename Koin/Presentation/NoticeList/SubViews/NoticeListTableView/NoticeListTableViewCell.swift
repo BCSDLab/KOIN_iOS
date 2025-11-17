@@ -81,7 +81,7 @@ final class NoticeListTableViewCell: UITableViewCell {
         configureView()
     }
     
-    func configure(articleModel: NoticeArticleDTO) {
+    func configure(articleModel: NoticeArticleDto) {
         if let type = articleModel.type {
             boardTitleLabel.text = "\(type.description)물"
         } else {

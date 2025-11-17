@@ -201,7 +201,7 @@ extension AgreementFormViewController {
         let viewController = CertificationFormViewController(viewModel: viewModel)
         viewController.title = "회원가입"
         navigationController?.pushViewController(viewController, animated: true)
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(eventName: "sign_up", userId: 0, platform: "iOS")
+        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.termsAgreement, .click, "약관동의", customSessionId))
     }
 }

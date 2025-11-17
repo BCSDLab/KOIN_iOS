@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopBenefitUseCase {
-    func execute() -> AnyPublisher<ShopBenefitsDTO, Error>
+    func execute() -> AnyPublisher<ShopBenefitsDto, Error>
 }
 
 final class DefaultFetchShopBenefitUseCase: FetchShopBenefitUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShopBenefitUseCase: FetchShopBenefitUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute() -> AnyPublisher<ShopBenefitsDTO, Error> {
+    func execute() -> AnyPublisher<ShopBenefitsDto, Error> {
         return shopRepository.fetchShopBenefits()
     }
 }

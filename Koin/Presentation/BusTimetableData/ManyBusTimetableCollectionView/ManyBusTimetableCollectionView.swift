@@ -8,103 +8,128 @@
 import Combine
 import UIKit
 
-// 임시 데이터 모델
+final class ManyBusTimetableCollectionView: UICollectionView {
 
-final class ManyBusTimetableCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
-    //MARK: - Properties
-    private var subscriptions = Set<AnyCancellable>()
+    // MARK: Properties
     private var busTimeData: [RouteInfo] = []
-    private var maxTableWidth: CGFloat = 0
     let contentWidthPublisher = PassthroughSubject<CGFloat, Never>()
-  
-    //MARK: - Initialization
+
+    // MARK: Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
-        register(NoticeKeywordCollectionViewCell.self, forCellWithReuseIdentifier: NoticeKeywordCollectionViewCell.identifier)
+        backgroundColor = .clear
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        isScrollEnabled = true
+        contentInset = .zero
+
+        register(ManyBusTimetableCollectionViewCell.self,
+                 forCellWithReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier)
+        register(ManyBusTimetableCollectionViewHeaderCell.self,
+                 forCellWithReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier)
+
         dataSource = self
         delegate = self
-        showsHorizontalScrollIndicator = false
-        contentInset = .zero
-        register(ManyBusTimetableCollectionViewCell.self, forCellWithReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier)
-        register(ManyBusTimetableCollectionViewHeaderCell.self, forCellWithReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier)
-        isScrollEnabled = true
-        showsVerticalScrollIndicator = false
-        contentInset = .zero
     }
-    
+
     func configure(busInfo: [RouteInfo]) {
         self.busTimeData = busInfo
         reloadData()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentWidthPublisher.send(self.contentSize.width)
+        contentWidthPublisher.send(contentSize.width)
     }
 }
 
-extension ManyBusTimetableCollectionView {
+// MARK: - UICollectionViewDataSource
+extension ManyBusTimetableCollectionView: UICollectionViewDataSource {
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return busTimeData.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return busTimeData[section].arrivalTime.count + 1
+        busTimeData.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier, for: indexPath) as? ManyBusTimetableCollectionViewHeaderCell else { return UICollectionViewCell() }
-            cell.configure(busTimeNumber: busTimeData[indexPath.section].name)
-            return cell
-        }
-        else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier, for: indexPath) as? ManyBusTimetableCollectionViewCell else { return UICollectionViewCell() }
-            cell.configure(busTime: busTimeData[indexPath.section].arrivalTime[indexPath.row - 1])
-            return cell
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        busTimeData[section].arrivalTime.count + 1
     }
-  
-}
 
-extension ManyBusTimetableCollectionView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.row == 0 {
-            let label = UILabel()
-            for time in busTimeData[indexPath.section].arrivalTime {
-                if let time = time {
-                    label.text = time
-                    break
-                }
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == 0 {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ManyBusTimetableCollectionViewHeaderCell.reuseIdentifier,
+                for: indexPath
+            ) as? ManyBusTimetableCollectionViewHeaderCell else {
+                return UICollectionViewCell()
             }
-            label.font = .appFont(.pretendardRegular, size: 14)
-            let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 52))
-            return CGSize(width: size.width + 50, height: 52)
+
+            let route = busTimeData[indexPath.section]
+            cell.configure(name: route.name, detail: route.detail)
+            return cell
         } else {
-            let label = UILabel()
-            label.text = busTimeData[indexPath.section].arrivalTime[indexPath.row - 1]
-            label.font = .appFont(.pretendardBold, size: 16)
-            let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 46))
-            return CGSize(width: size.width + 20, height: 46)
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ManyBusTimetableCollectionViewCell.identifier,
+                for: indexPath
+            ) as? ManyBusTimetableCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            let time = busTimeData[indexPath.section].arrivalTime[indexPath.item - 1]
+            cell.configure(busTime: time)
+            return cell
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
     }
 }
 
+// MARK: - UICollectionViewDelegate
+extension ManyBusTimetableCollectionView: UICollectionViewDelegate {}
 
+// MARK: - UICollectionViewDelegateFlowLayout
+extension ManyBusTimetableCollectionView: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        if indexPath.item == 0 {
+            let sample = firstValidTime(in: busTimeData[indexPath.section].arrivalTime) ?? "—"
+            let width = textWidth(sample,
+                                  font: .appFont(.pretendardRegular, size: 14)) + 50
+            return CGSize(width: width, height: 52)
+        } else {
+            let time = busTimeData[indexPath.section].arrivalTime[indexPath.item - 1] ?? "—"
+            let width = textWidth(time,
+                                  font: .appFont(.pretendardBold, size: 16)) + 20
+            return CGSize(width: width, height: 46)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat { 0 }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat { 0 }
+
+    private func firstValidTime(in times: [String?]) -> String? {
+        for time in times where time != nil && !(time?.isEmpty ?? true) { return time }
+        return nil
+    }
+
+    private func textWidth(_ text: String, font: UIFont) -> CGFloat {
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = (text as NSString).size(withAttributes: attributes)
+        return ceil(size.width)
+    }
+}

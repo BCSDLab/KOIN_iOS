@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchRecommendedKeywordUseCase {
-    func execute(filters: [NoticeKeywordDTO]) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error>
+    func execute(filters: [NoticeKeywordDto]) -> AnyPublisher<NoticeRecommendedKeywordDto, Error>
 }
 
 final class DefaultFetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCase {
@@ -18,13 +18,13 @@ final class DefaultFetchRecommendedKeywordUseCase: FetchRecommendedKeywordUseCas
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(filters: [NoticeKeywordDTO]) -> AnyPublisher<NoticeRecommendedKeywordDTO, Error> {
+    func execute(filters: [NoticeKeywordDto]) -> AnyPublisher<NoticeRecommendedKeywordDto, Error> {
         return noticeListRepository.fetchRecommendedKeyword(count: nil)
-            .map { recommendedKeywordDTO in
-                let filteredKeywords = recommendedKeywordDTO.keywords.filter { keyword in
+            .map { recommendedKeywordDto in
+                let filteredKeywords = recommendedKeywordDto.keywords.filter { keyword in
                     !filters.contains { $0.keyword == keyword }
                 }
-                return NoticeRecommendedKeywordDTO(keywords: filteredKeywords)
+                return NoticeRecommendedKeywordDto(keywords: filteredKeywords)
             }
             .eraseToAnyPublisher()
     }

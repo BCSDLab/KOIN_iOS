@@ -18,6 +18,10 @@ final class DiningViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var viewDidAppeared = false
     
+    // FIXME: - AB 테스트 식단 세션 아이디 프로퍼티
+    private var customSessionId: String?
+    private var isHidingBySwipe = false
+    
     // MARK: - UI Components
     
     private let dateCalendarCollectionView: CalendarCollectionView = {
@@ -137,7 +141,7 @@ final class DiningViewController: UIViewController {
         configureSwipeGestures()
         configureView()
         navigationItem.title = "식단"
-        inputSubject.send(.getABTestResult)
+        inputSubject.send(.getAbTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -180,8 +184,8 @@ final class DiningViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
-            case let .setABTestResult(abTestResult):
-                self?.diningListCollectionView.setAbTestResult(result: abTestResult)
+            case .setAbTestResult(_):
+                break
             }
         }.store(in: &subscriptions)
         
@@ -236,7 +240,6 @@ final class DiningViewController: UIViewController {
 }
 
 extension DiningViewController {
-    
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
         case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
@@ -268,7 +271,6 @@ extension DiningViewController {
     }
     
     private func showBottomSheet(_ isOn: (Bool, Bool)) {
-      
         let bottomSheetViewController = BottomSheetViewController(contentViewController: diningNotiContentViewController, defaultHeight: 332, cornerRadius: 16, dimmedAlpha: 0.4, isPannedable: false)
         diningNotiContentViewController.updateButtonIsOn(isOn)
         self.present(bottomSheetViewController, animated: true)
@@ -343,16 +345,15 @@ extension DiningViewController {
     
     private func setUpLayOuts() {
         [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
-            self.view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
         }
-        
+
         [diningTypeSegmentControl, underlineView].forEach {
             tabBarView.addSubview($0)
         }
         
-        separateViewArray.forEach { view in
-            stackView.addArrangedSubview(view)
+        separateViewArray.forEach {
+            stackView.addArrangedSubview($0)
         }
     }
     
@@ -403,8 +404,6 @@ extension DiningViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBackground
     }
 }
-
-
