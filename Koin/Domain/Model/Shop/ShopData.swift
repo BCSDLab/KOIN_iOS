@@ -20,4 +20,6 @@ struct ShopData {
     let updatedAt: String
     let bank: String?
     let accountNumber: String?
+    let openTime: String?
+    let closeTime: String?
 }

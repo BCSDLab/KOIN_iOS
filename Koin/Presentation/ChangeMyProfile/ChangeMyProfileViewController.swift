@@ -489,7 +489,7 @@ extension ChangeMyProfileViewController {
         inputSubject.send(.modifyProfile(userInfo))
     }
     
-    private func showProfile(_ profile: UserDTO) {
+    private func showProfile(_ profile: UserDto) {
         idTextField.text = profile.loginId
         nameTextField.text = profile.name
         nicknameTextField.text = profile.nickname

@@ -10,7 +10,7 @@ import UIKit
 
 final class EventShopCollectionView: UICollectionView, UICollectionViewDataSource, UIScrollViewDelegate, UICollectionViewDelegate  {
     
-    private var eventShops: [EventDTO] = []
+    private var eventShops: [EventDto] = []
     let cellTapPublisher = PassthroughSubject<(Int, String), Never>()
     let scrollPublisher = PassthroughSubject<String, Never>()
     private var timer: Timer?
@@ -25,6 +25,7 @@ final class EventShopCollectionView: UICollectionView, UICollectionViewDataSourc
         super.init(coder: coder)
         commonInit()
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         adjustCollectionViewInsets()
@@ -36,16 +37,16 @@ final class EventShopCollectionView: UICollectionView, UICollectionViewDataSourc
         delegate = self
         showsHorizontalScrollIndicator = false
         decelerationRate = .fast
+        backgroundColor = UIColor.appColor(.newBackground)
     }
     
-    func setEventShops(_ eventList: [EventDTO]) {
+    func setEventShops(_ eventList: [EventDto]) {
         self.eventShops = eventList
         self.reloadData()
     }
-    
 }
+
 extension EventShopCollectionView {
-    
     func startAutoScroll() {
         timer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
     }
@@ -54,6 +55,7 @@ extension EventShopCollectionView {
         timer?.invalidate()
         timer = nil
     }
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         stopAutoScroll()
     }
@@ -68,6 +70,7 @@ extension EventShopCollectionView {
         stopAutoScroll()
         startAutoScroll()
     }
+    
     @objc private func scrollToNextItem() {
         
         if eventShops.isEmpty { return }
@@ -88,8 +91,8 @@ extension EventShopCollectionView {
         let inset = (bounds.width - cellWidthIncludingSpacing) / 2
         contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
     }
-    
 }
+
 extension EventShopCollectionView {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard let layout = self.collectionViewLayout as? UICollectionViewFlowLayout else { return }
@@ -106,6 +109,7 @@ extension EventShopCollectionView {
         offset.x = roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left - adjustedCenterX + (cellWidthIncludingSpacing / 2)
         targetContentOffset.pointee = offset
     }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updateCurrentIndex()
         resetAutoScrollTimer()

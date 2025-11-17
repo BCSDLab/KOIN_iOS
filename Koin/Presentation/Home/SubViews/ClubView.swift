@@ -103,7 +103,7 @@ final class ClubView: UIView {
         }
     }
     
-    func setupHotClub(club: HotClubDTO) {
+    func setupHotClub(club: HotClubDto) {
         hotClubImageView.loadImageWithSpinner(from: club.imageUrl)
         hotClubImageView.isHidden = false
         hotClubId = club.clubId

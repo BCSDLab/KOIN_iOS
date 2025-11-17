@@ -10,23 +10,23 @@ import Combine
 
 protocol CoreService {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
-    func fetchBanner() -> AnyPublisher<BannerDTO, Error>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDTO, Error>
-    func fetchHotClubs() -> AnyPublisher<HotClubDTO, Error>
+    func fetchBanner() -> AnyPublisher<BannerDto, Error>
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error>
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error>
 }
 
 final class DefaultCoreService: CoreService {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
         return request(.checkVersion)
     }
-    func fetchBanner() -> AnyPublisher<BannerDTO, Error> {
+    func fetchBanner() -> AnyPublisher<BannerDto, Error> {
         return request(.fetchBanner)
     }
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDTO, Error> {
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
         return request(.fetchClubCategories)
     }
     
-    func fetchHotClubs() -> AnyPublisher<HotClubDTO, Error> {
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
         return request(.fetchHotClubs)
     }
 

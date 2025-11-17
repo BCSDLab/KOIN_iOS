@@ -9,8 +9,8 @@ import Alamofire
 import Combine
 
 protocol ChatService {
-    func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse>
-    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse>
+    func fetchChatRoom() -> AnyPublisher<[ChatRoomDto], ErrorResponse>
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse>
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
     func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse>
 }
@@ -48,9 +48,9 @@ final class DefaultChatService: ChatService {
             .eraseToAnyPublisher()
     }
     
-    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDTO], ErrorResponse> {
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse> {
         return networkService.requestWithResponse(api: ChatAPI.fetchChatDetail(articleId, chatRoomId))
-            .catch { [weak self] error -> AnyPublisher<[ChatDetailDTO], ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<[ChatDetailDto], ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()
@@ -63,9 +63,9 @@ final class DefaultChatService: ChatService {
             .eraseToAnyPublisher()
     }
     
-    func fetchChatRoom() -> AnyPublisher<[ChatRoomDTO], ErrorResponse> {
+    func fetchChatRoom() -> AnyPublisher<[ChatRoomDto], ErrorResponse> {
         return networkService.requestWithResponse(api: ChatAPI.fetchChatRoom)
-            .catch { [weak self] error -> AnyPublisher<[ChatRoomDTO], ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<[ChatRoomDto], ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()

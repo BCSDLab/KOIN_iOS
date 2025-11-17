@@ -23,8 +23,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
-        case updateLostItem(LostArticleDetailDTO)
-        case updatePopularArticles([NoticeArticleDTO])
+        case updateLostItem(LostArticleDetailDto)
+        case updatePopularArticles([NoticeArticleDto])
         case updateActivityIndictor(Bool, String?, URL?)
         case showToast(String)
         case showAuth(UserTypeResponse)

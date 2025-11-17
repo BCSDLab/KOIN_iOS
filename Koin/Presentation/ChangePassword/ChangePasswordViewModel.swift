@@ -36,7 +36,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
     private let modifyUseCase: ModifyUseCase
     private let changePasswordUseCase = DefaultChangePasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private (set)var currentStep: Int = 1
-    private var userDTO: UserDTO? = nil
+    private var userDto: UserDto? = nil
     var isCompleted: (Bool, Bool) = (false, false) {
         didSet {
             let isEnable = isCompleted.0 && isCompleted.1
@@ -89,7 +89,7 @@ extension ChangePasswordViewModel {
             }
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showEmail(response.loginId ?? ""))
-            self?.userDTO = response
+            self?.userDto = response
         }.store(in: &subscriptions)
     }
     

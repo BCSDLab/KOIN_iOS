@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bitcoin-icons_minus-outline.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -37,15 +37,15 @@ final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
             .eraseToAnyPublisher()
     }
     
-    private func removeNonOperatingItems(from diningList: [DiningDTO]) -> [DiningDTO] {
+    private func removeNonOperatingItems(from diningList: [DiningDto]) -> [DiningDto] {
         return diningList.filter { $0.menu?.first != "미운영" }
     }
     
-    private func filterByDiningType(_ diningList: [DiningDTO], type: DiningType) -> [DiningDTO] {
+    private func filterByDiningType(_ diningList: [DiningDto], type: DiningType) -> [DiningDto] {
         return diningList.filter { $0.type == type }
     }
     
-    private func sortDiningList(_ diningList: [DiningDTO]) -> [DiningDTO] {
+    private func sortDiningList(_ diningList: [DiningDto]) -> [DiningDto] {
         return diningList.sorted {
             let order1 = $0.place.rawValue.first.map { sortOrder(of: $0) } ?? Int.max
             let order2 = $1.place.rawValue.first.map { sortOrder(of: $0) } ?? Int.max

@@ -30,14 +30,14 @@ final class HomeViewModel: ViewModelProtocol {
     
     enum Output {
         case updateDining(DiningItem?, DiningType, Bool)
-        case updateNoticeBanners([NoticeArticleDTO], ((String, String), Int)?)
-        case putImage(ShopCategoryDTO)
+        case updateNoticeBanners([NoticeArticleDto], ((String, String), Int)?)
+        case putImage(ShopCategoryDto)
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case showForceModal
-        case updateBanner(BannerDTO, AssignAbTestResponse)
-        case setHotClub(HotClubDTO)
-        case setClubCategories(ClubCategoriesDTO)
+        case updateBanner(BannerDto, AssignAbTestResponse)
+        case setHotClub(HotClubDto)
+        case setClubCategories(ClubCategoriesDto)
     }
     
     // MARK: - Properties
@@ -59,6 +59,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private (set) var moved = false
+    private var shopCategories: [ShopCategory] = []
     
     // MARK: - Initialization
     init(fetchDiningListUseCase: FetchDiningListUseCase,
@@ -102,7 +103,8 @@ final class HomeViewModel: ViewModelProtocol {
             case let .getNoticeBanner(date):
                 self?.getNoticeBanners(date: date)
             case let .getAbTestResult(abTestTitle):
-                self?.getAbTestResult(abTestTitle: abTestTitle)
+                break
+                // self?.getAbTestResult(abTestTitle: abTestTitle)
             case .getBannerAbTest(let request):
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
@@ -228,8 +230,13 @@ extension HomeViewModel {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
+            self?.shopCategories = response.shopCategories
             self?.outputSubject.send(.putImage(response))
         }.store(in: &subscriptions)
+    }
+    
+    func getCategoryName(for id: Int) -> String? {
+        return shopCategories.first(where: { $0.id == id })?.name
     }
     
     private func checkLogin() {
@@ -243,7 +250,7 @@ extension HomeViewModel {
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
-            if eventLabelNeededDuration == .mainShopBenefit || eventLabelNeededDuration == .benefitShopCategories {
+            if eventLabelNeededDuration == .mainShopBenefit || eventLabelNeededDuration == .benefitShopCategories || eventLabelNeededDuration == .mainShopCategories {
                 durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
             }
             
@@ -277,6 +284,7 @@ extension HomeViewModel {
         }.store(in: &subscriptions)
     }
     
+    
     private func getAbTestResult(abTestTitle: String) {
         assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
             .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
@@ -295,7 +303,7 @@ extension HomeViewModel {
                 }
             }).store(in: &subscriptions)
     }
-    
+  
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }

@@ -10,12 +10,12 @@ import UIKit
 
 final class NoticeListTableView: UITableView {
     // MARK: - Properties
-    private var noticeArticleList: [NoticeArticleDTO] = [] 
+    private var noticeArticleList: [NoticeArticleDto] = [] 
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let isScrolledPublisher = PassthroughSubject<Void, Never>()
@@ -61,7 +61,7 @@ final class NoticeListTableView: UITableView {
         headerView.setText(type: type)
     }
     
-    func updateNoticeList(noticeArticleList: [NoticeArticleDTO], pageInfos: NoticeListPages) {
+    func updateNoticeList(noticeArticleList: [NoticeArticleDto], pageInfos: NoticeListPages) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
         isForSearch = false
@@ -70,7 +70,7 @@ final class NoticeListTableView: UITableView {
         headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDTO], isLastPage: Bool, isNewKeyword: Bool) {
+    func updateSearchedResult(noticeArticleList: [NoticeArticleDto], isLastPage: Bool, isNewKeyword: Bool) {
         if isNewKeyword {
             self.noticeArticleList = []
         }
@@ -84,7 +84,7 @@ final class NoticeListTableView: UITableView {
         headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
-    func updateKeywordList(keywordList: [NoticeKeywordDTO], keywordIdx: Int) {
+    func updateKeywordList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
         if let headerView = self.headerView(forSection: 0) as? NoticeListHeaderView {
             headerView.updateKeyWordsList(keywordList: keywordList, keywordIdx: keywordIdx)
         }

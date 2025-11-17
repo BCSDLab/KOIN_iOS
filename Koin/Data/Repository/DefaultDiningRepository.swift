@@ -16,11 +16,11 @@ final class DefaultDiningRepository: DiningRepository {
         self.shareService = shareService
     }
     
-    func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDTO], ErrorResponse> {
+    func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse> {
         return diningService.fetchDiningList(requestModel: requestModel, retry: false)
     }
     
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDTO, Error> {
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error> {
         return diningService.fetchCoopShopList()
     }
     

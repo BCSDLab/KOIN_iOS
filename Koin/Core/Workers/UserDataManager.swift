@@ -17,7 +17,7 @@ final class UserDataManager {
     
     private init() {}
     
-    func setUserData(userData: UserDTO) {
+    func setUserData(userData: UserDto) {
         guard let id = userData.id else {
             self.id = 0
             self.userId = "anonymous"

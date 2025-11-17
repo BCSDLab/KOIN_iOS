@@ -10,7 +10,7 @@ import Foundation
 
 struct FrameData {
     let semester: String
-    var frame: [FrameDTO]
+    var frame: [FrameDto]
 }
 
 final class TimetableViewModel: ViewModelProtocol {
@@ -35,8 +35,8 @@ final class TimetableViewModel: ViewModelProtocol {
     enum NextInput {
         case fetchFrameList
         case createFrame(String)
-        case deleteFrame(FrameDTO)
-        case modifyFrame(FrameDTO)
+        case deleteFrame(FrameDto)
+        case modifyFrame(FrameDto)
         case modifySemester([String], [String])
         case rollbackFrame(Int)
     }
@@ -415,7 +415,7 @@ extension TimetableViewModel {
     }
     
     // 프레임 1개 삭제
-    private func deleteFrame(frame: FrameDTO) {
+    private func deleteFrame(frame: FrameDto) {
         deleteFrameUseCase.execute(id: frame.id).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
@@ -430,7 +430,7 @@ extension TimetableViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func modifyFrame(frame: FrameDTO) {
+    private func modifyFrame(frame: FrameDto) {
         modifyFrameUseCase.execute(frame: frame).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")

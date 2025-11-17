@@ -11,9 +11,9 @@ import UIKit
 final class MyKeywordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     
-    let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeywordDTO, Never>()
+    let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let myKeywordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
-    private var myKeywordList: [NoticeKeywordDTO] = []
+    private var myKeywordList: [NoticeKeywordDto] = []
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -33,7 +33,7 @@ final class MyKeywordCollectionView: UICollectionView, UICollectionViewDataSourc
         contentInset = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
     }
     
-    func updateMyKeywords(keywords: [NoticeKeywordDTO]) {
+    func updateMyKeywords(keywords: [NoticeKeywordDto]) {
         self.myKeywordList = keywords
         reloadData()
     }

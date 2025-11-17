@@ -20,8 +20,8 @@ final class DefaultFetchShopReviewListUseCase: FetchShopReviewListUseCase {
     
     func execute(requestModel: FetchShopReviewRequest) -> AnyPublisher<ShopReview, ErrorResponse> {
         return shopRepository.fetchReviewList(requestModel: requestModel)
-            .map { reviewsDTO in
-                reviewsDTO.toDomain(shopId: requestModel.shopId) 
+            .map { reviewsDto in
+                reviewsDto.toDomain(shopId: requestModel.shopId) 
             }
             .eraseToAnyPublisher()
     }

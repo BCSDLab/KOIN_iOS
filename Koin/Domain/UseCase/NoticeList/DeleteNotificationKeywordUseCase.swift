@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol DeleteNotificationKeywordUseCase {
-    func execute(keyword: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse>
+    func execute(keyword: NoticeKeywordDto) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultDeleteNotificationKeywordUseCase: DeleteNotificationKeywordUseCase {
@@ -19,7 +19,7 @@ final class DefaultDeleteNotificationKeywordUseCase: DeleteNotificationKeywordUs
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(keyword: NoticeKeywordDTO) -> AnyPublisher<Void, ErrorResponse> {
+    func execute(keyword: NoticeKeywordDto) -> AnyPublisher<Void, ErrorResponse> {
         noticeListRepository.deleteNotificationKeyword(requestModel: keyword)
     }
 }

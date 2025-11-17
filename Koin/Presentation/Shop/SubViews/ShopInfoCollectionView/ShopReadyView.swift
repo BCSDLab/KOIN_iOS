@@ -6,31 +6,21 @@
 //
 
 import UIKit
+import SnapKit
 
 final class ShopReadyView: UIView {
     
     // MARK: - UI Components
     
-    private let shopTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardBold, size: 14)
-        label.textColor = UIColor.appColor(.sub300)
-        return label
-    }()
+    private let shopReadyLabel = UILabel().then {
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
+        $0.textColor = UIColor.appColor(.neutral0)
+    }
     
-    private let shopReadyLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.appFont(.pretendardMedium, size: 14)
-        label.textColor = UIColor.appColor(.neutral0)
-        return label
-    }()
-    
-    private let visualEffectView: UIVisualEffectView = {
-        let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
-        effectView.backgroundColor = UIColor.appColor(.neutral800)
-        effectView.alpha = 0.6
-        return effectView
-    }()
+    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.backgroundColor = .black
+        $0.alpha = 0.6
+    }
     
     // MARK: Init
     
@@ -52,8 +42,7 @@ final class ShopReadyView: UIView {
     
     
     func setShopTitle(text: String) {
-        shopTitleLabel.text = text
-        shopReadyLabel.text = text.hasFinalConsonant() ? "은 준비중입니다." : "는 준비중입니다."
+        shopReadyLabel.text = "영업을 준비중이에요"
     }
     
 }
@@ -62,26 +51,19 @@ final class ShopReadyView: UIView {
 
 extension ShopReadyView {
     private func setUpLayOuts() {
-        [shopTitleLabel, shopReadyLabel].forEach {
+        [shopReadyLabel].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        shopTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.snp.leading).offset(16)
-            make.centerY.equalTo(self.snp.centerY)
-        }
-        
-        shopReadyLabel.snp.makeConstraints { make in
-            make.leading.equalTo(shopTitleLabel.snp.trailing)
-            make.centerY.equalTo(shopTitleLabel.snp.centerY)
+        shopReadyLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
         }
     }
     
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-  //      self.backgroundColor = UIColor.appColor(.readyGray)
     }
 }

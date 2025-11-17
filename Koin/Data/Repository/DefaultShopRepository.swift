@@ -16,11 +16,19 @@ final class DefaultShopRepository: ShopRepository {
         self.service = service
     }
     
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDTO, Error> {
+    func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, Error> {
+        service.fetchShopMenusCategory(shopId: shopId)
+    }
+    
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, Error> {
+        service.fetchShopSummary(id: id)
+    }
+    
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, Error> {
         service.fetchBeneficialShops(id: id)
     }
     
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDTO, Error> {
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, Error> {
         service.fetchShopBenefits()
     }
     
@@ -28,39 +36,39 @@ final class DefaultShopRepository: ShopRepository {
         service.uploadFiles(files: files)
     }
     
-    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDTO, Error> {
+    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, Error> {
         return service.fetchShopList(requestModel: requestModel)
     }
     
-    func fetchEventList() -> AnyPublisher<EventsDTO, Error> {
+    func fetchEventList() -> AnyPublisher<EventsDto, Error> {
         return service.fetchEventList()
     }
     
-    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDTO, Error> {
+    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, Error> {
         return service.fetchShopCategoryList()
     }
     
-    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDTO, Error> {
+    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, Error> {
         return service.fetchShopData(requestModel: requestModel)
     }
     
-    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDTO, Error> {
+    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, Error> {
         return service.fetchShopMenuList(requestModel: requestModel)
     }
     
-    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDTO, Error> {
+    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error> {
         return service.fetchShopEventList(requestModel: requestModel)
     }
     
-    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDTO, ErrorResponse> {
+    func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDto, ErrorResponse> {
         return service.fetchReviewList(requestModel: requestModel, retry: false)
     }
     
-    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDTO, ErrorResponse> {
+    func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDto, ErrorResponse> {
         return service.fetchReview(reviewId: reviewId, shopId: shopId)
     }
     
-    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDTO, ErrorResponse> {
+    func fetchMyReviewList(requestModel: FetchMyReviewRequest, shopId: Int) -> AnyPublisher<MyReviewDto, ErrorResponse> {
         return service.fetchMyReviewList(requestModel: requestModel, shopId: shopId)
     }
     
@@ -84,7 +92,15 @@ final class DefaultShopRepository: ShopRepository {
         return service.postCallNotification(shopId: shopId)
     }
     
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDTO, Error> {
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> { // TODO: 삭제 예정
         return service.searchRelatedShops(text: text)
+    }
+    
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, Error> {
+        return service.fetchSearchShop(requestModel: requestModel)
+            .map { dto in
+                ShopSearch(from: dto)
+            }
+            .eraseToAnyPublisher()
     }
 }

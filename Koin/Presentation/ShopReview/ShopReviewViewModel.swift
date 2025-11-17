@@ -20,6 +20,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let uploadFileUseCase: UploadFileUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
+    var isEdit: Bool { reviewId != nil}
     private let shopName: String
     private let shopId: Int
     
@@ -33,7 +34,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case fillComponent(OneReviewDTO)
+        case fillComponent(OneReviewDto)
         case addImage(String)
         case showToast(String, Bool)
         case updateShopName(String)
