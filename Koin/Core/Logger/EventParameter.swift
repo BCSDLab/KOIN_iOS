@@ -60,7 +60,6 @@ enum EventParameter {
             case shopDetailViewReviewWrite = "shop_detail_view_review_write"
             case shopDetailViewReviewWriteDone = "shop_detail_view_review_write_done"
             case shopDetailViewReviewReport = "shop_detail_view_review_report"
-            case shopDetailViewReviewReportDone = "shop_detail_view_review_report_done"
             case shopDetailViewReviewBack = "shop_detail_view_review_back"
             
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
