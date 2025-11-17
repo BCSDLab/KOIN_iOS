@@ -35,7 +35,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
     
     private let reviewCountLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.neutral400)
+        $0.textColor = UIColor(hexCode: "767676")
         $0.numberOfLines = 0
     }
     
@@ -75,11 +75,7 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         shopReadyView.isHidden = info.isOpen
         starImageView.image = info.reviewCount > 0 ? UIImage.appImage(asset: .star) : UIImage.appImage(asset: .emptyStar)
         ratingLabel.text = "\(info.averageRate)"
-        switch info.reviewCount {
-        case 0: reviewCountLabel.text = "첫 번째 리뷰를 작성해보세요 :)"
-        case 1...9: reviewCountLabel.text = "( 리뷰 \(info.reviewCount)개 )"
-        default: reviewCountLabel.text = "( 리뷰 10+ 개 )"
-        }
+        reviewCountLabel.text = " ( 리뷰 \(info.reviewCount)개 )"
     }
 }
 
@@ -119,7 +115,7 @@ extension ShopInfoCollectionViewCell {
         }
         
         reviewCountLabel.snp.makeConstraints {
-            $0.top.equalTo(starImageView.snp.top)
+            $0.centerY.equalTo(ratingLabel)
             $0.leading.equalTo(ratingLabel.snp.trailing).offset(4)
             $0.trailing.equalToSuperview().inset(20)
         }
