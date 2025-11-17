@@ -406,7 +406,7 @@ extension ShopSummaryViewController {
         
         let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: viewModel.shopName)
         reviewListViewController.title = "리뷰"
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, shopName))
+        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
 }
