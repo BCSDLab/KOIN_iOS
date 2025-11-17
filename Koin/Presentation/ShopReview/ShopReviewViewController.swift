@@ -6,32 +6,37 @@
 //
 
 import Combine
-import PhotosUI
-import Then
 import UIKit
+import PhotosUI
 import SnapKit
+import Then
 
-final class ShopReviewViewController: UIViewController, UITextViewDelegate {
+final class ShopReviewViewController: UIViewController {
+    
     // MARK: - Properties
     
     private let viewModel: ShopReviewViewModel
     private let inputSubject: PassthroughSubject<ShopReviewViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    let writeCompletePublisher = PassthroughSubject<(Bool, Int?, WriteReviewRequest), Never>()
-        
+    
     private var reviewTextViewHeight: Constraint?
+    
     private var minTextViewHeight: CGFloat {
         let font = UIFont.setFont(.body2)
         return ceil(font.lineHeight + 24)
     }
+    
     private let maxTextViewHeight: CGFloat = 398
     
     private var tagHeightConstraint: Constraint?
     
+    // MARK: - Publisher
+    
+    let writeCompletePublisher = PassthroughSubject<(Bool, Int?, WriteReviewRequest), Never>()
+    
     // MARK: - UI Components
     
-    private let scrollView = UIScrollView().then { _ in
-    }
+    private let scrollView = UIScrollView()
     
     private let shopNameLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 20)
@@ -42,7 +47,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.numberOfLines = 0
-        $0.text = "리뷰를 남겨주시면 사장님과 다른 분들에게 도움이 됩니다.\n또한, 악의적인 리뷰는 관리자에 의해 삭제될 수 있습니다."
+        $0.setLineHeight(lineHeight: 1.4, text: "리뷰를 남겨주시면 사장님과 다른 분들에게 도움이 됩니다.\n또한, 악의적인 리뷰는 관리자에 의해 삭제될 수 있습니다.")
     }
     
     private let totalScoreView = ScoreView().then {
@@ -71,7 +76,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let imageDescriptionLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
-        $0.text = "리뷰와 관련된 사진을 업로드해주세요."
+        $0.setLineHeight(lineHeight: 1.4, text: "리뷰와 관련된 사진을 업로드해주세요.")
     }
     
     private let uploadimageButton: DashedBorderButton = {
@@ -146,7 +151,7 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     private let addMenuDescriptioLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
-        $0.text = "입력한 메뉴가 태그로 추가돼요"
+        $0.setLineHeight(lineHeight: 1.4, text: "입력한 메뉴가 태그로 추가돼요")
     }
 
     private let addMenuCountLabel = UILabel().then {
@@ -203,21 +208,21 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         bind()
         configureView()
         hideKeyboardWhenTappedAround()
-        reviewTextView.delegate = self
+        setDelegate()
+        setAddTarget()
+        setUpKeyboard()
+        setNotification()
+        
         inputSubject.send(.checkModify)
         inputSubject.send(.updateShopName)
-        setUpKeyboard()
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
         submitReviewButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.submitReviewButtonTapped()
         }
-        uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
-        addMenuTextField.addTarget(self, action: #selector(didTextFieldReturn), for: .primaryActionTriggered)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -273,22 +278,30 @@ final class ShopReviewViewController: UIViewController, UITextViewDelegate {
             self?.view.layoutIfNeeded()
         }
     }
+    
+    private func setAddTarget() {
+        uploadimageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
+        addMenuTextField.addTarget(self, action: #selector(didTextFieldReturn), for: .primaryActionTriggered)
+    }
+    
+    private func setDelegate() {
+        reviewTextView.delegate = self
+    }
+    
+    private func setNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
 }
 
 extension ShopReviewViewController {
+    
     @objc private func appDidEnterBackground() {
         inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
     }
     
     @objc private func appWillEnterForeground() {
         inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let characterCount = textView.text.count
-        reviewDescriptionWordLimitLabel.text = "\(characterCount)/500"
-        textViewPlaceHorderLabel.isHidden = !textView.text.isEmpty
-        calculateTextViewHeight()
     }
     
     private func calculateTextViewHeight() {
@@ -305,14 +318,6 @@ extension ShopReviewViewController {
             self.reviewTextViewHeight?.update(offset: clampedHeight)
         }
     }
-
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let currentText = textView.text ?? ""
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        return updatedText.count <= 500
-    }
     
     private func fillComponent(_ response: OneReviewDto) {
         totalScoreView.rating = Double(response.rating)
@@ -325,7 +330,7 @@ extension ShopReviewViewController {
     @objc private func uploadImageButtonTapped() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
-        configuration.selectionLimit = 1 // 선택할 수 있는 사진 개수 설정
+        configuration.selectionLimit = 1
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
@@ -350,6 +355,7 @@ extension ShopReviewViewController {
 }
 
 extension ShopReviewViewController: PHPickerViewControllerDelegate {
+    
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         
@@ -376,132 +382,6 @@ extension ShopReviewViewController: PHPickerViewControllerDelegate {
 
 extension ShopReviewViewController {
     
-    private func setUpLayOuts() {
-        view.addSubview(scrollView)
-        view.addSubview(submitReviewButton)
-        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
-            scrollView.addSubview($0)
-        }
-    }
-    
-    private func setUpConstraints() {
-        
-        scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
-        }
-        shopNameLabel.snp.makeConstraints {
-            $0.top.equalTo(scrollView.snp.top).offset(24)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-        }
-        reviewGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(shopNameLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(shopNameLabel.snp.leading)
-            $0.trailing.equalTo(scrollView.snp.trailing)
-            $0.trailing.equalTo(view.snp.trailing)
-        }
-        totalScoreView.snp.makeConstraints {
-            $0.top.equalTo(reviewGuideLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(shopNameLabel.snp.leading)
-            $0.width.equalTo(206.71)
-            $0.height.equalTo(40)
-        }
-        totalScoreLabel.snp.makeConstraints {
-            $0.centerY.equalTo(totalScoreView.snp.centerY)
-            $0.leading.equalTo(totalScoreView.snp.trailing).offset(10)
-        }
-        separateView.snp.makeConstraints {
-            $0.top.equalTo(totalScoreView.snp.bottom).offset(24)
-            $0.leading.equalTo(scrollView.snp.leading).offset(20)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
-            $0.height.equalTo(1)
-        }
-        imageLabel.snp.makeConstraints {
-            $0.top.equalTo(separateView.snp.bottom).offset(24)
-            $0.leading.equalTo(shopNameLabel.snp.leading)
-        }
-        imageDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(imageLabel.snp.bottom)
-            $0.leading.equalTo(shopNameLabel.snp.leading)
-        }
-        imageUploadCollectionView.snp.makeConstraints {
-            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(6)
-            $0.leading.equalTo(uploadimageButton.snp.trailing).offset(16)
-            $0.trailing.equalTo(scrollView.snp.trailing)
-            $0.height.equalTo(98)
-        }
-        uploadimageButton.snp.makeConstraints {
-            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(12)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.height.width.equalTo(92)
-        }
-        reviewDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
-            $0.leading.equalTo(shopNameLabel.snp.leading)
-        }
-        reviewDescriptionWordLimitLabel.snp.makeConstraints {
-            $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
-        }
-        reviewTextView.snp.makeConstraints {
-            $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(5)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            self.reviewTextViewHeight = $0.height.equalTo(minTextViewHeight).constraint
-        }
-        reviewTextView.addSubview(textViewPlaceHorderLabel)
-        textViewPlaceHorderLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
-        }
-        
-        reviewMenuLabel.snp.makeConstraints {
-            $0.top.equalTo(reviewTextView.snp.bottom).offset(27)
-            $0.leading.equalTo(scrollView.snp.leading).offset(32)
-        }
-        
-        addMenuLabel.snp.makeConstraints {
-            $0.top.equalTo(reviewTextView.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().inset(24)
-        }
-        addMenuDescriptioLabel.snp.makeConstraints{
-            $0.top.equalTo(addMenuLabel.snp.bottom)
-            $0.leading.equalTo(addMenuLabel.snp.leading)
-        }
-        addMenuCountLabel.snp.makeConstraints{
-            $0.bottom.equalTo(addMenuDescriptioLabel.snp.bottom)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
-        }
-        tagCollectionView.snp.makeConstraints{
-            $0.top.equalTo(addMenuDescriptioLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(24)
-            tagHeightConstraint = $0.height.greaterThanOrEqualTo(1).constraint
-        }
-        addMenuTextField.snp.makeConstraints {
-            $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
-            $0.leading.equalTo(scrollView.snp.leading).offset(24)
-            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
-            $0.height.equalTo(46)
-            $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
-        }
-        submitReviewButton.snp.makeConstraints {
-            $0.leading.equalTo(view.snp.leading).offset(24)
-            $0.trailing.equalTo(view.snp.trailing).offset(-24)
-            $0.height.equalTo(48)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
-        }
-    }
-    
-    private func configureView() {
-        setUpLayOuts()
-        setUpConstraints()
-        self.view.backgroundColor = UIColor.appColor(.newBackground)
-        scrollView.backgroundColor = UIColor.appColor(.newBackground)
-    }
-}
-
-
-extension ShopReviewViewController {
     @objc private func didTextFieldReturn(_ textField: UITextField) {
         guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
         tagCollectionView.add(text)
@@ -548,19 +428,23 @@ extension ShopReviewViewController {
     }
 }
 
-
 extension ShopReviewViewController {
-    func setUpKeyboard() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillShow),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
-    }
     
+    func setUpKeyboard() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
     
     @objc func keyboardWillShow(_ sender: Notification) {
         guard let keyboardFrameValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -581,6 +465,170 @@ extension ShopReviewViewController {
             self.additionalSafeAreaInsets.bottom = 0
             self.view.layoutIfNeeded()
         }
+    }
+}
+
+extension ShopReviewViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let characterCount = textView.text.count
+        reviewDescriptionWordLimitLabel.text = "\(characterCount)/500"
+        textViewPlaceHorderLabel.isHidden = !textView.text.isEmpty
+        calculateTextViewHeight()
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        return updatedText.count <= 500
+    }
+}
+
+// MARK: - UI Functions
+
+extension ShopReviewViewController {
+    
+    private func setUpLayouts() {
+        view.addSubview(scrollView)
+        view.addSubview(submitReviewButton)
+        
+        [shopNameLabel, reviewGuideLabel, totalScoreView, totalScoreLabel, separateView, imageLabel, imageDescriptionLabel, imageUploadCollectionView, uploadimageButton, reviewDescriptionLabel, reviewDescriptionWordLimitLabel, reviewTextView, reviewMenuLabel,addMenuLabel,addMenuDescriptioLabel,addMenuCountLabel,tagCollectionView,addMenuTextField].forEach {
+            scrollView.addSubview($0)
+        }
+        
+        reviewTextView.addSubview(textViewPlaceHorderLabel)
+    }
+    
+    private func setUpConstraints() {
+        
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
+        }
+        
+        shopNameLabel.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.top).offset(24)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+        }
+        
+        reviewGuideLabel.snp.makeConstraints {
+            $0.top.equalTo(shopNameLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
+            $0.trailing.equalTo(scrollView.snp.trailing)
+            $0.trailing.equalTo(view.snp.trailing)
+        }
+        
+        totalScoreView.snp.makeConstraints {
+            $0.top.equalTo(reviewGuideLabel.snp.bottom).offset(16)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
+            $0.width.equalTo(206.71)
+            $0.height.equalTo(40)
+        }
+        
+        totalScoreLabel.snp.makeConstraints {
+            $0.centerY.equalTo(totalScoreView.snp.centerY)
+            $0.leading.equalTo(totalScoreView.snp.trailing).offset(10)
+        }
+        
+        separateView.snp.makeConstraints {
+            $0.top.equalTo(totalScoreView.snp.bottom).offset(24)
+            $0.leading.equalTo(scrollView.snp.leading).offset(20)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-20)
+            $0.height.equalTo(1)
+        }
+        
+        imageLabel.snp.makeConstraints {
+            $0.top.equalTo(separateView.snp.bottom).offset(24)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
+        }
+        
+        imageDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(imageLabel.snp.bottom)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
+        }
+        
+        imageUploadCollectionView.snp.makeConstraints {
+            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(6)
+            $0.leading.equalTo(uploadimageButton.snp.trailing).offset(16)
+            $0.trailing.equalTo(scrollView.snp.trailing)
+            $0.height.equalTo(98)
+        }
+        
+        uploadimageButton.snp.makeConstraints {
+            $0.top.equalTo(imageDescriptionLabel.snp.bottom).offset(12)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+            $0.height.width.equalTo(92)
+        }
+        
+        reviewDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(uploadimageButton.snp.bottom).offset(27)
+            $0.leading.equalTo(shopNameLabel.snp.leading)
+        }
+        
+        reviewDescriptionWordLimitLabel.snp.makeConstraints {
+            $0.bottom.equalTo(reviewDescriptionLabel.snp.bottom)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
+        }
+        
+        reviewTextView.snp.makeConstraints {
+            $0.top.equalTo(reviewDescriptionLabel.snp.bottom).offset(12)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
+            self.reviewTextViewHeight = $0.height.equalTo(minTextViewHeight).constraint
+        }
+                
+        textViewPlaceHorderLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
+        }
+        
+        reviewMenuLabel.snp.makeConstraints {
+            $0.top.equalTo(reviewTextView.snp.bottom).offset(27)
+            $0.leading.equalTo(scrollView.snp.leading).offset(32)
+        }
+        
+        addMenuLabel.snp.makeConstraints {
+            $0.top.equalTo(reviewTextView.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().inset(24)
+        }
+        
+        addMenuDescriptioLabel.snp.makeConstraints{
+            $0.top.equalTo(addMenuLabel.snp.bottom)
+            $0.leading.equalTo(addMenuLabel.snp.leading)
+        }
+        
+        addMenuCountLabel.snp.makeConstraints{
+            $0.bottom.equalTo(addMenuDescriptioLabel.snp.bottom)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-32)
+        }
+        
+        tagCollectionView.snp.makeConstraints{
+            $0.top.equalTo(addMenuDescriptioLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            tagHeightConstraint = $0.height.greaterThanOrEqualTo(1).constraint
+        }
+        
+        addMenuTextField.snp.makeConstraints {
+            $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
+            $0.leading.equalTo(scrollView.snp.leading).offset(24)
+            $0.trailing.equalTo(scrollView.snp.trailing).offset(-24)
+            $0.height.equalTo(46)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-200)
+        }
+        
+        submitReviewButton.snp.makeConstraints {
+            $0.leading.equalTo(view.snp.leading).offset(24)
+            $0.trailing.equalTo(view.snp.trailing).offset(-24)
+            $0.height.equalTo(48)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+        }
+    }
+    
+    private func configureView() {
+        setUpLayouts()
+        setUpConstraints()
+        view.backgroundColor = UIColor.appColor(.newBackground)
     }
 }
 

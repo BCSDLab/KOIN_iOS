@@ -66,7 +66,7 @@ extension ShopReviewReportViewModel {
             self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
             let value = selectedItems.joined(separator: ",")
             
-            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: value)
+            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
         }.store(in: &subscriptions)
     }
     
