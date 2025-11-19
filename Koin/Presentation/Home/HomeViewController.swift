@@ -21,8 +21,7 @@ final class HomeViewController: UIViewController {
         
     // MARK: - UI Components
     
-    private let wrapperView = UIView().then { _ in
-    }
+    private let wrapperView = UIView()
     
     private let grayColorView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral50)
@@ -92,8 +91,7 @@ final class HomeViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
     
-    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then { _ in
-    }
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in})
     
     private let menuLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.primary500)
@@ -121,10 +119,10 @@ final class HomeViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private let menuBackgroundView = MenuBackgroundView(frame: .zero).then { _ in
-    }
+    private let menuBackgroundView = MenuBackgroundView(frame: .zero)
     
     private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
+    
     private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
     
     // MARK: - Initialization
@@ -148,6 +146,7 @@ final class HomeViewController: UIViewController {
         print(KeychainWorker.shared.read(key: .fcm))
         print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
+        inputSubject.send(.getNoticeBanner(Date()))
         configureView()
         configureSwipeGestures()
         configureTapGesture()
@@ -233,7 +232,6 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         clubView.hotClubButtonPublisher.sink { [weak self] id in
-         //   self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs/\(id)"), animated: true)
             self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
         }.store(in: &subscriptions)
         
@@ -399,6 +397,7 @@ extension HomeViewController {
 
         return false
     }
+    
     private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
         if banner.count == 0 { return }
         let viewController: UIViewController
@@ -544,17 +543,10 @@ extension HomeViewController {
         else if result.variableName == .mainDiningNew {
             goDiningPageButton.isHidden = false
         }
-        else if result.variableName == .bannerNew {
-            inputSubject.send(.getNoticeBanner(Date()))
-        }
-        else {
-            inputSubject.send(.getNoticeBanner(nil))
-        }
     }
     
     private func didTapCell(at id: Int) {
-        //let orderableCategoryIds = [0, 1, 2, 3, 5, 6]
-        let initialTabIndex = 1 // orderableCategoryIds.contains(categoryId) ? 0 : 1 // MARK: 주변상점으로만 진입
+        let initialTabIndex = 1
         
         let orderTabBarViewController = OrderTabBarViewController(selectedShopId: id, initialTabIndex: initialTabIndex)
         navigationController?.pushViewController(orderTabBarViewController, animated: true)
@@ -598,7 +590,6 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
-     //   let viewController = ClubWebViewController()
         let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
@@ -635,6 +626,7 @@ extension HomeViewController: UIScrollViewDelegate {
             }
         }
     }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let contentOffsetY = scrollView.contentOffset.y
         let screenHeight = scrollView.frame.height
@@ -689,54 +681,64 @@ extension HomeViewController {
             make.top.equalTo(logoView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
+        
         logoView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top)
             make.width.equalTo(view.snp.width)
             make.height.equalTo(119)
             make.centerX.equalTo(view.snp.centerX)
         }
+        
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(wrapperView.snp.top)
             make.leading.equalTo(wrapperView.snp.leading)
             make.trailing.equalTo(wrapperView.snp.trailing)
             make.bottom.equalTo(wrapperView.snp.bottom)
         }
+        
         noticeLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
             make.leading.equalToSuperview().offset(24)
             make.height.equalTo(29)
         }
+        
         noticeListCollectionView.snp.makeConstraints { make in
             make.top.equalTo(noticeLabel.snp.bottom).offset(8)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(95)
         }
+        
         noticePageControl.snp.makeConstraints { make in
             make.top.equalTo(noticeListCollectionView.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
         }
+        
         goNoticePageButton.snp.makeConstraints { make in
             make.top.equalTo(noticeLabel).offset(3)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(22)
         }
+        
         goDiningPageButton.snp.makeConstraints { make in
             make.top.equalTo(menuLabel).offset(3)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(22)
         }
+        
         busLabel.snp.makeConstraints { make in
             make.top.equalTo(noticePageControl.snp.bottom).offset(12)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
+        
         busQrCodeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(24)
             make.centerY.equalTo(busLabel)
             make.height.equalTo(22)
         }
+        
         busView.snp.makeConstraints { make in
             make.top.equalTo(busLabel.snp.bottom).offset(16)
             make.leading.equalTo(scrollView)
@@ -744,33 +746,39 @@ extension HomeViewController {
             make.height.equalTo(65)
             make.width.equalTo(scrollView.snp.width)
         }
+        
         clubView.snp.makeConstraints { make in
             make.top.equalTo(busView.snp.bottom).offset(24)
             make.horizontalEdges.equalTo(scrollView)
         }
+        
         orderLabel.snp.makeConstraints { make in
             make.top.equalTo(clubView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)
         }
+        
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(orderLabel.snp.bottom).offset(11)
             make.leading.equalTo(scrollView.snp.leading)
             make.trailing.equalTo(scrollView.snp.trailing)
             make.height.equalTo(166)
         }
+        
         menuLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.top.equalTo(categoryCollectionView.snp.bottom).offset(24)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
         }
+        
         diningTooltipImageView.snp.makeConstraints { make in
             make.centerY.equalTo(menuLabel.snp.centerY)
             make.leading.equalTo(menuLabel.snp.trailing).offset(8)
             make.width.equalTo(176)
             make.height.equalTo(36)
         }
+        
         menuBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(cornerSegmentControl.snp.bottom)
             make.height.equalTo(233)
@@ -778,17 +786,20 @@ extension HomeViewController {
             make.trailing.equalTo(scrollView.snp.trailing)
             make.bottom.equalTo(scrollView.snp.bottom).offset(-11)
         }
+        
         tabBarView.snp.makeConstraints {
             $0.top.equalTo(menuLabel.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(45)
             $0.width.equalTo(264)
         }
+        
         cornerSegmentControl.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(43)
         }
     }
+    
     private func setUpRoundedCorners() {
         logoView.layer.cornerRadius = 20
         logoView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
