@@ -11,7 +11,7 @@ import PhotosUI
 import SnapKit
 import Then
 
-final class ShopReviewViewController: UIViewController {
+final class ShopReviewViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
     
@@ -228,8 +228,10 @@ final class ShopReviewViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        setGestureDelegate()
         inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         setNavigationItem()
+        
     }
     
     // MARK: - Bind
@@ -286,6 +288,11 @@ final class ShopReviewViewController: UIViewController {
     
     private func setDelegate() {
         reviewTextView.delegate = self
+    }
+    
+    private func setGestureDelegate() {
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     private func setNotification() {
@@ -425,6 +432,18 @@ extension ShopReviewViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage.appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(backButtonTapped)
         )
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == navigationController?.interactivePopGestureRecognizer {
+            if viewModel.isEdit {
+                presentExitConfirm()
+                return false
+            } else {
+                return true
+            }
+        }
+        return true
     }
 }
 
