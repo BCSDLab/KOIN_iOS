@@ -392,19 +392,17 @@ extension ShopViewController {
         shopCollectionView.isHidden = isEmpty
         emptyResultStackView.isHidden = !isEmpty
 
-        if isEmpty {
-            shopCollectionView.snp.updateConstraints {
-                $0.height.equalTo(0)
-            }
-        } else {
+        if !isEmpty {
             shopCollectionView.updateShop(shops)
-            shopCollectionView.snp.updateConstraints {
-                $0.height.equalTo(shopCollectionView.calculateShopListHeight())
-            }
         }
-
+        shopCollectionView.snp.remakeConstraints {
+            $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            let height = isEmpty ? 0 : shopCollectionView.calculateShopListHeight()
+            $0.height.equalTo(height)
+            $0.bottom.equalToSuperview().offset(-32)
+        }
         view.layoutIfNeeded()
-
     }
 
     private func updateFilteredCategory(_ id: Int) {
@@ -496,13 +494,12 @@ extension ShopViewController {
             $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.height.equalTo(1)
+            $0.bottom.equalToSuperview().offset(-32)
         }
         emptyResultStackView.snp.makeConstraints {
             $0.centerY.equalTo(view.safeAreaLayoutGuide)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(24)
-            $0.bottom.equalToSuperview().offset(-32)
         }
     }
     
