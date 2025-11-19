@@ -497,7 +497,6 @@ extension ShopViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(1)
-//            $0.bottom.equalToSuperview().offset(-32)
         }
         emptyResultStackView.snp.makeConstraints {
             $0.centerY.equalTo(view.safeAreaLayoutGuide)
@@ -505,7 +504,6 @@ extension ShopViewController {
             $0.leading.trailing.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().offset(-32)
         }
-
     }
     
     private func configureView() {
