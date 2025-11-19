@@ -529,7 +529,9 @@ extension HomeViewController {
     
     private func updateHotArticles(articles: [NoticeArticleDto], phrases: ((String, String), Int)?) {
         noticeListCollectionView.updateNoticeList(articles, phrases)
-        noticePageControl.numberOfPages = articles.count
+        
+        let hasKeywordBanner = phrases != nil ? 1 : 0
+        noticePageControl.numberOfPages = articles.count + hasKeywordBanner
     }
     
     private func putImage(data: ShopCategoryDto) {
