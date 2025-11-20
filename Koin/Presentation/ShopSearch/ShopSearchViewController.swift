@@ -171,6 +171,7 @@ extension ShopSearchViewController {
                                              shopId: shopId,
                                              shopName: shopName)
         let viewController = ShopSummaryViewController(viewModel: viewModel)
+        viewController.title = shopName
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
