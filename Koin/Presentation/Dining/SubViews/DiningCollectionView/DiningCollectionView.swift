@@ -73,20 +73,25 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
         let leading = (UIScreen.main.bounds.width - 280) / 2
         diningShareToolTipImageView.snp.updateConstraints {
-            $0.top.equalTo(self).offset(heightOfDiningCard - 25)
-            $0.height.equalTo(100)
+            $0.top.equalTo(self).offset(heightOfDiningCard - 20)
+            $0.height.equalTo(70)
             $0.leading.equalTo(self).offset(leading)
             $0.width.equalTo(252)
         }
 
         if !hasShownImage {
             diningShareToolTipImageView.isHidden = false
-            diningShareToolTipImageView.setUpGif(fileName: "diningShare")
+            diningShareToolTipImageView.setUpImage(image: UIImage.appImage(asset: .diningShare) ?? UIImage())
             diningShareToolTipImageView.changeXButtonSize(width: 50, height: 50)
             diningShareToolTipImageView.onXButtonTapped = { [weak self] in
                 self?.diningShareToolTipImageView.isHidden = true
                 UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
             }
+        }
+        
+        let transform = CGAffineTransform(translationX: 0, y: 15)
+        UIView.animate(withDuration: 0.68, delay: 0, options: [.repeat, .curveEaseInOut, .autoreverse, .allowUserInteraction]) { [weak self] in
+            self?.diningShareToolTipImageView.transform = transform
         }
     }
     
