@@ -8,6 +8,10 @@
 import Combine
 import UIKit
 
+extension Notification.Name {
+    static let willEnterForeground = NSNotification.Name("willEnterForeground")
+}
+
 final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var diningList: [DiningItem] = []
@@ -33,6 +37,10 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func commonInit() {

@@ -147,6 +147,7 @@ final class DiningViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
+        NotificationCenter.default.addObserver(self, selector: #selector(setToolTipImageViewAnimate), name: .willEnterForeground, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -241,6 +242,10 @@ final class DiningViewController: UIViewController {
 }
 
 extension DiningViewController {
+    @objc private func setToolTipImageViewAnimate() {
+        diningListCollectionView.setToolTipImageViewAnimate()
+    }
+    
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
         case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
