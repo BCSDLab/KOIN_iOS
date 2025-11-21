@@ -88,9 +88,14 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
                 UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
             }
         }
+    }
+    
+    func setToolTipImageViewAnimate() {
+        diningShareToolTipImageView.layer.removeAllAnimations()
+        diningShareToolTipImageView.transform = CGAffineTransformIdentity
         
-        let transform = CGAffineTransform(translationX: 0, y: 15)
-        UIView.animate(withDuration: 0.68, delay: 0, options: [.repeat, .curveEaseInOut, .autoreverse, .allowUserInteraction]) { [weak self] in
+        let transform = CGAffineTransform(translationX: 0, y: 8)
+        UIView.animate(withDuration: 0.7, delay: 0, options: [.repeat, .curveEaseInOut, .autoreverse, .allowUserInteraction]) { [weak self] in
             self?.diningShareToolTipImageView.transform = transform
         }
     }

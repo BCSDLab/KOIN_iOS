@@ -152,6 +152,7 @@ final class DiningViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .fill)
+        diningListCollectionView.setToolTipImageViewAnimate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
