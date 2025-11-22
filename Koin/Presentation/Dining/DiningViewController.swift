@@ -147,7 +147,6 @@ final class DiningViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
-        NotificationCenter.default.addObserver(self, selector: #selector(setToolTipImageViewAnimate), name: .willEnterForeground, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -238,6 +237,10 @@ final class DiningViewController: UIViewController {
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
+            self?.setToolTipImageViewAnimate()
+        }
+        .store(in: &subscriptions)
     }
 }
 

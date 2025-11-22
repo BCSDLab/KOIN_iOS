@@ -8,10 +8,6 @@
 import Combine
 import UIKit
 
-extension Notification.Name {
-    static let willEnterForeground = NSNotification.Name("willEnterForeground")
-}
-
 final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var diningList: [DiningItem] = []
@@ -37,10 +33,6 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     private func commonInit() {
@@ -87,7 +79,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
             $0.width.equalTo(252)
         }
 
-        if !hasShownImage {
+        //if !hasShownImage {
             diningShareToolTipImageView.isHidden = false
             diningShareToolTipImageView.setUpImage(image: UIImage.appImage(asset: .diningShare) ?? UIImage())
             diningShareToolTipImageView.changeXButtonSize(width: 50, height: 50)
@@ -95,7 +87,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
                 self?.diningShareToolTipImageView.isHidden = true
                 UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
             }
-        }
+        //}
     }
     
     func setToolTipImageViewAnimate() {

@@ -72,10 +72,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: rootViewController)
         }
     }
-    
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        NotificationCenter.default.post(name: .willEnterForeground, object: nil)
-    }
 }
 
 extension SceneDelegate {
