@@ -152,6 +152,7 @@ final class DiningViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .fill)
+        diningListCollectionView.setToolTipImageViewAnimate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -236,10 +237,18 @@ final class DiningViewController: UIViewController {
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
+            self?.setToolTipImageViewAnimate()
+        }
+        .store(in: &subscriptions)
     }
 }
 
 extension DiningViewController {
+    @objc private func setToolTipImageViewAnimate() {
+        diningListCollectionView.setToolTipImageViewAnimate()
+    }
+    
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
         case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))

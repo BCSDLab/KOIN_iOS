@@ -65,6 +65,7 @@ enum ImageAsset: String {
     case heartFill
     case share
     case diningTooltip
+    case diningShare
     case myReview
     case option
     case optionFill
