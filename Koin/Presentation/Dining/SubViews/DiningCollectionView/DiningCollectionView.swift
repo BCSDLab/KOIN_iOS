@@ -79,7 +79,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
             $0.width.equalTo(252)
         }
 
-        //if !hasShownImage {
+        if !hasShownImage {
             diningShareToolTipImageView.isHidden = false
             diningShareToolTipImageView.setUpImage(image: UIImage.appImage(asset: .diningShare) ?? UIImage())
             diningShareToolTipImageView.changeXButtonSize(width: 50, height: 50)
@@ -87,7 +87,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
                 self?.diningShareToolTipImageView.isHidden = true
                 UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
             }
-        //}
+        }
     }
     
     func setToolTipImageViewAnimate() {
