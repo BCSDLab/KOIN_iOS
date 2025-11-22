@@ -28,6 +28,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
+        self.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
     }
     
     required init?(coder: NSCoder) {
