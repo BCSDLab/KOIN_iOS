@@ -12,27 +12,34 @@ final class RadioButton: UIControl {
     
     // MARK: - Properties
     
+    weak var group: RadioButtonGroup?
+    
     override var isSelected: Bool {
         didSet {
-            updateAppearance()
+            guard oldValue != isSelected else { return }
+            updateAppearance(animated: true)
+            updateAccessibilityValue()
         }
     }
     
     override var isHighlighted: Bool {
         didSet {
-            updateAppearance()
+            guard oldValue != isHighlighted else { return }
+            updateAppearance(animated: false)
         }
     }
     
     override var isEnabled: Bool {
         didSet {
-            updateAppearance()
+            guard oldValue != isEnabled else { return }
+            updateAppearance(animated: false)
         }
     }
     
     private var isHovered: Bool = false {
         didSet {
-            updateAppearance()
+            guard oldValue != isHovered else { return }
+            updateAppearance(animated: false)
         }
     }
     
@@ -43,6 +50,11 @@ final class RadioButton: UIControl {
         static let innerCircleSize: CGFloat = 11.67
         static let focusRingSize: CGFloat = 28
         static let spacing: CGFloat = 12
+    }
+    
+    private enum AnimationDuration {
+        static let selection: TimeInterval = 0.2
+        static let focus: TimeInterval = 0.15
     }
     
     // MARK: - UI Components
@@ -80,7 +92,8 @@ final class RadioButton: UIControl {
         radioButtonTitleLabel.text = title
         configureView()
         setupGestures()
-        updateAppearance()
+        setupAccessibility()
+        updateAppearance(animated: false)
     }
     
     required init?(coder: NSCoder) {
@@ -102,8 +115,14 @@ extension RadioButton {
     }
     
     @objc private func handleTap() {
-        guard isEnabled else { return }
-        isSelected.toggle()
+        guard isEnabled, !isSelected else { return }
+        
+        if let group = group {
+            group.selectRadioButton(self)
+        } else {
+            isSelected = true
+        }
+        
         sendActions(for: .valueChanged)
     }
     
@@ -137,7 +156,26 @@ extension RadioButton {
     
     override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         super.didUpdateFocus(in: context, with: coordinator)
-        updateAppearance()
+        
+        coordinator.addCoordinatedAnimations { [weak self] in
+            self?.updateAppearance(animated: false)
+        }
+    }
+}
+
+// MARK: - Accessibility
+
+extension RadioButton {
+    
+    private func setupAccessibility() {
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityLabel = radioButtonTitleLabel.text
+        updateAccessibilityValue()
+    }
+    
+    private func updateAccessibilityValue() {
+        accessibilityValue = isSelected ? "선택됨" : "선택 안 됨"
     }
 }
 
@@ -145,14 +183,38 @@ extension RadioButton {
 
 extension RadioButton {
     
-    private func updateAppearance() {
+    private func updateAppearance(animated: Bool) {
         let state = getCurrentState()
         let colors = getColors(for: state)
         
         circleView.layer.borderColor = colors.border.cgColor
         innerCircleView.backgroundColor = colors.innerCircle
-        innerCircleView.alpha = isSelected ? 1 : 0
-        focusRingView.alpha = isFocused ? 1 : 0
+        
+        let innerCircleAlpha: CGFloat = isSelected ? 1 : 0
+        let focusRingAlpha: CGFloat = isFocused ? 1 : 0
+        
+        if animated {
+            UIView.animate(
+                withDuration: AnimationDuration.selection,
+                delay: 0,
+                options: [.curveEaseInOut, .beginFromCurrentState],
+                animations: { [weak self] in
+                    self?.innerCircleView.alpha = innerCircleAlpha
+                }
+            )
+            
+            UIView.animate(
+                withDuration: AnimationDuration.focus,
+                delay: 0,
+                options: [.curveEaseInOut, .beginFromCurrentState],
+                animations: { [weak self] in
+                    self?.focusRingView.alpha = focusRingAlpha
+                }
+            )
+        } else {
+            innerCircleView.alpha = innerCircleAlpha
+            focusRingView.alpha = focusRingAlpha
+        }
     }
     
     private func getCurrentState() -> RadioButtonState {
