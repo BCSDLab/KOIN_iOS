@@ -2,41 +2,79 @@
 //  RadioButtonGroup.swift
 //  koin
 //
-//  Created by 이은지 on 11/9/25.
+//  Created by 이은지 on 11/24/25.
 //
 
 import Foundation
 
 final class RadioButtonGroup {
     
-    private var radioButtons: [RadioButton] = []
-    var selectedButton: RadioButton?
+    // MARK: - Properties
+    
+    private var radiobuttons: [RadioButton] = []
+    
+    private(set) var selectedRadioButton: RadioButton? {
+        didSet {
+            onSelectionChanged?(selectedRadioButton)
+        }
+    }
     
     var onSelectionChanged: ((RadioButton?) -> Void)?
-    
-    func addButton(_ button: RadioButton) {
-        radioButtons.append(button)
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .valueChanged)
-    }
-    
-    @objc private func buttonTapped(_ button: RadioButton) {
-        if button.isSelected {
-            radioButtons.forEach {
-                if $0 != button {
-                    $0.isSelected = false
-                }
-            }
-            selectedButton = button
-        } else {
-            if selectedButton == button {
-                selectedButton = nil
-            }
+        
+    func addRadioButton(_ button: RadioButton) {
+        guard !radiobuttons.contains(where: { $0 === button }) else { return }
+        
+        radiobuttons.append(button)
+        button.group = self
+        button.addTarget(self, action: #selector(radioButtonTapped(_:)), for: .valueChanged)
+        
+        if selectedRadioButton != nil {
+            button.isSelected = false
+        } else if button.isSelected {
+            selectedRadioButton = button
         }
-        onSelectionChanged?(selectedButton)
     }
     
-    func deselectAll() {
-        radioButtons.forEach { $0.isSelected = false }
-        selectedButton = nil
+    func removeRadioButton(_ button: RadioButton) {
+        guard let index = radiobuttons.firstIndex(where: { $0 === button }) else { return }
+        
+        radiobuttons.remove(at: index)
+        button.group = nil
+        button.removeTarget(self, action: #selector(radioButtonTapped(_:)), for: .valueChanged)
+        
+        if selectedRadioButton === button {
+            selectedRadioButton = nil
+        }
+    }
+    
+    func removeAllRadioButtons() {
+        radiobuttons.forEach { button in
+            button.group = nil
+            button.removeTarget(self, action: #selector(radioButtonTapped(_:)), for: .valueChanged)
+        }
+        radiobuttons.removeAll()
+        selectedRadioButton = nil
+    }
+    
+    func selectRadioButton(_ button: RadioButton) {
+        guard radiobuttons.contains(where: { $0 === button }), button.isEnabled else { return }
+        
+        selectedRadioButton?.isSelected = false
+        
+        button.isSelected = true
+        selectedRadioButton = button
+    }
+    
+    func deselectAllRadioButtons() {
+        selectedRadioButton?.isSelected = false
+        selectedRadioButton = nil
+    }
+    
+    func setEnabledRadioButton(_ enabled: Bool) {
+        radiobuttons.forEach { $0.isEnabled = enabled }
+    }
+        
+    @objc private func radioButtonTapped(_ sender: RadioButton) {
+        selectRadioButton(sender)
     }
 }
