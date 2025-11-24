@@ -327,6 +327,10 @@ extension RadioButton {
             $0.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
+        
+        self.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(20)
+        }
     }
     
     private func configureView() {
