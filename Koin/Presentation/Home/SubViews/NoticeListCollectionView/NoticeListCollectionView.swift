@@ -42,7 +42,10 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
     func updateNoticeList(_ popularNoticeList: [NoticeArticleDto], _ keywordNoticePhrase: ((String, String), Int)?) {
         self.popularNoticeList = popularNoticeList
         self.keywordNoticePhrase = keywordNoticePhrase
-        bannerCount = popularNoticeList.count
+        
+        let hasKeywordBanner = keywordNoticePhrase != nil ? 1 : 0
+        bannerCount = popularNoticeList.count + hasKeywordBanner
+        
         startAutoScroll()
         reloadData()
     }

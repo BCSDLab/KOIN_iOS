@@ -146,6 +146,47 @@ final class ShopViewController: UIViewController {
         $0.isHidden = true
     }
     
+    private let emptyResultLabel = UILabel().then {
+        let firstLine = "이용 가능한 가게가 없어요"
+        let secondLine = "조건을 변경하고 다시 검색해주세요"
+        let text = "\(firstLine)\n\(secondLine)"
+
+        let attributedText = NSMutableAttributedString(string: text)
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 6
+        paragraphStyle.alignment = .center
+
+        attributedText.addAttribute(.font, value: UIFont.appFont(.pretendardBold, size: 18), range: NSRange(location: 0, length: firstLine.count))
+        attributedText.addAttribute(.foregroundColor, value: UIColor.appColor(.new500), range: NSRange(location: 0, length: firstLine.count))
+
+        let secondLineRange = NSRange(location: firstLine.count + 1, length: secondLine.count)
+        attributedText.addAttribute(.font, value: UIFont.appFont(.pretendardMedium, size: 14), range: secondLineRange)
+        attributedText.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral600), range: secondLineRange)
+
+        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
+
+        $0.attributedText = attributedText
+        $0.numberOfLines = 0
+        $0.textAlignment = .center
+    }
+    
+    private let emptyResultImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .orderEmptyLogo)
+    }
+
+    private lazy var emptyResultStackView = UIStackView(arrangedSubviews: [emptyResultImageView,emptyResultLabel]).then {
+        $0.axis = .vertical
+        $0.spacing = 16
+        $0.alignment = .center
+        $0.distribution = .equalSpacing
+        $0.isHidden = true
+        $0.backgroundColor = UIColor.appColor(.newBackground)
+        $0.isUserInteractionEnabled = false
+    }
+
+
+    
     private let shopCollectionView = ShopInfoCollectionView()
     
     // MARK: - Initialization
@@ -347,8 +388,21 @@ extension ShopViewController {
     }
 
     private func updateFilteredShops(_ shops: [Shop]) {
-        shopCollectionView.updateShop(shops)
-        shopCollectionView.snp.updateConstraints { $0.height.equalTo(shopCollectionView.calculateShopListHeight()) }
+        let isEmpty = shops.isEmpty
+        shopCollectionView.isHidden = isEmpty
+        emptyResultStackView.isHidden = !isEmpty
+
+        if !isEmpty {
+            shopCollectionView.updateShop(shops)
+        }
+        shopCollectionView.snp.remakeConstraints {
+            $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            let height = isEmpty ? 0 : shopCollectionView.calculateShopListHeight()
+            $0.height.equalTo(height)
+            $0.bottom.equalToSuperview().offset(-32)
+        }
+        view.layoutIfNeeded()
     }
 
     private func updateFilteredCategory(_ id: Int) {
@@ -382,7 +436,7 @@ extension ShopViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [categoryCollectionView, searchBarButton, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView].forEach {
+        [categoryCollectionView, searchBarButton, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView,emptyResultStackView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -440,8 +494,12 @@ extension ShopViewController {
             $0.top.equalTo(openShopToggleButton.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.height.equalTo(1)
             $0.bottom.equalToSuperview().offset(-32)
+        }
+        emptyResultStackView.snp.makeConstraints {
+            $0.centerY.equalTo(view.safeAreaLayoutGuide)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
     }
     

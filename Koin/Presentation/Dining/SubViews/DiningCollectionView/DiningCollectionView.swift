@@ -28,6 +28,7 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         commonInit()
+        self.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -73,15 +74,15 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
         let leading = (UIScreen.main.bounds.width - 280) / 2
         diningShareToolTipImageView.snp.updateConstraints {
-            $0.top.equalTo(self).offset(heightOfDiningCard - 25)
-            $0.height.equalTo(100)
+            $0.top.equalTo(self).offset(heightOfDiningCard - 20)
+            $0.height.equalTo(70)
             $0.leading.equalTo(self).offset(leading)
             $0.width.equalTo(252)
         }
 
         if !hasShownImage {
             diningShareToolTipImageView.isHidden = false
-            diningShareToolTipImageView.setUpGif(fileName: "diningShare")
+            diningShareToolTipImageView.setUpImage(image: UIImage.appImage(asset: .diningShare) ?? UIImage())
             diningShareToolTipImageView.changeXButtonSize(width: 50, height: 50)
             diningShareToolTipImageView.onXButtonTapped = { [weak self] in
                 self?.diningShareToolTipImageView.isHidden = true
@@ -90,6 +91,16 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         }
     }
     
+    func startToolTipImageViewAnimation() {
+        let transform = CGAffineTransform(translationX: 0, y: 10)
+        UIView.animate(withDuration: 0.7, delay: 0, options: [.repeat, .curveEaseInOut, .autoreverse, .allowUserInteraction]) { [weak self] in
+            self?.diningShareToolTipImageView.transform = transform
+        }
+    }
+    func stopToolTipImageViewAnimation() {
+        diningShareToolTipImageView.layer.removeAllAnimations()
+        diningShareToolTipImageView.transform = CGAffineTransformIdentity
+    }
 }
 
 extension DiningCollectionView {
