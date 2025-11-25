@@ -91,16 +91,16 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
         }
     }
     
-    func setToolTipImageViewAnimate() {
-        diningShareToolTipImageView.layer.removeAllAnimations()
-        diningShareToolTipImageView.transform = CGAffineTransformIdentity
-        
+    func startToolTipImageViewAnimation() {
         let transform = CGAffineTransform(translationX: 0, y: 10)
         UIView.animate(withDuration: 0.7, delay: 0, options: [.repeat, .curveEaseInOut, .autoreverse, .allowUserInteraction]) { [weak self] in
             self?.diningShareToolTipImageView.transform = transform
         }
     }
-    
+    func stopToolTipImageViewAnimation() {
+        diningShareToolTipImageView.layer.removeAllAnimations()
+        diningShareToolTipImageView.transform = CGAffineTransformIdentity
+    }
 }
 
 extension DiningCollectionView {
